@@ -14,7 +14,7 @@ export default function SearchBar({
   return (
     <div className="relative max-w-xl w-full">
       <svg
-        className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400"
+        className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-palm-300"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
@@ -34,7 +34,7 @@ export default function SearchBar({
           onSearch?.(e.target.value);
         }}
         placeholder={placeholder}
-        className="w-full pl-12 pr-4 py-3.5 rounded-xl bg-white border border-sand-200 text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-ocean-500/30 focus:border-ocean-400 transition-all"
+        className="w-full pl-12 pr-4 py-3.5 rounded-xl bg-white border border-sand-200 text-palm-900 placeholder:text-palm-300 focus:outline-none focus:ring-2 focus:ring-gold-400/30 focus:border-gold-400 transition-all"
       />
     </div>
   );

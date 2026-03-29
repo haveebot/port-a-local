@@ -5,14 +5,21 @@ export default function FeaturedSpots() {
   const featured = getFeaturedBusinesses();
 
   return (
-    <section className="py-20 bg-sand-50/50" id="featured">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
+    <section className="py-24 bg-palm-950 relative" id="featured">
+      {/* Subtle palm pattern */}
+      <div className="absolute inset-0 palm-pattern opacity-20" />
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="text-center mb-14">
+          <p className="text-gold-400 text-sm font-medium tracking-[0.2em] uppercase mb-3">
+            Hand-Picked by Locals
+          </p>
+          <h2 className="font-display text-3xl sm:text-4xl font-bold text-sand-50 mb-4">
             Featured Spots
           </h2>
-          <p className="text-lg text-slate-500 max-w-2xl mx-auto">
-            Hand-picked favorites from locals who know Port A inside and out
+          <div className="gold-line max-w-xs mx-auto mb-6" />
+          <p className="text-lg text-sand-400 max-w-2xl mx-auto font-light">
+            The best of Port Aransas, curated by people who know every corner of this island
           </p>
         </div>
 

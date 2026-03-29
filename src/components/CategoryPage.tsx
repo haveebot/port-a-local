@@ -32,15 +32,18 @@ export default function CategoryPage({
       <Navigation />
 
       {/* Header */}
-      <section className="pt-28 pb-12 wave-bg">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+      <section className="pt-28 pb-14 hero-gradient relative">
+        <div className="absolute bottom-0 left-0 right-0 gold-line" />
+        <div className="absolute inset-0 palm-pattern opacity-15" />
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-center gap-3 mb-2">
             <span className="text-4xl">{category.icon}</span>
-            <h1 className="text-4xl sm:text-5xl font-bold text-slate-900">
+            <h1 className="font-display text-4xl sm:text-5xl font-bold text-sand-50">
               {category.name}
             </h1>
           </div>
-          <p className="text-lg text-slate-500 mt-2 mb-8 max-w-2xl">
+          <p className="text-lg text-sand-400 mt-2 mb-8 max-w-2xl font-light">
             {category.description}
           </p>
 
@@ -52,14 +55,14 @@ export default function CategoryPage({
             <Badge size="lg" />
           </div>
 
-          <p className="text-sm text-slate-400 mt-4">
+          <p className="text-sm text-sand-500 mt-4">
             {filtered.length} vetted {filtered.length === 1 ? "business" : "businesses"}
           </p>
         </div>
       </section>
 
       {/* Listings */}
-      <section className="py-12">
+      <section className="py-14">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           {filtered.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -69,7 +72,7 @@ export default function CategoryPage({
             </div>
           ) : (
             <div className="text-center py-16">
-              <p className="text-lg text-slate-400">
+              <p className="text-lg text-palm-300">
                 No businesses match &ldquo;{query}&rdquo;
               </p>
             </div>
