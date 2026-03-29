@@ -280,6 +280,382 @@ export const businesses: Business[] = [
     ],
   },
 
+  {
+    slug: "tortugas-saltwater-grill",
+    name: "Tortuga's Saltwater Grill",
+    category: "eat",
+    tagline: "Premium Gulf Coast seafood & hand-cut steaks in an upscale island setting",
+    description:
+      "Tortuga's Saltwater Grill is Port Aransas's top-rated restaurant, serving premium Gulf Coast seafood and hand-cut steaks in a cozy, upscale setting. From creative sushi-inspired starters to Parmesan-crusted flounder and lobster bisque, every dish is crafted with care. They offer Sunday brunch with coffee and cocktails, an extensive lunch and dinner menu 7 days a week, and reservations via OpenTable. Rated 4.7 stars by nearly 1,000 OpenTable diners.",
+    address: "429 N Alister St, Port Aransas, TX 78373",
+    phone: "(361) 749-2739",
+    website: "https://www.tortugassaltwatergrill.com",
+    hours: "Mon-Thu 3PM-9PM, Fri-Sun 9AM-2PM & 3PM-9PM",
+    hoursOfOperation: {
+      Monday: "3:00 PM – 9:00 PM",
+      Tuesday: "3:00 PM – 9:00 PM",
+      Wednesday: "3:00 PM – 9:00 PM",
+      Thursday: "3:00 PM – 9:00 PM",
+      Friday: "9:00 AM – 2:00 PM, 3:00 PM – 9:00 PM",
+      Saturday: "9:00 AM – 2:00 PM, 3:00 PM – 9:00 PM",
+      Sunday: "9:00 AM – 2:00 PM, 3:00 PM – 9:00 PM",
+    },
+    featured: true,
+    tags: ["seafood", "steaks", "fine dining", "brunch", "sushi"],
+    priceRange: "$$$",
+    menu: [
+      {
+        section: "Favorites",
+        items: [
+          {
+            name: "Lobster Bisque",
+            description: "Rich, creamy house-made lobster bisque",
+          },
+          {
+            name: "Parmesan Crusted Flounder",
+            description: "Gulf flounder with a crispy Parmesan crust",
+          },
+          {
+            name: "Shrimp & Grits",
+            description:
+              "Cheddar grit cakes topped with Gulf shrimp sautéed with crispy bacon, corn & poblano peppers",
+          },
+          {
+            name: "Big Cheesy Burger",
+            description: "House favorite — a loaded gourmet burger",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    slug: "virginias-on-the-bay",
+    name: "Virginia's On The Bay",
+    category: "eat",
+    tagline: "Waterfront seafood since 1996 — bring your catch, they'll cook it",
+    description:
+      "Virginia's on the Bay has been serving fresh seafood to Port A since 1996. This two-story waterfront eatery offers amazing views of the lighthouse, harbor, and the channel from the open-air deck. Bring in your own catch of the day and they'll prepare it grilled, blackened, or fried with family-style sides. Known for their crab cakes, fresh oysters on the half shell, seafood gumbo, and the legendary chocolate and coconut gooey Louie dessert. Pull up by boat and dock for dinner.",
+    address: "815 Trout St, Port Aransas, TX 78373",
+    phone: "(361) 749-4088",
+    website: "https://virginiasonthebay.com",
+    hours: "Sun-Thu 11AM-9PM, Fri-Sat 11AM-10PM",
+    hoursOfOperation: {
+      Monday: "11:00 AM – 9:00 PM",
+      Tuesday: "11:00 AM – 9:00 PM",
+      Wednesday: "11:00 AM – 9:00 PM",
+      Thursday: "11:00 AM – 9:00 PM",
+      Friday: "11:00 AM – 10:00 PM",
+      Saturday: "11:00 AM – 10:00 PM",
+      Sunday: "11:00 AM – 9:00 PM",
+    },
+    featured: true,
+    tags: ["waterfront", "seafood", "family-friendly", "boat dock", "cook your catch"],
+    priceRange: "$$",
+    menu: [
+      {
+        section: "Highlights",
+        items: [
+          {
+            name: "Crab Cakes",
+            description: "House-made jumbo lump crab cakes",
+          },
+          {
+            name: "Oysters on the Half Shell",
+            description: "Fresh Gulf oysters served raw",
+          },
+          {
+            name: "Cook Your Catch",
+            description:
+              "Bring your cleaned fish — grilled, blackened, or fried with family-style sides",
+          },
+          {
+            name: "Chocolate Coconut Gooey Louie",
+            description: "Signature dessert — a must-try",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    slug: "fins-grill-icehouse",
+    name: "FINS Grill & Icehouse",
+    category: "eat",
+    tagline: "Waterfront seafood & grill — you hook 'em, we cook 'em!",
+    description:
+      "FINS Grill & Icehouse is a waterfront dining destination offering fresh Gulf seafood, creative cocktails, and island vibes right on the marina. Their motto says it all: 'You hook 'em, we cook 'em!' Bring in your fresh-caught, cleaned fish and FINS will prepare it grilled, fried, blackened, or garlic. A casual, come-as-you-are spot perfect for families, fishermen, and anyone craving Gulf-fresh seafood.",
+    address: "440 W Cotter Ave, Port Aransas, TX 78373",
+    phone: "(361) 749-8646",
+    website: "https://www.finsgrillandicehouse.com",
+    hours: "Mon-Thu 11AM-8PM, Fri-Sat 11AM-9PM, Sun 11AM-8PM",
+    hoursOfOperation: {
+      Monday: "11:00 AM – 8:00 PM",
+      Tuesday: "11:00 AM – 8:00 PM",
+      Wednesday: "11:00 AM – 8:00 PM",
+      Thursday: "11:00 AM – 8:00 PM",
+      Friday: "11:00 AM – 9:00 PM",
+      Saturday: "11:00 AM – 9:00 PM",
+      Sunday: "11:00 AM – 8:00 PM",
+    },
+    featured: false,
+    tags: ["waterfront", "seafood", "grill", "casual", "cook your catch"],
+    priceRange: "$$",
+  },
+  {
+    slug: "la-playa-mexican-grille",
+    name: "La Playa Mexican Grille",
+    category: "eat",
+    tagline: "Fresh Tex-Mex, 70+ tequilas & island-famous fish tacos since 2002",
+    description:
+      "La Playa Mexican Grille has been serving unforgettable food and good times since 2002. Featuring daily fresh fish specials, classic Tex-Mex favorites, and a collection of over 70 tequilas, this is the island's go-to for Mexican cuisine. Try the avocado crab nest, blackened tuna tacos, or the Island Pepper — a roasted poblano stuffed with white cheese, wrapped in fajita steak, topped with ranchero sauce and chili con queso. Ranked #9 of all restaurants in Port Aransas on TripAdvisor.",
+    address: "222 Beach Ave, Port Aransas, TX 78373",
+    phone: "(361) 749-0022",
+    website: "https://laplayamexicangrille.com",
+    hours: "Tue-Sat 5PM-10PM, Closed Sun-Mon",
+    hoursOfOperation: {
+      Monday: "Closed",
+      Tuesday: "5:00 PM – 10:00 PM",
+      Wednesday: "5:00 PM – 10:00 PM",
+      Thursday: "5:00 PM – 10:00 PM",
+      Friday: "5:00 PM – 10:00 PM",
+      Saturday: "5:00 PM – 10:00 PM",
+      Sunday: "Closed",
+    },
+    featured: false,
+    tags: ["mexican", "tex-mex", "tequila", "fish tacos", "date night"],
+    priceRange: "$$",
+    menu: [
+      {
+        section: "Signature Dishes",
+        items: [
+          {
+            name: "Avocado Crab Nest",
+            description:
+              "Half avocado stuffed with sautéed lump crab meat, topped with melted white cheese, cilantro ranch & pico de gallo",
+          },
+          {
+            name: "Blackened Tuna Tacos",
+            description: "Fresh tuna blackened and served in warm tortillas",
+          },
+          {
+            name: "Island Pepper",
+            description:
+              "Roasted poblano stuffed with white cheese, wrapped in fajita steak, topped with ranchero sauce & queso",
+          },
+          {
+            name: "Crabmeat Enchiladas",
+            description:
+              "Stuffed with sautéed lump crab & avocado, topped with creamy roasted poblano sauce",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    slug: "roosevelts-tarpon-inn",
+    name: "Roosevelt's at The Tarpon Inn",
+    category: "eat",
+    tagline: "Fine dining in a historic 1886 courtyard — hand-cut steaks & Gulf seafood",
+    description:
+      "Tucked behind the historic Tarpon Inn (est. 1886), Roosevelt's serves fine dining in an intimate courtyard setting. The curated menu features hand-cut steaks with rich Bordelaise sauce, coconut-crusted jumbo shrimp, firecracker tenderloin, and citrus-grilled Mahi Mahi with lobster cream. The adjacent 1886 Bar offers craft cocktails in a cozy lounge. Wine Down Wednesdays feature half-price select bottles. Named after President FDR, who fished off Port Aransas in 1937. Reservations required.",
+    address: "200 E Cotter Ave, Port Aransas, TX 78373",
+    phone: "(361) 749-1540",
+    website: "https://www.rooseveltsatthetarponinn.com",
+    hours: "Mon, Thu-Sun 5PM-9PM, Closed Tue-Wed",
+    hoursOfOperation: {
+      Monday: "5:00 PM – 9:00 PM",
+      Tuesday: "Closed",
+      Wednesday: "Closed",
+      Thursday: "5:00 PM – 9:00 PM",
+      Friday: "5:00 PM – 9:00 PM",
+      Saturday: "5:00 PM – 9:00 PM",
+      Sunday: "5:00 PM – 9:00 PM",
+    },
+    featured: false,
+    tags: ["fine dining", "steaks", "seafood", "historic", "wine", "date night"],
+    priceRange: "$$$",
+    menu: [
+      {
+        section: "Signature Dishes",
+        items: [
+          {
+            name: "Firecracker Tenderloin",
+            description:
+              "Bacon-wrapped tenderloin medallions with serrano pepper & Swiss cheese in Bordelaise atop mushroom risotto",
+          },
+          {
+            name: "Coconut Jumbo Shrimp",
+            description:
+              "Panko-coconut encrusted jumbo shrimp drizzled with raspberry chipotle over shallot fries",
+          },
+          {
+            name: "Citrus Grilled Mahi Mahi",
+            description:
+              "Grilled Mahi Mahi with potatoes, finished with creamy lobster sauce",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    slug: "kodys-restaurant",
+    name: "Kody's Restaurant & Bar",
+    category: "eat",
+    tagline: "Burgers, seafood & steaks with 18-hole mini golf — kitchen open 'til 1AM",
+    description:
+      "Kody's is a long-time local favorite known for Texas-style comfort food — burgers, seafood, tacos, sandwiches, and steaks. One of the few restaurants on the island with a late-night kitchen open until 1AM and a bar 'til 2AM. All-you-can-eat shrimp on Wednesdays, Prime Rib Thursdays, and lunch specials daily from 11AM to 4PM. Plus 18-hole miniature golf right on-site. Family-friendly with plenty of vegetarian options.",
+    address: "2034 Hwy 361, Port Aransas, TX 78373",
+    phone: "(361) 749-8226",
+    website: "https://www.kodysrestaurant.com",
+    hours: "Mon-Fri 11AM-2AM (kitchen 'til 1AM)",
+    featured: false,
+    tags: ["burgers", "seafood", "late night", "mini golf", "family-friendly"],
+    priceRange: "$$",
+  },
+  {
+    slug: "grumbles-seafood-co",
+    name: "Grumbles Seafood Co.",
+    category: "eat",
+    tagline: "Fast-casual Gulf seafood — everything caught in the Gulf of Mexico",
+    description:
+      "Grumbles Seafood Co. is deeply rooted in Port Aransas with a mission to serve high-quality Gulf Coast seafood in a fun, family-friendly environment. Everything they cook comes from the Gulf of Mexico — they serve nothing else. It's a fast-casual spot where families and fishermen can come as they are, whether fresh from the beach or the boat. The island-fare menu focuses on fresh seafood, burgers, and salads.",
+    address: "850 Tarpon St, Port Aransas, TX 78373",
+    phone: "(361) 749-1990",
+    website: "https://grumblesseafoodco.com",
+    hours: "Daily 11AM-9PM",
+    hoursOfOperation: {
+      Monday: "11:00 AM – 9:00 PM",
+      Tuesday: "11:00 AM – 9:00 PM",
+      Wednesday: "11:00 AM – 9:00 PM",
+      Thursday: "11:00 AM – 9:00 PM",
+      Friday: "11:00 AM – 9:00 PM",
+      Saturday: "11:00 AM – 9:00 PM",
+      Sunday: "11:00 AM – 9:00 PM",
+    },
+    featured: false,
+    tags: ["seafood", "fast-casual", "family-friendly", "Gulf fresh", "burgers"],
+    priceRange: "$$",
+  },
+  {
+    slug: "port-a-pizzeria",
+    name: "Port A Pizzeria",
+    category: "eat",
+    tagline: "Hand-tossed pizza, calzones & an all-you-can-eat buffet for 30+ years",
+    description:
+      "For over 30 years, Port A Pizzeria has been a Port Aransas staple, serving hand-tossed and thin-crust pizzas, calzones, hot subs, wings, and homemade meatballs. Their all-you-can-eat dine-in buffet includes a salad bar, pastas, a variety of pizzas, dessert, and a beverage. A perfect casual stop on Avenue G for families and groups.",
+    address: "407 E Ave G, Port Aransas, TX 78373",
+    phone: "(361) 749-5226",
+    website: "https://www.portapizzeria.com",
+    hours: "Daily 11AM-10PM",
+    hoursOfOperation: {
+      Monday: "11:00 AM – 10:00 PM",
+      Tuesday: "11:00 AM – 10:00 PM",
+      Wednesday: "11:00 AM – 10:00 PM",
+      Thursday: "11:00 AM – 10:00 PM",
+      Friday: "11:00 AM – 10:00 PM",
+      Saturday: "11:00 AM – 10:00 PM",
+      Sunday: "11:00 AM – 10:00 PM",
+    },
+    featured: false,
+    tags: ["pizza", "calzones", "buffet", "family-friendly", "casual"],
+    priceRange: "$",
+  },
+  {
+    slug: "lisabellas-bistro",
+    name: "Lisabella's Bistro & Bar",
+    category: "eat",
+    tagline: "Upscale coastal seafood at Cinnamon Shore — chef-driven menu & craft cocktails",
+    description:
+      "Lisabella's Bistro & Bar at Cinnamon Shore serves upscale coastal cuisine with a chef-driven menu. Highlights include baked oysters Lisabella, the Del Mar Pasta with diver sea scallops, wild Gulf shrimp, and fresh fish in chardonnay lobster cream, and the house-specialty mermaid soup — a lobster coconut broth with shrimp, curry, and secret spices. Save room for the from-scratch Hallelujah Chocolate Cake, the family recipe everyone raves about. Reservations highly recommended.",
+    address: "5009 Hwy 361, Port Aransas, TX 78373",
+    phone: "(361) 749-4222",
+    website: "https://lisabellas.com",
+    hours: "Tue-Sat 5:30PM-9PM, Closed Sun-Mon",
+    hoursOfOperation: {
+      Monday: "Closed",
+      Tuesday: "5:30 PM – 9:00 PM",
+      Wednesday: "5:30 PM – 9:00 PM",
+      Thursday: "5:30 PM – 9:00 PM",
+      Friday: "5:30 PM – 9:00 PM",
+      Saturday: "5:30 PM – 9:00 PM",
+      Sunday: "Closed",
+    },
+    featured: false,
+    tags: ["seafood", "upscale", "cocktails", "Cinnamon Shore", "date night"],
+    priceRange: "$$$",
+    menu: [
+      {
+        section: "Signature Dishes",
+        items: [
+          {
+            name: "Del Mar Pasta",
+            description:
+              "Penne topped with diver sea scallops, wild Gulf shrimp & fresh Gulf fish in roasted poblano chardonnay lobster cream",
+          },
+          {
+            name: "Mermaid Soup",
+            description:
+              "Lobster coconut broth with shrimp, curry & secret spices",
+          },
+          {
+            name: "Baked Oysters Lisabella",
+            description: "House specialty baked oysters",
+          },
+          {
+            name: "Hallelujah Chocolate Cake",
+            description: "Made-from-scratch family recipe chocolate cake",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    slug: "lelos-island-bar",
+    name: "Lelo's Island Bar",
+    category: "eat",
+    tagline: "Signature tiki drinks, specialty burgers & island vibes — dog-friendly patio",
+    description:
+      "Lelo's Island Bar is a neighborhood staple for locals and visitors alike, serving signature tiki drinks and specialty burgers in a casual, laid-back setting. Indoor and outdoor seating with a dog-friendly patio. A perfect spot to grab a craft cocktail, a cold beer, and a burger after a day on the beach.",
+    address: "212 Beach St, Port Aransas, TX 78373",
+    phone: "(361) 416-1792",
+    website: "https://www.lelosbar.com",
+    hours: "Mon-Wed 11AM-10PM, Thu-Sat 11AM-11PM, Sun 11AM-10PM",
+    hoursOfOperation: {
+      Monday: "11:00 AM – 10:00 PM",
+      Tuesday: "11:00 AM – 10:00 PM",
+      Wednesday: "11:00 AM – 10:00 PM",
+      Thursday: "11:00 AM – 11:00 PM",
+      Friday: "11:00 AM – 11:00 PM",
+      Saturday: "11:00 AM – 11:00 PM",
+      Sunday: "11:00 AM – 10:00 PM",
+    },
+    featured: false,
+    tags: ["bar", "burgers", "tiki drinks", "dog-friendly", "casual"],
+    priceRange: "$$",
+  },
+  {
+    slug: "bierhaus-port-aransas",
+    name: "BierHaus Port Aransas",
+    category: "eat",
+    tagline: "Craft biers, bar swings, live music & a climate-controlled patio on Ave G",
+    description:
+      "BierHaus is one of Port A's staple bars, located on Avenue G in the former Shells Pasta building. With indoor and outdoor climate-controlled bars, daily drink specials, delicious food, and live music, it's the perfect hangout. Grab a seat on their signature bar swings, play bar games, or relax on the patio with a cold craft beer. Pet-friendly, wheelchair accessible, with WiFi and parking.",
+    address: "522 E Ave G, Port Aransas, TX 78373",
+    phone: "(361) 339-1041",
+    hours: "Mon-Thu 11AM-12AM, Fri-Sat 11AM-1AM, Sun 11AM-12AM",
+    hoursOfOperation: {
+      Monday: "11:00 AM – 12:00 AM",
+      Tuesday: "11:00 AM – 12:00 AM",
+      Wednesday: "11:00 AM – 12:00 AM",
+      Thursday: "11:00 AM – 12:00 AM",
+      Friday: "11:00 AM – 1:00 AM",
+      Saturday: "11:00 AM – 1:00 AM",
+      Sunday: "11:00 AM – 12:00 AM",
+    },
+    featured: false,
+    tags: ["bar", "craft beer", "live music", "pet-friendly", "bar swings"],
+    priceRange: "$$",
+  },
+
   // STAY
   {
     slug: "port-royal-ocean-resort",
@@ -348,6 +724,61 @@ export const businesses: Business[] = [
       "Free parking",
       "Washer/dryer in units",
       "Pet-friendly options available",
+    ],
+  },
+
+  {
+    slug: "tarpon-inn",
+    name: "The Tarpon Inn",
+    category: "stay",
+    tagline: "Historic 1886 hotel on the National Register — 7,000 signed tarpon scales in the lobby",
+    description:
+      "Originally built in 1886 from surplus Civil War barracks material, The Tarpon Inn is one of the most historic hotels on the Texas coast and a National Register landmark celebrating 140 years. Each of the unique rooms is decorated in period antiques — no two are alike, and there are no televisions or telephones by design. The 200-foot-long porches with rocking chairs and old-fashioned ceiling fans invite you to slow down to island time. The main lobby is adorned with over 7,000 tarpon scales, each signed by the angler who landed the fish — including one signed by President Franklin D. Roosevelt in 1937. Home to Roosevelt's restaurant and the 1886 Bar.",
+    address: "220 E Cotter Ave, Port Aransas, TX 78373",
+    phone: "(361) 749-1540",
+    website: "https://www.thetarponinn.com",
+    hours: "24/7 front desk",
+    featured: true,
+    tags: ["historic", "boutique hotel", "National Register", "Roosevelt's", "1886 Bar"],
+    priceRange: "$$$",
+    amenities: [
+      "National Register of Historic Places (since 1979)",
+      "200-foot porches with rocking chairs",
+      "Period antique furnishings",
+      "Old-fashioned ceiling fans",
+      "Private baths",
+      "Lobby with 7,000+ signed tarpon scales",
+      "Roosevelt's restaurant on-site",
+      "1886 Bar & cocktail lounge",
+      "Courtyard event space",
+      "No TVs or phones — by design",
+    ],
+  },
+  {
+    slug: "amelias-landing",
+    name: "Amelia's Landing Hotel",
+    category: "stay",
+    tagline: "Aviation-themed boutique hotel — breakfast delivered to your door every morning",
+    description:
+      "Amelia's Landing is an aviation-themed boutique hotel in the heart of Port Aransas with 23 unique rooms, each representing a different era of aviation history. They claim to be the only hotel in America that delivers breakfast to every guest's room each morning — a signature service since 2002. Amenities include a year-round outdoor pool, sun terrace, picnic area, BBQ facilities, and electric vehicle charging. A 15-minute walk to the beach with free parking and concierge service.",
+    address: "105 N Alister St, Port Aransas, TX 78373",
+    phone: "(361) 416-1777",
+    website: "https://www.ameliaslanding.com",
+    hours: "24/7 front desk",
+    featured: false,
+    tags: ["boutique hotel", "aviation-themed", "breakfast included", "pool", "downtown"],
+    priceRange: "$$",
+    amenities: [
+      "Breakfast delivered to room daily",
+      "23 uniquely themed rooms",
+      "Year-round outdoor pool",
+      "Sun terrace & picnic area",
+      "BBQ facilities",
+      "Free WiFi",
+      "Free parking",
+      "EV charging station",
+      "Concierge service",
+      "Refrigerator & microwave in rooms",
     ],
   },
 
@@ -496,6 +927,177 @@ export const businesses: Business[] = [
     ],
   },
 
+  {
+    slug: "scarlet-lady-dolphin-cruises",
+    name: "Scarlet Lady Dolphin Cruises",
+    category: "do",
+    tagline: "Catamaran dolphin tours, oyster farm trips & sunset cruises with a full bar",
+    description:
+      "The Scarlet Lady is a 50-foot catamaran-style vessel built in 2015, holding up to 48 passengers with plenty of room and shade. Cruise the Lydia Ann Channel in search of wild dolphins, sea birds, and the iconic Lydia Ann Lighthouse. The only dolphin tour in Port Aransas with a full bar on board. Beyond the daily dolphin adventure, they offer specialty cruises: Wine on the Water (third Thursday monthly), the Sip & Shuck Oyster Farm Tour (first Sunday monthly) to Texas Clear Water Oyster Gardens, industrial waterways tours, and holiday cruises. Departs from Captain Kelly's Deep Sea Headquarters.",
+    address: "440 W Cotter Ave, Port Aransas, TX 78373",
+    phone: "(361) 749-5597",
+    website: "https://scarletladydolphincruise.com",
+    hours: "Daily — call for cruise times",
+    featured: false,
+    tags: ["dolphins", "catamaran", "sunset cruise", "oyster tour", "full bar"],
+    schedule: [
+      {
+        name: "Dolphin Adventure Tour",
+        times: ["Two departures daily — call for times"],
+        description:
+          "1.5-hour cruise along the Lydia Ann Channel with full narration on Port Aransas history",
+      },
+      {
+        name: "Wine on the Water",
+        times: ["Third Thursday of every month"],
+        description: "Wine and cheese sunset cruise",
+      },
+      {
+        name: "Sip & Shuck Oyster Farm Tour",
+        times: ["First Sunday of every month + bonus dates"],
+        description:
+          "Prosecco welcome, behind-the-scenes oyster farm visit, freshly shucked local oysters & wine pairing",
+      },
+      {
+        name: "Industrial Waterways Tour",
+        times: ["Call for schedule"],
+        description:
+          "2-hour tour cruising the deep-water channels alongside commercial ships, tugboats & port operations",
+      },
+    ],
+  },
+  {
+    slug: "deep-sea-headquarters",
+    name: "Deep Sea Headquarters",
+    category: "do",
+    tagline: "Full-service marina with fishing charters from 3 to 60 hours & a pirate ship",
+    description:
+      "Deep Sea Headquarters is a full-service marina offering high-quality deep sea fishing in Port Aransas with trips from 3 to 60 hours. Their fleet includes the custom-built Gulf Eagle (the largest, most comfortable vessel with heated/AC cabin), the Kingfisher party boat (up to 40 passengers), and the Pelican private charter (70-foot vessel with AC cabin). They also operate the Red Dragon Pirate Ship with cannon fire, dolphin watching, sword fighting, and treasure hunting. All trips include bait, rod, and tackle. Voted top Fishing Guide & Charter in the Coastal Bend.",
+    address: "440 W Cotter Ave, Port Aransas, TX 78373",
+    phone: "(361) 749-5597",
+    website: "https://deepseaheadquarters.com",
+    hours: "Daily 6AM-9PM",
+    hoursOfOperation: {
+      Monday: "6:00 AM – 9:00 PM",
+      Tuesday: "6:00 AM – 9:00 PM",
+      Wednesday: "6:00 AM – 9:00 PM",
+      Thursday: "6:00 AM – 9:00 PM",
+      Friday: "6:00 AM – 9:00 PM",
+      Saturday: "6:00 AM – 9:00 PM",
+      Sunday: "6:00 AM – 9:00 PM",
+    },
+    featured: true,
+    tags: ["fishing", "deep sea", "charters", "pirate ship", "marina"],
+    priceRange: "$$–$$$$",
+    charters: [
+      {
+        name: "Bay Fishing Trip",
+        duration: "3-4 hours",
+        price: "Call for rates",
+        description: "Family-friendly bay fishing in calm waters",
+      },
+      {
+        name: "Half-Day Offshore",
+        duration: "8 hours",
+        price: "Call for rates",
+        description: "Deep sea fishing targeting snapper, kingfish & more",
+      },
+      {
+        name: "Full-Day Offshore",
+        duration: "12 hours",
+        price: "Call for rates",
+        description: "Extended offshore trip for serious anglers",
+      },
+      {
+        name: "56-Hour Tuna Safari",
+        duration: "56 hours (2 nights)",
+        price: "Call for rates",
+        description:
+          "Two nights offshore aboard the Wharf Cat or Scat Cat — targeting yellowfin tuna, dorado, wahoo & marlin",
+      },
+      {
+        name: "Red Dragon Pirate Ship",
+        duration: "1.5 hours",
+        price: "Call for rates",
+        description:
+          "Family fun with cannon fire, dolphin watching, sword fighting & treasure hunting",
+      },
+    ],
+  },
+  {
+    slug: "palmilla-beach-golf",
+    name: "Palmilla Beach Golf Club",
+    category: "do",
+    tagline: "The only True-Links golf course in Texas — open to the public, no dress code",
+    description:
+      "Originally planned by Arnold Palmer, Palmilla Beach Golf Club features the only True-Links style course in Texas. The 9-hole course (par 32) plus 'The Loop' (par 9) offer a unique coastal golfing experience. Open to the public with no membership required and no dress code. Every booking includes a complimentary golf cart and 1 hour of driving range access before your tee time.",
+    address: "258 Snapdragon, Port Aransas, TX 78373",
+    phone: "(361) 749-4653",
+    website: "https://www.palmillabeach.com/palmilla-beach-golf/",
+    hours: "Mon-Sat 8AM-6PM",
+    hoursOfOperation: {
+      Monday: "8:00 AM – 6:00 PM",
+      Tuesday: "8:00 AM – 6:00 PM",
+      Wednesday: "8:00 AM – 6:00 PM",
+      Thursday: "8:00 AM – 6:00 PM",
+      Friday: "8:00 AM – 6:00 PM",
+      Saturday: "8:00 AM – 6:00 PM",
+      Sunday: "Closed",
+    },
+    featured: false,
+    tags: ["golf", "links course", "Arnold Palmer", "public", "no dress code"],
+    amenities: [
+      "9-hole True-Links course (par 32)",
+      "The Loop (par 9)",
+      "Complimentary golf cart with booking",
+      "Driving range — 1 hour free before tee time",
+      "No membership required",
+      "No dress code",
+      "Open to the public",
+    ],
+  },
+  {
+    slug: "island-outfitters",
+    name: "Island Outfitters",
+    category: "do",
+    tagline: "Premier golf cart rentals & beach gear — book online, delivered to your door",
+    description:
+      "Island Outfitters is Port Aransas's premier golf cart rental and beach gear provider. Skip the pickup line — book online and they'll deliver a six-passenger golf cart with unlimited fuel right to your accommodation. They also rent electric bikes, beach chairs, and Yeti coolers. All renters must be 21+ with a valid license, proof of insurance, and credit card. Golf carts cannot be driven on Highway 361.",
+    address: "525 Cut Off Rd, Port Aransas, TX 78373",
+    phone: "(361) 336-3866",
+    website: "https://www.islandoutfitterstx.com",
+    hours: "Daily 9AM-7PM",
+    hoursOfOperation: {
+      Monday: "9:00 AM – 7:00 PM",
+      Tuesday: "9:00 AM – 7:00 PM",
+      Wednesday: "9:00 AM – 7:00 PM",
+      Thursday: "9:00 AM – 7:00 PM",
+      Friday: "9:00 AM – 7:00 PM",
+      Saturday: "9:00 AM – 7:00 PM",
+      Sunday: "9:00 AM – 7:00 PM",
+    },
+    featured: false,
+    tags: ["golf carts", "beach gear", "e-bikes", "rentals", "delivery"],
+    rentals: [
+      {
+        name: "6-Passenger Golf Cart",
+        duration: "Daily & multi-day",
+        price: "Book online for rates",
+        description: "2022 model with unlimited fuel, delivered to you",
+      },
+      {
+        name: "Electric Bikes",
+        duration: "Daily",
+        price: "Book online for rates",
+      },
+      {
+        name: "Beach Chairs & Yeti Coolers",
+        duration: "Daily",
+        price: "Book online for rates",
+      },
+    ],
+  },
+
   // SHOP
   {
     slug: "island-surf-rentals",
@@ -542,6 +1144,45 @@ export const businesses: Business[] = [
     },
     featured: false,
     tags: ["kites", "beach gear", "gifts", "wind toys", "family-friendly"],
+  },
+
+  {
+    slug: "wintons-island-candy",
+    name: "Winton's Island Candy",
+    category: "shop",
+    tagline: "Homemade fudge, caramels & saltwater taffy since 1995",
+    description:
+      "Since 1995, Winton's Island Candies has been the island's sweetest stop. This family-owned confectionary on Alister Street specializes in homemade caramels and fudge, with a variety of treats including saltwater taffy, candy corn, gummies, sours, licorice, and truffles. The aroma of freshly made fudge and pralines greets you at the door. A must-visit for anyone with a sweet tooth.",
+    address: "601 S Alister St, Port Aransas, TX 78373",
+    phone: "(361) 749-4772",
+    website: "https://wintonscandies.com",
+    hours: "Daily 9AM-9PM",
+    hoursOfOperation: {
+      Monday: "9:00 AM – 9:00 PM",
+      Tuesday: "9:00 AM – 9:00 PM",
+      Wednesday: "9:00 AM – 9:00 PM",
+      Thursday: "9:00 AM – 9:00 PM",
+      Friday: "9:00 AM – 9:00 PM",
+      Saturday: "9:00 AM – 9:00 PM",
+      Sunday: "9:00 AM – 9:00 PM",
+    },
+    featured: false,
+    tags: ["candy", "fudge", "saltwater taffy", "gifts", "sweets"],
+    priceRange: "$",
+  },
+  {
+    slug: "destination-beach-surf",
+    name: "Destination Beach & Surf",
+    category: "shop",
+    tagline: "Beach essentials, apparel & unique coastal gifts on Alister Street since 2000",
+    description:
+      "Located in the heart of downtown Port Aransas on Alister Street, Destination Beach & Surf is a treasure trove of apparel, beach essentials, and unique gifts designed to capture the spirit of coastal living. Open since 2000, this souvenir shop has everything from swimwear and sunscreen to Port Aransas-themed gifts and keepsakes.",
+    address: "516 S Alister St, Port Aransas, TX 78373",
+    phone: "(361) 749-2444",
+    hours: "Daily 9AM-8PM",
+    featured: false,
+    tags: ["beach gear", "apparel", "gifts", "souvenirs", "coastal"],
+    priceRange: "$–$$",
   },
 
   // SERVICES
