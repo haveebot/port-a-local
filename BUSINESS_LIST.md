@@ -7,6 +7,8 @@ _🔑 = owner/affiliate (priority lead routing)_
 - Build comprehensive first, curate/feature later
 - Flag affiliates with 🔑 for priority lead routing
 - Multi-category businesses get listed under every applicable category (max exposure)
+- **NO PUD businesses** — Port A has planned urban developments (Cinnamon Shore, Palmilla, Sunflower Beach, etc.) with their own internal businesses. We focus on the main island/community only.
+- Exception: Lisabella's (personal relationship) is the only PUD-adjacent listing we carry
 
 ---
 
@@ -29,49 +31,134 @@ _🔑 = owner/affiliate (priority lead routing)_
 - Jackfish (multi: golf cart rentals, retail, brick oven pizza)
 - Drifter's Deli (at Woody's Last Stand)
 - Tortuga's Saltwater Grill
+- KC's Oyster Shack
+- The Phoenix Restaurant & Bar
+- Castaway's Bar & Grill
+- Taqueria San Juan
+- Cancun Mexican Restaurant
+- The Gaff Pizza
+- Trout Street Bar & Grill
+- Coach's Island Grill
+- The Island Cafe
+- Island Bakery
+- Port A Poke
+- Lelo's Island Bar
+- Mrs. K's
+- Vibe Taco
+- Wok On
+- Bayou Bistro
+- Aloha Acai
+- Stingray's
+- Bernie's Beach House
+- Coffee Waves
+- Bron's Backyard
 
 ## Drink
-- BlueWater Cowboy Saloon & Mercantile (3rd floor bar, Gulf views, sportfishing boat transom theme)
-- Lelo's Island Bar
-- Boat Bar (at Woody's Last Stand)
-- Bron's Beach Carts & Backyard (to-go daiquiris, cold beer, tropical cocktails)
+_🍺 = bar only | 🍽️🍺 = restaurant bar (also listed in Eat)_
+
+**Bars**
+- Bernie's Beach House 🍺
+- The Gaff 🍺
+- Lelo's Island Bar 🍺
+- Boat Bar at Woody's Last Stand 🍺
+- Bron's Backyard 🍺
+- Treasure Island 🍺
+- Busted Bicycle 🍺
+- Red's Riviera 🍺
+- Shorty's 🍺
+- Salty Dog 🍺
+- VFW 🍺
+
+**Restaurant Bars**
+- BlueWater Cowboy Saloon & Mercantile 🍽️🍺
+- Stingray's 🍽️🍺
+- Castaway's Bar & Grill 🍽️🍺
+- FINS Grill & Icehouse 🍽️🍺
 
 ## Stay
-- Port Royal Ocean Resort & Conference Center
-- Cinnamon Shore
-- The Tarpon Inn
-- Amelia's Landing Hotel
+_🏨 = hotel/motel | 🏠 = vacation rental | 🏢 = property management company | 🏕️ = RV/camping_
+
+**Hotels & Motels**
+- Port Royal Ocean Resort & Conference Center 🏨
+- The Tarpon Inn 🏨
+- Amelia's Landing Hotel 🏨
+- Best Western 🏨
+- Days Inn 🏨
+- Beachgate 🏨
+- Shark Reef Resort 🏨
+- Tropic Island Resort 🏨
+- Seashell Village Resort 🏨
+- Alister Square Inn 🏨
+- America's Best Value Inn 🏨
+- Island Hotel 🏨
+- Oceans Edge Hotel 🏨
+- Hotel Lydia 🏨
+- Hampton Inn 🏨
+- Sea and Sand Cottages 🏨
+- Sway 🏢
+
+**Property Management / Vacation Rentals**
+- CCMS 🏢
+- Life in Paradise 🏢
+- Port A Escapes 🏢
+- Beachcomber Vacation Rentals 🏢
+- Nautical Nooks Vacation Rentals 🏢
+- New Wave Vacation Rentals 🏢
+- Silver Sands Vacation Rentals 🏢
+
+**Condos & Complexes**
+- Sand Dollar City 🏠
+- The Courtyard Condominiums 🏠
+- Port A Beachlodge 🏨 (also listed in Eat — restaurant + separate hotel/motel facilities)
+
+**RV Resorts & Camping**
+- Aloha Beach RV Resort 🏕️
+- Gulf Waters RV Resort 🏕️
+- Lafitte's Hideout 🏕️
+- On The Beach RV Resort 🏕️
+- Pioneer RV Resort 🏕️
+- Port A RV Resort 🏕️
+- Tropic Island RV Resort 🏕️
+- IB Magee Beach Park 🏕️
+
+- ⚠️ _TODO for Winston & Nick: Review PUD properties (Cinnamon Shore, Palmilla Beach, Sunflower Beach) for possible inclusion_
 
 ## Do
-- Bron's Beach Carts & Backyard (live music, fire dancers, yard games)
+- Bron's Backyard (live music, fire dancers, yard games)
 - Dolphin Watch Nature Tour & Shrimp Trawl
 - The Jetty Boat at Fisherman's Wharf
-- Port A Beach Buggies
 - Scarlet Lady Dolphin Cruises
 - Red Dragon Pirate Ship
-- Palmilla Beach Golf Club
 - Island Outfitters
 - Island Surf Rentals
 - Fly It! Port A
 - Neptune Tours (at Woody's Last Stand)
 - Parasailing (at Woody's Last Stand)
+- ⚠️ _TODO: Revisit Do category — add city parks, nature walks, public facilities, and other non-commercial attractions_
 
 ## Fish
+_💰 High-potential booking/reservation revenue category_
+
 - Deep Sea Headquarters
 - Neptune's Charters
 - Alex Porter's Fishing Guide Service (at Woody's Last Stand)
+- Dolphin Dock
+- Island Tackle
+- Fisherman's Wharf
+- Tejas Guide Services
+- Winton's Guide Service 🔑 (family friends — priority listing)
+- Woody's Last Stand
+- Port Aransas Fly Fishing
 
-## Shop
-- Winton's Island Candy
-- Destination Beach & Surf
-- The Cart Store
+- ⚠️ _TODO: Additional local guides with personal relationships to be added after confirming they want to be promoted and have availability. Consider booking/reservation engine and ad placement as revenue streams._
 
 ## Beach
-- Bron's Beach Carts & Backyard (beach setups, umbrellas, tents, chairs — 3 beach locations)
+- Bron's Backyard (beach setups, umbrellas, tents, chairs — fixed beach locations only)
+- ⚠️ _OUR PRODUCT: Beach cabana service — any location customer chooses. Only mobile beach service on the island. See docs/OUR-PRODUCTS.md_
 
 ## Shop
 - BlueWater Cowboy Saloon & Mercantile (Mercantile retail)
-- Winton's Island Candy
+- Winton's Island Candy 🔑 (family friends — priority listing)
 - Destination Beach & Surf
 - The Cart Store
 
@@ -83,7 +170,7 @@ _🔑 = owner/affiliate (priority lead routing)_
 - JOY Cart Rentals 🔑 (Nick & wife)
 - Golf Cart Rentals (at Woody's Last Stand)
 - Fresh Local Crabs (at Woody's Last Stand)
-- Bron's Beach Carts & Backyard (golf cart rentals, 24hr, free pickup/delivery)
+- Bron's Backyard (golf cart rentals, 24hr, free pickup/delivery)
 
 ---
 _Last updated: 2026-03-29_
