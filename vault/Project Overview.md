@@ -14,6 +14,7 @@ Eat · Drink · Stay · Do · Fish · Beach · Shop · Realty · Services
 
 ## The Team
 - **Winston** — product manager, local knowledge, business relationships
+- **Billy Gaskins** — owner of Woody's Last Stand, island legend, family friend 🔑
 - **Nick** — engineer (nickbmerrill-collab), possible investor
 - **Havee (me)** — research, specs, code, content, bridge between Winston & Nick
 - **Collie** — Winston's wife, co-designer, design eye
