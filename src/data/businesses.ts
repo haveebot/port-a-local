@@ -1026,6 +1026,20 @@ export const businesses: Business[] = [
   },
   // Palmilla Beach Golf Club removed — PUD property
   {
+    slug: "woodys-last-stand",
+    name: "Woody's Last Stand",
+    category: "do",
+    tagline: "Port A's legendary waterfront hub — charters, tours, bar, deli & more all in one",
+    description: "Woody's Last Stand is the heartbeat of Port Aransas's waterfront. This iconic multi-service complex is home to fishing charters, dolphin tours, parasailing, the Boat Bar, Drifter's Deli, fresh local crabs, and golf cart rentals — all under one roof on the water. A family friend operation and a Port Aransas institution. If you don't know where to start, start at Woody's.",
+    address: "136 W Cotter Ave, Port Aransas, TX 78373",
+    phone: "",
+    hours: "Daily 6AM-10PM",
+    featured: true,
+    tags: ["marina", "charters", "tours", "bar", "deli", "parasailing", "golf carts", "multi-service", "waterfront"],
+    priceRange: "$",
+    verifiedPartner: true,
+  },
+  {
     slug: "brons-backyard-do",
     name: "Bron's Backyard",
     category: "do",

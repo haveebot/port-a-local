@@ -132,6 +132,7 @@ _🏨 = hotel/motel | 🏠 = vacation rental | 🏢 = property management compan
 - Island Outfitters
 - Island Surf Rentals
 - Fly It! Port A
+- Woody's Last Stand 🔑 (family friends — owner is personal relationship — priority listing, multi-service waterfront hub)
 - Neptune Tours (at Woody's Last Stand)
 - Parasailing (at Woody's Last Stand)
 - ⚠️ _TODO: Revisit Do category — add city parks, nature walks, public facilities, and other non-commercial attractions_
