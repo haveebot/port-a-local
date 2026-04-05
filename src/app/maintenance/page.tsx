@@ -67,7 +67,7 @@ export default function MaintenancePage() {
               will reach out to you shortly.
             </p>
             <p className="text-navy-300 text-sm">
-              Need immediate assistance? Call directly: <a href="tel:3614558606" className="text-coral-400 font-medium">(361) 455-8606</a>
+              Our team will review your request and reach out to you soon.
             </p>
           </div>
         </section>
@@ -151,8 +151,8 @@ export default function MaintenancePage() {
                   onChange={handleChange}
                   className="w-full border border-sand-300 rounded-lg px-3 py-2 text-navy-900 focus:outline-none focus:ring-2 focus:ring-coral-400"
                 >
-                  <option value="either">Either Phone or Email</option>
-                  <option value="phone">Phone Call</option>
+                  <option value="either">Either Text or Email</option>
+                  <option value="sms">Text / SMS</option>
                   <option value="email">Email</option>
                 </select>
               </div>
@@ -230,8 +230,7 @@ export default function MaintenancePage() {
             </button>
 
             <p className="text-center text-sm text-navy-400">
-              Need immediate help? Call John directly:{" "}
-              <a href="tel:3614558606" className="text-coral-500 font-medium">(361) 455-8606</a>
+              Our team will be in touch shortly after receiving your request.
             </p>
           </form>
         </div>
