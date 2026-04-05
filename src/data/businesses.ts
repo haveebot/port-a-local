@@ -1174,28 +1174,20 @@ export const businesses: Business[] = [
   },
 
   // SHOP
+  // Island Surf Rentals removed from Shop — it's a rental/Do business, not retail
   {
-    slug: "island-surf-rentals",
-    name: "Island Surf Rentals",
+    slug: "bluewater-cowboy-mercantile",
+    name: "BlueWater Cowboy Mercantile",
     category: "shop",
-    tagline: "Golf carts, surfboards, kayaks & beach cruisers since 2009",
-    description:
-      "Since 2009, Island Surf Rentals has been South Texas' premier choice for golf carts and surf rentals. Their fleet of Yamaha golf carts — four and six passengers in custom color combos — each comes with a beach permit and city license plate. They also stock surfboards, stand-up paddleboards, boogie boards, skim boards, kayaks, and aluminum beach cruiser bikes. Pick up goodr sunglasses, Dirty Hooker fishing apparel, and Port Aransas custom-designed tees while you're there.",
-    address: "130 E Ave G, Port Aransas, TX 78373",
-    phone: "(361) 749-0822",
-    website: "https://islandsurfrentals.com",
-    hours: "Daily 9AM-5PM",
-    hoursOfOperation: {
-      Monday: "9:00 AM – 5:00 PM",
-      Tuesday: "9:00 AM – 5:00 PM",
-      Wednesday: "9:00 AM – 5:00 PM",
-      Thursday: "9:00 AM – 5:00 PM",
-      Friday: "9:00 AM – 5:00 PM",
-      Saturday: "9:00 AM – 5:00 PM",
-      Sunday: "9:00 AM – 5:00 PM",
-    },
-    featured: true,
-    tags: ["surf", "golf carts", "rentals", "kayaks", "bikes", "beach gear"],
+    tagline: "Western-coastal clothing, gifts & souvenirs with Gulf views on Beach St",
+    description: "The mercantile side of BlueWater Cowboy Saloon is a full retail shop carrying western-coastal clothing, gifts, souvenirs, and coastal goods. A unique shopping stop on Beach Street that captures the blend of Texas cowboy and Gulf Coast culture that defines Port Aransas.",
+    address: "229 Beach St, Port Aransas, TX 78373",
+    phone: "(361) 749-0106",
+    website: "https://bwcporta.com",
+    hours: "Daily 11AM-10PM",
+    featured: false,
+    tags: ["retail", "gifts", "clothing", "western", "coastal", "souvenirs"],
+    priceRange: "$$",
   },
   {
     slug: "fly-it-port-a",
