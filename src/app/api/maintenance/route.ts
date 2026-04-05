@@ -19,7 +19,9 @@ async function sendSMS(to: string, body: string) {
     return;
   }
   const toClean = to.replace(/\D/g, "");
+  const toFormatted = `+1${toClean}`;
   const url = `https://api.twilio.com/2010-04-01/Accounts/${TWILIO_SID}/Messages.json`;
+  console.log(`[SMS] Sending to ${toFormatted} from ${TWILIO_FROM}`);
   const res = await fetch(url, {
     method: "POST",
     headers: {
@@ -28,13 +30,15 @@ async function sendSMS(to: string, body: string) {
     },
     body: new URLSearchParams({
       From: TWILIO_FROM,
-      To: `+1${toClean}`,
+      To: toFormatted,
       Body: body,
     }),
   });
+  const result = await res.json();
   if (!res.ok) {
-    const err = await res.text();
-    console.error("[SMS] Twilio error:", err);
+    console.error("[SMS] Twilio error:", JSON.stringify(result));
+  } else {
+    console.log("[SMS] Sent successfully. SID:", result.sid, "Status:", result.status);
   }
 }
 
@@ -97,16 +101,17 @@ export async function POST(req: NextRequest) {
   const customerHtml = `
     <h2>We received your maintenance request!</h2>
     <p>Hi ${name},</p>
-    <p>Thanks for submitting a maintenance request through Port A Local. We've notified our maintenance team and they'll reach out to you shortly.</p>
+    <p>Thank you for reaching out through Port A Local. We've received your request and our local service team is reviewing the details.</p>
     <p><strong>Your request summary:</strong></p>
     <ul>
       <li><strong>Service:</strong> ${serviceType}</li>
       <li><strong>Property:</strong> ${address}</li>
       <li><strong>Urgency:</strong> ${urgencyText}</li>
     </ul>
-    <p>Need immediate assistance? Call John Brown directly at <a href="tel:3614558606">(361) 455-8606</a>.</p>
+    <p>Someone will be in touch with you soon to confirm availability and schedule your service.</p>
     <br/>
     <p>— Port A Local Team</p>
+    <p style="color:#888;font-size:12px;">port-a-local.vercel.app</p>
   `;
 
   // SMS confirmation to customer
