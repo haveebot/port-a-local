@@ -109,9 +109,13 @@ export async function POST(req: NextRequest) {
     <p>— Port A Local Team</p>
   `;
 
-  // Fire all three in parallel
+  // SMS confirmation to customer
+  const customerSMS = `Port A Local: We received your maintenance request for "${serviceType}" at ${address}. Our team is reviewing it and will be in touch shortly.`;
+
+  // Fire all in parallel — always send both email AND SMS to customer
   await Promise.allSettled([
     sendSMS(JOHN_PHONE, smsBody),
+    sendSMS(phone, customerSMS),
     JOHN_EMAIL ? sendEmail(JOHN_EMAIL, `[${urgency.toUpperCase()}] Maintenance Request — ${name} — ${serviceType}`, vendorHtml) : Promise.resolve(),
     sendEmail(email, "We received your maintenance request — Port A Local", customerHtml),
   ]);

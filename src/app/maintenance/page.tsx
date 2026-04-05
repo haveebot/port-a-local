@@ -62,12 +62,11 @@ export default function MaintenancePage() {
           <div className="max-w-2xl mx-auto px-4 sm:px-6 text-center">
             <div className="text-6xl mb-6">✅</div>
             <h1 className="font-display text-4xl font-bold text-sand-50 mb-4">Request Received!</h1>
-            <p className="text-lg text-navy-200 mb-8">
-              We've notified our maintenance team. John Brown from Port A Maintenance Services
-              will reach out to you shortly.
+            <p className="text-lg text-navy-200 mb-4">
+              Thank you! We've received your maintenance request and our local service team is reviewing the details.
             </p>
-            <p className="text-navy-300 text-sm">
-              Our team will review your request and reach out to you soon.
+            <p className="text-navy-300">
+              You'll receive a confirmation shortly, and someone will be in touch to schedule your service.
             </p>
           </div>
         </section>
@@ -144,7 +143,7 @@ export default function MaintenancePage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-navy-700 mb-1">Preferred Contact *</label>
+                <label className="block text-sm font-medium text-navy-700 mb-1">Preferred Follow-Up *</label>
                 <select
                   name="contactPref"
                   value={form.contactPref}
