@@ -6,7 +6,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
 });
 
 const RESEND_KEY = process.env.RESEND_API_KEY || "";
-const INTERNAL_EMAIL = process.env.INTERNAL_ALERT_EMAIL || "haveebot@gmail.com";
+const INTERNAL_EMAIL = process.env.INTERNAL_ALERT_EMAIL || "";
 
 async function sendEmail(to: string, subject: string, html: string) {
   if (!RESEND_KEY) {
