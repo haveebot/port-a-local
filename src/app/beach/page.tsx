@@ -275,9 +275,9 @@ export default function BeachPage() {
 
               {totalPrice && numDays && (
                 <div className="bg-sand-50 border border-sand-200 rounded-xl p-4">
-                  <div className="flex justify-between text-sm text-navy-700 mb-1">
-                    <span>{qty} {selectedProduct.label}{qty > 1 ? "s" : ""} × {numDays} day{numDays !== 1 ? "s" : ""} × ${selectedProduct.price}</span>
-                    <span className="font-semibold">${totalPrice}</span>
+                  <div className="flex flex-wrap justify-between items-baseline gap-x-4 gap-y-1 text-sm text-navy-700 mb-1">
+                    <span className="text-navy-500">{qty} {selectedProduct.label}{qty > 1 ? "s" : ""} × {numDays} day{numDays !== 1 ? "s" : ""} × ${selectedProduct.price}</span>
+                    <span className="font-semibold whitespace-nowrap">${totalPrice} total</span>
                   </div>
                   <p className="text-xs text-navy-400 mt-2">
                     Total due at confirmation. Our team will follow up to collect payment before your first day.

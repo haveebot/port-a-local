@@ -12,11 +12,11 @@ export default function BusinessCard({ business }: { business: Business }) {
       <div className="h-1 bg-gradient-to-r from-navy-600 via-coral-400 to-gold-400" />
 
       <div className="p-6">
-        <div className="flex items-start justify-between mb-3">
-          <h3 className="font-display text-lg font-bold text-navy-900 group-hover:text-coral-600 transition-colors leading-tight">
+        <div className="flex items-start justify-between mb-3 gap-2">
+          <h3 className="font-display text-lg font-bold text-navy-900 group-hover:text-coral-600 transition-colors leading-tight flex-1 min-w-0">
             {business.name}
           </h3>
-          <Badge />
+          <span className="shrink-0"><Badge /></span>
         </div>
 
         <p className="text-sm text-navy-400 mb-4 leading-relaxed">

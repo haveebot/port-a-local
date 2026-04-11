@@ -16,7 +16,7 @@ export default function Hero() {
             The Official Local Guide to Port Aransas, TX
           </div>
 
-          <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold text-sand-50 leading-[1.1] mb-8">
+          <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl font-bold text-sand-50 leading-[1.1] mb-8">
             Discover{" "}
             <span className="text-coral-400 italic">Port Aransas</span>
             <br />

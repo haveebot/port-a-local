@@ -45,19 +45,19 @@ export default async function BusinessDetailPage({
       <section className="pt-28 pb-16 wave-bg">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           {/* Breadcrumb */}
-          <nav className="flex items-center gap-2 text-sm text-navy-300 mb-8">
-            <Link href="/" className="hover:text-coral-500 transition-colors">
+          <nav className="flex flex-wrap items-center gap-1.5 text-sm text-navy-300 mb-8">
+            <Link href="/" className="hover:text-coral-500 transition-colors whitespace-nowrap">
               Home
             </Link>
             <span className="text-coral-300/40">/</span>
             <Link
               href={`/${category.slug}`}
-              className="hover:text-coral-500 transition-colors"
+              className="hover:text-coral-500 transition-colors whitespace-nowrap"
             >
               {category.icon} {category.name}
             </Link>
             <span className="text-coral-300/40">/</span>
-            <span className="text-navy-700">{business.name}</span>
+            <span className="text-navy-700 truncate max-w-[200px] sm:max-w-none">{business.name}</span>
           </nav>
 
           {/* Header */}

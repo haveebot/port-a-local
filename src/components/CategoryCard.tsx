@@ -5,7 +5,7 @@ export default function CategoryCard({ category }: { category: Category }) {
   return (
     <Link
       href={`/${category.slug}`}
-      className="group block p-6 rounded-2xl bg-white border border-sand-200 card-hover relative overflow-hidden"
+      className="group block p-4 sm:p-6 rounded-2xl bg-white border border-sand-200 card-hover relative overflow-hidden"
     >
       {/* Coral accent on hover */}
       <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-coral-400 to-coral-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
