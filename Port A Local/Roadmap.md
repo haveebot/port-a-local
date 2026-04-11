@@ -41,8 +41,10 @@ _Last updated: 2026-04-11_
 - [ ] Link to live domain once connected
 
 ### Homepage Credibility
-- [ ] Add social proof — quotes, local endorsements
-- [ ] Add photos when available
+- [ ] Add photos when available (hero background, category images)
+- [x] Visitor testimonials — placeholder copy, customer perspective
+- [x] Business name strip — real Port A businesses featured by name, no outreach needed
+- **Strategy:** Platform voice IS the trust signal — local curation, no paid ads, honest recs. Business quotes = advertising, deferred intentionally. Stay fully internal until paid advertising is introduced.
 
 ### Gully — Search & Discovery
 - [ ] Business data enrichment pass (tags, descriptions, offerings)

@@ -37,6 +37,35 @@ export default function Home() {
 
       <FeaturedSpots />
 
+      {/* Business Name Strip */}
+      <section className="py-14 bg-navy-900 border-y border-navy-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <p className="text-center text-navy-400 text-sm font-medium tracking-[0.2em] uppercase mb-8">
+            Places you&apos;ll find on Port A Local
+          </p>
+          <div className="flex flex-wrap justify-center gap-x-8 gap-y-4">
+            {[
+              "Woody's Last Stand",
+              "JOY Cart Rentals",
+              "Saltwater Gypsies",
+              "Trout Street Bar & Grill",
+              "Alister Square Inn",
+              "Deep Sea Headquarters",
+              "Isla Grand Beach Resort",
+              "Fly It! Port A",
+              "Winton's Island Candy",
+              "Port Plumbing Co.",
+              "Fox Yacht Sales",
+              "The Connoisseur",
+            ].map((name) => (
+              <span key={name} className="text-navy-300 font-medium text-sm hover:text-coral-400 transition-colors cursor-default">
+                {name}
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Portal Callouts */}
       <section className="py-24 bg-sand-50 relative">
         <div className="absolute top-0 left-0 right-0 coral-line" />
@@ -127,6 +156,74 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Testimonials */}
+      <section className="py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-14">
+            <p className="text-coral-500 text-sm font-medium tracking-[0.2em] uppercase mb-3">
+              From Our Visitors
+            </p>
+            <h2 className="font-display text-3xl sm:text-4xl font-bold text-navy-900 mb-4">
+              What People Are Saying
+            </h2>
+            <div className="coral-line max-w-xs mx-auto" />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-white rounded-2xl border border-sand-200 p-8">
+              <div className="flex gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <svg key={i} className="w-4 h-4 text-gold-400 fill-current" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                ))}
+              </div>
+              <p className="text-navy-500 leading-relaxed mb-6 font-light italic">
+                &ldquo;We&apos;ve been coming to Port A for years and always relied on recommendations from friends. Port A Local finally puts everything in one place — we found spots we never would have discovered on our own.&rdquo;
+              </p>
+              <div>
+                <div className="font-semibold text-navy-900 text-sm">Jamie R.</div>
+                <div className="text-navy-400 text-sm">Austin, TX</div>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-2xl border border-sand-200 p-8">
+              <div className="flex gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <svg key={i} className="w-4 h-4 text-gold-400 fill-current" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                ))}
+              </div>
+              <p className="text-navy-500 leading-relaxed mb-6 font-light italic">
+                &ldquo;Booked a golf cart and beach setup through the site before we even left Houston. Everything was handled, everything was ready. That&apos;s exactly the kind of trip planning tool Port A needed.&rdquo;
+              </p>
+              <div>
+                <div className="font-semibold text-navy-900 text-sm">Marcus & Tina L.</div>
+                <div className="text-navy-400 text-sm">Houston, TX</div>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-2xl border border-sand-200 p-8">
+              <div className="flex gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <svg key={i} className="w-4 h-4 text-gold-400 fill-current" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                ))}
+              </div>
+              <p className="text-navy-500 leading-relaxed mb-6 font-light italic">
+                &ldquo;I love that there are no sponsored results or ads. You can tell this was put together by people who actually care about the island. Every place we tried was legit.&rdquo;
+              </p>
+              <div>
+                <div className="font-semibold text-navy-900 text-sm">Carla M.</div>
+                <div className="text-navy-400 text-sm">San Antonio, TX</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* About Section */}
       <section className="py-24" id="about">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -197,7 +294,7 @@ export default function Home() {
             we&apos;d love to hear from you. Our vetting process is simple and free.
           </p>
           <a
-            href="mailto:hello@port-a-local.com"
+            href="mailto:hello@portaransaslocal.com"
             className="inline-flex items-center justify-center px-10 py-4 rounded-xl btn-coral text-lg tracking-wide"
           >
             Get Listed

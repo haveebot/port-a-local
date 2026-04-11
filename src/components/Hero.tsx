@@ -59,8 +59,8 @@ export default function Hero() {
             <div className="text-sm text-navy-300 mt-1 tracking-wide">Locally Approved</div>
           </div>
           <div>
-            <div className="text-3xl font-display font-bold text-sand-300">0</div>
-            <div className="text-sm text-navy-300 mt-1 tracking-wide">Paid Placements</div>
+            <div className="text-3xl font-display font-bold text-sand-300">Free</div>
+            <div className="text-sm text-navy-300 mt-1 tracking-wide">No Paid Listings</div>
           </div>
         </div>
       </div>
