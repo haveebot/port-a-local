@@ -72,6 +72,16 @@ _Last updated: 2026-04-11_
 - [ ] Printful/Printify for print-on-demand fulfillment
 - [ ] Palm Republic tie-in
 
+### Maintenance — Full Tiered Dispatch Model
+Current: Standard (free) + Priority Dispatch ($20, 7AM–8PM) — both live.
+
+Next tiers to build:
+- [ ] **After Hours Emergency tier** — $75–100, true 24/7, immediate dispatch, John on-call premium
+- [ ] **Weekend logic** — confirm hours with John, adjust priority window if different Sat/Sun
+- [ ] **Early morning rule** — before 7AM, Priority held until 7AM (already handled by time check); Emergency fires immediately
+- [ ] **Revenue split with John** — define % PAL takes on Priority and Emergency fees
+- [ ] **Volume tracking** — dashboard showing dispatches per week, revenue per month
+
 ### Twilio
 - [ ] Swap to 361 local number (~$1/month) → SMS fully live for maintenance
 
