@@ -24,7 +24,7 @@ export default function Hero() {
           </h1>
 
           <p className="text-xl text-navy-200/80 leading-relaxed mb-12 max-w-2xl font-light">
-            Every business on Port A Local Co is vetted and approved by people who actually
+            Every business on Port A Local is vetted and approved by people who actually
             live here. No paid placements. No algorithms. Just honest recommendations
             from your neighbors on the island.
           </p>

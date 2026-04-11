@@ -15,9 +15,6 @@ export default function Footer() {
               <span className="font-display text-2xl font-bold text-coral-400 tracking-wide">
                 PORT A LOCAL
               </span>
-              <span className="text-coral-500/60 text-xs font-medium tracking-[0.2em] uppercase">
-                co
-              </span>
             </div>
             <p className="text-navy-300 leading-relaxed max-w-md mb-6 font-light">
               A community-driven guide to Port Aransas, Texas. Every business is
@@ -92,7 +89,7 @@ export default function Footer() {
 
         <div className="pt-8 border-t border-navy-800 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-navy-500">
-            &copy; {new Date().getFullYear()} Port A Local Co. Made on the island.
+            &copy; {new Date().getFullYear()} Port A Local. Made on the island.
           </p>
           <div className="flex items-center gap-6 text-sm text-navy-500">
             <Link href="#" className="hover:text-coral-400 transition-colors">Privacy</Link>

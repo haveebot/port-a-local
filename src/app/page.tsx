@@ -45,12 +45,12 @@ export default function Home() {
               Our Mission
             </p>
             <h2 className="font-display text-3xl sm:text-4xl font-bold text-navy-900 mb-6">
-              Why Port A Local Co?
+              Why Port A Local?
             </h2>
             <div className="coral-line max-w-xs mx-auto mb-8" />
             <p className="text-lg text-navy-400 leading-relaxed mb-12 font-light">
               Port Aransas is one of the most beloved beach towns on the Texas coast, but finding
-              the real gems has always been word-of-mouth. We built Port A Local Co to change that —
+              the real gems has always been word-of-mouth. We built Port A Local to change that —
               a single place where visitors and residents can discover businesses that are genuinely
               local, genuinely good, and genuinely cared about by the community.
             </p>
@@ -103,7 +103,7 @@ export default function Home() {
           </h2>
           <div className="gold-line max-w-xs mx-auto mb-6" />
           <p className="text-lg text-navy-200 max-w-2xl mx-auto mb-10 font-light">
-            If you run a local business and want to be featured on Port A Local Co,
+            If you run a local business and want to be featured on Port A Local,
             we&apos;d love to hear from you. Our vetting process is simple and free.
           </p>
           <a

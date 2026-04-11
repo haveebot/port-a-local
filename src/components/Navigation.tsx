@@ -28,9 +28,6 @@ export default function Navigation() {
             <span className="text-coral-400 text-2xl font-display font-bold tracking-wide">
               PORT A LOCAL
             </span>
-            <span className="text-coral-500/60 text-xs font-medium tracking-[0.2em] uppercase hidden sm:inline">
-              co
-            </span>
           </Link>
 
           {/* Desktop nav */}
