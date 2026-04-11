@@ -45,39 +45,39 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Info */}
+          {/* Services */}
           <div>
             <h4 className="font-display font-semibold text-sm tracking-[0.15em] uppercase text-coral-400 mb-5">
-              For Businesses
+              Services
             </h4>
             <ul className="space-y-3">
               <li>
                 <Link
-                  href="#"
+                  href="/rent"
                   className="text-navy-300 hover:text-coral-300 transition-colors text-sm"
                 >
-                  Get Listed
+                  🛺 Golf Cart Rentals
                 </Link>
               </li>
               <li>
                 <Link
-                  href="#"
+                  href="/beach"
                   className="text-navy-300 hover:text-coral-300 transition-colors text-sm"
                 >
-                  Claim Your Business
+                  🏖️ Beach Rentals
                 </Link>
               </li>
               <li>
                 <Link
-                  href="#"
+                  href="/maintenance"
                   className="text-navy-300 hover:text-coral-300 transition-colors text-sm"
                 >
-                  Advertising
+                  🔧 Maintenance
                 </Link>
               </li>
               <li>
                 <Link
-                  href="#about"
+                  href="/#about"
                   className="text-navy-300 hover:text-coral-300 transition-colors text-sm"
                 >
                   About Us

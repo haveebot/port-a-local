@@ -37,6 +37,96 @@ export default function Home() {
 
       <FeaturedSpots />
 
+      {/* Portal Callouts */}
+      <section className="py-24 bg-sand-50 relative">
+        <div className="absolute top-0 left-0 right-0 coral-line" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-14">
+            <p className="text-coral-500 text-sm font-medium tracking-[0.2em] uppercase mb-3">
+              Book Direct
+            </p>
+            <h2 className="font-display text-3xl sm:text-4xl font-bold text-navy-900 mb-4">
+              Services on the Island
+            </h2>
+            <div className="coral-line max-w-xs mx-auto mb-6" />
+            <p className="text-lg text-navy-400 max-w-2xl mx-auto font-light">
+              Skip the runaround. Book directly through Port A Local — our local team handles everything.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Golf Cart Rentals */}
+            <a
+              href="/rent"
+              className="group block rounded-2xl bg-white border border-sand-200 overflow-hidden card-hover"
+            >
+              <div className="h-1 bg-gradient-to-r from-navy-600 via-coral-400 to-gold-400" />
+              <div className="p-8">
+                <div className="text-4xl mb-4">🛺</div>
+                <h3 className="font-display text-xl font-bold text-navy-900 group-hover:text-coral-600 transition-colors mb-2">
+                  Golf Cart Rentals
+                </h3>
+                <p className="text-navy-400 text-sm leading-relaxed mb-6">
+                  The best way to get around Port Aransas. Reserve your cart and we'll have it delivered to you.
+                </p>
+                <span className="inline-flex items-center gap-2 text-sm font-semibold text-coral-500 group-hover:text-coral-600 transition-colors">
+                  Reserve Now
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </span>
+              </div>
+            </a>
+
+            {/* Beach Rentals */}
+            <a
+              href="/beach"
+              className="group block rounded-2xl bg-white border border-sand-200 overflow-hidden card-hover"
+            >
+              <div className="h-1 bg-gradient-to-r from-navy-600 via-coral-400 to-gold-400" />
+              <div className="p-8">
+                <div className="text-4xl mb-4">🏖️</div>
+                <h3 className="font-display text-xl font-bold text-navy-900 group-hover:text-coral-600 transition-colors mb-2">
+                  Beach Rentals
+                </h3>
+                <p className="text-navy-400 text-sm leading-relaxed mb-6">
+                  Cabana setups and chair & umbrella packages delivered straight to your spot on the sand.
+                </p>
+                <span className="inline-flex items-center gap-2 text-sm font-semibold text-coral-500 group-hover:text-coral-600 transition-colors">
+                  Book a Setup
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </span>
+              </div>
+            </a>
+
+            {/* Maintenance */}
+            <a
+              href="/maintenance"
+              className="group block rounded-2xl bg-white border border-sand-200 overflow-hidden card-hover"
+            >
+              <div className="h-1 bg-gradient-to-r from-navy-600 via-coral-400 to-gold-400" />
+              <div className="p-8">
+                <div className="text-4xl mb-4">🔧</div>
+                <h3 className="font-display text-xl font-bold text-navy-900 group-hover:text-coral-600 transition-colors mb-2">
+                  Maintenance
+                </h3>
+                <p className="text-navy-400 text-sm leading-relaxed mb-6">
+                  Need something fixed? Submit a request and we'll connect you with Port A's most trusted local crew.
+                </p>
+                <span className="inline-flex items-center gap-2 text-sm font-semibold text-coral-500 group-hover:text-coral-600 transition-colors">
+                  Submit a Request
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* About Section */}
       <section className="py-24" id="about">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -107,7 +197,7 @@ export default function Home() {
             we&apos;d love to hear from you. Our vetting process is simple and free.
           </p>
           <a
-            href="#"
+            href="mailto:hello@port-a-local.com"
             className="inline-flex items-center justify-center px-10 py-4 rounded-xl btn-coral text-lg tracking-wide"
           >
             Get Listed
