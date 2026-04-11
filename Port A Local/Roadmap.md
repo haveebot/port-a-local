@@ -1,0 +1,95 @@
+# Port A Local — Roadmap & To-Do
+_Living document. Updated each session._
+_Last updated: 2026-04-10_
+
+---
+
+## Next Session
+
+### Stripe Integration
+- [ ] Add Stripe to `/rent` — collect $10/day reservation fee at booking
+- [ ] Add Stripe to `/beach` — collect full amount at booking
+- [ ] Test end-to-end payment flow
+
+### Domain & Deployment
+- [ ] Connect real domain (TBD — portalocal.com? port-a-local.com?)
+- [ ] Configure DNS on Vercel
+- [ ] Update mailto links from hello@port-a-local.com to real domain email
+- [ ] SSL / HTTPS confirm
+- [ ] Submit sitemap to Google Search Console once domain live
+
+---
+
+## Backlog (prioritized)
+
+### Mobile Experience Audit ← Winston reviews
+- [ ] Full review of all pages on mobile
+- [ ] Portal forms (rent, beach, maintenance) on small screen
+- [ ] Nav behavior on mobile
+- [ ] Touch targets, font sizes, spacing
+
+### FeaturedSpots Audit ← Winston reviews
+- [ ] Review which businesses are currently featured
+- [ ] Confirm featured set is the right mix
+
+### Google Business Profile
+- [ ] Create Port A Local Google Business listing
+- [ ] Add address, phone, hours, description
+- [ ] Link to live domain once connected
+
+### Homepage Credibility
+- [ ] Add social proof — quotes, local endorsements
+- [ ] Add photos when available
+
+### Gully — Search & Discovery
+- [ ] Business data enrichment pass (tags, descriptions, offerings)
+- [ ] Upgrade category search to use enriched data
+- [ ] Site-wide search (`/search` or nav)
+- [ ] Crowdsourced tagging system
+- [ ] Brand as Gully, build personality
+- [ ] AI layer (Claude API) — V2
+- Full spec: `Features/Gully — Search & Discovery.md`
+
+### Realty
+- [ ] Build out Realty category when ready
+- [ ] Source local real estate agents
+
+### Merch / Shop
+- [ ] Shopify Storefront API integration
+- [ ] `/shop` page on Port A Local
+- [ ] Printful/Printify for print-on-demand fulfillment
+- [ ] Palm Republic tie-in
+
+### Twilio
+- [ ] Swap to 361 local number (~$1/month) → SMS fully live for maintenance
+
+---
+
+## Completed ✅
+
+### Session — April 10, 2026
+- `/rent` golf cart portal + `/api/rent`
+- `/beach` beach rentals portal (cabana $300/day, chair & umbrella $85/day) + `/api/beach`
+- Homepage "Services on the Island" section — three portal cards
+- Footer rebuilt with live portal links, dead links removed
+- "Get Listed" → mailto
+- SEO meta tags on all 6 category pages
+- Dynamic SEO metadata on all 142 business listing pages
+- SEO layout files for all 3 portals
+- Open Now filter on category pages
+- Business count copy: "X locally vetted businesses in Port Aransas"
+- Hero stat: 140+ vetted businesses
+- Nav contrast fix (gradient desktop, solid mobile menu)
+- "Co" scrubbed from brand everywhere
+- Repo cleanup (vault-backup, BUSINESS_LIST.md, scripts deleted; docs → vault)
+- Vault renamed to "Port A Local" in Obsidian
+- Roadmap.md + Ideas.md created
+- Platform strategy: Next.js + Vercel + Shopify headless for merch
+
+### Session — April 4, 2026
+- Directory live — 142 businesses, 6 active categories (Eat, Drink, Stay, Do, Fish, Shop)
+- `/maintenance` portal — customer form → John Brown via email + SMS
+- Nav: Beach Rentals, Rent a Cart, Maintenance portals linked
+- Removed Services, Realty, Beach from directory categories
+- Vercel deploy configured, Google Sheet backup created
+- Obsidian vault set up
