@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Navigation from "@/components/Navigation";
@@ -8,6 +9,20 @@ import { getCategoryBySlug } from "@/data/categories";
 
 export function generateStaticParams() {
   return getAllBusinessSlugs();
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ category: string; slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const business = getBusinessBySlug(slug);
+  if (!business) return {};
+  return {
+    title: `${business.name} — Port Aransas, TX | Port A Local`,
+    description: business.tagline + " Locally vetted and approved by Port A Local.",
+  };
 }
 
 export default async function BusinessDetailPage({
