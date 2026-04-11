@@ -82,13 +82,18 @@ export default function BeachPage() {
     setErrorMsg("");
 
     try {
-      const res = await fetch("/api/beach", {
+      const res = await fetch("/api/checkout/beach", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...form, numDays, totalPrice, qty }),
       });
-      if (!res.ok) throw new Error("Submission failed");
-      setStatus("success");
+      if (!res.ok) throw new Error("Checkout failed");
+      const { url } = await res.json();
+      if (url) {
+        window.location.href = url;
+      } else {
+        throw new Error("No checkout URL returned");
+      }
     } catch {
       setStatus("error");
       setErrorMsg("Something went wrong. Please try again.");
@@ -333,11 +338,11 @@ export default function BeachPage() {
               disabled={status === "loading"}
               className="w-full py-4 rounded-xl btn-coral text-lg font-medium tracking-wide disabled:opacity-60"
             >
-              {status === "loading" ? "Submitting..." : "Request Beach Setup"}
+              {status === "loading" ? "Redirecting to payment..." : "Book & Pay Now"}
             </button>
 
             <p className="text-center text-sm text-navy-400">
-              No payment collected now — our team will confirm and follow up before your first day.
+              Secure payment via Stripe. Full amount collected now — your setup will be ready on the sand.
             </p>
           </form>
         </div>

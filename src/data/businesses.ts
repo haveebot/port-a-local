@@ -1437,6 +1437,30 @@ export const businesses: Business[] = [
     priceRange: "$–$$",
   },
 
+  {
+    slug: "fox-yacht-sales",
+    name: "Fox Yacht Sales",
+    category: "shop",
+    tagline: "Port A's yacht dealer since 1989 — exclusive Texas dealer for Hatteras Yachts",
+    description: "Fox Yacht Sales has been Port Aransas's premier yacht dealer since 1989. Specializing in yachts from 15 to 100 feet, they are the exclusive Texas dealer for Hatteras Yachts and carry a full inventory of new and pre-owned vessels. Whether you're buying, selling, or just dreaming, Fox Yacht Sales brings decades of island expertise to every transaction. Also has a South Padre Island location.",
+    address: "203 W Cotter Ave, Port Aransas, TX 78373",
+    phone: "(361) 749-4870",
+    website: "https://www.foxyachtsales.com",
+    hours: "Mon-Fri 8AM-5PM, Sat 10AM-3PM",
+    hoursOfOperation: {
+      Monday: "8:00 AM – 5:00 PM",
+      Tuesday: "8:00 AM – 5:00 PM",
+      Wednesday: "8:00 AM – 5:00 PM",
+      Thursday: "8:00 AM – 5:00 PM",
+      Friday: "8:00 AM – 5:00 PM",
+      Saturday: "10:00 AM – 3:00 PM",
+      Sunday: "Closed",
+    },
+    featured: false,
+    tags: ["boats", "yachts", "marine", "Hatteras", "boat sales", "buy", "sell", "dealer"],
+    priceRange: "$$$$",
+  },
+
   // --- SERVICES ---
   {
     slug: "port-a-maintenance",

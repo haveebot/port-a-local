@@ -1,6 +1,6 @@
 # Port A Local — Roadmap & To-Do
 _Living document. Updated each session._
-_Last updated: 2026-04-10_
+_Last updated: 2026-04-11_
 
 ---
 
@@ -12,9 +12,12 @@ _Last updated: 2026-04-10_
 - [ ] Test end-to-end payment flow
 
 ### Domain & Deployment
-- [ ] Connect real domain (TBD — portalocal.com? port-a-local.com?)
-- [ ] Configure DNS on Vercel
-- [ ] Update mailto links from hello@port-a-local.com to real domain email
+- [ ] Purchase `portaransaslocal.com` via Vercel (primary domain — no hyphens rule)
+- [ ] Supporting domains: `portalocal.co`, `localportaransas.com` — redirect to primary
+- [ ] Set up Google Workspace → `@portaransaslocal.com` emails
+- [ ] Update all hardcoded `port-a-local.vercel.app` references in codebase
+- [ ] Update mailto links to real domain email
+- [ ] SSL / HTTPS confirm
 - [ ] SSL / HTTPS confirm
 - [ ] Submit sitemap to Google Search Console once domain live
 
@@ -49,6 +52,15 @@ _Last updated: 2026-04-10_
 - [ ] Brand as Gully, build personality
 - [ ] AI layer (Claude API) — V2
 - Full spec: `Features/Gully — Search & Discovery.md`
+
+### Buy/Sell — Classifieds & Marketplace
+- [ ] New nav section: "Buy/Sell" (or "Marketplace")
+- [ ] User-posted listings — boats, gear, carts, property, island items
+- [ ] Fox Yacht Sales as anchor listing / launch partner
+- [ ] Revenue model: free to list, pay to feature (promoted spots)
+- [ ] Moderation workflow TBD
+- [ ] Consider: listing expiration, photo uploads, contact form per listing
+- _Note: Port Aransas has strong demand for boat/marine buy-sell — natural fit_
 
 ### Realty
 - [ ] Build out Realty category when ready

@@ -70,13 +70,18 @@ export default function RentPage() {
     setErrorMsg("");
 
     try {
-      const res = await fetch("/api/rent", {
+      const res = await fetch("/api/checkout/rent", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...form, numDays, reservationFee }),
       });
-      if (!res.ok) throw new Error("Submission failed");
-      setStatus("success");
+      if (!res.ok) throw new Error("Checkout failed");
+      const { url } = await res.json();
+      if (url) {
+        window.location.href = url;
+      } else {
+        throw new Error("No checkout URL returned");
+      }
     } catch {
       setStatus("error");
       setErrorMsg("Something went wrong. Please try again or call us directly.");
@@ -309,12 +314,11 @@ export default function RentPage() {
               disabled={status === "loading"}
               className="w-full py-4 rounded-xl btn-coral text-lg font-medium tracking-wide disabled:opacity-60"
             >
-              {status === "loading" ? "Submitting..." : "Request Reservation"}
+              {status === "loading" ? "Redirecting to payment..." : "Reserve & Pay Now"}
             </button>
 
             <p className="text-center text-sm text-navy-400">
-              No payment collected yet — our team will confirm availability and
-              follow up within a few hours.
+              Secure payment via Stripe. Reservation fee collected now — cart balance paid at pickup at a discounted rate.
             </p>
           </form>
         </div>
