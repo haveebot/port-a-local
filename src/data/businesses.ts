@@ -46,6 +46,7 @@ export interface Business {
   hours: string;
   hoursOfOperation?: HoursOfOperation;
   featured: boolean;
+  categories?: string[]; // secondary categories this business also belongs to
   tags: string[];
   menu?: MenuSection[];
   charters?: CharterOption[];
@@ -151,6 +152,7 @@ export const businesses: Business[] = [
       Sunday: "8:00 AM – 12:00 AM",
     },
     featured: true,
+    categories: ["stay", "drink"],
     tags: ["beachfront", "bar & grill", "pet-friendly", "casual", "seafood"],
     priceRange: "$$",
     menu: [
@@ -349,6 +351,7 @@ export const businesses: Business[] = [
       Sunday: "11:00 AM – 9:00 PM",
     },
     featured: true,
+    categories: ["drink"],
     tags: ["waterfront", "seafood", "family-friendly", "boat dock", "cook your catch"],
     priceRange: "$$",
     menu: [
@@ -987,6 +990,7 @@ export const businesses: Business[] = [
       Sunday: "6:00 AM – 9:00 PM",
     },
     featured: true,
+    categories: ["fish"],
     tags: ["fishing", "deep sea", "charters", "pirate ship", "marina"],
     priceRange: "$$–$$$$",
     charters: [
@@ -1993,20 +1997,6 @@ export const businesses: Business[] = [
 
   // --- FISH ---
   {
-    slug: "deep-sea-headquarters",
-    name: "Deep Sea Headquarters",
-    category: "fish",
-    tagline: "Port A's biggest fishing operation — offshore charters, bay trips & the Red Dragon",
-    description: "Deep Sea Headquarters is the largest fishing operation in Port Aransas. Offshore charters, bay fishing trips, the famous Red Dragon Pirate Ship, and everything in between. If you want to fish the Gulf, start here.",
-    address: "440 W Cotter Ave, Port Aransas, TX 78373",
-    phone: "(361) 749-5597",
-    website: "https://deepseaheadquarters.com",
-    hours: "Daily 6AM-9PM",
-    featured: true,
-    tags: ["deep sea", "offshore", "charters", "bay fishing", "family", "pirate ship"],
-    priceRange: "$$",
-  },
-  {
     slug: "alex-porter-fishing",
     name: "Alex Porter's Fishing Guide Service",
     category: "fish",
@@ -2160,6 +2150,7 @@ export const businesses: Business[] = [
       Sunday: "10:00 AM – 11:00 PM",
     },
     featured: true,
+    categories: ["do", "eat"],
     tags: ["bar", "live music", "yard games", "golf cart rentals", "beach chairs", "shaved ice", "outdoor", "events"],
     priceRange: "$",
   },
@@ -2620,7 +2611,7 @@ export function getBusinessBySlug(slug: string): Business | undefined {
 }
 
 export function getBusinessesByCategory(category: string): Business[] {
-  return businesses.filter((b) => b.category === category);
+  return businesses.filter((b) => b.category === category || b.categories?.includes(category));
 }
 
 export function getFeaturedBusinesses(): Business[] {
