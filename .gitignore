@@ -15,3 +15,5 @@ data/*.db-shm
 mobile/node_modules/
 mobile/.expo/
 mobile/dist/
+.vercel
+.DS_Store
