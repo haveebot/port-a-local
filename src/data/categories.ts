@@ -43,25 +43,11 @@ export const categories: Category[] = [
     color: "bg-sand-600",
   },
   {
-    slug: "beach",
-    name: "Beach",
-    description: "Beach setups, rentals & everything you need on the sand",
-    icon: "🏖️",
-    color: "bg-sunset-500",
-  },
-  {
     slug: "shop",
     name: "Shop",
     description: "Local boutiques, surf shops & markets run by real Port A people",
     icon: "🛍️",
     color: "bg-ocean-500",
-  },
-  {
-    slug: "realty",
-    name: "Realty",
-    description: "Local real estate agents & property experts who know the island",
-    icon: "🏡",
-    color: "bg-seafoam-500",
   },
 ];
 
