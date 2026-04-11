@@ -11,10 +11,14 @@
             "id": "8da6755f2650a6f0",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "Business Directory/Business Directory Index.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "Business Directory Index"
             }
           }
         ]
@@ -178,6 +182,15 @@
   },
   "active": "8da6755f2650a6f0",
   "lastOpenFiles": [
+    "Revenue Log.md",
+    "Market Intelligence.md",
+    "People & Vendors/Nick Merrill — Engineering.md",
+    "People & Vendors/Collie Caraker — Design.md",
+    "People & Vendors/Billy Gaskins — Woody's Last Stand.md",
+    "People & Vendors/JOY Cart Rentals.md",
+    "People & Vendors/John Brown — Port A Maintenance Services.md",
+    "People & Vendors",
+    "Decision Log.md",
     "Ideas.md",
     "Roadmap.md",
     "Our Products.md",

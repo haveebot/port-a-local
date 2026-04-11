@@ -1,51 +1,56 @@
-# Port A Local — Project Brain
-
-> Winston + Havee's working knowledge base for the Port A Local project.
-> Last updated: 2026-04-04
+# Port A Local — Company Brain
+_Winston + Havee's living knowledge base. Updated every session._
+_Last updated: 2026-04-10_
 
 ---
 
-## Quick Links
+## Navigation
 
-- [[Project Overview]]
-- [[Revenue Model/Revenue Model]]
-- [[Business Directory/Business Directory Index]]
-- [[Features/Features Index]]
+### Strategy & Decisions
+- [[Project Overview]] — what it is, the team, the mission
+- [[Decision Log]] — every major decision, why it was made
+- [[Market Intelligence]] — the landscape, competitors, search terms, what we're learning
+- [[Revenue Log]] — bookings, payments, lead tracking, scoreboard
+
+### People & Vendors
+- [[People & Vendors/John Brown — Port A Maintenance Services]] — maintenance vendor
+- [[People & Vendors/JOY Cart Rentals]] — Tier 1 golf cart vendor
+- [[People & Vendors/Billy Gaskins — Woody's Last Stand]] — 🔑 affiliate, family friend
+- [[People & Vendors/Collie Caraker — Design]] — design advisor, Palm Republic
+- [[People & Vendors/Nick Merrill — Engineering]] — potential investor, not active
+
+### Product
+- [[Features/Features Index]] — all features planned and built
+- [[Features/Gully — Search & Discovery]] — site-wide search + AI assistant concept
+- [[Features/Rental Engine]] — golf cart + beach rental engine spec
+- [[Roadmap]] — prioritized to-do list
+- [[Ideas]] — loose scratchpad, future ideas, Collie input
+
+### Business Directory
+- [[Business Directory/Business Directory Index]] — all 142 businesses
+- [[Revenue Model/Revenue Model]] — revenue streams and strategy
+
+### Session Notes
 - [[Session Notes/Session Notes Index]]
+- [[Session Notes/2026-04-10]] — most recent session
+- [[Session Notes/2026-04-04]] — first build session
 
 ---
 
-## Status — April 4, 2026
+## Current Status — April 10, 2026
 
-| Category | In Code | Status |
-|----------|---------|--------|
-| Eat | 39 | ✅ |
-| Drink | 15 | ✅ |
-| Stay | 35 | ✅ |
-| Do | 14 | ✅ |
-| Fish | 10 | ✅ |
-| Beach | 2 | ✅ |
-| Shop | 18 | ✅ |
-| Services | 5 | ✅ |
-| Realty | 0 | ⬜ TBD |
-| **Total** | **138** | |
+| What | Detail |
+|------|--------|
+| Live site | https://port-a-local.vercel.app |
+| Businesses | 142 across 6 categories |
+| Portals | `/rent` `/beach` `/maintenance` |
+| Revenue | $0 — Stripe pending (next session) |
+| Repo | https://github.com/haveebot/port-a-local |
 
 ---
 
-## Key Links
-
-- **Live Site:** https://port-a-local.vercel.app
-- **Maintenance Portal:** https://port-a-local.vercel.app/maintenance
-- **Repo (ours):** https://github.com/haveebot/port-a-local
-- **Repo (Nick's):** https://github.com/nickbmerrill-collab/port-a-local-co
-- **Google Sheet:** https://docs.google.com/spreadsheets/d/1Xrn7-2M9nhiR9vDkAeeLFr5evBz8bsAU0EP4lb0PnXk
-
----
-
-## Next Steps
-
-- Swap Twilio to 361 local number → SMS fully live (~$1/month)
-- Realty category buildout
-- Rental engine (golf carts, beach cabanas)
-- Revenue model discussion
-- Nick briefing
+## Operating Model
+Winston makes product decisions and owns local relationships.
+Havee builds, maintains, deploys, and organizes everything else.
+Goal: lean two-person operation that punches above its weight.
+See [[Decision Log]] for all major decisions.
