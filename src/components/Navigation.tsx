@@ -22,6 +22,10 @@ export default function Navigation() {
           : "bg-transparent"
       }`}
     >
+      {/* Persistent gradient — ensures nav links are readable on any background */}
+      {!scrolled && (
+        <div className="absolute inset-0 bg-gradient-to-b from-navy-950/70 to-transparent pointer-events-none" />
+      )}
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-18">
           <Link href="/" className="flex items-center gap-3 group">
@@ -80,7 +84,7 @@ export default function Navigation() {
 
         {/* Mobile menu */}
         {mobileOpen && (
-          <div className="md:hidden pb-4 border-t border-coral-500/20">
+          <div className="md:hidden pb-4 border-t border-coral-500/20 bg-navy-950/98 backdrop-blur-md">
             {categories.map((cat) => (
               <Link
                 key={cat.slug}
