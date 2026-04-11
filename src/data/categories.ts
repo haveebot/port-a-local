@@ -63,13 +63,6 @@ export const categories: Category[] = [
     icon: "🏡",
     color: "bg-seafoam-500",
   },
-  {
-    slug: "services",
-    name: "Services",
-    description: "Golf cart rentals, maintenance, guides & pros who know the island",
-    icon: "⚓",
-    color: "bg-coral-500",
-  },
 ];
 
 export function getCategoryBySlug(slug: string): Category | undefined {
