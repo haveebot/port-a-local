@@ -8,26 +8,8 @@ import { businesses } from "@/data/businesses";
 import { categories } from "@/data/categories";
 import Link from "next/link";
 
-// Port Aransas coordinates
+// Port Aransas center
 const PORT_A_CENTER: [number, number] = [27.8339, -97.0611];
-
-// Business coordinates — manually mapped for Port Aransas businesses
-// Using Port Aransas center as default, with slight offsets for visual spread
-const businessCoords: Record<string, [number, number]> = {
-  // These will be populated over time with real coordinates
-  // For now, businesses without specific coords get a clustered position around downtown
-};
-
-function getCoords(slug: string, index: number): [number, number] {
-  if (businessCoords[slug]) return businessCoords[slug];
-  // Spread businesses around downtown Port A in a grid pattern
-  const row = Math.floor(index / 8);
-  const col = index % 8;
-  return [
-    PORT_A_CENTER[0] + (row - 4) * 0.002 + (Math.random() - 0.5) * 0.001,
-    PORT_A_CENTER[1] + (col - 4) * 0.002 + (Math.random() - 0.5) * 0.001,
-  ];
-}
 
 const categoryColors: Record<string, string> = {
   eat: "#e8656f",
@@ -38,7 +20,9 @@ const categoryColors: Record<string, string> = {
   shop: "#ec4899",
 };
 
-// Dynamically import the map component to avoid SSR issues with Leaflet
+// Only businesses with real geocoded coordinates
+const geocodedBusinesses = businesses.filter((b) => b.coordinates);
+
 const MapComponent = dynamic(() => import("@/components/MapView"), {
   ssr: false,
   loading: () => (
@@ -53,11 +37,11 @@ export default function MapPage() {
 
   const filtered = useMemo(() => {
     const list = activeCategory === "All"
-      ? businesses
-      : businesses.filter((b) => b.category === activeCategory);
-    return list.map((b, i) => ({
+      ? geocodedBusinesses
+      : geocodedBusinesses.filter((b) => b.category === activeCategory);
+    return list.map((b) => ({
       ...b,
-      coords: getCoords(b.slug, i),
+      coords: b.coordinates as [number, number],
       color: categoryColors[b.category] || "#e8656f",
     }));
   }, [activeCategory]);
