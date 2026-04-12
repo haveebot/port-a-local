@@ -51,7 +51,7 @@ export default function Home() {
               "Trout Street Bar & Grill",
               "Alister Square Inn",
               "Deep Sea Headquarters",
-              "Isla Grand Beach Resort",
+              "Cinnamon Shore",
               "Fly It! Port A",
               "Winton's Island Candy",
               "Port Plumbing Co.",
