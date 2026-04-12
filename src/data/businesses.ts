@@ -401,6 +401,22 @@ export const businesses: Business[] = [
     },
     featured: false,
     tags: ["waterfront", "seafood", "grill", "casual", "cook your catch", "full bar"],
+    menu: [
+      {
+        section: "Signatures",
+        items: [
+          { name: "Port A Burger" },
+          { name: "Fish Tacos" },
+          { name: "FINS Famous Onion Rings" },
+          { name: "Coconut Shrimp" },
+          { name: "Seafood Gumbo" },
+          { name: "Blackened Gulf Fish" },
+          { name: "Crab Cakes" },
+          { name: "Panko Fried Shrimp" },
+          { name: "Fried Gulf Fish & Shrimp Po'Boy" },
+        ],
+      },
+    ],
     priceRange: "$$",
   },
   {
@@ -521,6 +537,21 @@ export const businesses: Business[] = [
     },
     featured: false,
     tags: ["burgers", "seafood", "late night", "mini golf", "family-friendly", "locally owned"],
+    menu: [
+      {
+        section: "Signatures",
+        items: [
+          { name: "Blackened Mahi Mahi Tacos" },
+          { name: "Crab Cake BLT" },
+          { name: "Crab Stuffed Fried Avocado" },
+          { name: "Fried Oysters" },
+          { name: "Garlic Fish" },
+          { name: "All-You-Can-Eat Fried Shrimp" },
+          { name: "Prime Rib" },
+          { name: "Peel & Eat Shrimp" },
+        ],
+      },
+    ],
     priceRange: "$$",
   },
   {
@@ -545,6 +576,20 @@ export const businesses: Business[] = [
     },
     featured: false,
     tags: ["seafood", "fast-casual", "family-friendly", "Gulf fresh", "burgers", "family friendly"],
+    menu: [
+      {
+        section: "Signatures",
+        items: [
+          { name: "Grumbles Famous Hushpuppies" },
+          { name: "Stuffed Flounder" },
+          { name: "Blackened Mahi Sandwich" },
+          { name: "Fried Gulf Oysters" },
+          { name: "Blackened Shrimp Po'Boy" },
+          { name: "Fried Oyster Po'Boy" },
+          { name: "Sesame Crusted Tuna Salad" },
+        ],
+      },
+    ],
     priceRange: "$$",
   },
   {
@@ -569,6 +614,23 @@ export const businesses: Business[] = [
     },
     featured: false,
     tags: ["pizza", "calzones", "buffet", "family-friendly", "casual", "locally owned"],
+    menu: [
+      {
+        section: "Signatures",
+        items: [
+          { name: "Supreme Pizza" },
+          { name: "All Meat Pizza" },
+          { name: "Margherita Pizza" },
+          { name: "Chicken Bacon Ranch Pizza" },
+          { name: "Calzones" },
+          { name: "Spaghetti with Meatballs" },
+          { name: "Chicken Alfredo" },
+          { name: "Meatball Sub" },
+          { name: "Philly Cheesesteak Sub" },
+          { name: "Fried Spicy Raviolis" },
+        ],
+      },
+    ],
     priceRange: "$",
   },
   {
@@ -642,6 +704,16 @@ export const businesses: Business[] = [
     },
     featured: false,
     tags: ["bar", "burgers", "tiki drinks", "dog-friendly", "casual", "outdoor seating", "locally owned", "happy hour"],
+    menu: [
+      {
+        section: "Signatures",
+        items: [
+          { name: "Specialty Burgers" },
+          { name: "Tiki Drinks" },
+          { name: "Island Cocktails" },
+        ],
+      },
+    ],
     priceRange: "$$",
   },
   {
@@ -666,6 +738,20 @@ export const businesses: Business[] = [
     },
     featured: false,
     tags: ["bar", "craft beer", "live music", "pet-friendly", "bar swings", "outdoor seating", "happy hour", "locally owned"],
+    menu: [
+      {
+        section: "Signatures",
+        items: [
+          { name: "Giant Bavarian Pretzel with Bier Cheese" },
+          { name: "Smash Burgers" },
+          { name: "Wings" },
+          { name: "Fish Tacos" },
+          { name: "Fish & Chips" },
+          { name: "Fried Shrimp" },
+          { name: "Prickly Pear Margarita" },
+        ],
+      },
+    ],
     priceRange: "$$",
   },
 
@@ -2469,6 +2555,21 @@ export const businesses: Business[] = [
     },
     featured: false,
     tags: ["bar", "gulf views", "western", "rooftop", "retail", "sunset views"],
+    menu: [
+      {
+        section: "Signatures",
+        items: [
+          { name: "Cowboy Cakes Crab Cakes" },
+          { name: "Fried Seafood Nachos" },
+          { name: "Tuna Tostados" },
+          { name: "Seafood & Sausage Gumbo" },
+          { name: "Grilled Seafood Platter" },
+          { name: "Coconut Shrimp" },
+          { name: "Ribeye Steak" },
+          { name: "Key Lime Pie" },
+        ],
+      },
+    ],
     priceRange: "$$",
   },
   {
@@ -2492,6 +2593,21 @@ export const businesses: Business[] = [
     },
     featured: false,
     tags: ["seafood", "pasta", "casual", "family", "locally owned"],
+    menu: [
+      {
+        section: "Signatures",
+        items: [
+          { name: "Richard's Fish" },
+          { name: "Chicken Parmigiana" },
+          { name: "Shrimp Bolognese" },
+          { name: "Manicotti" },
+          { name: "Fish Tacos" },
+          { name: "Oyster Tacos" },
+          { name: "Lump Crab Stuffed Avocado" },
+          { name: "Peel 'N Eat Shrimp" },
+        ],
+      },
+    ],
     priceRange: "$$",
   },
   {
@@ -2515,6 +2631,22 @@ export const businesses: Business[] = [
     },
     featured: false,
     tags: ["bbq", "seafood", "family", "southern comfort", "smoked meats", "family friendly", "locally owned"],
+    menu: [
+      {
+        section: "Signatures",
+        items: [
+          { name: "Sliced Brisket" },
+          { name: "Pork Spare Ribs" },
+          { name: "Pulled Pork" },
+          { name: "Smoked Char-Grilled Chicken" },
+          { name: "MacDaddy Burger" },
+          { name: "Pork Chili Nachos" },
+          { name: "Fried Chicken" },
+          { name: "Fried Shrimp" },
+          { name: "Pecan Pie" },
+        ],
+      },
+    ],
     priceRange: "$$",
   },
   {
@@ -2537,6 +2669,16 @@ export const businesses: Business[] = [
     },
     featured: false,
     tags: ["pizza", "brick oven", "golf carts", "retail", "casual", "locally owned"],
+    menu: [
+      {
+        section: "Signatures",
+        items: [
+          { name: "Margherita Pizza" },
+          { name: "BBQ Chicken Pizza" },
+          { name: "Build-Your-Own Brick Oven Pizza" },
+        ],
+      },
+    ],
     priceRange: "$",
   },
   {
@@ -2559,6 +2701,15 @@ export const businesses: Business[] = [
     },
     featured: false,
     tags: ["deli", "sandwiches", "casual", "marina", "grab and go"],
+    menu: [
+      {
+        section: "Signatures",
+        items: [
+          { name: "Deli Sandwiches" },
+          { name: "Wraps" },
+        ],
+      },
+    ],
     priceRange: "$",
   },
   {
@@ -2581,6 +2732,21 @@ export const businesses: Business[] = [
     },
     featured: false,
     tags: ["oysters", "seafood", "casual", "shack", "gulf", "locally owned"],
+    menu: [
+      {
+        section: "Signatures",
+        items: [
+          { name: "Oysters on the Half Shell" },
+          { name: "Grilled Oysters" },
+          { name: "Grilled Butterfly Shrimp" },
+          { name: "Boiled Shrimp" },
+          { name: "Crab Claws" },
+          { name: "Crawfish" },
+          { name: "Lobster" },
+          { name: "Mussels" },
+        ],
+      },
+    ],
     priceRange: "$",
   },
   {
@@ -2603,6 +2769,19 @@ export const businesses: Business[] = [
     },
     featured: false,
     tags: ["casual", "bar", "burgers", "seafood", "late night", "full bar", "locally owned"],
+    menu: [
+      {
+        section: "Signatures",
+        items: [
+          { name: "Fried Green Tomatoes with Crab & Shrimp" },
+          { name: "Southern Fried Oyster Sliders" },
+          { name: "Tuna Stack" },
+          { name: "Fresh Sushi" },
+          { name: "Coconut Creme Pie" },
+          { name: "Ginger Cake" },
+        ],
+      },
+    ],
     priceRange: "$$",
   },
   {
@@ -2626,6 +2805,22 @@ export const businesses: Business[] = [
     },
     featured: false,
     tags: ["bar", "grill", "waterfront", "casual", "cold drinks", "happy hour", "outdoor seating", "pet friendly", "full bar", "locally owned"],
+    menu: [
+      {
+        section: "Signatures",
+        items: [
+          { name: "Seafood Gumbo" },
+          { name: "Jumbo Grilled Shrimp" },
+          { name: "Coconut Shrimp" },
+          { name: "Fried Oysters" },
+          { name: "Soft Shell Crab" },
+          { name: "Gulf Fish" },
+          { name: "Fried Shrimp" },
+          { name: "Shrimp Po'Boy" },
+          { name: "Happy Hour Oysters" },
+        ],
+      },
+    ],
     priceRange: "$$",
   },
   {
@@ -2649,6 +2844,21 @@ export const businesses: Business[] = [
     },
     featured: false,
     tags: ["mexican", "tacos", "authentic", "cheap eats", "casual", "locally owned"],
+    menu: [
+      {
+        section: "Signatures",
+        items: [
+          { name: "Breakfast Tacos" },
+          { name: "Fajitas" },
+          { name: "Enchiladas" },
+          { name: "Carne Asada" },
+          { name: "Shrimp Cocktail" },
+          { name: "Guacamole & Chips" },
+          { name: "Burritos" },
+          { name: "Quesadillas" },
+        ],
+      },
+    ],
     priceRange: "$",
   },
   {
@@ -2671,6 +2881,20 @@ export const businesses: Business[] = [
     },
     featured: false,
     tags: ["mexican", "tex-mex", "margaritas", "casual", "family", "full bar"],
+    menu: [
+      {
+        section: "Signatures",
+        items: [
+          { name: "Breakfast Tacos" },
+          { name: "Migas" },
+          { name: "Fajitas" },
+          { name: "Enchiladas" },
+          { name: "Carne Asada" },
+          { name: "Burritos" },
+          { name: "Nachos" },
+        ],
+      },
+    ],
     priceRange: "$$",
   },
   {
@@ -2694,6 +2918,18 @@ export const businesses: Business[] = [
     },
     featured: false,
     tags: ["pizza", "bar", "dive bar", "late night", "casual"],
+    menu: [
+      {
+        section: "Signatures",
+        items: [
+          { name: "The Gaffer Supreme Pizza" },
+          { name: "Meatball Sub" },
+          { name: "Loaded Parrot Buffalo Chicken" },
+          { name: "Calzones" },
+          { name: "Build-Your-Own Pizza" },
+        ],
+      },
+    ],
     priceRange: "$",
   },
   {
@@ -2717,6 +2953,22 @@ export const businesses: Business[] = [
     },
     featured: false,
     tags: ["waterfront", "fish tacos", "bar", "casual", "deck"],
+    menu: [
+      {
+        section: "Signatures",
+        items: [
+          { name: "Cajun Redfish" },
+          { name: "Fish Tacos" },
+          { name: "Crab Cakes" },
+          { name: "Shrimp Cocktail" },
+          { name: "Pan Seared Scallops" },
+          { name: "Shrimp Platter" },
+          { name: "Fish Sandwich" },
+          { name: "Oysters" },
+          { name: "Po'Boys" },
+        ],
+      },
+    ],
     priceRange: "$$",
   },
   {
@@ -2739,6 +2991,20 @@ export const businesses: Business[] = [
     },
     featured: false,
     tags: ["sports bar", "burgers", "bar food", "casual", "game day", "locally owned"],
+    menu: [
+      {
+        section: "Signatures",
+        items: [
+          { name: "Giant Pancakes" },
+          { name: "Breakfast Burger" },
+          { name: "Philly Cheesesteak" },
+          { name: "Street Tacos" },
+          { name: "Egg Rolls" },
+          { name: "Deep Fried Twinkies" },
+          { name: "Burgers" },
+        ],
+      },
+    ],
     priceRange: "$$",
   },
   {
@@ -2761,6 +3027,21 @@ export const businesses: Business[] = [
     },
     featured: false,
     tags: ["breakfast", "diner", "lunch", "comfort food", "local", "locally owned", "family friendly"],
+    menu: [
+      {
+        section: "Signatures",
+        items: [
+          { name: "Spanish Omelet" },
+          { name: "Avocado Toast" },
+          { name: "Biscuits & Gravy" },
+          { name: "French Toast" },
+          { name: "Steak & Eggs" },
+          { name: "Open-Faced Roast Beef Sandwich" },
+          { name: "Country Fried Steak" },
+          { name: "Fish & Chips" },
+        ],
+      },
+    ],
     priceRange: "$",
   },
   {
@@ -2783,6 +3064,21 @@ export const businesses: Business[] = [
     },
     featured: false,
     tags: ["bakery", "pastries", "coffee", "breakfast", "kolaches", "locally owned"],
+    menu: [
+      {
+        section: "Signatures",
+        items: [
+          { name: "Cruffins" },
+          { name: "Cinnamon Rolls" },
+          { name: "Chocolate Strawberry Croissants" },
+          { name: "Kolaches" },
+          { name: "Creme Brulee" },
+          { name: "Custom Cakes" },
+          { name: "Homemade Soups" },
+          { name: "Deli Sandwiches" },
+        ],
+      },
+    ],
     priceRange: "$",
   },
   {
@@ -2805,6 +3101,19 @@ export const businesses: Business[] = [
     },
     featured: false,
     tags: ["poke", "healthy", "fresh", "bowls", "casual"],
+    menu: [
+      {
+        section: "Signatures",
+        items: [
+          { name: "Build-Your-Own Poke Bowl" },
+          { name: "Spicy Tuna Bowl" },
+          { name: "Smoked Salmon Bowl" },
+          { name: "Tofu Poke Bowl" },
+          { name: "Sushi Rolls" },
+          { name: "Boba Tea" },
+        ],
+      },
+    ],
     priceRange: "$$",
   },
   {
@@ -2827,6 +3136,20 @@ export const businesses: Business[] = [
     },
     featured: false,
     tags: ["home cooking", "comfort food", "casual", "local", "locally owned"],
+    menu: [
+      {
+        section: "Signatures",
+        items: [
+          { name: "Chicken Pot Pie" },
+          { name: "Jalapeno Cheddar Burger" },
+          { name: "Philly Cheesesteak Sandwich" },
+          { name: "Turkey Reuben" },
+          { name: "Quiche" },
+          { name: "Caprese Panini" },
+          { name: "Cupcakes" },
+        ],
+      },
+    ],
     priceRange: "$",
   },
   {
@@ -2850,6 +3173,19 @@ export const businesses: Business[] = [
     },
     featured: false,
     tags: ["tacos", "creative", "casual", "fresh", "fun"],
+    menu: [
+      {
+        section: "Signatures",
+        items: [
+          { name: "Buff Chicken Taco" },
+          { name: "Brisket Elote" },
+          { name: "Ocean Avenue Taco" },
+          { name: "Mahi Vibe Taco" },
+          { name: "Brisket Bro Taco" },
+          { name: "Brisket Nachos" },
+        ],
+      },
+    ],
     priceRange: "$",
   },
   {
@@ -2873,6 +3209,17 @@ export const businesses: Business[] = [
     },
     featured: false,
     tags: ["asian", "wok", "stir fry", "casual", "rice bowls"],
+    menu: [
+      {
+        section: "Signatures",
+        items: [
+          { name: "Fried Rice" },
+          { name: "Kung Pao Chicken" },
+          { name: "Yakitori Shrimp Skewers" },
+          { name: "Teriyaki Chicken" },
+        ],
+      },
+    ],
     priceRange: "$",
   },
   {
@@ -2895,6 +3242,19 @@ export const businesses: Business[] = [
     },
     featured: false,
     tags: ["cajun", "seafood", "comfort food", "casual", "gulf", "outdoor seating"],
+    menu: [
+      {
+        section: "Signatures",
+        items: [
+          { name: "Seared Ahi Tuna" },
+          { name: "Bam Bam Shrimp" },
+          { name: "Thai Lettuce Wraps" },
+          { name: "Chicken Pot Pie" },
+          { name: "Crawfish-N-Cornbread" },
+          { name: "Bayou Hot Dogs" },
+        ],
+      },
+    ],
     priceRange: "$$",
   },
   {
@@ -2917,6 +3277,16 @@ export const businesses: Business[] = [
     },
     featured: false,
     tags: ["acai", "smoothies", "healthy", "fresh", "beach food", "breakfast", "locally owned"],
+    menu: [
+      {
+        section: "Signatures",
+        items: [
+          { name: "Acai Bowls" },
+          { name: "Pitaya Bowls" },
+          { name: "Smoothies" },
+        ],
+      },
+    ],
     priceRange: "$",
   },
   {
@@ -2940,6 +3310,20 @@ export const businesses: Business[] = [
     },
     featured: false,
     tags: ["waterfront", "seafood", "bar", "casual", "burgers", "happy hour", "outdoor seating", "live music"],
+    menu: [
+      {
+        section: "Signatures",
+        items: [
+          { name: "Brick Oven Pizza" },
+          { name: "Philly Cheesesteak Pizza" },
+          { name: "Buffalo Shrimp" },
+          { name: "Bacon Wrapped Chicken Bites" },
+          { name: "Pork Tacos" },
+          { name: "Wings" },
+          { name: "Burgers" },
+        ],
+      },
+    ],
     priceRange: "$$",
   },
   {
@@ -2963,6 +3347,22 @@ export const businesses: Business[] = [
     },
     featured: false,
     tags: ["beachfront", "bar", "grill", "gulf views", "casual", "live music", "sunset views", "pet friendly"],
+    menu: [
+      {
+        section: "Signatures",
+        items: [
+          { name: "Fried Bologna Sandwich" },
+          { name: "Super Grilled Cheese" },
+          { name: "Reuben" },
+          { name: "Green Chile Cheeseburger" },
+          { name: "Teriyaki Pineapple Burger" },
+          { name: "Gouda Cheese Dip" },
+          { name: "Frito Pie" },
+          { name: "Pork Egg Rolls" },
+          { name: "Hushpuppies" },
+        ],
+      },
+    ],
     priceRange: "$$",
   },
   {
@@ -2986,6 +3386,22 @@ export const businesses: Business[] = [
     },
     featured: false,
     tags: ["coffee", "espresso", "cold brew", "pastries", "breakfast", "locally owned"],
+    menu: [
+      {
+        section: "Signatures",
+        items: [
+          { name: "Cold Brew" },
+          { name: "Latte" },
+          { name: "Cappuccino" },
+          { name: "Caramel Macchiato" },
+          { name: "Honey Badger" },
+          { name: "Gelato" },
+          { name: "London Fog" },
+          { name: "Mexican Cocoa" },
+          { name: "Ham & Cheddar Sandwich" },
+        ],
+      },
+    ],
     priceRange: "$",
   },
 
