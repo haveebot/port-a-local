@@ -62,13 +62,20 @@ _Last updated: 2026-04-12_
 ---
 
 ## What's Built (April 12, 2026)
-- **Directory:** 140+ businesses, 6 categories (Eat, Drink, Stay, Do, Fish, Shop)
+- **Directory:** 140+ businesses, 6 categories, geocoded coordinates
 - **Portals:** 3 revenue portals (Rent, Beach, Maintenance) with Stripe (test keys)
-- **Port A Heritage:** 17 published long-form editorial stories — first-ever organized digital history of Port Aransas
-- **Gully:** "Just Gully It" search engine — unified Fuse.js index, Cmd+K palette, recent searches, ~405 menu items, tag enrichment, heritage integration
-- **Know This Place:** Anonymous tag suggestion feature on every listing, admin review queue
-- **SEO:** JSON-LD structured data (WebSite, LocalBusiness, Article), sitemap, robots.txt
-- **Nav:** Explore dropdown, Gully search pill, uniform portal pills, logo + tagline
+- **Port A Heritage:** 17 published long-form stories (~25,000 words)
+- **Gully:** "Just Gully It" search — businesses + heritage + ~405 menu items, Cmd+K, recent searches
+- **Curated Guides:** 10 guides (Happy Hour, Pet-Friendly, Date Night, Seafood, etc.)
+- **Trip Planner:** Save/bookmark to My Trip (localStorage)
+- **Interactive Map:** 127 businesses with real geocoded pins
+- **Island Pulse:** 10 webcams, ship traffic, NOAA weather/tides dashboard
+- **Island Essentials:** 10-section arrival guide
+- **Events & Happenings:** 15 annual + 4 recurring events
+- **Fishing Report:** seasonal species, regulations, live conditions
+- **Know This Place:** Anonymous tag suggestions, admin review queue
+- **SEO:** JSON-LD structured data, OG images for heritage
+- **Nav:** Explore dropdown, Gully pill, portal pills, My Trip heart, logo + tagline
 
 ## Operating Model
 Winston makes product decisions and owns local relationships.

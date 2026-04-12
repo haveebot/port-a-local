@@ -67,11 +67,21 @@ _Last updated: 2026-04-12_
 
 ## Completed ✅
 
-### Session — April 12, 2026 (monster session — 16 commits)
-- Port A Heritage rename (Island Stories → Port A Heritage)
-- 6 new heritage stories published (17 total for V1)
-- Related Heritage cross-links on all story pages
-- Heritage stories integrated into Gully search
+### Session — April 12, 2026 (MONSTER SESSION — 30 commits)
+- Port A Heritage rename + 6 new stories (17 total)
+- Gully: unified search, tags, menus, "Just Gully It" branding, recent searches
+- Know This Place: anonymous tag suggestions
+- Nav refactor: Explore dropdown, pills, logo, tagline
+- Curated Guides: 10 auto-generated guides
+- Trip Planner: My Trip with save/bookmark
+- Interactive Map: 127 geocoded businesses
+- Island Pulse: 10 webcams, ship traffic, NOAA weather/tides
+- Island Essentials: 10-section arrival guide
+- Events & Happenings: 15 annual + 4 recurring
+- Fishing Report: species, regulations, conditions, captain links
+- SEO: structured data + heritage OG images
+- Category page refinement, footer update, mobile fixes
+- Business listing UX: Open Now, Gully link, Signature Items, hero fix
 - Tag enrichment pass (648 → 732 tags, all popular chips work)
 - Menu item search (~405 items across 38 businesses)
 - "Just Gully It" branding across all touchpoints
