@@ -2,14 +2,14 @@
 
 import { useState, useEffect, useRef, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import Fuse from "fuse.js";
-import { businesses } from "@/data/businesses";
-import type { Business } from "@/data/businesses";
+import { gullyFuse, gullyItems, getGullyHref } from "@/lib/gullySearch";
+import type { GullyItem } from "@/lib/gullySearch";
+import { isOpenNow } from "@/lib/isOpenNow";
 import BusinessCard from "@/components/BusinessCard";
+import { businesses } from "@/data/businesses";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import Link from "next/link";
-import { isOpenNow } from "@/lib/isOpenNow";
 
 const popularChips = [
   { label: "🍔 Burgers", query: "Burgers" },
@@ -20,20 +20,9 @@ const popularChips = [
   { label: "🏖️ Family Friendly", query: "Family Friendly" },
   { label: "🌙 Late Night", query: "Late Night" },
   { label: "🦞 Seafood", query: "Seafood" },
+  { label: "📖 Heritage", query: "heritage" },
+  { label: "⛵ Farley Boats", query: "Farley" },
 ];
-
-const fuse = new Fuse(businesses, {
-  keys: [
-    { name: "name", weight: 3 },
-    { name: "tagline", weight: 2 },
-    { name: "tags", weight: 2 },
-    { name: "description", weight: 1 },
-    { name: "category", weight: 1 },
-  ],
-  threshold: 0.35,
-  includeScore: true,
-  minMatchCharLength: 2,
-});
 
 function GullyContent() {
   const searchParams = useSearchParams();
@@ -48,24 +37,39 @@ function GullyContent() {
     inputRef.current?.focus();
   }, []);
 
-  const fuseResults: Business[] =
+  // Search across unified index
+  const fuseResults: GullyItem[] =
     query.trim().length >= 2
-      ? fuse.search(query).map((r) => r.item)
-      : [...businesses];
+      ? gullyFuse.search(query).map((r) => r.item)
+      : [...gullyItems];
 
+  // Open Now filter — only applies to businesses
   const afterOpenFilter = openNow
-    ? fuseResults.filter((b) => isOpenNow(b))
+    ? fuseResults.filter((item) => {
+        if (item.type === "story") return true; // stories always pass through
+        const biz = businesses.find((b) => b.slug === item.slug);
+        return biz ? isOpenNow(biz) : false;
+      })
     : fuseResults;
 
+  // Build category list from results
   const categoriesInResults = Array.from(
-    new Set(afterOpenFilter.map((b) => b.category))
+    new Set(afterOpenFilter.map((item) =>
+      item.type === "story" ? "Heritage" : item.category
+    ))
   ).sort();
 
+  // Category filter
   const afterCategoryFilter =
     activeCategory === "All"
       ? afterOpenFilter
-      : afterOpenFilter.filter((b) => b.category === activeCategory);
+      : activeCategory === "Heritage"
+        ? afterOpenFilter.filter((item) => item.type === "story")
+        : afterOpenFilter.filter(
+            (item) => item.type === "business" && item.category === activeCategory
+          );
 
+  // Sort: featured first, then alphabetical
   const sorted = [...afterCategoryFilter].sort((a, b) => {
     if (a.featured && !b.featured) return -1;
     if (!a.featured && b.featured) return 1;
@@ -80,10 +84,13 @@ function GullyContent() {
     }
   }, [categoriesInResults, activeCategory]);
 
+  const storyCount = sorted.filter((i) => i.type === "story").length;
+  const bizCount = sorted.filter((i) => i.type === "business").length;
+
   const resultLabel =
     query.trim().length >= 2
-      ? `${sorted.length} ${sorted.length === 1 ? "result" : "results"} for "${query}"`
-      : `${sorted.length} locally vetted businesses in Port Aransas`;
+      ? `${sorted.length} ${sorted.length === 1 ? "result" : "results"} for "${query}"${storyCount > 0 ? ` (${storyCount} heritage)` : ""}`
+      : `${bizCount} businesses + ${storyCount} heritage articles in Port Aransas`;
 
   return (
     <main className="min-h-screen">
@@ -103,7 +110,7 @@ function GullyContent() {
             Gully
           </h1>
           <p className="text-lg text-navy-200 font-light mb-8">
-            Find anything on the island — restaurants, bars, charters, shops and more.
+            Find anything on the island — restaurants, bars, charters, shops, history and more.
           </p>
 
           {/* Search input */}
@@ -126,7 +133,7 @@ function GullyContent() {
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Try 'seafood', 'happy hour', 'fishing'..."
+              placeholder="Try 'seafood', 'happy hour', 'Farley', 'hurricane'..."
               className="w-full pl-12 pr-4 py-4 rounded-xl text-navy-900 bg-white border border-sand-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-coral-400 text-base"
             />
           </div>
@@ -166,7 +173,7 @@ function GullyContent() {
                     : "bg-white/10 text-sand-200 border-white/20 hover:bg-white/20"
                 }`}
               >
-                {cat}
+                {cat === "Heritage" ? "📖 Heritage" : cat}
               </button>
             ))}
           </div>
@@ -202,9 +209,36 @@ function GullyContent() {
 
           {sorted.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {sorted.map((biz) => (
-                <BusinessCard key={biz.slug} business={biz} />
-              ))}
+              {sorted.map((item) =>
+                item.type === "business" ? (
+                  <BusinessCard
+                    key={`biz-${item.slug}`}
+                    business={businesses.find((b) => b.slug === item.slug)!}
+                  />
+                ) : (
+                  <Link
+                    key={`story-${item.slug}`}
+                    href={`/history/${item.slug}`}
+                    className="group relative rounded-2xl bg-white border border-sand-200 overflow-hidden card-hover"
+                  >
+                    <div className="h-1 bg-gradient-to-r from-navy-600 via-coral-400 to-gold-400" />
+                    <div className="p-6 sm:p-8">
+                      <div className="flex items-center justify-between mb-4">
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-navy-50 text-navy-600">
+                          {item.icon} Heritage
+                        </span>
+                        <span className="text-xs text-navy-400">{item.readTime} read</span>
+                      </div>
+                      <h3 className="font-display text-lg font-bold text-navy-900 group-hover:text-coral-600 transition-colors mb-2">
+                        {item.name}
+                      </h3>
+                      <p className="text-sm text-navy-400 leading-relaxed font-light line-clamp-2">
+                        {item.tagline}
+                      </p>
+                    </div>
+                  </Link>
+                )
+              )}
             </div>
           ) : (
             <div className="text-center py-20">
@@ -221,8 +255,8 @@ function GullyContent() {
                 <Link href="/eat" className="btn-coral px-6 py-3 rounded-xl text-sm font-medium">
                   Browse Restaurants
                 </Link>
-                <Link href="/drink" className="px-6 py-3 rounded-xl text-sm font-medium bg-navy-100 text-navy-700 hover:bg-navy-200 transition-colors">
-                  Explore Bars
+                <Link href="/history" className="px-6 py-3 rounded-xl text-sm font-medium bg-navy-100 text-navy-700 hover:bg-navy-200 transition-colors">
+                  Explore Heritage
                 </Link>
                 <Link href="/fish" className="px-6 py-3 rounded-xl text-sm font-medium bg-navy-100 text-navy-700 hover:bg-navy-200 transition-colors">
                   Find Charters

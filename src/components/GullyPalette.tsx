@@ -2,22 +2,8 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import Fuse from "fuse.js";
-import { businesses } from "@/data/businesses";
-import type { Business } from "@/data/businesses";
-
-const fuse = new Fuse(businesses, {
-  keys: [
-    { name: "name", weight: 3 },
-    { name: "tagline", weight: 2 },
-    { name: "tags", weight: 2 },
-    { name: "description", weight: 1 },
-    { name: "category", weight: 1 },
-  ],
-  threshold: 0.35,
-  includeScore: true,
-  minMatchCharLength: 2,
-});
+import { gullyFuse, getGullyHref } from "@/lib/gullySearch";
+import type { GullyItem } from "@/lib/gullySearch";
 
 const categoryEmoji: Record<string, string> = {
   eat: "🍽️",
@@ -39,6 +25,8 @@ const popularChips = [
   { label: "🏖️ Family Friendly", query: "Family Friendly" },
   { label: "🌙 Late Night", query: "Late Night" },
   { label: "🦞 Seafood", query: "Seafood" },
+  { label: "📖 Heritage", query: "heritage" },
+  { label: "⛵ Farley Boats", query: "Farley" },
 ];
 
 export default function GullyPalette() {
@@ -47,9 +35,9 @@ export default function GullyPalette() {
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
-  const results: Business[] =
+  const results: GullyItem[] =
     query.trim().length >= 2
-      ? fuse.search(query).slice(0, 8).map((r) => r.item)
+      ? gullyFuse.search(query).slice(0, 8).map((r) => r.item)
       : [];
 
   const openPalette = useCallback(() => {
@@ -180,21 +168,23 @@ export default function GullyPalette() {
           ) : results.length > 0 ? (
             /* Search results */
             <>
-              {results.map((biz) => (
+              {results.map((item) => (
                 <button
-                  key={biz.slug}
-                  onClick={() => navigateTo(`/${biz.category}/${biz.slug}`)}
+                  key={`${item.type}-${item.slug}`}
+                  onClick={() => navigateTo(getGullyHref(item))}
                   className="w-full text-left flex items-center gap-3 px-4 py-3 hover:bg-sand-50 cursor-pointer transition-colors border-b border-sand-100 last:border-0"
                 >
                   <span className="text-xl flex-shrink-0">
-                    {categoryEmoji[biz.category] ?? "📍"}
+                    {item.type === "story"
+                      ? (item.icon ?? "📖")
+                      : (categoryEmoji[item.category] ?? "📍")}
                   </span>
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-navy-900">{biz.name}</p>
-                    <p className="text-sm text-navy-400 truncate">{biz.tagline}</p>
+                    <p className="font-medium text-navy-900">{item.name}</p>
+                    <p className="text-sm text-navy-400 truncate">{item.tagline}</p>
                   </div>
                   <span className="text-xs text-navy-300 capitalize flex-shrink-0">
-                    {biz.category}
+                    {item.type === "story" ? `${item.readTime} read` : item.category}
                   </span>
                 </button>
               ))}
