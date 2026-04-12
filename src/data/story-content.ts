@@ -299,4 +299,181 @@ export const storyContent: Record<string, StoryContent> = {
       { place: "Farley Boat Works", detail: "Flying debris during Celia ruined a boat on cement blocks. The 1919 hurricane had already driven the Farleys inland." },
     ],
   },
+
+  "tarpon-era": {
+    lede: "There was a time when the town wasn't called Port Aransas. It was called Tarpon, Texas — named after the fish that made it famous. From the 1880s through the 1960s, the Atlantic tarpon shaped everything about this place: its economy, its infrastructure, its culture, and its identity. Guides built their lives around the Silver King. The world's wealthiest sportsmen built the most expensive fishing club anyone had ever seen on a barrier island across the channel. Tackle manufacturers sent their equipment here to be tested. And then, within a single generation, the tarpon all but disappeared. This is the story of the rise, the fall, and the slow return of the fish that defined Port Aransas.",
+
+    sections: [
+      {
+        heading: "How It Started",
+        body: [
+          "Historian Dr. John Guthrie Ford believes the tarpon fishery was discovered soon after the Aransas Pass jetty project began in 1880. Workers building the jetties saw massive schools of tarpon in the pass and started hiring Mustang Island boatmen to take them fishing. The first tarpon caught on rod and reel anywhere in the world was landed in Florida in 1885. Within a decade, Port Aransas had reoriented its entire economy around the fish.",
+          "Before 1876, the Mercer Logs — the primary historical record of early island life — contain no mention of tarpon or rod-and-reel fishing. The pre-tarpon island economy ran on cattle roundups, ship piloting, commercial netting, and harvesting roseate spoonbills for the plumage trade. Tarpon changed everything.",
+        ],
+      },
+      {
+        heading: "The Name Changes",
+        body: [
+          "The town's names tell its own story. In 1888, the first post office was established under the name Ropesville. On July 17, 1896, postmaster Emma A. Roberts changed the name to Tarpon — a declaration that the fish was now the town's identity. The population was about 250. By 1910, the name changed again to Port Aransas, an aspirational choice reflecting ambitions to become a major seaport. But the tarpon era was far from over.",
+        ],
+      },
+      {
+        heading: "A Typical Fishing Day",
+        body: [
+          "In the 1920s through the 1940s, a tarpon fishing day started early. Anglers were called at 5:00 AM. Breakfast at the Tarpon Inn, which packed lunches and served dinner on return. On the fishing grounds by 6:00 AM. Guides rowed clients through the pass to the open Gulf and trolled along the surf line where immense schools of tarpon swam in deep guts between the sandbars.",
+          "The tackle was simple by modern standards: a 5-and-a-half-foot rod, number 9 linen line, and live mullet cast in front of approaching schools. A drying spool for the linen line was standard equipment. Multiple boats competed simultaneously for the same schools. An eight-hour fishing day was the norm. The fish were photographed rather than eaten — tarpon are not good table fare.",
+        ],
+      },
+      {
+        heading: "Ed Cotter and the First Motorized Sport Fishing Boat",
+        body: [
+          "Ed Cotter was the first boatman to operate a power fishing boat in Port Aransas — and possibly in all of American sport fishing. Around 1900, Colonel Ned Green of New York purchased a powerboat and paid Cotter to travel to Chicago to learn to operate its Packard engine, which ran on naphtha. By about 1904, Cotter was using the powerboat to tow fishing skiffs — believed to be the first time a motorized boat was used for sport fishing in the United States.",
+          "Cotter also owned the Tarpon Inn. His name lives on in Cotter Avenue, one of Port Aransas's main streets.",
+        ],
+        pullQuote: {
+          text: "Ed Cotter is believed to have operated the first motorized sport fishing boat in the United States — paid for by a New York colonel, powered by a Packard engine that ran on naphtha.",
+        },
+      },
+      {
+        heading: "The Most Expensive Club the World Had Ever Seen",
+        body: [
+          "In 1899, Edward Howland Robinson Green — son of Hetty Green, the woman Wall Street called \"the Witch of Wall Street\" — founded the Tarpon Club of Texas on St. Joseph Island, adjacent to Aransas Pass. It was, by every account, the most expensive and exclusive sporting club the world had ever seen.",
+          "The two-story cypress and pine clubhouse exceeded 12,000 square feet. White exterior, green trimmings, red-shingled roof. It was lit by 126 incandescent lamps powered by an electrical plant — visible for miles at sea on a barrier island in 1899. The first floor held private offices, billiard rooms, a kitchen, dining rooms, a dance hall, and a veranda. The second floor had 18 sleeping rooms, servant quarters, and a parlor.",
+          "The members called themselves the \"First Four Hundred Sportsmen of America.\" Their combined wealth ran into the hundreds of millions. They came for tarpon fishing and duck hunting — killing so many waterfowl that sharks gathered in the nearby waters. The club drew intense press coverage from 1898 to 1902, then closed in 1904. Green left Texas in 1910.",
+        ],
+      },
+      {
+        heading: "The Records",
+        body: [
+          "The 1909 season produced 297 tarpon caught on light tackle. Only 12 exceeded six feet. One was a world record at six feet, six inches. One angler caught seven tarpon in a single day.",
+          "On July 13, 1931, Dr. Stirling E. Russ caught a seven-foot, 168-pound tarpon that is still mounted at the Tarpon Inn. On May 8, 1937, President Roosevelt caught his famous five-foot, 77-pound silver king at 3:27 PM. The Texas state record for tarpon stands at 229 pounds and 90 inches — caught in 2017, decades after the fishery's peak.",
+          "Atlantic tarpon can exceed six feet in length, weigh over 200 pounds, and jump up to 10 feet out of the water. They are called the Silver King because of the way sunlight reflects off their large, silvery scales — each up to three inches in diameter — as they leap from the surface.",
+        ],
+        fact: [
+          { label: "1909 season", value: "297 tarpon on light tackle" },
+          { label: "Biggest at Tarpon Inn", value: "7 ft, 168 lbs (1931)" },
+          { label: "FDR's catch", value: "5 ft, 77 lbs (1937)" },
+          { label: "TX state record", value: "229 lbs, 90 in (2017)" },
+          { label: "Max size", value: "6+ ft, 200+ lbs, 10-ft jumps" },
+        ],
+      },
+      {
+        heading: "The Hooper Trophy",
+        body: [
+          "Colonel Hooper, president of the Aransas Pass Tarpon Club (headquartered in the Tarpon Inn), donated one of the most coveted trophies in sport fishing. The Hooper Trophy featured a solid silver base topped with a bronze leaping tarpon. The rules were designed to match the difficulty of winning the America's Cup: to win, an angler had to land two tarpon over six feet in the same year, using a five-and-a-half-foot rod and number 9 linen line.",
+        ],
+      },
+      {
+        heading: "What Killed the Fishery",
+        body: [
+          "The tarpon fishery peaked in the 1920s through the 1940s and collapsed in the 1950s, largely complete by the early 1960s. The causes were multiple and compounding.",
+          "First, overfishing. Mature tarpon were routinely killed in tournaments. They were sometimes dynamited or netted, and the carcasses used for fertilizer. Killing ten in a day was common. There was no catch-and-release ethic.",
+          "Second, the loss of juvenile nursery habitat. Records show a lack of small fish after 1960 while large fish remained — a clear sign of recruitment failure, meaning new fish were not being born or surviving to adulthood.",
+          "Third, the Texas drought of 1949 to 1957, which brought 30 to 50 percent less rain to the region. The drought led to dam construction: 69 dams were built between 1957 and 1970, including the Longhorn Dam on the Colorado River. The dams reduced freshwater inflow and nutrients to the coastal estuaries, increased salinity, and disrupted the food chain that juvenile tarpon depended on.",
+          "Fourth, pesticides, which Texas Parks and Wildlife identified as a contributing factor to the decline.",
+        ],
+        pullQuote: {
+          text: "69 dams built between 1957 and 1970. The dams didn't just hold back water. They held back the nutrients, the freshwater inflow, and the food chain that juvenile tarpon needed to survive.",
+        },
+      },
+      {
+        heading: "The Silver King Today",
+        body: [
+          "Tarpon are still caught off Port Aransas from June through September, in the 40-to-150-pound range. They are strictly catch-and-release in Texas. The consistent bite has returned, though nowhere near historical levels. Scientists at the Harte Research Institute are actively studying the local population.",
+          "The Deep Sea Roundup — Texas's oldest fishing tournament, running since 1932 — evolved from the original Tarpon Rodeo when the tarpon declined. The 88th edition was held July 11-14, 2024, with about 600 entries. The Boatmen Association that organized the first rodeo is now Port Aransas Boatmen Incorporated, a 501(c)(6) nonprofit with over 160 members.",
+          "The tarpon scale tradition continues at the Tarpon Inn, where over 7,000 signed scales line the lobby walls — the oldest dating to 1892. The most famous belongs to FDR. He never slept at the Inn. But his signature is still there, along with those of Hedy Lamarr, Edward Teller, Duncan Hines, and thousands of anglers whose names are remembered only by the scales they signed.",
+        ],
+      },
+    ],
+
+    sources: [
+      { label: "Port Aransas South Jetty — History Corner", url: "https://www.portasouthjetty.com/articles/port-aransas-history-corner-3/" },
+      { label: "Port Aransas Museum — Tarpon Era Exhibit", url: "https://portaransasmuseum.org/exhibits/tarpon-era/" },
+      { label: "The Bend Magazine — Port Aransas' Historic Tarpon Industry", url: "https://www.thebendmag.com/port-aransas-historic-tarpon-industry/" },
+      { label: "Nueces Press — The Tarpon Club of Texas", url: "https://www.nuecespress.com/the-tarpon-club-of-texas/" },
+      { label: "UT Marine Science Institute — The Silver King", url: "https://utmsi.utexas.edu/science-and-the-sea/print-article/the-silver-king/" },
+      { label: "R.K. Sawyer & Jim Moloney, The Tarpon Club of Texas and the Genius of E.H.R. Green (2023)" },
+      { label: "Barney Farley, Fishing Yesterday's Gulf Coast (Texas A&M University Press, 2008)" },
+    ],
+
+    visitToday: [
+      { place: "Tarpon Inn", detail: "7,000+ signed tarpon scales on the lobby walls. FDR's scale is displayed in a frame. The oldest dates to 1892." },
+      { place: "Port Aransas Museum — Tarpon Era Exhibit", detail: "Fishing rods, reels, Rodeo trophies, linen line-drying spool, and the mounted tarpon from the first Deep Sea Roundup (1932)." },
+      { place: "Deep Sea Roundup", detail: "Texas's oldest fishing tournament, held every July. 88th edition in 2024." },
+    ],
+  },
+
+  "lydia-ann-lighthouse": {
+    lede: "On Christmas Day, 1862, Confederate General John B. Magruder ordered two kegs of gunpowder detonated inside the Lydia Ann lighthouse. The explosion destroyed the upper twenty feet of brickwork and most of the circular staircase. It would be the last principal light on the Texas coast restored after the Civil War. But the lighthouse survived — as it would survive everything the next century and a half would throw at it: hurricanes, neglect, deactivation, and finally, a quiet rescue by a grocery store billionaire who relit it in 1988. Today the Lydia Ann is the only operating lighthouse in Texas with a live-in caretaker. And nobody can agree on who Lydia Ann actually was.",
+
+    sections: [
+      {
+        heading: "Bricks Lost at Sea",
+        body: [
+          "On March 3, 1851, Congress authorized $12,500 for the construction of a lighthouse at Aransas Pass. A brick tower design was selected. The federal government purchased 25 acres on Harbor Island for $31.25, and Texas ceded jurisdiction in June 1855.",
+          "In late December 1855, the schooner carrying the bricks for the tower foundered on the sandbar at the Aransas Pass entrance during high seas. The crew was rescued, but the ship and its cargo were a total loss. New bricks had to be ordered. They arrived in 1856, followed by the lantern room and a Fourth Order Fresnel lens manufactured in France.",
+          "By early 1857, the 55-foot octagonal tower and keeper's dwelling were completed. The tower was painted brown. When the light was first illuminated, it became the second oldest lighthouse on the Texas coast and the oldest surviving structure in the Aransas Pass area.",
+        ],
+        fact: [
+          { label: "Authorized", value: "March 3, 1851" },
+          { label: "Completed", value: "Early 1857" },
+          { label: "Height", value: "55 feet, octagonal brick" },
+          { label: "Original lens", value: "Fourth Order Fresnel" },
+          { label: "Cost authorized", value: "$12,500" },
+          { label: "Land cost", value: "$31.25 for 25 acres" },
+        ],
+      },
+      {
+        heading: "Christmas Day, 1862",
+        body: [
+          "During the Civil War, Confederate forces controlled the Texas coast. General Magruder, fearing the lighthouse would aid Union naval operations, ordered its destruction on December 25, 1862. Two kegs of powder were carried into the tower and detonated.",
+          "The blast damaged the upper twenty feet of brickwork and destroyed most of the circular staircase. But the lower portion of the tower held. It was badly damaged, not demolished. Repairs began in 1867, and the lighthouse was the last principal light along the Texas coast to return to service that spring.",
+        ],
+      },
+      {
+        heading: "The Keepers",
+        body: [
+          "The lighthouse's longest-serving keeper was Parry W. Humphreys, who tended the light for over 16 years from 1869 to 1886. His wife Maria served as first assistant, followed by Jane W. Humphreys for nearly a decade. The keeper position was often a family affair.",
+          "Frank Stephenson served as head keeper from 1897 to 1917. He had a daughter named Lydia Ann — which brings us to the most persistent mystery of the lighthouse.",
+        ],
+      },
+      {
+        heading: "Who Was Lydia Ann?",
+        body: [
+          "The historical marker at the lighthouse credits \"the daughter of the first keeper\" for the name. But that's inaccurate. Keeper Frank Stephenson, whose daughter was named Lydia Ann, was the ninth keeper — not the first.",
+          "Local historians believe the channel was more likely named after Lydia Ann Dana Hastings Hull Wells, wife of Texas Revolution veteran James B. Wells. The name may have been applied to the channel first, with the lighthouse taking its name from the waterway it served. The truth is: no one has definitively settled the question. The lighthouse has been guiding ships for 169 years, and nobody can agree on whose name it carries.",
+        ],
+        pullQuote: {
+          text: "The lighthouse has been guiding ships for 169 years, and nobody can agree on whose name it carries.",
+        },
+      },
+      {
+        heading: "The Lens",
+        body: [
+          "The Fourth Order Fresnel lens that served in the lighthouse from 1878 to 1952 was manufactured in the 1860s by the French firm of Augustin Henry Lapaute. Lapaute's ancestors were clockmakers for Louis XVI and Louis XVII. After meeting Augustin-Jean Fresnel — the physicist who invented the revolutionary lens design before his death in 1827 — Lapaute applied his knowledge of clockwork mechanisms to create a new lens rotation system.",
+          "The lens stands two feet, four inches tall. It was decommissioned by the Coast Guard in 1954 and eventually given to the City of Port Aransas, which turned it over to the Port Aransas Museum after its 2008 opening. In November 2022, Jean-Pierre Jacks — Lapaute's great-great-great-grandson — visited the museum from France and identified a previously overlooked maker's engraving on the lens's metal base. A 160-year-old connection, rediscovered in a small-town museum on a Texas barrier island.",
+        ],
+      },
+      {
+        heading: "Deactivation and Rescue",
+        body: [
+          "In 1952, a new light was established at the Port Aransas Coast Guard Station, and the Lydia Ann was deactivated after nearly a century of service. The tower was sold to private hands in 1955 for $25,151.",
+          "In 1973, Charles Butt — president and CEO of H-E-B, the Texas grocery chain — purchased the lighthouse property. Butt oversaw a careful restoration and hired a live-in caretaker, Rick Reichenbach, who was later profiled by Texas Monthly. On July 3, 1988, the light was reactivated as a private aid to navigation. An automated light was installed.",
+          "The Lydia Ann had been listed on the National Register of Historic Places on August 3, 1977. Today it remains privately owned. The grounds and tower are closed to the public, but the lighthouse is visible from the water — charter boats and kayak tours offer viewing from the Lydia Ann Channel.",
+        ],
+      },
+    ],
+
+    sources: [
+      { label: "Lighthousefriends.com — Aransas Pass (Lydia Ann) Lighthouse", url: "https://www.lighthousefriends.com/light.asp?ID=158" },
+      { label: "Port Aransas South Jetty — Lighthouse Has Stood 160+ Years", url: "https://www.portasouthjetty.com/articles/lighthouse-has-stood-160-years/" },
+      { label: "Port Aransas South Jetty — More Learned on Lighthouse Lens", url: "https://www.portasouthjetty.com/articles/more-learned-on-lighthouse-lens/" },
+      { label: "HMDB — Lydia Ann Lighthouse Historical Marker", url: "https://www.hmdb.org/m.asp?m=182890" },
+    ],
+
+    visitToday: [
+      { place: "Port Aransas Museum", detail: "The original Fourth Order Fresnel lens is on display — with the maker's engraving identified by Lapaute's great-great-great-grandson in 2022." },
+      { place: "Lydia Ann Channel", detail: "The lighthouse is visible from the water. Charter boats and kayak tours from Lighthouse Trails near Highway 361 offer viewing." },
+    ],
+  },
 };
