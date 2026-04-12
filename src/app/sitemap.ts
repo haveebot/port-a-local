@@ -1,9 +1,11 @@
 import { MetadataRoute } from "next";
 import { getAllBusinessSlugs } from "@/data/businesses";
 
-const BASE_URL = "https://port-a-local.vercel.app";
+const BASE_URL = "https://portaransaslocal.com";
 
 const CATEGORY_SLUGS = ["eat", "drink", "stay", "do", "fish", "shop"];
+
+const PORTAL_SLUGS = ["services", "rent", "beach", "maintenance"];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const categoryEntries: MetadataRoute.Sitemap = CATEGORY_SLUGS.map((slug) => ({
@@ -11,6 +13,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: new Date(),
     changeFrequency: "weekly",
     priority: 0.8,
+  }));
+
+  const portalEntries: MetadataRoute.Sitemap = PORTAL_SLUGS.map((slug) => ({
+    url: `${BASE_URL}/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly",
+    priority: 0.9,
   }));
 
   const businessEntries: MetadataRoute.Sitemap = getAllBusinessSlugs().map(
@@ -29,6 +38,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 1.0,
     },
+    ...portalEntries,
     ...categoryEntries,
     ...businessEntries,
   ];

@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: ["/admin", "/api"],
     },
-    sitemap: "https://port-a-local.vercel.app/sitemap.xml",
+    sitemap: "https://portaransaslocal.com/sitemap.xml",
   };
 }

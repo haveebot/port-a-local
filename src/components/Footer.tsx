@@ -53,6 +53,14 @@ export default function Footer() {
             <ul className="space-y-3">
               <li>
                 <Link
+                  href="/services"
+                  className="text-navy-300 hover:text-coral-300 transition-colors text-sm"
+                >
+                  🛠️ All Services
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/rent"
                   className="text-navy-300 hover:text-coral-300 transition-colors text-sm"
                 >

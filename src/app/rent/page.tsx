@@ -152,8 +152,8 @@ export default function RentPage() {
             </div>
             <div>
               <div className="text-3xl mb-2">🏁</div>
-              <p className="font-semibold text-navy-900 text-sm">Pick Up & Go</p>
-              <p className="text-navy-500 text-sm mt-1">Show up, grab your cart, and explore the island.</p>
+              <p className="font-semibold text-navy-900 text-sm">We Deliver, You Explore</p>
+              <p className="text-navy-500 text-sm mt-1">Your cart is delivered to you. Just hop in and go.</p>
             </div>
           </div>
         </div>
