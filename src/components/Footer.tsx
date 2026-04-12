@@ -85,6 +85,14 @@ export default function Footer() {
               </li>
               <li>
                 <Link
+                  href="/history"
+                  className="text-navy-300 hover:text-coral-300 transition-colors text-sm"
+                >
+                  📖 Island Stories
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/#about"
                   className="text-navy-300 hover:text-coral-300 transition-colors text-sm"
                 >

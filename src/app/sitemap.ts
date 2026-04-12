@@ -1,5 +1,6 @@
 import { MetadataRoute } from "next";
 import { getAllBusinessSlugs } from "@/data/businesses";
+import { stories } from "@/data/stories";
 
 const BASE_URL = "https://portaransaslocal.com";
 
@@ -31,6 +32,23 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })
   );
 
+  const storyEntries: MetadataRoute.Sitemap = [
+    {
+      url: `${BASE_URL}/history`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    ...stories
+      .filter((s) => s.published)
+      .map((story) => ({
+        url: `${BASE_URL}/history/${story.slug}`,
+        lastModified: new Date(),
+        changeFrequency: "monthly" as const,
+        priority: 0.7,
+      })),
+  ];
+
   return [
     {
       url: BASE_URL,
@@ -39,6 +57,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1.0,
     },
     ...portalEntries,
+    ...storyEntries,
     ...categoryEntries,
     ...businessEntries,
   ];

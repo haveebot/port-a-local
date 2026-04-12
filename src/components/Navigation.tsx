@@ -53,6 +53,12 @@ export default function Navigation() {
               🛠️ Services
             </Link>
             <Link
+              href="/history"
+              className="px-4 py-2 rounded-lg text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-navy-800/50 transition-all duration-300"
+            >
+              📖 History
+            </Link>
+            <Link
               href="/gully"
               title="Gully — search Port Aransas"
               className="px-3 py-2 rounded-lg text-sm font-semibold text-sand-200 hover:text-coral-300 hover:bg-navy-800/50 transition-all duration-300 flex items-center gap-1.5 tracking-wide"
@@ -126,6 +132,13 @@ export default function Navigation() {
               className="block px-4 py-3 text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors"
             >
               🛠️ Services
+            </Link>
+            <Link
+              href="/history"
+              onClick={() => setMobileOpen(false)}
+              className="block px-4 py-3 text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors"
+            >
+              📖 Island Stories
             </Link>
             <Link
               href="/beach"
