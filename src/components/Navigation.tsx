@@ -94,6 +94,22 @@ export default function Navigation() {
                       <span className="text-base">🛠️</span>
                       Services
                     </Link>
+                    <Link
+                      href="/events"
+                      onClick={() => setExploreOpen(false)}
+                      className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-white/5 transition-colors"
+                    >
+                      <span className="text-base">🎪</span>
+                      Events
+                    </Link>
+                    <Link
+                      href="/fishing-report"
+                      onClick={() => setExploreOpen(false)}
+                      className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-white/5 transition-colors"
+                    >
+                      <span className="text-base">🎣</span>
+                      Fishing Report
+                    </Link>
                   </div>
                 </div>
               )}
@@ -221,6 +237,20 @@ export default function Navigation() {
               className="block px-4 py-2.5 text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors"
             >
               🛠️ Services
+            </Link>
+            <Link
+              href="/events"
+              onClick={() => setMobileOpen(false)}
+              className="block px-4 py-2.5 text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors"
+            >
+              🎪 Events
+            </Link>
+            <Link
+              href="/fishing-report"
+              onClick={() => setMobileOpen(false)}
+              className="block px-4 py-2.5 text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors"
+            >
+              🎣 Fishing Report
             </Link>
             <Link
               href="/history"
