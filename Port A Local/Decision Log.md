@@ -41,6 +41,44 @@ _This is institutional memory. Never delete an entry._
 **Decision:** Brand is "Port A Local." "Co" removed everywhere.
 **Why:** Cleaner, simpler. Stands on its own.
 
-### Operating model: Winston + Havee only
-**Decision:** Port A Local is run by Winston (product, relationships, decisions) and Havee (build, maintain, deploy, organize). No dependency on Nick, Shelina, or anyone else.
+### Operating model: Winston + Claude
+**Decision:** Port A Local is run by Winston (product, relationships, decisions) and Claude (build, maintain, deploy, organize). No dependency on anyone else.
 **Why:** Speed, control, no bottlenecks. Two-person operation that punches above its weight.
+
+---
+
+## 2026-04-12
+
+### "Port A Heritage" rename (from "Island Stories")
+**Decision:** Rename the heritage section from "Island Stories" to "Port A Heritage." Nav label: "History." URL stays `/history`.
+**Why:** "Stories" was ambiguous — could read as blog posts, news articles, opinion pieces. "Heritage" anchors the content as preserved local history. "Port A" ties it to the brand.
+**Alternatives considered:** "Island History", "Island Heritage", "Port A History", "Our History."
+
+### Publish all 17 stories for V1
+**Decision:** Write and publish all 6 expansion stories in-session rather than deferring to future sessions.
+**Why:** Heritage is a key marketing differentiator at launch. No other Port A site has anything close to this depth. 17 original editorial pieces covering 5,000 years of history.
+
+### "Just Gully It" brand identity
+**Decision:** Brand the search engine as "Gully" with the verb "Gully it" used throughout — placeholders, headers, empty states, homepage section, nav pill.
+**Why:** "Gully it" is ownable, local, and action-oriented. Same energy as "Google it" but for the island. Turns a search bar into a brand moment.
+
+### Unified Gully search index
+**Decision:** Combine businesses + heritage stories + menu items into a single Fuse.js index rather than separate search instances.
+**Why:** One search experience across all content types. User doesn't need to know whether they're searching businesses or heritage — Gully handles it.
+
+### Menu data as internal search fuel
+**Decision:** Add menu items to business data for search purposes only. Not displayed on listing pages.
+**Why:** Enriches search results dramatically (someone searches "fried shrimp" and gets businesses that serve it) without cluttering the listing UI or implying we maintain live menus.
+
+### "Know This Place?" — anonymous, no login
+**Decision:** Build community tag suggestions without user accounts, login, or gamification. Fully anonymous.
+**Why:** No signup friction. Visitors contribute on first visit. Approval queue keeps quality high. Gamification (badges, Verified Local) deferred until Supabase.
+**Alternatives considered:** Full community tagging with accounts + badges (requires backend).
+
+### Nav refactor — Explore dropdown
+**Decision:** Collapse 6 category links + Services into an "Explore" dropdown. Portals as uniform pills. Gully as search pill.
+**Why:** 12 items in the nav was overcrowded. Portal boxes were getting squeezed and uneven. 7 items is cleaner, gives everything room to breathe.
+
+### Push to main for live review
+**Decision:** Push to `main` whenever there's a clean build and Winston wants to review on the live Vercel deployment. Always confirm first.
+**Why:** Winston reviews on the Vercel URL, not a local dev server. Changes in worktree branches are invisible to him.

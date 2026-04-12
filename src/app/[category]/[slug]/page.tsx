@@ -9,6 +9,7 @@ import { getCategoryBySlug } from "@/data/categories";
 import BusinessCard from "@/components/BusinessCard";
 import KnowThisPlace from "@/components/KnowThisPlace";
 import { LocalBusinessSchema } from "@/components/StructuredData";
+import { isOpenNow } from "@/lib/isOpenNow";
 
 export function generateStaticParams() {
   return getAllBusinessSlugs();
@@ -125,7 +126,7 @@ export default async function BusinessDetailPage({
               {/* Menu */}
               {business.menu && business.menu.length > 0 && (
                 <div className="rounded-2xl bg-white border border-sand-200 p-8">
-                  <h2 className="font-display text-xl font-bold text-navy-900 mb-6">Menu</h2>
+                  <h2 className="font-display text-xl font-bold text-navy-900 mb-6">Signature Items</h2>
                   <div className="space-y-8">
                     {business.menu.map((section) => (
                       <div key={section.section}>
@@ -226,6 +227,22 @@ export default async function BusinessDetailPage({
 
             {/* Sidebar */}
             <div className="space-y-6">
+              {/* Open Now indicator */}
+              {business.hoursOfOperation && (
+                <div className={`rounded-2xl border p-4 text-center ${
+                  isOpenNow(business)
+                    ? "bg-green-50 border-green-200"
+                    : "bg-sand-50 border-sand-200"
+                }`}>
+                  <div className="flex items-center justify-center gap-2">
+                    <span className={`w-2.5 h-2.5 rounded-full ${isOpenNow(business) ? "bg-green-500" : "bg-navy-300"}`} />
+                    <p className={`text-sm font-bold font-display ${isOpenNow(business) ? "text-green-700" : "text-navy-500"}`}>
+                      {isOpenNow(business) ? "Open Now" : "Currently Closed"}
+                    </p>
+                  </div>
+                </div>
+              )}
+
               {/* Verified Partner Badge */}
               {business.verifiedPartner && (
                 <div className="rounded-2xl bg-coral-50 border border-coral-200 p-4 text-center">
@@ -317,13 +334,27 @@ export default async function BusinessDetailPage({
                 </div>
               </div>
 
+              {/* Find similar */}
+              <Link
+                href={`/gully?q=${encodeURIComponent(business.tags[0] || category.name)}`}
+                className="flex items-center gap-3 rounded-2xl bg-sand-50 border border-sand-200 p-5 card-hover group"
+              >
+                <svg className="w-5 h-5 text-navy-400 group-hover:text-coral-500 transition-colors shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <div>
+                  <p className="text-sm font-medium text-navy-700 group-hover:text-coral-600 transition-colors">Find similar on Gully</p>
+                  <p className="text-xs text-navy-400">Search more {category.name.toLowerCase()} spots</p>
+                </div>
+              </Link>
+
               {/* CTA */}
               <div className="rounded-2xl bg-navy-50 border border-navy-100 p-6 text-center">
                 <p className="text-sm text-navy-600 font-medium mb-3">
                   Is this your business?
                 </p>
                 <a
-                  href="mailto:hello@portaransaslocal.com?subject=Claim my Port A Local listing"
+                  href={`mailto:hello@portaransaslocal.com?subject=Claim listing: ${business.name}`}
                   className="inline-flex items-center justify-center px-5 py-2.5 rounded-lg btn-coral text-sm"
                 >
                   Claim Listing

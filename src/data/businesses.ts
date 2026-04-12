@@ -2312,6 +2312,19 @@ export const businesses: Business[] = [
     featured: true,
     categories: ["do", "eat"],
     tags: ["bar", "live music", "yard games", "golf cart rentals", "beach chairs", "shaved ice", "outdoor", "events", "outdoor seating"],
+    menu: [
+      {
+        section: "Drinks & Offerings",
+        items: [
+          { name: "Frozen Margaritas" },
+          { name: "Draft Beer" },
+          { name: "Shaved Ice" },
+          { name: "Yard Games" },
+          { name: "Golf Cart Rentals" },
+          { name: "Beach Chair Rentals" },
+        ],
+      },
+    ],
     priceRange: "$",
   },
   {
@@ -2335,6 +2348,16 @@ export const businesses: Business[] = [
     },
     featured: false,
     tags: ["bar", "island vibes", "casual", "cold drinks"],
+    menu: [
+      {
+        section: "Drinks",
+        items: [
+          { name: "Cold Beer" },
+          { name: "Frozen Drinks" },
+          { name: "Island Cocktails" },
+        ],
+      },
+    ],
     priceRange: "$",
   },
   {
@@ -2357,6 +2380,16 @@ export const businesses: Business[] = [
     },
     featured: false,
     tags: ["bar", "local", "neighborhood", "dive bar", "cold beer", "locally owned"],
+    menu: [
+      {
+        section: "Drinks",
+        items: [
+          { name: "Cold Beer" },
+          { name: "Longnecks" },
+          { name: "Well Drinks" },
+        ],
+      },
+    ],
     priceRange: "$",
   },
   {
@@ -2379,6 +2412,17 @@ export const businesses: Business[] = [
     },
     featured: false,
     tags: ["bar", "waterfront", "riviera", "views", "cold drinks"],
+    menu: [
+      {
+        section: "Drinks",
+        items: [
+          { name: "Frozen Drinks" },
+          { name: "Draft Beer" },
+          { name: "Margaritas" },
+          { name: "Sunset Cocktails" },
+        ],
+      },
+    ],
     priceRange: "$$",
   },
   {
@@ -2402,6 +2446,16 @@ export const businesses: Business[] = [
     },
     featured: false,
     tags: ["bar", "dive bar", "local", "cold beer", "classic", "live music"],
+    menu: [
+      {
+        section: "Drinks",
+        items: [
+          { name: "Cold Beer" },
+          { name: "Well Drinks" },
+          { name: "Jukebox" },
+        ],
+      },
+    ],
     priceRange: "$",
   },
   {
@@ -2424,6 +2478,17 @@ export const businesses: Business[] = [
     },
     featured: false,
     tags: ["bar", "casual", "island vibes", "cold drinks"],
+    menu: [
+      {
+        section: "Drinks",
+        items: [
+          { name: "Cold Beer" },
+          { name: "Karaoke" },
+          { name: "Pool Tables" },
+          { name: "Shuffleboard" },
+        ],
+      },
+    ],
     priceRange: "$",
   },
   {
@@ -2437,6 +2502,15 @@ export const businesses: Business[] = [
     hours: "Call for hours",
     featured: false,
     tags: ["bar", "vfw", "local", "community", "cheap beer", "locally owned"],
+    menu: [
+      {
+        section: "Drinks",
+        items: [
+          { name: "Cold Beer" },
+          { name: "Cheap Drinks" },
+        ],
+      },
+    ],
     priceRange: "$",
   },
   // Restaurant bars — also listed in Eat

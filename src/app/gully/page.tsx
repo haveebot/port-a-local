@@ -1,9 +1,29 @@
 "use client";
 
 import { useState, useEffect, useRef, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { gullyFuse, gullyItems, getGullyHref } from "@/lib/gullySearch";
 import type { GullyItem } from "@/lib/gullySearch";
+
+const RECENT_KEY = "gully-recent";
+const MAX_RECENT = 5;
+
+function getRecentSearches(): string[] {
+  if (typeof window === "undefined") return [];
+  try {
+    return JSON.parse(localStorage.getItem(RECENT_KEY) || "[]");
+  } catch {
+    return [];
+  }
+}
+
+function saveRecentSearch(q: string) {
+  const trimmed = q.trim();
+  if (trimmed.length < 2) return;
+  const recent = getRecentSearches().filter((r) => r !== trimmed);
+  recent.unshift(trimmed);
+  localStorage.setItem(RECENT_KEY, JSON.stringify(recent.slice(0, MAX_RECENT)));
+}
 import { isOpenNow } from "@/lib/isOpenNow";
 import BusinessCard from "@/components/BusinessCard";
 import { businesses } from "@/data/businesses";
@@ -31,11 +51,15 @@ function GullyContent() {
   const [query, setQuery] = useState(initialQ);
   const [activeCategory, setActiveCategory] = useState("All");
   const [openNow, setOpenNow] = useState(false);
+  const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     inputRef.current?.focus();
-  }, []);
+    setRecentSearches(getRecentSearches());
+    // Save initial query from URL if present
+    if (initialQ.trim().length >= 2) saveRecentSearch(initialQ);
+  }, [initialQ]);
 
   // Search across unified index
   const fuseResults: GullyItem[] =
@@ -180,10 +204,28 @@ function GullyContent() {
         </div>
       </section>
 
-      {/* Popular chips — shown only when query is empty */}
+      {/* Recent + Popular chips — shown only when query is empty */}
       {query.trim().length === 0 && (
         <section className="pb-0">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
+            {recentSearches.length > 0 && (
+              <div className="mt-8 mb-6">
+                <p className="text-sm font-semibold text-navy-300 uppercase tracking-wide mb-3">
+                  Recent
+                </p>
+                <div className="flex flex-wrap justify-center gap-2">
+                  {recentSearches.map((r) => (
+                    <button
+                      key={r}
+                      onClick={() => setQuery(r)}
+                      className="px-4 py-2 rounded-full text-sm bg-navy-100 text-navy-600 hover:bg-coral-50 hover:text-coral-600 border border-navy-200 transition-colors cursor-pointer"
+                    >
+                      {r}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
             <p className="text-sm font-semibold text-navy-300 uppercase tracking-wide mb-3 mt-8">
               Just Gully It
             </p>
