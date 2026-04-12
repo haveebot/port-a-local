@@ -476,4 +476,391 @@ export const storyContent: Record<string, StoryContent> = {
       { place: "Lydia Ann Channel", detail: "The lighthouse is visible from the water. Charter boats and kayak tours from Lighthouse Trails near Highway 361 offer viewing." },
     ],
   },
+
+  "karankawa-legacy": {
+    lede: "Long before the tarpon anglers, before the Farleys, before the lighthouse, before the town had a name, the Karankawa people lived on these barrier islands. Not for centuries — for millennia. Radiocarbon dating places Karankawa groups on the Texas Gulf Coast as early as 5,000 BCE. They were nomads who moved between the islands in summer and the mainland in winter, traveling in bands of fifty, converging into groups of five hundred when food was plentiful. They tattooed their entire bodies. They crafted pottery lined with natural tar. They used longbows nearly as tall as themselves. And in 1858, after decades of colonial violence justified by propaganda, they were declared extinct. That declaration was a lie. The Karankawa survived. And in 2020, the Handbook of Texas finally admitted it.",
+
+    sections: [
+      {
+        heading: "The First Islanders",
+        body: [
+          "The Karankawa inhabited the barrier islands and mainland coast between Galveston Bay and Corpus Christi Bay. Archaeological evidence — primarily shell middens, mounds of discarded shells from harvested oysters and clams — documents their long-term presence across the entire Texas Gulf Coast.",
+          "They followed a seasonal migration pattern that perfectly matched the resources of the coast. Summer meant fishing camps on the barrier islands. Winter meant hunting grounds on the mainland. Small bands of about fifty kinsmen, led by a chief, traveled independently most of the year, then converged into larger groups of five hundred or more in winter when food sources concentrated.",
+          "Their material culture was sophisticated. They crafted baskets and pottery lined with asphaltum — natural tar that washed up on Gulf beaches — creating waterproof vessels. Their longbows were described by Europeans as nearly as tall as the archers themselves. Their entire bodies were covered in tattoos that conveyed social status, marital availability, and served as a kind of passport through their territory.",
+        ],
+        fact: [
+          { label: "Earliest evidence", value: "~5,000 BCE" },
+          { label: "Territory", value: "Galveston Bay to Corpus Christi Bay" },
+          { label: "Band size", value: "~50, converging to 500+ in winter" },
+          { label: "Average height", value: "5'8\" (taller than most Europeans)" },
+          { label: "Declared extinct", value: "1858 (falsely)" },
+          { label: "Handbook corrected", value: "November 2020" },
+        ],
+      },
+      {
+        heading: "The Myth That Justified Genocide",
+        body: [
+          "The Karankawa practiced a ceremonial form of cannibalism — consuming small portions of defeated enemies to symbolically absorb their power. This practice ended by the late 1600s. No firsthand account of any form of cannibalism exists after that date.",
+          "But the myth was too useful to die. Failed Spanish conquistadors and missionaries created propaganda to justify their own failures. When Anglo-American colonists arrived under Stephen F. Austin's land grants in the 1820s, they weaponized the myth further. Austin declared the Karankawa \"universal enemies to man\" and called openly for their \"extermination.\" He assigned a captain to expel them from his land grant, leading to multiple attacks including the Skull Creek massacre.",
+          "Over 30,000 settlers arrived in and near Karankawa territory between the 1820s and 1830s. By the time of Texas independence in 1836, the Karankawa were fighting for survival. In 1858, following defeat by a force led by Juan Nepomuceno Cortina, they were declared extinct. SMU historian Tim Seiter has since led modern research debunking the cannibalism myth alongside Karankawa descendants.",
+        ],
+        pullQuote: {
+          text: "Stephen F. Austin declared the Karankawa 'universal enemies to man' and called for their extermination. The cannibalism myth justified the genocide. The myth was a lie. The extinction was also a lie.",
+        },
+      },
+      {
+        heading: "Survival in the Margins",
+        body: [
+          "The surviving Karankawa did not vanish. After the last nine warriors made a final stand near the Mexican town of Mier, the women and children dispersed to ranches and cities on both sides of the Texas-Mexico border. During the mid-1840s, most surviving Karankawa moved south into Tamaulipas, Mexico. They retained their culture and passed it down through generations — invisibly, in a world that had declared them gone.",
+        ],
+      },
+      {
+        heading: "The Return",
+        body: [
+          "The revival traces to September 2009, when the Brownsville Herald profiled Enrique Gonzalez Jr., who claimed to be a direct descendant with Karankawa grandparents on both sides. Around 2015, individuals across the Gulf Coast began connecting via social media and formed the Karankawa Kadla — meaning \"mixed people\" — as a tribal organization. Two clans emerged: one centered in Corpus Christi, one in Galveston. They now have a tribal council.",
+          "In November 2020, the Handbook of Texas changed its first sentence from \"The now-extinct Karankawa Indians\" to \"The Karankawa Indians are an American Indian cultural group whose traditional homelands are located along Texas' Gulf Coast.\" A single sentence — 162 years overdue.",
+          "The Karankawa Kadla are not yet recognized by the state or federal government. Texas's recognition process remains tangled in bureaucracy. But the Indigenous Peoples of the Coastal Bend nonprofit has organized to fight industrial expansion near sacred sites, and the tribe's visibility grows with each year.",
+        ],
+      },
+      {
+        heading: "Donnel Point, 2025",
+        body: [
+          "In 2025, an Ingleside on the Bay resident named Patrick Nye spotted a dense shell deposit in an eroded bluff while boating near Donnel Point, along the La Quinta Channel on Corpus Christi Bay. Local archaeologists confirmed it as an archaic shell midden matching historical accounts of Karankawa tribal camps dating back approximately 2,300 years. Historically, four separate shell middens had been identified at Donnel Point in the 1930s.",
+          "The site is owned by the Port of Corpus Christi. An unused permit authorizes construction of an oil terminal on the property. Earthjustice lawyers representing the Karankawa and the Carrizo/Comecrudo Tribe of Texas have asked the U.S. Army Corps of Engineers to revoke the permit. Donnel Point is among the last undisturbed tracts of land on nearly seventy miles of shoreline.",
+          "The fight is ongoing. A people declared extinct in 1858 are now in federal court defending a 2,300-year-old sacred site from an oil terminal. That is the Karankawa story — not history in the past tense, but a living struggle over who gets to define what matters.",
+        ],
+      },
+    ],
+
+    sources: [
+      { label: "Texas State Historical Association — Handbook of Texas: Karankawa", url: "https://www.tshaonline.org/handbook/entries/karankawa-indians" },
+      { label: "Texas Highways — Karankawa Descendants Are Reclaiming Their Heritage", url: "https://texashighways.com/culture/people/karankawa-descendants-are-reclaiming-their-heritage-after-being-written-off-extinct/" },
+      { label: "SMU News — Tim Seiter Karankawa Research" },
+      { label: "PAPHA — Karankawa Resurgence Lecture (2025)", url: "https://portaransasmuseum.org/henry-gonzales-alejandro-oyoque-speak-about-karankawa-resurgence/" },
+      { label: "Earthjustice — Donnel Point Press Release (2025)" },
+      { label: "Robert A. Ricklis, The Karankawa Indians of Texas (Texas Archaeology and Ethnohistory Series)" },
+    ],
+
+    visitToday: [
+      { place: "Port Aransas Museum", detail: "The \"Historic Families and Characters\" exhibit (2025) features Karankawa history. PAPHA hosted the Karankawa Resurgence lecture in February 2025." },
+      { place: "The Barrier Islands", detail: "Mustang Island itself was a Karankawa summer camp for thousands of years. Shell middens are found across the Texas coast." },
+    ],
+  },
+
+  "port-aransas-museum": {
+    lede: "The Port Aransas Museum holds nearly 40,000 historical photographs. It has film footage from the 1920s and 1930s. It has oral history recordings with islanders who survived Hurricane Celia. It has a Fourth Order Fresnel lens manufactured in 1860s Paris. It has a 60-foot genealogy scroll tracing 20 local families from a single 1854 marriage. And the building itself — a 1910 Sears, Roebuck catalog kit house, shipped to the island on a barge, that once served as the Coast Guard station — is an artifact in its own right. Almost none of this is accessible online. The museum's digital presence consists of a basic WordPress site with no searchable archive, no published oral histories, no virtual exhibits. It is one of the most significant gaps in Texas coastal heritage — and one of the greatest opportunities.",
+
+    sections: [
+      {
+        heading: "A Sears Kit House on a Barge",
+        body: [
+          "The museum building was ordered from a Sears, Roebuck catalog — a prefabricated home with all components shipped pre-cut and numbered for assembly. It was built by Robert A. Mercer, son of Robert Ainsworth Mercer, the man who established the first permanent settlement on Mustang Island in 1855. The kit house was brought to Port Aransas on a barge in 1910.",
+          "It survived the devastating 1919 hurricane. When that storm destroyed the original Life Saving Station, this kit house served as the temporary Coast Guard station until a new facility opened in 1925. After that, it passed into private ownership. Municipal Court Judge Duncan Neblett and former Mayor Georgia Neblett lived there for twenty years. It became known as the Neblett house.",
+          "In 2006, an out-of-town developer purchased the property with plans to demolish the house and build townhouses. In 2007, it was listed on Preservation Texas's Most Endangered Places. PAPHA acquired the house — the original owners donated it to be moved — and spent $45,311 to relocate it to the Community Center property. It opened as the Port Aransas Museum in December 2008.",
+        ],
+      },
+      {
+        heading: "38,000 Photos and Counting",
+        body: [
+          "The museum's photo archive has grown from an initial collection of 8,000 digitized images to nearly 40,000. The person responsible for this is Mark Creighton, a Cornell graduate who arrived in Port Aransas from the New Jersey shore in 1982. Creighton is a founding and lifetime member of PAPHA, the museum archivist, and the primary force behind digitizing the historical photo collection.",
+          "Every historical photograph added to the archive passes through Creighton's hands. The subjects span the late 1800s through the present: fishing, storms, daily life, buildings, schools, the jetties, boats, the lighthouse, families. The Brundrett family holdings alone include photographs from the late 1800s.",
+          "The collection grows through ongoing donations. In one remarkable discovery, Port Aransas resident Cathy Fulton found 12 photographs dated 1929 to 1931 in a drawer of an abandoned trailer near Beach Access Road 1. The envelope was labeled \"Port Aransas school children.\" Creighton noted the children may have been from \"rag town\" — a tent community from the late 1920s and 1930s.",
+        ],
+        pullQuote: {
+          text: "Nearly 40,000 historical photographs. Film footage from the 1920s. Oral histories with hurricane survivors. Almost none of it is accessible online.",
+        },
+      },
+      {
+        heading: "The Fresnel Lens and the Clockmaker's Heir",
+        body: [
+          "The museum's centerpiece is a Fourth Order Fresnel lens that served in the Lydia Ann Lighthouse from 1878 to 1952. It was manufactured in the 1860s by Augustin Henry Lapaute, whose family were clockmakers for French royalty. Lapaute met physicist Augustin-Jean Fresnel and applied his clockwork knowledge to create a revolutionary lens rotation system.",
+          "The lens stands two feet, four inches tall. It was decommissioned in 1954 and given to the City of Port Aransas, which transferred it to the museum after opening. In November 2022, a visitor named Jean-Pierre Jacks — Lapaute's great-great-great-grandson — arrived from France and identified a previously overlooked maker's engraving on the metal base. Five generations and 160 years, connected by a lens in a small museum on a barrier island.",
+        ],
+      },
+      {
+        heading: "The Collections",
+        body: [
+          "Beyond the photographs and the Fresnel lens, the museum holds a bronze jetty train bell from the Aransas Harbor Terminal Railway — the railroad chartered in 1892 to haul granite blocks to the jetty construction site. The bell has lost its clapper but visitors are encouraged to interact with it.",
+          "There is a genealogy scroll approximately sixty feet long, tracing about twenty local families stemming from a single 1854 marriage between Franz Joseph Frandolig and Hannah Anna Ellen Schwander. The Moores, the Mathews, the Bujans — all connected.",
+          "The Tarpon Era exhibit, opened in February 2020, holds fishing rods and reels, Rodeo trophies, a linen line-drying spool, tarpon fish prints by Dinah Bowman (whose gyotaku work is in the Smithsonian permanent collection), and a mounted tarpon from the first Deep Sea Roundup in 1932 — believed caught by Totsy Millican, though entered under her husband North's name.",
+          "And there are the oral histories: video interviews with long-time islanders, an ongoing project capturing personal narratives about hurricanes, fishing, and local characters. The 2025 \"Historic Families and Characters\" exhibit features direct input from families including the Brundrett, Milligan, Farley, Belcher, Teller, Baker, and Parker families — and, for the first time, Port Aransas's Black residents.",
+        ],
+      },
+      {
+        heading: "The Digital Gap",
+        body: [
+          "PAPHA's website is a basic WordPress site with pages for exhibits, events, and membership. There is no searchable photo database. No oral histories are published digitally — no podcast, no YouTube channel, no audio archive. The 1920s film footage is not available online in any form. The McKee Collection of 400-plus antique fishing rods and reels has a single webpage with no catalog and no images.",
+          "This matters because the collection is genuinely extraordinary. If the archive were digitized and made accessible, it would be one of the most comprehensive coastal heritage collections available online in Texas. The oral histories alone — recordings from survivors of Celia, from families who have been on the island for a century — represent irreplaceable primary sources.",
+          "The gap is not a criticism. PAPHA is a small nonprofit with $464,000 in annual revenue and a handful of staff. Digitization at this scale requires resources they don't yet have. But the opportunity is clear: a world-class physical archive with essentially zero digital reach.",
+        ],
+      },
+      {
+        heading: "PAPHA — The Organization Behind It All",
+        body: [
+          "The Port Aransas Preservation and Historical Association was founded in November 2002. Two of its key founders were Dr. John Guthrie Ford — a Trinity University psychology professor who transcribed the Mercer Logs, wrote the South Jetty's \"History Corner\" column, and created multiple museum exhibits before his death in 2018 — and Mark Creighton, who became the museum archivist.",
+          "PAPHA manages the museum, Farley Boat Works, the Chapel on the Dunes tours, the Mercer Market gift shop, and The Preserve (the 6,000-square-foot maritime museum under construction). Its total assets are just over $2 million. It operates on about $410,000 in annual expenses. Rick Pratt served as founding museum director from 2009 to 2018; Cliff Strain, a 40-year Port Aransas resident and former Flour Bluff ISD teacher, is the second and current director.",
+        ],
+      },
+    ],
+
+    sources: [
+      { label: "Preservation Texas — Mercer House", url: "https://www.preservationtexas.org/mep/mercer-house" },
+      { label: "PAPHA Official Site", url: "https://portaransasmuseum.org/" },
+      { label: "Port Aransas South Jetty — Historic Photos Found in Abandoned Trailer", url: "https://www.portasouthjetty.com/articles/historic-photos-found-in-an-abandoned-trailer/" },
+      { label: "Port Aransas South Jetty — More Learned on Lighthouse Lens", url: "https://www.portasouthjetty.com/articles/more-learned-on-lighthouse-lens/" },
+      { label: "Port Aransas South Jetty — Historic Families Exhibit", url: "https://www.portasouthjetty.com/articles/historic-families-museum-exhibit-to-open-thursday/" },
+      { label: "ProPublica Nonprofit Explorer — PAPHA Financials", url: "https://projects.propublica.org/nonprofits/organizations/710926680" },
+      { label: "J. Guthrie Ford & Mark Creighton, Images of America: Port Aransas (Arcadia Publishing, 2011)" },
+    ],
+
+    visitToday: [
+      { place: "Port Aransas Museum", detail: "408 N. Alister Street. Free admission. Thu-Sat 1-5 PM. Docent-led tours. The Fresnel lens, train bell, and Tarpon Era exhibit are all here." },
+      { place: "Chapel on the Dunes", detail: "Free PAPHA-led tours on the 1st and 3rd Saturday of each month, 9:15 AM. Near 11th Street and Avenue B." },
+      { place: "Farley Boat Works", detail: "716 W. Avenue C. The working boat shop and soon-to-open Preserve maritime museum are both PAPHA properties." },
+    ],
+  },
+
+  "storms-of-port-aransas": {
+    lede: "Port Aransas has been destroyed and rebuilt so many times that the cycle has become part of the town's identity. The 1875 hurricane wiped out the Mercer Docks and killed 150 people across Texas. The 1916 storm left the island flooded and infested with rattlesnakes. The 1919 hurricane — the worst in Port Aransas history — brought a storm surge of up to 15 feet, ruptured oil tanks that coated victims in crude, and killed as many as 1,000 people in the region. The town was depopulated and had to be resettled from scratch. The population didn't recover to its pre-1919 level until the 1960s. Then came Celia in 1970. Then Harvey in 2017. Port Aransas has experienced 43 hurricanes since 1930. The name \"Hurricane Junction\" is not a nickname. It is the historical record.",
+
+    sections: [
+      {
+        heading: "1875 — The First Recorded Devastation",
+        body: [
+          "The Hurricane of 1875 carried winds of 115 mph and destroyed the Mercer Docks — the major maritime infrastructure connecting Mustang Island to the outside world. Regular steamship service between the island and New Orleans, which had operated since the 1850s, ended permanently. Across Texas, 150 people were killed. Port Aransas's connection to the mainland was severed, and rebuilding the island's role as a port would take decades.",
+        ],
+      },
+      {
+        heading: "1916 — Rattlesnakes and Ruins",
+        body: [
+          "The August 18, 1916 hurricane destroyed Port Aransas \"except for a few buildings.\" The island was flooded and, in the aftermath, infested with rattlesnakes driven from their burrows by the water. Corpus Christi sustained $1.5 million in damage and 20 deaths.",
+          "The storm also destroyed the original Life Saving Station. A 1910 Sears kit house — the building that is now the Port Aransas Museum — served as the replacement station until 1925.",
+        ],
+      },
+      {
+        heading: "1919 — The Town That Disappeared",
+        body: [
+          "The 1919 hurricane is the worst natural disaster in Port Aransas history. Part of the Florida Keys Hurricane, it made Texas landfall at Baffin Bay on September 14 with winds of at least 110 mph and a storm surge variously reported at 11 to 15 feet.",
+          "The results were total. As one survivor put it: \"The whole town was gone. Every single house and store, hotel and inn.\" Only a school building survived — near the present-day Dairy Queen on the 300 block of West Cotter Avenue. The wind lasted 18 continuous hours.",
+          "Oil tanks ruptured during the storm. Victims swept into the bay were coated in heavy crude oil, making identification impossible. A communal shelter housing over 100 people collapsed after filling with water. Survivors fled to Cedar Hill, near present-day Beach Street.",
+          "Rescue was delayed three days because Corpus Christi authorities believed there were no survivors. The death toll in Texas was at least 284, but NWS estimates that 600 to 1,000 may have died — many victims in Nueces Bay, coated in crude, were never identified.",
+          "Most families relocated after the storm. Port Aransas was essentially depopulated and had to be resettled. The population had been about 250 before the storm. By 1925, it was 50.",
+        ],
+        pullQuote: {
+          text: "The whole town was gone. Every single house and store, hotel and inn.",
+          attribution: "1919 hurricane survivor",
+        },
+      },
+      {
+        heading: "1961 — Carla Cleaned House",
+        body: [
+          "Hurricane Carla's impact on Port Aransas was significant in a way that doesn't show up in damage statistics. The storm destroyed most of the town's \"illegal joints\" — the bars, gambling houses, and unlicensed establishments that had given Port Aransas a reputation as a lawless party destination. They were never rebuilt. Carla effectively ended that era and pushed the town toward the family-friendly fishing village identity it carries today.",
+        ],
+      },
+      {
+        heading: "1970 — Celia and the Microbursts",
+        body: [
+          "Hurricane Celia made landfall on August 3, 1970, with sustained winds between 125 and 140 mph and gusts estimated at 180 mph. The eye passed directly over Port Aransas. What made Celia unique were the microbursts — concentrated pockets of high-energy wind that struck in rapid succession over about 15 minutes, producing damage patterns that looked more like tornadoes than a hurricane.",
+          "Seventy-five percent of Port Aransas homes and businesses were damaged. The Tarpon Inn closed for five years. The fishing fleet was scattered — 331 boats lost across the Coastal Bend. The Marlin Queen, a 65-foot party boat, was impaled on pilings. Total damage was $930 million in 1970 dollars.",
+          "The recovery took two years. Pearl Beer bottled drinking water in beer bottles. Residents cooked freezer food communally before it spoiled. The community barbecue tradition that started after Celia continues after every storm.",
+        ],
+      },
+      {
+        heading: "2017 — Harvey",
+        body: [
+          "Hurricane Harvey made landfall near Port Aransas and Rockport on the night of August 25, 2017 as a Category 4 hurricane with 130 mph winds. Mayor Charles Bujan had ordered an evacuation the previous day for the town's approximately 4,000 residents.",
+          "The damage was the most comprehensive in the town's modern history: 100% of businesses damaged, 85% of homes damaged. City infrastructure sustained $50 to $70 million in damage. The city lost $300 million in property-tax value and laid off 10% of its workforce. The Tarpon Inn was flooded with an 8-foot storm surge but the lobby walls held and the 7,000-plus tarpon scales survived. The Inn reopened after eight months.",
+          "But Harvey's deepest impact was demographic. The storm destroyed the town's affordable housing stock — the older, cheaper houses where the fishing guides, restaurant workers, and service employees lived. What got rebuilt was more expensive. Workers were forced to commute from Corpus Christi and Rockport. An 188-unit affordable housing complex opened in spring 2022, but the fundamental dynamic remains: each rebuilding cycle makes Port Aransas wealthier, less diverse, and less accessible to the people who make it work.",
+        ],
+        pullQuote: {
+          text: "The hurricane wiped out a lot of the workforce housing, and it didn't come back.",
+          attribution: "David Parsons, Port Aransas City Manager",
+        },
+      },
+      {
+        heading: "The Pattern",
+        body: [
+          "Port Aransas has experienced 43 hurricanes since 1930. The destructive sequence — 1875, 1916, 1919, 1961, 1970, 2017 — averages roughly one catastrophic storm every 25 years. Each time, the community rebuilds. Each time, some people don't come back. Each time, the town that emerges is a little different from the one that was destroyed.",
+          "The dark truth about resilience is that it comes with a cost. Every rebuilding cycle concentrates wealth. The people who can afford to rebuild do. The people who can't, leave. Port Aransas after Harvey is not the same town as Port Aransas before Harvey, just as it wasn't the same after Celia, or after 1919. The island endures. But the question of who gets to live on it keeps changing.",
+        ],
+      },
+    ],
+
+    sources: [
+      { label: "NWS Corpus Christi — Hurricane Celia", url: "https://www.weather.gov/crp/hurricanecelia" },
+      { label: "NWS Corpus Christi — Hurricane of 1919", url: "https://www.weather.gov/crp/hurricane1919" },
+      { label: "NWS Corpus Christi — Hurricane Harvey", url: "https://www.weather.gov/crp/hurricane_harvey" },
+      { label: "Port Aransas South Jetty — 1919 Hurricane", url: "https://www.portasouthjetty.com/articles/1919-hurricane-smashed-port-a/" },
+      { label: "Houston Public Media — Harvey Port Aransas", url: "https://www.houstonpublicmedia.org/articles/news/2018/08/20/300865/" },
+      { label: "Cyril Matthew Kuehne, Hurricane Junction: A History of Port Aransas (St. Mary's University, 1973)" },
+    ],
+
+    visitToday: [
+      { place: "Port Aransas Museum", detail: "Hurricane exhibits documenting 1916, 1919, Celia, and Harvey. Oral histories from survivors. A 1940s Farley boat wrecked by Celia." },
+      { place: "Tarpon Inn", detail: "Built in 1925 with pine poles sunk in 16-20 feet of concrete. Has survived Celia and Harvey. The scales survived everything." },
+      { place: "300 Block W. Cotter Avenue", detail: "Near the site of the only building that survived the 1919 hurricane — the school building." },
+    ],
+  },
+
+  "chapel-on-the-dunes": {
+    lede: "In 1937, a woman named Aline B. Carter — Wellesley graduate, harp student at the Boston Conservatory, astronomy instructor, poet, and the future Poet Laureate of Texas — built a small chapel on top of a sand dune overlooking the Gulf of Mexico. She called it the Chapel of Eternal Light, because the small windows were placed to frame the morning Gulf light from one side and the sunset bay light from the other. She held Sunday school for the island's children and served ice cream and cake. The chapel still stands. The Carter family still owns it. PAPHA gives tours twice a month. It is the oldest functional consecrated church on Mustang Island.",
+
+    sections: [
+      {
+        heading: "The White Angel",
+        body: [
+          "Aline B. Carter was not a typical island resident. She attended Wellesley College, received musical instruction in harp at the Boston Conservatory, and trained at the Eric Pape School of Art in Boston. She was an astronomy instructor, a poet, and a visual artist. She was resident of the historic Maverick Carter House in San Antonio.",
+          "She authored two poetry collections: Halo of Love and Doubt Not The Dream. From 1947 to 1949, she served as the Texas Poet Laureate. On Mustang Island, she was known as the \"White Angel\" for the flowing white organdy dresses she wore while doing community service.",
+        ],
+      },
+      {
+        heading: "A Chapel Built for Light",
+        body: [
+          "Carter commissioned Ethel Wilson Harris to design and build the chapel. Harris was a noted San Antonio artisan associated with the Mission San Jose Pottery and the Works Progress Administration's Arts and Crafts Division. The altar and tile work were based on Carter's own drawings.",
+          "The chapel sits atop a sand dune near the intersection of 11th Street and Avenue B, oriented so that its small windows capture the changing light throughout the day. Carter used it for meditation and inspiration. She held Sunday school for island children, serving ice cream and cake — making what may have been the most popular religious education program in the history of Mustang Island.",
+        ],
+        pullQuote: {
+          text: "She called it the Chapel of Eternal Light, because the windows frame the morning Gulf light from one side and the sunset bay light from the other.",
+        },
+      },
+      {
+        heading: "The Murals and the Legacy",
+        body: [
+          "In 1972 — the year Aline Carter died — artist John Patrick Cobb painted Biblical murals on the chapel's whitewashed interior. The Old Testament is depicted on the north wall, the New Testament on the south.",
+          "The Carter family retains ownership. Frank Carter, one of Aline's three sons, managed the chapel until his death at age 99 in 2018. The chapel is available for weddings and private ceremonies. PAPHA offers free guided tours on the first and third Saturday of each month, starting at 9:15 AM and lasting 30 to 40 minutes.",
+          "There is no other building quite like it on the Texas coast — a sand dune chapel built by a poet laureate, designed by a WPA artisan, painted with murals in the year its founder died, and maintained by the same family for nearly ninety years.",
+        ],
+      },
+    ],
+
+    sources: [
+      { label: "Chapel on the Dunes — Official Site", url: "https://chapelonthedunes.org/" },
+      { label: "Texas Highways — Chapel on the Dunes Endures", url: "https://texashighways.com/culture/chapel-on-the-dunes-endures-port-aransas/" },
+      { label: "Atlas Obscura — Chapel on the Dunes", url: "https://www.atlasobscura.com/places/chapel-on-the-dunes" },
+      { label: "PAPHA — Chapel Tours", url: "https://portaransasmuseum.org/chapel-on-the-dunes-tours/" },
+    ],
+
+    visitToday: [
+      { place: "Chapel on the Dunes", detail: "Near 11th Street and Avenue B. Free PAPHA tours on the 1st and 3rd Saturday of each month, 9:15 AM. 30-40 minutes." },
+    ],
+  },
+
+  "wwii-coastal-defenses": {
+    lede: "One month after Pearl Harbor, in January 1942, a German U-boat was spotted just miles from the entrance to Aransas Pass. The pass guarded an oil depot and served as the transit route for Port of Corpus Christi vessels — Port Aransas was the nation's 12th largest oil shipping port. The U.S. Army's response was swift: field artillery from the 2nd Infantry Division, followed by Battery E of the 50th Coast Artillery Regiment, equipped with two French-designed 155mm guns mounted on reinforced concrete emplacements atop the sand dunes. A camp was built for 360 men. The guns could reach targets 11 miles out to sea. For two and a half years, they watched the Gulf of Mexico. They never fired a shot.",
+
+    sections: [
+      {
+        heading: "The Threat",
+        body: [
+          "The Southern Defense Command, created in March 1941 under Lieutenant General Walter Krueger, was responsible for the entire Southern U.S. coastline from North Carolina to Brownsville. After Pearl Harbor, the fear of German naval operations in the Gulf of Mexico was not hypothetical — the U-boat sighting near Aransas Pass in January 1942 was real. The oil depot inside the pass and the commercial shipping traffic through the channel made Port Aransas a logical target.",
+        ],
+      },
+      {
+        heading: "The Response",
+        body: [
+          "In January 1942, the SDC dispatched a temporary field artillery battery of the 2nd Infantry Division to Mustang Island. They set up 105mm Howitzers as an immediate defensive measure. By April 1942, Battery E of the 50th Coast Artillery Regiment arrived with heavier equipment: two French-designed 155mm GPF (Grande Puissance Filloux) guns.",
+          "The guns were mounted on Panama mounts — a type of gun emplacement developed by the U.S. Army in Panama during the 1920s. The troops built reinforced concrete emplacements on top of the sand dunes, along with timber magazines for ammunition storage, a commander's station, and searchlights. The camp accommodated 360 men. The 155mm guns could fire six-inch shells at targets up to 11 miles away.",
+        ],
+        fact: [
+          { label: "Duration", value: "January 1942 — July 1944" },
+          { label: "Personnel", value: "360 men" },
+          { label: "Primary weapons", value: "Two 155mm GPF guns" },
+          { label: "Range", value: "11 miles" },
+          { label: "Shots fired at enemy", value: "Zero" },
+        ],
+      },
+      {
+        heading: "Two and a Half Years of Watching",
+        body: [
+          "Coastal defense operations at Port Aransas lasted from January 1942 to July 1944, when enemy naval threats in the Gulf were assessed as having ceased. During the entire deployment, no weapons were discharged at any enemy. No actual engagements with enemy craft occurred. The guns watched the water, and the water stayed empty.",
+          "The military presence had another effect: the population of Port Aransas reportedly doubled during the war years as hundreds of servicemen lived on the island. The town had been small — perhaps 500 people before the war — and the sudden influx of young military personnel changed the social fabric temporarily.",
+        ],
+      },
+      {
+        heading: "An Older Military History",
+        body: [
+          "Mustang Island's military history didn't start with World War II. During the Mexican-American War of 1846 to 1848, a small fort was built on the island to guard the entrance to Aransas Bay and remained in use through the Civil War.",
+          "In April 1863, Confederate forces established Fort Semmes on the northern end of Mustang Island — named after Confederate Navy Captain Raphael Semmes. On November 17, 1863, Union forces under Brigadier General Thomas E.G. Ransom attacked Fort Semmes. The Confederate garrison of fewer than 100 men under Major George O. Dunaway was bombarded by the USS Monongahela from offshore. The Confederates surrendered. Union troops occupied the island until July 1864.",
+          "And of course, on Christmas Day 1862, Confederate General Magruder ordered the Lydia Ann lighthouse destroyed — an act of military demolition that the lighthouse survived, and that is remembered far better than the fort that stood just up the island.",
+        ],
+      },
+      {
+        heading: "What Remains",
+        body: [
+          "A Texas Historical Commission marker — \"World War II Coastal Defenses at the Aransas Pass\" (Atlas #5507015267) — documents the wartime installation. Gun mount remnants are still visible in the dunes. Local preservation groups have worked to create a memorial at the site.",
+          "The WWII guns that never fired are a quiet story — no combat, no heroics, no casualties. But they represent something important about Port Aransas: even the military history of this island is defined by the tension between preparation and the Gulf's indifference. The guns waited. The threat never came. And then the men went home.",
+        ],
+      },
+    ],
+
+    sources: [
+      { label: "Texas Historical Commission Atlas — WWII Coastal Defenses (#5507015267)" },
+      { label: "TSHA Handbook — Port Aransas", url: "https://www.tshaonline.org/handbook/entries/port-aransas-tx" },
+      { label: "Port Aransas South Jetty — Historical Articles" },
+    ],
+
+    visitToday: [
+      { place: "WWII Gun Emplacement Remnants", detail: "Concrete remains of the Panama mount emplacements are still visible in the sand dunes near Aransas Pass." },
+      { place: "THC Historical Marker", detail: "\"World War II Coastal Defenses at the Aransas Pass\" marker documents the 1942-1944 installation." },
+    ],
+  },
+
+  "deep-sea-roundup": {
+    lede: "In 1932, 25 charter boat and commercial fishermen calling themselves the Boatmen Association staged a three-day Texas Tarpon Rodeo in Port Aransas. North Millican caught the first winning tarpon — though locals still whisper that his wife Totsy actually landed the fish. The mounted tarpon from that day is still on display in the Port Aransas Museum, entered under North's name. Two years later, Dorothy Fair became the first woman to officially win the tournament. That rodeo evolved into the Deep Sea Roundup — Texas's oldest fishing tournament, now in its ninth decade, and the event that defines summer in Port Aransas.",
+
+    sections: [
+      {
+        heading: "From Tarpon Rodeo to Deep Sea Roundup",
+        body: [
+          "The original Tarpon Rodeo was organized by Barney Farley Sr. in 1932, at a time when Port Aransas's identity as a tarpon fishing destination was at its peak. The 25 founding members of the Boatmen Association had a specific mission: protect the local fishing waters and create an organized event that would draw national attention to Port Aransas.",
+          "The tournament was built around tarpon — the Silver King that had defined the town's economy since the 1880s. But as the tarpon fishery declined through the 1950s and 1960s, the tournament adapted. By 1947, it was called the \"Tarpon Rodeo and Deep Sea Roundup.\" By 1965, as tarpon catches became rare, it was renamed simply the Deep Sea Roundup, expanding to include all offshore species.",
+        ],
+      },
+      {
+        heading: "Totsy's Fish",
+        body: [
+          "The story of the first tournament's winning catch is one of Port Aransas's best-loved pieces of local lore. The tarpon was officially entered under North Millican's name. But the widely held local belief is that his wife Totsy actually caught the fish. The mounted tarpon from the 1932 rodeo — possibly the first tournament-winning fish in Texas coastal history — is displayed at the Port Aransas Museum.",
+          "Whether Totsy caught the fish or not, what is documented is that Dorothy Fair became the first woman champion in 1934 — just two years into the tournament's existence. Women have been a significant part of Port Aransas fishing culture from the beginning.",
+        ],
+        pullQuote: {
+          text: "The first winning tarpon was entered under North Millican's name. Locals still say his wife Totsy actually caught the fish. The mounted tarpon is in the museum. Under North's name.",
+        },
+      },
+      {
+        heading: "The Boatmen",
+        body: [
+          "The Port Aransas Boatmen Association, founded in 1932 with 25 members, has grown into Port Aransas Boatmen Incorporated — a 501(c)(6) nonprofit with over 160 members. The original mission of protecting fishing waters and sponsoring the tournament remains the core purpose.",
+          "The organization hosts the Deep Sea Roundup every July. The 88th edition was held July 11 through 14, 2024, drawing approximately 600 entries. The tournament has only paused twice: during World War II and in 2020 for COVID-19.",
+        ],
+        fact: [
+          { label: "First held", value: "1932 (as Texas Tarpon Rodeo)" },
+          { label: "Current name since", value: "1965" },
+          { label: "88th edition", value: "July 11-14, 2024" },
+          { label: "Entries (2024)", value: "~600" },
+          { label: "Pauses", value: "WWII + COVID-19 only" },
+          { label: "Organizer", value: "Port Aransas Boatmen Inc." },
+        ],
+      },
+      {
+        heading: "Nine Decades on the Gulf",
+        body: [
+          "The Deep Sea Roundup is the oldest fishing tournament on the Texas coast. That longevity matters because the tournament's history mirrors the ecological and economic history of Port Aransas itself. It started as a tarpon event when tarpon were abundant. It adapted when tarpon declined. It survived wars and pandemics. It continues as a broad offshore fishing competition in an era when catch-and-release tarpon fishing has slowly returned.",
+          "Every July, the tournament brings hundreds of anglers, families, and spectators to Port Aransas. It remains the defining summer event — a direct descendant of the 25 boatmen who decided, in 1932, that what their town needed was a fishing tournament.",
+        ],
+      },
+    ],
+
+    sources: [
+      { label: "Deep Sea Roundup — About", url: "https://deepsearoundup.org/about/" },
+      { label: "Port Aransas Boatmen", url: "https://paboatmen.org/" },
+      { label: "Port Aransas South Jetty — Blow-by-Blow Tarpon Fishing", url: "https://www.portasouthjetty.com/articles/blow-by-blow-tarpon-fishing/" },
+      { label: "Port Aransas Museum — Tarpon Era Exhibit", url: "https://portaransasmuseum.org/exhibits/tarpon-era/" },
+    ],
+
+    visitToday: [
+      { place: "Deep Sea Roundup", detail: "Held every July at Roberts Point Park. Texas's oldest fishing tournament. ~600 entries in 2024." },
+      { place: "Port Aransas Museum", detail: "The mounted tarpon from the first 1932 Rodeo is on display — entered under North Millican's name." },
+      { place: "Roberts Point Park", detail: "301 J.C. Barr Blvd. Home to the Deep Sea Roundup, the Wooden Boat Festival, and the municipal marina." },
+    ],
+  },
 };
