@@ -48,31 +48,33 @@ export default async function BusinessDetailPage({
     <main className="min-h-screen">
       <Navigation />
 
-      <section className="pt-28 pb-16 wave-bg">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+      <section className="pt-28 pb-16 hero-gradient relative">
+        <div className="absolute bottom-0 left-0 right-0 coral-line" />
+        <div className="absolute inset-0 palm-pattern opacity-15" />
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6">
           {/* Breadcrumb */}
           <nav className="flex flex-wrap items-center gap-1.5 text-sm text-navy-300 mb-8">
-            <Link href="/" className="hover:text-coral-500 transition-colors whitespace-nowrap">
+            <Link href="/" className="hover:text-coral-300 transition-colors whitespace-nowrap">
               Home
             </Link>
             <span className="text-coral-300/40">/</span>
             <Link
               href={`/${category.slug}`}
-              className="hover:text-coral-500 transition-colors whitespace-nowrap"
+              className="hover:text-coral-300 transition-colors whitespace-nowrap"
             >
               {category.icon} {category.name}
             </Link>
             <span className="text-coral-300/40">/</span>
-            <span className="text-navy-700 truncate max-w-[200px] sm:max-w-none">{business.name}</span>
+            <span className="text-navy-200 truncate max-w-[200px] sm:max-w-none">{business.name}</span>
           </nav>
 
           {/* Header */}
           <div className="flex items-start justify-between flex-wrap gap-4 mb-6">
             <div>
-              <h1 className="font-display text-4xl sm:text-5xl font-bold text-navy-900 mb-2">
+              <h1 className="font-display text-4xl sm:text-5xl font-bold text-sand-50 mb-2">
                 {business.name}
               </h1>
-              <p className="text-xl text-navy-400 font-light">{business.tagline}</p>
+              <p className="text-xl text-navy-200 font-light">{business.tagline}</p>
             </div>
             <Badge size="lg" />
           </div>
@@ -82,7 +84,7 @@ export default async function BusinessDetailPage({
             {business.tags.map((tag) => (
               <span
                 key={tag}
-                className="px-3 py-1.5 rounded-full bg-coral-50 text-coral-700 text-sm font-medium border border-coral-200/50"
+                className="px-3 py-1.5 rounded-full text-xs font-medium bg-navy-700/50 text-navy-200 border border-navy-600/30"
               >
                 {tag}
               </span>
