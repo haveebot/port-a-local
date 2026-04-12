@@ -111,12 +111,6 @@ export default function Navigation() {
             >
               Guides
             </Link>
-            <Link
-              href="/map"
-              className="px-4 py-2 rounded-lg text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-navy-800/50 transition-all duration-300"
-            >
-              Map
-            </Link>
 
             {/* Gully search pill */}
             <Link
@@ -223,13 +217,6 @@ export default function Navigation() {
               className="block px-4 py-2.5 text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors"
             >
               📋 Guides
-            </Link>
-            <Link
-              href="/map"
-              onClick={() => setMobileOpen(false)}
-              className="block px-4 py-2.5 text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors"
-            >
-              🗺️ Map
             </Link>
             <Link
               href="/my-trip"
