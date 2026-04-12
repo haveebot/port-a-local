@@ -1,6 +1,6 @@
 # Port A Local — Company Brain
-_Winston + Havee's living knowledge base. Updated every session._
-_Last updated: 2026-04-10_
+_Winston + Claude's living knowledge base. Updated every session._
+_Last updated: 2026-04-12_
 
 ---
 
@@ -9,48 +9,69 @@ _Last updated: 2026-04-10_
 ### Strategy & Decisions
 - [[Project Overview]] — what it is, the team, the mission
 - [[Decision Log]] — every major decision, why it was made
-- [[Market Intelligence]] — the landscape, competitors, search terms, what we're learning
+- [[Market Intelligence]] — the landscape, competitors, search terms
 - [[Revenue Log]] — bookings, payments, lead tracking, scoreboard
 
 ### People & Vendors
 - [[People & Vendors/John Brown — Port A Maintenance Services]] — maintenance vendor
 - [[People & Vendors/JOY Cart Rentals]] — Tier 1 golf cart vendor
-- [[People & Vendors/Billy Gaskins — Woody's Last Stand]] — 🔑 affiliate, family friend
+- [[People & Vendors/Billy Gaskins — Woody's Last Stand]] — affiliate, family friend
 - [[People & Vendors/Collie Caraker — Design]] — design advisor, Palm Republic
 - [[People & Vendors/Nick Merrill — Engineering]] — potential investor, not active
 
 ### Product
 - [[Features/Features Index]] — all features planned and built
-- [[Features/Gully — Search & Discovery]] — site-wide search + AI assistant concept
+- [[Features/Gully — Search & Discovery]] — "Just Gully It" search engine
 - [[Features/Rental Engine]] — golf cart + beach rental engine spec
 - [[Roadmap]] — prioritized to-do list
 - [[Ideas]] — loose scratchpad, future ideas, Collie input
 
+### Heritage
+- [[Heritage Research/FDR Tarpon Fishing Trip 1937]]
+- [[Heritage Research/The Tarpon Era]]
+- [[Heritage Research/Farley Boat Works]]
+- [[Heritage Research/Hurricane Celia and Port A Storm History]]
+- [[Heritage Research/Port Aransas Timeline]]
+- [[Heritage Research/Port Aransas Museum and PAPHA]]
+
 ### Business Directory
-- [[Business Directory/Business Directory Index]] — all 142 businesses
+- [[Business Directory/Business Directory Index]] — all 140+ businesses
 - [[Revenue Model/Revenue Model]] — revenue streams and strategy
 
 ### Session Notes
 - [[Session Notes/Session Notes Index]]
-- [[Session Notes/2026-04-10]] — most recent session
+- [[Session Notes/2026-04-12]] — monster session (17 heritage stories, Gully upgrade, nav refactor, SEO, Know This Place)
+- [[Session Notes/2026-04-10]] — portals, nav, SEO, Gully concept
 - [[Session Notes/2026-04-04]] — first build session
 
 ---
 
-## Current Status — April 10, 2026
+## Current Status — April 12, 2026
 
 | What | Detail |
 |------|--------|
 | Live site | https://port-a-local.vercel.app |
-| Businesses | 142 across 6 categories |
+| Domain | portaransaslocal.com (purchased, DNS pending Workspace) |
+| Businesses | 140+ across 6 categories |
+| Heritage | 17 published stories — Port A Heritage (~25,000 words) |
 | Portals | `/rent` `/beach` `/maintenance` |
-| Revenue | $0 — Stripe pending (next session) |
+| Search | Gully — unified index (businesses + heritage + menus) |
+| Revenue | $0 — Stripe pending (accounts blocked on Workspace) |
 | Repo | https://github.com/haveebot/port-a-local |
 
 ---
 
+## What's Built (April 12, 2026)
+- **Directory:** 140+ businesses, 6 categories (Eat, Drink, Stay, Do, Fish, Shop)
+- **Portals:** 3 revenue portals (Rent, Beach, Maintenance) with Stripe (test keys)
+- **Port A Heritage:** 17 published long-form editorial stories — first-ever organized digital history of Port Aransas
+- **Gully:** "Just Gully It" search engine — unified Fuse.js index, Cmd+K palette, recent searches, ~405 menu items, tag enrichment, heritage integration
+- **Know This Place:** Anonymous tag suggestion feature on every listing, admin review queue
+- **SEO:** JSON-LD structured data (WebSite, LocalBusiness, Article), sitemap, robots.txt
+- **Nav:** Explore dropdown, Gully search pill, uniform portal pills, logo + tagline
+
 ## Operating Model
 Winston makes product decisions and owns local relationships.
-Havee builds, maintains, deploys, and organizes everything else.
+Claude builds, maintains, deploys, and organizes everything else.
 Goal: lean two-person operation that punches above its weight.
 See [[Decision Log]] for all major decisions.

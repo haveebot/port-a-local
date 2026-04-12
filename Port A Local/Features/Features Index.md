@@ -1,26 +1,57 @@
 # Features Index
+_Last updated: 2026-04-12_
 
-> Specs and ideas for product features. See `docs/features/` in the repo for detailed specs.
+## Live Features
 
-## Planned (specs exist in repo)
-- [[Maintenance Portal]] — business maintenance request routing
-- [[Payment Processing]] — integrated payment for bookings/leads
-- [[Rental Engine]] — golf carts, beach equipment, cabana service
-- [[Gully — Search & Discovery]] — site-wide search, community tagging, AI-powered local assistant
+### Search & Discovery
+- **Gully** — "Just Gully It" site-wide search engine
+  - Unified Fuse.js index: 140+ businesses + 17 heritage stories + ~405 menu items
+  - Cmd+K command palette on every page
+  - Recent searches (localStorage, last 5)
+  - Tag enrichment: happy hour, live music, pet friendly, sunset views, etc.
+  - Dedicated homepage section + nav search pill
+  - Spec: [[Gully — Search & Discovery]]
 
-## Portals Built (live)
-- `/maintenance` — customer maintenance request → John Brown
-- `/rent` — golf cart booking → internal alert + customer confirmation
-- `/beach` — beach rentals (cabana $300/day, chair & umbrella $85/day)
+### Revenue Portals
+- `/maintenance` — Standard (free) + Priority Dispatch ($20). Spec: [[Maintenance Portal]]
+- `/rent` — golf cart booking ($10/day reservation fee). Spec: [[Rental Engine]]
+- `/beach` — cabana ($300/day) + chair & umbrella ($85/day). Spec: [[Rental Engine]]
+- All portals: Stripe integrated (test keys), Resend email confirmations
 
-## Ideas / Backlog
-- Business portal / dashboard (listing management)
-- Booking/reservation engine (Fish charters)
-- Lead tracking and affiliate routing
-- Mobile app (Expo project exists in repo under /mobile)
+### Heritage Content
+- **Port A Heritage** — 17 published long-form editorial stories at `/history`
+- Related Heritage cross-links between stories
+- Integrated into Gully search
+
+### Community Input
+- **Know This Place?** — anonymous tag suggestion form on every business listing
+  - 16 quick-pick tag chips + free-text note
+  - No login required
+  - Admin review at `/admin/suggestions`
+  - API: `/api/suggestions`
+
+### SEO
+- JSON-LD structured data: WebSite (homepage), LocalBusiness (listings), Article (heritage)
+- Dynamic meta tags on all pages
+- Sitemap + robots.txt
+
+### Navigation
+- Explore dropdown (6 categories + Services)
+- Gully search pill
+- Uniform portal pills (Beach, Carts, Maintenance)
+- Mobile menu with section headers
+
+### Directory
+- 140+ businesses across 6 categories
+- Open Now filter on category pages
+- BusinessCard component with tags, hours, location
+
+## Planned / Backlog
+- Stripe live keys (waiting on Workspace/admin@ email)
+- Resend email notifications for Know This Place suggestions
+- Classifieds / Want Board (needs Supabase)
+- Community tagging with gamification (badges, Verified Local)
+- Gully AI layer (Claude API) — V2
 - Map view for directory
-- Stripe payment integration for portals
-- Twilio 361 number swap (SMS for maintenance portal)
-
-## Next Feature To Build
-TBD — discuss with Winston
+- Realty category
+- Merch via Shopify Storefront API
