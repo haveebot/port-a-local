@@ -80,7 +80,7 @@ export const businesses: Business[] = [
       Sunday: "Closed",
     },
     featured: true,
-    tags: ["italian", "fine dining", "wine", "seafood", "date night"],
+    tags: ["italian", "fine dining", "wine", "seafood", "date night", "locally owned"],
     priceRange: "$$$",
     menu: [
       {
@@ -153,7 +153,7 @@ export const businesses: Business[] = [
     },
     featured: false,
     categories: ["stay", "drink"],
-    tags: ["beachfront", "bar & grill", "pet-friendly", "casual", "seafood"],
+    tags: ["beachfront", "bar & grill", "pet-friendly", "casual", "seafood", "pet friendly"],
     priceRange: "$$",
     menu: [
       {
@@ -196,7 +196,7 @@ export const businesses: Business[] = [
       Sunday: "5:00 PM – 8:30 PM",
     },
     featured: false,
-    tags: ["cajun", "boiled seafood", "casual", "iconic", "family-friendly"],
+    tags: ["cajun", "boiled seafood", "casual", "iconic", "family-friendly", "locally owned"],
     priceRange: "$$",
     menu: [
       {
@@ -303,7 +303,7 @@ export const businesses: Business[] = [
       Sunday: "9:00 AM – 2:00 PM, 3:00 PM – 9:00 PM",
     },
     featured: true,
-    tags: ["seafood", "steaks", "fine dining", "brunch", "sushi"],
+    tags: ["seafood", "steaks", "fine dining", "brunch", "sushi", "full bar"],
     priceRange: "$$$",
     menu: [
       {
@@ -352,7 +352,7 @@ export const businesses: Business[] = [
     },
     featured: false,
     categories: ["drink"],
-    tags: ["waterfront", "seafood", "family-friendly", "boat dock", "cook your catch"],
+    tags: ["waterfront", "seafood", "family-friendly", "boat dock", "cook your catch", "outdoor seating", "locally owned"],
     priceRange: "$$",
     menu: [
       {
@@ -400,7 +400,7 @@ export const businesses: Business[] = [
       Sunday: "11:00 AM – 8:00 PM",
     },
     featured: false,
-    tags: ["waterfront", "seafood", "grill", "casual", "cook your catch"],
+    tags: ["waterfront", "seafood", "grill", "casual", "cook your catch", "full bar"],
     priceRange: "$$",
   },
   {
@@ -424,7 +424,7 @@ export const businesses: Business[] = [
       Sunday: "Closed",
     },
     featured: false,
-    tags: ["mexican", "tex-mex", "tequila", "fish tacos", "date night"],
+    tags: ["mexican", "tex-mex", "tequila", "fish tacos", "date night", "full bar", "locally owned"],
     priceRange: "$$",
     menu: [
       {
@@ -474,7 +474,7 @@ export const businesses: Business[] = [
       Sunday: "5:00 PM – 9:00 PM",
     },
     featured: false,
-    tags: ["fine dining", "steaks", "seafood", "historic", "wine", "date night"],
+    tags: ["fine dining", "steaks", "seafood", "historic", "wine", "date night", "outdoor seating", "full bar"],
     priceRange: "$$$",
     menu: [
       {
@@ -520,7 +520,7 @@ export const businesses: Business[] = [
       Saturday: "11:00 AM – 2:00 AM",
     },
     featured: false,
-    tags: ["burgers", "seafood", "late night", "mini golf", "family-friendly"],
+    tags: ["burgers", "seafood", "late night", "mini golf", "family-friendly", "locally owned"],
     priceRange: "$$",
   },
   {
@@ -544,7 +544,7 @@ export const businesses: Business[] = [
       Sunday: "11:00 AM – 9:00 PM",
     },
     featured: false,
-    tags: ["seafood", "fast-casual", "family-friendly", "Gulf fresh", "burgers"],
+    tags: ["seafood", "fast-casual", "family-friendly", "Gulf fresh", "burgers", "family friendly"],
     priceRange: "$$",
   },
   {
@@ -568,7 +568,7 @@ export const businesses: Business[] = [
       Sunday: "11:00 AM – 10:00 PM",
     },
     featured: false,
-    tags: ["pizza", "calzones", "buffet", "family-friendly", "casual"],
+    tags: ["pizza", "calzones", "buffet", "family-friendly", "casual", "locally owned"],
     priceRange: "$",
   },
   {
@@ -592,7 +592,7 @@ export const businesses: Business[] = [
       Sunday: "Closed",
     },
     featured: false,
-    tags: ["seafood", "upscale", "cocktails", "Cinnamon Shore", "date night"],
+    tags: ["seafood", "upscale", "cocktails", "Cinnamon Shore", "date night", "full bar", "family friendly"],
     priceRange: "$$$",
     menu: [
       {
@@ -641,7 +641,7 @@ export const businesses: Business[] = [
       Sunday: "11:00 AM – 10:00 PM",
     },
     featured: false,
-    tags: ["bar", "burgers", "tiki drinks", "dog-friendly", "casual"],
+    tags: ["bar", "burgers", "tiki drinks", "dog-friendly", "casual", "outdoor seating", "locally owned", "happy hour"],
     priceRange: "$$",
   },
   {
@@ -665,7 +665,7 @@ export const businesses: Business[] = [
       Sunday: "11:00 AM – 12:00 AM",
     },
     featured: false,
-    tags: ["bar", "craft beer", "live music", "pet-friendly", "bar swings"],
+    tags: ["bar", "craft beer", "live music", "pet-friendly", "bar swings", "outdoor seating", "happy hour", "locally owned"],
     priceRange: "$$",
   },
 
@@ -817,7 +817,7 @@ export const businesses: Business[] = [
       Sunday: "10:00 AM – 7:00 PM",
     },
     featured: false,
-    tags: ["dolphins", "boat tour", "family-friendly", "wildlife", "sunset cruise"],
+    tags: ["dolphins", "boat tour", "family-friendly", "wildlife", "sunset cruise", "sunset views", "outdoor", "family friendly"],
     schedule: [
       {
         name: "Dolphin Watch Nature Tour & Shrimp Trawl",
@@ -856,7 +856,7 @@ export const businesses: Business[] = [
       Sunday: "6:00 AM – 7:00 PM",
     },
     featured: false,
-    tags: ["fishing", "jetty", "san jose island", "beachcombing", "birding"],
+    tags: ["fishing", "jetty", "san jose island", "beachcombing", "birding", "pet friendly"],
     schedule: [
       {
         name: "Summer Departures (Port Aransas → San Jose Island)",
@@ -900,7 +900,7 @@ export const businesses: Business[] = [
     website: "https://portabeachbuggies.com",
     hours: "Daily 8AM-6PM",
     featured: false,
-    tags: ["golf cart", "rentals", "transportation", "island cruising"],
+    tags: ["golf cart", "rentals", "transportation", "island cruising", "outdoor", "locally owned"],
     rentals: [
       {
         name: "3-Hour Rental",
@@ -952,7 +952,7 @@ export const businesses: Business[] = [
     website: "https://scarletladydolphincruise.com",
     hours: "Daily — call for cruise times",
     featured: false,
-    tags: ["dolphins", "catamaran", "sunset cruise", "oyster tour", "full bar"],
+    tags: ["dolphins", "catamaran", "sunset cruise", "oyster tour", "full bar", "sunset views", "outdoor", "family friendly"],
     schedule: [
       {
         name: "Dolphin Adventure Tour",
@@ -1050,7 +1050,7 @@ export const businesses: Business[] = [
     website: "https://woodyslaststand.com",
     hours: "Daily 7AM-7PM (Boat Bar noon-10PM)",
     featured: true,
-    tags: ["marina", "charters", "tours", "boat bar", "parasailing", "waterfront", "multi-service", "Billy Gaskins"],
+    tags: ["marina", "charters", "tours", "boat bar", "parasailing", "waterfront", "multi-service", "Billy Gaskins", "sunset views"],
     priceRange: "$",
     verifiedPartner: true,
   },
@@ -1078,7 +1078,7 @@ export const businesses: Business[] = [
     website: "https://deepseaheadquarters.com",
     hours: "Check schedule for departure times",
     featured: true,
-    tags: ["pirate ship", "cruise", "family", "kids", "fun", "gulf"],
+    tags: ["pirate ship", "cruise", "family", "kids", "fun", "gulf", "sunset views"],
     priceRange: "$$",
   },
   {
@@ -1092,7 +1092,7 @@ export const businesses: Business[] = [
     website: "https://islandsurfrentals.com",
     hours: "Daily 9AM-5PM",
     featured: false,
-    tags: ["surfboards", "rentals", "paddleboard", "surf lessons", "beach gear"],
+    tags: ["surfboards", "rentals", "paddleboard", "surf lessons", "beach gear", "outdoor", "locally owned"],
     priceRange: "$",
   },
   {
@@ -1195,7 +1195,7 @@ export const businesses: Business[] = [
       Saturday: "11:00 AM – 5:00 PM",
     },
     featured: true,
-    tags: ["gifts", "handmade jewelry", "vintage decor", "art", "coastal", "local"],
+    tags: ["gifts", "handmade jewelry", "vintage decor", "art", "coastal", "local", "locally owned"],
     priceRange: "$",
     verifiedPartner: true,
   },
@@ -1391,7 +1391,7 @@ export const businesses: Business[] = [
     },
     featured: false,
     categories: ["do"],
-    tags: ["kites", "beach gear", "gifts", "wind toys", "family-friendly"],
+    tags: ["kites", "beach gear", "gifts", "wind toys", "family-friendly", "locally owned"],
   },
 
   {
@@ -1415,7 +1415,7 @@ export const businesses: Business[] = [
       Sunday: "9:00 AM – 9:00 PM",
     },
     featured: false,
-    tags: ["candy", "fudge", "saltwater taffy", "gifts", "sweets"],
+    tags: ["candy", "fudge", "saltwater taffy", "gifts", "sweets", "locally owned"],
     priceRange: "$",
   },
   {
@@ -1429,7 +1429,7 @@ export const businesses: Business[] = [
     phone: "(361) 749-2444",
     hours: "Daily 9AM-8PM",
     featured: false,
-    tags: ["beach gear", "apparel", "gifts", "souvenirs", "coastal"],
+    tags: ["beach gear", "apparel", "gifts", "souvenirs", "coastal", "locally owned"],
     priceRange: "$–$$",
   },
 
@@ -1453,7 +1453,7 @@ export const businesses: Business[] = [
       Sunday: "Closed",
     },
     featured: false,
-    tags: ["boats", "yachts", "marine", "Hatteras", "boat sales", "buy", "sell", "dealer"],
+    tags: ["boats", "yachts", "marine", "Hatteras", "boat sales", "buy", "sell", "dealer", "locally owned"],
     priceRange: "$$$$",
   },
 
@@ -1662,7 +1662,7 @@ export const businesses: Business[] = [
     website: "https://alistersquareinn.com",
     hours: "Check-in 3PM, Check-out 11AM",
     featured: false,
-    tags: ["inn", "central", "walkable", "local", "charming"],
+    tags: ["inn", "central", "walkable", "local", "charming", "pet friendly"],
     priceRange: "$$",
     amenities: ["Free WiFi", "Parking", "Central Location"],
   },
@@ -1809,7 +1809,7 @@ export const businesses: Business[] = [
     website: "https://www.portaescapes.com",
     hours: "Call for availability",
     featured: false,
-    tags: ["property management", "vacation rental", "beach homes"],
+    tags: ["property management", "vacation rental", "beach homes", "family friendly"],
     priceRange: "$$",
   },
   {
@@ -2062,7 +2062,7 @@ export const businesses: Business[] = [
     website: "https://dolphindocks.com",
     hours: "Daily 6AM-8PM",
     featured: false,
-    tags: ["marina", "dock", "fishing", "bait", "waterfront"],
+    tags: ["marina", "dock", "fishing", "bait", "waterfront", "locally owned"],
     priceRange: "$",
   },
   {
@@ -2076,7 +2076,7 @@ export const businesses: Business[] = [
     website: "https://islandtacklepa.com",
     hours: "Daily 5AM-7PM",
     featured: false,
-    tags: ["tackle", "bait", "gear", "fishing report", "local knowledge"],
+    tags: ["tackle", "bait", "gear", "fishing report", "local knowledge", "locally owned"],
     priceRange: "$",
   },
   {
@@ -2090,7 +2090,7 @@ export const businesses: Business[] = [
     website: "https://www.fishermanswharfporta.com",
     hours: "Daily 6AM-8PM",
     featured: false,
-    tags: ["marina", "charters", "waterfront", "bait", "fuel"],
+    tags: ["marina", "charters", "waterfront", "bait", "fuel", "locally owned"],
     priceRange: "$$",
   },
   {
@@ -2103,7 +2103,7 @@ export const businesses: Business[] = [
     phone: "",
     hours: "By appointment",
     featured: false,
-    tags: ["guide service", "flats fishing", "bay fishing", "laguna madre", "local"],
+    tags: ["guide service", "flats fishing", "bay fishing", "laguna madre", "local", "locally owned"],
     priceRange: "$$",
   },
   {
@@ -2116,7 +2116,7 @@ export const businesses: Business[] = [
     phone: "",
     hours: "By appointment",
     featured: false,
-    tags: ["guide service", "bay fishing", "flats", "local", "premier"],
+    tags: ["guide service", "bay fishing", "flats", "local", "premier", "locally owned"],
     priceRange: "$$",
     verifiedPartner: true,
   },
@@ -2155,7 +2155,7 @@ export const businesses: Business[] = [
       Sunday: "12:00 PM – 2:00 AM",
     },
     featured: false,
-    tags: ["bar", "beachfront", "gulf views", "cold drinks", "sunset"],
+    tags: ["bar", "beachfront", "gulf views", "cold drinks", "sunset", "live music", "sunset views"],
     priceRange: "$",
   },
   {
@@ -2178,7 +2178,7 @@ export const businesses: Business[] = [
       Sunday: "11:00 AM – 11:00 PM",
     },
     featured: true,
-    tags: ["bar", "dive bar", "pool tables", "live music", "local"],
+    tags: ["bar", "dive bar", "pool tables", "live music", "local", "locally owned"],
     priceRange: "$",
   },
   {
@@ -2201,7 +2201,7 @@ export const businesses: Business[] = [
       Sunday: "11:00 AM – 10:00 PM",
     },
     featured: false,
-    tags: ["bar", "tiki", "dog-friendly", "cocktails", "patio", "bar swings"],
+    tags: ["bar", "tiki", "dog-friendly", "cocktails", "patio", "bar swings", "outdoor seating"],
     priceRange: "$$",
   },
   {
@@ -2225,7 +2225,7 @@ export const businesses: Business[] = [
     },
     featured: true,
     categories: ["do", "eat"],
-    tags: ["bar", "live music", "yard games", "golf cart rentals", "beach chairs", "shaved ice", "outdoor", "events"],
+    tags: ["bar", "live music", "yard games", "golf cart rentals", "beach chairs", "shaved ice", "outdoor", "events", "outdoor seating"],
     priceRange: "$",
   },
   {
@@ -2270,7 +2270,7 @@ export const businesses: Business[] = [
       Sunday: "12:00 PM – 7:00 PM",
     },
     featured: false,
-    tags: ["bar", "local", "neighborhood", "dive bar", "cold beer"],
+    tags: ["bar", "local", "neighborhood", "dive bar", "cold beer", "locally owned"],
     priceRange: "$",
   },
   {
@@ -2315,7 +2315,7 @@ export const businesses: Business[] = [
       Sunday: "12:00 PM – 2:00 AM",
     },
     featured: false,
-    tags: ["bar", "dive bar", "local", "cold beer", "classic"],
+    tags: ["bar", "dive bar", "local", "cold beer", "classic", "live music"],
     priceRange: "$",
   },
   {
@@ -2350,7 +2350,7 @@ export const businesses: Business[] = [
     phone: "(361) 749-6534",
     hours: "Call for hours",
     featured: false,
-    tags: ["bar", "vfw", "local", "community", "cheap beer"],
+    tags: ["bar", "vfw", "local", "community", "cheap beer", "locally owned"],
     priceRange: "$",
   },
   // Restaurant bars — also listed in Eat
@@ -2374,7 +2374,7 @@ export const businesses: Business[] = [
       Sunday: "11:00 AM – 9:00 PM",
     },
     featured: false,
-    tags: ["bar", "gulf views", "rooftop", "western", "restaurant bar"],
+    tags: ["bar", "gulf views", "rooftop", "western", "restaurant bar", "sunset views"],
     priceRange: "$$",
   },
   {
@@ -2420,7 +2420,7 @@ export const businesses: Business[] = [
       Sunday: "10:00 AM – 9:00 PM",
     },
     featured: false,
-    tags: ["bar", "waterfront", "restaurant bar", "grill", "casual"],
+    tags: ["bar", "waterfront", "restaurant bar", "grill", "casual", "happy hour", "outdoor seating", "pet friendly", "locally owned"],
     priceRange: "$$",
   },
   {
@@ -2468,7 +2468,7 @@ export const businesses: Business[] = [
       Sunday: "11:00 AM – 10:00 PM",
     },
     featured: false,
-    tags: ["bar", "gulf views", "western", "rooftop", "retail"],
+    tags: ["bar", "gulf views", "western", "rooftop", "retail", "sunset views"],
     priceRange: "$$",
   },
   {
@@ -2491,7 +2491,7 @@ export const businesses: Business[] = [
       Saturday: "11:00 AM – 9:00 PM",
     },
     featured: false,
-    tags: ["seafood", "pasta", "casual", "family"],
+    tags: ["seafood", "pasta", "casual", "family", "locally owned"],
     priceRange: "$$",
   },
   {
@@ -2514,7 +2514,7 @@ export const businesses: Business[] = [
       Sunday: "11:00 AM – 9:00 PM",
     },
     featured: false,
-    tags: ["bbq", "seafood", "family", "southern comfort", "smoked meats"],
+    tags: ["bbq", "seafood", "family", "southern comfort", "smoked meats", "family friendly", "locally owned"],
     priceRange: "$$",
   },
   {
@@ -2536,7 +2536,7 @@ export const businesses: Business[] = [
       Saturday: "9:00 AM – 7:00 PM",
     },
     featured: false,
-    tags: ["pizza", "brick oven", "golf carts", "retail", "casual"],
+    tags: ["pizza", "brick oven", "golf carts", "retail", "casual", "locally owned"],
     priceRange: "$",
   },
   {
@@ -2580,7 +2580,7 @@ export const businesses: Business[] = [
       Saturday: "5:00 PM – 9:00 PM",
     },
     featured: false,
-    tags: ["oysters", "seafood", "casual", "shack", "gulf"],
+    tags: ["oysters", "seafood", "casual", "shack", "gulf", "locally owned"],
     priceRange: "$",
   },
   {
@@ -2602,7 +2602,7 @@ export const businesses: Business[] = [
       Sunday: "11:00 AM – 10:00 PM",
     },
     featured: false,
-    tags: ["casual", "bar", "burgers", "seafood", "late night"],
+    tags: ["casual", "bar", "burgers", "seafood", "late night", "full bar", "locally owned"],
     priceRange: "$$",
   },
   {
@@ -2625,7 +2625,7 @@ export const businesses: Business[] = [
       Sunday: "11:00 AM – 11:00 PM",
     },
     featured: false,
-    tags: ["bar", "grill", "waterfront", "casual", "cold drinks"],
+    tags: ["bar", "grill", "waterfront", "casual", "cold drinks", "happy hour", "outdoor seating", "pet friendly", "full bar", "locally owned"],
     priceRange: "$$",
   },
   {
@@ -2648,7 +2648,7 @@ export const businesses: Business[] = [
       Sunday: "8:00 AM – 8:00 PM",
     },
     featured: false,
-    tags: ["mexican", "tacos", "authentic", "cheap eats", "casual"],
+    tags: ["mexican", "tacos", "authentic", "cheap eats", "casual", "locally owned"],
     priceRange: "$",
   },
   {
@@ -2670,7 +2670,7 @@ export const businesses: Business[] = [
       Sunday: "11:00 AM – 9:00 PM",
     },
     featured: false,
-    tags: ["mexican", "tex-mex", "margaritas", "casual", "family"],
+    tags: ["mexican", "tex-mex", "margaritas", "casual", "family", "full bar"],
     priceRange: "$$",
   },
   {
@@ -2738,7 +2738,7 @@ export const businesses: Business[] = [
       Sunday: "11:00 AM – 10:00 PM",
     },
     featured: false,
-    tags: ["sports bar", "burgers", "bar food", "casual", "game day"],
+    tags: ["sports bar", "burgers", "bar food", "casual", "game day", "locally owned"],
     priceRange: "$$",
   },
   {
@@ -2760,7 +2760,7 @@ export const businesses: Business[] = [
       Sunday: "7:00 AM – 3:00 PM",
     },
     featured: false,
-    tags: ["breakfast", "diner", "lunch", "comfort food", "local"],
+    tags: ["breakfast", "diner", "lunch", "comfort food", "local", "locally owned", "family friendly"],
     priceRange: "$",
   },
   {
@@ -2782,7 +2782,7 @@ export const businesses: Business[] = [
       Sunday: "8:00 AM – 2:00 PM",
     },
     featured: false,
-    tags: ["bakery", "pastries", "coffee", "breakfast", "kolaches"],
+    tags: ["bakery", "pastries", "coffee", "breakfast", "kolaches", "locally owned"],
     priceRange: "$",
   },
   {
@@ -2826,7 +2826,7 @@ export const businesses: Business[] = [
       Saturday: "11:00 AM – 3:00 PM",
     },
     featured: false,
-    tags: ["home cooking", "comfort food", "casual", "local"],
+    tags: ["home cooking", "comfort food", "casual", "local", "locally owned"],
     priceRange: "$",
   },
   {
@@ -2894,7 +2894,7 @@ export const businesses: Business[] = [
       Saturday: "11:00 AM – 12:00 AM",
     },
     featured: false,
-    tags: ["cajun", "seafood", "comfort food", "casual", "gulf"],
+    tags: ["cajun", "seafood", "comfort food", "casual", "gulf", "outdoor seating"],
     priceRange: "$$",
   },
   {
@@ -2916,7 +2916,7 @@ export const businesses: Business[] = [
       Sunday: "8:00 AM – 5:00 PM",
     },
     featured: false,
-    tags: ["acai", "smoothies", "healthy", "fresh", "beach food"],
+    tags: ["acai", "smoothies", "healthy", "fresh", "beach food", "breakfast", "locally owned"],
     priceRange: "$",
   },
   {
@@ -2939,7 +2939,7 @@ export const businesses: Business[] = [
       Sunday: "11:00 AM – 10:00 PM",
     },
     featured: false,
-    tags: ["waterfront", "seafood", "bar", "casual", "burgers"],
+    tags: ["waterfront", "seafood", "bar", "casual", "burgers", "happy hour", "outdoor seating", "live music"],
     priceRange: "$$",
   },
   {
@@ -2962,7 +2962,7 @@ export const businesses: Business[] = [
       Sunday: "10:00 AM – 10:00 PM",
     },
     featured: false,
-    tags: ["beachfront", "bar", "grill", "gulf views", "casual"],
+    tags: ["beachfront", "bar", "grill", "gulf views", "casual", "live music", "sunset views", "pet friendly"],
     priceRange: "$$",
   },
   {
@@ -2985,7 +2985,7 @@ export const businesses: Business[] = [
       Sunday: "6:00 AM – 3:00 PM",
     },
     featured: false,
-    tags: ["coffee", "espresso", "cold brew", "pastries", "breakfast"],
+    tags: ["coffee", "espresso", "cold brew", "pastries", "breakfast", "locally owned"],
     priceRange: "$",
   },
 
