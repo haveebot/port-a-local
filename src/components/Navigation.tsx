@@ -53,6 +53,15 @@ export default function Navigation() {
               🛠️ Services
             </Link>
             <Link
+              href="/search"
+              title="Search"
+              className="px-3 py-2 rounded-lg text-sand-200 hover:text-coral-300 hover:bg-navy-800/50 transition-all duration-300"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </Link>
+            <Link
               href="/beach"
               className="ml-2 px-4 py-2 rounded-lg text-sm font-medium bg-coral-500/20 text-coral-300 hover:bg-coral-500/30 transition-all duration-300 border border-coral-500/30"
             >
@@ -91,6 +100,13 @@ export default function Navigation() {
         {/* Mobile menu */}
         {mobileOpen && (
           <div className="md:hidden pb-4 border-t border-coral-500/20 bg-navy-950/98 backdrop-blur-md">
+            <Link
+              href="/search"
+              onClick={() => setMobileOpen(false)}
+              className="block px-4 py-3 text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors"
+            >
+              🔍 Search
+            </Link>
             {categories.map((cat) => (
               <Link
                 key={cat.slug}
