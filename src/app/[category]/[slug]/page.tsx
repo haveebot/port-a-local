@@ -236,19 +236,33 @@ export default async function BusinessDetailPage({
                     </svg>
                     <div>
                       <p className="text-sm font-medium text-navy-700">Address</p>
-                      <p className="text-sm text-navy-400">{business.address}</p>
+                      <a
+                        href={`https://maps.google.com/?q=${encodeURIComponent(business.address)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm text-coral-500 hover:text-coral-600 hover:underline"
+                      >
+                        {business.address}
+                      </a>
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-3">
-                    <svg className="w-5 h-5 text-coral-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                    </svg>
-                    <div>
-                      <p className="text-sm font-medium text-navy-700">Phone</p>
-                      <p className="text-sm text-navy-400">{business.phone}</p>
+                  {business.phone && (
+                    <div className="flex items-start gap-3">
+                      <svg className="w-5 h-5 text-coral-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                      </svg>
+                      <div>
+                        <p className="text-sm font-medium text-navy-700">Phone</p>
+                        <a
+                          href={`tel:+1${business.phone.replace(/\D/g, "")}`}
+                          className="text-sm text-coral-500 hover:text-coral-600 hover:underline"
+                        >
+                          {business.phone}
+                        </a>
+                      </div>
                     </div>
-                  </div>
+                  )}
 
                   <div className="flex items-start gap-3">
                     <svg className="w-5 h-5 text-coral-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
