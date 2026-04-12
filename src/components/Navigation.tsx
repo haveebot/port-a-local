@@ -73,7 +73,7 @@ export default function Navigation() {
               </button>
 
               {exploreOpen && (
-                <div className="absolute top-full left-0 mt-2 w-56 rounded-xl bg-navy-900/98 backdrop-blur-md border border-white/10 shadow-xl overflow-hidden">
+                <div className="absolute top-full left-0 mt-2 w-52 sm:w-56 rounded-xl bg-navy-900/98 backdrop-blur-md border border-white/10 shadow-xl overflow-hidden">
                   {categories.map((cat) => (
                     <Link
                       key={cat.slug}
@@ -137,7 +137,7 @@ export default function Navigation() {
           {/* Mobile toggle */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden p-2 rounded-lg text-sand-300 hover:text-coral-400 hover:bg-navy-800/50 transition-colors"
+            className="md:hidden p-3 rounded-lg text-sand-300 hover:text-coral-400 hover:bg-navy-800/50 transition-colors"
             aria-label="Toggle menu"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

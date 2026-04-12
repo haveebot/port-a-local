@@ -150,7 +150,7 @@ export default function HistoryPage() {
 
           <div className="relative">
             {/* Vertical line */}
-            <div className="absolute left-6 sm:left-1/2 top-0 bottom-0 w-px bg-sand-200" />
+            <div className="absolute left-4 sm:left-1/2 top-0 bottom-0 w-px bg-sand-200" />
 
             {[
               { year: "~2000 BC", event: "Karankawa people inhabit the barrier islands", icon: "🏝️" },
@@ -170,11 +170,11 @@ export default function HistoryPage() {
                 }`}
               >
                 {/* Dot */}
-                <div className="absolute left-6 sm:left-1/2 w-3 h-3 rounded-full bg-coral-400 border-2 border-white -translate-x-1/2 z-10" />
+                <div className="absolute left-4 sm:left-1/2 w-3 h-3 rounded-full bg-coral-400 border-2 border-white -translate-x-1/2 z-10" />
 
                 {/* Content */}
                 <div
-                  className={`ml-14 sm:ml-0 sm:w-[calc(50%-2rem)] ${
+                  className={`ml-10 sm:ml-0 sm:w-[calc(50%-2rem)] ${
                     i % 2 === 0 ? "sm:text-right sm:pr-8" : "sm:text-left sm:pl-8 sm:ml-auto"
                   }`}
                 >
