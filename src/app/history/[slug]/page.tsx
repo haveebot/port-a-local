@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { stories, getStoryBySlug } from "@/data/stories";
 import { storyContent } from "@/data/story-content";
 import { ArticleSchema } from "@/components/StructuredData";
+import SaveToTrip from "@/components/SaveToTrip";
 import type { Metadata } from "next";
 
 // Generate static pages for all stories that have content
@@ -84,9 +85,15 @@ export default async function StoryPage({
             {story.icon} {story.category} · {story.readTime} read
           </div>
 
-          <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-sand-50 mb-4 leading-tight">
-            {story.title}
-          </h1>
+          <div className="flex items-start justify-between gap-4">
+            <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-sand-50 mb-4 leading-tight">
+              {story.title}
+            </h1>
+            <SaveToTrip
+              item={{ type: "story", slug: story.slug, name: story.title, category: story.category, icon: story.icon, tagline: story.subtitle }}
+              size="md"
+            />
+          </div>
 
           <p className="text-lg sm:text-xl text-navy-200 font-light leading-relaxed">
             {story.subtitle}

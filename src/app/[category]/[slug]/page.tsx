@@ -10,6 +10,7 @@ import BusinessCard from "@/components/BusinessCard";
 import KnowThisPlace from "@/components/KnowThisPlace";
 import { LocalBusinessSchema } from "@/components/StructuredData";
 import { isOpenNow } from "@/lib/isOpenNow";
+import SaveToTrip from "@/components/SaveToTrip";
 
 export function generateStaticParams() {
   return getAllBusinessSlugs();
@@ -79,7 +80,13 @@ export default async function BusinessDetailPage({
               </h1>
               <p className="text-xl text-navy-200 font-light">{business.tagline}</p>
             </div>
-            <Badge size="lg" />
+            <div className="flex items-center gap-3">
+              <SaveToTrip
+                item={{ type: "business", slug: business.slug, name: business.name, category: business.category, tagline: business.tagline }}
+                size="md"
+              />
+              <Badge size="lg" />
+            </div>
           </div>
 
           {/* Tags */}
