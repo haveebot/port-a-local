@@ -51,15 +51,21 @@ export default function CategoryPage({
 
   const hasOpenNowData = businesses.some((b) => b.hoursOfOperation);
 
-  const filtered = businesses.filter((b) => {
-    const matchesQuery = query
-      ? b.name.toLowerCase().includes(query.toLowerCase()) ||
-        b.tagline.toLowerCase().includes(query.toLowerCase()) ||
-        b.tags.some((t) => t.toLowerCase().includes(query.toLowerCase()))
-      : true;
-    const matchesOpen = openNow ? isOpenNow(b) : true;
-    return matchesQuery && matchesOpen;
-  });
+  const filtered = businesses
+    .filter((b) => {
+      const matchesQuery = query
+        ? b.name.toLowerCase().includes(query.toLowerCase()) ||
+          b.tagline.toLowerCase().includes(query.toLowerCase()) ||
+          b.tags.some((t) => t.toLowerCase().includes(query.toLowerCase()))
+        : true;
+      const matchesOpen = openNow ? isOpenNow(b) : true;
+      return matchesQuery && matchesOpen;
+    })
+    .sort((a, b) => {
+      if (a.featured && !b.featured) return -1;
+      if (!a.featured && b.featured) return 1;
+      return a.name.localeCompare(b.name);
+    });
 
   return (
     <main className="min-h-screen">

@@ -51,7 +51,7 @@ export default function Hero() {
         {/* Stats bar */}
         <div className="mt-20 grid grid-cols-3 gap-8 max-w-lg">
           <div>
-            <div className="text-3xl font-display font-bold text-coral-400">140+</div>
+            <div className="text-3xl font-display font-bold text-coral-400">130+</div>
             <div className="text-sm text-navy-300 mt-1 tracking-wide">Vetted Businesses</div>
           </div>
           <div>

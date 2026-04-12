@@ -47,6 +47,12 @@ export default function Navigation() {
               </Link>
             ))}
             <Link
+              href="/services"
+              className="px-4 py-2 rounded-lg text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-navy-800/50 transition-all duration-300"
+            >
+              🛠️ Services
+            </Link>
+            <Link
               href="/beach"
               className="ml-2 px-4 py-2 rounded-lg text-sm font-medium bg-coral-500/20 text-coral-300 hover:bg-coral-500/30 transition-all duration-300 border border-coral-500/30"
             >
@@ -96,6 +102,13 @@ export default function Navigation() {
                 {cat.name}
               </Link>
             ))}
+            <Link
+              href="/services"
+              onClick={() => setMobileOpen(false)}
+              className="block px-4 py-3 text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors"
+            >
+              🛠️ Services
+            </Link>
             <Link
               href="/beach"
               onClick={() => setMobileOpen(false)}

@@ -50,12 +50,27 @@ function RentSuccessContent() {
         <h1 className="font-display text-4xl font-bold text-sand-50 mb-4">
           You&apos;re All Set!
         </h1>
-        <p className="text-lg text-navy-200 mb-4">
-          Payment received. Your golf cart reservation is confirmed — our local team will follow up with pickup details.
+        <p className="text-lg text-navy-200 mb-6">
+          Payment received. Your golf cart reservation is confirmed.
         </p>
-        <p className="text-navy-300">
-          Check your email for a confirmation. See you on the island.
-        </p>
+        <div className="text-left bg-white/10 rounded-2xl p-6 mb-8 space-y-4">
+          <p className="text-sand-200 font-semibold text-sm tracking-wide uppercase">What happens next</p>
+          <div className="flex items-start gap-3">
+            <span className="text-coral-400 font-bold">1</span>
+            <p className="text-navy-200 text-sm">Check your email — a confirmation is on its way.</p>
+          </div>
+          <div className="flex items-start gap-3">
+            <span className="text-coral-400 font-bold">2</span>
+            <p className="text-navy-200 text-sm">Our local team will contact you within 24 hours to confirm availability and delivery details.</p>
+          </div>
+          <div className="flex items-start gap-3">
+            <span className="text-coral-400 font-bold">3</span>
+            <p className="text-navy-200 text-sm">Your cart is delivered to you. Hop in and explore the island.</p>
+          </div>
+        </div>
+        <a href="/" className="inline-flex items-center justify-center px-8 py-3 rounded-xl btn-coral text-sm font-semibold">
+          Explore Port A Local
+        </a>
       </>
     );
   }
@@ -64,12 +79,14 @@ function RentSuccessContent() {
     <>
       <div className="text-6xl mb-6">⚠️</div>
       <h1 className="font-display text-4xl font-bold text-sand-50 mb-4">
-        Something went wrong
+        Payment Issue
       </h1>
       <p className="text-lg text-navy-200 mb-4">
-        Your payment may have gone through but we couldn&apos;t confirm it automatically. Please email or call us and we&apos;ll sort it out right away.
+        Your payment may have gone through but we couldn&apos;t confirm it automatically. Reach out and we&apos;ll sort it out right away.
       </p>
-      <p className="text-navy-300">We apologize for the inconvenience.</p>
+      <a href="mailto:hello@portaransaslocal.com?subject=Golf cart reservation issue" className="text-coral-400 hover:text-coral-300 underline text-sm">
+        hello@portaransaslocal.com
+      </a>
     </>
   );
 }
