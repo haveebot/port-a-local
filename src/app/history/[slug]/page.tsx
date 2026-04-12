@@ -23,7 +23,7 @@ export async function generateMetadata({
   if (!story) return {};
 
   return {
-    title: `${story.title} — Island Stories | Port A Local`,
+    title: `${story.title} — Port A Heritage | Port A Local`,
     description: story.description,
     openGraph: {
       title: story.title,
@@ -72,7 +72,7 @@ export default async function StoryPage({
               href="/history"
               className="hover:text-coral-300 transition-colors"
             >
-              Island Stories
+              Port A Heritage
             </Link>
             <span>/</span>
             <span className="text-navy-200 capitalize">{story.category}</span>
@@ -249,6 +249,49 @@ export default async function StoryPage({
         </section>
       )}
 
+      {/* Related Heritage */}
+      {story.relatedStories && story.relatedStories.length > 0 && (() => {
+        const related = story.relatedStories
+          .map((s) => stories.find((st) => st.slug === s && st.published))
+          .filter(Boolean);
+        if (related.length === 0) return null;
+        return (
+          <section className="py-16 bg-sand-50">
+            <div className="max-w-3xl mx-auto px-4 sm:px-6">
+              <div className="mb-8">
+                <p className="text-coral-500 text-sm font-medium tracking-[0.2em] uppercase mb-2">
+                  Keep Reading
+                </p>
+                <h2 className="font-display text-2xl font-bold text-navy-900">
+                  Related Heritage
+                </h2>
+              </div>
+              <div className="grid gap-4">
+                {related.map((r) => (
+                  <Link
+                    key={r!.slug}
+                    href={`/history/${r!.slug}`}
+                    className="flex gap-4 bg-white rounded-xl border border-sand-200 p-5 card-hover group"
+                  >
+                    <div className="w-10 h-10 rounded-full bg-navy-50 flex items-center justify-center flex-shrink-0 text-lg">
+                      {r!.icon}
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-navy-900 group-hover:text-coral-600 transition-colors">
+                        {r!.title}
+                      </h3>
+                      <p className="text-sm text-navy-500 font-light mt-1 line-clamp-2">
+                        {r!.subtitle}
+                      </p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      })()}
+
       {/* Sources */}
       <section className="py-12">
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
@@ -326,7 +369,7 @@ export default async function StoryPage({
               href="/history"
               className="text-sm font-medium text-navy-400 hover:text-coral-500 transition-colors"
             >
-              All Stories
+              All Heritage
             </Link>
 
             {nextStory ? (

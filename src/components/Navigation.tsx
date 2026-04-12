@@ -138,7 +138,7 @@ export default function Navigation() {
               onClick={() => setMobileOpen(false)}
               className="block px-4 py-3 text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors"
             >
-              📖 Island Stories
+              📖 History
             </Link>
             <Link
               href="/beach"

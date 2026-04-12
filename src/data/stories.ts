@@ -14,6 +14,8 @@ export interface Story {
   tags: string[];
   /** Related business slugs from the directory */
   relatedBusinesses?: string[];
+  /** Related heritage story slugs — shown as "Related Heritage" on story pages */
+  relatedStories?: string[];
 }
 
 export const stories: Story[] = [
@@ -31,6 +33,7 @@ export const stories: Story[] = [
     date: "2026-04-12",
     tags: ["FDR", "tarpon", "Farley", "Tarpon Inn", "fishing", "1937", "presidential history"],
     relatedBusinesses: [],
+    relatedStories: ["farley-boat-works", "tarpon-era", "deep-sea-roundup"],
   },
   {
     slug: "tarpon-era",
@@ -46,6 +49,7 @@ export const stories: Story[] = [
     date: "2026-04-12",
     tags: ["tarpon", "Silver King", "fishing history", "Tarpon Texas", "guides", "sport fishing"],
     relatedBusinesses: [],
+    relatedStories: ["fdr-tarpon-port-aransas", "farley-boat-works", "deep-sea-roundup"],
   },
   {
     slug: "farley-boat-works",
@@ -61,6 +65,7 @@ export const stories: Story[] = [
     date: "2026-04-12",
     tags: ["Farley", "boat building", "wooden boats", "maritime heritage", "PAPHA", "craftsmanship"],
     relatedBusinesses: [],
+    relatedStories: ["fdr-tarpon-port-aransas", "port-aransas-museum", "tarpon-era"],
   },
   {
     slug: "hurricane-celia",
@@ -76,6 +81,7 @@ export const stories: Story[] = [
     date: "2026-04-12",
     tags: ["Hurricane Celia", "1970", "storms", "resilience", "rebuilding", "natural disaster"],
     relatedBusinesses: [],
+    relatedStories: ["storms-of-port-aransas", "farley-boat-works", "port-aransas-museum"],
   },
   {
     slug: "lydia-ann-lighthouse",
@@ -91,6 +97,7 @@ export const stories: Story[] = [
     date: "2026-04-12",
     tags: ["lighthouse", "Lydia Ann", "Fresnel lens", "maritime", "Civil War", "H-E-B", "Charles Butt"],
     relatedBusinesses: [],
+    relatedStories: ["port-aransas-museum", "wwii-coastal-defenses"],
   },
   {
     slug: "karankawa-legacy",
@@ -121,6 +128,7 @@ export const stories: Story[] = [
     date: "2026-04-12",
     tags: ["museum", "PAPHA", "archive", "photos", "Sears kit house", "Fresnel lens", "Mark Creighton"],
     relatedBusinesses: [],
+    relatedStories: ["farley-boat-works", "lydia-ann-lighthouse", "karankawa-legacy"],
   },
   {
     slug: "storms-of-port-aransas",
@@ -136,6 +144,7 @@ export const stories: Story[] = [
     date: "2026-04-12",
     tags: ["hurricanes", "storms", "1919", "Celia", "Harvey", "resilience", "rebuilding"],
     relatedBusinesses: [],
+    relatedStories: ["hurricane-celia", "farley-boat-works", "port-aransas-museum"],
   },
   {
     slug: "chapel-on-the-dunes",
@@ -151,6 +160,7 @@ export const stories: Story[] = [
     date: "2026-04-12",
     tags: ["Chapel on the Dunes", "Aline Carter", "poet laureate", "church", "architecture", "WPA"],
     relatedBusinesses: [],
+    relatedStories: ["port-aransas-museum", "fdr-tarpon-port-aransas"],
   },
   {
     slug: "wwii-coastal-defenses",
@@ -180,6 +190,100 @@ export const stories: Story[] = [
     published: true,
     date: "2026-04-12",
     tags: ["Deep Sea Roundup", "fishing tournament", "Boatmen", "Tarpon Rodeo", "competition"],
+    relatedBusinesses: [],
+    relatedStories: ["tarpon-era", "fdr-tarpon-port-aransas", "farley-boat-works"],
+  },
+
+  // --- Expansion stories (coming soon) ---
+
+  {
+    slug: "farley-boats-craft",
+    title: "No Blueprints, No Problem",
+    subtitle: "How the Farleys built boats by eye — half-models, hand tools, and a method that died with the men who knew it",
+    description:
+      "Fred and Barney Farley never drew a blueprint. They carved half-models from pine, eyeballed the lines, and built boats that outperformed anything on the Gulf. This is the story of the craft itself — the technique, the tools, the apprentices, and why the method couldn't survive the shift to fiberglass.",
+    category: "heritage",
+    icon: "🪵",
+    readTime: "10 min",
+    featured: false,
+    published: false,
+    date: "",
+    tags: ["Farley", "boat building", "wooden boats", "craftsmanship", "half-models", "maritime heritage"],
+    relatedBusinesses: [],
+  },
+  {
+    slug: "port-aransas-museum-collection",
+    title: "The Island's Institutional Memory",
+    subtitle: "Inside the Port Aransas Museum — from a Fresnel lens shipped from Paris to 1920s film footage nobody has digitized",
+    description:
+      "The Port Aransas Museum sits in a 1910 Sears kit house that was barged to the island. Inside: a third-order Fresnel lens from 1857, nearly 40,000 historical photos, oral histories on cassette tape, and 1920s silent film footage of island life. Most of it has never been digitized. This is what the collection holds and why it matters.",
+    category: "heritage",
+    icon: "🏛️",
+    readTime: "9 min",
+    featured: false,
+    published: false,
+    date: "",
+    tags: ["museum", "PAPHA", "archive", "Fresnel lens", "Sears kit house", "preservation", "Creighton"],
+    relatedBusinesses: [],
+  },
+  {
+    slug: "mercer-logs",
+    title: "The Mercer Logs",
+    subtitle: "The handwritten shipping records that document every vessel, cargo, and storm on Aransas Pass from the 1850s forward",
+    description:
+      "Before radio, before the Coast Guard, the Mercers kept the books. Their handwritten logs tracked every ship through Aransas Pass — tonnage, cargo, weather, wrecks. The logs survive. They're one of the most complete maritime records on the Texas coast.",
+    category: "heritage",
+    icon: "📜",
+    readTime: "8 min",
+    featured: false,
+    published: false,
+    date: "",
+    tags: ["Mercer", "shipping", "Aransas Pass", "maritime records", "19th century", "trade"],
+    relatedBusinesses: [],
+  },
+  {
+    slug: "red-tide-utmsi",
+    title: "The Red Tide That Built a University",
+    subtitle: "How a catastrophic fish kill in the 1930s led to the founding of the University of Texas Marine Science Institute",
+    description:
+      "In the 1930s, a massive red tide event killed millions of fish along the Texas coast. The ecological disaster was so severe it forced the state to invest in marine research. The result: UTMSI, built on the shores of the Port Aransas ship channel, now one of the leading marine research institutions in the Gulf.",
+    category: "heritage",
+    icon: "🔬",
+    readTime: "8 min",
+    featured: false,
+    published: false,
+    date: "",
+    tags: ["UTMSI", "red tide", "marine science", "university", "ecology", "fish kill", "research"],
+    relatedBusinesses: [],
+  },
+  {
+    slug: "port-aransas-ferry",
+    title: "The Ferry That Keeps the Island an Island",
+    subtitle: "Since 1855, the only way across Aransas Pass has been by boat — and the ferry system that runs it is a story in itself",
+    description:
+      "Port Aransas is one of the few Texas barrier island communities still accessible only by ferry or bridge. The ferry system across Aransas Pass has operated in some form since the 1850s — from private skiffs to the state-run fleet that moves millions of vehicles a year. It's the reason Port A still feels like an island.",
+    category: "heritage",
+    icon: "⛴️",
+    readTime: "7 min",
+    featured: false,
+    published: false,
+    date: "",
+    tags: ["ferry", "Aransas Pass", "TxDOT", "transportation", "island access", "infrastructure"],
+    relatedBusinesses: [],
+  },
+  {
+    slug: "cinnamon-shore-tension",
+    title: "The Development Question",
+    subtitle: "When master-planned communities arrived on Mustang Island — and what Port Aransas made of it",
+    description:
+      "Cinnamon Shore opened on Mustang Island in 2007 as a master-planned beach community with a New Urbanist vision. To some, it brought investment and attention. To others, it represented the kind of development that could price locals out of their own island. The tension between preservation and growth defines modern Port Aransas.",
+    category: "heritage",
+    icon: "🏗️",
+    readTime: "9 min",
+    featured: false,
+    published: false,
+    date: "",
+    tags: ["Cinnamon Shore", "development", "Mustang Island", "growth", "preservation", "housing"],
     relatedBusinesses: [],
   },
 ];

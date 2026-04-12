@@ -51,15 +51,15 @@ export default function Home() {
 
       <FeaturedSpots />
 
-      {/* Island Stories Callout */}
+      {/* Port A Heritage Callout */}
       <section className="py-20 bg-navy-900 relative">
         <div className="absolute inset-0 palm-pattern opacity-10" />
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 text-center">
           <p className="text-coral-400 text-sm font-medium tracking-[0.2em] uppercase mb-3">
-            Port Aransas Heritage
+            Local History
           </p>
           <h2 className="font-display text-3xl sm:text-4xl font-bold text-sand-50 mb-4">
-            Island Stories
+            Port A Heritage
           </h2>
           <div className="gold-line max-w-xs mx-auto mb-6" />
           <p className="text-lg text-navy-200 font-light max-w-2xl mx-auto mb-8">
@@ -70,7 +70,7 @@ export default function Home() {
             href="/history"
             className="inline-flex items-center justify-center px-8 py-3 rounded-xl btn-coral text-sm font-semibold gap-2"
           >
-            Explore the Stories
+            Explore Our Heritage
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>

@@ -88,7 +88,7 @@ export default function Footer() {
                   href="/history"
                   className="text-navy-300 hover:text-coral-300 transition-colors text-sm"
                 >
-                  📖 Island Stories
+                  📖 History
                 </Link>
               </li>
               <li>

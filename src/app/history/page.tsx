@@ -5,9 +5,9 @@ import { stories } from "@/data/stories";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Port Aransas History — Stories from the Island | Port A Local",
+  title: "Port A Heritage — Port Aransas History | Port A Local",
   description:
-    "The stories that shaped Port Aransas, Texas. From the Tarpon Era to Hurricane Celia, from Farley Boat Works to FDR's famous catch. Local history told by locals.",
+    "The history that shaped Port Aransas, Texas. From the Tarpon Era to Hurricane Celia, from Farley Boat Works to FDR's famous catch. Local heritage preserved by locals.",
 };
 
 function StoryCard({ story }: { story: (typeof stories)[number] }) {
@@ -58,7 +58,7 @@ function StoryCard({ story }: { story: (typeof stories)[number] }) {
             href={`/history/${story.slug}`}
             className="inline-flex items-center gap-2 text-sm font-semibold text-coral-500 group-hover:text-coral-600 transition-colors"
           >
-            Read the Story
+            Read More
             <svg
               className="w-4 h-4"
               fill="none"
@@ -103,14 +103,14 @@ export default function HistoryPage() {
             Port Aransas Heritage
           </div>
           <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-sand-50 mb-4">
-            Island Stories
+            Port A Heritage
           </h1>
           <p className="text-lg sm:text-xl text-navy-200 font-light max-w-2xl mx-auto mb-6">
-            The people, places, and moments that shaped Port Aransas. Told by locals, built to last.
+            The people, places, and moments that shaped Port Aransas. Preserved by locals, built to last.
           </p>
           <p className="text-sm text-navy-300 font-light max-w-xl mx-auto">
             Port Aransas has been home to the Karankawa for 4,500 years, a U.S. President&apos;s fishing
-            destination, and a community that has rebuilt itself after every storm. These stories deserve
+            destination, and a community that has rebuilt itself after every storm. This history deserves
             a digital home. This is it.
           </p>
         </div>
@@ -184,7 +184,7 @@ export default function HistoryPage() {
               { year: "1970", event: "Hurricane Celia devastates the island", icon: "🌀" },
               { year: "2011", event: "Farley Boat Works revived by PAPHA", icon: "🔨" },
               { year: "2017", event: "Hurricane Harvey hits Port Aransas", icon: "⛈️" },
-              { year: "2026", event: "Port A Local launches Island Stories", icon: "📖" },
+              { year: "2026", event: "Port A Local launches Port A Heritage", icon: "📖" },
             ].map((item, i) => (
               <div
                 key={item.year}
@@ -222,17 +222,17 @@ export default function HistoryPage() {
 
         <div className="relative max-w-3xl mx-auto px-4 sm:px-6 text-center">
           <h2 className="font-display text-3xl font-bold text-sand-50 mb-4">
-            Know the Island&apos;s Story?
+            Know the Island&apos;s History?
           </h2>
           <p className="text-lg text-navy-200 font-light mb-8">
-            If you have photos, documents, or stories about Port Aransas history,
+            If you have photos, documents, or memories about Port Aransas history,
             we&apos;d love to hear from you. Every detail matters.
           </p>
           <a
-            href="mailto:hello@portaransaslocal.com?subject=Port%20Aransas%20History"
+            href="mailto:hello@portaransaslocal.com?subject=Port%20Aransas%20Heritage"
             className="inline-flex items-center justify-center px-8 py-3 rounded-xl btn-coral text-sm font-semibold"
           >
-            Share a Story
+            Share Your History
           </a>
         </div>
       </section>

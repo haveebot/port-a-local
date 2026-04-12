@@ -1,5 +1,5 @@
 /**
- * Story content for Island Stories heritage pages.
+ * Story content for Port A Heritage pages.
  * Each story is keyed by slug and contains structured sections
  * that the [slug] page renders into a long-form editorial layout.
  */
