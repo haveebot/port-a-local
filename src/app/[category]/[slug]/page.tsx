@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import { getBusinessBySlug, getAllBusinessSlugs, getBusinessesByCategory } from "@/data/businesses";
 import { getCategoryBySlug } from "@/data/categories";
 import BusinessCard from "@/components/BusinessCard";
+import KnowThisPlace from "@/components/KnowThisPlace";
 
 export function generateStaticParams() {
   return getAllBusinessSlugs();
@@ -327,8 +328,13 @@ export default async function BusinessDetailPage({
             </div>
           </div>
 
+          {/* Know This Place? */}
+          <div className="lg:col-span-2">
+            <KnowThisPlace businessSlug={business.slug} businessName={business.name} />
+          </div>
+
           {/* Back link */}
-          <div className="mt-12">
+          <div className="mt-12 lg:col-span-3">
             <Link
               href={`/${category.slug}`}
               className="inline-flex items-center gap-2 text-sm font-medium text-coral-500 hover:text-coral-600 transition-colors"
