@@ -44,9 +44,12 @@ export default function Navigation() {
       )}
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-18">
-          <Link href="/" className="flex items-center gap-3 group">
-            <span className="text-coral-400 text-2xl font-display font-bold tracking-wide">
+          <Link href="/" className="flex flex-col group">
+            <span className="text-coral-400 text-3xl font-display font-bold tracking-wide leading-none">
               PORT A LOCAL
+            </span>
+            <span className="text-navy-400 text-[10px] font-medium tracking-[0.3em] uppercase mt-0.5">
+              Port Aransas, TX
             </span>
           </Link>
 
