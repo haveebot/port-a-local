@@ -118,6 +118,12 @@ export default function Navigation() {
               Live
             </Link>
             <Link
+              href="/essentials"
+              className="px-4 py-2 rounded-lg text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-navy-800/50 transition-all duration-300"
+            >
+              Essentials
+            </Link>
+            <Link
               href="/map"
               className="px-4 py-2 rounded-lg text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-navy-800/50 transition-all duration-300"
             >
@@ -243,6 +249,13 @@ export default function Navigation() {
               className="block px-4 py-2.5 text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors"
             >
               📡 Live
+            </Link>
+            <Link
+              href="/essentials"
+              onClick={() => setMobileOpen(false)}
+              className="block px-4 py-2.5 text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors"
+            >
+              🧭 Essentials
             </Link>
             <Link
               href="/my-trip"
