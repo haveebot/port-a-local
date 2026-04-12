@@ -53,13 +53,14 @@ export default function Navigation() {
               🛠️ Services
             </Link>
             <Link
-              href="/search"
-              title="Search"
-              className="px-3 py-2 rounded-lg text-sand-200 hover:text-coral-300 hover:bg-navy-800/50 transition-all duration-300"
+              href="/gully"
+              title="Gully — search Port Aransas"
+              className="px-3 py-2 rounded-lg text-sm font-semibold text-sand-200 hover:text-coral-300 hover:bg-navy-800/50 transition-all duration-300 flex items-center gap-1.5 tracking-wide"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
+              Gully
             </Link>
             <Link
               href="/beach"
@@ -101,11 +102,11 @@ export default function Navigation() {
         {mobileOpen && (
           <div className="md:hidden pb-4 border-t border-coral-500/20 bg-navy-950/98 backdrop-blur-md">
             <Link
-              href="/search"
+              href="/gully"
               onClick={() => setMobileOpen(false)}
-              className="block px-4 py-3 text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors"
+              className="block px-4 py-3 text-sm font-semibold text-sand-200 hover:text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors tracking-wide"
             >
-              🔍 Search
+              🔍 Gully
             </Link>
             {categories.map((cat) => (
               <Link
