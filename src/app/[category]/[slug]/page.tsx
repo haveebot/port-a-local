@@ -299,7 +299,7 @@ export default async function BusinessDetailPage({
                   Is this your business?
                 </p>
                 <a
-                  href="#"
+                  href="mailto:hello@portaransaslocal.com?subject=Claim my Port A Local listing"
                   className="inline-flex items-center justify-center px-5 py-2.5 rounded-lg btn-coral text-sm"
                 >
                   Claim Listing

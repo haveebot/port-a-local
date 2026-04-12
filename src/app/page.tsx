@@ -79,7 +79,7 @@ export default function Home() {
             </h2>
             <div className="coral-line max-w-xs mx-auto mb-6" />
             <p className="text-lg text-navy-400 max-w-2xl mx-auto font-light">
-              Skip the runaround. Book directly through Port A Local — our local team handles everything.
+              Skip the runaround. Book directly through Port A Local. Our local team handles everything.
             </p>
           </div>
 
@@ -179,7 +179,7 @@ export default function Home() {
                 ))}
               </div>
               <p className="text-navy-500 leading-relaxed mb-6 font-light italic">
-                &ldquo;We&apos;ve been coming to Port A for years and always relied on recommendations from friends. Port A Local finally puts everything in one place — we found spots we never would have discovered on our own.&rdquo;
+                &ldquo;We&apos;ve been coming to Port A for years and always relied on recommendations from friends. Port A Local finally puts it all in one place. We found spots we never would have found on our own.&rdquo;
               </p>
               <div>
                 <div className="font-semibold text-navy-900 text-sm">Jamie R.</div>
@@ -237,9 +237,9 @@ export default function Home() {
             <div className="coral-line max-w-xs mx-auto mb-8" />
             <p className="text-lg text-navy-400 leading-relaxed mb-12 font-light">
               Port Aransas is one of the most beloved beach towns on the Texas coast, but finding
-              the real gems has always been word-of-mouth. We built Port A Local to change that —
-              a single place where visitors and residents can discover businesses that are genuinely
-              local, genuinely good, and genuinely cared about by the community.
+              the real gems has always been word-of-mouth. We built Port A Local to change that.
+              One place to discover businesses that are genuinely local, genuinely good, and
+              genuinely cared about by the community.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
@@ -258,7 +258,7 @@ export default function Home() {
                 </div>
                 <h3 className="font-display font-bold text-navy-900 mb-2">Community First</h3>
                 <p className="text-sm text-navy-400 font-light">
-                  We exist to serve Port Aransas — connecting visitors with businesses that make this town great.
+                  We exist to serve Port Aransas. Connecting visitors with the businesses that make this town great.
                 </p>
               </div>
               <div className="p-8 rounded-2xl bg-white border border-sand-200 card-hover">

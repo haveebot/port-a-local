@@ -104,7 +104,7 @@ export default function CategoryPage({
 
           <p className="text-sm text-navy-300 mt-4">
             {filtered.length} locally vetted {filtered.length === 1 ? "business" : "businesses"} in Port Aransas
-            {openNow && " — open right now"}
+            {openNow && ", open right now"}
           </p>
         </div>
       </section>

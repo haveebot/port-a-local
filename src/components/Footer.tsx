@@ -19,7 +19,7 @@ export default function Footer() {
             <p className="text-navy-300 leading-relaxed max-w-md mb-6 font-light">
               A community-driven guide to Port Aransas, Texas. Every business is
               vetted by locals, for locals and visitors alike. No paid placements,
-              no corporate sponsors — just honest recommendations.
+              no corporate sponsors. Just honest recommendations.
             </p>
             <p className="text-sm text-navy-500">
               Port Aransas, TX 78373

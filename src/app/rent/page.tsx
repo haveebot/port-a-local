@@ -160,12 +160,12 @@ export default function RentPage() {
       </section>
 
       {/* Form */}
-      <section className="py-14">
+      <section className="py-14 overflow-x-hidden">
         <div className="max-w-2xl mx-auto px-4 sm:px-6">
           <form onSubmit={handleSubmit} className="space-y-6">
 
             {/* Dates & Cart */}
-            <div className="bg-white rounded-2xl border border-sand-200 p-6 space-y-4">
+            <div className="bg-white rounded-2xl border border-sand-200 p-4 sm:p-6 space-y-4">
               <h2 className="font-display text-xl font-bold text-navy-900">Your Rental</h2>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -263,7 +263,7 @@ export default function RentPage() {
             </div>
 
             {/* Contact Info */}
-            <div className="bg-white rounded-2xl border border-sand-200 p-6 space-y-4">
+            <div className="bg-white rounded-2xl border border-sand-200 p-4 sm:p-6 space-y-4">
               <h2 className="font-display text-xl font-bold text-navy-900">Your Info</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
