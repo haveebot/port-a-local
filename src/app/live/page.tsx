@@ -1,5 +1,6 @@
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import IslandConditions from "@/components/IslandConditions";
 
 // === WEBCAM SOURCES ===
 // HDOnTap blocks iframe embedding (X-Frame-Options: DENY), so beach cams link out.
@@ -67,10 +68,6 @@ const webcams = [
   },
 ];
 
-// === NOAA STATIONS ===
-const BUOY_STATION = "PCNT2";
-const TIDE_STATION = "8775241";
-
 // === EXTERNAL LINKS ===
 const externalLinks = [
   {
@@ -82,7 +79,7 @@ const externalLinks = [
   {
     name: "Tide Predictions",
     description: "NOAA tide charts for Aransas Pass",
-    url: `https://tidesandcurrents.noaa.gov/noaatidepredictions.html?id=${TIDE_STATION}`,
+    url: "https://tidesandcurrents.noaa.gov/noaatidepredictions.html?id=8775237",
     icon: "🌙",
   },
   {
@@ -106,7 +103,7 @@ const externalLinks = [
   {
     name: "NOAA Buoy Station",
     description: "Raw observation data from coastal stations near Port Aransas",
-    url: `https://www.ndbc.noaa.gov/station_page.php?station=${BUOY_STATION}`,
+    url: "https://www.ndbc.noaa.gov/station_page.php?station=PTAT2",
     icon: "📡",
   },
   {
@@ -234,41 +231,11 @@ export default function LivePage() {
               Weather & Tides
             </h2>
             <p className="text-navy-400 font-light">
-              Real-time data from NOAA coastal monitoring stations near Port Aransas.
+              Real-time data from NOAA Station 8775237 — Port Aransas.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* NOAA Buoy Widget */}
-            <div className="rounded-2xl overflow-hidden border border-sand-200 bg-white">
-              <div className="p-4 border-b border-sand-200">
-                <h3 className="font-display font-bold text-navy-900">Coastal Observations</h3>
-                <p className="text-xs text-navy-400 mt-1">NOAA Station {BUOY_STATION} — water temp, wind, pressure</p>
-              </div>
-              <div className="p-4">
-                <iframe
-                  src={`https://www.ndbc.noaa.gov/widgets/station_page.php?station=${BUOY_STATION}`}
-                  title="NOAA Buoy Data"
-                  className="w-full h-[350px] border-0"
-                />
-              </div>
-            </div>
-
-            {/* Tide Widget */}
-            <div className="rounded-2xl overflow-hidden border border-sand-200 bg-white">
-              <div className="p-4 border-b border-sand-200">
-                <h3 className="font-display font-bold text-navy-900">Tide Predictions</h3>
-                <p className="text-xs text-navy-400 mt-1">NOAA Station {TIDE_STATION} — 3-day tide chart</p>
-              </div>
-              <div className="p-4">
-                <iframe
-                  src={`https://tidesandcurrents.noaa.gov/noaatidewidget/widget.php?id=${TIDE_STATION}&type=prediction&days=3`}
-                  title="NOAA Tide Predictions"
-                  className="w-full h-[350px] border-0"
-                />
-              </div>
-            </div>
-          </div>
+          <IslandConditions />
         </div>
       </section>
 
