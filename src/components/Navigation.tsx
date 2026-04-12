@@ -61,13 +61,13 @@ export default function Navigation() {
             <Link
               href="/gully"
               title="Just Gully It — search the island"
-              className="px-3 py-2 rounded-lg text-sm font-semibold text-sand-200 hover:text-coral-300 hover:bg-navy-800/50 transition-all duration-300 flex items-center gap-1.5 tracking-wide"
+              className="ml-1 flex items-center gap-2 px-4 py-1.5 rounded-full text-sm text-navy-300 bg-white/8 border border-white/15 hover:bg-white/15 hover:text-sand-100 hover:border-white/25 transition-all duration-300"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
-              Gully
-              <kbd className="hidden lg:inline-flex ml-1.5 items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-mono bg-white/10 text-sand-300 border border-white/20">⌘K</kbd>
+              <span className="font-medium">Gully it...</span>
+              <kbd className="hidden lg:inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-mono bg-white/10 text-navy-400 border border-white/10">⌘K</kbd>
             </Link>
             <Link
               href="/beach"
