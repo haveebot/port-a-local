@@ -11,6 +11,17 @@ import Footer from "@/components/Footer";
 import Link from "next/link";
 import { isOpenNow } from "@/lib/isOpenNow";
 
+const popularChips = [
+  { label: "🍔 Burgers", query: "Burgers" },
+  { label: "🎣 Charter Fishing", query: "Charter Fishing" },
+  { label: "🍹 Happy Hour", query: "Happy Hour" },
+  { label: "🌮 Tacos", query: "Tacos" },
+  { label: "☕ Coffee", query: "Coffee" },
+  { label: "🏖️ Family Friendly", query: "Family Friendly" },
+  { label: "🌙 Late Night", query: "Late Night" },
+  { label: "🦞 Seafood", query: "Seafood" },
+];
+
 const fuse = new Fuse(businesses, {
   keys: [
     { name: "name", weight: 3 },
@@ -161,6 +172,28 @@ function GullyContent() {
           </div>
         </div>
       </section>
+
+      {/* Popular chips — shown only when query is empty */}
+      {query.trim().length === 0 && (
+        <section className="pb-0">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
+            <p className="text-sm font-semibold text-navy-300 uppercase tracking-wide mb-3 mt-8">
+              Popular searches
+            </p>
+            <div className="flex flex-wrap justify-center gap-2">
+              {popularChips.map((chip) => (
+                <button
+                  key={chip.query}
+                  onClick={() => setQuery(chip.query)}
+                  className="px-4 py-2 rounded-full text-sm bg-white/10 text-sand-200 hover:bg-white/20 border border-white/20 transition-colors cursor-pointer"
+                >
+                  {chip.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Results */}
       <section className="py-14">

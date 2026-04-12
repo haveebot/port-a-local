@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import GullyPalette from "@/components/GullyPalette";
 
 export const metadata: Metadata = {
   title: "Port A Local — Your Local Guide to Port Aransas, TX",
@@ -21,7 +22,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="font-sans antialiased">{children}</body>
+      <body className="font-sans antialiased">
+        {children}
+        <GullyPalette />
+      </body>
     </html>
   );
 }
