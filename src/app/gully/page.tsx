@@ -9,35 +9,7 @@ import BusinessCard from "@/components/BusinessCard";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import Link from "next/link";
-
-function isOpenNow(business: Business): boolean {
-  if (!business.hoursOfOperation) return false;
-  const now = new Date();
-  const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-  const todayName = days[now.getDay()];
-  const todayHours = business.hoursOfOperation[todayName];
-  if (!todayHours || todayHours === "Closed") return false;
-
-  const clean = todayHours.replace(/\s*–\s*/g, "-").replace(/\s*-\s*/g, "-");
-  const match = clean.match(/(\d+(?::\d+)?)\s*(AM|PM)?-(\d+(?::\d+)?)\s*(AM|PM)?/i);
-  if (!match) return false;
-
-  function toMinutes(time: string, meridiem: string): number {
-    const [h, m = "0"] = time.split(":");
-    let hours = parseInt(h);
-    const mins = parseInt(m);
-    meridiem = meridiem?.toUpperCase();
-    if (meridiem === "PM" && hours !== 12) hours += 12;
-    if (meridiem === "AM" && hours === 12) hours = 0;
-    return hours * 60 + mins;
-  }
-
-  const openMin = toMinutes(match[1], match[2] || match[4]);
-  const closeMin = toMinutes(match[3], match[4] || match[2]);
-  const nowMin = now.getHours() * 60 + now.getMinutes();
-
-  return nowMin >= openMin && nowMin < closeMin;
-}
+import { isOpenNow } from "@/lib/isOpenNow";
 
 const fuse = new Fuse(businesses, {
   keys: [
