@@ -43,7 +43,7 @@ export default function Home() {
           <p className="text-center text-navy-400 text-sm font-medium tracking-[0.2em] uppercase mb-8">
             Places you&apos;ll find on Port A Local
           </p>
-          <div className="flex flex-wrap justify-center gap-x-8 gap-y-4">
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">
             {[
               "Woody's Last Stand",
               "JOY Cart Rentals",
@@ -58,7 +58,7 @@ export default function Home() {
               "Fox Yacht Sales",
               "The Connoisseur",
             ].map((name) => (
-              <span key={name} className="text-navy-300 font-medium text-sm hover:text-coral-400 transition-colors cursor-default">
+              <span key={name} className="text-center text-navy-300 font-medium text-sm hover:text-coral-400 transition-colors cursor-default py-1">
                 {name}
               </span>
             ))}
