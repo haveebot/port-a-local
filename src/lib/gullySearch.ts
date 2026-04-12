@@ -10,6 +10,8 @@ export interface GullyItem {
   description: string;
   tags: string[];
   category: string;
+  /** Flattened menu item names — internal search fuel, not displayed */
+  menuItems?: string[];
   /** Business-specific */
   featured?: boolean;
   hoursOfOperation?: Record<string, string>;
@@ -30,6 +32,7 @@ const businessItems: GullyItem[] = businesses.map((b) => ({
   featured: b.featured,
   hoursOfOperation: b.hoursOfOperation,
   hours: b.hours,
+  menuItems: b.menu?.flatMap((s) => s.items.map((i) => i.name)) ?? [],
 }));
 
 const storyItems: GullyItem[] = stories
@@ -53,6 +56,7 @@ export const gullyFuse = new Fuse(gullyItems, {
     { name: "name", weight: 3 },
     { name: "tagline", weight: 2 },
     { name: "tags", weight: 2 },
+    { name: "menuItems", weight: 1.5 },
     { name: "description", weight: 1 },
     { name: "category", weight: 1 },
   ],
