@@ -60,7 +60,7 @@ export default function Navigation() {
             </Link>
             <Link
               href="/gully"
-              title="Gully — search Port Aransas"
+              title="Just Gully It — search the island"
               className="px-3 py-2 rounded-lg text-sm font-semibold text-sand-200 hover:text-coral-300 hover:bg-navy-800/50 transition-all duration-300 flex items-center gap-1.5 tracking-wide"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

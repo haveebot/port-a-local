@@ -110,7 +110,7 @@ function GullyContent() {
             Gully
           </h1>
           <p className="text-lg text-navy-200 font-light mb-8">
-            Find anything on the island — restaurants, bars, charters, shops, history and more.
+            Find anything on the island. Restaurants, bars, charters, shops, history and more — just Gully it.
           </p>
 
           {/* Search input */}
@@ -133,7 +133,7 @@ function GullyContent() {
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Try 'seafood', 'happy hour', 'Farley', 'hurricane'..."
+              placeholder="Gully it..."
               className="w-full pl-12 pr-4 py-4 rounded-xl text-navy-900 bg-white border border-sand-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-coral-400 text-base"
             />
           </div>
@@ -185,7 +185,7 @@ function GullyContent() {
         <section className="pb-0">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
             <p className="text-sm font-semibold text-navy-300 uppercase tracking-wide mb-3 mt-8">
-              Popular searches
+              Just Gully It
             </p>
             <div className="flex flex-wrap justify-center gap-2">
               {popularChips.map((chip) => (
@@ -248,8 +248,8 @@ function GullyContent() {
               </h2>
               <p className="text-navy-400 mb-8 max-w-md mx-auto font-light">
                 {query.trim()
-                  ? `No results for "${query}". Try something else — Gully knows the island well.`
-                  : "No businesses match your current filters."}
+                  ? `Nothing washed up for "${query}". Try Gullying something else.`
+                  : "Nothing here. Try a different filter."}
               </p>
               <div className="flex flex-wrap justify-center gap-3">
                 <Link href="/eat" className="btn-coral px-6 py-3 rounded-xl text-sm font-medium">

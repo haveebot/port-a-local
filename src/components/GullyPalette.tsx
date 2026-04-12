@@ -140,7 +140,7 @@ export default function GullyPalette() {
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search Port Aransas..."
+            placeholder="Gully it..."
             className="w-full pl-12 pr-4 py-4 text-navy-900 text-base border-b border-sand-200 focus:outline-none"
           />
         </div>
@@ -151,7 +151,7 @@ export default function GullyPalette() {
             /* Popular chips */
             <div className="p-4">
               <p className="text-xs font-semibold text-navy-400 uppercase tracking-wide mb-3">
-                Popular searches
+                Just Gully It
               </p>
               <div className="flex flex-wrap gap-2">
                 {popularChips.map((chip) => (
@@ -200,12 +200,12 @@ export default function GullyPalette() {
             /* No results */
             <div className="px-4 py-8 text-center">
               <span className="text-3xl block mb-2">🌊</span>
-              <p className="text-navy-400 mb-3">No results for &ldquo;{query}&rdquo;</p>
+              <p className="text-navy-400 mb-3">Nothing washed up for &ldquo;{query}&rdquo;</p>
               <button
                 onClick={() => navigateTo(`/gully?q=${encodeURIComponent(query)}`)}
                 className="text-sm text-coral-500 hover:text-coral-600 font-medium"
               >
-                Try searching in Gully →
+                Try Gullying it differently →
               </button>
             </div>
           )}

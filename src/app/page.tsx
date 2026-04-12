@@ -11,6 +11,44 @@ export default function Home() {
       <Navigation />
       <Hero />
 
+      {/* Gully — Just Gully It */}
+      <section className="py-20 bg-navy-900 relative">
+        <div className="absolute inset-0 palm-pattern opacity-10" />
+        <div className="relative max-w-3xl mx-auto px-4 sm:px-6 text-center">
+          <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-coral-500/30 bg-coral-500/10 text-coral-300 text-sm font-medium tracking-wide mb-6">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            Port A&apos;s Search Engine
+          </div>
+          <h2 className="font-display text-3xl sm:text-4xl font-bold text-sand-50 mb-4">
+            Just Gully It
+          </h2>
+          <div className="gold-line max-w-xs mx-auto mb-6" />
+          <p className="text-lg text-navy-200 font-light max-w-2xl mx-auto mb-8">
+            Gully knows the island. Search 140+ locally vetted businesses, 17 heritage articles, menus, happy hours, and more — all in one place. No ads, no sponsored results.
+          </p>
+
+          <form action="/gully" className="max-w-2xl mx-auto mb-6 relative">
+            <div className="relative">
+              <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-navy-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+              <input
+                type="text"
+                name="q"
+                placeholder="Gully it..."
+                className="w-full pl-12 pr-4 py-4 rounded-xl text-navy-900 bg-white border border-sand-200 shadow-lg focus:outline-none focus:ring-2 focus:ring-coral-400 text-base"
+              />
+            </div>
+          </form>
+
+          <p className="text-sm text-navy-400">
+            Try &ldquo;fish tacos&rdquo; &middot; &ldquo;happy hour&rdquo; &middot; &ldquo;Farley&rdquo; &middot; &ldquo;sunset&rdquo; &middot; &ldquo;pet friendly&rdquo;
+          </p>
+        </div>
+      </section>
+
       {/* Category Grid */}
       <section className="py-24 relative" id="explore">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -26,20 +64,6 @@ export default function Home() {
               Every listing is vetted by locals. Browse by category to find exactly what you need.
             </p>
           </div>
-
-          <form action="/gully" className="max-w-2xl mx-auto mb-10 relative">
-            <div className="relative">
-              <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-navy-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-              <input
-                type="text"
-                name="q"
-                placeholder="Gully it — restaurants, bars, charters, shops..."
-                className="w-full pl-12 pr-4 py-4 rounded-xl text-navy-900 bg-white border border-sand-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-coral-400 text-base"
-              />
-            </div>
-          </form>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
             {categories.map((cat) => (
