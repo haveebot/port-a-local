@@ -4,8 +4,9 @@ import Link from "next/link";
 import Navigation from "@/components/Navigation";
 import Badge from "@/components/Badge";
 import Footer from "@/components/Footer";
-import { getBusinessBySlug, getAllBusinessSlugs } from "@/data/businesses";
+import { getBusinessBySlug, getAllBusinessSlugs, getBusinessesByCategory } from "@/data/businesses";
 import { getCategoryBySlug } from "@/data/categories";
+import BusinessCard from "@/components/BusinessCard";
 
 export function generateStaticParams() {
   return getAllBusinessSlugs();
@@ -37,6 +38,10 @@ export default async function BusinessDetailPage({
   if (!business || !category) {
     notFound();
   }
+
+  const related = getBusinessesByCategory(categorySlug)
+    .filter((b) => b.slug !== slug)
+    .slice(0, 3);
 
   return (
     <main className="min-h-screen">
@@ -336,6 +341,30 @@ export default async function BusinessDetailPage({
           </div>
         </div>
       </section>
+
+      {/* More in category */}
+      {related.length > 0 && (
+        <section className="py-16 bg-sand-50 border-t border-sand-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6">
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="font-display text-2xl font-bold text-navy-900">
+                More in {category.icon} {category.name}
+              </h2>
+              <Link
+                href={`/${category.slug}`}
+                className="text-sm font-medium text-coral-500 hover:text-coral-600 transition-colors"
+              >
+                View all →
+              </Link>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {related.map((biz) => (
+                <BusinessCard key={biz.slug} business={biz} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       <Footer />
     </main>
