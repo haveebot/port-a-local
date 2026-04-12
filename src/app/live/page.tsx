@@ -1,66 +1,69 @@
-"use client";
-
-import { useState } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 
-// === WEBCAM SOURCES (HDOnTap embeds + city ferry cams) ===
+// === WEBCAM SOURCES ===
+// HDOnTap blocks iframe embedding (X-Frame-Options: DENY), so beach cams link out.
+// Ferry cam and MarineTraffic embed fine.
 const webcams = [
   {
-    id: "dunes",
     name: "The Dunes Beach Cam",
-    description: "PTZ beach cam from The Dunes Condominiums — panoramic Gulf views",
-    embedUrl: "https://hdontap.com/stream/259405/the-dunes-port-aransas-live-beach-cam/embed/",
-    source: "HDOnTap / The Dunes",
+    description: "PTZ beach cam — panoramic Gulf views",
+    url: "https://hdontap.com/stream/259405/the-dunes-port-aransas-live-beach-cam/",
+    icon: "🏖️",
   },
   {
-    id: "casa",
     name: "Casa Condos Beach Cam",
-    description: "Rotating shoreline and surf views from Casa Condominiums",
-    embedUrl: "https://hdontap.com/stream/831616/casa-condos-port-aransas-beach-live-webcam/embed/",
-    source: "HDOnTap / Casa Condos",
+    description: "Rotating shoreline and surf views",
+    url: "https://hdontap.com/stream/831616/casa-condos-port-aransas-beach-live-webcam/",
+    icon: "🌊",
   },
   {
-    id: "aransas-princess",
     name: "Aransas Princess Beach Cam",
-    description: "Beach and Gulf of Mexico from Aransas Princess Condos",
-    embedUrl: "https://hdontap.com/stream/167516/aransas-princess-port-aransas-beach-live-webcam/embed/",
-    source: "HDOnTap / Aransas Princess",
+    description: "Beach and Gulf of Mexico",
+    url: "https://hdontap.com/stream/167516/aransas-princess-port-aransas-beach-live-webcam/",
+    icon: "🏝️",
   },
   {
-    id: "sandpiper",
     name: "Sandpiper Beach Cam",
-    description: "Panoramic southeast-facing beach view from Sandpiper Condos",
-    embedUrl: "https://hdontap.com/stream/518728/port-aransas-beach-live-webvam/embed/",
-    source: "HDOnTap / Sandpiper",
+    description: "Panoramic southeast-facing beach view",
+    url: "https://hdontap.com/stream/518728/port-aransas-beach-live-webvam/",
+    icon: "🐚",
   },
   {
-    id: "seagull",
     name: "Sea Gull Beach Cam",
-    description: "Northeast surf and shoreline from Sea Gull Condos on Mustang Island",
-    embedUrl: "https://hdontap.com/stream/814199/port-aransas-beach-seagull-condos-live-webcam/embed/",
-    source: "HDOnTap / Sea Gull Condos",
+    description: "Northeast surf and shoreline on Mustang Island",
+    url: "https://hdontap.com/stream/814199/port-aransas-beach-seagull-condos-live-webcam/",
+    icon: "🦅",
   },
   {
-    id: "gulf-shores",
     name: "Gulf Shores Beach Cam",
-    description: "East-southeast facing — waves and horizon from Gulf Shores Condos",
-    embedUrl: "https://hdontap.com/stream/776400/gulf-shores-port-aransas-live-beach-cam/embed/",
-    source: "HDOnTap / Gulf Shores",
+    description: "East-southeast facing — waves and horizon",
+    url: "https://hdontap.com/stream/776400/gulf-shores-port-aransas-live-beach-cam/",
+    icon: "🌅",
   },
   {
-    id: "sandcastle",
     name: "Sandcastle Beach Cam",
-    description: "PTZ Gulf views from Sand Castle Resort Condominiums",
-    embedUrl: "https://hdontap.com/stream/896845/sandcastle-condos-port-aransas-live-beach-cam/embed/",
-    source: "HDOnTap / Sandcastle",
+    description: "PTZ Gulf views from Sand Castle Resort",
+    url: "https://hdontap.com/stream/896845/sandcastle-condos-port-aransas-live-beach-cam/",
+    icon: "🏰",
   },
   {
-    id: "ferry-south",
-    name: "Ferry Landing — South View",
+    name: "Ferry Cam — South View",
     description: "Watch ferries load and cross Aransas Pass",
-    embedUrl: "https://cityofportaransas.org/ferrycam1/",
-    source: "City of Port Aransas",
+    url: "https://cityofportaransas.org/ferrycam1/",
+    icon: "⛴️",
+  },
+  {
+    name: "Dolphin Docks Harbor Cam",
+    description: "Live view of the harbor and docks",
+    url: "https://dolphindocks.com/webcam/",
+    icon: "🐬",
+  },
+  {
+    name: "Deep Sea HQ Fish Rack",
+    description: "See what's coming off the boats today",
+    url: "https://deepseaheadquarters.com/live-fish-rack/",
+    icon: "🎣",
   },
 ];
 
@@ -115,9 +118,6 @@ const externalLinks = [
 ];
 
 export default function LivePage() {
-  const [activeWebcam, setActiveWebcam] = useState(webcams[0].id);
-  const currentCam = webcams.find((w) => w.id === activeWebcam) || webcams[0];
-
   return (
     <main className="min-h-screen">
       <Navigation />
@@ -148,53 +148,40 @@ export default function LivePage() {
             <p className="text-coral-500 text-sm font-medium tracking-[0.2em] uppercase mb-3">
               Live Cameras
             </p>
-            <h2 className="font-display text-2xl sm:text-3xl font-bold text-navy-900">
+            <h2 className="font-display text-2xl sm:text-3xl font-bold text-navy-900 mb-2">
               See the Island Right Now
             </h2>
+            <p className="text-navy-400 font-light">
+              10 live webcams across Port Aransas — beach views, ferry landing, harbor, and more. Click any camera to watch live.
+            </p>
           </div>
 
-          {/* Cam selector tabs */}
-          <div className="flex flex-wrap gap-2 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {webcams.map((cam) => (
-              <button
-                key={cam.id}
-                onClick={() => setActiveWebcam(cam.id)}
-                className={`px-3 py-1.5 rounded-full text-xs sm:text-sm font-medium border transition-all duration-200 ${
-                  activeWebcam === cam.id
-                    ? "bg-coral-500 text-white border-coral-500"
-                    : "bg-white text-navy-600 border-sand-200 hover:border-coral-300 hover:text-coral-600"
-                }`}
+              <a
+                key={cam.name}
+                href={cam.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-start gap-4 bg-white rounded-xl border border-sand-200 p-5 card-hover"
               >
-                {cam.name.replace(" Beach Cam", "").replace(" — South View", "")}
-              </button>
+                <div className="w-10 h-10 rounded-full bg-navy-50 flex items-center justify-center flex-shrink-0 text-xl">
+                  {cam.icon}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-1">
+                    <p className="font-semibold text-navy-900 group-hover:text-coral-600 transition-colors text-sm truncate">
+                      {cam.name}
+                    </p>
+                    <span className="flex items-center gap-1 text-[10px] text-red-500 font-medium flex-shrink-0">
+                      <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+                      LIVE
+                    </span>
+                  </div>
+                  <p className="text-xs text-navy-400">{cam.description}</p>
+                </div>
+              </a>
             ))}
-          </div>
-
-          {/* Active cam */}
-          <div className="rounded-2xl overflow-hidden border border-sand-200 bg-navy-950">
-            <div className="aspect-video">
-              <iframe
-                key={currentCam.id}
-                src={currentCam.embedUrl}
-                title={currentCam.name}
-                className="w-full h-full"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            </div>
-            <div className="p-4 bg-white border-t border-sand-200">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="font-semibold text-navy-900">{currentCam.name}</p>
-                  <p className="text-sm text-navy-400">{currentCam.description}</p>
-                </div>
-                <div className="flex items-center gap-2 text-xs text-navy-400">
-                  <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-                  LIVE
-                </div>
-              </div>
-              <p className="text-xs text-navy-300 mt-2">Source: {currentCam.source}</p>
-            </div>
           </div>
         </div>
       </section>
