@@ -5,6 +5,26 @@ import { useRouter } from "next/navigation";
 import { gullyFuse, getGullyHref } from "@/lib/gullySearch";
 import type { GullyItem } from "@/lib/gullySearch";
 
+const RECENT_KEY = "gully-recent";
+const MAX_RECENT = 5;
+
+function getRecentSearches(): string[] {
+  if (typeof window === "undefined") return [];
+  try {
+    return JSON.parse(localStorage.getItem(RECENT_KEY) || "[]");
+  } catch {
+    return [];
+  }
+}
+
+function saveRecentSearch(q: string) {
+  const trimmed = q.trim();
+  if (trimmed.length < 2) return;
+  const recent = getRecentSearches().filter((r) => r !== trimmed);
+  recent.unshift(trimmed);
+  localStorage.setItem(RECENT_KEY, JSON.stringify(recent.slice(0, MAX_RECENT)));
+}
+
 const categoryEmoji: Record<string, string> = {
   eat: "🍽️",
   drink: "🍹",
@@ -50,12 +70,15 @@ export default function GullyPalette() {
     setQuery("");
   }, []);
 
+  const [recentSearches, setRecentSearches] = useState<string[]>([]);
+
   const navigateTo = useCallback(
     (href: string) => {
+      if (query.trim().length >= 2) saveRecentSearch(query);
       router.push(href);
       closePalette();
     },
-    [router, closePalette]
+    [router, closePalette, query]
   );
 
   // Keyboard listeners
@@ -99,10 +122,10 @@ export default function GullyPalette() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [open, query, openPalette, closePalette, navigateTo]);
 
-  // Auto-focus input on open
+  // Auto-focus input + load recent searches on open
   useEffect(() => {
     if (open) {
-      // Small tick to let the DOM render
+      setRecentSearches(getRecentSearches());
       requestAnimationFrame(() => {
         inputRef.current?.focus();
       });
@@ -148,8 +171,26 @@ export default function GullyPalette() {
         {/* Results area */}
         <div className="max-h-96 overflow-y-auto">
           {query.trim().length < 2 ? (
-            /* Popular chips */
+            /* Recent + Popular chips */
             <div className="p-4">
+              {recentSearches.length > 0 && (
+                <div className="mb-4">
+                  <p className="text-xs font-semibold text-navy-400 uppercase tracking-wide mb-2">
+                    Recent
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {recentSearches.map((r) => (
+                      <button
+                        key={r}
+                        onClick={() => setQuery(r)}
+                        className="px-3 py-1.5 rounded-full text-sm bg-navy-50 text-navy-600 hover:bg-coral-50 hover:text-coral-600 border border-navy-100 cursor-pointer transition-colors"
+                      >
+                        {r}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
               <p className="text-xs font-semibold text-navy-400 uppercase tracking-wide mb-3">
                 Just Gully It
               </p>

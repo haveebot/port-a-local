@@ -8,6 +8,7 @@ import { getBusinessBySlug, getAllBusinessSlugs, getBusinessesByCategory } from 
 import { getCategoryBySlug } from "@/data/categories";
 import BusinessCard from "@/components/BusinessCard";
 import KnowThisPlace from "@/components/KnowThisPlace";
+import { LocalBusinessSchema } from "@/components/StructuredData";
 
 export function generateStaticParams() {
   return getAllBusinessSlugs();
@@ -46,6 +47,7 @@ export default async function BusinessDetailPage({
 
   return (
     <main className="min-h-screen">
+      <LocalBusinessSchema business={business} />
       <Navigation />
 
       <section className="pt-28 pb-16 hero-gradient relative">

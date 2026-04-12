@@ -3,11 +3,13 @@ import Hero from "@/components/Hero";
 import CategoryCard from "@/components/CategoryCard";
 import FeaturedSpots from "@/components/FeaturedSpots";
 import Footer from "@/components/Footer";
+import { WebsiteSchema } from "@/components/StructuredData";
 import { categories } from "@/data/categories";
 
 export default function Home() {
   return (
     <main className="min-h-screen">
+      <WebsiteSchema />
       <Navigation />
       <Hero />
 

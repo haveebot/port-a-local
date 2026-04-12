@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { stories, getStoryBySlug } from "@/data/stories";
 import { storyContent } from "@/data/story-content";
+import { ArticleSchema } from "@/components/StructuredData";
 import type { Metadata } from "next";
 
 // Generate static pages for all stories that have content
@@ -58,6 +59,7 @@ export default async function StoryPage({
 
   return (
     <main className="min-h-screen">
+      <ArticleSchema story={story} />
       <Navigation />
 
       {/* Hero */}
