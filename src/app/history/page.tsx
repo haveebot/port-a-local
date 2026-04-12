@@ -11,14 +11,8 @@ export const metadata: Metadata = {
 };
 
 function StoryCard({ story }: { story: (typeof stories)[number] }) {
-  const isComingSoon = !story.published;
-
   return (
-    <div
-      className={`group relative rounded-2xl bg-white border border-sand-200 overflow-hidden ${
-        isComingSoon ? "" : "card-hover"
-      }`}
-    >
+    <div className="group relative rounded-2xl bg-white border border-sand-200 overflow-hidden card-hover">
       {/* Top gradient bar */}
       <div className="h-1 bg-gradient-to-r from-navy-600 via-coral-400 to-gold-400" />
 
@@ -32,13 +26,7 @@ function StoryCard({ story }: { story: (typeof stories)[number] }) {
         </div>
 
         {/* Title */}
-        <h3
-          className={`font-display text-xl font-bold mb-2 ${
-            isComingSoon
-              ? "text-navy-700"
-              : "text-navy-900 group-hover:text-coral-600 transition-colors"
-          }`}
-        >
+        <h3 className="font-display text-xl font-bold mb-2 text-navy-900 group-hover:text-coral-600 transition-colors">
           {story.title}
         </h3>
 
@@ -47,46 +35,35 @@ function StoryCard({ story }: { story: (typeof stories)[number] }) {
           {story.subtitle}
         </p>
 
-        {/* CTA or Coming Soon */}
-        {isComingSoon ? (
-          <span className="inline-flex items-center gap-2 text-sm font-medium text-navy-300">
-            <span className="w-1.5 h-1.5 rounded-full bg-gold-400" />
-            Coming Soon
-          </span>
-        ) : (
-          <Link
-            href={`/history/${story.slug}`}
-            className="inline-flex items-center gap-2 text-sm font-semibold text-coral-500 group-hover:text-coral-600 transition-colors"
+        {/* CTA */}
+        <Link
+          href={`/history/${story.slug}`}
+          className="inline-flex items-center gap-2 text-sm font-semibold text-coral-500 group-hover:text-coral-600 transition-colors"
+        >
+          Read More
+          <svg
+            className="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
           >
-            Read More
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M17 8l4 4m0 0l-4 4m4-4H3"
-              />
-            </svg>
-          </Link>
-        )}
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M17 8l4 4m0 0l-4 4m4-4H3"
+            />
+          </svg>
+        </Link>
       </div>
-
-      {/* Overlay for coming soon */}
-      {isComingSoon && (
-        <div className="absolute inset-0 bg-white/30 pointer-events-none" />
-      )}
     </div>
   );
 }
 
 export default function HistoryPage() {
-  const featured = stories.filter((s) => s.featured);
-  const more = stories.filter((s) => !s.featured);
+  const published = stories.filter((s) => s.published);
+  const featured = published.filter((s) => s.featured);
+  const more = published.filter((s) => !s.featured);
 
   return (
     <main className="min-h-screen">

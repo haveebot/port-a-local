@@ -863,4 +863,479 @@ export const storyContent: Record<string, StoryContent> = {
       { place: "Roberts Point Park", detail: "301 J.C. Barr Blvd. Home to the Deep Sea Roundup, the Wooden Boat Festival, and the municipal marina." },
     ],
   },
+
+  "farley-boats-craft": {
+    lede: "Fred Farley never drew a blueprint. For sixty years, three generations of his family built sport fishing boats the same way: designs sketched directly on the wood flooring with colored carpenter's crayon, hull shapes demonstrated through hand-carved half-models, and every measurement carried in the builder's eye. The Farley method produced boats that outperformed anything on the Gulf Coast — vessels so precisely tuned to the conditions at Aransas Pass that a president chose one over his own yacht. But the method was inseparable from the men who practiced it. When fiberglass arrived in the 1960s, the Farleys didn't adapt. They couldn't. The craft died with the generation that knew it.",
+
+    sections: [
+      {
+        heading: "Designs on the Floor",
+        body: [
+          "Walk into Farley Boat Works in 1940 and you'd see it immediately: the shop floor was the drafting table. Fred and his sons sketched hull lines directly onto the wood flooring using colored carpenter's crayon — full-scale outlines that showed the exact shape of the boat before a single plank was cut. When a prospective buyer came in, the Farleys walked them across plywood sheets laid on the floor with the boat's lines drawn out beneath their feet.",
+          "For custom modifications, they carved half-models — small wooden boat halves, maybe a foot long, shaped by hand to show exactly how the finished hull would look from every angle. A buyer could hold the half-model, turn it in the light, and see their boat before it existed. No technical drawings. No naval architecture. Just wood, crayon, and a craftsman's eye that had been trained on Gulf Coast water since 1910.",
+        ],
+        fact: [
+          { label: "Design method", value: "Carpenter's crayon on shop floor" },
+          { label: "Custom demos", value: "Hand-carved pine half-models" },
+          { label: "Formal blueprints", value: "Zero — ever" },
+          { label: "Signature size", value: "18-footer for two people" },
+        ],
+      },
+      {
+        heading: "The V-Bottom Hull",
+        body: [
+          "Every design decision in a Farley boat traced back to one place: the mouth of Aransas Pass. The water there is choppy, current-driven, and unpredictable. Tarpon run through it. Guides needed a boat that could handle the chop, hold position in the current, and give an angler enough room to fight a fish that could weigh over a hundred pounds.",
+          "The Farley answer was a V-bottom hull with a hard chine — angular where the hull sides met the bottom, not rounded. The chine didn't touch water until well aft of the bow, which meant the boat cut through chop instead of slapping against it. High bows combated the seas. Low sides with rounded tumblehomes made it easier to lean over the gunwale and land a fighting tarpon. Open cockpits with stern-facing fighting chairs. Front windshields with opening hatches for ventilation.",
+          "The result was a boat so precisely matched to its environment that guides who fished other waters often found Farley hulls too specialized. But on the waters they were designed for, nothing else came close.",
+        ],
+        pullQuote: {
+          text: "The chine doesn't touch water until well aft of the bow. That's why they cut through the chop instead of slapping against it.",
+        },
+      },
+      {
+        heading: "Cypress, Then Mahogany",
+        body: [
+          "Before World War II, the Farleys built with 5/8-inch-thick top-grade cypress planks. Cypress was the ideal boatbuilding wood for the Gulf Coast: lightweight, naturally resistant to rot, and strong enough to absorb the shock of rough water. The Farleys could get it locally and cheaply.",
+          "The war changed that. Cypress became scarce as supply chains shifted to military production. After 1945, the Farleys switched to Honduran and Philippine mahogany — heavier, darker, but equally durable. The engines were never marine motors. They were converted automobile engines: Chrysler flatheads, Fords, Chevrolets. Some customers supplied their own. The combination of mahogany hull and automotive power was distinctly Farley — practical, unglamorous, and fast.",
+        ],
+      },
+      {
+        heading: "Beyond Tarpon Boats",
+        body: [
+          "The Farleys built everything from 16-foot skiffs to 28-foot offshore cruisers. In the 1920s, they built cabin-equipped boats for duck hunting guides. In the 1950s, as tarpon populations declined, they pivoted to offshore cruisers for the emerging deep-sea sportfishing market.",
+          "The most dramatic commission came around 1928, when Gail Borden Munsill of the Borden dairy empire hired the Farleys to build a speedboat. It was capable of 60 miles per hour — extraordinary for a wooden hull in that era. The Munsill speedboat proved that Farley craftsmanship extended far beyond fishing. But tarpon boats remained the core. That's what the Gulf demanded, and that's what the Farleys knew best.",
+        ],
+        fact: [
+          { label: "Range", value: "16 to 28 feet" },
+          { label: "Pre-WWII wood", value: "Top-grade cypress" },
+          { label: "Post-WWII wood", value: "Honduran & Philippine mahogany" },
+          { label: "Engines", value: "Converted auto engines" },
+        ],
+      },
+      {
+        heading: "The Apprentice Problem",
+        body: [
+          "The Farley method had a fatal flaw: it couldn't be taught from a book. Every technique — reading the water, shaping the half-model, marking the floor, selecting the right plank for the right position on the hull — was transmitted by watching, doing, and correcting. Father to son. Uncle to nephew. Master to apprentice.",
+          "Fred taught Jim and Fred Jr. Jim built the Tina. Don captained boats for FDR's visit. But the next generation came of age in the 1960s, when fiberglass boats were already cheaper, faster to produce, and easier to maintain. There was no economic reason to learn the old way. The market that had sustained the craft — wealthy tarpon anglers who would wait months for a custom wooden hull — was shrinking every year.",
+        ],
+      },
+      {
+        heading: "Fiberglass Trees",
+        body: [
+          "The Farleys closed sometime between 1973 and 1975. Mass-produced fiberglass hulls could be stamped out in days. A Farley boat took months. The economics were impossible.",
+          "The family's position was simple and final. They were wooden boat builders. They had always been wooden boat builders. The apocryphal family quote survives: if God wanted fiberglass boats, He would have made fiberglass trees. They never switched materials. They never compromised the method. They just stopped.",
+          "What was lost wasn't just a business. It was a way of reading water and translating it into wood — a craft practiced by one family, in one town, for sixty years. No manual survived because none had ever been written.",
+        ],
+        pullQuote: {
+          text: "If God wanted fiberglass boats, He would have made fiberglass trees.",
+          attribution: "The Farley family",
+        },
+      },
+      {
+        heading: "What Survives",
+        body: [
+          "Today at Farley Boat Works, volunteers build Port A Skiffs — flat-bottomed plywood fishing boats designed by Doyle Marek, not the V-bottom tarpon boats the Farleys made. The method is different. The materials are different. The boats serve a different purpose.",
+          "But the half-models are still there. The original tools hang on the walls. The Tina — the only complete original Farley hull known to survive — sits on display after a fifty-year journey through five owners and three Texas cities. And every October at the Wooden Boat Festival, families compete to build a boat in three days, working with hand tools and plywood, keeping alive the idea that boats should be built by people who can feel the wood.",
+        ],
+      },
+    ],
+
+    sources: [
+      { label: "PAPHA — History of Farley Boat Works", url: "https://portaransasmuseum.org/history-of-farley-boat-works/" },
+      { label: "Farley Boats — Wikipedia", url: "https://en.wikipedia.org/wiki/Farley_Boats" },
+      { label: "Texas Highways — Farley Boat Works Maritime Museum Expansion", url: "https://texashighways.com/travel-news/farley-boat-works-a-historic-link-to-port-aransas-tarpon-fishing-heyday-is-expanding-into-a-maritime-museum/" },
+      { label: "Authentic Texas — The Fine Art of Wooden Craft", url: "https://issuu.com/authentictexas/docs/at-spring-2020-online/s/10450461" },
+      { label: "Port Aransas South Jetty — Most Historical Boat", url: "https://www.portasouthjetty.com/articles/most-historical-boat-farley-boat-works/" },
+    ],
+
+    visitToday: [
+      { place: "Farley Boat Works", detail: "716 W. Avenue C. Open Tue-Fri 9AM-4PM, Sat 10AM-2PM. See the original tools, half-models, and the Tina on display." },
+      { place: "Wooden Boat Festival", detail: "Annual three-day event at Roberts Point Park every October. Five families compete to build a boat in three days." },
+      { place: "Port Aransas Museum", detail: "A 1940s Farley boat wrecked by Hurricane Celia is on display, along with tarpon-era fishing equipment." },
+    ],
+  },
+
+  "port-aransas-museum-collection": {
+    lede: "The Port Aransas Museum sits inside a house that was ordered from a Sears, Roebuck catalog in 1910 and shipped to the island on a barge. Inside that house: a Third Order Fresnel lens made in 1860s Paris, nearly 40,000 historical photographs, 1920s silent film footage of island life, oral histories recorded on cassette tape, a 60-foot genealogy scroll tracing twenty local families to a single 1854 marriage, whale bones, a jetty train bell, and the mounted tarpon from the first Deep Sea Roundup in 1932. Most of this collection has never been digitized. Almost none of it is accessible online. This is what the island's institutional memory looks like — and why it matters that someone is keeping it.",
+
+    sections: [
+      {
+        heading: "The House Itself",
+        body: [
+          "The building was built from a Sears, Roebuck and Company mail-order kit by Robert A. Mercer, son of Robert Ainsworth Mercer — the original 1855 settler of Mustang Island. It arrived on a barge and was assembled on the island in 1910. The Craftsman-style house later became known as the Neblett house, after Municipal Court Judge Duncan Neblett and former Mayor Georgia Neblett, who lived there for twenty years.",
+          "The house survived the 1919 hurricane and served as a temporary Coast Guard station after the existing station was destroyed. It survived Hurricane Celia in 1970. In 2006, an out-of-town developer bought the property with plans to demolish it and build townhouses. The house was listed on Preservation Texas's Most Endangered Places list in 2007. PAPHA acquired it, spent over $45,000 to relocate it to the Community Center property, and opened the museum in December 2008. Preservation Texas updated its status to a single word: Saved.",
+        ],
+        fact: [
+          { label: "Built", value: "1910 (Sears kit house)" },
+          { label: "Original builder", value: "Robert A. Mercer" },
+          { label: "Museum opened", value: "December 2008" },
+          { label: "Address", value: "408 N. Alister Street" },
+          { label: "Admission", value: "Free" },
+        ],
+      },
+      {
+        heading: "The Fresnel Lens",
+        body: [
+          "The centerpiece of the museum's collection is a Fourth Order Fresnel lens, originally installed in the Lydia Ann Lighthouse from 1878 to 1952. It was made in the 1860s by Augustin Henry Lapaute, a French lens maker whose ancestors had been clockmakers for Louis XVI and Louis XVII. The lens stands two feet four inches tall, a precisely engineered arrangement of glass prisms designed to bend lamplight into a beam visible for miles at sea.",
+          "The Coast Guard decommissioned the lens in 1954 and the city eventually turned it over to the museum after its 2008 opening. In November 2022, Jean-Pierre Jacks — Lapaute's great-great-great-grandson — visited Port Aransas and identified a previously overlooked maker's engraving on the metal base. A lens made in Paris more than 160 years ago, identified by the craftsman's own descendant, displayed in a Sears kit house on a barrier island in Texas.",
+        ],
+        pullQuote: {
+          text: "In November 2022, the lens maker's great-great-great-grandson visited Port Aransas and identified his ancestor's engraving on the metal base.",
+        },
+      },
+      {
+        heading: "38,000 Photos and Counting",
+        body: [
+          "The museum's photo archive has grown from an initial collection of around 8,000 images to nearly 40,000 photographs and documents spanning the late 1800s through the present. The subjects cover everything: fishing, storms, daily life, buildings, people, school children, the jetties, boats, the lighthouse, community events, families, the ferry, surfing history.",
+          "The archive exists because of one person: Mark Creighton. A Cornell graduate who arrived in Port Aransas from the New Jersey shore in 1982, Creighton has been the primary archivist processing every historical photo added to the digital collection. He co-authored Images of America: Port Aransas with founding PAPHA member Dr. John Guthrie Ford. The vast majority of the photos in that book come from his archive.",
+          "In one notable discovery, a Port Aransas resident named Cathy Fulton found twelve photographs dated 1929-1931 in a drawer of an abandoned trailer near Beach Access Road 1. The envelope was labeled \"Port Aransas school children.\" Creighton noted the children may have been from \"rag town,\" a tent community from the late 1920s and 1930s. Twelve photos, hidden for nearly a century, found by chance and brought to the one person on the island who would know what they meant.",
+        ],
+        fact: [
+          { label: "Photos", value: "~40,000" },
+          { label: "Primary archivist", value: "Mark Creighton" },
+          { label: "Time span", value: "Late 1800s to present" },
+          { label: "Online access", value: "Almost none" },
+        ],
+      },
+      {
+        heading: "Film, Tape, and Oral History",
+        body: [
+          "Beyond photographs, the museum holds rare 1920s and 1930s film footage of Port Aransas — silent film showing island life a century ago. The footage is available for viewing at the museum and copies can be purchased, but none of it appears to be accessible online in any form.",
+          "The museum's ongoing Oral Histories Project records video interviews with important islanders — accounts of hurricanes, fishing, local characters, and daily life that exist nowhere else. These recordings sit on cassette tapes and digital video files inside the museum. No podcast. No YouTube channel. No audio archive.",
+        ],
+      },
+      {
+        heading: "The Genealogy Scroll",
+        body: [
+          "One of the museum's most extraordinary objects is a paper scroll approximately sixty feet long, tracing about twenty local families stemming from one 1854 marriage between Franz Joseph Frandolig and Hannah Anna Ellen Schwander. The families include the Moores, the Mathews, the Bujans, and roughly seventeen others. It's a single document that maps the genetic history of an entire island community back to a single union before the Civil War.",
+          "The scroll is not digitized. It is not viewable online. It exists as a physical artifact inside a two-room museum in a house that was shipped to the island on a barge.",
+        ],
+      },
+      {
+        heading: "The Exhibits",
+        body: [
+          "The museum's permanent collection includes a 1940s Farley boat damaged by Hurricane Celia, gyotaku fish prints by Dinah Bowman (whose work is in the Smithsonian's permanent collection), whale bones, and the bronze bell from the Aransas Harbor Terminal Railway — the jetty train that hauled granite blocks 3.5 miles from Central Texas to the jetty construction site from 1892 until the railway closed in 1947.",
+          "Rotating exhibits bring the collection to life. The Tarpon Era exhibit, opened in 2020, chronicles the 1880s through the late 1950s with rods, reels, trophies, and the mounted tarpon from the first Deep Sea Roundup — believed caught by Totsy Millican but entered under her husband North's name. The 2025 exhibit, Historic Families and Characters, includes Port Aransas's Black residents for the first time.",
+        ],
+        pullQuote: {
+          text: "The 2025 exhibit includes Port Aransas's Black residents for the first time.",
+        },
+      },
+      {
+        heading: "The Digital Gap",
+        body: [
+          "The museum's physical collection is extraordinary. Its digital presence is not. Almost none of the 40,000 photos are accessible online. No oral histories are published digitally. The 1920s film footage isn't available in any online form. There's no searchable collection database, no virtual exhibits, no digital storytelling.",
+          "This isn't a criticism — it's a reality of a small nonprofit running on $464,000 a year with a staff of three. PAPHA has grown from a small preservation society founded in 2002 to an organization managing multiple properties with over two million dollars in assets. The digital frontier is the obvious next step. Until then, the only way to see what the island has saved is to walk through the door.",
+        ],
+      },
+    ],
+
+    sources: [
+      { label: "PAPHA — Port Aransas Museum", url: "https://portaransasmuseum.org/" },
+      { label: "Images of America: Port Aransas — Arcadia Publishing", url: "https://www.arcadiapublishing.com/products/9780738579580" },
+      { label: "Port Aransas South Jetty — Museum Coverage" },
+      { label: "Preservation Texas — Most Endangered Places (2007)" },
+      { label: "PAPHA Annual Report / Tax Filings (FY 2024)" },
+    ],
+
+    visitToday: [
+      { place: "Port Aransas Museum", detail: "408 N. Alister Street. Free admission. Thu-Sat 1-5 PM. Docent-led tours. The Fresnel lens, train bell, and Tarpon Era exhibit are all here." },
+      { place: "Farley Boat Works", detail: "716 W. Avenue C. The working boat shop is a PAPHA property — see original Farley tools and the Tina." },
+      { place: "Chapel on the Dunes", detail: "Free PAPHA-led tours on the 1st and 3rd Saturday of each month, 9:15 AM." },
+    ],
+  },
+
+  "mercer-logs": {
+    lede: "On March 1, 1866, Robert Ainsworth Mercer opened a large bound ledger book on Mustang Island and began to write. The Civil War had just ended. Federal troops had spent four years blockading Aransas Pass, burning buildings, and confiscating cattle. The Mercers had abandoned their homes and fled inland. Now they were back, and Robert began recording everything: the weather, the ships, the storms, the births, the funerals, the feuds, the rescues, and the slow return of life to a barrier island that had been occupied and emptied. He wrote in the third person, in ship's log format, always concerned with the weather. His sons John and Edward continued after him. Six bound ledger books survive, spanning 1866 to 1881. They are among the most complete maritime records on the Texas coast.",
+
+    sections: [
+      {
+        heading: "The First Settler's Son",
+        body: [
+          "Robert Ainsworth Mercer was the son of the original 1855 settler of Mustang Island. His father had claimed land on the barrier island before the Civil War, when Aransas Pass was the primary commercial channel connecting the Texas interior to Gulf shipping routes. The Mercers were not wealthy planters or speculators. They were working people who lived by the water and understood that the channel was the island's reason for existing.",
+          "It was Robert A. Mercer who later built the Sears kit house that would become the Port Aransas Museum — ordered from the catalog in 1910 and shipped to the island on a barge. But the logs predate that house by half a century.",
+        ],
+      },
+      {
+        heading: "What the Logs Contain",
+        body: [
+          "The six ledger books read like the operating system of a barrier island. Robert Mercer recorded the coming and going of every ship through Aransas Pass — names, tonnage, cargo, destinations. He documented the weather obsessively, noting wind direction, temperature, and sea conditions. He recorded shipwrecks and rescues. He noted births, deaths, marriages, and funerals.",
+          "The logs also contain something rarer: the texture of daily life on a remote island in the 1860s and 1870s. Family feuds. Parties. The education of children. Place names that no longer exist. Boat names that appear nowhere else in the historical record. The Mercer Logs are not just shipping records — they are the closest thing that exists to a real-time diary of post-Civil War life on the Texas barrier islands.",
+        ],
+        fact: [
+          { label: "First entry", value: "March 1, 1866" },
+          { label: "Span", value: "1866–1881" },
+          { label: "Format", value: "Ship's log, third person" },
+          { label: "Volumes", value: "6 bound ledger books" },
+          { label: "Authors", value: "Robert, John, and Edward Mercer" },
+        ],
+        pullQuote: {
+          text: "He wrote in the third person, in ship's log format, always concerned with the weather.",
+        },
+      },
+      {
+        heading: "After the Blockade",
+        body: [
+          "The timing of the first entry is significant. Federal troops had blockaded Aransas Pass from 1862 to 1866, cutting off the commercial shipping that was the island's economic lifeline. They set fire to buildings and appropriated cattle. The Mercer family — like most island residents — abandoned their homes and relocated inland for the duration of the war.",
+          "When Robert began writing on March 1, 1866, he was documenting a community rebuilding from nothing. The first entries record which ships returned, which families came back, and what condition the island was in. The logs are, in their earliest pages, a record of recolonization — the same families returning to the same barrier island and starting over.",
+        ],
+      },
+      {
+        heading: "Three Generations of Record-Keepers",
+        body: [
+          "Robert Mercer kept the logs through his death in 1875. His sons John and Edward continued the practice, maintaining the same ship's log format their father had established. There is evidence that wives occasionally contributed entries as well, though the primary record-keepers were the Mercer men.",
+          "The handwriting changes. The concerns shift — later entries reflect a more settled community, less focused on survival and more on commerce and civic life. But the format holds. The weather always comes first. The ships always get named. The dead always get recorded.",
+        ],
+      },
+      {
+        heading: "Preservation and Transcription",
+        body: [
+          "Five of the six logs were microfilmed by La Retama Library in Corpus Christi in 1976 — a fortunate act of preservation for documents that had survived over a century of Gulf Coast hurricanes. A sixth log was discovered that same year by a Mercer descendant in Rockport. It awaits transcription.",
+          "The most significant transcription work was done by Dr. John Guthrie Ford, a founding member of PAPHA and retired Trinity University psychology professor. Ford transcribed the first five logs into searchable Microsoft Word documents, transforming handwritten 19th-century cursive into text that historians and researchers could actually work with. PAPHA published selections in hardback, available at the museum gift shop.",
+          "Ford died in 2018. PAPHA now awards the Dr. John Guthrie Ford History Award for historical scholarship — a fitting legacy for a man who spent years translating another man's handwriting into something the future could read.",
+        ],
+        pullQuote: {
+          text: "Dr. Ford spent years translating 19th-century handwriting into something the future could read. PAPHA now awards a history prize in his name.",
+        },
+      },
+    ],
+
+    sources: [
+      { label: "PAPHA — Port Aransas Museum", url: "https://portaransasmuseum.org/" },
+      { label: "Port Aransas Museum Research Files — Mercer Logs Section" },
+      { label: "La Retama Library (Corpus Christi) — 1976 Microfilm" },
+      { label: "Images of America: Port Aransas — Ford and Creighton (Arcadia Publishing, 2011)" },
+    ],
+
+    visitToday: [
+      { place: "Port Aransas Museum", detail: "408 N. Alister Street. Free admission. Thu-Sat 1-5 PM. Published selections of the Mercer Logs available at the gift shop." },
+      { place: "The Mercer House", detail: "The Sears kit house that is now the museum was built by Robert A. Mercer's son — the same family that kept the logs." },
+    ],
+  },
+
+  "red-tide-utmsi": {
+    lede: "In 1935, millions of dead fish washed up along the Texas coast near Port Aransas. A University of Texas zoologist named Elmer Lund traveled to the island to investigate. He built a one-room shack on an old Army Corps of Engineers dock, spent the summer collecting samples, and left with more questions than answers. He went back to Austin convinced that the university needed a permanent marine research station on the coast. Six years later, the Institute of Marine Science opened in Port Aransas — the first permanent marine research station in the state of Texas. The organism that caused the fish kill would not be formally identified for another decade. But the questions it raised built a university.",
+
+    sections: [
+      {
+        heading: "Three Failed Starts",
+        body: [
+          "The idea for a Texas marine laboratory goes back to 1892, when the UT Board of Regents reported to the governor about the need for a coastal research station. In May 1900, the regents allocated $300 for a small facility in Galveston. The catastrophic 1900 Galveston hurricane destroyed it. A second attempt was wiped out by a 1915 tropical storm. The coast kept saying no.",
+          "It took a disaster of a different kind — not a hurricane, but a biological event nobody could explain — to finally make the case that Texas needed eyes on its own water.",
+        ],
+      },
+      {
+        heading: "The 1935 Fish Kill",
+        body: [
+          "The dead fish were primarily menhaden and mullet — millions of them, washed up along miles of Texas coastline. We now know the cause was a red tide: an algal bloom caused by dinoflagellates that deplete oxygen and produce natural toxins. The specific organism, Karenia brevis, would not be formally identified until 1946-47, from a Florida bloom. Records of similar fish kills on the Gulf Coast date back to at least 1530.",
+          "Dr. Elmer Julius Lund was a UT zoologist and biophysicist who had earned his PhD from Johns Hopkins in 1914 and joined UT's faculty in 1926. When he arrived in Port Aransas in 1935, he and colleague Dr. A.H. Wiebe constructed a rough-lumber, one-room laboratory on an old Army Corps of Engineers dock. Lund spent the summer studying the bloom, but his resources were completely inadequate for the scope of the event. He returned to Austin frustrated — and determined.",
+        ],
+        fact: [
+          { label: "Event", value: "Massive fish kill, 1935" },
+          { label: "Cause", value: "Red tide (Karenia brevis)" },
+          { label: "Investigator", value: "Dr. Elmer J. Lund" },
+          { label: "First lab", value: "One-room shack on a dock" },
+        ],
+      },
+      {
+        heading: "Ten Acres from the Mayor",
+        body: [
+          "In 1940, Port Aransas mayor Boone Walker donated ten acres of his own property to the university for a biological laboratory. It was the kind of gesture that defined small-town Texas: a mayor giving away his land because he believed the science mattered and the island was the right place for it.",
+          "With Walker's donation and Board of Regents approval, the Institute of Marine Science was formally established in 1941, with Elmer Lund as its first director. UT purchased twelve acres and relocated an 1890s Army Corps of Engineers building onto the property. That building still stands today — known as Dormitory B, it is reportedly the oldest building on Mustang Island.",
+        ],
+        pullQuote: {
+          text: "The mayor donated ten acres of his own land. A zoologist built a shack on a dock. That's how Texas got its first permanent marine research station.",
+        },
+      },
+      {
+        heading: "Building a Station",
+        body: [
+          "By 1946, UTMSI had become the state's first permanent marine research station. Two permanent frame buildings and a 200-foot pier into Aransas Pass were constructed. Lund established the Publications of the Institute of Marine Science — later renamed Contributions in Marine Science, still published annually. The institute's first scientific publication was a comprehensive study of the marine fishes of Texas by Dr. Gordon Gunter.",
+          "Lund served as director until 1949. He also personally purchased and donated twelve additional acres to expand the facility. He didn't just found the institute — he funded its growth out of his own pocket.",
+        ],
+      },
+      {
+        heading: "Growth on the Gulf",
+        body: [
+          "The decades after Lund built a campus. In 1961, Dr. Howard T. Odum spearheaded construction of the institute's first proper laboratory complex, boat docks, and outdoor seawater ponds. In 1965, Dr. Donald Wohlschlag secured 49 acres of beachfront property, cementing the institute's long-term future. By 1970, additional laboratories, housing, and a boat basin had been built under Dr. Carl Oppenheimer.",
+          "In 1982, researcher Tony Amos founded the Amos Rehabilitation Keep — known locally as the ARK — for sea turtle and marine bird rehabilitation. The ARK became one of the most visible connections between the institute and the community, a place where islanders could bring injured wildlife and watch the recovery.",
+        ],
+        fact: [
+          { label: "Founded", value: "1941" },
+          { label: "First director", value: "Dr. Elmer J. Lund" },
+          { label: "Campus", value: "72 acres on the ship channel" },
+          { label: "Faculty", value: "~16 members" },
+          { label: "Graduate students", value: "~41" },
+        ],
+      },
+      {
+        heading: "Harvey and After",
+        body: [
+          "On August 25, 2017, Hurricane Harvey made landfall with Category 4 winds directly over UTMSI. The damage totaled approximately $45 million. NOAA awarded $11.7 million for recovery. The campus was rebuilt, and the Patton Center for Marine Science Education — renovated with support from NOAA and philanthropists Bobby and Sherri Patton — is now free and open to the public.",
+          "Today the institute sits on 72 acres at the mouth of Aransas Pass. Its research focuses on fish ecology, biogeochemistry, oil spill impacts, microplastics, mariculture, and — circling back to where it all started — harmful algal blooms. The red tides that built the university are still the red tides that keep its scientists up at night.",
+        ],
+        pullQuote: {
+          text: "The red tides that built the university are still the red tides that keep its scientists up at night.",
+        },
+      },
+    ],
+
+    sources: [
+      { label: "UTMSI — Official History", url: "https://utmsi.utexas.edu/about/history" },
+      { label: "PAPHA Winter History Lecture Series — UTMSI Presentation (2024)" },
+      { label: "Port Aransas Museum Research Files — Timeline" },
+      { label: "Texas State Historical Association — Marine Science Institute" },
+    ],
+
+    visitToday: [
+      { place: "Patton Center for Marine Science Education", detail: "Free and open to the public, Tue-Sat. Aquaria, exhibits, and educational programs on the UTMSI campus." },
+      { place: "UTMSI Campus", detail: "750 Channel View Dr. The oldest building on Mustang Island — an 1890s Army Corps building — is still in use as student housing." },
+      { place: "The ARK", detail: "Sea turtle and marine bird rehabilitation center on campus, founded 1982." },
+    ],
+  },
+
+  "port-aransas-ferry": {
+    lede: "Port Aransas is one of the few communities on the Texas coast that you still have to take a boat to reach. The ferry across Aransas Pass has operated in some form since the 1920s — from a one-car side-wheeler named the Mitzi to a state-run fleet of eight vessels that moves millions of vehicles a year, twenty-four hours a day, free of charge. There has never been a bridge. The ferry is the reason Port Aransas still feels like an island. That's not nostalgia. That's infrastructure.",
+
+    sections: [
+      {
+        heading: "Before the Ferry",
+        body: [
+          "Before any organized ferry service, people crossed the Aransas Pass channel by private skiffs, rowboats, and sailboats. The Port Aransas Skiff — the same flat-bottomed plank boat that families used for fishing, duck hunting, and crabbing — doubled as basic transportation across the bays and channels. If you wanted to get to Port Aransas, you found someone with a boat.",
+          "By 1911, a railroad — the Aransas Harbor Terminal Railway — had been built to service Port Aransas via Harbor Island. Before the causeway road was built, a driver would buy a ticket, load their vehicle onto a flatbed rail car, and ride the rails across. When trains weren't running, drivers could use wooden planks laid inside the rails to drive their cars manually along the tracks.",
+        ],
+      },
+      {
+        heading: "The Munsill Ferry",
+        body: [
+          "In 1926, Sam Robertson started the first regular ferry service — a one-hour ride across the channel, four times daily in each direction. But it was Gail Borden Munsill, heir to the Borden dairy fortune, who transformed the crossing.",
+          "In 1928, Munsill purchased the Harbor Island Terminal Railroad improvements and launched ferry service using the side-wheel ferry Mitzi, which carried six automobiles. He converted the railroad trestle into a one-way toll road made of wooden planks. At the opening, over 100 cars headed to Harbor Island. Demand outgrew the Mitzi quickly, so Munsill commissioned a larger ferry — the Rufus R, christened in Galveston with a bottle of Gulf water from Port Aransas. It cost $30,000 and held 18 cars. It burned to the waterline shortly after arriving in October 1931.",
+        ],
+        fact: [
+          { label: "First regular service", value: "1926" },
+          { label: "Munsill era", value: "1928-1934" },
+          { label: "First ferry", value: "Mitzi (6 cars)" },
+          { label: "Toll", value: "$1 each direction" },
+        ],
+        pullQuote: {
+          text: "The Rufus R cost $30,000 and held 18 cars. It burned to the waterline shortly after arriving.",
+        },
+      },
+      {
+        heading: "County Takes Over",
+        body: [
+          "Munsill died in 1934. The operation passed through several hands before Nueces County purchased it for $250,000 in 1951. The county judge told the new superintendent, Melvin Littleton, directly: either he made money, or he was out of a job.",
+          "Littleton served from 1951 to 1982 and transformed the operation. Unable to raise the $1 toll rate, he focused on increasing off-season traffic. Ferry personnel built the Ancel Brundrett Pier, Horace Caldwell Pier, Roberts Point Park pier, and boat launching ramps during off-seasons. Staff created roadside signs promoting Port Aransas along Midwest highway routes. By 1960, Littleton had cut the roundtrip fare in half and relocated ferry landings to shorten the crossing, enabling more trips per vessel.",
+        ],
+      },
+      {
+        heading: "The State Steps In",
+        body: [
+          "On January 1, 1968, the Texas Highway Department — now TxDOT — assumed operation of the ferry system. Tolls were eliminated. The ferry became free.",
+          "Before the transfer, Littleton made sure the ferry account surplus funded new vessels. The state began with six. Today the fleet numbers eight — five holding 28 vehicles each and three holding 20 — all named after former TxDOT executive directors. The current ramp system has been in place since 1986, and a new ferry headquarters building was completed in 2015.",
+        ],
+        fact: [
+          { label: "TxDOT takeover", value: "January 1, 1968" },
+          { label: "Current fleet", value: "8 vessels" },
+          { label: "Capacity", value: "20-28 vehicles each" },
+          { label: "Cost", value: "Free" },
+          { label: "Schedule", value: "24/7, 365 days" },
+        ],
+      },
+      {
+        heading: "Twenty-Four Hours a Day",
+        body: [
+          "The Port Aransas ferry operates twenty-four hours a day, 365 days a year, weather permitting. Between two and six ferries run at any given time depending on traffic and season. The crossing takes roughly ten minutes across a quarter-mile of the Corpus Christi Ship Channel on State Highway 361.",
+          "The numbers are staggering: approximately 2.4 to 3 million vehicles and up to 6 million passengers per year. During Spring Break 2023, 121,201 vehicles and 227,568 passengers crossed in eighteen days. The operation burns roughly 15,000 gallons of diesel per week and employs 136 TxDOT staff, plus contracted flaggers and security guards. It is one of only two state-operated ferry systems in Texas — the other runs between Galveston and Bolivar Peninsula.",
+        ],
+      },
+      {
+        heading: "Why No Bridge",
+        body: [
+          "The Corpus Christi Ship Channel at Aransas Pass handles a constant flow of large freighters, tankers, and offshore rigs. Any fixed crossing would need to be tall enough for commercial shipping — a massive engineering project with a price tag to match. The topic has been studied and debated for decades. A bridge or tunnel has been proposed multiple times.",
+          "Many Port Aransas residents actively oppose a fixed crossing. The ferry acts as a natural throttle on traffic and development. It forces visitors to slow down, to wait, to feel the transition from mainland to island. Removing it would make Port Aransas just another beach town accessible by highway. The ferry is inconvenient by design — and that inconvenience is, for many locals, the point.",
+        ],
+        pullQuote: {
+          text: "The ferry is inconvenient by design — and that inconvenience is, for many locals, the point.",
+        },
+      },
+    ],
+
+    sources: [
+      { label: "Port Aransas Museum Research Files — Timeline" },
+      { label: "TxDOT — Port Aransas Ferry Operations", url: "https://www.txdot.gov/about/districts/corpus-christi/port-aransas-ferry.html" },
+      { label: "Port Aransas South Jetty — Ferry Coverage" },
+      { label: "Texas State Historical Association — Port Aransas" },
+    ],
+
+    visitToday: [
+      { place: "The Ferry", detail: "Free, 24/7. Board from Port Street stacking lanes in Aransas Pass. Crossing takes ~10 minutes. Watch for dolphins in the channel." },
+      { place: "Roberts Point Park", detail: "301 J.C. Barr Blvd. Watch the ferries cross from the park's waterfront, with the ship channel and dolphins in view." },
+    ],
+  },
+
+  "cinnamon-shore-tension": {
+    lede: "In 2007, a developer named Jeff Lamkin opened Cinnamon Shore on Mustang Island — a master-planned beach community modeled after the New Urbanist developments along Florida's Highway 30A. Walkable streets, Gulf Coast architecture, front porches designed to encourage neighborly conversation. The first phase covered 63 acres and 225 homes with a median price of a million dollars. A second phase, announced in 2017, was a $1.3 billion expansion across 300 acres. To some, Cinnamon Shore brought world-class design and investment to a coast that needed it. To others, it represented exactly the kind of development that would price the locals out of their own island. Both sides were right.",
+
+    sections: [
+      {
+        heading: "The Vision",
+        body: [
+          "Lamkin's stated model was the communities along Florida's 30A corridor — Seaside, WaterColor, Rosemary Beach, Alys Beach — but adapted for the Texas coast. The design philosophy was New Urbanist: walkable grid streets instead of cul-de-sacs, mixed housing types instead of uniform subdivisions, a town center with local retailers instead of chain stores. Principal architect Jim Kissling has completed nearly 40 projects at Cinnamon Shore since 2009.",
+          "Cinnamon Shore North took 17 years to build out. As the community filled, Lamkin announced Cinnamon Shore South in June 2017 — 550 homes over 147 acres, with a projected 15-to-20-year buildout. Groundbreaking was October 2018. A third subdivision of 250 homes on the bayside is in conceptual design. When complete, Cinnamon Shore will be one of the largest planned communities on the Texas coast.",
+        ],
+        fact: [
+          { label: "Developer", value: "Jeff Lamkin / Sea Oats Group" },
+          { label: "Phase I", value: "63 acres, ~225 homes" },
+          { label: "Phase II", value: "300 acres, $1.3B" },
+          { label: "Median price", value: "~$1 million" },
+          { label: "Style", value: "New Urbanist" },
+        ],
+      },
+      {
+        heading: "The Community Response",
+        body: [
+          "The defining confrontation between Cinnamon Shore and Port Aransas came over Beach Access Road 1B. The city proposed a new beach access road for emergency vehicle access on the southern end of town. Cinnamon Shore property owners opposed the original route adjacent to their subdivision, citing decreased property values and safety concerns.",
+          "The debate intensified when Cinnamon Shore sent an email urging property owners to register to vote in Port Aransas and support candidates favoring their development plans. Nueces County tax records showed that only 2 of 526 Cinnamon Shore owners had homestead exemptions — meaning only two were full-time residents. The rest were vacation homeowners and investors being asked to vote on issues affecting a community they didn't live in year-round.",
+        ],
+        pullQuote: {
+          text: "Only 2 of 526 Cinnamon Shore owners had homestead exemptions. The rest were vacation homeowners being asked to vote on issues affecting a town they didn't live in.",
+        },
+      },
+      {
+        heading: "What Harvey Changed",
+        body: [
+          "Hurricane Harvey made landfall near Port Aransas on August 25, 2017, with Category 4 winds. An estimated 70% of buildings were damaged. 100% of Port Aransas businesses sustained damage. Total losses reached roughly $1 billion. The building department issued 5,539 permits in the ten months after Harvey — more than three times the normal rate.",
+          "Cinnamon Shore's newer, code-compliant construction sustained minimal damage by comparison. Management brought in 120 generators to prevent mold. This became a marketing point: the resilience of new construction versus the vulnerability of the older housing stock that gave Port Aransas its character.",
+          "The rebuilding period accelerated the transformation. Older, affordable housing — clapboard cottages, modest rentals — was destroyed and replaced by higher-end construction. Harvey didn't create the development pressure. It removed the buildings that had been standing in its way.",
+        ],
+      },
+      {
+        heading: "The Affordability Question",
+        body: [
+          "The tension isn't abstract. Port Aransas is a town where restaurant workers, fishing guides, and shop employees need to live close to their jobs. As property values rise and short-term vacation rentals replace long-term housing, the people who make the island function get pushed further from it.",
+          "Housing has been identified as the number one issue facing the community. Condos damaged by Harvey have been particularly slow to come back. Eight years after the storm, Port Aransas is still rebuilding — but what's being rebuilt doesn't always look like what was there before.",
+        ],
+      },
+      {
+        heading: "The Question That Stays",
+        body: [
+          "Every coastal community faces some version of this. Growth brings investment, tax revenue, and attention. It also brings traffic, higher prices, and a slow erosion of the qualities that attracted people in the first place. Port Aransas is not Seaside. It's a fishing town with a working ship channel, a ferry that throttles traffic, and a museum in a Sears kit house. The question is whether it can absorb a billion dollars in master-planned development and still be the place that locals recognize.",
+          "There is no villain in this story. Lamkin built something architecturally ambitious on a coast that was mostly strip motels and bait shops. The community that pushed back was protecting something real — an island identity built over a century of storms, recoveries, and the stubborn refusal to become somewhere else. Both positions are defensible. The tension between them is the story.",
+        ],
+      },
+    ],
+
+    sources: [
+      { label: "Port Aransas South Jetty — Cinnamon Shore Coverage" },
+      { label: "Texas Architect Magazine — Cinnamon Shore (2020)", url: "https://magazine.texasarchitects.org/2020/05/06/architect-designed-luxury-developments-in-port-aransas-weather-the-storm/" },
+      { label: "Houston Public Media — Harvey and Port Aransas (2018)", url: "https://www.houstonpublicmedia.org/articles/news/2018/08/20/300865/harvey-damaged-100-percent-of-port-aransas-businesses-but-the-island-town-is-working-its-way-back/" },
+      { label: "Sea Oats Group — Cinnamon Shore South Announcement (2017)" },
+    ],
+
+    visitToday: [
+      { place: "Cinnamon Shore", detail: "Drive through on SH 361 south of Port Aransas. The New Urbanist architecture and town center are visible from the road." },
+      { place: "Old Town Port Aransas", detail: "Walk the blocks between Station Street and the harbor. The contrast between original island architecture and new construction tells the story." },
+    ],
+  },
 };
