@@ -1,6 +1,13 @@
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import IslandConditions from "@/components/IslandConditions";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Island Pulse — Live Webcams, Weather & Tides | Port A Local",
+  description:
+    "Live webcams, real-time weather, tides, ship traffic, and surf conditions in Port Aransas, TX. 10 cameras, NOAA data, and MarineTraffic — everything happening on the island right now.",
+};
 
 // === WEBCAM SOURCES ===
 // HDOnTap blocks iframe embedding (X-Frame-Options: DENY), so beach cams link out.
