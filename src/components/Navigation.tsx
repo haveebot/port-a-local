@@ -8,7 +8,9 @@ export default function Navigation() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [exploreOpen, setExploreOpen] = useState(false);
+  const [discoverOpen, setDiscoverOpen] = useState(false);
   const exploreRef = useRef<HTMLDivElement>(null);
+  const discoverRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -16,11 +18,14 @@ export default function Navigation() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Close dropdown when clicking outside
+  // Close dropdowns when clicking outside
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
       if (exploreRef.current && !exploreRef.current.contains(e.target as Node)) {
         setExploreOpen(false);
+      }
+      if (discoverRef.current && !discoverRef.current.contains(e.target as Node)) {
+        setDiscoverOpen(false);
       }
     };
     document.addEventListener("mousedown", onClick);
@@ -30,6 +35,15 @@ export default function Navigation() {
   const portalLinkClass =
     "px-4 py-2 rounded-full text-sm font-medium bg-coral-500/15 text-coral-300 border border-coral-500/25 hover:bg-coral-500/25 hover:border-coral-500/40 transition-all duration-300";
 
+  const dropdownLinkClass =
+    "flex items-center gap-3 px-4 py-3 text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-white/5 transition-colors";
+
+  const mobileLinkClass =
+    "block px-4 py-2.5 text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors";
+
+  const sectionHeaderClass =
+    "px-4 pt-4 pb-1 text-[10px] font-semibold text-navy-500 uppercase tracking-widest";
+
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
@@ -38,7 +52,6 @@ export default function Navigation() {
           : "bg-transparent"
       }`}
     >
-      {/* Persistent gradient — ensures nav links are readable on any background */}
       {!scrolled && (
         <div className="absolute inset-0 bg-gradient-to-b from-navy-950/70 to-transparent pointer-events-none" />
       )}
@@ -55,96 +68,87 @@ export default function Navigation() {
 
           {/* Desktop nav */}
           <div className="hidden md:flex items-center gap-2">
-            {/* Explore dropdown */}
+            {/* Explore dropdown — directory & activities */}
             <div ref={exploreRef} className="relative">
               <button
-                onClick={() => setExploreOpen(!exploreOpen)}
+                onClick={() => { setExploreOpen(!exploreOpen); setDiscoverOpen(false); }}
                 className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-navy-800/50 transition-all duration-300"
               >
                 Explore
                 <svg
                   className={`w-3.5 h-3.5 transition-transform duration-200 ${exploreOpen ? "rotate-180" : ""}`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor" viewBox="0 0 24 24"
                 >
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
 
               {exploreOpen && (
-                <div className="absolute top-full left-0 mt-2 w-52 sm:w-56 rounded-xl bg-navy-900/98 backdrop-blur-md border border-white/10 shadow-xl overflow-hidden">
+                <div className="absolute top-full left-0 mt-2 w-52 rounded-xl bg-navy-900/98 backdrop-blur-md border border-white/10 shadow-xl overflow-hidden">
                   {categories.map((cat) => (
-                    <Link
-                      key={cat.slug}
-                      href={`/${cat.slug}`}
-                      onClick={() => setExploreOpen(false)}
-                      className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-white/5 transition-colors"
-                    >
+                    <Link key={cat.slug} href={`/${cat.slug}`} onClick={() => setExploreOpen(false)} className={dropdownLinkClass}>
                       <span className="text-base">{cat.icon}</span>
                       {cat.name}
                     </Link>
                   ))}
                   <div className="border-t border-white/10">
-                    <Link
-                      href="/services"
-                      onClick={() => setExploreOpen(false)}
-                      className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-white/5 transition-colors"
-                    >
-                      <span className="text-base">🛠️</span>
-                      Services
+                    <Link href="/services" onClick={() => setExploreOpen(false)} className={dropdownLinkClass}>
+                      <span className="text-base">🛠️</span> Services
                     </Link>
-                    <Link
-                      href="/events"
-                      onClick={() => setExploreOpen(false)}
-                      className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-white/5 transition-colors"
-                    >
-                      <span className="text-base">🎪</span>
-                      Events
+                    <Link href="/events" onClick={() => setExploreOpen(false)} className={dropdownLinkClass}>
+                      <span className="text-base">🎪</span> Events
                     </Link>
-                    <Link
-                      href="/fishing-report"
-                      onClick={() => setExploreOpen(false)}
-                      className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-white/5 transition-colors"
-                    >
-                      <span className="text-base">🎣</span>
-                      Fishing Report
+                    <Link href="/fishing-report" onClick={() => setExploreOpen(false)} className={dropdownLinkClass}>
+                      <span className="text-base">🎣</span> Fishing Report
                     </Link>
                   </div>
                 </div>
               )}
             </div>
 
-            <Link
-              href="/history"
-              className="px-4 py-2 rounded-lg text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-navy-800/50 transition-all duration-300"
-            >
-              History
-            </Link>
-            <Link
-              href="/guides"
-              className="px-4 py-2 rounded-lg text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-navy-800/50 transition-all duration-300"
-            >
-              Guides
-            </Link>
-            <Link
-              href="/live"
-              className="px-4 py-2 rounded-lg text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-navy-800/50 transition-all duration-300"
-            >
-              Live
-            </Link>
-            <Link
-              href="/essentials"
-              className="px-4 py-2 rounded-lg text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-navy-800/50 transition-all duration-300"
-            >
-              Essentials
-            </Link>
-            <Link
-              href="/map"
-              className="px-4 py-2 rounded-lg text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-navy-800/50 transition-all duration-300"
-            >
-              Map
-            </Link>
+            {/* Discover dropdown — content & tools */}
+            <div ref={discoverRef} className="relative">
+              <button
+                onClick={() => { setDiscoverOpen(!discoverOpen); setExploreOpen(false); }}
+                className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-navy-800/50 transition-all duration-300"
+              >
+                Discover
+                <svg
+                  className={`w-3.5 h-3.5 transition-transform duration-200 ${discoverOpen ? "rotate-180" : ""}`}
+                  fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
+              {discoverOpen && (
+                <div className="absolute top-full left-0 mt-2 w-52 rounded-xl bg-navy-900/98 backdrop-blur-md border border-white/10 shadow-xl overflow-hidden">
+                  <Link href="/history" onClick={() => setDiscoverOpen(false)} className={dropdownLinkClass}>
+                    <span className="text-base">📖</span> Heritage
+                  </Link>
+                  <Link href="/guides" onClick={() => setDiscoverOpen(false)} className={dropdownLinkClass}>
+                    <span className="text-base">📋</span> Guides
+                  </Link>
+                  <Link href="/where-to-stay" onClick={() => setDiscoverOpen(false)} className={dropdownLinkClass}>
+                    <span className="text-base">🏠</span> Where to Stay
+                  </Link>
+                  <Link href="/essentials" onClick={() => setDiscoverOpen(false)} className={dropdownLinkClass}>
+                    <span className="text-base">🧭</span> Essentials
+                  </Link>
+                  <div className="border-t border-white/10">
+                    <Link href="/live" onClick={() => setDiscoverOpen(false)} className={dropdownLinkClass}>
+                      <span className="text-base">📡</span> Island Pulse
+                    </Link>
+                    <Link href="/map" onClick={() => setDiscoverOpen(false)} className={dropdownLinkClass}>
+                      <span className="text-base">🗺️</span> Map
+                    </Link>
+                    <Link href="/photos" onClick={() => setDiscoverOpen(false)} className={dropdownLinkClass}>
+                      <span className="text-base">📸</span> Photos
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </div>
 
             {/* Gully search pill */}
             <Link
@@ -173,16 +177,10 @@ export default function Navigation() {
             {/* Divider */}
             <div className="w-px h-5 bg-white/15 mx-1" />
 
-            {/* Portal links — uniform pills */}
-            <Link href="/beach" className={portalLinkClass}>
-              🏖️ Beach
-            </Link>
-            <Link href="/rent" className={portalLinkClass}>
-              🛺 Carts
-            </Link>
-            <Link href="/maintenance" className={portalLinkClass}>
-              🔧 Maintenance
-            </Link>
+            {/* Portal links */}
+            <Link href="/beach" className={portalLinkClass}>🏖️ Beach</Link>
+            <Link href="/rent" className={portalLinkClass}>🛺 Carts</Link>
+            <Link href="/maintenance" className={portalLinkClass}>🔧 Maintenance</Link>
           </div>
 
           {/* Mobile toggle */}
@@ -204,7 +202,7 @@ export default function Navigation() {
         {/* Mobile menu */}
         {mobileOpen && (
           <div className="md:hidden pb-4 border-t border-coral-500/20 bg-navy-950/98 backdrop-blur-md">
-            {/* Gully — top of mobile menu */}
+            {/* Gully */}
             <Link
               href="/gully"
               onClick={() => setMobileOpen(false)}
@@ -216,124 +214,36 @@ export default function Navigation() {
               Gully it...
             </Link>
 
-            {/* Categories */}
-            <p className="px-4 pt-3 pb-1 text-[10px] font-semibold text-navy-500 uppercase tracking-widest">
-              Explore
-            </p>
+            {/* Explore */}
+            <p className={sectionHeaderClass}>Explore</p>
             {categories.map((cat) => (
-              <Link
-                key={cat.slug}
-                href={`/${cat.slug}`}
-                onClick={() => setMobileOpen(false)}
-                className="block px-4 py-2.5 text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors"
-              >
-                <span className="mr-2">{cat.icon}</span>
-                {cat.name}
+              <Link key={cat.slug} href={`/${cat.slug}`} onClick={() => setMobileOpen(false)} className={mobileLinkClass}>
+                <span className="mr-2">{cat.icon}</span>{cat.name}
               </Link>
             ))}
-            <Link
-              href="/services"
-              onClick={() => setMobileOpen(false)}
-              className="block px-4 py-2.5 text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors"
-            >
-              🛠️ Services
-            </Link>
-            <Link
-              href="/events"
-              onClick={() => setMobileOpen(false)}
-              className="block px-4 py-2.5 text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors"
-            >
-              🎪 Events
-            </Link>
-            <Link
-              href="/fishing-report"
-              onClick={() => setMobileOpen(false)}
-              className="block px-4 py-2.5 text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors"
-            >
-              🎣 Fishing Report
-            </Link>
-            <Link
-              href="/history"
-              onClick={() => setMobileOpen(false)}
-              className="block px-4 py-2.5 text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors"
-            >
-              📖 History
-            </Link>
-            <Link
-              href="/guides"
-              onClick={() => setMobileOpen(false)}
-              className="block px-4 py-2.5 text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors"
-            >
-              📋 Guides
-            </Link>
-            <Link
-              href="/map"
-              onClick={() => setMobileOpen(false)}
-              className="block px-4 py-2.5 text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors"
-            >
-              🗺️ Map
-            </Link>
-            <Link
-              href="/live"
-              onClick={() => setMobileOpen(false)}
-              className="block px-4 py-2.5 text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors"
-            >
-              📡 Live
-            </Link>
-            <Link
-              href="/essentials"
-              onClick={() => setMobileOpen(false)}
-              className="block px-4 py-2.5 text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors"
-            >
-              🧭 Essentials
-            </Link>
-            <Link
-              href="/where-to-stay"
-              onClick={() => setMobileOpen(false)}
-              className="block px-4 py-2.5 text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors"
-            >
-              🏠 Where to Stay
-            </Link>
-            <Link
-              href="/photos"
-              onClick={() => setMobileOpen(false)}
-              className="block px-4 py-2.5 text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors"
-            >
-              📸 Photos
-            </Link>
-            <Link
-              href="/my-trip"
-              onClick={() => setMobileOpen(false)}
-              className="block px-4 py-2.5 text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors"
-            >
-              ❤️ My Trip
-            </Link>
+            <Link href="/services" onClick={() => setMobileOpen(false)} className={mobileLinkClass}>🛠️ Services</Link>
+            <Link href="/events" onClick={() => setMobileOpen(false)} className={mobileLinkClass}>🎪 Events</Link>
+            <Link href="/fishing-report" onClick={() => setMobileOpen(false)} className={mobileLinkClass}>🎣 Fishing Report</Link>
 
-            {/* Portals */}
-            <p className="px-4 pt-4 pb-1 text-[10px] font-semibold text-navy-500 uppercase tracking-widest">
-              Book Direct
-            </p>
-            <Link
-              href="/beach"
-              onClick={() => setMobileOpen(false)}
-              className="block px-4 py-2.5 text-sm font-medium text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors"
-            >
-              🏖️ Beach Rentals
-            </Link>
-            <Link
-              href="/rent"
-              onClick={() => setMobileOpen(false)}
-              className="block px-4 py-2.5 text-sm font-medium text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors"
-            >
-              🛺 Rent a Cart
-            </Link>
-            <Link
-              href="/maintenance"
-              onClick={() => setMobileOpen(false)}
-              className="block px-4 py-2.5 text-sm font-medium text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors"
-            >
-              🔧 Maintenance
-            </Link>
+            {/* Discover */}
+            <p className={sectionHeaderClass}>Discover</p>
+            <Link href="/history" onClick={() => setMobileOpen(false)} className={mobileLinkClass}>📖 Heritage</Link>
+            <Link href="/guides" onClick={() => setMobileOpen(false)} className={mobileLinkClass}>📋 Guides</Link>
+            <Link href="/where-to-stay" onClick={() => setMobileOpen(false)} className={mobileLinkClass}>🏠 Where to Stay</Link>
+            <Link href="/essentials" onClick={() => setMobileOpen(false)} className={mobileLinkClass}>🧭 Essentials</Link>
+            <Link href="/live" onClick={() => setMobileOpen(false)} className={mobileLinkClass}>📡 Island Pulse</Link>
+            <Link href="/map" onClick={() => setMobileOpen(false)} className={mobileLinkClass}>🗺️ Map</Link>
+            <Link href="/photos" onClick={() => setMobileOpen(false)} className={mobileLinkClass}>📸 Photos</Link>
+
+            {/* My Trip */}
+            <p className={sectionHeaderClass}>My Trip</p>
+            <Link href="/my-trip" onClick={() => setMobileOpen(false)} className={mobileLinkClass}>❤️ Saved Spots</Link>
+
+            {/* Book Direct */}
+            <p className={sectionHeaderClass}>Book Direct</p>
+            <Link href="/beach" onClick={() => setMobileOpen(false)} className="block px-4 py-2.5 text-sm font-medium text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors">🏖️ Beach Rentals</Link>
+            <Link href="/rent" onClick={() => setMobileOpen(false)} className="block px-4 py-2.5 text-sm font-medium text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors">🛺 Rent a Cart</Link>
+            <Link href="/maintenance" onClick={() => setMobileOpen(false)} className="block px-4 py-2.5 text-sm font-medium text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors">🔧 Maintenance</Link>
           </div>
         )}
       </div>
