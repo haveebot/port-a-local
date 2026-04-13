@@ -1,9 +1,10 @@
 import Fuse from "fuse.js";
 import { businesses } from "@/data/businesses";
 import { stories } from "@/data/stories";
+import { archivePhotos } from "@/data/archives";
 
 export interface GullyItem {
-  type: "business" | "story";
+  type: "business" | "story" | "archive";
   slug: string;
   name: string;
   tagline: string;
@@ -49,7 +50,18 @@ const storyItems: GullyItem[] = stories
     readTime: s.readTime,
   }));
 
-export const gullyItems: GullyItem[] = [...businessItems, ...storyItems];
+const archiveItems: GullyItem[] = archivePhotos.map((p) => ({
+  type: "archive" as const,
+  slug: p.id,
+  name: p.title,
+  tagline: p.description.slice(0, 120),
+  description: p.description,
+  tags: p.tags,
+  category: "archives",
+  icon: "🏛️",
+}));
+
+export const gullyItems: GullyItem[] = [...businessItems, ...storyItems, ...archiveItems];
 
 export const gullyFuse = new Fuse(gullyItems, {
   keys: [
@@ -66,7 +78,7 @@ export const gullyFuse = new Fuse(gullyItems, {
 });
 
 export function getGullyHref(item: GullyItem): string {
-  return item.type === "story"
-    ? `/history/${item.slug}`
-    : `/${item.category}/${item.slug}`;
+  if (item.type === "story") return `/history/${item.slug}`;
+  if (item.type === "archive") return `/archives`;
+  return `/${item.category}/${item.slug}`;
 }

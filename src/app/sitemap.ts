@@ -1,6 +1,7 @@
 import { MetadataRoute } from "next";
 import { getAllBusinessSlugs } from "@/data/businesses";
 import { stories } from "@/data/stories";
+import { guides } from "@/data/guides";
 
 const BASE_URL = "https://portaransaslocal.com";
 
@@ -49,6 +50,25 @@ export default function sitemap(): MetadataRoute.Sitemap {
       })),
   ];
 
+  const CONTENT_PAGES = [
+    "gully", "guides", "live", "essentials", "events",
+    "fishing-report", "where-to-stay", "photos", "archives", "map", "my-trip",
+  ];
+
+  const guideEntries: MetadataRoute.Sitemap = guides.map((g) => ({
+    url: `${BASE_URL}/guides/${g.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
+  }));
+
+  const contentEntries: MetadataRoute.Sitemap = CONTENT_PAGES.map((slug) => ({
+    url: `${BASE_URL}/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: "weekly" as const,
+    priority: 0.8,
+  }));
+
   return [
     {
       url: BASE_URL,
@@ -58,6 +78,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     ...portalEntries,
     ...storyEntries,
+    ...contentEntries,
+    ...guideEntries,
     ...categoryEntries,
     ...businessEntries,
   ];
