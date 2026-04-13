@@ -84,19 +84,33 @@ export default function ArchivesPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {photos.map((photo) => (
                     <div key={photo.id} className="bg-white rounded-2xl border border-sand-200 overflow-hidden">
-                      {/* Photo placeholder — links to source */}
+                      {/* Photo — render inline if direct image URL, otherwise link out */}
                       <a
                         href={photo.sourceUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="block bg-navy-100 aspect-[4/3] flex items-center justify-center group hover:bg-navy-200 transition-colors"
+                        className="block bg-navy-950 aspect-[4/3] relative overflow-hidden group"
                       >
-                        <div className="text-center p-6">
-                          <span className="text-4xl block mb-3">🏛️</span>
-                          <p className="text-sm font-medium text-navy-600 group-hover:text-coral-600 transition-colors">
-                            View at {photo.source}
-                          </p>
-                          <p className="text-xs text-navy-400 mt-1">Click to view original →</p>
+                        {photo.imageUrl.match(/\.(jpg|jpeg|png|gif|webp)$/i) ? (
+                          /* eslint-disable-next-line @next/next/no-img-element */
+                          <img
+                            src={photo.imageUrl}
+                            alt={photo.title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            loading="lazy"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center bg-navy-100 group-hover:bg-navy-200 transition-colors">
+                            <div className="text-center p-6">
+                              <span className="text-4xl block mb-3">🏛️</span>
+                              <p className="text-sm font-medium text-navy-600 group-hover:text-coral-600 transition-colors">
+                                View at {photo.source}
+                              </p>
+                            </div>
+                          </div>
+                        )}
+                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-navy-950/80 to-transparent p-3">
+                          <p className="text-[10px] text-navy-200 font-medium">{photo.date} · {photo.source}</p>
                         </div>
                       </a>
 
