@@ -145,6 +145,9 @@ export default function Navigation() {
                     <Link href="/photos" onClick={() => setDiscoverOpen(false)} className={dropdownLinkClass}>
                       <span className="text-base">📸</span> Photos
                     </Link>
+                    <Link href="/archives" onClick={() => setDiscoverOpen(false)} className={dropdownLinkClass}>
+                      <span className="text-base">🏛️</span> Archives
+                    </Link>
                   </div>
                 </div>
               )}
@@ -234,6 +237,7 @@ export default function Navigation() {
             <Link href="/live" onClick={() => setMobileOpen(false)} className={mobileLinkClass}>📡 Island Pulse</Link>
             <Link href="/map" onClick={() => setMobileOpen(false)} className={mobileLinkClass}>🗺️ Map</Link>
             <Link href="/photos" onClick={() => setMobileOpen(false)} className={mobileLinkClass}>📸 Photos</Link>
+            <Link href="/archives" onClick={() => setMobileOpen(false)} className={mobileLinkClass}>🏛️ Archives</Link>
 
             {/* My Trip */}
             <p className={sectionHeaderClass}>My Trip</p>
