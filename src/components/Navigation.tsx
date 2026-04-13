@@ -288,6 +288,20 @@ export default function Navigation() {
               🧭 Essentials
             </Link>
             <Link
+              href="/where-to-stay"
+              onClick={() => setMobileOpen(false)}
+              className="block px-4 py-2.5 text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors"
+            >
+              🏠 Where to Stay
+            </Link>
+            <Link
+              href="/photos"
+              onClick={() => setMobileOpen(false)}
+              className="block px-4 py-2.5 text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors"
+            >
+              📸 Photos
+            </Link>
+            <Link
               href="/my-trip"
               onClick={() => setMobileOpen(false)}
               className="block px-4 py-2.5 text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors"
