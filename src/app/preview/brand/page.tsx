@@ -3,6 +3,7 @@ import Footer from "@/components/Footer";
 import LighthouseMark from "@/components/brand/LighthouseMark";
 import BeamMark from "@/components/brand/BeamMark";
 import SealMark from "@/components/brand/SealMark";
+import FusionMark from "@/components/brand/FusionMark";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -185,18 +186,206 @@ export default function BrandPreviewPage() {
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 text-center">
           <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-coral-500/30 bg-coral-500/10 text-coral-300 text-sm font-medium tracking-wide mb-6">
             <span className="w-1.5 h-1.5 rounded-full bg-coral-400" />
-            Internal — Brand Preview
+            Internal — Brand Preview v2
           </div>
           <h1 className="font-display text-4xl sm:text-5xl font-bold text-sand-50 mb-4">
-            Three lighthouses
+            Round two
           </h1>
           <p className="text-lg text-navy-200 font-light max-w-2xl mx-auto">
-            Each mark anchored in the Lydia Ann. Review at every size, on both
-            fields, as wordmark lockups. Pick one — or pick pieces of each — and
-            we iterate.
+            The fusion of Direction 1 and Direction 3, with deliberate distance
+            from the Bureau&apos;s destination-marketing look. Below the fusion,
+            the three original directions for reference.
           </p>
         </div>
       </section>
+
+      {/* === THE FUSION — recommended direction === */}
+      <section className="py-20 bg-gradient-to-b from-sand-50 to-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="mb-10">
+            <p className="text-coral-500 text-sm font-medium tracking-[0.2em] uppercase mb-2">
+              Direction 4 — Recommended
+            </p>
+            <h2 className="font-display text-3xl sm:text-4xl font-bold text-navy-900 mb-3">
+              The Fusion
+            </h2>
+            <p className="text-base text-navy-500 font-light max-w-2xl leading-relaxed">
+              Full Lydia Ann lighthouse inside a seal. Intentionally distant from
+              the Tourism Bureau&apos;s soft-beach look: serif instead of sans,
+              navy instead of aqua, coordinates instead of city name, maritime
+              chart ticks instead of generic ornament. The beam rays cross the
+              inner ring — the mark refuses to stay in its frame.
+            </p>
+          </div>
+
+          <div className="grid gap-6 mb-10">
+            <SizeRamp background="#f5f0e8" label="Size ramp — light context">
+              {(s) => <FusionMark size={s} variant="light" />}
+            </SizeRamp>
+            <SizeRamp background="#0b1120" label="Size ramp — dark context">
+              {(s) => <FusionMark size={s} variant="dark" />}
+            </SizeRamp>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6 mb-10">
+            <div
+              className="rounded-2xl p-10 flex flex-col items-center justify-center border border-sand-200"
+              style={{ background: "#f5f0e8", minHeight: 320 }}
+            >
+              <FusionMark size={240} variant="light" />
+            </div>
+            <div
+              className="rounded-2xl p-10 flex flex-col items-center justify-center border border-sand-200"
+              style={{ background: "#0b1120", minHeight: 320 }}
+            >
+              <FusionMark size={240} variant="dark" />
+            </div>
+          </div>
+
+          {/* Attitude callouts */}
+          <div className="rounded-2xl bg-white border border-sand-200 p-6 sm:p-8">
+            <p className="text-xs font-semibold tracking-widest uppercase text-coral-500 mb-4">
+              How it differs from the Bureau
+            </p>
+            <dl className="grid sm:grid-cols-2 gap-x-8 gap-y-4 text-sm">
+              <div>
+                <dt className="font-semibold text-navy-900">Typography</dt>
+                <dd className="text-navy-500 font-light">
+                  Georgia serif, black weight — institutional / journalistic, not
+                  destination-marketing
+                </dd>
+              </div>
+              <div>
+                <dt className="font-semibold text-navy-900">Palette</dt>
+                <dd className="text-navy-500 font-light">
+                  Navy + coral. No aqua, no yellow, no sand-beach warmth
+                </dd>
+              </div>
+              <div>
+                <dt className="font-semibold text-navy-900">
+                  Bottom arc: coordinates
+                </dt>
+                <dd className="text-navy-500 font-light">
+                  <span className="font-mono">27°50′N · 97°03′W</span> — tourism
+                  bureaus don&apos;t use coordinates. Specific, nautical, owns
+                  the actual place
+                </dd>
+              </div>
+              <div>
+                <dt className="font-semibold text-navy-900">
+                  12-point compass marks
+                </dt>
+                <dd className="text-navy-500 font-light">
+                  Reads as maritime chart, not decorative tourism seal
+                </dd>
+              </div>
+              <div>
+                <dt className="font-semibold text-navy-900">
+                  Beam breaks the frame
+                </dt>
+                <dd className="text-navy-500 font-light">
+                  The lighthouse rays cross the inner ring. Refuses to stay in
+                  the box.
+                </dd>
+              </div>
+              <div>
+                <dt className="font-semibold text-navy-900">
+                  Coral cardinal breaks
+                </dt>
+                <dd className="text-navy-500 font-light">
+                  Coral interrupts the navy ring at N/S/E/W. Disruption, not
+                  ornament.
+                </dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+      </section>
+
+      {/* === AS A SYSTEM — D1 + Fusion used together === */}
+      <section className="py-20">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="mb-10">
+            <p className="text-coral-500 text-sm font-medium tracking-[0.2em] uppercase mb-2">
+              As a system
+            </p>
+            <h2 className="font-display text-3xl sm:text-4xl font-bold text-navy-900 mb-3">
+              Lighthouse + Fusion, used together
+            </h2>
+            <p className="text-base text-navy-500 font-light max-w-2xl leading-relaxed">
+              D1 (Lighthouse) carries the nav, favicon, and everyday moments.
+              Fusion carries the signature moments — Dispatch footers, About
+              pages, anywhere PAL needs to put its stamp on something.
+            </p>
+          </div>
+
+          {/* Primary + signature, dark context */}
+          <div
+            className="rounded-2xl p-10 sm:p-14 grid md:grid-cols-2 gap-10 items-center border border-sand-200 mb-6"
+            style={{ background: "#0b1120" }}
+          >
+            <div className="flex flex-col gap-6">
+              <p className="text-xs font-semibold tracking-widest uppercase text-coral-300">
+                Primary mark — everyday use
+              </p>
+              <div className="flex items-center gap-5">
+                <LighthouseMark size={96} variant="light" showBeam />
+                <div className="flex flex-col">
+                  <span className="font-display font-bold text-4xl tracking-wide leading-none text-coral-400">
+                    PORT A LOCAL
+                  </span>
+                  <span className="text-[11px] font-medium tracking-[0.3em] uppercase mt-2 text-navy-300">
+                    Port Aransas, TX
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-col gap-6 items-center md:items-end">
+              <p className="text-xs font-semibold tracking-widest uppercase text-coral-300">
+                Signature seal — heritage / editorial
+              </p>
+              <FusionMark size={180} variant="dark" />
+            </div>
+          </div>
+
+          {/* Primary + signature, light context */}
+          <div
+            className="rounded-2xl p-10 sm:p-14 grid md:grid-cols-2 gap-10 items-center border border-sand-200"
+            style={{ background: "#f5f0e8" }}
+          >
+            <div className="flex flex-col gap-6">
+              <p className="text-xs font-semibold tracking-widest uppercase text-navy-400">
+                Primary mark — everyday use
+              </p>
+              <div className="flex items-center gap-5">
+                <LighthouseMark size={96} variant="dark" showBeam />
+                <div className="flex flex-col">
+                  <span className="font-display font-bold text-4xl tracking-wide leading-none text-navy-900">
+                    PORT A LOCAL
+                  </span>
+                  <span className="text-[11px] font-medium tracking-[0.3em] uppercase mt-2 text-navy-500">
+                    Port Aransas, TX
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-col gap-6 items-center md:items-end">
+              <p className="text-xs font-semibold tracking-widest uppercase text-navy-400">
+                Signature seal — heritage / editorial
+              </p>
+              <FusionMark size={180} variant="light" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Divider */}
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
+        <div className="border-t border-sand-200" />
+        <p className="text-center text-xs font-semibold tracking-widest uppercase text-navy-400 mt-6">
+          Original three directions — for reference
+        </p>
+      </div>
 
       <DirectionBlock
         title="Lighthouse"
@@ -230,16 +419,16 @@ export default function BrandPreviewPage() {
         <div className="absolute bottom-0 left-0 right-0 coral-line" />
         <div className="relative max-w-3xl mx-auto px-4 sm:px-6 text-center">
           <h2 className="font-display text-3xl font-bold text-sand-50 mb-4">
-            Pick a direction.
+            Approve the fusion?
           </h2>
           <p className="text-lg text-navy-200 font-light mb-2">
-            Tell me which to carry forward. I&apos;ll iterate proportions, refine
-            details, then wire it through favicon, OG images, navigation, and the
-            dispatch section.
+            If yes, I&apos;ll wire it through the whole system: favicon,
+            navigation, default OG image, dispatch OG template, and a Dispatch
+            footer seal.
           </p>
           <p className="text-sm text-navy-400 font-light">
-            Combinations welcome — e.g., Direction 2 as the nav mark, Direction 3
-            as the Dispatch masthead seal.
+            If you want adjustments — proportions, typography, coordinates
+            removed, different attitude moves — name them.
           </p>
         </div>
       </section>
