@@ -1,15 +1,15 @@
 import { brandedOG, ogSize, ogContentType } from "@/lib/brandedOG";
 
-export const alt = "Port A Dispatch — Editorial, analysis, and reporting";
+export const alt = "Golf cart rentals in Port Aransas";
 export const size = ogSize;
 export const contentType = ogContentType;
 
 export default function Image() {
   return brandedOG({
-    badge: "🧭 Dispatch",
-    title: "Dispatch",
+    badge: "🛺 Rent a Cart",
+    title: "Golf Cart Rentals",
     subtitle:
-      "Editorial, analysis, and reporting on the island as it is — not as it is advertised.",
+      "Reserve a cart delivered right to your door. $10 reservation fee locks it in. Paid through Port A Local.",
     lockupVariant: "standard",
   });
 }

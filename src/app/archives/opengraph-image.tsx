@@ -1,15 +1,15 @@
 import { brandedOG, ogSize, ogContentType } from "@/lib/brandedOG";
 
-export const alt = "Port A Dispatch — Editorial, analysis, and reporting";
+export const alt = "Port Aransas Historical Archives";
 export const size = ogSize;
 export const contentType = ogContentType;
 
 export default function Image() {
   return brandedOG({
-    badge: "🧭 Dispatch",
-    title: "Dispatch",
+    badge: "🏛️ Archives",
+    title: "Historical Archives",
     subtitle:
-      "Editorial, analysis, and reporting on the island as it is — not as it is advertised.",
+      "Public-domain photographs of Port Aransas, 1853–2017. The largest organized digital archive of the island, anywhere.",
     lockupVariant: "standard",
   });
 }

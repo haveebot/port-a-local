@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
+import { emailLayout } from "@/lib/emailLayout";
 
 const getStripe = () => new Stripe(process.env.STRIPE_SECRET_KEY || "", {
   apiVersion: "2026-03-25.dahlia",
@@ -71,43 +72,48 @@ export async function POST(req: NextRequest) {
     const days = parseInt(numDays);
     const total = parseInt(totalPrice);
 
-    const internalHtml = `
-      <h2>✅ Beach Rental PAID — Port A Local</h2>
-      <hr/>
-      <p><strong>Customer:</strong> ${name}</p>
-      <p><strong>Phone:</strong> <a href="tel:${phone}">${phone}</a></p>
-      <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
-      <hr/>
-      <p><strong>Setup:</strong> ${productLabel}</p>
-      <p><strong>Quantity:</strong> ${qty}</p>
-      <p><strong>Start:</strong> ${startFormatted}</p>
-      <p><strong>End:</strong> ${endFormatted}</p>
-      <p><strong>Duration:</strong> ${days} day${days !== 1 ? "s" : ""}</p>
-      <p><strong>Beach Location:</strong> ${deliveryAddress}</p>
-      <hr/>
-      <p><strong>Total Collected:</strong> $${total}</p>
-      <p><strong>Stripe Session:</strong> ${session.id}</p>
-      <p style="color:#888;font-size:12px;">Submitted via Port A Local</p>
-    `;
+    const internalHtml = emailLayout({
+      tone: "alert",
+      preheader: `Beach rental PAID — ${name} — $${total}`,
+      bodyHtml: `
+        <h2 style="margin:0 0 8px 0; font-size:20px; color:#0b1120;">✅ Beach Rental — PAID</h2>
+        <p style="margin:0 0 16px 0; color:#4a5568; font-size:13px;">Payment received via Stripe. Deliver on schedule.</p>
+        <p><strong>Customer:</strong> ${name}</p>
+        <p><strong>Phone:</strong> <a href="tel:${phone}" style="color:#e8656f;">${phone}</a></p>
+        <p><strong>Email:</strong> <a href="mailto:${email}" style="color:#e8656f;">${email}</a></p>
+        <hr style="border:none; border-top:1px solid #e4dccc; margin:16px 0;"/>
+        <p><strong>Setup:</strong> ${productLabel}</p>
+        <p><strong>Quantity:</strong> ${qty}</p>
+        <p><strong>Start:</strong> ${startFormatted}</p>
+        <p><strong>End:</strong> ${endFormatted}</p>
+        <p><strong>Duration:</strong> ${days} day${days !== 1 ? "s" : ""}</p>
+        <p><strong>Beach location:</strong> ${deliveryAddress}</p>
+        <hr style="border:none; border-top:1px solid #e4dccc; margin:16px 0;"/>
+        <p style="font-size:16px;"><strong>Total collected:</strong> $${total}</p>
+        <p style="font-size:11px; color:#8896ab; font-family:monospace; margin-top:12px;">Stripe session: ${session.id}</p>
+      `,
+    });
 
-    const customerHtml = `
-      <h2>Your Beach Setup is Booked — Port A Local</h2>
-      <p>Hi ${name},</p>
-      <p>Payment received! Your beach setup is confirmed. Our local team will have everything ready for you on the sand.</p>
-      <p><strong>Your booking:</strong></p>
-      <ul>
-        <li><strong>Setup:</strong> ${productLabel}</li>
-        <li><strong>Quantity:</strong> ${qty}</li>
-        <li><strong>Start:</strong> ${startFormatted}</li>
-        <li><strong>End:</strong> ${endFormatted}</li>
-        <li><strong>Duration:</strong> ${days} day${days !== 1 ? "s" : ""}</li>
-        <li><strong>Beach Location:</strong> ${deliveryAddress}</li>
-        <li><strong>Total Paid:</strong> $${total}</li>
-      </ul>
-      <p>Questions? Reply to this email and we'll sort it out.</p>
-      <br/>
-      <p>— Port A Local Team</p>
-    `;
+    const customerHtml = emailLayout({
+      preheader: "Your beach setup is booked — we'll have it ready on the sand.",
+      bodyHtml: `
+        <h2 style="margin:0 0 8px 0; font-size:22px; color:#0b1120;">Your beach setup is booked</h2>
+        <p style="margin:0 0 16px 0; color:#4a5568; font-size:14px;">Payment received. Our local team will have everything ready for you on the sand.</p>
+        <p>Hi ${name},</p>
+        <p><strong>Your booking:</strong></p>
+        <ul>
+          <li><strong>Setup:</strong> ${productLabel}</li>
+          <li><strong>Quantity:</strong> ${qty}</li>
+          <li><strong>Start:</strong> ${startFormatted}</li>
+          <li><strong>End:</strong> ${endFormatted}</li>
+          <li><strong>Duration:</strong> ${days} day${days !== 1 ? "s" : ""}</li>
+          <li><strong>Beach location:</strong> ${deliveryAddress}</li>
+          <li><strong>Total paid:</strong> $${total}</li>
+        </ul>
+        <p>Questions? Reply to this email.</p>
+        <p style="margin-top:20px;">— the Port A Local team</p>
+      `,
+    });
 
     console.log(`[Beach/Confirm] Payment confirmed — ${name} | ${productLabel} x${qty} | ${pickupDate} → ${returnDate} | $${total}`);
 

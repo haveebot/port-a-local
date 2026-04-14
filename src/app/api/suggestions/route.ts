@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { promises as fs } from "fs";
 import path from "path";
+import { emailLayout } from "@/lib/emailLayout";
 
 const RESEND_KEY = process.env.RESEND_API_KEY;
 const SUGGESTIONS_FILE = path.join(process.cwd(), "data", "suggestions.json");
@@ -25,14 +26,19 @@ async function sendNotificationEmail(suggestion: Suggestion) {
     ? suggestion.selectedTags.map((t) => `<li>${t}</li>`).join("")
     : "<li><em>None</em></li>";
 
-  const html = `
-    <h2>New Tag Suggestion</h2>
-    <p><strong>Business:</strong> ${suggestion.businessName} (${suggestion.businessSlug})</p>
-    <p><strong>Suggested Tags:</strong></p>
-    <ul>${tagList}</ul>
-    ${suggestion.customNote ? `<p><strong>Custom Note:</strong> ${suggestion.customNote}</p>` : ""}
-    <p><strong>Submitted:</strong> ${new Date(suggestion.timestamp).toLocaleString()}</p>
-  `;
+  const html = emailLayout({
+    preheader: `New tag suggestion for ${suggestion.businessName}`,
+    bodyHtml: `
+      <h2 style="margin:0 0 8px 0; font-size:20px; color:#0b1120;">New Tag Suggestion</h2>
+      <p style="margin:0 0 16px 0; color:#4a5568; font-size:13px;">Review in the admin queue.</p>
+      <p><strong>Business:</strong> ${suggestion.businessName} <span style="color:#8896ab; font-family:monospace; font-size:12px;">(${suggestion.businessSlug})</span></p>
+      <p><strong>Suggested tags:</strong></p>
+      <ul>${tagList}</ul>
+      ${suggestion.customNote ? `<p><strong>Custom note:</strong> ${suggestion.customNote}</p>` : ""}
+      <p style="color:#8896ab; font-size:12px; margin-top:12px;">Submitted ${new Date(suggestion.timestamp).toLocaleString()}</p>
+    `,
+    cta: { label: "Open admin queue", href: "https://theportalocal.com/admin/suggestions" },
+  });
 
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",

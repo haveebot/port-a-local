@@ -1,15 +1,15 @@
 import { brandedOG, ogSize, ogContentType } from "@/lib/brandedOG";
 
-export const alt = "Port A Dispatch — Editorial, analysis, and reporting";
+export const alt = "Gully — Port A's local search engine";
 export const size = ogSize;
 export const contentType = ogContentType;
 
 export default function Image() {
   return brandedOG({
-    badge: "🧭 Dispatch",
-    title: "Dispatch",
+    badge: "🔍 Gully",
+    title: "Just Gully It",
     subtitle:
-      "Editorial, analysis, and reporting on the island as it is — not as it is advertised.",
+      "Port A's local search engine. Every business, every heritage story, every dispatch — one unified index. Built by locals.",
     lockupVariant: "standard",
   });
 }

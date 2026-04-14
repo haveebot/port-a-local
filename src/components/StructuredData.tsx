@@ -35,6 +35,37 @@ export function WebsiteSchema() {
   );
 }
 
+export function OrganizationSchema() {
+  return (
+    <JsonLd
+      data={{
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        name: "Port A Local",
+        alternateName: "PAL",
+        url: "https://theportalocal.com",
+        logo: "https://theportalocal.com/logos/lighthouse-full.svg",
+        description:
+          "Port Aransas's local directory and editorial platform. Heritage, dispatch, wayfinding. Not a tourism bureau.",
+        foundingDate: "2026",
+        email: "hello@theportalocal.com",
+        address: {
+          "@type": "PostalAddress",
+          addressLocality: "Port Aransas",
+          addressRegion: "TX",
+          postalCode: "78373",
+          addressCountry: "US",
+        },
+        geo: {
+          "@type": "GeoCoordinates",
+          latitude: 27.8339,
+          longitude: -97.0611,
+        },
+      }}
+    />
+  );
+}
+
 export function LocalBusinessSchema({ business }: { business: Business }) {
   const data: Record<string, unknown> = {
     "@context": "https://schema.org",

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
+import { emailLayout } from "@/lib/emailLayout";
 
 const getStripe = () => new Stripe(process.env.STRIPE_SECRET_KEY || "", {
   apiVersion: "2026-03-25.dahlia",
@@ -82,42 +83,45 @@ export async function POST(req: NextRequest) {
     // --- Priority SMS to John — marked clearly as paid dispatch ---
     const smsPriority = `🚨 PRIORITY DISPATCH — PORT A LOCAL\n$${dispatchFee} paid. Respond within 2-4 hours.\n\nFrom: ${name}\nPhone: ${phone}\nAddress: ${address}\nService: ${serviceType}\n\n"${description?.slice(0, 100)}${(description?.length || 0) > 100 ? "..." : ""}"\n\nPreferred contact: ${contactPref}`;
 
-    // --- Priority email to John ---
-    const vendorHtml = `
-      <h2 style="color:#e55a2b;">🚨 PRIORITY DISPATCH — $${dispatchFee} PAID</h2>
-      <p style="font-size:16px;font-weight:bold;">Respond within 2-4 hours (7AM–8PM window)</p>
-      <hr/>
-      <p><strong>Customer:</strong> ${name}</p>
-      <p><strong>Phone:</strong> <a href="tel:${phone}">${phone}</a></p>
-      <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
-      <p><strong>Preferred Contact:</strong> ${contactPref}</p>
-      <hr/>
-      <p><strong>Property Address:</strong> ${address}</p>
-      <p><strong>Service Type:</strong> ${serviceType}</p>
-      <p><strong>Urgency:</strong> ${urgency}</p>
-      <p><strong>Description:</strong></p>
-      <p style="background:#fff3f0;padding:12px;border-radius:8px;border-left:4px solid #e55a2b;">${description}</p>
-      <hr/>
-      <p><strong>Dispatch Fee Collected:</strong> $${dispatchFee}</p>
-      <p><strong>Stripe Session:</strong> ${session.id}</p>
-      <p style="color:#888;font-size:12px;">Submitted via Port A Local</p>
-    `;
+    const vendorHtml = emailLayout({
+      tone: "alert",
+      preheader: `PRIORITY DISPATCH — $${dispatchFee} PAID — ${name}`,
+      bodyHtml: `
+        <h2 style="margin:0 0 8px 0; font-size:20px; color:#e8656f;">🚨 Priority Dispatch — $${dispatchFee} PAID</h2>
+        <p style="margin:0 0 16px 0; color:#0b1120; font-size:14px; font-weight:600;">Respond within 2–4 hours (7 AM–8 PM window)</p>
+        <p><strong>Customer:</strong> ${name}</p>
+        <p><strong>Phone:</strong> <a href="tel:${phone}" style="color:#e8656f;">${phone}</a></p>
+        <p><strong>Email:</strong> <a href="mailto:${email}" style="color:#e8656f;">${email}</a></p>
+        <p><strong>Preferred contact:</strong> ${contactPref}</p>
+        <hr style="border:none; border-top:1px solid #e4dccc; margin:16px 0;"/>
+        <p><strong>Property:</strong> ${address}</p>
+        <p><strong>Service:</strong> ${serviceType}</p>
+        <p><strong>Urgency:</strong> ${urgency}</p>
+        <p><strong>Description:</strong></p>
+        <p style="background:#fdecee; padding:12px; border-radius:8px; border-left:4px solid #e8656f;">${description}</p>
+        <hr style="border:none; border-top:1px solid #e4dccc; margin:16px 0;"/>
+        <p style="font-size:16px;"><strong>Dispatch fee collected:</strong> $${dispatchFee}</p>
+        <p style="font-size:11px; color:#8896ab; font-family:monospace; margin-top:12px;">Stripe session: ${session.id}</p>
+      `,
+    });
 
-    // --- Customer confirmation ---
-    const customerHtml = `
-      <h2>Priority Dispatch Confirmed — Port A Local</h2>
-      <p>Hi ${name},</p>
-      <p>Your $${dispatchFee} priority dispatch fee has been received. Our local service team has been notified and will be in touch within <strong>2-4 hours</strong> (7AM–8PM).</p>
-      <p><strong>Your request:</strong></p>
-      <ul>
-        <li><strong>Service:</strong> ${serviceType}</li>
-        <li><strong>Property:</strong> ${address}</li>
-        <li><strong>Priority Dispatch Fee:</strong> $${dispatchFee}</li>
-      </ul>
-      <p>Questions? Reply to this email or call us directly.</p>
-      <br/>
-      <p>— Port A Local Team</p>
-    `;
+    const customerHtml = emailLayout({
+      preheader: `Priority dispatch confirmed — you'll hear back within 2–4 hours.`,
+      bodyHtml: `
+        <h2 style="margin:0 0 8px 0; font-size:22px; color:#0b1120;">Priority dispatch confirmed</h2>
+        <p style="margin:0 0 16px 0; color:#4a5568; font-size:14px;">Our local service team has been notified. You will hear back within <strong>2–4 hours</strong> (7 AM–8 PM).</p>
+        <p>Hi ${name},</p>
+        <p>Your $${dispatchFee} priority dispatch fee has been received.</p>
+        <p><strong>Your request:</strong></p>
+        <ul>
+          <li><strong>Service:</strong> ${serviceType}</li>
+          <li><strong>Property:</strong> ${address}</li>
+          <li><strong>Priority dispatch fee:</strong> $${dispatchFee}</li>
+        </ul>
+        <p>Questions? Reply to this email or give us a call.</p>
+        <p style="margin-top:20px;">— the Port A Local team</p>
+      `,
+    });
 
     const customerSMS = `Port A Local: Priority dispatch confirmed! $${dispatchFee} received. Our team will contact you within 2-4 hours about your ${serviceType} request at ${address}.`;
 

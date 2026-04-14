@@ -1,15 +1,15 @@
 import { brandedOG, ogSize, ogContentType } from "@/lib/brandedOG";
 
-export const alt = "Port A Dispatch — Editorial, analysis, and reporting";
+export const alt = "Port Aransas Curated Guides";
 export const size = ogSize;
 export const contentType = ogContentType;
 
 export default function Image() {
   return brandedOG({
-    badge: "🧭 Dispatch",
-    title: "Dispatch",
+    badge: "📋 Guides",
+    title: "Curated Guides",
     subtitle:
-      "Editorial, analysis, and reporting on the island as it is — not as it is advertised.",
+      "Happy Hour, Pet-Friendly, Date Night, Seafood, and more. Honest shortlists built from the directory — not promoted placements.",
     lockupVariant: "standard",
   });
 }

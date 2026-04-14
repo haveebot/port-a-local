@@ -1,15 +1,15 @@
 import { brandedOG, ogSize, ogContentType } from "@/lib/brandedOG";
 
-export const alt = "Port A Dispatch — Editorial, analysis, and reporting";
+export const alt = "Services on Port A Local";
 export const size = ogSize;
 export const contentType = ogContentType;
 
 export default function Image() {
   return brandedOG({
-    badge: "🧭 Dispatch",
-    title: "Dispatch",
+    badge: "🛠️ Services",
+    title: "Island Services",
     subtitle:
-      "Editorial, analysis, and reporting on the island as it is — not as it is advertised.",
+      "Book direct through PAL: golf cart rentals, beach setups, property maintenance. Plus vetted service providers from the directory.",
     lockupVariant: "standard",
   });
 }

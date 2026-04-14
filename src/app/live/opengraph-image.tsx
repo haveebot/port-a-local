@@ -1,15 +1,15 @@
 import { brandedOG, ogSize, ogContentType } from "@/lib/brandedOG";
 
-export const alt = "Port A Dispatch — Editorial, analysis, and reporting";
+export const alt = "Island Pulse — live conditions and webcams in Port Aransas";
 export const size = ogSize;
 export const contentType = ogContentType;
 
 export default function Image() {
   return brandedOG({
-    badge: "🧭 Dispatch",
-    title: "Dispatch",
+    badge: "📡 Island Pulse",
+    title: "Live from the Island",
     subtitle:
-      "Editorial, analysis, and reporting on the island as it is — not as it is advertised.",
+      "Webcams, tides, weather, marine traffic. Real-time conditions on Mustang Island.",
     lockupVariant: "standard",
   });
 }

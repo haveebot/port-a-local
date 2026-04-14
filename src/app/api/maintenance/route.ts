@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { emailLayout } from "@/lib/emailLayout";
 
 const JOHN_PHONE = process.env.JOHN_BROWN_PHONE || "(361) 455-8606";
 const JOHN_EMAIL = process.env.JOHN_BROWN_EMAIL || "";
@@ -88,40 +89,40 @@ export async function POST(req: NextRequest) {
   // --- SMS to John Brown ---
   const smsBody = `PORT A LOCAL — New Maintenance Request\n${urgencyText}\n\nFrom: ${name}\nPhone: ${phone}\nAddress: ${address}\nService: ${serviceType}\n\n"${description.slice(0, 120)}${description.length > 120 ? "..." : ""}"\n\nReply or call customer directly.`;
 
-  // --- Email to John Brown ---
-  const vendorHtml = `
-    <h2>New Maintenance Request — Port A Local</h2>
-    <p><strong>Urgency:</strong> ${urgencyText}</p>
-    <hr/>
-    <p><strong>Customer:</strong> ${name}</p>
-    <p><strong>Phone:</strong> <a href="tel:${phone}">${phone}</a></p>
-    <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
-    <p><strong>Preferred Contact:</strong> ${contactPref}</p>
-    <hr/>
-    <p><strong>Property Address:</strong> ${address}</p>
-    <p><strong>Service Type:</strong> ${serviceType}</p>
-    <p><strong>Description:</strong></p>
-    <p style="background:#f5f5f5;padding:12px;border-radius:8px;">${description}</p>
-    <hr/>
-    <p style="color:#888;font-size:12px;">Submitted via Port A Local — portalocal.com</p>
-  `;
+  const vendorHtml = emailLayout({
+    tone: "alert",
+    preheader: `Maintenance request — ${urgencyText} — ${name}`,
+    bodyHtml: `
+      <h2 style="margin:0 0 8px 0; font-size:20px; color:#0b1120;">New Maintenance Request</h2>
+      <p style="margin:0 0 16px 0; color:#4a5568; font-size:13px;"><strong>Urgency:</strong> ${urgencyText}</p>
+      <p><strong>Customer:</strong> ${name}</p>
+      <p><strong>Phone:</strong> <a href="tel:${phone}" style="color:#e8656f;">${phone}</a></p>
+      <p><strong>Email:</strong> <a href="mailto:${email}" style="color:#e8656f;">${email}</a></p>
+      <p><strong>Preferred contact:</strong> ${contactPref}</p>
+      <hr style="border:none; border-top:1px solid #e4dccc; margin:16px 0;"/>
+      <p><strong>Property:</strong> ${address}</p>
+      <p><strong>Service:</strong> ${serviceType}</p>
+      <p><strong>Description:</strong></p>
+      <p style="background:#f5f0e8; padding:12px; border-radius:8px; border:1px solid #e4dccc;">${description}</p>
+    `,
+  });
 
-  // --- Confirmation email to customer ---
-  const customerHtml = `
-    <h2>We received your maintenance request!</h2>
-    <p>Hi ${name},</p>
-    <p>Thank you for reaching out through Port A Local. We've received your request and our local service team is reviewing the details.</p>
-    <p><strong>Your request summary:</strong></p>
-    <ul>
-      <li><strong>Service:</strong> ${serviceType}</li>
-      <li><strong>Property:</strong> ${address}</li>
-      <li><strong>Urgency:</strong> ${urgencyText}</li>
-    </ul>
-    <p>Someone will be in touch with you soon to confirm availability and schedule your service.</p>
-    <br/>
-    <p>— Port A Local Team</p>
-    <p style="color:#888;font-size:12px;">theportalocal.com</p>
-  `;
+  const customerHtml = emailLayout({
+    preheader: "We received your maintenance request.",
+    bodyHtml: `
+      <h2 style="margin:0 0 8px 0; font-size:22px; color:#0b1120;">We received your maintenance request</h2>
+      <p style="margin:0 0 16px 0; color:#4a5568; font-size:14px;">Our local service team is reviewing the details. Someone will be in touch shortly to confirm availability and schedule the work.</p>
+      <p>Hi ${name},</p>
+      <p><strong>Your request:</strong></p>
+      <ul>
+        <li><strong>Service:</strong> ${serviceType}</li>
+        <li><strong>Property:</strong> ${address}</li>
+        <li><strong>Urgency:</strong> ${urgencyText}</li>
+      </ul>
+      <p>Questions? Reply to this email.</p>
+      <p style="margin-top:20px;">— the Port A Local team</p>
+    `,
+  });
 
   // SMS confirmation to customer
   const customerSMS = `Port A Local: We received your maintenance request for "${serviceType}" at ${address}. Our team is reviewing it and will be in touch shortly.`;
