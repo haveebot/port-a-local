@@ -1338,4 +1338,251 @@ export const storyContent: Record<string, StoryContent> = {
       { place: "Old Town Port Aransas", detail: "Walk the blocks between Station Street and the harbor. The contrast between original island architecture and new construction tells the story." },
     ],
   },
+
+  "tarpon-inn": {
+    lede: "The Tarpon Inn was never meant to be a hotel. In 1886, when contractors began the first serious attempt to jetty the shifting sandbars of Aransas Pass, they needed somewhere to house the workers. They used what they had: surplus lumber from a Civil War Army barracks, nailed together fast on a piece of Mustang Island dry enough to stand on. When the jetty work slowed and the workers left, the building stayed. Someone put cots and a sign on it and called it a hotel. Over the next hundred and forty years, that hotel became the single most important building in American tarpon fishing — a place where presidents signed scales, where the first sport-fishing club on the Gulf held its meetings, and where a hurricane in 2017 ripped the roof off but somehow left the scales on the wall.",
+
+    sections: [
+      {
+        heading: "Barracks Wood and a Sign",
+        body: [
+          "The timing of the Tarpon Inn's founding is not a coincidence. The first federal jetty project at Aransas Pass had begun in 1880, and by the mid-1880s work was accelerating. Men needed a place to sleep. The building that went up in 1886 was simple — long, low, wooden, built from whatever could be shipped in cheaply. It sat near the mouth of the pass with nothing much around it.",
+          "When the first jetty attempt stalled in 1889, the workers cleared out. The barracks building was repurposed. It began taking in the men who were starting to arrive on Mustang Island for a different reason entirely: fishing.",
+        ],
+        fact: [
+          { label: "Year built", value: "1886" },
+          { label: "Original purpose", value: "Barracks for jetty workers" },
+          { label: "Material", value: "Surplus Civil War Army lumber" },
+          { label: "Now on wall", value: "7,000+ signed tarpon scales" },
+        ],
+      },
+      {
+        heading: "The Silver King's Clubhouse",
+        body: [
+          "By the 1890s, Port Aransas — still called Tarpon at the time — was becoming the premier tarpon fishing destination in the United States. The Tarpon Inn sat at the center of it. Guests breakfasted there before heading out with their guides, and the Inn packed their lunches. They came back at sunset to clean up and eat dinner in the dining room, the day's scales already being signed and tacked to the wall.",
+          "The tradition of mounting signed scales began informally and never stopped. Anglers who had landed a tarpon would write their name and the date on a scale the size of a silver dollar and give it to the Inn. By the mid-twentieth century, the walls were covered. Today there are more than seven thousand of them — a shingled mural of every angler who mattered on the Texas coast, the oldest dating back to the 1880s.",
+        ],
+        pullQuote: {
+          text: "Seven thousand signed scales on the walls — a shingled mural of every angler who mattered on the Texas coast.",
+        },
+      },
+      {
+        heading: "Ed Cotter and the First Powerboat",
+        body: [
+          "The Tarpon Inn's most consequential owner was Ed Cotter, a boatman whose name still hangs on a street running through town. Around 1900, Colonel Ned Green of New York — a wealthy New York sportsman — bought a powerboat and paid Cotter to travel to Chicago to learn how to operate its Packard engine, which burned naphtha. By about 1904, Cotter had begun using the motorboat to tow his skiffs out to the fishing grounds. It is believed to be the first use of a motorized vessel for sport fishing anywhere in the United States.",
+          "Cotter bought the Tarpon Inn and ran it for years. The building became not just a hotel but the headquarters of a fishing economy — the place where guides were hired, where the Tarpon Club held its meetings, where the Hooper Trophy was awarded.",
+        ],
+      },
+      {
+        heading: "The Scales That Matter",
+        body: [
+          "Two scales on the lobby wall are more valuable than the rest combined. One is from President Franklin D. Roosevelt's five-foot, seventy-seven-pound tarpon, caught at 3:27 PM on May 8, 1937, off the Potomac with Barney Farley aboard. FDR signed it.",
+          "The other is from a tarpon landed by Dr. Stirling E. Russ on July 13, 1931 — seven feet long and one hundred sixty-eight pounds. The fish itself, not just the scale, is mounted on the wall of the Inn. It was the kind of catch that made the Port Aransas legend.",
+          "Aimee Semple McPherson — the Los Angeles evangelist and radio personality of the 1920s and 1930s — has a signed scale on the wall too. So do dozens of oilmen, governors, Texas Rangers, and the wives of all of them.",
+        ],
+      },
+      {
+        heading: "What Harvey Took and Didn't",
+        body: [
+          "On August 25, 2017, Hurricane Harvey made landfall near Port Aransas as a Category 4 storm. Roughly seventy percent of the town's buildings were damaged. One hundred percent of businesses sustained damage. The Tarpon Inn, at the center of it all, lost portions of its roof and sections of its upper structure.",
+          "The scales survived. Staff had taken precautions, and the lobby walls held. The Inn closed, then reopened after roughly eight months of restoration. Today it still operates — rooms upstairs, the scales downstairs, and the Silver King Bar at the back. It is not the oldest hotel in Texas, but it is almost certainly the most photographed interior on the Gulf Coast.",
+        ],
+      },
+    ],
+
+    sources: [
+      { label: "Port Aransas Museum Research Files — The Tarpon Era" },
+      { label: "Tarpon Inn — History", url: "https://www.thetarponinn.com/about-us" },
+      { label: "Wikipedia — Tarpon Inn", url: "https://en.wikipedia.org/wiki/Tarpon_Inn" },
+      { label: "Texas State Historical Association — Port Aransas", url: "https://www.tshaonline.org/handbook/entries/port-aransas-tx" },
+      { label: "Port Aransas Museum Research Files — Port Aransas Timeline" },
+    ],
+
+    visitToday: [
+      { place: "The Tarpon Inn Lobby", detail: "200 E. Cotter Ave. Walk in and look at the walls. The scales are free to see — you don't have to be a guest. The FDR scale is in a glass case." },
+      { place: "Silver King Bar", detail: "Inside the Inn. Mounted tarpon on the wall, original woodwork, Gulf view from the upstairs porch." },
+      { place: "Cotter Avenue", detail: "The street in front of the Inn. Named for Ed Cotter, the Inn's most important owner and the man who invented motorboat sport fishing in America." },
+    ],
+  },
+
+  "port-aransas-jetties": {
+    lede: "Aransas Pass was, for most of recorded history, impossible. The gap between Mustang Island and San José Island was a shallow, shifting mess of sandbars that silted up after every storm and rearranged itself with the tides. Shallow-draft ships could sometimes squeeze through. Deep-draft ships could not. The tarpon that made this coast famous and the ship channel that would eventually make it rich both depended on one thing: someone figuring out how to hold the pass open. It took thirty-nine years, three separate attempts, and an enormous amount of Hill Country granite to finally do it.",
+
+    sections: [
+      {
+        heading: "Phase One: The Brush Mattress (1880–1885)",
+        body: [
+          "In 1879, Congress passed a resolution authorizing the deepening of Aransas Pass. In May of 1880, Samuel M. Mansfield began the work. The design that emerged — driven by available budget and limited engineering precedent on this coast — was a five-thousand-five-hundred-foot jetty built from a brush mattress foundation topped with stone.",
+          "The logic was that the brush would settle into the sand and provide a stable base. It did not. The mattress decayed, the stone slumped, and by 1885 the project was clearly failing. In 1889, the federal government gave up and abandoned it.",
+        ],
+      },
+      {
+        heading: "Phase Two: The Bankrupt Company (1890–1897)",
+        body: [
+          "When the federal government left, local entrepreneurs formed the Aransas Pass Harbor Company to pick up the work. They raised private capital and began building a wooden-cased jetty system, again topped with rock. The wooden casings failed in the surf, and the company switched mid-project to an all-rock design. That was more expensive. The company ran through its money and declared bankruptcy in 1897.",
+          "After two attempts and seventeen years, Aransas Pass was still not reliably open to deep-water shipping. Federal and private dollars had both tried and both failed.",
+        ],
+      },
+      {
+        heading: "Phase Three: The Army Corps and the Granite (1899–1919)",
+        body: [
+          "In 1899, Congress authorized the Army Corps of Engineers to return and finish the job. This time the design was right and the execution was relentless. The north jetty came first, built out from San José Island. The south jetty followed, extending from Mustang Island.",
+          "The stone was the right stone. Enormous granite blocks — many weighing several tons — were quarried from the Llano Uplift in Central Texas and railed down to the coast. A Rockport-based contracting firm, D.M. Picton, handled much of the jetty work. Workers came from all over, including European immigrants: one named Matteo Bujan arrived from Croatia and stayed in Port Aransas, his descendants still in town.",
+          "In 1907 the north jetty was nearing completion and the south was authorized. In 1911 the work was considered substantially complete. In 1919, after another eight years of extension and reinforcement, both jetties were fully finished.",
+        ],
+        pullQuote: {
+          text: "Enormous granite blocks, many weighing several tons, quarried from the Llano Uplift and railed down to the coast.",
+        },
+      },
+      {
+        heading: "The Railway That Hauled the Rock",
+        body: [
+          "None of it would have been possible without a single-purpose railroad. The Aransas Harbor Terminal Railway was chartered on June 13, 1892, specifically to haul granite from mainland quarries to the pass. Railroad flatcars brought the stone to the shore of Redfish Bay. From there, the Terminal Railway's trestle carried the rock three and a half miles over open water, where it was transferred to barges, towed out into the Gulf, and dumped into position.",
+          "The railway operated for over fifty years. It closed in 1947. Almost nothing of it remains visible today — a few pilings, some rotted trestle wood in low tide. But the bronze bell from its steam engine sits in the Port Aransas Museum. Visitors are encouraged to touch it.",
+        ],
+        fact: [
+          { label: "Railway chartered", value: "June 13, 1892" },
+          { label: "Trestle length", value: "3.5 miles over Redfish Bay" },
+          { label: "Closed", value: "1947" },
+          { label: "Granite source", value: "Llano Uplift, Central Texas" },
+          { label: "Lead contractor", value: "D.M. Picton firm of Rockport" },
+        ],
+      },
+      {
+        heading: "What the Jetties Built",
+        body: [
+          "A reliable deep-water channel at Aransas Pass changed everything. Within a decade of the jetties' completion, Port Aransas had become a serious sport fishing destination — the Tarpon Era was already underway but now had the infrastructure to support it. By the 1940s, Port Aransas was the twelfth-largest oil shipping port in the United States. Harbor Island, just inside the pass, was lined with refineries and tanker berths.",
+          "Modern tourism depends on the jetties too. The south jetty walk is the single most photographed feature on the island. Surfers ride the breaks that form against the rock. Fishermen work the channel. Dolphins chase shrimp boats into the pass. None of that happens without thirty-nine years of failed attempts followed by twenty years of granite.",
+        ],
+      },
+    ],
+
+    sources: [
+      { label: "Port Aransas Museum Research Files — Port Aransas Timeline" },
+      { label: "Port Aransas South Jetty — Building the Jetties", url: "https://www.portasouthjetty.com/articles/building-the-jetties/" },
+      { label: "Texas State Historical Association — Aransas Harbor Terminal Railway", url: "https://www.tshaonline.org/handbook/entries/aransas-harbor-terminal-railway" },
+      { label: "PortAransas.com — The Port Aransas Jetties", url: "https://portaransas.com/the-port-aransas-jetties/" },
+      { label: "Port Aransas Preservation and Historical Association — Taming the Channel Exhibit", url: "https://portaransasmuseum.org/exhibits/taming-the-channel-the-pass-must-be-caught/" },
+    ],
+
+    visitToday: [
+      { place: "South Jetty Walk", detail: "Accessible from the end of Cotter Avenue. Walk out on the granite blocks — many of them more than a century old. Dolphins, shrimp boats, and the ship channel are all right there." },
+      { place: "Port Aransas Museum — Jetty Train Bell", detail: "101 E. Brundrett Ave. The bronze bell from the Aransas Harbor Terminal Railway's steam engine. You're encouraged to touch it." },
+      { place: "Horace Caldwell Pier", detail: "Just north of the south jetty. Best angle to watch the pass, the jetty tip, and the ships moving through." },
+    ],
+  },
+
+  "ropesville-to-port-aransas": {
+    lede: "Most towns pick a name and keep it. Port Aransas picked three. In 1888 the first post office on Mustang Island opened under the name Ropesville. Eight years later it was renamed Tarpon. Fifteen years after that, Port Aransas. Three names in twenty-three years — each one an argument about what the place was becoming, and a clue about what the people living there wanted it to be.",
+
+    sections: [
+      {
+        heading: "Ropesville (1888)",
+        body: [
+          "On July 12, 1888, the United States Postal Service authorized a post office at Ropesville, Texas. The postmaster of record was William R. Roberts. The name's origin is a small mystery: no surviving document explains it. It may have been named for a local figure, or for a rope-related industry (possibly the maritime lines used in pass work), or for a person whose connection to the island has been lost. Historians have looked and haven't found it.",
+          "What is known is what Ropesville was: a scatter of houses, a handful of fishing families, and the first federal recognition that anyone lived out here at all. The first federal jetty attempt had started eight years earlier. The island was beginning to register with the outside world.",
+        ],
+        fact: [
+          { label: "Ropesville post office established", value: "July 12, 1888" },
+          { label: "First postmaster", value: "William R. Roberts" },
+          { label: "Origin of name", value: "Unknown" },
+        ],
+      },
+      {
+        heading: "Tarpon (1896)",
+        body: [
+          "On July 17, 1896, the postmaster — now Emma A. Roberts — changed the town's name to Tarpon. The reason was no mystery at all. Sport fishing for Megalops atlanticus had become the defining economic activity of the island. Anglers from New York, Chicago, and London were booking passage to the Texas coast specifically to chase the Silver King. The Tarpon Inn was already ten years old. The Tarpon Club would follow.",
+          "Renaming the town after the fish was both a marketing decision and an honest description. What was Ropesville, really? Nobody could quite remember. What was Tarpon? That, everyone could agree on.",
+        ],
+      },
+      {
+        heading: "Port Aransas (1910–1911)",
+        body: [
+          "The third name was the longest fight. On December 23, 1910, a name change to Port Aransas was recorded. The official change took effect on April 1, 1911. Seven months later, on November 25, 1911, the city was incorporated.",
+          "Why change it again? The answer is in the new name itself. Tarpon was a fish. A port was an ambition. By the early 1910s, the jetties were nearly complete, the deep-water channel was becoming reliable, and the people living on the island could see a different future — one that involved commercial shipping, real infrastructure, and a town that could hold its own against Corpus Christi across the bay. Aransas Pass was the defining geographic feature. Port Aransas declared what the town intended to be.",
+        ],
+        pullQuote: {
+          text: "Tarpon was a fish. A port was an ambition. The name change declared what the town intended to be.",
+        },
+      },
+      {
+        heading: "What Three Names Reveal",
+        body: [
+          "Each name marked a distinct phase of self-understanding. Ropesville was a frontier placeholder — a post office box with a name nobody could explain. Tarpon was the fishing economy speaking: this is what we do, this is what we're known for. Port Aransas was the industrial and maritime ambition: this is what we are building toward.",
+          "The pattern doesn't stop in 1911. The fight over Cinnamon Shore, the tension between working-town and resort-town, the arguments about short-term rentals and development — these are all continuations of the same question that produced three post office names in twenty-three years. What is this place? What do we want it to be?",
+        ],
+      },
+    ],
+
+    sources: [
+      { label: "Port Aransas Museum Research Files — Port Aransas Timeline" },
+      { label: "Texas State Historical Association — Port Aransas", url: "https://www.tshaonline.org/handbook/entries/port-aransas-tx" },
+      { label: "United States Postal Service historical records — post office establishment dates" },
+      { label: "Port Aransas Preservation and Historical Association", url: "https://portaransasmuseum.org" },
+    ],
+
+    visitToday: [
+      { place: "Port Aransas Museum", detail: "101 E. Brundrett Ave. The timeline exhibit traces all three names and the context behind each change." },
+      { place: "Downtown Port Aransas", detail: "Walk the blocks around Station Street and Tarpon Street. Tarpon Street still carries the old name — a reminder of what the town was called in 1896." },
+    ],
+  },
+
+  "surfing-port-aransas": {
+    lede: "Surf culture arrived in Port Aransas the way most good things did — quietly, in the early 1960s, brought by a handful of young men who had seen what was happening in California and decided the Texas Gulf was worth trying. The Gulf doesn't make big waves often. But it makes them consistently enough that by 1970, thousands of people had caught the bug. The Coastal Bend would go on to produce national champions who beat surfers from Hawaii and the East Coast. The boards from those years are now behind glass at the Port Aransas Museum — classic longboards shaped by hand in shops that once operated within a few blocks of the water.",
+
+    sections: [
+      {
+        heading: "The First Shops",
+        body: [
+          "The early Port Aransas surf scene had two anchors. The Surf Shack operated at the intersection of Beach and Station streets through the 1960s, renting boards to anyone who wanted to try. And East of Hawaii Surfboards, one of the most important Texas shapers of the era, had offices in both Port Aransas and Austin — an unusual two-city model that reflected where Texas surf culture actually lived, split between the coast and the interior college towns sending students to the beach.",
+          "There had been surfers on the Texas coast before the 1960s. But the 1960s were when it stopped being a novelty and became an industry. Board rentals, lessons, shops, competitions — the whole ecosystem took shape in a decade.",
+        ],
+      },
+      {
+        heading: "Pat Magee and the Island-Wear Empire",
+        body: [
+          "Pat Magee is one of the most important names in Port Aransas surf history. He ran a surf shop on the island and built it into a chain of island-wear boutiques that spread across Texas. His personal collection of boards and surf memorabilia formed the core of what is now exhibited at the Port Aransas Museum and the Texas Surf Museum in Corpus Christi.",
+          "The other key collector is Brad Lomax, owner of Water Street Seafood Company in Corpus Christi. His private board collection, combined with Magee's, represents the most complete physical record of Coastal Bend surf history anywhere.",
+        ],
+      },
+      {
+        heading: "National Champions from a Small Coast",
+        body: [
+          "The Texas Gulf has a reputation among outsiders as a surfing backwater. The reputation is wrong. Coastal Bend surfers won national amateur championships in the 1960s and 1970s, beating competitors from California, Hawaii, and the East Coast — the three regions that dominated American surfing in that era. The Texas Gulf Surfing Association tracked the competition circuit; its best amateurs consistently outperformed expectations.",
+          "The Gulf's inconsistency is part of what made the surfers good. You can't wait for a perfect wave in Port Aransas — you have to read what's coming and commit. Surfers who could work small, fast, shifting waves turned out to be formidable when conditions elsewhere were cleaner.",
+        ],
+        pullQuote: {
+          text: "You can't wait for a perfect wave in Port Aransas — you have to read what's coming and commit.",
+        },
+      },
+      {
+        heading: "Breaks and Boards",
+        body: [
+          "The main Port Aransas breaks form around the jetties and Horace Caldwell Pier. The granite from the 1899–1919 jetty project, dumped into position to tame the pass, ended up creating exactly the kind of structure that generates rideable waves. The engineers building the jetties were not thinking about surfing. They built it anyway.",
+          "Board shapers up and down the Coastal Bend — Port Aransas, Corpus Christi, Galveston, South Padre — produced work that reflected the local conditions. Longer boards for the softer Gulf waves, subtle rocker profiles, finish work adapted to a coast where salt and heat eat equipment fast.",
+        ],
+      },
+      {
+        heading: "The Museum Preserves It",
+        body: [
+          "The Port Aransas Museum runs a permanent surfing history exhibit: roughly twenty boards from Port Aransas, Corpus Christi, Galveston, and South Padre Island shapers, plus memorabilia, artwork, photographs, and oral history from the early era. Dan Parker, longtime surfer and former curator of the Texas Surf Museum in Corpus Christi, has been central to organizing the exhibit. Parker and co-author Michelle Christenson published Surfing Corpus Christi and Port Aransas through Arcadia Publishing — the definitive written history of Texas Gulf surf culture.",
+          "You can still surf Port A today. You can still buy a board in town. But the scene that started at the Surf Shack in the early 1960s is now also a historical record, carefully kept by the people who lived it.",
+        ],
+      },
+    ],
+
+    sources: [
+      { label: "Port Aransas Museum Research Files — Port Aransas Museum and PAPHA" },
+      { label: "Port Aransas Museum — Surfing History Exhibit", url: "https://portaransasmuseum.org" },
+      { label: "Surfing Corpus Christi and Port Aransas — Dan Parker and Michelle Christenson (Arcadia Publishing)", url: "https://portaransasmuseum.org/product/surfing-corpus-christi-and-port-aransas/" },
+      { label: "The Bend Magazine — The History of Surfing in the Coastal Bend", url: "https://www.thebendmag.com/the-birth-of-surfing-in-the-coastal-bend/" },
+      { label: "Port Aransas Visitors Guide — Museum recalls surf exploits", url: "https://visitorsguide.portasouthjetty.com/articles/museum-recalls-surf-exploits/" },
+    ],
+
+    visitToday: [
+      { place: "Port Aransas Museum — Surfing Exhibit", detail: "101 E. Brundrett Ave. Roughly 20 boards plus memorabilia from the 1960s onward. Dan Parker's curation, Pat Magee and Brad Lomax collections." },
+      { place: "Horace Caldwell Pier", detail: "The primary surf break in town. Boards go out on swells; spectators watch from the pier." },
+      { place: "South Jetty", detail: "Secondary break. Waves form against the granite on incoming swells. Walk the jetty to watch from above." },
+    ],
+  },
 };
