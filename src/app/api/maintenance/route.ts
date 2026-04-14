@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 const JOHN_PHONE = process.env.JOHN_BROWN_PHONE || "(361) 455-8606";
 const JOHN_EMAIL = process.env.JOHN_BROWN_EMAIL || "";
+const ADMIN_PHONE = process.env.ADMIN_PHONE || "";
 const TWILIO_SID = process.env.TWILIO_ACCOUNT_SID || "";
 const TWILIO_TOKEN = process.env.TWILIO_AUTH_TOKEN || "";
 const TWILIO_FROM = process.env.TWILIO_PHONE_NUMBER || "";
@@ -126,6 +127,7 @@ export async function POST(req: NextRequest) {
   // Fire all in parallel — always send both email AND SMS to customer
   await Promise.allSettled([
     sendSMS(JOHN_PHONE, smsBody),
+    ADMIN_PHONE ? sendSMS(ADMIN_PHONE, smsBody) : Promise.resolve(),
     sendSMS(phone, customerSMS),
     JOHN_EMAIL ? sendEmail(JOHN_EMAIL, `[${urgency.toUpperCase()}] Maintenance Request — ${name} — ${serviceType}`, vendorHtml) : Promise.resolve(),
     sendEmail(email, "We received your maintenance request — Port A Local", customerHtml),

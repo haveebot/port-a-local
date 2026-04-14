@@ -7,6 +7,7 @@ const getStripe = () => new Stripe(process.env.STRIPE_SECRET_KEY || "", {
 
 const JOHN_PHONE = process.env.JOHN_BROWN_PHONE || "(361) 455-8606";
 const JOHN_EMAIL = process.env.JOHN_BROWN_EMAIL || "";
+const ADMIN_PHONE = process.env.ADMIN_PHONE || "";
 const TWILIO_SID = process.env.TWILIO_ACCOUNT_SID || "";
 const TWILIO_TOKEN = process.env.TWILIO_AUTH_TOKEN || "";
 const TWILIO_FROM = process.env.TWILIO_PHONE_NUMBER || "";
@@ -120,6 +121,7 @@ export async function POST(req: NextRequest) {
 
     await Promise.allSettled([
       sendSMS(JOHN_PHONE, smsPriority),
+      ADMIN_PHONE ? sendSMS(ADMIN_PHONE, smsPriority) : Promise.resolve(),
       sendSMS(phone, customerSMS),
       JOHN_EMAIL ? sendEmail(JOHN_EMAIL, `🚨 PRIORITY DISPATCH — ${name} — ${serviceType}`, vendorHtml) : Promise.resolve(),
       sendEmail(email, "Priority Dispatch Confirmed — Port A Local", customerHtml),
