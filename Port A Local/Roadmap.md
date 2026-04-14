@@ -20,12 +20,10 @@ _Last updated: 2026-04-13_
 ### ⏳ Waiting
 - [ ] A2P 10DLC Campaign — IN_PROGRESS at TCR (low-volume mixed use case, no failure reason). Maintenance SMS code already updated to use MessagingServiceSid when available — auto-flips the moment it approves.
 
-### 🟡 Open
-- [ ] Google Business Profile for Port A Local
-
-### Decided — no migration (2026-04-13)
+### Decided — no migration, no GBP (2026-04-13)
 - **GitHub:** PAL stays on `haveebot/port-a-local`. Winston owns haveebot; managed jointly. No org migration.
 - **Vercel:** PAL stays on `haveebots-projects` team. Project already named `port-a-local`, deploys to theportalocal.com. Avoids Pro plan cost with zero functional benefit at current scale.
+- **Google Business Profile:** Deferred / skipped. PAL is a media/directory platform with no storefront; GBP is built for storefronts and service-area businesses. Brand presence is handled by JSON-LD schema (already live), GSC, and clean on-site structure. Revisit only if PAL opens a pop-up, adds paid advertising, or takes on a physical presence.
 - Note: Sage Em is the opposite — full company-only separation. `sageem` org + `sageem` Vercel team, not haveebot.
 
 ---
@@ -36,11 +34,14 @@ _Last updated: 2026-04-13_
 - [ ] Review which businesses are currently featured
 - [ ] Confirm featured set is the right mix
 
-### Heritage Expansion Ideas
-- [ ] Surfing History — surfing in Port A from the 1960s
-- [ ] The Tarpon Inn — 1886, the scales, FDR, Harvey survival
-- [ ] The Jetties — granite from Central Texas, Aransas Harbor Terminal Railway
-- [ ] Ropesville to Port Aransas — the naming history (Ropesville → Tarpon → Port Aransas)
+### Heritage Expansion Ideas — FUTURE
+_Original 4 shipped 2026-04-13 (tarpon-inn, port-aransas-jetties, ropesville-to-port-aransas, surfing-port-aransas). Candidates for the next batch:_
+- [ ] The Red Snapper Fleet — commercial snapper history on the Texas coast
+- [ ] The Shrimpers — Vietnamese shrimping community arriving in the 1970s-80s, integration and conflict
+- [ ] Pat Magee's Surf Shop — Winston can decide if this deserves its own story vs the Surfing piece
+- [ ] The School That Moved — Port A ISD history, storm displacements, the 2019 bond
+- [ ] The Whoopers — Aransas National Wildlife Refuge whooping crane return
+- [ ] The Oil Era at Harbor Island — 1940s boom, the tank farms, the decline
 
 ### Buy/Sell — Classifieds & Marketplace
 - [ ] New section: "Buy/Sell" (or "Marketplace")
