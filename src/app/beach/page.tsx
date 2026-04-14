@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 
@@ -340,6 +341,14 @@ export default function BeachPage() {
             >
               {status === "loading" ? "Redirecting to payment..." : "Book & Pay Now"}
             </button>
+
+            <p className="text-center text-xs text-navy-400/70 leading-relaxed">
+              By submitting, you agree to our{" "}
+              <Link href="/terms" className="underline hover:text-navy-600">Terms</Link> and{" "}
+              <Link href="/privacy" className="underline hover:text-navy-600">Privacy Policy</Link>{" "}
+              and consent to receive SMS and email updates about your request.
+              Msg &amp; data rates may apply. Reply STOP to opt out.
+            </p>
 
             <p className="text-center text-sm text-navy-400">
               Secure payment via Stripe. Full amount collected now — your setup will be ready on the sand.

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { promises as fs } from "fs";
 import path from "path";
 
+const RESEND_KEY = process.env.RESEND_API_KEY;
 const SUGGESTIONS_FILE = path.join(process.cwd(), "data", "suggestions.json");
 
 interface Suggestion {
@@ -12,6 +13,45 @@ interface Suggestion {
   customNote: string;
   timestamp: string;
   status: "pending" | "approved" | "dismissed";
+}
+
+async function sendNotificationEmail(suggestion: Suggestion) {
+  if (!RESEND_KEY) {
+    console.log("[Email] Resend not configured — would notify admin about suggestion for", suggestion.businessName);
+    return;
+  }
+
+  const tagList = suggestion.selectedTags.length
+    ? suggestion.selectedTags.map((t) => `<li>${t}</li>`).join("")
+    : "<li><em>None</em></li>";
+
+  const html = `
+    <h2>New Tag Suggestion</h2>
+    <p><strong>Business:</strong> ${suggestion.businessName} (${suggestion.businessSlug})</p>
+    <p><strong>Suggested Tags:</strong></p>
+    <ul>${tagList}</ul>
+    ${suggestion.customNote ? `<p><strong>Custom Note:</strong> ${suggestion.customNote}</p>` : ""}
+    <p><strong>Submitted:</strong> ${new Date(suggestion.timestamp).toLocaleString()}</p>
+  `;
+
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${RESEND_KEY}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      from: "Port A Local <bookings@theportalocal.com>",
+      to: "admin@theportalocal.com",
+      subject: `Tag Suggestion: ${suggestion.businessName}`,
+      html,
+    }),
+  });
+
+  if (!res.ok) {
+    const err = await res.text();
+    console.error("[Email] Resend error:", err);
+  }
 }
 
 async function readSuggestions(): Promise<Suggestion[]> {
@@ -55,7 +95,10 @@ export async function POST(request: Request) {
     suggestions.push(newSuggestion);
     await writeSuggestions(suggestions);
 
-    // TODO: When Resend is live, send notification email to admin@theportalocal.com
+    // Fire-and-forget: don't block the response on email delivery
+    sendNotificationEmail(newSuggestion).catch((err) =>
+      console.error("[Email] Failed to send suggestion notification:", err)
+    );
 
     return NextResponse.json({ success: true });
   } catch {

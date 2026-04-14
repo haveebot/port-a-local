@@ -131,8 +131,10 @@ export default function Footer() {
           <p className="text-sm text-navy-500">
             &copy; {new Date().getFullYear()} Port A Local. Made on the island.
           </p>
-          <div className="flex items-center gap-6 text-sm text-navy-500">
+          <div className="flex items-center gap-6 text-xs text-navy-500">
             <a href="mailto:hello@theportalocal.com" className="hover:text-coral-400 transition-colors">Contact</a>
+            <Link href="/privacy" className="hover:text-coral-400 transition-colors">Privacy Policy</Link>
+            <Link href="/terms" className="hover:text-coral-400 transition-colors">Terms &amp; Conditions</Link>
           </div>
         </div>
       </div>
