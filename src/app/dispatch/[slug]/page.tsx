@@ -9,6 +9,7 @@ import {
 import { dispatchContent } from "@/data/dispatch-content";
 import { stories } from "@/data/stories";
 import { DispatchSchema } from "@/components/StructuredData";
+import LighthouseMark from "@/components/brand/LighthouseMark";
 import type { Metadata } from "next";
 
 export function generateStaticParams() {
@@ -248,6 +249,22 @@ export default async function DispatchArticlePage({
           </div>
         </section>
       )}
+
+      {/* Signature seal — the mark as a masthead stamp */}
+      <section className="py-16">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6">
+          <div className="flex flex-col items-center text-center gap-4 border-y border-sand-200 py-12">
+            <LighthouseMark size={72} variant="dark" detail="standard" />
+            <p className="text-xs font-semibold tracking-[0.25em] uppercase text-navy-500">
+              Published by Port A Local
+            </p>
+            <p className="text-xs text-navy-400 font-light max-w-sm leading-relaxed">
+              Editorial, analysis, and reporting on the island as it is — not as
+              it is advertised. <span className="font-mono">27°50′N 97°03′W</span>
+            </p>
+          </div>
+        </div>
+      </section>
 
       {/* Sources */}
       <section className="py-12">

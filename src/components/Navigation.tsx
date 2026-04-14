@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { categories } from "@/data/categories";
+import LighthouseMark from "@/components/brand/LighthouseMark";
 
 export default function Navigation() {
   const [scrolled, setScrolled] = useState(false);
@@ -57,12 +58,17 @@ export default function Navigation() {
       )}
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-18">
-          <Link href="/" className="flex flex-col group">
-            <span className="text-coral-400 text-3xl font-display font-bold tracking-wide leading-none">
-              PORT A LOCAL
+          <Link href="/" className="flex items-center gap-3 group" aria-label="Port A Local — home">
+            <span className="transition-transform duration-500 group-hover:-rotate-3">
+              <LighthouseMark size={42} variant="light" detail="standard" />
             </span>
-            <span className="text-navy-400 text-[10px] font-medium tracking-[0.3em] uppercase mt-0.5">
-              Port Aransas, TX
+            <span className="flex flex-col">
+              <span className="text-coral-400 text-2xl sm:text-3xl font-display font-bold tracking-wide leading-none">
+                PORT A LOCAL
+              </span>
+              <span className="text-navy-400 text-[10px] font-medium tracking-[0.3em] uppercase mt-1">
+                Port Aransas, TX
+              </span>
             </span>
           </Link>
 
