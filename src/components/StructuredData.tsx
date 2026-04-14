@@ -17,7 +17,7 @@ export function WebsiteSchema() {
         "@context": "https://schema.org",
         "@type": "WebSite",
         name: "Port A Local",
-        url: "https://portaransaslocal.com",
+        url: "https://theportalocal.com",
         description:
           "Your local guide to Port Aransas, TX. Vetted restaurants, lodging, activities, shops, services, and heritage content.",
         potentialAction: {
@@ -25,7 +25,7 @@ export function WebsiteSchema() {
           target: {
             "@type": "EntryPoint",
             urlTemplate:
-              "https://portaransaslocal.com/gully?q={search_term_string}",
+              "https://theportalocal.com/gully?q={search_term_string}",
           },
           "query-input": "required name=search_term_string",
         },
@@ -48,7 +48,7 @@ export function LocalBusinessSchema({ business }: { business: Business }) {
       postalCode: "78373",
       addressCountry: "US",
     },
-    url: `https://portaransaslocal.com/${business.category}/${business.slug}`,
+    url: `https://theportalocal.com/${business.category}/${business.slug}`,
   };
 
   if (business.phone) {
@@ -99,21 +99,21 @@ export function ArticleSchema({ story }: { story: Story }) {
         "@type": "Article",
         headline: story.title,
         description: story.description,
-        url: `https://portaransaslocal.com/history/${story.slug}`,
+        url: `https://theportalocal.com/history/${story.slug}`,
         datePublished: story.date,
         author: {
           "@type": "Organization",
           name: "Port A Local",
-          url: "https://portaransaslocal.com",
+          url: "https://theportalocal.com",
         },
         publisher: {
           "@type": "Organization",
           name: "Port A Local",
-          url: "https://portaransaslocal.com",
+          url: "https://theportalocal.com",
         },
         mainEntityOfPage: {
           "@type": "WebPage",
-          "@id": `https://portaransaslocal.com/history/${story.slug}`,
+          "@id": `https://theportalocal.com/history/${story.slug}`,
         },
         keywords: story.tags.join(", "),
         articleSection: "Port A Heritage",

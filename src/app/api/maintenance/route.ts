@@ -115,7 +115,7 @@ export async function POST(req: NextRequest) {
     <p>Someone will be in touch with you soon to confirm availability and schedule your service.</p>
     <br/>
     <p>— Port A Local Team</p>
-    <p style="color:#888;font-size:12px;">port-a-local.vercel.app</p>
+    <p style="color:#888;font-size:12px;">theportalocal.com</p>
   `;
 
   // SMS confirmation to customer

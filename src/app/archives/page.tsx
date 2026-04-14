@@ -164,8 +164,8 @@ export default function ArchivesPage() {
               </p>
               <p>
                 If you have historical photographs of Port Aransas — family photos, inherited collections, or institutional materials — we would love to help preserve and share them. Contact us at{" "}
-                <a href="mailto:hello@portaransaslocal.com?subject=Historical%20Photos" className="text-coral-500 hover:text-coral-600">
-                  hello@portaransaslocal.com
+                <a href="mailto:hello@theportalocal.com?subject=Historical%20Photos" className="text-coral-500 hover:text-coral-600">
+                  hello@theportalocal.com
                 </a>.
               </p>
             </div>

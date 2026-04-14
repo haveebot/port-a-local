@@ -3,7 +3,7 @@ import { getAllBusinessSlugs } from "@/data/businesses";
 import { stories } from "@/data/stories";
 import { guides } from "@/data/guides";
 
-const BASE_URL = "https://portaransaslocal.com";
+const BASE_URL = "https://theportalocal.com";
 
 const CATEGORY_SLUGS = ["eat", "drink", "stay", "do", "fish", "shop"];
 

@@ -206,7 +206,7 @@ export default function HistoryPage() {
             we&apos;d love to hear from you. Every detail matters.
           </p>
           <a
-            href="mailto:hello@portaransaslocal.com?subject=Port%20Aransas%20Heritage"
+            href="mailto:hello@theportalocal.com?subject=Port%20Aransas%20Heritage"
             className="inline-flex items-center justify-center px-8 py-3 rounded-xl btn-coral text-sm font-semibold"
           >
             Share Your History

@@ -150,7 +150,7 @@ export default function ServicesPage() {
             Get your business in front of visitors and property owners looking for local, trusted service on the island.
           </p>
           <a
-            href="mailto:hello@portaransaslocal.com?subject=Add my service business to Port A Local"
+            href="mailto:hello@theportalocal.com?subject=Add my service business to Port A Local"
             className="inline-flex items-center justify-center px-8 py-4 rounded-xl btn-coral text-base font-semibold tracking-wide"
           >
             Get Listed

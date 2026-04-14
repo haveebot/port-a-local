@@ -149,7 +149,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
             </span>
           </div>
           <span style={{ fontSize: 16, color: "#4a5568" }}>
-            portaransaslocal.com
+            theportalocal.com
           </span>
         </div>
       </div>

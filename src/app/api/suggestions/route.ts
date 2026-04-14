@@ -55,7 +55,7 @@ export async function POST(request: Request) {
     suggestions.push(newSuggestion);
     await writeSuggestions(suggestions);
 
-    // TODO: When Resend is live, send notification email to admin@portaransaslocal.com
+    // TODO: When Resend is live, send notification email to admin@theportalocal.com
 
     return NextResponse.json({ success: true });
   } catch {

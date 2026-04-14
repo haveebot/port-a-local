@@ -51,7 +51,7 @@ _Last updated: 2026-04-12_
 | What | Detail |
 |------|--------|
 | Live site | https://port-a-local.vercel.app |
-| Domain | portaransaslocal.com (purchased, DNS pending Workspace) |
+| Domain | theportalocal.com (purchased, DNS pending Workspace) |
 | Businesses | 140+ across 6 categories |
 | Heritage | 17 published stories — Port A Heritage (~25,000 words) |
 | Portals | `/rent` `/beach` `/maintenance` |

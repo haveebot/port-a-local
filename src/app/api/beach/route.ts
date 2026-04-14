@@ -82,7 +82,7 @@ export async function POST(req: NextRequest) {
     <p><strong>Beach Location:</strong> ${deliveryAddress}</p>
     <hr/>
     <p><strong>Total (to collect):</strong> $${totalPrice}</p>
-    <p style="color:#888;font-size:12px;">Submitted via Port A Local — port-a-local.vercel.app/beach</p>
+    <p style="color:#888;font-size:12px;">Submitted via Port A Local — theportalocal.com/beach</p>
   `;
 
   // --- Customer confirmation ---
@@ -103,7 +103,7 @@ export async function POST(req: NextRequest) {
     <p>Questions? Reply to this email and we'll sort it out.</p>
     <br/>
     <p>— Port A Local Team</p>
-    <p style="color:#888;font-size:12px;">port-a-local.vercel.app</p>
+    <p style="color:#888;font-size:12px;">theportalocal.com</p>
   `;
 
   console.log(`[Beach] New request — ${name} | ${productLabel} x${qty || quantity} | ${pickupDate} → ${returnDate} | $${totalPrice}`);

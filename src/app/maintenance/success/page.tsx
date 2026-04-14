@@ -72,8 +72,8 @@ function MaintenanceSuccessContent() {
       <p className="text-lg text-navy-200 mb-4">
         Your payment may have gone through but we couldn&apos;t confirm it automatically. Reach out and we&apos;ll get it sorted immediately.
       </p>
-      <a href="mailto:hello@portaransaslocal.com?subject=Maintenance dispatch issue" className="text-coral-400 hover:text-coral-300 underline text-sm">
-        hello@portaransaslocal.com
+      <a href="mailto:hello@theportalocal.com?subject=Maintenance dispatch issue" className="text-coral-400 hover:text-coral-300 underline text-sm">
+        hello@theportalocal.com
       </a>
     </>
   );

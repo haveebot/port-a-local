@@ -361,7 +361,7 @@ export default function Home() {
             we&apos;d love to hear from you. Our vetting process is simple and free.
           </p>
           <a
-            href="mailto:hello@portaransaslocal.com"
+            href="mailto:hello@theportalocal.com"
             className="inline-flex items-center justify-center px-10 py-4 rounded-xl btn-coral text-lg tracking-wide"
           >
             Get Listed

@@ -7,7 +7,7 @@ _Last updated: 2026-04-12_
 ## Blocked on Google Workspace
 
 ### Account Creation
-- [ ] Google Workspace resolves → admin@portaransaslocal.com live
+- [ ] Google Workspace resolves → admin@theportalocal.com live
 - [ ] Create Stripe account under admin@
 - [ ] Create Resend account under admin@
 - [ ] Create Twilio account under admin@
@@ -16,7 +16,7 @@ _Last updated: 2026-04-12_
 
 ### Once Accounts Are Live
 - [ ] Swap Stripe test keys → live PAL Stripe keys
-- [ ] Swap BASE_URL in sitemap.ts + robots.ts → portaransaslocal.com
+- [ ] Swap BASE_URL in sitemap.ts + robots.ts → theportalocal.com
 - [ ] Wire Resend to Know This Place (email on new suggestions)
 - [ ] Swap Twilio to 361 local number (~$1/month) → SMS live for maintenance
 - [ ] Google Search Console → submit sitemap
@@ -96,7 +96,7 @@ _Last updated: 2026-04-12_
 - Full vault update
 
 ### Session — April 10-11, 2026
-- Domain purchased: portaransaslocal.com
+- Domain purchased: theportalocal.com
 - Gully branded: search engine with Cmd+K palette, popular chips
 - 11 Island Stories published (complete heritage content layer)
 - `/rent` golf cart portal + `/beach` beach rentals portal

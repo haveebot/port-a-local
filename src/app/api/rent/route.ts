@@ -79,7 +79,7 @@ export async function POST(req: NextRequest) {
     <p><strong>Pickup/Delivery:</strong> ${deliveryLabel}</p>
     <hr/>
     <p><strong>Reservation Fee (to collect):</strong> $${reservationFee}</p>
-    <p style="color:#888;font-size:12px;">Submitted via Port A Local — port-a-local.vercel.app/rent</p>
+    <p style="color:#888;font-size:12px;">Submitted via Port A Local — theportalocal.com/rent</p>
   `;
 
   // --- Customer confirmation ---
@@ -98,7 +98,7 @@ export async function POST(req: NextRequest) {
     <p>Questions? Reply to this email or call us and we&apos;ll sort it out.</p>
     <br/>
     <p>— Port A Local Team</p>
-    <p style="color:#888;font-size:12px;">port-a-local.vercel.app</p>
+    <p style="color:#888;font-size:12px;">theportalocal.com</p>
   `;
 
   console.log(`[Rent] New request — ${name} | ${cartLabel} | ${pickupDate} → ${returnDate} | ${delivery}`);

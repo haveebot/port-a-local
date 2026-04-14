@@ -109,7 +109,7 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href="mailto:hello@portaransaslocal.com"
+                  href="mailto:hello@theportalocal.com"
                   className="text-navy-300 hover:text-coral-300 transition-colors text-sm"
                 >
                   Contact
@@ -117,7 +117,7 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href="mailto:hello@portaransaslocal.com?subject=Get%20Listed%20on%20Port%20A%20Local"
+                  href="mailto:hello@theportalocal.com?subject=Get%20Listed%20on%20Port%20A%20Local"
                   className="text-navy-300 hover:text-coral-300 transition-colors text-sm"
                 >
                   Get Listed
@@ -132,7 +132,7 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} Port A Local. Made on the island.
           </p>
           <div className="flex items-center gap-6 text-sm text-navy-500">
-            <a href="mailto:hello@portaransaslocal.com" className="hover:text-coral-400 transition-colors">Contact</a>
+            <a href="mailto:hello@theportalocal.com" className="hover:text-coral-400 transition-colors">Contact</a>
           </div>
         </div>
       </div>

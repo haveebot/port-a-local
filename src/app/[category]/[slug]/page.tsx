@@ -361,7 +361,7 @@ export default async function BusinessDetailPage({
                   Is this your business?
                 </p>
                 <a
-                  href={`mailto:hello@portaransaslocal.com?subject=Claim listing: ${business.name}`}
+                  href={`mailto:hello@theportalocal.com?subject=Claim listing: ${business.name}`}
                   className="inline-flex items-center justify-center px-5 py-2.5 rounded-lg btn-coral text-sm"
                 >
                   Claim Listing

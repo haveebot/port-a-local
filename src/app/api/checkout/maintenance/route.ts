@@ -5,7 +5,7 @@ const getStripe = () => new Stripe(process.env.STRIPE_SECRET_KEY || "", {
   apiVersion: "2026-03-25.dahlia",
 });
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://port-a-local.vercel.app";
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://theportalocal.com";
 
 const DISPATCH_FEE = 20; // $20 priority dispatch fee
 
