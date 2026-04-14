@@ -6,6 +6,7 @@ const ADMIN_PHONE = process.env.ADMIN_PHONE || "";
 const TWILIO_SID = process.env.TWILIO_ACCOUNT_SID || "";
 const TWILIO_TOKEN = process.env.TWILIO_AUTH_TOKEN || "";
 const TWILIO_FROM = process.env.TWILIO_PHONE_NUMBER || "";
+const TWILIO_MESSAGING_SID = process.env.TWILIO_MESSAGING_SERVICE_SID || "";
 const RESEND_KEY = process.env.RESEND_API_KEY || "";
 
 function urgencyLabel(u: string) {
@@ -15,7 +16,7 @@ function urgencyLabel(u: string) {
 }
 
 async function sendSMS(to: string, body: string) {
-  if (!TWILIO_SID || !TWILIO_TOKEN || !TWILIO_FROM) {
+  if (!TWILIO_SID || !TWILIO_TOKEN || (!TWILIO_MESSAGING_SID && !TWILIO_FROM)) {
     console.log("[SMS] Twilio not configured — would send to", to, ":", body);
     return;
   }
@@ -26,18 +27,21 @@ async function sendSMS(to: string, body: string) {
     return;
   }
   const url = `https://api.twilio.com/2010-04-01/Accounts/${TWILIO_SID}/Messages.json`;
-  console.log(`[SMS] Sending to ${toFormatted} from ${TWILIO_FROM}`);
+  const params: Record<string, string> = { To: toFormatted, Body: body };
+  if (TWILIO_MESSAGING_SID) {
+    params.MessagingServiceSid = TWILIO_MESSAGING_SID;
+    console.log(`[SMS] Sending to ${toFormatted} via Messaging Service ${TWILIO_MESSAGING_SID}`);
+  } else {
+    params.From = TWILIO_FROM;
+    console.log(`[SMS] Sending to ${toFormatted} from ${TWILIO_FROM}`);
+  }
   const res = await fetch(url, {
     method: "POST",
     headers: {
       Authorization: "Basic " + Buffer.from(`${TWILIO_SID}:${TWILIO_TOKEN}`).toString("base64"),
       "Content-Type": "application/x-www-form-urlencoded",
     },
-    body: new URLSearchParams({
-      From: TWILIO_FROM,
-      To: toFormatted,
-      Body: body,
-    }),
+    body: new URLSearchParams(params),
   });
   const result = await res.json();
   if (!res.ok) {

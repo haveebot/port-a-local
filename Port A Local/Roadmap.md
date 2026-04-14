@@ -1,25 +1,28 @@
 # Port A Local — Roadmap & To-Do
 _Living document. Updated each session._
-_Last updated: 2026-04-12_
+_Last updated: 2026-04-13_
 
 ---
 
-## Blocked on Google Workspace
+## Infrastructure — Status
 
-### Account Creation
-- [ ] Google Workspace resolves → admin@theportalocal.com live
-- [ ] Create Stripe account under admin@
-- [ ] Create Resend account under admin@
-- [ ] Create Twilio account under admin@
-- [ ] Create GitHub org (port-a-local), transfer repo from haveebot
-- [ ] Create Vercel team (port-a-local), move project
+### ✅ Live
+- Google Workspace active — admin@, hello@, bookings@ all receive mail (MX: smtp.google.com)
+- Domain live: https://theportalocal.com (200 OK, HTTPS)
+- Stripe: `acct_1TLv2G…` under admin@theportalocal.com, charges + payouts enabled, live keys in Vercel
+- Resend: live API key in Vercel, bookings@theportalocal.com sender
+- Twilio: account active, $44 balance, number +1 (361) 428-1706 SMS+Voice
+- A2P 10DLC Brand: **APPROVED** (BNd603…)
+- GSC: domain verified via TXT, sitemap submitted
+- Sitemap + robots on theportalocal.com (175+ URLs)
+- Resend wired to Know This Place — admin@ gets email on every new tag suggestion
 
-### Once Accounts Are Live
-- [ ] Swap Stripe test keys → live PAL Stripe keys
-- [ ] Swap BASE_URL in sitemap.ts + robots.ts → theportalocal.com
-- [ ] Wire Resend to Know This Place (email on new suggestions)
-- [ ] Swap Twilio to 361 local number (~$1/month) → SMS live for maintenance
-- [ ] Google Search Console → submit sitemap
+### ⏳ Waiting
+- [ ] A2P 10DLC Campaign — IN_PROGRESS at TCR (low-volume mixed use case, no failure reason). Maintenance SMS code already updated to use MessagingServiceSid when available — auto-flips the moment it approves.
+
+### 🟡 Open
+- [ ] Create GitHub org (`port-a-local`), transfer repo from haveebot/port-a-local
+- [ ] Create Vercel team (`port-a-local`), move project from haveebots-projects
 - [ ] Google Business Profile for Port A Local
 
 ---
