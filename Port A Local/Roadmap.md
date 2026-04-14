@@ -21,9 +21,12 @@ _Last updated: 2026-04-13_
 - [ ] A2P 10DLC Campaign — IN_PROGRESS at TCR (low-volume mixed use case, no failure reason). Maintenance SMS code already updated to use MessagingServiceSid when available — auto-flips the moment it approves.
 
 ### 🟡 Open
-- [ ] Create GitHub org (`port-a-local`), transfer repo from haveebot/port-a-local
-- [ ] Create Vercel team (`port-a-local`), move project from haveebots-projects
 - [ ] Google Business Profile for Port A Local
+
+### Decided — no migration (2026-04-13)
+- **GitHub:** PAL stays on `haveebot/port-a-local`. Winston owns haveebot; managed jointly. No org migration.
+- **Vercel:** PAL stays on `haveebots-projects` team. Project already named `port-a-local`, deploys to theportalocal.com. Avoids Pro plan cost with zero functional benefit at current scale.
+- Note: Sage Em is the opposite — full company-only separation. `sageem` org + `sageem` Vercel team, not haveebot.
 
 ---
 
