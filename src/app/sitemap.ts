@@ -1,6 +1,7 @@
 import { MetadataRoute } from "next";
 import { getAllBusinessSlugs } from "@/data/businesses";
 import { stories } from "@/data/stories";
+import { dispatches } from "@/data/dispatches";
 import { guides } from "@/data/guides";
 
 const BASE_URL = "https://theportalocal.com";
@@ -50,6 +51,23 @@ export default function sitemap(): MetadataRoute.Sitemap {
       })),
   ];
 
+  const dispatchEntries: MetadataRoute.Sitemap = [
+    {
+      url: `${BASE_URL}/dispatch`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    ...dispatches
+      .filter((d) => d.published)
+      .map((d) => ({
+        url: `${BASE_URL}/dispatch/${d.slug}`,
+        lastModified: d.updatedAt ? new Date(d.updatedAt) : new Date(d.date),
+        changeFrequency: "weekly" as const,
+        priority: 0.8,
+      })),
+  ];
+
   const CONTENT_PAGES = [
     "gully", "guides", "live", "essentials", "events",
     "fishing-report", "where-to-stay", "photos", "archives", "map", "my-trip",
@@ -78,6 +96,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     ...portalEntries,
     ...storyEntries,
+    ...dispatchEntries,
     ...contentEntries,
     ...guideEntries,
     ...categoryEntries,

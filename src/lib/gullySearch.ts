@@ -1,10 +1,11 @@
 import Fuse from "fuse.js";
 import { businesses } from "@/data/businesses";
 import { stories } from "@/data/stories";
+import { dispatches } from "@/data/dispatches";
 import { archivePhotos } from "@/data/archives";
 
 export interface GullyItem {
-  type: "business" | "story" | "archive";
+  type: "business" | "story" | "dispatch" | "archive";
   slug: string;
   name: string;
   tagline: string;
@@ -50,6 +51,20 @@ const storyItems: GullyItem[] = stories
     readTime: s.readTime,
   }));
 
+const dispatchItems: GullyItem[] = dispatches
+  .filter((d) => d.published)
+  .map((d) => ({
+    type: "dispatch" as const,
+    slug: d.slug,
+    name: d.title,
+    tagline: d.subtitle,
+    description: d.description,
+    tags: d.tags,
+    category: d.category,
+    icon: d.icon,
+    readTime: d.readTime,
+  }));
+
 const archiveItems: GullyItem[] = archivePhotos.map((p) => ({
   type: "archive" as const,
   slug: p.id,
@@ -61,7 +76,12 @@ const archiveItems: GullyItem[] = archivePhotos.map((p) => ({
   icon: "🏛️",
 }));
 
-export const gullyItems: GullyItem[] = [...businessItems, ...storyItems, ...archiveItems];
+export const gullyItems: GullyItem[] = [
+  ...businessItems,
+  ...storyItems,
+  ...dispatchItems,
+  ...archiveItems,
+];
 
 export const gullyFuse = new Fuse(gullyItems, {
   keys: [
@@ -79,6 +99,7 @@ export const gullyFuse = new Fuse(gullyItems, {
 
 export function getGullyHref(item: GullyItem): string {
   if (item.type === "story") return `/history/${item.slug}`;
+  if (item.type === "dispatch") return `/dispatch/${item.slug}`;
   if (item.type === "archive") return `/archives`;
   return `/${item.category}/${item.slug}`;
 }

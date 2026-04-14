@@ -126,6 +126,9 @@ export default function Navigation() {
                   <Link href="/history" onClick={() => setDiscoverOpen(false)} className={dropdownLinkClass}>
                     <span className="text-base">📖</span> Heritage
                   </Link>
+                  <Link href="/dispatch" onClick={() => setDiscoverOpen(false)} className={dropdownLinkClass}>
+                    <span className="text-base">🧭</span> Dispatch
+                  </Link>
                   <Link href="/guides" onClick={() => setDiscoverOpen(false)} className={dropdownLinkClass}>
                     <span className="text-base">📋</span> Guides
                   </Link>
@@ -231,6 +234,7 @@ export default function Navigation() {
             {/* Discover */}
             <p className={sectionHeaderClass}>Discover</p>
             <Link href="/history" onClick={() => setMobileOpen(false)} className={mobileLinkClass}>📖 Heritage</Link>
+            <Link href="/dispatch" onClick={() => setMobileOpen(false)} className={mobileLinkClass}>🧭 Dispatch</Link>
             <Link href="/guides" onClick={() => setMobileOpen(false)} className={mobileLinkClass}>📋 Guides</Link>
             <Link href="/where-to-stay" onClick={() => setMobileOpen(false)} className={mobileLinkClass}>🏠 Where to Stay</Link>
             <Link href="/essentials" onClick={() => setMobileOpen(false)} className={mobileLinkClass}>🧭 Essentials</Link>

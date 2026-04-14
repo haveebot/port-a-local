@@ -216,7 +216,7 @@ export default function GullyPalette() {
                   className="w-full text-left flex items-center gap-3 px-4 py-3 hover:bg-sand-50 cursor-pointer transition-colors border-b border-sand-100 last:border-0"
                 >
                   <span className="text-xl flex-shrink-0">
-                    {item.type === "story"
+                    {item.type === "story" || item.type === "dispatch"
                       ? (item.icon ?? "📖")
                       : (categoryEmoji[item.category] ?? "📍")}
                   </span>
@@ -225,7 +225,11 @@ export default function GullyPalette() {
                     <p className="text-sm text-navy-400 truncate">{item.tagline}</p>
                   </div>
                   <span className="text-xs text-navy-300 capitalize flex-shrink-0">
-                    {item.type === "story" ? `${item.readTime} read` : item.category}
+                    {item.type === "story"
+                      ? `${item.readTime} read`
+                      : item.type === "dispatch"
+                        ? `Dispatch · ${item.readTime}`
+                        : item.category}
                   </span>
                 </button>
               ))}

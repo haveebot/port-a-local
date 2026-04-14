@@ -1,5 +1,6 @@
 import type { Business } from "@/data/businesses";
 import type { Story } from "@/data/stories";
+import type { Dispatch } from "@/data/dispatches";
 
 function JsonLd({ data }: { data: Record<string, unknown> }) {
   return (
@@ -117,6 +118,39 @@ export function ArticleSchema({ story }: { story: Story }) {
         },
         keywords: story.tags.join(", "),
         articleSection: "Port A Heritage",
+        inLanguage: "en-US",
+      }}
+    />
+  );
+}
+
+export function DispatchSchema({ dispatch }: { dispatch: Dispatch }) {
+  return (
+    <JsonLd
+      data={{
+        "@context": "https://schema.org",
+        "@type": "NewsArticle",
+        headline: dispatch.title,
+        description: dispatch.description,
+        url: `https://theportalocal.com/dispatch/${dispatch.slug}`,
+        datePublished: dispatch.date,
+        dateModified: dispatch.updatedAt || dispatch.date,
+        author: {
+          "@type": "Organization",
+          name: "Port A Local",
+          url: "https://theportalocal.com",
+        },
+        publisher: {
+          "@type": "Organization",
+          name: "Port A Local",
+          url: "https://theportalocal.com",
+        },
+        mainEntityOfPage: {
+          "@type": "WebPage",
+          "@id": `https://theportalocal.com/dispatch/${dispatch.slug}`,
+        },
+        keywords: dispatch.tags.join(", "),
+        articleSection: "Dispatch",
         inLanguage: "en-US",
       }}
     />

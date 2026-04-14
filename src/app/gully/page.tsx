@@ -70,7 +70,8 @@ function GullyContent() {
   // Open Now filter — only applies to businesses
   const afterOpenFilter = openNow
     ? fuseResults.filter((item) => {
-        if (item.type === "story") return true; // stories always pass through
+        // Editorial content (heritage + dispatch) always passes through
+        if (item.type === "story" || item.type === "dispatch") return true;
         const biz = businesses.find((b) => b.slug === item.slug);
         return biz ? isOpenNow(biz) : false;
       })
@@ -78,9 +79,15 @@ function GullyContent() {
 
   // Build category list from results
   const categoriesInResults = Array.from(
-    new Set(afterOpenFilter.map((item) =>
-      item.type === "story" ? "Heritage" : item.category
-    ))
+    new Set(
+      afterOpenFilter.map((item) =>
+        item.type === "story"
+          ? "Heritage"
+          : item.type === "dispatch"
+            ? "Dispatch"
+            : item.category,
+      ),
+    ),
   ).sort();
 
   // Category filter
@@ -89,9 +96,11 @@ function GullyContent() {
       ? afterOpenFilter
       : activeCategory === "Heritage"
         ? afterOpenFilter.filter((item) => item.type === "story")
-        : afterOpenFilter.filter(
-            (item) => item.type === "business" && item.category === activeCategory
-          );
+        : activeCategory === "Dispatch"
+          ? afterOpenFilter.filter((item) => item.type === "dispatch")
+          : afterOpenFilter.filter(
+              (item) => item.type === "business" && item.category === activeCategory
+            );
 
   // Sort: featured first, then alphabetical
   const sorted = [...afterCategoryFilter].sort((a, b) => {
@@ -109,12 +118,20 @@ function GullyContent() {
   }, [categoriesInResults, activeCategory]);
 
   const storyCount = sorted.filter((i) => i.type === "story").length;
+  const dispatchCount = sorted.filter((i) => i.type === "dispatch").length;
   const bizCount = sorted.filter((i) => i.type === "business").length;
+
+  const editorialSuffix = [
+    storyCount > 0 ? `${storyCount} heritage` : null,
+    dispatchCount > 0 ? `${dispatchCount} dispatch` : null,
+  ]
+    .filter(Boolean)
+    .join(", ");
 
   const resultLabel =
     query.trim().length >= 2
-      ? `${sorted.length} ${sorted.length === 1 ? "result" : "results"} for "${query}"${storyCount > 0 ? ` (${storyCount} heritage)` : ""}`
-      : `${bizCount} businesses + ${storyCount} heritage articles in Port Aransas`;
+      ? `${sorted.length} ${sorted.length === 1 ? "result" : "results"} for "${query}"${editorialSuffix ? ` (${editorialSuffix})` : ""}`
+      : `${bizCount} businesses + ${storyCount} heritage + ${dispatchCount} dispatch in Port Aransas`;
 
   return (
     <main className="min-h-screen">
@@ -251,23 +268,39 @@ function GullyContent() {
 
           {sorted.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {sorted.map((item) =>
-                item.type === "business" ? (
-                  <BusinessCard
-                    key={`biz-${item.slug}`}
-                    business={businesses.find((b) => b.slug === item.slug)!}
-                  />
-                ) : (
+              {sorted.map((item) => {
+                if (item.type === "business") {
+                  return (
+                    <BusinessCard
+                      key={`biz-${item.slug}`}
+                      business={businesses.find((b) => b.slug === item.slug)!}
+                    />
+                  );
+                }
+
+                const isDispatch = item.type === "dispatch";
+                const href = isDispatch
+                  ? `/dispatch/${item.slug}`
+                  : `/history/${item.slug}`;
+                const label = isDispatch ? "Dispatch" : "Heritage";
+                const barClass = isDispatch
+                  ? "h-1 bg-gradient-to-r from-coral-500 via-coral-400 to-gold-400"
+                  : "h-1 bg-gradient-to-r from-navy-600 via-coral-400 to-gold-400";
+                const chipClass = isDispatch
+                  ? "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-coral-50 text-coral-600"
+                  : "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-navy-50 text-navy-600";
+
+                return (
                   <Link
-                    key={`story-${item.slug}`}
-                    href={`/history/${item.slug}`}
+                    key={`${item.type}-${item.slug}`}
+                    href={href}
                     className="group relative rounded-2xl bg-white border border-sand-200 overflow-hidden card-hover"
                   >
-                    <div className="h-1 bg-gradient-to-r from-navy-600 via-coral-400 to-gold-400" />
+                    <div className={barClass} />
                     <div className="p-6 sm:p-8">
                       <div className="flex items-center justify-between mb-4">
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-navy-50 text-navy-600">
-                          {item.icon} Heritage
+                        <span className={chipClass}>
+                          {item.icon} {label}
                         </span>
                         <span className="text-xs text-navy-400">{item.readTime} read</span>
                       </div>
@@ -279,8 +312,8 @@ function GullyContent() {
                       </p>
                     </div>
                   </Link>
-                )
-              )}
+                );
+              })}
             </div>
           ) : (
             <div className="text-center py-20">
