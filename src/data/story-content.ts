@@ -1704,7 +1704,7 @@ export const storyContent: Record<string, StoryContent> = {
       {
         heading: "This Weekend",
         body: [
-          "The twenty-ninth annual Texas Sandfest runs Friday, April 17 through Sunday, April 19, 2026. Tim Parke, who owns Lone Star Taste in Port Aransas, takes over the board presidency for his first year at the helm. The Josh Abbott Band, from Lubbock, plays Saturday night. Masters, Duo, Semi-Pro, Advanced Amateur, Family, Team, Youth, and Guppy categories will sculpt across the three days in the sand between mile markers 9 and 13. Admission is thirty dollars for an adult weekend wristband, five for youth ages six to twelve. The thirtieth annual is next year.",
+          "The twenty-ninth annual Texas Sandfest runs Friday, April 17 through Sunday, April 19, 2026. Tim Parke, who owns Lone Star Taste in Port Aransas, takes over the board presidency for his first year at the helm. The Josh Abbott Band, from Lubbock, closes out the festival Sunday. Masters, Duo, Semi-Pro, Advanced Amateur, Family, Team, Youth, and Guppy categories will sculpt across the three days in the sand between mile markers 9 and 13. Admission is thirty dollars for an adult weekend wristband, five for youth ages six to twelve. The thirtieth annual is next year.",
           "Somewhere on the sand this weekend, a child will build her first sandcastle. She will not remember the card table. She will not remember that two Port Aransas women set folding chairs on the beach in 1997 so their own children could do the same thing. But the card table is the reason she is there. Nearly half a million dollars will move through this weekend — into scholarships that will eventually send her cousin to college, into a volunteer fire department that will respond when her grandmother's house floods, into the food pantry that feeds the waiter who serves her family at dinner on Sunday night. The festival that started as two moms watching their children build castles on the sand has become one of the largest civic engines in a town that needs every one it can get.",
           "Calvert and Schafer's card table is, in the strict literal sense, gone. But you can see it every year, right there at the base of every sculpture, on every stretch of beach between mile markers 9 and 13, and in every grant check the festival writes in May. Some things you build outlast the thing you built them on.",
         ],
@@ -1712,7 +1712,7 @@ export const storyContent: Record<string, StoryContent> = {
           { label: "Dates", value: "April 17–19, 2026" },
           { label: "Edition", value: "29th annual" },
           { label: "Board President", value: "Tim Parke (Lone Star Taste)" },
-          { label: "Saturday music", value: "Josh Abbott Band" },
+          { label: "Sunday closing music", value: "Josh Abbott Band" },
           { label: "Adult weekend wristband", value: "$30" },
           { label: "Youth (ages 6–12)", value: "$5" },
           { label: "Beach location", value: "Mile markers 9–13" },
@@ -1744,7 +1744,7 @@ export const storyContent: Record<string, StoryContent> = {
     ],
 
     visitToday: [
-      { place: "Texas Sandfest 2026", detail: "Friday April 17 through Sunday April 19, 2026. Mile markers 9–13 on the Mustang Island beach. $30 adult weekend wristband, $5 youth 6–12. Josh Abbott Band plays Saturday night." },
+      { place: "Texas Sandfest 2026", detail: "Friday April 17 through Sunday April 19, 2026. Mile markers 9–13 on the Mustang Island beach. $30 adult weekend wristband, $5 youth 6–12. Josh Abbott Band closes out the festival Sunday." },
       { place: "Port Aransas Art Center", detail: "Corner of Alister and Avenue G. The institution Sharon Schafer directed in 1997 — and which still receives a Sandfest grant every year from the festival she helped start. Open galleries, classes, and community programs." },
       { place: "The Logo Mountain", detail: "The 15-foot-tall centerpiece sculpture is raised fresh on the beach each year, carrying the season's sponsor logos. This year, it also carries Lisa \"Wiggly\" Shelton's name." },
     ],
