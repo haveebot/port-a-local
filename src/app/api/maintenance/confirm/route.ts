@@ -7,13 +7,16 @@ const getStripe = () => new Stripe(process.env.STRIPE_SECRET_KEY || "", {
 });
 
 const JOHN_PHONE = process.env.JOHN_BROWN_PHONE || "(361) 455-8606";
-const JOHN_EMAIL = process.env.JOHN_BROWN_EMAIL || "";
 const ADMIN_PHONE = process.env.ADMIN_PHONE || "";
+const INTERNAL_EMAIL = process.env.INTERNAL_ALERT_EMAIL || "";
 const TWILIO_SID = process.env.TWILIO_ACCOUNT_SID || "";
 const TWILIO_TOKEN = process.env.TWILIO_AUTH_TOKEN || "";
 const TWILIO_FROM = process.env.TWILIO_PHONE_NUMBER || "";
 const TWILIO_MESSAGING_SID = process.env.TWILIO_MESSAGING_SERVICE_SID || "";
 const RESEND_KEY = process.env.RESEND_API_KEY || "";
+
+// John Brown is SMS-only by design — vendor doesn't take email.
+// All maintenance internal emails go to INTERNAL_ALERT_EMAIL for records.
 
 async function sendSMS(to: string, body: string) {
   if (!TWILIO_SID || !TWILIO_TOKEN || (!TWILIO_MESSAGING_SID && !TWILIO_FROM)) {
@@ -131,7 +134,7 @@ export async function POST(req: NextRequest) {
       sendSMS(JOHN_PHONE, smsPriority),
       ADMIN_PHONE ? sendSMS(ADMIN_PHONE, smsPriority) : Promise.resolve(),
       sendSMS(phone, customerSMS),
-      JOHN_EMAIL ? sendEmail(JOHN_EMAIL, `🚨 PRIORITY DISPATCH — ${name} — ${serviceType}`, vendorHtml) : Promise.resolve(),
+      INTERNAL_EMAIL ? sendEmail(INTERNAL_EMAIL, `🚨 PRIORITY DISPATCH — ${name} — ${serviceType}`, vendorHtml) : Promise.resolve(),
       sendEmail(email, "Priority Dispatch Confirmed — Port A Local", customerHtml),
     ]);
 

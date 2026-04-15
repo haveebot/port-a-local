@@ -2,13 +2,16 @@ import { NextRequest, NextResponse } from "next/server";
 import { emailLayout } from "@/lib/emailLayout";
 
 const JOHN_PHONE = process.env.JOHN_BROWN_PHONE || "(361) 455-8606";
-const JOHN_EMAIL = process.env.JOHN_BROWN_EMAIL || "";
 const ADMIN_PHONE = process.env.ADMIN_PHONE || "";
+const INTERNAL_EMAIL = process.env.INTERNAL_ALERT_EMAIL || "";
 const TWILIO_SID = process.env.TWILIO_ACCOUNT_SID || "";
 const TWILIO_TOKEN = process.env.TWILIO_AUTH_TOKEN || "";
 const TWILIO_FROM = process.env.TWILIO_PHONE_NUMBER || "";
 const TWILIO_MESSAGING_SID = process.env.TWILIO_MESSAGING_SERVICE_SID || "";
 const RESEND_KEY = process.env.RESEND_API_KEY || "";
+
+// John Brown is SMS-only by design — vendor doesn't take email.
+// All maintenance internal emails go to INTERNAL_ALERT_EMAIL for records.
 
 function urgencyLabel(u: string) {
   if (u === "emergency") return "🚨 EMERGENCY — ASAP";
@@ -130,11 +133,12 @@ export async function POST(req: NextRequest) {
   console.log(`[Maintenance] Customer phone raw: "${phone}" | John phone: "${JOHN_PHONE}"`);
 
   // Fire all in parallel — always send both email AND SMS to customer
+  // Internal record email goes to INTERNAL_ALERT_EMAIL (admin@theportalocal.com)
   await Promise.allSettled([
     sendSMS(JOHN_PHONE, smsBody),
     ADMIN_PHONE ? sendSMS(ADMIN_PHONE, smsBody) : Promise.resolve(),
     sendSMS(phone, customerSMS),
-    JOHN_EMAIL ? sendEmail(JOHN_EMAIL, `[${urgency.toUpperCase()}] Maintenance Request — ${name} — ${serviceType}`, vendorHtml) : Promise.resolve(),
+    INTERNAL_EMAIL ? sendEmail(INTERNAL_EMAIL, `[${urgency.toUpperCase()}] Maintenance Request — ${name} — ${serviceType}`, vendorHtml) : Promise.resolve(),
     sendEmail(email, "We received your maintenance request — Port A Local", customerHtml),
   ]);
 
