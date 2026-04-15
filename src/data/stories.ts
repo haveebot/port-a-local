@@ -341,6 +341,22 @@ export const stories: Story[] = [
     relatedStories: ["port-aransas-jetties", "port-aransas-museum", "port-aransas-museum-collection"],
   },
   {
+    slug: "texas-sandfest",
+    title: "The Card Table That Built Texas Sandfest",
+    subtitle: "In 1997, two Port Aransas moms set folding chairs on the beach. What grew from that afternoon now pays nearly half a million dollars a year back to the island.",
+    description:
+      "Elleece Calvert and Sharon Schafer set folding chairs and a card table on a Port Aransas beach in 1997 so they could watch their children build sandcastles. Twenty-nine years later, Texas Sandfest is the largest native-sand sculpture competition in the United States — a three-day festival that writes half-million-dollar checks every year to the school district, the volunteer fire department, the food pantry, and the Art Center where it all started.",
+    category: "heritage",
+    icon: "🏰",
+    readTime: "12 min",
+    featured: true,
+    published: true,
+    date: "2026-04-15",
+    tags: ["Sandfest", "Texas Sandfest", "sand sculpture", "Elleece Calvert", "Sharon Schafer", "Lisa Shelton", "Mustang Island", "Harvey recovery", "PAISD scholarships", "1997"],
+    relatedBusinesses: [],
+    relatedStories: ["hurricane-celia", "cinnamon-shore-tension", "red-tide-utmsi", "port-aransas-museum", "storms-of-port-aransas"],
+  },
+  {
     slug: "cinnamon-shore-tension",
     title: "The Development Question",
     subtitle: "When master-planned communities arrived on Mustang Island — and what Port Aransas made of it",

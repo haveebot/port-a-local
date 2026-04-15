@@ -1585,4 +1585,168 @@ export const storyContent: Record<string, StoryContent> = {
       { place: "South Jetty", detail: "Secondary break. Waves form against the granite on incoming swells. Walk the jetty to watch from above." },
     ],
   },
+
+  "texas-sandfest": {
+    lede: "Sometime in the spring of 1997, two Port Aransas women set folding chairs and a card table on the beach so they could watch their children build sandcastles. Elleece Calvert was a local mother. Sharon Schafer directed the Art Center for the Islands, Port Aransas's small nonprofit arts organization. The specific day is lost to the public record. The children's names, the mile marker, the first-year attendance — none of it survived the way it should have. What survived was a phrase, repeated in every official account since: they set folding chairs and a card table on the beach so they could watch. Twenty-nine years later, that card table is the origin story of Texas Sandfest — a three-day festival that draws thirty thousand people a day, flies master sculptors in from Canada, the Netherlands, France, and Italy, and writes checks every year to the Port Aransas school district, the volunteer fire department, the food pantry, the Art Center, and two dozen other local organizations. Most of the people who attend have no idea it started with two moms and a card table.",
+
+    sections: [
+      {
+        heading: "Why It Had to Be This Beach",
+        body: [
+          "Sandfest could not have started just anywhere. Mustang Island sand is, for reasons of geology, uncommonly good at what sand sculptors ask of it. It has a high clay content. Tamped wet and layered into flat disks — what sculptors call pancakes — it can be stacked into towering spikes that carry weight without crumbling. Into those spikes, an experienced sculptor can carve at almost any angle. Beaches with softer, more uniform grain sizes do not do this.",
+          "Mark Landrum, the Port Aransas resident who has taught sandcastle-building on the island for years and serves on the Sandfest board, put the claim plainly in a Texas Highways profile: the Texas shore, he said, stacks better than anywhere in the world. He attributes it to the clay. The festival has built its international reputation on that technical fact. South Padre Island's Sandcastle Days, the other major Texas competition, runs on its own local substrate. Virginia Beach and Siesta Key have theirs. Port Aransas competes on Mustang Island's.",
+          "Often described — by organizers and regional press alike — as the largest native-sand sculpture competition in the United States, Sandfest carries a qualifier worth noting. Native-sand means sculptors compete with the sand where they stand. No trucks, no engineered competition sand, no sculpting compounds hauled in from elsewhere. What the beach gives you is what you work with. It is, in a strict technical sense, the purest form of the art.",
+        ],
+        pullQuote: {
+          text: "Our sand here along the Texas shore is better than anywhere in the world for stacking sand. We can stack it taller than anybody.",
+          attribution: "Mark Landrum, Texas Highways",
+        },
+        fact: [
+          { label: "Founded", value: "1997" },
+          { label: "Founders", value: "Elleece Calvert & Sharon Schafer" },
+          { label: "Ranking", value: "Largest native-sand competition in U.S." },
+          { label: "Location", value: "Mile markers 9–13, Mustang Island" },
+          { label: "Format", value: "3 days, Friday–Sunday in April" },
+        ],
+      },
+      {
+        heading: "The Umbrella, Then the Spin-Off",
+        body: [
+          "The first few Sandfests were small. Calvert and Schafer handled the organizing under the banner of the Art Center for the Islands — Schafer's institution. It was clear almost immediately that a full-scale festival would need a formal nonprofit home. A Corpus Christi–based sand sculptor named Dee McElroy, who had competed at festivals elsewhere and knew the organizational landscape, pointed out the obvious: someone needed to set it up as a 501(c)(3).",
+          "The solution, for nearly a decade, was the Port Aransas Community Theatre. PACT had the nonprofit status and the organizational machinery to host a growing festival, and in exchange, Sandfest proceeds funded PACT operations. From the late 1990s through September 2006, the festival ran under the theater's umbrella. Then, in the fall of 2006, the Sandfest board asked PACT to release it. It became an independent 501(c)(3) in its own right. At the first officer meeting of the new nonprofit, Elleece Calvert was elected treasurer.",
+          "Schafer stepped back to focus on the Art Center. Calvert stayed on as event director for another four years — introducing the $2 spectator admission fee in 2010, and the first mesh fencing separating spectators from the masters' sculpting area the same year. These were the structural changes that took Sandfest from a community event to a professionally run competition.",
+          "The presidency of the new board rotated. Port Aransas attorney Arnold Govella served four one-year terms between 2001 and 2014. Betty Crawford presided in 2011 — the first year the festival legally served alcohol, after a unanimous 7–0 vote by the city council the previous December. Shawn Etheridge held multiple terms through 2015 and was quoted as president again in 2019. Ruth Maspero ran the board through the pandemic cancellation and the October 2021 recovery edition. Scot Deason served from 2023 through 2025. Tim Parke, a local business owner who runs Lone Star Taste, takes over this year.",
+        ],
+        fact: [
+          { label: "Under PACT umbrella", value: "1997–2006" },
+          { label: "Independent 501(c)(3)", value: "September 2006" },
+          { label: "First treasurer", value: "Elleece Calvert" },
+          { label: "2026 board president", value: "Tim Parke (Lone Star Taste)" },
+        ],
+      },
+      {
+        heading: "The Sculptors Arrived",
+        body: [
+          "In 1997, the festival was moms, kids, and whoever walked up. Within a decade, it had become a destination on the international sand-sculpting circuit. Masters now fly in annually from Prince Edward Island, Vancouver, Ontario, Tacoma, Cleveland, France, the Netherlands, Italy, and Quebec. Competition is divided into Masters Solo, Masters Duo, Semi-Pro, Advanced Amateur, and a set of open categories that includes Family, Team, Youth, and Guppy. A master solo sculptor gets approximately thirty-six hours of work time, spread across five days of the competition week. A Guppy gets less.",
+          "The modern dynasty is Abe Waterman of Prince Edward Island. Waterman has won Masters Solo in 2022, 2023, and 2024 — three consecutive years — in addition to multiple Duo wins going back to 2015. Sue McGrew of Tacoma, paired with Benoit Dutherage of France, has dominated the Duo category in recent years. Marie-Line Gagne of Canada won the 2025 Masters Solo with a piece titled \"On the Edge,\" and also took Sculptors' Choice.",
+          "The single most widely covered sculpture in festival history is from 2019. Damon Langlois of British Columbia carved a facepalming Abraham Lincoln, modeled after the Lincoln Memorial but seated atop a crumbling foundation. He titled it \"Liberty Crumbling.\" It won Masters Solo, then went viral — picked up by Colossal, Bored Panda, TwistedSifter, and the San Antonio Current, and shared widely on social media. It was the moment Sandfest stopped being a regional fishing-town festival and became an internationally recognized art event.",
+          "But the international names are not the full story. Amateur, Semi-Pro, Youth, Family, and Guppy competitions run alongside the masters throughout the weekend. Most of the people sculpting on Sandfest weekend are not professionals. They are children with buckets, families with shovels, and weekend artists who drove in from San Antonio. The distinction between the professionals and the amateurs is technical; the spectacle is shared.",
+        ],
+        pullQuote: {
+          text: "The artists are special… it's ephemeral. It's only here for a minute.",
+          attribution: "Erin Richmond, 2023 visitor, Port Aransas South Jetty",
+        },
+      },
+      {
+        heading: "The Year It Saved the Town",
+        body: [
+          "Hurricane Harvey made landfall late on August 25, 2017, with the eye passing less than a mile from downtown Port Aransas. An estimated seventy percent of the island's buildings were damaged or destroyed. One hundred percent of Port Aransas businesses sustained damage. Total losses approached one billion dollars. The Tarpon Inn lost its first-floor lobby to an eight-foot storm surge. The Farley Boat Works was flooded. For the remainder of 2017, Port Aransas was, in the practical sense, closed.",
+          "Sandfest had already happened that year, in April, four months before the storm. The question by winter was whether the 2018 edition — the festival's twenty-second — could go on at all. The beach was functional. Much of the town was not. The sculpting community watched the calendar and waited for a signal.",
+          "It came. Between April 27 and 29, 2018, Sandfest opened on the beach between mile markers 9 and 13. Eighteen masters competed. Attendance reached thirty thousand over three days. Delayne Corbett of Vancouver won Masters Solo with a piece titled \"Seraphim,\" also taking People's Choice. Abe Waterman and Morgan Rudluff won Masters Duo with \"Ball and Chain.\" Lisa Shelton was the festival's Executive Director. Mark Landrum did a national radio interview with WBUR the Friday morning the festival opened, framing it for a post-Harvey audience.",
+          "By the end of the weekend, Sandfest had raised a then-record $310,000 for local nonprofits. The festival was described in its own messaging, and by every outlet that covered it, as the first major local event since the hurricane. It was more than a competition. For three days, it gave Port Aransas back the thing it had lost along with the buildings — the feeling of a town functioning in public.",
+        ],
+        pullQuote: {
+          text: "The talent was great, and it was hard to pick favorites and winners.",
+          attribution: "Lisa Shelton, 2018 Sandfest Executive Director",
+        },
+        fact: [
+          { label: "Dates", value: "April 27–29, 2018" },
+          { label: "Attendance", value: "30,000+" },
+          { label: "Masters competing", value: "18" },
+          { label: "Beach location", value: "Mile markers 9–13" },
+          { label: "Donations raised", value: "$310,000 (record)" },
+        ],
+      },
+      {
+        heading: "The Money Goes Home",
+        body: [
+          "Sandfest is not a festival that breaks even and donates the surplus. It is, by structure, a fundraiser. The admission fees, sponsorship packages, beer garden sales, and gallery spaces are all engineered to produce net proceeds that go back to the community. Since 2012, the festival has distributed more than $1.5 million to Port Aransas nonprofits.",
+          "The 2025 edition alone distributed $464,169 across twenty-one local organizations. The single largest line item — $274,419 — went to Port Aransas High School scholarships. That scholarship line has grown by a hundred and nineteen percent in three years, from $125,000 in 2022 to its 2025 total. Other 2025 recipients included the Port Aransas Volunteer Fire Department, Helping Hands Food Pantry, Moore-McDonald VFW Post 8967, the Port Aransas Art Center, the Port Aransas Community Theatre, Port Aransas EMS, the Port Aransas Police Foundation, Trinity by the Sea, Friends of the ARK, Animal Friends of Port Aransas, Keep Port Aransas Beautiful, the Port Aransas Garden Club, Friends of the Library, Bikers Against Child Abuse, the Port Aransas Youth Development Foundation, the Port Aransas Preservation and Historical Association, the PAISD Nurses Fund, and a line dedicated to PAISD teachers' continuing education.",
+          "One of those recipients is the Port Aransas Art Center. Which is to say: the institution Sharon Schafer directed in 1997, when she set a card table on the beach with Elleece Calvert, still receives a grant every year from the festival that started there. The money moves in a circle. The festival its founders created, decades later, pays back to the institution that housed them at the beginning. It is one of the cleaner examples of civic return in Texas coastal life.",
+        ],
+        pullQuote: {
+          text: "The Art Center — where Sharon Schafer directed in 1997 — still receives a grant every year from the festival it seeded.",
+        },
+        fact: [
+          { label: "Cumulative since 2012", value: "$1.5M+" },
+          { label: "2025 distribution", value: "$464,169" },
+          { label: "2025 recipients", value: "21 organizations" },
+          { label: "PAISD scholarships 2025", value: "$274,419" },
+          { label: "Scholarship growth 2022→2025", value: "+119%" },
+        ],
+      },
+      {
+        heading: "The Logo Mountain",
+        body: [
+          "Every Sandfest centerpiece is a fifteen-foot-tall sculpture that carries the year's sponsor logos. Sculptors and volunteers have rebuilt it on the beach every year since the festival's earliest days — including 2015, when a hard rain destroyed the previous version before opening, and 2018, after Hurricane Harvey nearly took the festival down with it. The logo mountain is the closest thing Sandfest has to a permanent fixture, except that it isn't permanent. It is rebuilt, every year, by hand, from sand.",
+          "This year, the mountain carries a name that did not come from a sponsor sheet: Lisa Shelton.",
+          "Shelton was Sandfest's Executive Director in 2018 and 2019, the Harvey-recovery years. Most of Port Aransas knew her as \"Wiggly,\" a nickname that referred to a shock of curly blonde hair and a personality of equivalent volume. She also served, at various points, on the Port Aransas ISD Board of Trustees (including a term as president), the Port Aransas Tourism Bureau, the Community Theatre board, the Planning and Zoning Commission, and the Port Aransas Education Foundation. She suffered a stroke on October 22, 2024, and died of complications on September 6, 2025. She was sixty-one.",
+          "The 2026 logo mountain is the first since her passing. Her name is on it.",
+        ],
+        pullQuote: {
+          text: "Wiggly was a force — a force of passion, enthusiasm, hard work, determination and love.",
+          attribution: "Mary Henkel Judson, Port Aransas South Jetty",
+        },
+      },
+      {
+        heading: "Weather and Will",
+        body: [
+          "A festival built of sand on a Gulf-coast beach survives because its volunteers refuse to cancel. The 2015 edition was the extreme case. A hard rain on April 22 destroyed the centerpiece sculpture before opening day. Flooding closed roads from Avenue G to Beach Access Road 1A. High winds knocked down tents. Then, at around six in the morning on Sunday, April 26, approximately thirty amateur sculptures were vandalized by a group of teenagers on golf carts and motorized bicycles. The Sandfest logo on the centerpiece was defaced. A section of the chain-link fence around the masters' sculpting area was torn down. No arrests were ever reported.",
+          "The festival finished the weekend on schedule and set attendance records. Shawn Etheridge, then board president, told the South Jetty afterward that it was incredible — as big as any Sandfest he had experienced. The centerpiece was rebuilt. The amateur sculpting community moved on.",
+          "There have been other curve balls. The 2020 edition was postponed from April to October, then cancelled entirely in July as the COVID-19 pandemic made a three-day, thirty-thousand-attendee festival impossible. The 2021 edition moved to October 15–17 — the only fall Sandfest in the festival's history. In 2023, extra-high tides from a Gulf low-pressure system forced at least one master sculptor to completely restart his work mid-competition. And in 2025, with the City of Port Aransas under municipal water restrictions, Sandfest pumped water from a private pond and trucked it in by tanker to the beach. Sculpting takes water. The festival found a way.",
+          "What does it take to hold a festival made of sand for twenty-nine years on a Gulf-coast beach? Everything, every year, and whatever the weather and the tides are willing to leave you.",
+        ],
+        pullQuote: {
+          text: "Mother Nature threw us a couple of curve balls.",
+          attribution: "Scot Deason, Sandfest Board President 2023–2025",
+        },
+      },
+      {
+        heading: "This Weekend",
+        body: [
+          "The twenty-ninth annual Texas Sandfest runs Friday, April 17 through Sunday, April 19, 2026. Tim Parke, who owns Lone Star Taste in Port Aransas, takes over the board presidency for his first year at the helm. The Josh Abbott Band, from Lubbock, plays Saturday night. Masters, Duo, Semi-Pro, Advanced Amateur, Family, Team, Youth, and Guppy categories will sculpt across the three days in the sand between mile markers 9 and 13. Admission is thirty dollars for an adult weekend wristband, five for youth ages six to twelve. The thirtieth annual is next year.",
+          "Somewhere on the sand this weekend, a child will build her first sandcastle. She will not remember the card table. She will not remember that two Port Aransas women set folding chairs on the beach in 1997 so their own children could do the same thing. But the card table is the reason she is there. Nearly half a million dollars will move through this weekend — into scholarships that will eventually send her cousin to college, into a volunteer fire department that will respond when her grandmother's house floods, into the food pantry that feeds the waiter who serves her family at dinner on Sunday night. The festival that started as two moms watching their children build castles on the sand has become one of the largest civic engines in a town that needs every one it can get.",
+          "Calvert and Schafer's card table is, in the strict literal sense, gone. But you can see it every year, right there at the base of every sculpture, on every stretch of beach between mile markers 9 and 13, and in every grant check the festival writes in May. Some things you build outlast the thing you built them on.",
+        ],
+        fact: [
+          { label: "Dates", value: "April 17–19, 2026" },
+          { label: "Edition", value: "29th annual" },
+          { label: "Board President", value: "Tim Parke (Lone Star Taste)" },
+          { label: "Saturday music", value: "Josh Abbott Band" },
+          { label: "Adult weekend wristband", value: "$30" },
+          { label: "Youth (ages 6–12)", value: "$5" },
+          { label: "Beach location", value: "Mile markers 9–13" },
+        ],
+      },
+    ],
+
+    sources: [
+      { label: "Texas Sandfest official — History", url: "https://www.texassandfest.org/history" },
+      { label: "Texas Sandfest official — 2025 Winners", url: "https://www.texassandfest.org/winners" },
+      { label: "Port Aransas Tourism Bureau — History of Texas SandFest", url: "https://www.portaransas.org/texas-sandfest/about/history/" },
+      { label: "Port Aransas Tourism Bureau — Texas SandFest 2026", url: "https://www.portaransas.org/texas-sandfest/" },
+      { label: "Port Aransas South Jetty — \"Shelton was sparkling community leader\" (Sept 10, 2025)", url: "https://www.portasouthjetty.com/articles/shelton-was-sparkling-community-leader/" },
+      { label: "Port Aransas South Jetty — \"SandFest gives back to area organizations\" (2025)", url: "https://www.portasouthjetty.com/articles/sandfest-gives-back-to-area-organizations/" },
+      { label: "Port Aransas South Jetty — \"SandFest was super\" (2025 coverage)", url: "https://www.portasouthjetty.com/articles/sandfest-was-super/" },
+      { label: "Port Aransas South Jetty — \"Record set in SandFest donations\" (2019)", url: "https://www.portasouthjetty.com/articles/record-set-in-sandfest-donations/" },
+      { label: "Port Aransas South Jetty — \"SandFest superb\" (2018 post-Harvey)", url: "https://www.portasouthjetty.com/articles/sandfest-superb/" },
+      { label: "Port Aransas South Jetty — \"SandFest survives\" (2015 vandalism year)", url: "https://www.portasouthjetty.com/articles/sandfest-survives/" },
+      { label: "Port Aransas South Jetty — \"Neither wind nor Gulf tides stop SandFest\" (2023)", url: "https://www.portasouthjetty.com/articles/neither-wind-nor-gulf-tides-stop-sandfest/" },
+      { label: "Port Aransas South Jetty — \"SandFest 2022 'best ever'\"", url: "https://www.portasouthjetty.com/articles/sandfest-2022-best-ever/" },
+      { label: "Port Aransas South Jetty — \"City gives OK to SandFest to sell alcohol at 2011 event\"", url: "https://www.portasouthjetty.com/articles/city-gives-ok-to-sandfest-to-sell-alcohol-at-2011-event/" },
+      { label: "Port Aransas South Jetty — \"Winners of the 12th annual Texas SandFest\" (2008)", url: "https://www.portasouthjetty.com/articles/winners-of-the-12th-annual-texas-sandfest/" },
+      { label: "Texas Standard — Former Accountant Prospers as the Sandcastle Guy", url: "https://www.texasstandard.org/stories/former-accountant-prospers-as-the-sandcastle-guy/" },
+      { label: "WBUR Here & Now — \"Texas 'Sandcastle Guy' on Hurricane Harvey Recovery\" (April 27, 2018)", url: "https://www.wbur.org/hereandnow/2018/04/27/texas-sandfest-hurricane-harvey-recovery" },
+      { label: "Colossal — \"An Award-Winning Sand Sculpture by Damon Langlois Captures a Crumbling Abraham Lincoln\"", url: "https://www.thisiscolossal.com/2019/05/lincoln-sculpture-by-damon-langlois/" },
+      { label: "KIII 3News — Texas Sandfest 2026 returns to Port Aransas", url: "https://www.kiiitv.com/article/news/local/texas-sandfest-2026-returns-to-port-aransas/503-e0229988-d7bb-484c-be1a-ccf041c38d95" },
+      { label: "KRIS-TV — \"The Queen of Port Aransas\" (November 2024)", url: "https://www.kristv.com/news/local-news/in-your-neighborhood/nueces-county/port-aransas/the-queen-of-port-aransas-port-a-community-rallies-to-support-beloved-local" },
+      { label: "Austin Chronicle — Day Trips: SandFest, Port Aransas (2025)", url: "https://www.austinchronicle.com/columns/2025-04-25/day-trips-sandfest-port-aransas/" },
+    ],
+
+    visitToday: [
+      { place: "Texas Sandfest 2026", detail: "Friday April 17 through Sunday April 19, 2026. Mile markers 9–13 on the Mustang Island beach. $30 adult weekend wristband, $5 youth 6–12. Josh Abbott Band plays Saturday night." },
+      { place: "Port Aransas Art Center", detail: "Corner of Alister and Avenue G. The institution Sharon Schafer directed in 1997 — and which still receives a Sandfest grant every year from the festival she helped start. Open galleries, classes, and community programs." },
+      { place: "The Logo Mountain", detail: "The 15-foot-tall centerpiece sculpture is raised fresh on the beach each year, carrying the season's sponsor logos. This year, it also carries Lisa \"Wiggly\" Shelton's name." },
+    ],
+  },
 };
