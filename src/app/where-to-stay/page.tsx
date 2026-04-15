@@ -30,15 +30,6 @@ const neighborhoods = [
     lodging: ["Port Royal Ocean Resort", "Beachgate Condosuites", "Sand Dollar City", "Sea and Sand Cottages"],
   },
   {
-    name: "Cinnamon Shore",
-    icon: "🏡",
-    vibe: "Luxury, New Urbanist, master-planned",
-    description:
-      "Master-planned community 4 miles south of downtown on Mustang Island. New Urbanist architecture, walkable grid streets, town center with retail and dining (Lisabella's Bistro). Median home price around $1 million. This is the high-end, design-forward Port A experience.",
-    bestFor: ["Luxury", "Architecture", "Quiet", "Design-minded travelers"],
-    lodging: ["Cinnamon Shore"],
-  },
-  {
     name: "Mid-Island / Highway 361",
     icon: "🛣️",
     vibe: "Convenient, affordable, easy access",
