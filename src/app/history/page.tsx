@@ -191,6 +191,35 @@ export default function HistoryPage() {
         </div>
       </section>
 
+      {/* Archives cross-link */}
+      <section className="py-16 bg-navy-900 relative">
+        <div className="absolute top-0 left-0 right-0 coral-line" />
+        <div className="relative max-w-5xl mx-auto px-4 sm:px-6">
+          <div className="grid md:grid-cols-[1fr_auto] gap-8 items-center">
+            <div>
+              <p className="text-coral-400 text-sm font-medium tracking-[0.2em] uppercase mb-3">
+                Companion Collection
+              </p>
+              <h2 className="font-display text-2xl sm:text-3xl font-bold text-sand-50 mb-3">
+                Browse the Historical Archives
+              </h2>
+              <p className="text-navy-200 font-light max-w-xl">
+                31 public-domain photographs of Port Aransas spanning 1853 to 2017 — the largest organized digital collection of historical PA imagery online. Sourced from the Library of Congress, NARA, NOAA, NASA, UTSA, and Wikimedia.
+              </p>
+            </div>
+            <Link
+              href="/archives"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-coral-500/15 text-coral-300 border border-coral-500/30 hover:bg-coral-500/25 hover:border-coral-500/50 transition-all duration-300 text-sm font-semibold whitespace-nowrap"
+            >
+              🏛️ Browse Archives
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="py-20 hero-gradient relative">
         <div className="absolute top-0 left-0 right-0 gold-line" />

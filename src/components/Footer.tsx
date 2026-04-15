@@ -85,6 +85,14 @@ export default function Footer() {
               </li>
               <li>
                 <Link
+                  href="/archives"
+                  className="text-navy-300 hover:text-coral-300 transition-colors text-sm"
+                >
+                  🏛️ Archives
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/rent"
                   className="text-navy-300 hover:text-coral-300 transition-colors text-sm"
                 >
