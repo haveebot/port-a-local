@@ -58,12 +58,11 @@ export async function POST(req: NextRequest) {
     }
 
     const m = session.metadata || {};
-    const { name, phone, email, cartSize, pickupDate, returnDate, delivery, deliveryAddress, numDays, reservationFee } = m;
+    const { name, phone, email, cartSize, pickupDate, returnDate, numDays, reservationFee } = m;
 
     const pickupFormatted = formatDate(pickupDate);
     const returnFormatted = formatDate(returnDate);
     const cartLabel = `${cartSize}-Passenger Golf Cart`;
-    const deliveryLabel = delivery === "delivery" ? `Delivery to: ${deliveryAddress}` : "Self-Pickup";
     const days = parseInt(numDays);
     const fee = parseInt(reservationFee);
 
@@ -81,7 +80,7 @@ export async function POST(req: NextRequest) {
         <p><strong>Pickup:</strong> ${pickupFormatted}</p>
         <p><strong>Return:</strong> ${returnFormatted}</p>
         <p><strong>Duration:</strong> ${days} day${days !== 1 ? "s" : ""}</p>
-        <p><strong>Pickup/Delivery:</strong> ${deliveryLabel}</p>
+        <p><strong>Pickup:</strong> Port Aransas (sourcing vendor)</p>
         <hr style="border:none; border-top:1px solid #e4dccc; margin:16px 0;"/>
         <p style="font-size:16px;"><strong>Fee collected:</strong> $${fee}</p>
         <p style="font-size:11px; color:#8896ab; font-family:monospace; margin-top:12px;">Stripe session: ${session.id}</p>
@@ -92,17 +91,19 @@ export async function POST(req: NextRequest) {
       preheader: "Your golf cart reservation is confirmed.",
       bodyHtml: `
         <h2 style="margin:0 0 8px 0; font-size:22px; color:#0b1120;">Your cart is reserved</h2>
-        <p style="margin:0 0 16px 0; color:#4a5568; font-size:14px;">Payment received. Our local team will be in touch with pickup details.</p>
+        <p style="margin:0 0 16px 0; color:#4a5568; font-size:14px;">Payment received. We&apos;re matching your reservation with a vetted local cart company now. You&apos;ll receive <strong>pickup details 24–48 hours before your arrival date</strong>.</p>
         <p>Hi ${name},</p>
         <p><strong>Your reservation:</strong></p>
         <ul>
           <li><strong>Cart:</strong> ${cartLabel}</li>
-          <li><strong>Pickup:</strong> ${pickupFormatted}</li>
-          <li><strong>Return:</strong> ${returnFormatted}</li>
+          <li><strong>Pickup date:</strong> ${pickupFormatted}</li>
+          <li><strong>Return date:</strong> ${returnFormatted}</li>
           <li><strong>Duration:</strong> ${days} day${days !== 1 ? "s" : ""}</li>
-          <li><strong>Pickup/Delivery:</strong> ${deliveryLabel}</li>
           <li><strong>Reservation fee paid:</strong> $${fee}</li>
+          <li><strong>Pickup location:</strong> Sent 24–48 hours before arrival</li>
         </ul>
+        <p><strong>What to bring:</strong> Valid photo ID (must be 18+).</p>
+        <p><strong>Our guarantee:</strong> If we&apos;re unable to source a cart for your dates, your reservation fee is fully refunded.</p>
         <p>Questions? Reply to this email.</p>
         <p style="margin-top:20px;">— the Port A Local team</p>
       `,

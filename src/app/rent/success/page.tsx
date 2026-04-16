@@ -61,11 +61,11 @@ function RentSuccessContent() {
           </div>
           <div className="flex items-start gap-3">
             <span className="text-coral-400 font-bold">2</span>
-            <p className="text-navy-200 text-sm">Our local team will contact you within 24 hours to confirm availability and delivery details.</p>
+            <p className="text-navy-200 text-sm">We match your reservation with a vetted local cart company. You don&apos;t lift a finger.</p>
           </div>
           <div className="flex items-start gap-3">
             <span className="text-coral-400 font-bold">3</span>
-            <p className="text-navy-200 text-sm">Your cart is delivered to you. Hop in and explore the island.</p>
+            <p className="text-navy-200 text-sm">Pickup details arrive <strong className="text-sand-50">24–48 hours before your arrival date</strong> — location, hours, and what to bring. Show up, grab the keys, ride.</p>
           </div>
         </div>
         <a href="/" className="inline-flex items-center justify-center px-8 py-3 rounded-xl btn-coral text-sm font-semibold">

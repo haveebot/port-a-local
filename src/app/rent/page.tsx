@@ -11,12 +11,15 @@ const CART_SIZES = [
   { value: "8", label: "8-Passenger Cart" },
 ];
 
-function getTodayStr() {
-  return new Date().toISOString().split("T")[0];
+/** Calendar starts 5 days from today — gives us lead time to source a vendor. */
+function getMinBookingDate() {
+  const d = new Date();
+  d.setDate(d.getDate() + 5);
+  return d.toISOString().split("T")[0];
 }
 
 export default function RentPage() {
-  const today = getTodayStr();
+  const minDate = getMinBookingDate();
 
   const [form, setForm] = useState({
     name: "",
@@ -25,8 +28,6 @@ export default function RentPage() {
     cartSize: "4",
     pickupDate: "",
     returnDate: "",
-    delivery: "pickup",
-    deliveryAddress: "",
   });
 
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
@@ -62,10 +63,6 @@ export default function RentPage() {
       setErrorMsg("Return date must be after pickup date.");
       return;
     }
-    if (form.delivery === "delivery" && !form.deliveryAddress.trim()) {
-      setErrorMsg("Please enter a delivery address.");
-      return;
-    }
 
     setStatus("loading");
     setErrorMsg("");
@@ -85,7 +82,7 @@ export default function RentPage() {
       }
     } catch {
       setStatus("error");
-      setErrorMsg("Something went wrong. Please try again or call us directly.");
+      setErrorMsg("Something went wrong. Please try again or email hello@theportalocal.com.");
     }
   };
 
@@ -96,17 +93,18 @@ export default function RentPage() {
         <section className="pt-28 pb-20 hero-gradient relative">
           <div className="absolute bottom-0 left-0 right-0 coral-line" />
           <div className="max-w-2xl mx-auto px-4 sm:px-6 text-center">
-            <div className="text-6xl mb-6">🏖️</div>
+            <div className="text-6xl mb-6">🛺</div>
             <h1 className="font-display text-4xl font-bold text-sand-50 mb-4">
-              You&apos;re All Set!
+              Your Cart is Reserved!
             </h1>
             <p className="text-lg text-navy-200 mb-4">
-              Your golf cart reservation request has been received. Our local
-              team is reviewing availability and will confirm your booking
-              shortly.
+              We&apos;re matching your reservation with a local cart company now.
             </p>
-            <p className="text-navy-300">
-              Check your email for a confirmation. We&apos;ll be in touch soon.
+            <p className="text-navy-300 mb-6">
+              You&apos;ll receive pickup details <strong className="text-sand-100">24–48 hours before your arrival date</strong> — including location, hours, and what to bring.
+            </p>
+            <p className="text-navy-400 text-sm">
+              Full refund if we&apos;re unable to fulfill your reservation. Check your email for a confirmation.
             </p>
           </div>
         </section>
@@ -119,7 +117,7 @@ export default function RentPage() {
     <main className="min-h-screen">
       <Navigation />
 
-      {/* Header */}
+      {/* Hero */}
       <section className="pt-28 pb-14 hero-gradient relative">
         <div className="absolute bottom-0 left-0 right-0 coral-line" />
         <div className="absolute inset-0 palm-pattern opacity-15" />
@@ -127,34 +125,53 @@ export default function RentPage() {
           <div className="flex items-center gap-3 mb-2">
             <span className="text-4xl">🛺</span>
             <h1 className="font-display text-4xl sm:text-5xl font-bold text-sand-50">
-              Golf Cart Rentals
+              Rent a Golf Cart
             </h1>
           </div>
-          <p className="text-lg text-navy-200 mt-2 font-light">
-            The best way to get around Port Aransas. Reserve yours now — our
-            local team handles the rest.
+          <p className="text-lg text-navy-200 mt-2 font-light max-w-2xl">
+            The island runs on golf carts. Reserve yours through Port A Local and we guarantee a clean, well-maintained cart from a vetted local company — no booking fees, no guesswork.
           </p>
         </div>
       </section>
 
-      {/* How it works */}
+      {/* How It Works */}
       <section className="py-10 bg-sand-50 border-b border-sand-200">
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
             <div>
               <div className="text-3xl mb-2">📅</div>
               <p className="font-semibold text-navy-900 text-sm">Pick Your Dates</p>
-              <p className="text-navy-500 text-sm mt-1">Choose pickup and return. We&apos;ll confirm availability.</p>
+              <p className="text-navy-500 text-sm mt-1">Choose your cart size and rental dates. Pay a small reservation fee to lock it in.</p>
             </div>
             <div>
               <div className="text-3xl mb-2">✅</div>
-              <p className="font-semibold text-navy-900 text-sm">We Confirm</p>
-              <p className="text-navy-500 text-sm mt-1">Our local team reviews and locks in your cart.</p>
+              <p className="font-semibold text-navy-900 text-sm">We Confirm Your Cart</p>
+              <p className="text-navy-500 text-sm mt-1">We source a quality cart from our network of local rental companies. You don&apos;t lift a finger.</p>
             </div>
             <div>
-              <div className="text-3xl mb-2">🏁</div>
-              <p className="font-semibold text-navy-900 text-sm">We Deliver, You Explore</p>
-              <p className="text-navy-500 text-sm mt-1">Your cart is delivered to you. Just hop in and go.</p>
+              <div className="text-3xl mb-2">📍</div>
+              <p className="font-semibold text-navy-900 text-sm">Pick Up & Explore</p>
+              <p className="text-navy-500 text-sm mt-1">Pickup details sent 24–48 hours before your arrival. Show up, grab the keys, ride.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Guarantee Strip */}
+      <section className="py-8 bg-navy-900 border-b border-navy-800">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+            <div className="flex items-center justify-center gap-2">
+              <span className="text-coral-400 text-lg">✓</span>
+              <span className="text-sand-200 text-sm font-medium">Quality Guaranteed</span>
+            </div>
+            <div className="flex items-center justify-center gap-2">
+              <span className="text-coral-400 text-lg">✓</span>
+              <span className="text-sand-200 text-sm font-medium">Vetted Local Companies</span>
+            </div>
+            <div className="flex items-center justify-center gap-2">
+              <span className="text-coral-400 text-lg">✓</span>
+              <span className="text-sand-200 text-sm font-medium">Full Refund if Unfulfilled</span>
             </div>
           </div>
         </div>
@@ -178,7 +195,7 @@ export default function RentPage() {
                     type="date"
                     name="pickupDate"
                     required
-                    min={today}
+                    min={minDate}
                     value={form.pickupDate}
                     onChange={handleChange}
                     className="w-full border border-sand-300 rounded-lg px-3 py-2 text-navy-900 focus:outline-none focus:ring-2 focus:ring-coral-400"
@@ -192,7 +209,7 @@ export default function RentPage() {
                     type="date"
                     name="returnDate"
                     required
-                    min={form.pickupDate || today}
+                    min={form.pickupDate || minDate}
                     value={form.returnDate}
                     onChange={handleChange}
                     className="w-full border border-sand-300 rounded-lg px-3 py-2 text-navy-900 focus:outline-none focus:ring-2 focus:ring-coral-400"
@@ -218,37 +235,6 @@ export default function RentPage() {
                 </select>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-navy-700 mb-1">
-                  Pickup or Delivery? *
-                </label>
-                <select
-                  name="delivery"
-                  value={form.delivery}
-                  onChange={handleChange}
-                  className="w-full border border-sand-300 rounded-lg px-3 py-2 text-navy-900 focus:outline-none focus:ring-2 focus:ring-coral-400"
-                >
-                  <option value="pickup">I&apos;ll pick it up</option>
-                  <option value="delivery">Deliver to me</option>
-                </select>
-              </div>
-
-              {form.delivery === "delivery" && (
-                <div>
-                  <label className="block text-sm font-medium text-navy-700 mb-1">
-                    Delivery Address *
-                  </label>
-                  <input
-                    type="text"
-                    name="deliveryAddress"
-                    value={form.deliveryAddress}
-                    onChange={handleChange}
-                    placeholder="123 Beach Ave, Port Aransas, TX"
-                    className="w-full border border-sand-300 rounded-lg px-3 py-2 text-navy-900 focus:outline-none focus:ring-2 focus:ring-coral-400"
-                  />
-                </div>
-              )}
-
               {/* Pricing summary */}
               {numDays && reservationFee && (
                 <div className="bg-sand-50 border border-sand-200 rounded-xl p-4 mt-2">
@@ -257,7 +243,7 @@ export default function RentPage() {
                     <span className="font-semibold">${reservationFee}</span>
                   </div>
                   <p className="text-xs text-navy-400 mt-2">
-                    Reservation fee collected at confirmation. You&apos;ll pay the rental balance directly at pickup — at a discounted rate that more than covers this fee.
+                    Reservation fee secures your cart. Rental balance paid directly to the cart company at pickup.
                   </p>
                 </div>
               )}
@@ -306,6 +292,33 @@ export default function RentPage() {
               </div>
             </div>
 
+            {/* Booking Details & Disclosures */}
+            <div className="bg-navy-50 rounded-2xl border border-navy-100 p-4 sm:p-6 space-y-3">
+              <h3 className="font-display text-sm font-bold text-navy-900 uppercase tracking-wide">Before You Book</h3>
+              <ul className="space-y-2 text-sm text-navy-600">
+                <li className="flex items-start gap-2">
+                  <span className="text-coral-500 font-bold mt-0.5">→</span>
+                  <span><strong>Pickup details</strong> are sent to your email 24–48 hours before your arrival date.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-coral-500 font-bold mt-0.5">→</span>
+                  <span><strong>Valid ID required</strong> at pickup. Must be 18 or older to rent.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-coral-500 font-bold mt-0.5">→</span>
+                  <span><strong>Free cancellation</strong> 48+ hours before your pickup date. Non-refundable within 48 hours.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-coral-500 font-bold mt-0.5">→</span>
+                  <span><strong>Damage deposit</strong> may be collected by the rental company at pickup.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-coral-500 font-bold mt-0.5">→</span>
+                  <span><strong>Full refund</strong> if we&apos;re unable to source a cart for your dates — no risk to you.</span>
+                </li>
+              </ul>
+            </div>
+
             {errorMsg && (
               <p className="text-red-500 text-sm text-center">{errorMsg}</p>
             )}
@@ -315,19 +328,19 @@ export default function RentPage() {
               disabled={status === "loading"}
               className="w-full py-4 rounded-xl btn-coral text-lg font-medium tracking-wide disabled:opacity-60"
             >
-              {status === "loading" ? "Redirecting to payment..." : "Reserve & Pay Now"}
+              {status === "loading" ? "Redirecting to payment..." : "Reserve My Cart"}
             </button>
 
             <p className="text-center text-xs text-navy-400/70 leading-relaxed">
               By submitting, you agree to our{" "}
               <Link href="/terms" className="underline hover:text-navy-600">Terms</Link> and{" "}
               <Link href="/privacy" className="underline hover:text-navy-600">Privacy Policy</Link>{" "}
-              and consent to receive SMS and email updates about your request.
+              and consent to receive SMS and email updates about your reservation.
               Msg &amp; data rates may apply. Reply STOP to opt out.
             </p>
 
             <p className="text-center text-sm text-navy-400">
-              Secure payment via Stripe. Reservation fee collected now — cart balance paid at pickup at a discounted rate.
+              Secure payment via Stripe. $10/day reservation fee — rental balance paid at pickup.
             </p>
           </form>
         </div>

@@ -47,8 +47,6 @@ export async function POST(req: NextRequest) {
     cartSize,
     pickupDate,
     returnDate,
-    delivery,
-    deliveryAddress,
     numDays,
     reservationFee,
   } = body;
@@ -60,10 +58,6 @@ export async function POST(req: NextRequest) {
   const pickupFormatted = formatDate(pickupDate);
   const returnFormatted = formatDate(returnDate);
   const cartLabel = `${cartSize}-Passenger Golf Cart`;
-  const deliveryLabel =
-    delivery === "delivery"
-      ? `Delivery to: ${deliveryAddress}`
-      : "Self-Pickup";
 
   const internalHtml = emailLayout({
     tone: "alert",
@@ -79,7 +73,7 @@ export async function POST(req: NextRequest) {
       <p><strong>Pickup:</strong> ${pickupFormatted}</p>
       <p><strong>Return:</strong> ${returnFormatted}</p>
       <p><strong>Duration:</strong> ${numDays} day${numDays !== 1 ? "s" : ""}</p>
-      <p><strong>Pickup/Delivery:</strong> ${deliveryLabel}</p>
+      <p><strong>Pickup:</strong> In Port Aransas (location TBD — sourcing vendor)</p>
       <hr style="border:none; border-top:1px solid #e4dccc; margin:16px 0;"/>
       <p style="font-size:16px;"><strong>Reservation fee to collect:</strong> $${reservationFee}</p>
     `,
@@ -88,23 +82,24 @@ export async function POST(req: NextRequest) {
   const customerHtml = emailLayout({
     preheader: "Your golf cart reservation request is in.",
     bodyHtml: `
-      <h2 style="margin:0 0 8px 0; font-size:22px; color:#0b1120;">Your cart reservation is in</h2>
-      <p style="margin:0 0 16px 0; color:#4a5568; font-size:14px;">Our local team is reviewing availability. We will follow up within a few hours to confirm your cart and collect the reservation fee.</p>
+      <h2 style="margin:0 0 8px 0; font-size:22px; color:#0b1120;">Your cart reservation is confirmed</h2>
+      <p style="margin:0 0 16px 0; color:#4a5568; font-size:14px;">We&apos;re matching your reservation with a vetted local cart company now. You&apos;ll receive <strong>pickup details 24–48 hours before your arrival date</strong> — including location, hours, and what to bring.</p>
       <p>Hi ${name},</p>
-      <p><strong>Your request:</strong></p>
+      <p><strong>Your reservation:</strong></p>
       <ul>
         <li><strong>Cart:</strong> ${cartLabel}</li>
         <li><strong>Pickup:</strong> ${pickupFormatted}</li>
         <li><strong>Return:</strong> ${returnFormatted}</li>
         <li><strong>Duration:</strong> ${numDays} day${numDays !== 1 ? "s" : ""}</li>
-        <li><strong>Pickup/Delivery:</strong> ${deliveryLabel}</li>
       </ul>
-      <p>Questions? Reply to this email or give us a call.</p>
+      <p><strong>What to bring:</strong> Valid photo ID (must be 18+).</p>
+      <p><strong>Our guarantee:</strong> If we&apos;re unable to source a cart for your dates, your reservation fee is fully refunded — no questions asked.</p>
+      <p>Questions? Reply to this email.</p>
       <p style="margin-top:20px;">— the Port A Local team</p>
     `,
   });
 
-  console.log(`[Rent] New request — ${name} | ${cartLabel} | ${pickupDate} → ${returnDate} | ${delivery}`);
+  console.log(`[Rent] New request — ${name} | ${cartLabel} | ${pickupDate} → ${returnDate}`);
 
   await Promise.allSettled([
     sendEmail(INTERNAL_EMAIL, `Golf Cart Request — ${name} — ${pickupDate} to ${returnDate}`, internalHtml),

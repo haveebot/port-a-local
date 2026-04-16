@@ -16,8 +16,6 @@ export async function POST(req: NextRequest) {
     cartSize,
     pickupDate,
     returnDate,
-    delivery,
-    deliveryAddress,
     numDays,
     reservationFee,
   } = body;
@@ -38,7 +36,7 @@ export async function POST(req: NextRequest) {
             unit_amount: reservationFee * 100, // Stripe uses cents
             product_data: {
               name: `Golf Cart Reservation — ${cartSize}-Passenger`,
-              description: `${numDays} day${numDays !== 1 ? "s" : ""} · ${pickupDate} → ${returnDate}${delivery === "delivery" ? ` · Delivery to ${deliveryAddress}` : " · Self-Pickup"}`,
+              description: `${numDays} day${numDays !== 1 ? "s" : ""} · ${pickupDate} → ${returnDate} · Pickup in Port Aransas`,
             },
           },
           quantity: 1,
@@ -52,8 +50,6 @@ export async function POST(req: NextRequest) {
         cartSize,
         pickupDate,
         returnDate,
-        delivery,
-        deliveryAddress: deliveryAddress || "",
         numDays: String(numDays),
         reservationFee: String(reservationFee),
       },
