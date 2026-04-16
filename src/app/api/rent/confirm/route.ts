@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { emailLayout } from "@/lib/emailLayout";
+import { getBlastableVendors, getBlastCount } from "@/data/cart-vendors";
 
 const getStripe = () => new Stripe(process.env.STRIPE_SECRET_KEY || "", {
   apiVersion: "2026-03-25.dahlia",
@@ -103,7 +104,8 @@ export async function POST(req: NextRequest) {
           <li><strong>Pickup location:</strong> Sent 24–48 hours before arrival</li>
         </ul>
         <p><strong>What to bring:</strong> Valid photo ID (must be 18+).</p>
-        <p><strong>Our guarantee:</strong> If we&apos;re unable to source a cart for your dates, your reservation fee is fully refunded.</p>
+        <p><strong>Your savings:</strong> Every PAL reservation includes a guaranteed <strong>$20 discount</strong> off the rental company's standard rate.</p>
+        <p><strong>Our guarantee:</strong> If we're unable to source a cart for your dates, your reservation fee is fully refunded.</p>
         <p>Questions? Reply to this email.</p>
         <p style="margin-top:20px;">— the Port A Local team</p>
       `,
@@ -111,9 +113,48 @@ export async function POST(req: NextRequest) {
 
     console.log(`[Rent/Confirm] Payment confirmed — ${name} | ${cartLabel} | ${pickupDate} → ${returnDate}`);
 
+    // --- Vendor lead blast ---
+    const vendors = getBlastableVendors();
+    const totalVendorCount = getBlastCount();
+
+    const vendorLeadHtml = emailLayout({
+      tone: "alert",
+      preheader: `New cart rental lead — ${cartLabel} — ${pickupDate} to ${returnDate}`,
+      bodyHtml: `
+        <h2 style="margin:0 0 8px 0; font-size:20px; color:#0b1120;">🛺 New Cart Rental Lead</h2>
+        <p style="margin:0 0 16px 0; color:#4a5568; font-size:14px;">A customer just reserved a golf cart through Port A Local. Reply to this email to claim this rental. <strong>First response wins.</strong></p>
+        <hr style="border:none; border-top:1px solid #e4dccc; margin:16px 0;"/>
+        <p><strong>Cart:</strong> ${cartLabel}</p>
+        <p><strong>Pickup:</strong> ${pickupFormatted}</p>
+        <p><strong>Return:</strong> ${returnFormatted}</p>
+        <p><strong>Duration:</strong> ${days} day${days !== 1 ? "s" : ""}</p>
+        <hr style="border:none; border-top:1px solid #e4dccc; margin:16px 0;"/>
+        <p style="font-size:13px; color:#4a5568;"><strong>By responding to claim this lead, you agree to:</strong></p>
+        <ul style="font-size:13px; color:#4a5568; padding-left:20px;">
+          <li>Have a clean, well-maintained ${cartSize}-passenger cart ready for customer pickup on <strong>${pickupFormatted}</strong></li>
+          <li>Provide the customer a <strong>minimum $20 discount</strong> off your standard rental rate</li>
+          <li>Adhere to your standard rental practices — including rental agreements, ID verification, deposit handling, customer service, and emergency maintenance support for the duration of the rental</li>
+        </ul>
+        <p style="font-size:13px; color:#4a5568;">Customer contact info is shared after you claim.</p>
+        <hr style="border:none; border-top:1px solid #e4dccc; margin:16px 0;"/>
+        <p style="font-size:12px; color:#8896ab; font-style:italic;">This lead was sent to ${totalVendorCount} Port Aransas cart companies. First to respond wins.</p>
+      `,
+    });
+
+    const vendorBlastPromises = vendors.map((v) =>
+      sendEmail(
+        v.email,
+        `🛺 New Cart Rental — ${cartLabel} — ${pickupDate} to ${returnDate} — Claim It`,
+        vendorLeadHtml
+      )
+    );
+
+    console.log(`[Rent/Blast] Sending lead to ${vendors.length} vendors (${totalVendorCount} total on list)`);
+
     await Promise.allSettled([
       sendEmail(INTERNAL_EMAIL, `✅ Golf Cart PAID — ${name} — ${pickupDate} to ${returnDate}`, internalHtml),
       sendEmail(email, "Your Golf Cart is Reserved — Port A Local", customerHtml),
+      ...vendorBlastPromises,
     ]);
 
     return NextResponse.json({ success: true });

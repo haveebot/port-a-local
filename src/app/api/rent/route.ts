@@ -93,7 +93,8 @@ export async function POST(req: NextRequest) {
         <li><strong>Duration:</strong> ${numDays} day${numDays !== 1 ? "s" : ""}</li>
       </ul>
       <p><strong>What to bring:</strong> Valid photo ID (must be 18+).</p>
-      <p><strong>Our guarantee:</strong> If we&apos;re unable to source a cart for your dates, your reservation fee is fully refunded — no questions asked.</p>
+      <p><strong>Your savings:</strong> Every PAL reservation includes a guaranteed <strong>$20 discount</strong> off the rental company's standard rate.</p>
+      <p><strong>Our guarantee:</strong> If we're unable to source a cart for your dates, your reservation fee is fully refunded — no questions asked.</p>
       <p>Questions? Reply to this email.</p>
       <p style="margin-top:20px;">— the Port A Local team</p>
     `,

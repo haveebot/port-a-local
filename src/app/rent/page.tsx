@@ -129,7 +129,7 @@ export default function RentPage() {
             </h1>
           </div>
           <p className="text-lg text-navy-200 mt-2 font-light max-w-2xl">
-            The island runs on golf carts. Reserve yours through Port A Local and we guarantee a clean, well-maintained cart from a vetted local company — no booking fees, no guesswork.
+            The island runs on golf carts. Reserve yours through Port A Local and we guarantee a clean, well-maintained cart from a vetted local company — plus a <strong className="text-sand-100">guaranteed $20 discount</strong> off the rental company&apos;s standard rate. No booking fees, no guesswork.
           </p>
         </div>
       </section>
@@ -168,6 +168,10 @@ export default function RentPage() {
             <div className="flex items-center justify-center gap-2">
               <span className="text-coral-400 text-lg">✓</span>
               <span className="text-sand-200 text-sm font-medium">Vetted Local Companies</span>
+            </div>
+            <div className="flex items-center justify-center gap-2">
+              <span className="text-coral-400 text-lg">✓</span>
+              <span className="text-sand-200 text-sm font-medium">Guaranteed $20 Off Rental</span>
             </div>
             <div className="flex items-center justify-center gap-2">
               <span className="text-coral-400 text-lg">✓</span>
@@ -243,7 +247,7 @@ export default function RentPage() {
                     <span className="font-semibold">${reservationFee}</span>
                   </div>
                   <p className="text-xs text-navy-400 mt-2">
-                    Reservation fee secures your cart. Rental balance paid directly to the cart company at pickup.
+                    Reservation fee secures your cart. Rental balance paid directly to the cart company at pickup — with a guaranteed $20 off their standard rate.
                   </p>
                 </div>
               )}
