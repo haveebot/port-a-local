@@ -45,6 +45,23 @@ export default function MaintenancePage() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  // Urgency / dispatch coupling — Urgent or Emergency forces Priority Dispatch.
+  // Switching back to Standard downgrades urgency to Routine.
+  const handleUrgencyChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newUrgency = e.target.value;
+    setForm({ ...form, urgency: newUrgency });
+    if ((newUrgency === "urgent" || newUrgency === "emergency") && priorityAvailable) {
+      setDispatchType("priority");
+    }
+  };
+
+  const handleDispatchChange = (newType: "standard" | "priority") => {
+    setDispatchType(newType);
+    if (newType === "standard" && (form.urgency === "urgent" || form.urgency === "emergency")) {
+      setForm({ ...form, urgency: "routine" });
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("loading");
@@ -145,7 +162,7 @@ export default function MaintenancePage() {
                     name="dispatchType"
                     value="standard"
                     checked={dispatchType === "standard"}
-                    onChange={() => setDispatchType("standard")}
+                    onChange={() => handleDispatchChange("standard")}
                     className="sr-only"
                   />
                   <span className="font-semibold text-navy-900">Standard Request</span>
@@ -166,7 +183,7 @@ export default function MaintenancePage() {
                     name="dispatchType"
                     value="priority"
                     checked={dispatchType === "priority"}
-                    onChange={() => priorityAvailable && setDispatchType("priority")}
+                    onChange={() => priorityAvailable && handleDispatchChange("priority")}
                     disabled={!priorityAvailable}
                     className="sr-only"
                   />
@@ -283,13 +300,35 @@ export default function MaintenancePage() {
                   <select
                     name="urgency"
                     value={form.urgency}
-                    onChange={handleChange}
+                    onChange={handleUrgencyChange}
                     className="w-full border border-sand-300 rounded-lg px-3 py-2 text-navy-900 focus:outline-none focus:ring-2 focus:ring-coral-400"
                   >
                     <option value="routine">Routine — within a week</option>
-                    <option value="urgent">Urgent — within 48 hours</option>
-                    <option value="emergency">Emergency — ASAP</option>
+                    <option value="urgent" disabled={!priorityAvailable}>
+                      Urgent — within 48 hours{!priorityAvailable ? " (opens 7 AM)" : ""}
+                    </option>
+                    <option value="emergency" disabled={!priorityAvailable}>
+                      Emergency — ASAP{!priorityAvailable ? " (opens 7 AM)" : ""}
+                    </option>
                   </select>
+
+                  {/* Coupling callout — visible when Urgent/Emergency selected during business hours */}
+                  {(form.urgency === "urgent" || form.urgency === "emergency") && priorityAvailable && (
+                    <div className="mt-2 bg-coral-50 border border-coral-200 rounded-lg p-3 text-xs text-coral-700 leading-relaxed">
+                      ⚡ Urgent and Emergency requests use <strong>Priority Dispatch</strong> — guaranteed 2–4 hour response (7 AM–8 PM). $20 dispatch fee.
+                    </div>
+                  )}
+
+                  {/* After-hours notice — visible when Priority Dispatch unavailable */}
+                  {!priorityAvailable && (
+                    <p className="mt-2 text-xs text-navy-500 leading-relaxed">
+                      Urgent / Emergency requests open at 7 AM. For after-hours emergencies, call{" "}
+                      <a href="tel:3614558606" className="text-coral-500 font-medium hover:text-coral-600">
+                        (361) 455-8606
+                      </a>{" "}
+                      directly.
+                    </p>
+                  )}
                 </div>
               </div>
               <div>
