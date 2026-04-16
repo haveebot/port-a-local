@@ -84,14 +84,14 @@ export async function POST(req: NextRequest) {
     const { name, phone, email, address, serviceType, description, urgency, contactPref, dispatchFee } = m;
 
     // --- Priority SMS to John — marked clearly as paid dispatch ---
-    const smsPriority = `🚨 PRIORITY DISPATCH — PORT A LOCAL\n$${dispatchFee} paid. Respond within 2-4 hours.\n\nFrom: ${name}\nPhone: ${phone}\nAddress: ${address}\nService: ${serviceType}\n\n"${description?.slice(0, 100)}${(description?.length || 0) > 100 ? "..." : ""}"\n\nPreferred contact: ${contactPref}`;
+    const smsPriority = `🚨 PRIORITY DISPATCH — PORT A LOCAL\n$${dispatchFee} paid. Respond within 4 hours.\n\nFrom: ${name}\nPhone: ${phone}\nAddress: ${address}\nService: ${serviceType}\n\n"${description?.slice(0, 100)}${(description?.length || 0) > 100 ? "..." : ""}"\n\nPreferred contact: ${contactPref}`;
 
     const vendorHtml = emailLayout({
       tone: "alert",
       preheader: `PRIORITY DISPATCH — $${dispatchFee} PAID — ${name}`,
       bodyHtml: `
         <h2 style="margin:0 0 8px 0; font-size:20px; color:#e8656f;">🚨 Priority Dispatch — $${dispatchFee} PAID</h2>
-        <p style="margin:0 0 16px 0; color:#0b1120; font-size:14px; font-weight:600;">Respond within 2–4 hours (7 AM–8 PM window)</p>
+        <p style="margin:0 0 16px 0; color:#0b1120; font-size:14px; font-weight:600;">Respond within 4 hours (7 AM–8 PM window)</p>
         <p><strong>Customer:</strong> ${name}</p>
         <p><strong>Phone:</strong> <a href="tel:${phone}" style="color:#e8656f;">${phone}</a></p>
         <p><strong>Email:</strong> <a href="mailto:${email}" style="color:#e8656f;">${email}</a></p>
@@ -109,10 +109,10 @@ export async function POST(req: NextRequest) {
     });
 
     const customerHtml = emailLayout({
-      preheader: `Priority dispatch confirmed — you'll hear back within 2–4 hours.`,
+      preheader: `Priority dispatch confirmed — you'll hear back within 4 hours.`,
       bodyHtml: `
         <h2 style="margin:0 0 8px 0; font-size:22px; color:#0b1120;">Priority dispatch confirmed</h2>
-        <p style="margin:0 0 16px 0; color:#4a5568; font-size:14px;">Our local service team has been notified. You will hear back within <strong>2–4 hours</strong> (7 AM–8 PM).</p>
+        <p style="margin:0 0 16px 0; color:#4a5568; font-size:14px;">Our local service team has been notified. You will hear back within <strong>4 hours</strong> (7 AM–8 PM).</p>
         <p>Hi ${name},</p>
         <p>Your $${dispatchFee} priority dispatch fee has been received.</p>
         <p><strong>Your request:</strong></p>
@@ -126,7 +126,7 @@ export async function POST(req: NextRequest) {
       `,
     });
 
-    const customerSMS = `Port A Local: Priority dispatch confirmed! $${dispatchFee} received. Our team will contact you within 2-4 hours about your ${serviceType} request at ${address}.`;
+    const customerSMS = `Port A Local: Priority dispatch confirmed! $${dispatchFee} received. Our team will contact you within 4 hours about your ${serviceType} request at ${address}.`;
 
     console.log(`[Maintenance/Priority] Paid dispatch confirmed — ${name} (${phone}) — ${serviceType}`);
 

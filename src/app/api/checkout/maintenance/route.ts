@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
             unit_amount: DISPATCH_FEE * 100,
             product_data: {
               name: "Priority Dispatch — Port A Local Maintenance",
-              description: `${serviceType} at ${address} — guaranteed response within 2-4 hours (7AM–8PM)`,
+              description: `${serviceType} at ${address} — guaranteed response within 4 hours (7AM–8PM)`,
             },
           },
           quantity: 1,

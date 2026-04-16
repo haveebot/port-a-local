@@ -51,7 +51,7 @@ function MaintenanceSuccessContent() {
           </div>
           <div className="flex items-start gap-3">
             <span className="text-coral-400 font-bold">2</span>
-            <p className="text-navy-200 text-sm">Our local team reviews your request and will contact you within <strong className="text-sand-50">2-4 hours</strong> to confirm scope and schedule.</p>
+            <p className="text-navy-200 text-sm">Our local team reviews your request and will contact you within <strong className="text-sand-50">4 hours</strong> to confirm scope and schedule.</p>
           </div>
           <div className="flex items-start gap-3">
             <span className="text-coral-400 font-bold">3</span>

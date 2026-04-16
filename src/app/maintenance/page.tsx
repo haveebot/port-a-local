@@ -45,19 +45,23 @@ export default function MaintenancePage() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // Urgency / dispatch coupling — Urgent or Emergency forces Priority Dispatch.
-  // Switching back to Standard downgrades urgency to Routine.
+  // Urgency / dispatch coupling — Emergency forces Priority Dispatch (4-hr SLA, $20).
+  // Routine and Urgent stay on free Standard (Urgent is a 48-hr expectation, no SLA).
+  // Both directions stay in sync to prevent stale UI / loophole hopping.
   const handleUrgencyChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newUrgency = e.target.value;
     setForm({ ...form, urgency: newUrgency });
-    if ((newUrgency === "urgent" || newUrgency === "emergency") && priorityAvailable) {
+    if (newUrgency === "emergency" && priorityAvailable) {
       setDispatchType("priority");
+    } else if (newUrgency === "routine" || newUrgency === "urgent") {
+      setDispatchType("standard");
     }
   };
 
   const handleDispatchChange = (newType: "standard" | "priority") => {
     setDispatchType(newType);
-    if (newType === "standard" && (form.urgency === "urgent" || form.urgency === "emergency")) {
+    // Switching back to Standard while Emergency is selected downgrades urgency to Routine.
+    if (newType === "standard" && form.urgency === "emergency") {
       setForm({ ...form, urgency: "routine" });
     }
   };
@@ -193,7 +197,7 @@ export default function MaintenancePage() {
                   </div>
                   <span className="text-sm text-navy-500">
                     {priorityAvailable
-                      ? "We contact you within 2–4 hours. Guaranteed."
+                      ? "We contact you within 4 hours. Guaranteed."
                       : "Available 7AM–8PM daily. Check back then."}
                   </span>
                   <span className="text-lg font-bold text-coral-500 mt-1">$20</span>
@@ -203,7 +207,7 @@ export default function MaintenancePage() {
 
               {dispatchType === "priority" && priorityAvailable && (
                 <div className="bg-coral-50 border border-coral-200 rounded-xl p-3 text-sm text-coral-700">
-                  ⚡ Your $20 dispatch fee guarantees our team contacts you within <strong>2–4 hours</strong>. Available 7AM–8PM daily.
+                  ⚡ Your $20 dispatch fee guarantees our team contacts you within <strong>4 hours</strong>. Available 7AM–8PM daily.
                 </div>
               )}
             </div>
@@ -304,25 +308,23 @@ export default function MaintenancePage() {
                     className="w-full border border-sand-300 rounded-lg px-3 py-2 text-navy-900 focus:outline-none focus:ring-2 focus:ring-coral-400"
                   >
                     <option value="routine">Routine — within a week</option>
-                    <option value="urgent" disabled={!priorityAvailable}>
-                      Urgent — within 48 hours{!priorityAvailable ? " (opens 7 AM)" : ""}
-                    </option>
+                    <option value="urgent">Urgent — within 48 hours</option>
                     <option value="emergency" disabled={!priorityAvailable}>
-                      Emergency — ASAP{!priorityAvailable ? " (opens 7 AM)" : ""}
+                      Emergency — within 4 hours{!priorityAvailable ? " (opens 7 AM)" : ""}
                     </option>
                   </select>
 
-                  {/* Coupling callout — visible when Urgent/Emergency selected during business hours */}
-                  {(form.urgency === "urgent" || form.urgency === "emergency") && priorityAvailable && (
+                  {/* Coupling callout — Emergency triggers Priority Dispatch during business hours */}
+                  {form.urgency === "emergency" && priorityAvailable && (
                     <div className="mt-2 bg-coral-50 border border-coral-200 rounded-lg p-3 text-xs text-coral-700 leading-relaxed">
-                      ⚡ Urgent and Emergency requests use <strong>Priority Dispatch</strong> — guaranteed 2–4 hour response (7 AM–8 PM). $20 dispatch fee.
+                      ⚡ Emergency requests use <strong>Priority Dispatch</strong> — guaranteed within 4 hours (7 AM–8 PM). $20 dispatch fee.
                     </div>
                   )}
 
-                  {/* After-hours notice — visible when Priority Dispatch unavailable */}
+                  {/* After-hours notice — Emergency requires Priority which closes at 8 PM */}
                   {!priorityAvailable && (
                     <p className="mt-2 text-xs text-navy-500 leading-relaxed">
-                      Urgent / Emergency requests open at 7 AM. For after-hours emergencies, call{" "}
+                      Emergency requests open at 7 AM. For after-hours emergencies, call{" "}
                       <a href="tel:3614558606" className="text-coral-500 font-medium hover:text-coral-600">
                         (361) 455-8606
                       </a>{" "}
@@ -369,7 +371,7 @@ export default function MaintenancePage() {
 
             <p className="text-center text-sm text-navy-400">
               {dispatchType === "priority"
-                ? "Secure payment via Stripe. $20 dispatch fee guarantees 2–4 hour response (7AM–8PM)."
+                ? "Secure payment via Stripe. $20 dispatch fee guarantees response within 4 hours (7AM–8PM)."
                 : "Free request — our team will be in touch to schedule your service."}
             </p>
 
