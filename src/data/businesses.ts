@@ -1154,7 +1154,7 @@ export const businesses: Business[] = [
     phone: "(361) 749-5597",
     website: "https://deepseaheadquarters.com",
     hours: "Check schedule for departure times",
-    featured: true,
+    featured: false,
     tags: ["pirate ship", "cruise", "family", "kids", "fun", "gulf", "sunset views"],
     priceRange: "$$",
   },
@@ -3466,7 +3466,7 @@ export const businesses: Business[] = [
       Saturday: "8:00 AM – 5:00 PM",
       Sunday: "8:00 AM – 5:00 PM",
     },
-    featured: false,
+    featured: true,
     tags: ["acai", "smoothies", "healthy", "fresh", "beach food", "breakfast", "locally owned"],
     menu: [
       {
