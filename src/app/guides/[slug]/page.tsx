@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import { guides, getGuideBySlug } from "@/data/guides";
 import { businesses } from "@/data/businesses";
 import type { Metadata } from "next";
+import { EmojiIcon } from "@/components/brand/PortalIcon";
 
 export function generateStaticParams() {
   return guides.map((g) => ({ slug: g.slug }));
@@ -75,7 +76,7 @@ export default async function GuidePage({
           </div>
 
           <div className="flex items-center gap-4 mb-4">
-            <span className="text-5xl">{guide.icon}</span>
+            <EmojiIcon emoji={guide.icon} className="w-14 h-14 text-coral-400 shrink-0" />
             <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-sand-50 leading-tight">
               {guide.title}
             </h1>
@@ -139,7 +140,7 @@ export default async function GuidePage({
                   href={`/guides/${g.slug}`}
                   className="group flex items-center gap-4 rounded-xl bg-white border border-sand-200 p-5 card-hover"
                 >
-                  <span className="text-2xl">{g.icon}</span>
+                  <EmojiIcon emoji={g.icon} className="w-7 h-7 text-navy-900 shrink-0" />
                   <div>
                     <p className="font-semibold text-navy-900 group-hover:text-coral-600 transition-colors text-sm">
                       {g.title}

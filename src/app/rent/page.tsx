@@ -141,7 +141,7 @@ export default function RentPage() {
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
             <div>
-              <div className="text-3xl mb-2">📅</div>
+              <PortalIcon name="calendar" className="w-9 h-9 mx-auto mb-2 text-navy-900" />
               <p className="font-semibold text-navy-900 text-sm">Pick Your Dates</p>
               <p className="text-navy-500 text-sm mt-1">Choose your cart size and rental dates. Pay a small reservation fee to lock it in.</p>
             </div>

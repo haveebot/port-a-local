@@ -58,7 +58,15 @@ export type PortalIconName =
   | "weather"
   | "wildlife"
   | "emergency"
-  | "connectivity";
+  | "connectivity"
+  // Round 3 — Tier 4 decorative
+  | "sunrise"
+  | "island"
+  | "palm"
+  | "urgent"
+  | "trophy"
+  | "art"
+  | "calendar";
 
 const svgBase = {
   viewBox: "0 0 64 64",
@@ -649,6 +657,117 @@ function Connectivity(props: SVGProps<SVGSVGElement>) {
 }
 
 // ═══════════════════════════════════════════════════════════════════
+// ROUND 3 — Tier 4 decorative (sunrise/palm/urgent/trophy/art/calendar/island)
+// ═══════════════════════════════════════════════════════════════════
+
+function Sunrise(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...svgBase} {...props}>
+      <rect x="31" y="4" width="2" height="6" />
+      <rect x="4" y="30" width="6" height="2" />
+      <rect x="54" y="30" width="6" height="2" />
+      <path d="M16 16 L20 20" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+      <path d="M48 16 L44 20" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+      <path d="M6 40 A26 26 0 0 1 58 40 Z" />
+      <rect x="4" y="42" width="56" height="3" rx="1" />
+      <path
+        d="M4 52 Q16 48 28 52 Q40 56 52 52 Q58 50 60 52"
+        stroke="currentColor"
+        strokeWidth="2"
+        fill="none"
+      />
+    </svg>
+  );
+}
+
+function Island(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...svgBase} {...props}>
+      <rect x="30" y="22" width="4" height="26" />
+      <path d="M32 22 Q16 14 10 20 Q22 18 32 26 Q42 18 54 20 Q48 14 32 22 Z" />
+      <path d="M32 22 Q28 6 40 8 Q30 14 32 22 Z" />
+      <ellipse cx="32" cy="50" rx="26" ry="4" />
+      <path
+        d="M4 58 Q16 54 28 58 Q40 62 52 58 Q58 56 60 58"
+        stroke="currentColor"
+        strokeWidth="2"
+        fill="none"
+      />
+    </svg>
+  );
+}
+
+function Palm(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...svgBase} {...props}>
+      <path d="M30 18 Q28 36 24 58 L32 58 L34 36 Q36 24 32 18 Z" />
+      <path d="M32 20 Q14 10 6 18 Q20 16 32 24 Q44 16 58 18 Q50 10 32 20 Z" />
+      <path d="M32 20 Q26 4 38 4 Q30 14 32 20 Z" />
+      <rect x="29" y="30" width="6" height="1.5" />
+      <rect x="28" y="40" width="6" height="1.5" />
+      <rect x="27" y="50" width="8" height="1.5" />
+    </svg>
+  );
+}
+
+function Urgent(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...svgBase} {...props}>
+      <path d="M38 4 L12 36 L28 36 L22 60 L50 28 L34 28 Z" />
+    </svg>
+  );
+}
+
+function Trophy(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...svgBase} {...props}>
+      <path d="M18 8 H46 V18 Q46 32 36 36 Q34 38 34 42 V46 H30 V42 Q30 38 28 36 Q18 32 18 18 Z" />
+      <path
+        d="M18 14 Q8 14 8 22 Q8 30 16 30"
+        stroke="currentColor"
+        strokeWidth="3"
+        fill="none"
+      />
+      <path
+        d="M46 14 Q56 14 56 22 Q56 30 48 30"
+        stroke="currentColor"
+        strokeWidth="3"
+        fill="none"
+      />
+      <rect x="24" y="46" width="16" height="4" />
+      <rect x="20" y="50" width="24" height="8" rx="1" />
+    </svg>
+  );
+}
+
+function Art(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...svgBase} {...props}>
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M32 8 C16 8, 6 20, 6 32 C6 44, 16 50, 24 46 C26 44, 30 44, 32 46 C34 48, 42 50, 48 44 C58 34, 58 14, 32 8 Z M42 22 a4 4 0 110 8 4 4 0 010-8 z M24 20 a3.5 3.5 0 110 7 3.5 3.5 0 010-7 z M16 30 a3.5 3.5 0 110 7 3.5 3.5 0 010-7 z M30 34 a3.5 3.5 0 110 7 3.5 3.5 0 010-7 z"
+      />
+    </svg>
+  );
+}
+
+function Calendar(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...svgBase} {...props}>
+      <rect x="14" y="6" width="3" height="10" rx="1" />
+      <rect x="47" y="6" width="3" height="10" rx="1" />
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M6 12 h52 v48 h-52 z M10 26 h44 v30 h-44 z"
+      />
+      <rect x="22" y="32" width="20" height="20" rx="2" />
+    </svg>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════
 // Icon registry + component
 // ═══════════════════════════════════════════════════════════════════
 
@@ -691,7 +810,91 @@ const icons: Record<
   wildlife: Wildlife,
   emergency: Emergency,
   connectivity: Connectivity,
+  sunrise: Sunrise,
+  island: Island,
+  palm: Palm,
+  urgent: Urgent,
+  trophy: Trophy,
+  art: Art,
+  calendar: Calendar,
 };
+
+/**
+ * Emoji → PortalIcon name lookup. Used by data-driven renders where the icon
+ * is stored as an emoji string (guides.ts, stories.ts, events data, etc.).
+ * Unmapped emojis fall back to the raw emoji span.
+ */
+export const emojiToIconName: Record<string, PortalIconName> = {
+  // Directory categories + portals (Round 1)
+  "🍽️": "eat",
+  "🍺": "drink",
+  "🏠": "stay",
+  "🌊": "do",
+  "🎣": "fish",
+  "🛍️": "shop",
+  "🏖️": "beach",
+  "🔧": "maintenance",
+  "🛺": "cart",
+  // Nav items (Round 2 Tier 1)
+  "🛠️": "services",
+  "🎪": "events",
+  "📖": "heritage",
+  "🧭": "dispatch",
+  "🏛️": "archives",
+  "📋": "guides",
+  "📡": "live",
+  "🗺️": "map",
+  "📸": "photos",
+  "❤️": "mytrip",
+  // Gully chips (Round 2 Tier 2)
+  "🍔": "burger",
+  "🍹": "happyhour",
+  "🌮": "taco",
+  "☕": "coffee",
+  "🦞": "seafood",
+  "⛵": "sailing",
+  "🏄": "surfing",
+  "🌙": "latenight",
+  "🚤": "offshore",
+  // Essentials sections (Round 2 Tier 3)
+  "⛴️": "ferry",
+  "🅿️": "parking",
+  "🐬": "wildlife",
+  "🏥": "emergency",
+  "📱": "connectivity",
+  // Tier 4 decorative (Round 3)
+  "🌅": "sunrise",
+  "🏝️": "island",
+  "🌴": "palm",
+  "⚡": "urgent",
+  "🏆": "trophy",
+  "🎨": "art",
+  "📅": "calendar",
+};
+
+/**
+ * EmojiIcon — renders a PortalIcon if the emoji has a mapped silhouette,
+ * otherwise falls back to rendering the raw emoji in a span. Use this
+ * wherever the icon value comes from data (data file, CMS, etc.) rather
+ * than being known statically at the call site.
+ */
+export function EmojiIcon({
+  emoji,
+  className,
+}: {
+  emoji: string;
+  className?: string;
+}) {
+  const name = emojiToIconName[emoji];
+  if (name) {
+    return <PortalIcon name={name} className={className} />;
+  }
+  return (
+    <span className={className} aria-hidden>
+      {emoji}
+    </span>
+  );
+}
 
 export interface PortalIconProps extends SVGProps<SVGSVGElement> {
   name: PortalIconName;

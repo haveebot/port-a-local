@@ -2,6 +2,7 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import IslandConditions from "@/components/IslandConditions";
 import type { Metadata } from "next";
+import { EmojiIcon } from "@/components/brand/PortalIcon";
 
 export const metadata: Metadata = {
   title: "Island Pulse — Live Webcams, Weather & Tides | Port A Local",
@@ -169,8 +170,8 @@ export default function LivePage() {
                 rel="noopener noreferrer"
                 className="group flex items-start gap-4 bg-white rounded-xl border border-sand-200 p-5 card-hover"
               >
-                <div className="w-10 h-10 rounded-full bg-navy-50 flex items-center justify-center flex-shrink-0 text-xl">
-                  {cam.icon}
+                <div className="w-10 h-10 rounded-full bg-navy-50 flex items-center justify-center flex-shrink-0">
+                  <EmojiIcon emoji={cam.icon} className="w-6 h-6 text-navy-900" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
@@ -267,7 +268,7 @@ export default function LivePage() {
                 rel="noopener noreferrer"
                 className="group flex items-start gap-4 bg-white rounded-xl border border-sand-200 p-5 card-hover"
               >
-                <span className="text-2xl flex-shrink-0">{link.icon}</span>
+                <EmojiIcon emoji={link.icon} className="w-7 h-7 flex-shrink-0 text-navy-900" />
                 <div>
                   <p className="font-semibold text-navy-900 group-hover:text-coral-600 transition-colors text-sm">
                     {link.name}

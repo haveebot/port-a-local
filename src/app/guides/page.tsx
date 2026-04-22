@@ -4,6 +4,7 @@ import Link from "next/link";
 import { guides } from "@/data/guides";
 import { businesses } from "@/data/businesses";
 import type { Metadata } from "next";
+import { EmojiIcon } from "@/components/brand/PortalIcon";
 
 export const metadata: Metadata = {
   title: "Local Guides — Port Aransas, TX | Port A Local",
@@ -60,7 +61,7 @@ export default function GuidesIndex() {
                   <div className="h-1 bg-gradient-to-r from-navy-600 via-coral-400 to-gold-400" />
                   <div className="p-6 sm:p-8">
                     <div className="flex items-center justify-between mb-4">
-                      <span className="text-3xl">{guide.icon}</span>
+                      <EmojiIcon emoji={guide.icon} className="w-9 h-9 text-navy-900" />
                       <span className="text-xs text-navy-400">{count} spots</span>
                     </div>
                     <h3 className="font-display text-lg font-bold text-navy-900 group-hover:text-coral-600 transition-colors mb-2">

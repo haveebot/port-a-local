@@ -2,6 +2,7 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import Link from "next/link";
 import type { Metadata } from "next";
+import { EmojiIcon } from "@/components/brand/PortalIcon";
 
 export const metadata: Metadata = {
   title: "Events & Happenings — Port Aransas, TX | Port A Local",
@@ -127,7 +128,7 @@ export default function EventsPage() {
                   {month.events.map((event) => (
                     <div key={event.name} className="bg-white rounded-xl border border-sand-200 p-5">
                       <div className="flex items-start gap-4">
-                        <span className="text-2xl flex-shrink-0 mt-0.5">{event.icon}</span>
+                        <EmojiIcon emoji={event.icon} className="w-7 h-7 flex-shrink-0 mt-0.5 text-navy-900" />
                         <div>
                           <h4 className="font-display font-bold text-navy-900 mb-1">{event.name}</h4>
                           <p className="text-xs font-medium text-coral-500 mb-2">{event.timing} · {event.location}</p>
@@ -159,7 +160,7 @@ export default function EventsPage() {
             {recurringEvents.map((event) => (
               <div key={event.name} className="bg-white rounded-xl border border-sand-200 p-5">
                 <div className="flex items-start gap-4">
-                  <span className="text-2xl flex-shrink-0">{event.icon}</span>
+                  <EmojiIcon emoji={event.icon} className="w-7 h-7 flex-shrink-0 text-navy-900" />
                   <div>
                     <h4 className="font-display font-bold text-navy-900 text-sm mb-1">{event.name}</h4>
                     <p className="text-xs font-medium text-coral-500 mb-2">{event.timing} · {event.location}</p>

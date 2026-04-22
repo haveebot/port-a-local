@@ -7,6 +7,7 @@ import { storyContent } from "@/data/story-content";
 import { ArticleSchema } from "@/components/StructuredData";
 import SaveToTrip from "@/components/SaveToTrip";
 import type { Metadata } from "next";
+import { EmojiIcon } from "@/components/brand/PortalIcon";
 
 // Generate static pages for all stories that have content
 export function generateStaticParams() {
@@ -82,7 +83,7 @@ export default async function StoryPage({
           </div>
 
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-coral-500/30 bg-coral-500/10 text-coral-300 text-sm font-medium tracking-wide mb-6">
-            {story.icon} {story.category} · {story.readTime} read
+            <EmojiIcon emoji={story.icon} className="w-4 h-4" /> {story.category} · {story.readTime} read
           </div>
 
           <div className="flex items-start justify-between gap-4">
@@ -282,8 +283,8 @@ export default async function StoryPage({
                     href={`/history/${r!.slug}`}
                     className="flex gap-4 bg-white rounded-xl border border-sand-200 p-5 card-hover group"
                   >
-                    <div className="w-10 h-10 rounded-full bg-navy-50 flex items-center justify-center flex-shrink-0 text-lg">
-                      {r!.icon}
+                    <div className="w-10 h-10 rounded-full bg-navy-50 flex items-center justify-center flex-shrink-0">
+                      <EmojiIcon emoji={r!.icon} className="w-5 h-5 text-navy-900" />
                     </div>
                     <div>
                       <h3 className="font-semibold text-navy-900 group-hover:text-coral-600 transition-colors">

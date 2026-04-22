@@ -210,8 +210,9 @@ export default function MaintenancePage() {
               </div>
 
               {dispatchType === "priority" && priorityAvailable && (
-                <div className="bg-coral-50 border border-coral-200 rounded-xl p-3 text-sm text-coral-700">
-                  ⚡ Your $20 dispatch fee guarantees our team contacts you within <strong>4 hours</strong>. Available 7AM–8PM daily.
+                <div className="flex items-start gap-2 bg-coral-50 border border-coral-200 rounded-xl p-3 text-sm text-coral-700">
+                  <PortalIcon name="urgent" className="w-4 h-4 mt-0.5 shrink-0" />
+                  <span>Your $20 dispatch fee guarantees our team contacts you within <strong>4 hours</strong>. Available 7AM–8PM daily.</span>
                 </div>
               )}
             </div>
@@ -320,8 +321,9 @@ export default function MaintenancePage() {
 
                   {/* Coupling callout — Emergency triggers Priority Dispatch during business hours */}
                   {form.urgency === "emergency" && priorityAvailable && (
-                    <div className="mt-2 bg-coral-50 border border-coral-200 rounded-lg p-3 text-xs text-coral-700 leading-relaxed">
-                      ⚡ Emergency requests use <strong>Priority Dispatch</strong> — guaranteed within 4 hours (7 AM–8 PM). $20 dispatch fee.
+                    <div className="mt-2 flex items-start gap-2 bg-coral-50 border border-coral-200 rounded-lg p-3 text-xs text-coral-700 leading-relaxed">
+                      <PortalIcon name="urgent" className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+                      <span>Emergency requests use <strong>Priority Dispatch</strong> — guaranteed within 4 hours (7 AM–8 PM). $20 dispatch fee.</span>
                     </div>
                   )}
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import PortalIcon from "@/components/brand/PortalIcon";
 
 const suggestedTags = [
   "dog friendly",
@@ -85,7 +86,7 @@ export default function KnowThisPlace({ businessSlug, businessName }: Props) {
           onClick={() => setOpen(true)}
           className="w-full rounded-2xl bg-sand-50 border border-sand-200 p-6 text-center card-hover group cursor-pointer"
         >
-          <span className="text-2xl block mb-2">🏝️</span>
+          <PortalIcon name="island" className="w-8 h-8 mx-auto mb-2 text-navy-900" />
           <p className="font-display text-lg font-bold text-navy-900 group-hover:text-coral-600 transition-colors mb-1">
             Know this place?
           </p>

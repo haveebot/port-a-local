@@ -313,7 +313,7 @@ export default function Home() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
               <div className="p-8 rounded-2xl bg-white border border-sand-200 card-hover">
                 <div className="w-12 h-12 rounded-full bg-navy-50 flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl">🌴</span>
+                  <PortalIcon name="palm" className="w-7 h-7 text-navy-900" />
                 </div>
                 <h3 className="font-display font-bold text-navy-900 mb-2">Island Curated</h3>
                 <p className="text-sm text-navy-400 font-light">
@@ -331,7 +331,7 @@ export default function Home() {
               </div>
               <div className="p-8 rounded-2xl bg-white border border-sand-200 card-hover">
                 <div className="w-12 h-12 rounded-full bg-gold-50 flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl">🏆</span>
+                  <PortalIcon name="trophy" className="w-7 h-7 text-navy-900" />
                 </div>
                 <h3 className="font-display font-bold text-navy-900 mb-2">No Pay-to-Play</h3>
                 <p className="text-sm text-navy-400 font-light">

@@ -3,6 +3,7 @@ import Footer from "@/components/Footer";
 import Link from "next/link";
 import { stories } from "@/data/stories";
 import type { Metadata } from "next";
+import { EmojiIcon } from "@/components/brand/PortalIcon";
 
 export const metadata: Metadata = {
   title: "Port A Heritage — Port Aransas History | Port A Local",
@@ -20,7 +21,7 @@ function StoryCard({ story }: { story: (typeof stories)[number] }) {
         {/* Category + Read Time */}
         <div className="flex items-center justify-between mb-4">
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-navy-50 text-navy-600 capitalize">
-            {story.icon} {story.category}
+            <EmojiIcon emoji={story.icon} className="w-3.5 h-3.5" /> {story.category}
           </span>
           <span className="text-xs text-navy-400">{story.readTime} read</span>
         </div>
@@ -181,8 +182,8 @@ export default function HistoryPage() {
                   <span className="text-xs font-bold text-coral-500 tracking-wider">
                     {item.year}
                   </span>
-                  <p className="text-navy-700 text-sm font-medium mt-1">
-                    {item.icon} {item.event}
+                  <p className="text-navy-700 text-sm font-medium mt-1 inline-flex items-center gap-1.5">
+                    <EmojiIcon emoji={item.icon} className="w-4 h-4 shrink-0" /> {item.event}
                   </p>
                 </div>
               </div>
