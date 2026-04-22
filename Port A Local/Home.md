@@ -1,6 +1,6 @@
 # Port A Local — Company Brain
 _Winston + Claude's living knowledge base. Updated every session._
-_Last updated: 2026-04-12_
+_Last updated: 2026-04-21_
 
 ---
 
@@ -14,7 +14,7 @@ _Last updated: 2026-04-12_
 
 ### People & Vendors
 - [[People & Vendors/John Brown — Port A Maintenance Services]] — maintenance vendor
-- [[People & Vendors/JOY Cart Rentals]] — Tier 1 golf cart vendor
+- [[People & Vendors/JOY Cart Rentals]] — Tier 1 golf cart vendor (pre-marketplace; see cart-vendors.ts for current 20)
 - [[People & Vendors/Billy Gaskins — Woody's Last Stand]] — affiliate, family friend
 - [[People & Vendors/Collie Caraker — Design]] — design advisor, Palm Republic
 - [[People & Vendors/Nick Merrill — Engineering]] — potential investor, not active
@@ -26,13 +26,14 @@ _Last updated: 2026-04-12_
 - [[Roadmap]] — prioritized to-do list
 - [[Ideas]] — loose scratchpad, future ideas, Collie input
 
-### Heritage
+### Heritage + Editorial
 - [[Heritage Research/FDR Tarpon Fishing Trip 1937]]
 - [[Heritage Research/The Tarpon Era]]
 - [[Heritage Research/Farley Boat Works]]
 - [[Heritage Research/Hurricane Celia and Port A Storm History]]
 - [[Heritage Research/Port Aransas Timeline]]
 - [[Heritage Research/Port Aransas Museum and PAPHA]]
+- Dispatch source material lives in `workspace/drafts/` and the editorial workflow in `feedback_pal_dispatch_workflow.md`
 
 ### Business Directory
 - [[Business Directory/Business Directory Index]] — all 140+ businesses
@@ -40,45 +41,74 @@ _Last updated: 2026-04-12_
 
 ### Session Notes
 - [[Session Notes/Session Notes Index]]
-- [[Session Notes/2026-04-12]] — monster session (17 heritage stories, Gully upgrade, nav refactor, SEO, Know This Place)
-- [[Session Notes/2026-04-10]] — portals, nav, SEO, Gully concept
-- [[Session Notes/2026-04-04]] — first build session
+- [[Session Notes/2026-04-16]] — Printable QR poster pattern (Sandfest signage)
+- [[Session Notes/2026-04-15]] — PUD scrub, cart marketplace pivot, Sandfest heritage, first FB assets, maintenance coupling
+- [[Session Notes/2026-04-14]] — Dispatch launches, Lighthouse brand, full-site saturation, editorial workflow locked
+- [[Session Notes/2026-04-13]] — Infrastructure live day (domain, Resend, Stripe, Twilio, heritage batch 1, GBP skip)
+- [[Session Notes/2026-04-12]] — Monster session (17 heritage stories, Gully upgrade, nav refactor, SEO, Know This Place)
+- [[Session Notes/2026-04-10]] — Portals, nav, SEO, Gully concept
+- [[Session Notes/2026-04-04]] — First build session
 
 ---
 
-## Current Status — April 12, 2026
+## Current Status — April 21, 2026
 
 | What | Detail |
 |------|--------|
-| Live site | https://port-a-local.vercel.app |
-| Domain | theportalocal.com (purchased, DNS pending Workspace) |
+| Live site | https://theportalocal.com (HTTPS, 200 OK) |
+| Domain | theportalocal.com (primary) |
 | Businesses | 140+ across 6 categories |
-| Heritage | 17 published stories — Port A Heritage (~25,000 words) |
-| Portals | `/rent` `/beach` `/maintenance` |
-| Search | Gully — unified index (businesses + heritage + menus) |
-| Revenue | $0 — Stripe pending (accounts blocked on Workspace) |
+| Heritage | **22 published stories** — Port A Heritage |
+| Dispatch | **1 published** — "The Two Port Aransases" (editorial/journalism) |
+| Portals | `/rent` (marketplace model) · `/beach` · `/maintenance` (urgency coupling) |
+| Search | Gully — unified index (businesses + heritage + dispatch + menus + archives) |
+| Brand | Lighthouse mark locked; full-site saturation complete; full lockup intentionally not yet locked |
+| Social | FB profile + FB banner routes shipped (`/social/*`) |
+| Print | Branded QR poster route (`/print/qr/[slug]`) — home + sandfest targets |
+| Revenue | $0 — Stripe LIVE, keys in Vercel, awaiting first transactions |
+| A2P 10DLC | Brand APPROVED; campaign IN_PROGRESS at TCR (passive wait) |
 | Repo | https://github.com/haveebot/port-a-local |
 
 ---
 
-## What's Built (April 12, 2026)
+## What's Built (April 21, 2026)
 - **Directory:** 140+ businesses, 6 categories, geocoded coordinates
-- **Portals:** 3 revenue portals (Rent, Beach, Maintenance) with Stripe (test keys)
-- **Port A Heritage:** 17 published long-form stories (~25,000 words)
-- **Gully:** "Just Gully It" search — businesses + heritage + ~405 menu items, Cmd+K, recent searches
-- **Curated Guides:** 10 guides (Happy Hour, Pet-Friendly, Date Night, Seafood, etc.)
-- **Trip Planner:** Save/bookmark to My Trip (localStorage)
+- **Portals:** `/rent` (marketplace model — 20 vendor blast, 8 emails active, 12 pending), `/beach` ($300 cabana + $85 chair&umbrella), `/maintenance` (Standard free / Emergency $20 Priority Dispatch, urgency coupled)
+- **Port A Heritage:** 22 published long-form stories (~28,000 words)
+- **Port A Dispatch:** 1 published piece, editorial architecture in place for future pieces
+- **Gully:** "Just Gully It" — unified index across businesses + heritage + dispatch + menus + archives; Cmd+K everywhere
+- **Curated Guides:** 10 guides auto-populated from tags
+- **Trip Planner:** My Trip (localStorage, no login)
 - **Interactive Map:** 127 businesses with real geocoded pins
-- **Island Pulse:** 10 webcams, ship traffic, NOAA weather/tides dashboard
+- **Island Pulse:** 10 webcams, ship traffic, native NOAA weather/tide dashboard
 - **Island Essentials:** 10-section arrival guide
-- **Events & Happenings:** 15 annual + 4 recurring events
+- **Events & Happenings:** 15 annual + 4 recurring
 - **Fishing Report:** seasonal species, regulations, live conditions
-- **Know This Place:** Anonymous tag suggestions, admin review queue
-- **SEO:** JSON-LD structured data, OG images for heritage
-- **Nav:** Explore dropdown, Gully pill, portal pills, My Trip heart, logo + tagline
+- **Where to Stay:** neighborhood guide (Cinnamon Shore section removed per PUD rule)
+- **Historical Archives:** 31 public domain photos, 1853-2017 — largest organized PA digital photo collection online
+- **Community Photos:** "Port A Through Your Eyes" submissions gallery
+- **Know This Place:** anonymous tag suggestions, admin review queue
+- **Brand:** LighthouseMark component (4 detail levels + monochrome), full-site saturation across every surface, shared OG helper (`brandedOG`), shared email helper (`emailLayout`)
+- **Social assets:** `/social/facebook-profile`, `/social/facebook-banner` (extensible pattern)
+- **Print assets:** `/print/qr/[slug]` — QR posters for physical signage
+- **SEO:** complete meta + JSON-LD (WebSite, Organization, LocalBusiness, Article, NewsArticle), sitemap 175+ URLs
 
 ## Operating Model
 Winston makes product decisions and owns local relationships.
 Claude builds, maintains, deploys, and organizes everything else.
 Goal: lean two-person operation that punches above its weight.
 See [[Decision Log]] for all major decisions.
+
+## Key Files
+- Vault: `/Users/winstoncaraker/Projects/workspace/port-a-local/Port A Local/`
+- Code: `/Users/winstoncaraker/Projects/workspace/port-a-local/` (Next.js + Vercel)
+- Stories: `src/data/stories.ts`, `src/data/story-content.ts`
+- Dispatch: `src/data/dispatches.ts`, `src/data/dispatch-content.ts`
+- Cart vendors: `src/data/cart-vendors.ts` — 20 selected PA cart companies, `getBlastableVendors()` helper
+- Brand mark: `src/components/brand/LighthouseMark.tsx`
+- Shared OG: `src/lib/brandedOG.tsx`
+- Shared email: `src/lib/emailLayout.ts`
+- Static logos: `public/logos/lighthouse-{full,standard,simple,icon}.svg`
+- Social routes: `src/app/social/facebook-{profile,banner}/route.tsx`
+- Print route: `src/app/print/qr/[slug]/page.tsx`
+- Archival photos: `public/archives/` (causeway-sign-1939.jpg — first downloaded)

@@ -82,3 +82,90 @@ _This is institutional memory. Never delete an entry._
 ### Push to main for live review
 **Decision:** Push to `main` whenever there's a clean build and Winston wants to review on the live Vercel deployment. Always confirm first.
 **Why:** Winston reviews on the Vercel URL, not a local dev server. Changes in worktree branches are invisible to him.
+
+---
+
+## 2026-04-13
+
+### Primary domain: theportalocal.com
+**Decision:** Switch primary domain from port-a-local.vercel.app to **theportalocal.com**. No hyphens (ever).
+**Why:** Clean URL, professional, easier to say/type/remember. Hyphens are a domain-naming no-go for the brand.
+
+### Skip Google Business Profile
+**Decision:** Defer/skip GBP entirely.
+**Why:** PAL is a media/directory platform with no storefront. GBP is built for storefronts and service-area businesses — technically we're ineligible and functionally we don't need it. Brand presence is handled by JSON-LD schema (live), GSC, and clean on-site SEO.
+**Revisit if:** PAL opens a pop-up, adds paid advertising, or takes on a physical presence.
+
+### PAL stays on haveebot GitHub + Vercel (no migration)
+**Decision:** Do NOT migrate PAL to a dedicated `port-a-local` GitHub org or Vercel team. Stay on `haveebot/port-a-local` + `haveebots-projects`.
+**Why:** PAL is a lean two-person op. Dedicated orgs/teams would add Vercel Pro cost ($20/mo) and overhead with zero functional benefit at current scale. Winston owns haveebot; it's effectively his.
+**Contrast with Sage Em:** Sage Em gets full company-only separation (`sageem` org + `sageem` team) because it has multiple collaborators and external-facing structure.
+
+### Twilio: prefer MessagingServiceSid
+**Decision:** Maintenance SMS code now prefers `TWILIO_MESSAGING_SERVICE_SID` when set, falls back to raw phone number.
+**Why:** Once A2P 10DLC campaign clears TCR, it auto-flips to the messaging service without a code change.
+
+---
+
+## 2026-04-14
+
+### Port A Dispatch — new editorial section
+**Decision:** Launch `/dispatch` as a separate section from Heritage. Distinct data layer (`dispatches.ts` + `dispatch-content.ts`), NewsArticle JSON-LD, dated bylines, signature seal footer.
+**Why:** Heritage = preserved history. Dispatch = current-events journalism. Collapsing them would confuse both audiences and dilute the editorial posture. Separate sections keep each voice clear and let them scale independently.
+**First piece:** "The Two Port Aransases" (2,050 words) — Tourism Bureau vs. in-town economic reality.
+
+### Editorial workflow — 6-step pattern
+**Decision:** Dispatch pieces follow: (1) push back on the brief first, (2) verify every factual claim publicly before writing, (3) hold unverifiable claims as follow-ups, (4) critique roles not people, (5) ship directly to live when authorized, (6) build architecture not just content.
+**Why:** Winston wants PAL to be a legitimate media outlet — "shareable, marketable, ours." That means defensible sourcing, sharp analytical spine, not agitating locals who are *"some of us,"* and a platform that grows. This pattern was validated live with Dispatch #1.
+**Stored at:** `feedback_pal_dispatch_workflow.md` in workspace memory.
+
+### Lighthouse mark — the PAL brand
+**Decision:** Lighthouse (inspired by the Lydia Ann Light) becomes the PAL identity. One `LighthouseMark` component, four detail levels (`full`, `standard`, `simple`, `icon`), `monochrome` prop.
+**Why:** Anchored in island history — not generic beach iconography. Works at every scale (12px favicon → 620px hero watermark) from a single source of truth. The anti-Bureau posture (serif weight, navy+coral, coordinates, journalistic voice) is visually carried by this mark.
+**Alternatives considered:** Three directions explored first, then v2 fusion, then v3 Lighthouse-only (locked).
+
+### Anti-Bureau positioning
+**Decision:** PAL is positioned as the media/editorial counter-narrative to the Port Aransas Tourism Bureau's "Island Life / Beach Nation" destination marketing.
+**Why:** The Bureau speaks for visitors. PAL speaks for the place. Established in Dispatch #1 and visually reinforced through the brand.
+
+---
+
+## 2026-04-15
+
+### PUD listing rule (firm)
+**Decision:** No customer-facing mentions of PUDs (Cinnamon Shore, Palmilla, Sunflower Beach, Preserve at Mustang Island). No directory listings, map pins, neighborhood callouts, "stay here" recs, popular chips.
+**Exception 1 — Editorial:** Heritage, Dispatch, archives, archival photos referencing PUDs as part of historical/economic narrative are protected.
+**Exception 2 — Lisabella's:** Listed despite sitting inside Cinnamon Shore (personal relationship). Address, tagline, map pin all fine — it's a feature for Lisabella's, not a routing to the PUD.
+**Why:** PAL's audience is locals and visitors who want the real island — not the gated developments that displace it. Editorial protection preserves the ability to *critique* those developments.
+**Enforcement:** Scrub on sight if a new PUD emerges (next likely: Preserve at Mustang Island, bayside subdivision).
+
+### Cart portal: marketplace model
+**Decision:** Pivot from preferred-vendor/delivery to competitive marketplace/pickup. Customer books → lead blasts to 20 vendors → first to claim wins → customer picks up. $10/day reservation fee. Vendor gives minimum $20 discount. 5-day calendar minimum. 3–4 day no-vendor refund policy.
+**Why:** Delivery is expensive and vendor-dependent — couldn't commit without a single exclusive vendor. Marketplace flips the dependency: we bring the demand, vendors compete for it. Flywheel thesis: volume → vendor dependence → vendor approaches us for exclusive deal → PAL has leverage.
+**Vendor branding rule holds:** no vendor names in portal UI at booking time. Name revealed only in pre-arrival notification.
+
+### Maintenance urgency-dispatch coupling
+**Decision:** Only **Emergency** triggers $20 Priority Dispatch. Urgent (48hr) stays free Standard. Switching Standard ↔ Emergency auto-syncs both fields. SLA tightened: "within 4 hours" (not 2-4). After 8PM, Emergency disabled — call (361) 455-8606 for after-hours.
+**Why:** Previous UX let customers pick Urgent + free Standard and expect same-day service. Coupling the two removes the ambiguity and protects John (who is SMS-only and doesn't need a flood of "urgent but free" leads).
+
+### First FB banner — "Straddle the Rail" over FDR
+**Decision:** Use the 1939 Russell Lee FSA photo of the Harbor Island Causeway sign as the first FB banner — not the FDR 1937 fishing photo.
+**Why:** FDR is more famous *and* personally meaningful (Barney Farley, Collie's grandfather, is in the photo) but overused by every PA tourism outlet, Tourism Bureau, Tarpon Inn, and museum. "Straddle the Rail" was already sourced as public domain, is visually distinct, and matches the anti-Bureau "deep-cut" voice — signals *we know this place.* FDR reserved for a future rotation.
+
+### Brand lockup — deliberately NOT locked yet
+**Decision:** The lighthouse mark itself is blessed. The *full lockup* (lighthouse + wordmark + coordinates strip) is in use internally (OG cards, emails, footer, nav) but has **not** been formally approved as "the official identity package" — and we are deliberately waiting.
+**Why:** (a) it's already working where needed so no lock is blocking, (b) FB banner proved the lockup isn't universal (pure photo + bleed beat lockup overlay), (c) locking prematurely biases toward using it everywhere.
+**Plan:** Ship 3–4 more brand surfaces (IG, Twitter, per-business OG, merch) and see the pattern before deciding whether there's one canonical lockup or 2–3 approved configurations.
+
+### FB page strategy — parked for Collie
+**Decision:** No mass-delete of old PAL FB posts. Triage (keep/hide/delete) deferred until Collie begins contributing on marketing.
+**Why:** Archive, don't nuke. Collie is the design/marketing co-founder — let her make the call when she's ready to own the channel.
+
+---
+
+## 2026-04-16
+
+### Printable QR poster pattern
+**Decision:** New dynamic route `/print/qr/[slug]` generates letter-size branded posters with a lighthouse-in-center QR code. Two initial targets: `home` and `sandfest`.
+**Why:** First physical-world PAL artifact. Bridges the site to in-person signage (Sandfest weekend was the forcing function). Pattern is trivially extensible to per-portal and per-heritage posters.
+**Tech:** `qrcode` npm package, error correction H (survives the center overlay), navy-on-sand, lighthouse icon overlay. `robots: noindex`. Letter-size `@page`.
