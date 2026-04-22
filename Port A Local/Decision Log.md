@@ -198,3 +198,28 @@ _This is institutional memory. Never delete an entry._
 **Cost:** $500–1,500 one-time. Cheap vs. one slip-and-sue on a rented cart or beach setup.
 **Scope exclusion:** Claude does not draft this. Templates create false confidence; Texas doctrine fails most generic templates. Attorney-only.
 **Alternatives considered:** (a) DIY from templates — rejected (Texas indemnification doctrine is specific), (b) template service like Rocket Lawyer — works for simple cases but PAL's vendor marketplace is not simple enough, (c) defer — rejected (current vendor-claim process has zero paper trail; exposure grows with every booking).
+
+---
+
+## 2026-04-22
+
+### A2P 10DLC — separate-opt-in architecture
+**Decision:** SMS consent on all three revenue forms (maintenance, rent, beach) must be collected via an **unchecked-by-default optional checkbox**, separable from form submission. Customer can complete the transaction without checking the box and still get email confirmation. Only affirmatively-opted-in customers receive SMS.
+**Why:** Twilio A2P 10DLC campaign came back FAILED with error 30923: "consent cannot be a required condition for service or transaction completion." Our bundled "By submitting, you agree to... and consent to receive SMS" language violated CTIA rules. Separating consent is the only path to TCR approval.
+**Implementation:** Shared `src/lib/twilioSms.ts` helper with `sendSms` (unconditional, for internal/vendor) and `sendConsumerSms` (gated on `smsConsent === true`, for customers). `smsConsent` threaded through all three Stripe checkout routes in metadata so it survives the payment round-trip. Customer SMS copy appends "Reply STOP to opt out." on every message.
+**Alternatives considered:** (a) keep bundled consent and appeal the rejection — rejected (TCR rule is explicit), (b) remove SMS entirely — rejected (we want SMS for pre-arrival and return reminders), (c) require consent but hide the checkbox from non-US visitors — rejected (too cute, would likely fail on resubmission).
+
+### Email signature — "— The Port A Local"
+**Decision:** All PAL-outbound email (transactional templates, autoresponders, drafts-for-Winston-to-paste, vendor replies) signs off with exactly `— The Port A Local`. Em-dash, capital T/P/L. No trailing "team." No individual name.
+**Why:** Winston's call — wants the signature to read as both an entity and a single person simultaneously. "Team" sounds corporate; a personal name breaks the editorial/anti-Bureau posture. "The Port A Local" holds both — it's the publication, and it's also how a local would describe themselves in the third person.
+**Applied:** 6 transactional email templates updated (rent, rent/confirm, beach, beach/confirm, maintenance, maintenance/confirm). Rule saved to workspace memory as `feedback_pal_email_signature.md`.
+
+### Miguel detailing routing — service-type dropdown, not separate dispatch
+**Decision:** Add "Detailing / Wash" and "RV Undercoating" to the `/maintenance` `SERVICE_TYPES` dropdown. John Brown receives the dispatch SMS like any other service type; John calls Miguel for detailing jobs. No new env var, no new dispatch state machine, no new portal route.
+**Why:** John is the island's trust anchor and his relationship-based routing IS the value — using him as the hub leverages that instead of bypassing it. Zero infrastructure cost (two strings added to an array). Also survives the A2P wait — John's dispatch is already wired. Graduates cleanly: if Miguel starts getting consistent volume and wants a dedicated channel, easy to flip him to the cart-style accept/decline flow later.
+**Alternatives considered:** (a) new `/detail` portal mirroring /rent or /maintenance — rejected for now (over-engineering for one vendor), (b) direct-to-Miguel lead-blast like cart vendors — rejected for now (Miguel hasn't asked for it; John's relationship handles routing better than software).
+
+### Email Automation — Gmail UI (Layer 1) before server-side (Layer 2)
+**Decision:** Implement email automation for admin@ / hello@ / bookings@ Workspace accounts in two layers. Layer 1 uses Gmail's built-in filters, labels, canned responses, and vacation responders — configured in the UI, ~20 minutes one-time. Layer 2 (server-side inbound parsing for click-to-claim vendor flows) is tied to the cart marketplace buildout and is future work.
+**Why:** Layer 1 covers the 80% use cases (autoresponders for hello@, infra-labeling for admin@, inbound-to-hello@ forwarding for bookings@) with no code. Server-side parsing introduces real infra (webhook endpoints, inbound mail vendor choice, storage for claim state) and couples to the cart click-to-claim buildout — better to tackle as one piece of work when the cart marketplace is the driver.
+**Artifact:** `Port A Local/Email Automation.md` — copy-paste-ready filter rules, label list, canned response templates, and vacation responder text for Winston to configure in the Workspace UI.

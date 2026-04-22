@@ -1,6 +1,6 @@
 # Port A Local — Company Brain
 _Winston + Claude's living knowledge base. Updated every session._
-_Last updated: 2026-04-21 (evening — Collie round 1 + attorney scope defined)_
+_Last updated: 2026-04-22 (A2P fix + 3 new listings + Miguel routing + email automation spec)_
 
 ---
 
@@ -70,7 +70,8 @@ _Last updated: 2026-04-21 (evening — Collie round 1 + attorney scope defined)_
 | Print | Branded QR poster route (`/print/qr/[slug]`) — home + sandfest targets |
 | Revenue | $0 — Stripe LIVE, keys in Vercel, awaiting first transactions |
 | Legal | ⚠️ **T&C + vendor agreements + indemnification pending attorney review** — marketplace liability thesis needs paperwork to hold up |
-| A2P 10DLC | Brand APPROVED; campaign IN_PROGRESS at TCR (passive wait) |
+| A2P 10DLC | Brand APPROVED; **campaign resubmitted 2026-04-22** after TCR failure on bundled consent — new submission has separate-opt-in architecture, IN_PROGRESS at TCR |
+| Email automation | Spec drafted (`Port A Local/Email Automation.md`); Layer 1 (Gmail UI filters/responders/templates) ready for Winston to configure (~20 min); Layer 2 (server-side inbound parsing) tied to cart marketplace buildout |
 | Repo | https://github.com/haveebot/port-a-local |
 
 ---

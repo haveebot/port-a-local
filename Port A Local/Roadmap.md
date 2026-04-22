@@ -1,6 +1,6 @@
 # Port A Local — Roadmap & To-Do
 _Living document. Updated each session._
-_Last updated: 2026-04-21 (evening — Collie round 1)_
+_Last updated: 2026-04-22 (A2P fix + 3 new listings + Miguel routing)_
 
 ---
 
@@ -19,7 +19,7 @@ _Last updated: 2026-04-21 (evening — Collie round 1)_
 - Print: branded QR poster route (`/print/qr/[slug]`) — home + sandfest
 
 ### ⏳ Waiting
-- [ ] **A2P 10DLC Campaign** — IN_PROGRESS at TCR (low-volume mixed, no failure reason). Maintenance SMS code uses `MessagingServiceSid` when env var is set — auto-flips on approval. *Re-verify status this session.*
+- [ ] **A2P 10DLC Campaign — RESUBMITTED 2026-04-22**. First submission failed 2026-04-22 on error 30923 (MESSAGE_FLOW: consent-as-required-condition). Root cause: forms bundled SMS consent into submit action. **Fix shipped (commit 132b312):** separate unchecked-by-default SMS opt-in checkbox on all three forms; shared `sendConsumerSms` helper gates consumer SMS on `smsConsent === true`; customer SMS copy now includes "Reply STOP to opt out." on every message. **Twilio-side:** account + messaging service renamed, failed Usa2p deleted, new Usa2p submitted with rewritten MessageFlow + 5 fresh consumer-facing sample messages. Brand remains APPROVED (`BCIXLIA`). Status: IN_PROGRESS at TCR. Messaging service code already prefers `MessagingServiceSid` when env var is set — auto-flips on approval. Expected timeline 1–5 business days.
 
 ### Decided — no migration, no GBP (2026-04-13)
 - **GitHub:** PAL stays on `haveebot/port-a-local`. No org migration.
@@ -111,6 +111,13 @@ _Last updated: 2026-04-21 (evening — Collie round 1)_
 ---
 
 ## Completed ✅
+
+### Session — April 22, 2026 (2 commits)
+- **A2P 10DLC failure → fix → resubmit.** Forms decoupled SMS consent from submission via separate unchecked-by-default opt-in checkbox; shared `src/lib/twilioSms.ts` gates consumer SMS on `smsConsent`; customer SMS now on all 3 revenue flows (was maintenance-only); STOP opt-out appended to every customer message. Twilio account + messaging service renamed off Twilio defaults. New Usa2p compliance record submitted with rewritten MessageFlow. Commit `132b312`.
+- **3 new vendor listings from inbound requests.** Portable Detail Service (Miguel Cantu — mobile RV detailing + undercoating since 1994) → `/services`. Salty Beach Babes (boutique at 345 N Alister St F1) → `/shop` (phone still blank). Barefoot Beans (coffee shop at 345 N Alister St E1, organic/fair-trade) → `/eat`. Aloha Açaí duplicate caught + removed (already live under slug `aloha-acai`). Commit `e0c5a73`.
+- **Miguel routing through /maintenance dropdown.** Added "Detailing / Wash" and "RV Undercoating" to `SERVICE_TYPES`; John Brown dispatches, John calls Miguel. Zero new infra.
+- **Email signature standardization.** All 6 transactional email templates now sign off with `— The Port A Local` (entity + person voice, no "team"). Rule saved to workspace memory (`feedback_pal_email_signature.md`).
+- **Email Automation spec drafted** (`Port A Local/Email Automation.md`). Layer 1 filter rules + labels + canned responses + vacation responders for admin@ / hello@ / bookings@, copy-paste-ready for Gmail UI. Layer 2 (server-side inbound parsing) flagged as future cart-marketplace work.
 
 ### Session — April 21, 2026 evening (Collie round 1 — 1 commit on top of the dumptruck commit)
 - **PortalIcon component** — 9 single-color silhouette SVGs matching Collie's refs (eat, drink, stay, do, fish, shop, beach, maintenance, cart). All `currentColor`, coral on navy bg / navy on white bg per Collie's rule.
