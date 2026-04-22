@@ -21,6 +21,7 @@ interface EssentialSection {
 const essentials: EssentialSection[] = [
   {
     icon: "⛴️",
+    portalIcon: "ferry",
     title: "Getting Here — The Ferry",
     items: [
       "The Port Aransas ferry is free, 24/7, 365 days a year. No reservation needed.",
@@ -62,6 +63,7 @@ const essentials: EssentialSection[] = [
   },
   {
     icon: "🅿️",
+    portalIcon: "parking",
     title: "Parking",
     items: [
       "Downtown Port Aransas has free street parking — no meters.",
@@ -72,6 +74,7 @@ const essentials: EssentialSection[] = [
   },
   {
     icon: "🌊",
+    portalIcon: "weather",
     title: "Weather & Water Safety",
     items: [
       "Gulf water temps range from ~60°F in winter to ~85°F in summer.",
@@ -84,6 +87,7 @@ const essentials: EssentialSection[] = [
   },
   {
     icon: "🐬",
+    portalIcon: "wildlife",
     title: "Wildlife",
     items: [
       "Dolphins are everywhere — in the ship channel, around the ferry, and in the bay. Watch from shore or take a dolphin tour.",
@@ -95,6 +99,7 @@ const essentials: EssentialSection[] = [
   },
   {
     icon: "🎣",
+    portalIcon: "fish",
     title: "Fishing Basics",
     items: [
       "Texas fishing license required for anyone 17+. Buy online at TPWD.gov or at Island Tackle.",
@@ -108,6 +113,7 @@ const essentials: EssentialSection[] = [
   },
   {
     icon: "🍽️",
+    portalIcon: "eat",
     title: "Dining Tips",
     items: [
       "Reservations recommended for Venetian Hot Plate, Roosevelt's, Tortuga's, and Lisabella's — especially weekends.",
@@ -120,6 +126,7 @@ const essentials: EssentialSection[] = [
   },
   {
     icon: "🏥",
+    portalIcon: "emergency",
     title: "Emergency & Medical",
     items: [
       "Emergency: call 911.",
@@ -132,6 +139,7 @@ const essentials: EssentialSection[] = [
   },
   {
     icon: "📱",
+    portalIcon: "connectivity",
     title: "Connectivity & Essentials",
     items: [
       "Cell service is generally good on the island (AT&T, Verizon, T-Mobile all have coverage).",

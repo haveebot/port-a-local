@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { gullyFuse, getGullyHref } from "@/lib/gullySearch";
 import type { GullyItem } from "@/lib/gullySearch";
+import PortalIcon, { type PortalIconName } from "@/components/brand/PortalIcon";
 
 const RECENT_KEY = "gully-recent";
 const MAX_RECENT = 5;
@@ -36,17 +37,17 @@ const categoryEmoji: Record<string, string> = {
   realty: "🏠",
 };
 
-const popularChips = [
-  { label: "🍔 Burgers", query: "Burgers" },
-  { label: "🎣 Charter Fishing", query: "Charter Fishing" },
-  { label: "🍹 Happy Hour", query: "Happy Hour" },
-  { label: "🌮 Tacos", query: "Tacos" },
-  { label: "☕ Coffee", query: "Coffee" },
-  { label: "🏖️ Family Friendly", query: "Family Friendly" },
-  { label: "🌙 Late Night", query: "Late Night" },
-  { label: "🦞 Seafood", query: "Seafood" },
-  { label: "📖 Heritage", query: "heritage" },
-  { label: "⛵ Farley Boats", query: "Farley" },
+const popularChips: Array<{ icon: PortalIconName; label: string; query: string }> = [
+  { icon: "burger", label: "Burgers", query: "Burgers" },
+  { icon: "fish", label: "Charter Fishing", query: "Charter Fishing" },
+  { icon: "happyhour", label: "Happy Hour", query: "Happy Hour" },
+  { icon: "taco", label: "Tacos", query: "Tacos" },
+  { icon: "coffee", label: "Coffee", query: "Coffee" },
+  { icon: "beach", label: "Family Friendly", query: "Family Friendly" },
+  { icon: "latenight", label: "Late Night", query: "Late Night" },
+  { icon: "seafood", label: "Seafood", query: "Seafood" },
+  { icon: "heritage", label: "Heritage", query: "heritage" },
+  { icon: "sailing", label: "Farley Boats", query: "Farley" },
 ];
 
 export default function GullyPalette() {
@@ -199,8 +200,9 @@ export default function GullyPalette() {
                   <button
                     key={chip.query}
                     onClick={() => setQuery(chip.query)}
-                    className="px-3 py-1.5 rounded-full text-sm bg-sand-100 text-navy-700 hover:bg-coral-50 hover:text-coral-600 border border-sand-200 cursor-pointer transition-colors"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm bg-sand-100 text-navy-700 hover:bg-coral-50 hover:text-coral-600 border border-sand-200 cursor-pointer transition-colors"
                   >
+                    <PortalIcon name={chip.icon} className="w-4 h-4 shrink-0" />
                     {chip.label}
                   </button>
                 ))}

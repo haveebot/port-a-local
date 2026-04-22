@@ -1,14 +1,26 @@
 import type { ReactElement, SVGProps } from "react";
 
 /**
- * PortalIcon — single-color silhouette icons for PAL directory categories + portals.
+ * PortalIcon — single-color silhouette icons for PAL, replacing emoji across
+ * the site in Collie's monochrome style.
  *
  * All icons use `currentColor`, so consumers set color via Tailwind text-* classes.
  * Per Collie's brand rule: coral on navy backgrounds (text-coral-400), navy on
  * white/sand backgrounds (text-navy-900).
+ *
+ * Round 1 (Collie-designed, approved 2026-04-21): eat, drink, stay, do, fish,
+ *   shop, beach, maintenance, cart.
+ * Round 2 (drafted in Collie's style 2026-04-22, pending her review):
+ *   - Nav items: services, events, heritage, dispatch, archives, guides,
+ *     essentials, live, map, photos, mytrip
+ *   - Gully chips: burger, happyhour, taco, coffee, seafood, sailing,
+ *     surfing, latenight, offshore
+ *   - Essentials sections: ferry, parking, weather, wildlife, emergency,
+ *     connectivity
  */
 
 export type PortalIconName =
+  // Round 1 — Collie-approved
   | "eat"
   | "drink"
   | "stay"
@@ -17,7 +29,36 @@ export type PortalIconName =
   | "shop"
   | "beach"
   | "maintenance"
-  | "cart";
+  | "cart"
+  // Round 2 — Tier 1 nav
+  | "services"
+  | "events"
+  | "heritage"
+  | "dispatch"
+  | "archives"
+  | "guides"
+  | "essentials"
+  | "live"
+  | "map"
+  | "photos"
+  | "mytrip"
+  // Round 2 — Tier 2 Gully chips
+  | "burger"
+  | "happyhour"
+  | "taco"
+  | "coffee"
+  | "seafood"
+  | "sailing"
+  | "surfing"
+  | "latenight"
+  | "offshore"
+  // Round 2 — Tier 3 Essentials section headers
+  | "ferry"
+  | "parking"
+  | "weather"
+  | "wildlife"
+  | "emergency"
+  | "connectivity";
 
 const svgBase = {
   viewBox: "0 0 64 64",
@@ -26,6 +67,10 @@ const svgBase = {
   "aria-hidden": true,
   focusable: false,
 } as const;
+
+// ═══════════════════════════════════════════════════════════════════
+// ROUND 1 — Collie-approved
+// ═══════════════════════════════════════════════════════════════════
 
 function Eat(props: SVGProps<SVGSVGElement>) {
   return (
@@ -85,21 +130,16 @@ function Do(props: SVGProps<SVGSVGElement>) {
 function Fish(props: SVGProps<SVGSVGElement>) {
   return (
     <svg {...svgBase} {...props}>
-      {/* Rod */}
       <path d="M8 52 L12 48 L44 14 L48 18 Z" />
-      {/* Reel */}
       <circle cx="13" cy="49" r="3" />
       <rect x="11" y="53" width="4" height="5" rx="1" />
-      {/* Line */}
       <rect x="45.3" y="17" width="1.5" height="18" />
-      {/* Hook */}
       <path
         d="M43 34 Q43 39 47 39 Q51 39 51 34"
         stroke="currentColor"
         strokeWidth="1.8"
         fill="none"
       />
-      {/* Fish */}
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -161,16 +201,11 @@ function Maintenance(props: SVGProps<SVGSVGElement>) {
 function Cart(props: SVGProps<SVGSVGElement>) {
   return (
     <svg {...svgBase} {...props}>
-      {/* Canopy */}
       <rect x="8" y="14" width="48" height="5" rx="2" />
-      {/* Posts */}
       <rect x="11" y="19" width="3" height="11" />
       <rect x="50" y="19" width="3" height="11" />
-      {/* Body */}
       <path d="M10 30 H54 L58 46 H6 Z" />
-      {/* Seat back */}
       <rect x="30" y="22" width="4" height="10" />
-      {/* Wheels (rings) */}
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -185,6 +220,438 @@ function Cart(props: SVGProps<SVGSVGElement>) {
   );
 }
 
+// ═══════════════════════════════════════════════════════════════════
+// ROUND 2 — Tier 1 nav items (drafted in Collie's style, pending review)
+// ═══════════════════════════════════════════════════════════════════
+
+function Services(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...svgBase} {...props}>
+      <rect x="23" y="10" width="18" height="3" rx="1" />
+      <rect x="23" y="10" width="3" height="8" />
+      <rect x="38" y="10" width="3" height="8" />
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M6 18 h52 v36 h-52 z M24 34 h16 v4 h-16 z"
+      />
+    </svg>
+  );
+}
+
+function Events(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...svgBase} {...props}>
+      <rect x="8" y="12" width="3" height="10" rx="1" />
+      <rect x="53" y="12" width="3" height="10" rx="1" />
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M6 18 h52 v38 h-52 z M6 28 h52 v-6 h-52 z M14 34 h8 v7 h-8 z M28 34 h8 v7 h-8 z M42 34 h8 v7 h-8 z M14 45 h8 v7 h-8 z M28 45 h8 v7 h-8 z M42 45 h8 v7 h-8 z"
+      />
+      <rect x="6" y="18" width="52" height="6" />
+    </svg>
+  );
+}
+
+function Heritage(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...svgBase} {...props}>
+      <path d="M6 18 Q18 14 30 18 V50 Q18 46 6 50 Z" />
+      <path d="M58 18 Q46 14 34 18 V50 Q46 46 58 50 Z" />
+      <rect x="30" y="18" width="4" height="32" />
+    </svg>
+  );
+}
+
+function Dispatch(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...svgBase} {...props}>
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M32 8a24 24 0 100 48 24 24 0 000-48zm0 5a19 19 0 100 38 19 19 0 000-38z"
+      />
+      <path d="M32 16 L38 32 L32 48 L26 32 Z" />
+    </svg>
+  );
+}
+
+function Archives(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...svgBase} {...props}>
+      <path d="M4 24 L32 8 L60 24 Z" />
+      <rect x="4" y="24" width="56" height="4" />
+      <rect x="10" y="28" width="4" height="22" />
+      <rect x="19" y="28" width="4" height="22" />
+      <rect x="30" y="28" width="4" height="22" />
+      <rect x="41" y="28" width="4" height="22" />
+      <rect x="50" y="28" width="4" height="22" />
+      <rect x="4" y="50" width="56" height="6" />
+    </svg>
+  );
+}
+
+function Guides(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...svgBase} {...props}>
+      <rect x="24" y="6" width="16" height="8" rx="2" />
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M10 12 h44 v48 h-44 z M18 26 h28 v3 h-28 z M18 34 h28 v3 h-28 z M18 42 h28 v3 h-28 z M18 50 h18 v3 h-18 z"
+      />
+    </svg>
+  );
+}
+
+function Essentials(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...svgBase} {...props}>
+      <path d="M22 6 q0 -4 10 -4 q10 0 10 4 v6 h-20 z" />
+      <rect x="7" y="18" width="5" height="20" rx="2" />
+      <rect x="52" y="18" width="5" height="20" rx="2" />
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M12 14 h40 v44 h-40 z M22 28 h20 v14 h-20 z"
+      />
+    </svg>
+  );
+}
+
+function Live(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...svgBase} {...props}>
+      <rect x="31" y="8" width="2" height="14" />
+      <path d="M26 22 L38 22 L42 56 L22 56 Z" />
+      <rect x="22" y="32" width="20" height="2.5" />
+      <rect x="22" y="44" width="20" height="2.5" />
+      <path
+        d="M18 18 Q32 8 46 18"
+        stroke="currentColor"
+        strokeWidth="3"
+        fill="none"
+      />
+      <path
+        d="M12 14 Q32 -2 52 14"
+        stroke="currentColor"
+        strokeWidth="3"
+        fill="none"
+      />
+      <circle cx="32" cy="14" r="2" />
+    </svg>
+  );
+}
+
+function Map(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...svgBase} {...props}>
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M32 4 Q14 4 14 24 Q14 38 32 60 Q50 38 50 24 Q50 4 32 4 Z M32 16 a7 7 0 100 14 7 7 0 000-14 z"
+      />
+    </svg>
+  );
+}
+
+function Photos(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...svgBase} {...props}>
+      <path d="M22 14 h20 l4 6 h-28 z" />
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M6 18 h52 v34 h-52 z M32 24 a10 10 0 110 20 10 10 0 010-20 z"
+      />
+      <circle cx="32" cy="34" r="5" />
+      <rect x="48" y="22" width="5" height="3" rx="1" />
+    </svg>
+  );
+}
+
+function MyTrip(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...svgBase} {...props}>
+      <path d="M32 54 C12 38 6 26 14 18 C22 10 30 14 32 22 C34 14 42 10 50 18 C58 26 52 38 32 54 Z" />
+    </svg>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// ROUND 2 — Tier 2 Gully search chips
+// ═══════════════════════════════════════════════════════════════════
+
+function Burger(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...svgBase} {...props}>
+      <path d="M6 26 Q6 14 32 14 Q58 14 58 26 Z" />
+      <rect x="6" y="28" width="52" height="4" rx="1" />
+      <path d="M6 34 Q12 38 18 34 Q24 38 30 34 Q36 38 42 34 Q48 38 54 34 Q58 35 58 36 V40 H6 Z" />
+      <rect x="6" y="40" width="52" height="3" />
+      <path d="M6 44 Q6 52 32 52 Q58 52 58 44 Z" />
+    </svg>
+  );
+}
+
+function HappyHour(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...svgBase} {...props}>
+      <path d="M16 10 Q32 2 48 10 L44 14 H20 Z" />
+      <rect x="31" y="10" width="2" height="16" />
+      <path d="M12 26 H52 L42 48 H22 Z" />
+      <path
+        d="M40 14 Q46 30 40 48"
+        stroke="currentColor"
+        strokeWidth="2"
+        fill="none"
+      />
+      <rect x="20" y="52" width="24" height="3" rx="1" />
+    </svg>
+  );
+}
+
+function Taco(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...svgBase} {...props}>
+      <path d="M4 24 Q32 10 60 24 L52 52 Q32 56 12 52 Z" />
+      <path
+        d="M10 22 Q18 16 26 22 Q32 16 38 22 Q46 16 54 22"
+        stroke="currentColor"
+        strokeWidth="3"
+        fill="none"
+      />
+    </svg>
+  );
+}
+
+function Coffee(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...svgBase} {...props}>
+      <path
+        d="M18 6 Q20 12 18 16"
+        stroke="currentColor"
+        strokeWidth="2.5"
+        fill="none"
+        strokeLinecap="round"
+      />
+      <path
+        d="M28 4 Q30 10 28 14"
+        stroke="currentColor"
+        strokeWidth="2.5"
+        fill="none"
+        strokeLinecap="round"
+      />
+      <path
+        d="M38 6 Q40 12 38 16"
+        stroke="currentColor"
+        strokeWidth="2.5"
+        fill="none"
+        strokeLinecap="round"
+      />
+      <path d="M8 22 H46 V48 Q46 56 38 56 H16 Q8 56 8 48 Z" />
+      <path
+        d="M46 28 Q56 28 56 38 Q56 46 46 46"
+        stroke="currentColor"
+        strokeWidth="3.5"
+        fill="none"
+      />
+    </svg>
+  );
+}
+
+function Seafood(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...svgBase} {...props}>
+      <ellipse cx="32" cy="38" rx="18" ry="12" />
+      <circle cx="25" cy="26" r="2.5" />
+      <circle cx="39" cy="26" r="2.5" />
+      <rect x="24" y="28" width="2" height="4" />
+      <rect x="38" y="28" width="2" height="4" />
+      <path d="M6 28 Q8 20 14 18 Q20 20 18 28 L14 28 L14 22 L10 22 L10 28 Z" />
+      <path d="M58 28 Q56 20 50 18 Q44 20 46 28 L50 28 L50 22 L54 22 L54 28 Z" />
+      <path d="M10 42 L16 46 L14 50 L8 46 Z" />
+      <path d="M54 42 L48 46 L50 50 L56 46 Z" />
+      <path d="M16 52 L22 50 L22 54 L16 56 Z" />
+      <path d="M48 52 L42 50 L42 54 L48 56 Z" />
+    </svg>
+  );
+}
+
+function Sailing(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...svgBase} {...props}>
+      <path d="M32 8 L32 42 L14 42 Z" />
+      <rect x="30" y="8" width="2" height="34" />
+      <path d="M34 14 L34 42 L48 42 Z" />
+      <path d="M6 44 H58 L50 54 H14 Z" />
+      <path
+        d="M4 56 Q16 52 28 56 Q40 60 52 56 Q60 54 60 56"
+        stroke="currentColor"
+        strokeWidth="2"
+        fill="none"
+      />
+    </svg>
+  );
+}
+
+function Surfing(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...svgBase} {...props}>
+      <path d="M14 16 Q10 12 14 8 Q18 4 30 10 L54 38 Q58 42 54 46 Q50 50 38 44 Z" />
+      <path d="M44 44 L52 50 L48 54 L40 48 Z" />
+      <path
+        d="M22 22 L40 38"
+        stroke="currentColor"
+        strokeWidth="2"
+        fill="none"
+      />
+      <path
+        d="M4 58 Q16 54 28 58 Q40 62 52 58 Q58 56 60 58"
+        stroke="currentColor"
+        strokeWidth="2"
+        fill="none"
+      />
+    </svg>
+  );
+}
+
+function LateNight(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...svgBase} {...props}>
+      <path d="M48 10 Q32 8 22 20 Q14 32 22 44 Q32 56 48 54 Q36 50 32 38 Q28 26 36 18 Q42 12 48 10 Z" />
+    </svg>
+  );
+}
+
+function Offshore(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...svgBase} {...props}>
+      <path d="M22 22 L42 22 L48 36 H16 Z" />
+      <path d="M6 36 H54 L60 44 H2 Z" />
+      <path
+        d="M4 50 Q16 46 28 50 Q40 54 52 50 Q58 48 60 50"
+        stroke="currentColor"
+        strokeWidth="2"
+        fill="none"
+      />
+      <path
+        d="M4 56 Q16 52 28 56 Q40 60 52 56 Q58 54 60 56"
+        stroke="currentColor"
+        strokeWidth="2"
+        fill="none"
+      />
+    </svg>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// ROUND 2 — Tier 3 Essentials section headers
+// ═══════════════════════════════════════════════════════════════════
+
+function Ferry(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...svgBase} {...props}>
+      <rect x="26" y="12" width="12" height="8" />
+      <rect x="31" y="6" width="2" height="6" />
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M12 20 h40 v14 h-40 z M16 24 h5 v6 h-5 z M24 24 h5 v6 h-5 z M32 24 h5 v6 h-5 z M40 24 h5 v6 h-5 z"
+      />
+      <path d="M4 34 H60 L56 48 H8 Z" />
+      <path
+        d="M4 54 Q16 50 28 54 Q40 58 52 54 Q58 52 60 54"
+        stroke="currentColor"
+        strokeWidth="2"
+        fill="none"
+      />
+    </svg>
+  );
+}
+
+function Parking(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...svgBase} {...props}>
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M8 8 h48 v48 h-48 z M22 18 h12 a8 8 0 010 16 h-6 v12 h-6 z M28 24 h6 a2 2 0 010 4 h-6 z"
+      />
+    </svg>
+  );
+}
+
+function Weather(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...svgBase} {...props}>
+      <rect x="43" y="4" width="2" height="5" />
+      <rect x="55" y="16" width="5" height="2" />
+      <rect x="43" y="24" width="2" height="5" transform="rotate(-45 44 26)" />
+      <rect x="32" y="16" width="5" height="2" transform="rotate(-90 34 17)" />
+      <rect x="43" y="8" width="2" height="5" transform="rotate(45 44 10)" />
+      <circle cx="44" cy="17" r="9" />
+      <path d="M8 44 Q8 32 20 32 Q22 24 32 26 Q44 26 44 36 Q52 36 52 44 Q52 50 46 50 H14 Q8 50 8 44 Z" />
+    </svg>
+  );
+}
+
+function Wildlife(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...svgBase} {...props}>
+      <path d="M4 50 Q10 32 28 22 Q46 14 58 22 Q50 20 44 26 Q42 30 46 34 Q50 38 54 36 Q46 44 38 40 Q30 38 24 44 Q16 52 4 50 Z" />
+      <path d="M28 22 L34 14 L38 22 Z" />
+      <circle cx="50" cy="22" r="1.5" />
+      <path
+        d="M4 56 Q16 52 28 56 Q40 60 52 56 Q58 54 60 56"
+        stroke="currentColor"
+        strokeWidth="2"
+        fill="none"
+      />
+    </svg>
+  );
+}
+
+function Emergency(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...svgBase} {...props}>
+      <rect x="26" y="8" width="12" height="48" rx="2" />
+      <rect x="8" y="26" width="48" height="12" rx="2" />
+    </svg>
+  );
+}
+
+function Connectivity(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...svgBase} {...props}>
+      <path
+        d="M14 14 Q32 4 50 14"
+        stroke="currentColor"
+        strokeWidth="3"
+        fill="none"
+      />
+      <path
+        d="M20 20 Q32 14 44 20"
+        stroke="currentColor"
+        strokeWidth="3"
+        fill="none"
+      />
+      <circle cx="32" cy="24" r="2" />
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M20 30 h24 v28 h-24 z M24 34 h16 v18 h-16 z"
+      />
+      <circle cx="32" cy="55" r="1.5" />
+    </svg>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// Icon registry + component
+// ═══════════════════════════════════════════════════════════════════
+
 const icons: Record<
   PortalIconName,
   (p: SVGProps<SVGSVGElement>) => ReactElement
@@ -198,6 +665,32 @@ const icons: Record<
   beach: Beach,
   maintenance: Maintenance,
   cart: Cart,
+  services: Services,
+  events: Events,
+  heritage: Heritage,
+  dispatch: Dispatch,
+  archives: Archives,
+  guides: Guides,
+  essentials: Essentials,
+  live: Live,
+  map: Map,
+  photos: Photos,
+  mytrip: MyTrip,
+  burger: Burger,
+  happyhour: HappyHour,
+  taco: Taco,
+  coffee: Coffee,
+  seafood: Seafood,
+  sailing: Sailing,
+  surfing: Surfing,
+  latenight: LateNight,
+  offshore: Offshore,
+  ferry: Ferry,
+  parking: Parking,
+  weather: Weather,
+  wildlife: Wildlife,
+  emergency: Emergency,
+  connectivity: Connectivity,
 };
 
 export interface PortalIconProps extends SVGProps<SVGSVGElement> {

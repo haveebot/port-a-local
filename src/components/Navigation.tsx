@@ -97,13 +97,16 @@ export default function Navigation() {
                   ))}
                   <div className="border-t border-white/10">
                     <Link href="/services" onClick={() => setExploreOpen(false)} className={dropdownLinkClass}>
-                      <span className="text-base">🛠️</span> Services
+                      <PortalIcon name="services" className="w-4 h-4 text-coral-400 shrink-0" />
+                      Services
                     </Link>
                     <Link href="/events" onClick={() => setExploreOpen(false)} className={dropdownLinkClass}>
-                      <span className="text-base">🎪</span> Events
+                      <PortalIcon name="events" className="w-4 h-4 text-coral-400 shrink-0" />
+                      Events
                     </Link>
                     <Link href="/fishing-report" onClick={() => setExploreOpen(false)} className={dropdownLinkClass}>
-                      <span className="text-base">🎣</span> Fishing Report
+                      <PortalIcon name="fish" className="w-4 h-4 text-coral-400 shrink-0" />
+                      Fishing Report
                     </Link>
                   </div>
                 </div>
@@ -128,32 +131,41 @@ export default function Navigation() {
               {discoverOpen && (
                 <div className="absolute top-full left-0 mt-2 w-52 rounded-xl bg-navy-900/98 backdrop-blur-md border border-white/10 shadow-xl overflow-hidden">
                   <Link href="/history" onClick={() => setDiscoverOpen(false)} className={dropdownLinkClass}>
-                    <span className="text-base">📖</span> Heritage
+                    <PortalIcon name="heritage" className="w-4 h-4 text-coral-400 shrink-0" />
+                    Heritage
                   </Link>
                   <Link href="/dispatch" onClick={() => setDiscoverOpen(false)} className={dropdownLinkClass}>
-                    <span className="text-base">🧭</span> Dispatch
+                    <PortalIcon name="dispatch" className="w-4 h-4 text-coral-400 shrink-0" />
+                    Dispatch
                   </Link>
                   <Link href="/archives" onClick={() => setDiscoverOpen(false)} className={dropdownLinkClass}>
-                    <span className="text-base">🏛️</span> Archives
+                    <PortalIcon name="archives" className="w-4 h-4 text-coral-400 shrink-0" />
+                    Archives
                   </Link>
                   <Link href="/guides" onClick={() => setDiscoverOpen(false)} className={dropdownLinkClass}>
-                    <span className="text-base">📋</span> Guides
+                    <PortalIcon name="guides" className="w-4 h-4 text-coral-400 shrink-0" />
+                    Guides
                   </Link>
                   <Link href="/where-to-stay" onClick={() => setDiscoverOpen(false)} className={dropdownLinkClass}>
-                    <span className="text-base">🏠</span> Where to Stay
+                    <PortalIcon name="stay" className="w-4 h-4 text-coral-400 shrink-0" />
+                    Where to Stay
                   </Link>
                   <Link href="/essentials" onClick={() => setDiscoverOpen(false)} className={dropdownLinkClass}>
-                    <span className="text-base">🧭</span> Essentials
+                    <PortalIcon name="essentials" className="w-4 h-4 text-coral-400 shrink-0" />
+                    Essentials
                   </Link>
                   <div className="border-t border-white/10">
                     <Link href="/live" onClick={() => setDiscoverOpen(false)} className={dropdownLinkClass}>
-                      <span className="text-base">📡</span> Island Pulse
+                      <PortalIcon name="live" className="w-4 h-4 text-coral-400 shrink-0" />
+                      Island Pulse
                     </Link>
                     <Link href="/map" onClick={() => setDiscoverOpen(false)} className={dropdownLinkClass}>
-                      <span className="text-base">🗺️</span> Map
+                      <PortalIcon name="map" className="w-4 h-4 text-coral-400 shrink-0" />
+                      Map
                     </Link>
                     <Link href="/photos" onClick={() => setDiscoverOpen(false)} className={dropdownLinkClass}>
-                      <span className="text-base">📸</span> Photos
+                      <PortalIcon name="photos" className="w-4 h-4 text-coral-400 shrink-0" />
+                      Photos
                     </Link>
                   </div>
                 </div>
@@ -179,9 +191,7 @@ export default function Navigation() {
               title="My Trip — saved spots"
               className="p-2 rounded-full text-navy-400 hover:text-coral-400 hover:bg-white/10 transition-all duration-300"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-              </svg>
+              <PortalIcon name="mytrip" className="w-5 h-5" />
             </Link>
 
             {/* Divider */}
@@ -240,25 +250,25 @@ export default function Navigation() {
                 <PortalIcon name={cat.slug as PortalIconName} className="w-4 h-4 text-coral-400 shrink-0" />{cat.name}
               </Link>
             ))}
-            <Link href="/services" onClick={() => setMobileOpen(false)} className={mobileLinkClass}>🛠️ Services</Link>
-            <Link href="/events" onClick={() => setMobileOpen(false)} className={mobileLinkClass}>🎪 Events</Link>
-            <Link href="/fishing-report" onClick={() => setMobileOpen(false)} className={mobileLinkClass}>🎣 Fishing Report</Link>
+            <Link href="/services" onClick={() => setMobileOpen(false)} className={`${mobileLinkClass} flex items-center gap-2`}><PortalIcon name="services" className="w-4 h-4 text-coral-400 shrink-0" /> Services</Link>
+            <Link href="/events" onClick={() => setMobileOpen(false)} className={`${mobileLinkClass} flex items-center gap-2`}><PortalIcon name="events" className="w-4 h-4 text-coral-400 shrink-0" /> Events</Link>
+            <Link href="/fishing-report" onClick={() => setMobileOpen(false)} className={`${mobileLinkClass} flex items-center gap-2`}><PortalIcon name="fish" className="w-4 h-4 text-coral-400 shrink-0" /> Fishing Report</Link>
 
             {/* Discover */}
             <p className={sectionHeaderClass}>Discover</p>
-            <Link href="/history" onClick={() => setMobileOpen(false)} className={mobileLinkClass}>📖 Heritage</Link>
-            <Link href="/dispatch" onClick={() => setMobileOpen(false)} className={mobileLinkClass}>🧭 Dispatch</Link>
-            <Link href="/archives" onClick={() => setMobileOpen(false)} className={mobileLinkClass}>🏛️ Archives</Link>
-            <Link href="/guides" onClick={() => setMobileOpen(false)} className={mobileLinkClass}>📋 Guides</Link>
-            <Link href="/where-to-stay" onClick={() => setMobileOpen(false)} className={mobileLinkClass}>🏠 Where to Stay</Link>
-            <Link href="/essentials" onClick={() => setMobileOpen(false)} className={mobileLinkClass}>🧭 Essentials</Link>
-            <Link href="/live" onClick={() => setMobileOpen(false)} className={mobileLinkClass}>📡 Island Pulse</Link>
-            <Link href="/map" onClick={() => setMobileOpen(false)} className={mobileLinkClass}>🗺️ Map</Link>
-            <Link href="/photos" onClick={() => setMobileOpen(false)} className={mobileLinkClass}>📸 Photos</Link>
+            <Link href="/history" onClick={() => setMobileOpen(false)} className={`${mobileLinkClass} flex items-center gap-2`}><PortalIcon name="heritage" className="w-4 h-4 text-coral-400 shrink-0" /> Heritage</Link>
+            <Link href="/dispatch" onClick={() => setMobileOpen(false)} className={`${mobileLinkClass} flex items-center gap-2`}><PortalIcon name="dispatch" className="w-4 h-4 text-coral-400 shrink-0" /> Dispatch</Link>
+            <Link href="/archives" onClick={() => setMobileOpen(false)} className={`${mobileLinkClass} flex items-center gap-2`}><PortalIcon name="archives" className="w-4 h-4 text-coral-400 shrink-0" /> Archives</Link>
+            <Link href="/guides" onClick={() => setMobileOpen(false)} className={`${mobileLinkClass} flex items-center gap-2`}><PortalIcon name="guides" className="w-4 h-4 text-coral-400 shrink-0" /> Guides</Link>
+            <Link href="/where-to-stay" onClick={() => setMobileOpen(false)} className={`${mobileLinkClass} flex items-center gap-2`}><PortalIcon name="stay" className="w-4 h-4 text-coral-400 shrink-0" /> Where to Stay</Link>
+            <Link href="/essentials" onClick={() => setMobileOpen(false)} className={`${mobileLinkClass} flex items-center gap-2`}><PortalIcon name="essentials" className="w-4 h-4 text-coral-400 shrink-0" /> Essentials</Link>
+            <Link href="/live" onClick={() => setMobileOpen(false)} className={`${mobileLinkClass} flex items-center gap-2`}><PortalIcon name="live" className="w-4 h-4 text-coral-400 shrink-0" /> Island Pulse</Link>
+            <Link href="/map" onClick={() => setMobileOpen(false)} className={`${mobileLinkClass} flex items-center gap-2`}><PortalIcon name="map" className="w-4 h-4 text-coral-400 shrink-0" /> Map</Link>
+            <Link href="/photos" onClick={() => setMobileOpen(false)} className={`${mobileLinkClass} flex items-center gap-2`}><PortalIcon name="photos" className="w-4 h-4 text-coral-400 shrink-0" /> Photos</Link>
 
             {/* My Trip */}
             <p className={sectionHeaderClass}>My Trip</p>
-            <Link href="/my-trip" onClick={() => setMobileOpen(false)} className={mobileLinkClass}>❤️ Saved Spots</Link>
+            <Link href="/my-trip" onClick={() => setMobileOpen(false)} className={`${mobileLinkClass} flex items-center gap-2`}><PortalIcon name="mytrip" className="w-4 h-4 text-coral-400 shrink-0" /> Saved Spots</Link>
 
             {/* Book Direct */}
             <p className={sectionHeaderClass}>Book Direct</p>
