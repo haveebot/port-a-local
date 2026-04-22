@@ -101,7 +101,7 @@ export default function DispatchIndexPage() {
             Dispatch
           </h1>
           <p className="text-lg sm:text-xl text-navy-200 font-light max-w-2xl mx-auto mb-6">
-            Editorial, analysis, and reporting on the island as it is — not as it is advertised.
+            Features, analysis and reporting on the island as it is — not as it&apos;s advertised.
           </p>
           <p className="text-sm text-navy-300 font-light max-w-xl mx-auto">
             Heritage preserves what Port Aransas has been. Dispatch is where we look at what it

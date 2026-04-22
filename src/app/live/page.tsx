@@ -92,7 +92,7 @@ const externalLinks = [
   {
     name: "Surf Report",
     description: "Current surf conditions at Port Aransas",
-    url: "https://www.surfline.com/surf-report/port-aransas/584204204e65fad6a7709cde",
+    url: "https://www.surfline.com/surf-report/horace-caldwell-pier/5842041f4e65fad6a7708b83",
     icon: "🏄",
   },
   {

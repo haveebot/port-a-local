@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { categories } from "@/data/categories";
 import LighthouseMark from "@/components/brand/LighthouseMark";
+import PortalIcon, { type PortalIconName } from "@/components/brand/PortalIcon";
 
 export default function Navigation() {
   const [scrolled, setScrolled] = useState(false);
@@ -53,9 +54,6 @@ export default function Navigation() {
           : "bg-transparent"
       }`}
     >
-      {!scrolled && (
-        <div className="absolute inset-0 bg-gradient-to-b from-navy-950/70 to-transparent pointer-events-none" />
-      )}
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-18">
           <Link href="/" className="flex items-center gap-3 group" aria-label="Port A Local — home">
@@ -93,7 +91,7 @@ export default function Navigation() {
                 <div className="absolute top-full left-0 mt-2 w-52 rounded-xl bg-navy-900/98 backdrop-blur-md border border-white/10 shadow-xl overflow-hidden">
                   {categories.map((cat) => (
                     <Link key={cat.slug} href={`/${cat.slug}`} onClick={() => setExploreOpen(false)} className={dropdownLinkClass}>
-                      <span className="text-base">{cat.icon}</span>
+                      <PortalIcon name={cat.slug as PortalIconName} className="w-4 h-4 text-coral-400 shrink-0" />
                       {cat.name}
                     </Link>
                   ))}
@@ -190,9 +188,18 @@ export default function Navigation() {
             <div className="w-px h-5 bg-white/15 mx-1" />
 
             {/* Portal links */}
-            <Link href="/beach" className={portalLinkClass}>🏖️ Beach</Link>
-            <Link href="/rent" className={portalLinkClass}>🛺 Carts</Link>
-            <Link href="/maintenance" className={portalLinkClass}>🔧 Maintenance</Link>
+            <Link href="/beach" className={`${portalLinkClass} inline-flex items-center gap-1.5`}>
+              <PortalIcon name="beach" className="w-3.5 h-3.5" />
+              Beach
+            </Link>
+            <Link href="/rent" className={`${portalLinkClass} inline-flex items-center gap-1.5`}>
+              <PortalIcon name="cart" className="w-3.5 h-3.5" />
+              Carts
+            </Link>
+            <Link href="/maintenance" className={`${portalLinkClass} inline-flex items-center gap-1.5`}>
+              <PortalIcon name="maintenance" className="w-3.5 h-3.5" />
+              Maintenance
+            </Link>
           </div>
 
           {/* Mobile toggle */}
@@ -229,8 +236,8 @@ export default function Navigation() {
             {/* Explore */}
             <p className={sectionHeaderClass}>Explore</p>
             {categories.map((cat) => (
-              <Link key={cat.slug} href={`/${cat.slug}`} onClick={() => setMobileOpen(false)} className={mobileLinkClass}>
-                <span className="mr-2">{cat.icon}</span>{cat.name}
+              <Link key={cat.slug} href={`/${cat.slug}`} onClick={() => setMobileOpen(false)} className={`${mobileLinkClass} flex items-center gap-2`}>
+                <PortalIcon name={cat.slug as PortalIconName} className="w-4 h-4 text-coral-400 shrink-0" />{cat.name}
               </Link>
             ))}
             <Link href="/services" onClick={() => setMobileOpen(false)} className={mobileLinkClass}>🛠️ Services</Link>
@@ -255,9 +262,9 @@ export default function Navigation() {
 
             {/* Book Direct */}
             <p className={sectionHeaderClass}>Book Direct</p>
-            <Link href="/beach" onClick={() => setMobileOpen(false)} className="block px-4 py-2.5 text-sm font-medium text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors">🏖️ Beach Rentals</Link>
-            <Link href="/rent" onClick={() => setMobileOpen(false)} className="block px-4 py-2.5 text-sm font-medium text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors">🛺 Rent a Cart</Link>
-            <Link href="/maintenance" onClick={() => setMobileOpen(false)} className="block px-4 py-2.5 text-sm font-medium text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors">🔧 Maintenance</Link>
+            <Link href="/beach" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors"><PortalIcon name="beach" className="w-4 h-4 shrink-0" /> Beach Rentals</Link>
+            <Link href="/rent" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors"><PortalIcon name="cart" className="w-4 h-4 shrink-0" /> Rent a Cart</Link>
+            <Link href="/maintenance" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors"><PortalIcon name="maintenance" className="w-4 h-4 shrink-0" /> Maintenance</Link>
           </div>
         )}
       </div>

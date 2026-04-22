@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { categories } from "@/data/categories";
 import LighthouseMark from "@/components/brand/LighthouseMark";
+import PortalIcon, { type PortalIconName } from "@/components/brand/PortalIcon";
 
 export default function Footer() {
   return (
@@ -44,9 +45,9 @@ export default function Footer() {
                 <li key={cat.slug}>
                   <Link
                     href={`/${cat.slug}`}
-                    className="text-navy-300 hover:text-coral-300 transition-colors text-sm"
+                    className="inline-flex items-center gap-2 text-navy-300 hover:text-coral-300 transition-colors text-sm"
                   >
-                    {cat.icon} {cat.name}
+                    <PortalIcon name={cat.slug as PortalIconName} className="w-3.5 h-3.5 text-coral-400 shrink-0" /> {cat.name}
                   </Link>
                 </li>
               ))}

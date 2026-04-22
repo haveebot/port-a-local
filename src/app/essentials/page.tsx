@@ -2,6 +2,7 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import Link from "next/link";
 import type { Metadata } from "next";
+import PortalIcon, { type PortalIconName } from "@/components/brand/PortalIcon";
 
 export const metadata: Metadata = {
   title: "Island Essentials — Everything You Need to Know | Port A Local",
@@ -9,7 +10,15 @@ export const metadata: Metadata = {
     "Your arrival guide to Port Aransas, TX. Ferry info, beach rules, golf cart rules, parking, weather, emergency contacts, and insider tips from locals.",
 };
 
-const essentials = [
+interface EssentialSection {
+  icon: string;
+  portalIcon?: PortalIconName;
+  title: string;
+  items: string[];
+  link?: { label: string; url: string };
+}
+
+const essentials: EssentialSection[] = [
   {
     icon: "⛴️",
     title: "Getting Here — The Ferry",
@@ -24,6 +33,7 @@ const essentials = [
   },
   {
     icon: "🛺",
+    portalIcon: "cart",
     title: "Golf Cart Rules",
     items: [
       "Golf carts are the main way to get around Port Aransas. They're street-legal on most roads.",
@@ -38,6 +48,7 @@ const essentials = [
   },
   {
     icon: "🏖️",
+    portalIcon: "beach",
     title: "Beach Rules & Tips",
     items: [
       "Beach driving is allowed on most Port Aransas beaches with a valid Nueces County beach parking permit ($12/year for residents, $12/day for visitors).",
@@ -166,7 +177,12 @@ export default function EssentialsPage() {
                 href={`#${section.title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
                 className="px-3 py-1.5 rounded-full text-xs sm:text-sm font-medium bg-white text-navy-600 border border-sand-200 hover:border-coral-300 hover:text-coral-600 transition-colors"
               >
-                {section.icon} {section.title.split("—")[0].trim()}
+                {section.portalIcon ? (
+                  <PortalIcon name={section.portalIcon} className="inline-block align-text-bottom w-3.5 h-3.5 mr-1.5 text-navy-600" />
+                ) : (
+                  <span className="mr-1">{section.icon}</span>
+                )}
+                {section.title.split("—")[0].trim()}
               </a>
             ))}
           </div>
@@ -183,7 +199,11 @@ export default function EssentialsPage() {
               className="scroll-mt-32"
             >
               <div className="flex items-center gap-3 mb-4">
-                <span className="text-3xl">{section.icon}</span>
+                {section.portalIcon ? (
+                  <PortalIcon name={section.portalIcon} className="w-8 h-8 text-navy-900 shrink-0" />
+                ) : (
+                  <span className="text-3xl">{section.icon}</span>
+                )}
                 <h2 className="font-display text-2xl font-bold text-navy-900">
                   {section.title}
                 </h2>

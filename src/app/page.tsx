@@ -5,6 +5,7 @@ import FeaturedSpots from "@/components/FeaturedSpots";
 import Footer from "@/components/Footer";
 import { WebsiteSchema } from "@/components/StructuredData";
 import { categories } from "@/data/categories";
+import PortalIcon from "@/components/brand/PortalIcon";
 
 export default function Home() {
   return (
@@ -158,7 +159,7 @@ export default function Home() {
             >
               <div className="h-1 bg-gradient-to-r from-navy-600 via-coral-400 to-gold-400" />
               <div className="p-8">
-                <div className="text-4xl mb-4">🛺</div>
+                <PortalIcon name="cart" className="w-12 h-12 mb-4 text-navy-900 group-hover:text-coral-500 transition-colors" />
                 <h3 className="font-display text-xl font-bold text-navy-900 group-hover:text-coral-600 transition-colors mb-2">
                   Golf Cart Rentals
                 </h3>
@@ -181,7 +182,7 @@ export default function Home() {
             >
               <div className="h-1 bg-gradient-to-r from-navy-600 via-coral-400 to-gold-400" />
               <div className="p-8">
-                <div className="text-4xl mb-4">🏖️</div>
+                <PortalIcon name="beach" className="w-12 h-12 mb-4 text-navy-900 group-hover:text-coral-500 transition-colors" />
                 <h3 className="font-display text-xl font-bold text-navy-900 group-hover:text-coral-600 transition-colors mb-2">
                   Beach Rentals
                 </h3>
@@ -204,7 +205,7 @@ export default function Home() {
             >
               <div className="h-1 bg-gradient-to-r from-navy-600 via-coral-400 to-gold-400" />
               <div className="p-8">
-                <div className="text-4xl mb-4">🔧</div>
+                <PortalIcon name="maintenance" className="w-12 h-12 mb-4 text-navy-900 group-hover:text-coral-500 transition-colors" />
                 <h3 className="font-display text-xl font-bold text-navy-900 group-hover:text-coral-600 transition-colors mb-2">
                   Maintenance
                 </h3>

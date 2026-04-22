@@ -33,7 +33,7 @@ export interface Dispatch {
 export const dispatches: Dispatch[] = [
   {
     slug: "the-two-port-aransases",
-    title: "The Two Port Aransases",
+    title: "Port Aransas — A Tale of Two Islands",
     subtitle:
       "Tourism dashboards say the island is up. Main Street tells a different story — and the numbers, read carefully, agree.",
     description:

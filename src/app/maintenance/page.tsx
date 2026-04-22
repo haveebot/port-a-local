@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import PortalIcon from "@/components/brand/PortalIcon";
 
 const SERVICE_TYPES = [
   "General Repair / Handyman",
@@ -134,13 +135,13 @@ export default function MaintenancePage() {
         <div className="absolute inset-0 palm-pattern opacity-15" />
         <div className="relative max-w-3xl mx-auto px-4 sm:px-6">
           <div className="flex items-center gap-3 mb-2">
-            <span className="text-4xl">🔧</span>
+            <PortalIcon name="maintenance" className="w-12 h-12 text-coral-400 shrink-0" />
             <h1 className="font-display text-4xl sm:text-5xl font-bold text-sand-50">
               Maintenance Request
             </h1>
           </div>
           <p className="text-lg text-navy-200 mt-2 font-light">
-            Submit a request and we&apos;ll connect you with Port Aransas&apos;s most trusted local maintenance team.
+            Submit a request and we&apos;ll connect you with the most trusted maintenance team in Port Aransas.
           </p>
         </div>
       </section>

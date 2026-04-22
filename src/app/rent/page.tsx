@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import PortalIcon from "@/components/brand/PortalIcon";
 
 const CART_SIZES = [
   { value: "4", label: "4-Passenger Cart" },
@@ -93,7 +94,7 @@ export default function RentPage() {
         <section className="pt-28 pb-20 hero-gradient relative">
           <div className="absolute bottom-0 left-0 right-0 coral-line" />
           <div className="max-w-2xl mx-auto px-4 sm:px-6 text-center">
-            <div className="text-6xl mb-6">🛺</div>
+            <PortalIcon name="cart" className="w-20 h-20 mx-auto mb-6 text-coral-400" />
             <h1 className="font-display text-4xl font-bold text-sand-50 mb-4">
               Your Cart is Reserved!
             </h1>
@@ -123,13 +124,13 @@ export default function RentPage() {
         <div className="absolute inset-0 palm-pattern opacity-15" />
         <div className="relative max-w-3xl mx-auto px-4 sm:px-6">
           <div className="flex items-center gap-3 mb-2">
-            <span className="text-4xl">🛺</span>
+            <PortalIcon name="cart" className="w-12 h-12 text-coral-400 shrink-0" />
             <h1 className="font-display text-4xl sm:text-5xl font-bold text-sand-50">
               Rent a Golf Cart
             </h1>
           </div>
           <p className="text-lg text-navy-200 mt-2 font-light max-w-2xl">
-            The island runs on golf carts. Reserve yours through Port A Local and we guarantee a clean, well-maintained cart from a vetted local company — plus a <strong className="text-sand-100">guaranteed $20 discount</strong> off the rental company&apos;s standard rate. No booking fees, no guesswork.
+            The island runs on golf carts. Reserve yours through Port A Local and we guarantee a clean, well-maintained cart from a vetted local company — plus a <strong className="text-sand-100">guaranteed $20 discount</strong>{" "}off the rental company&apos;s standard rate. No booking fees, no guesswork.
           </p>
         </div>
       </section>

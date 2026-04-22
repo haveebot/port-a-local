@@ -37,7 +37,7 @@ export const dispatchContent: Record<string, DispatchContent> = {
         ],
       },
       {
-        heading: "The frame",
+        heading: "The Frame",
         body: [
           "The Port Aransas that shows up in the Bureau's dashboards — the one marketed to San Antonio, Austin, and Dallas — is growing. Cinnamon Shore North, the planned unit development on the south end of the island, has sold more than $250 million worth of homes and is nearly complete. Sea Oats Group, its developer, announced a $1.3 billion second phase that will eventually stretch the PUD footprint across 300 acres. Phase 5 at Cinnamon Shore South opened to what the developer's press release called \u201csurging demand.\u201d",
           "That same PUD model — a walkable enclave with its own retail, its own amenities, its own brand identity, pitched to buyers from elsewhere — has been replicated twice more on the island. Palmilla Beach, wrapped around an Arnold Palmer\u2013designed golf course, and Sunflower Beach, directly across the street, are built on the same template. All three were master-planned by the same person: Mark Schnell, a land planner headquartered in Santa Rosa Beach, Florida, along Scenic Highway 30A. Schnell's firm imported the 30A aesthetic — the one that transformed that stretch of the Florida panhandle over the last two decades — to the Texas coast, beginning with Cinnamon Shore in 2006. Industry press has already given the result a name: \u201cthe new Texas coast.\u201d",
@@ -108,7 +108,7 @@ export const dispatchContent: Record<string, DispatchContent> = {
         ],
       },
       {
-        heading: "The historical pattern",
+        heading: "The Historical Pattern",
         body: [
           "Port Aransas has been through this before. The island has been built, destroyed, and rebuilt repeatedly — in the great storms of 1875 and 1919, in Hurricane Celia in 1970, through the 2000s cycle of named storms, and again after Harvey in 2017. Each rebuild has one thing in common. The capital that comes in to rebuild does not flow back to the same people who were there before. Prices reset. The town changes hands. The workers who put the roofs back on increasingly cannot live under those roofs.",
           "The current cycle began with Harvey's reported $45 million in municipal damage and the insurance and federal capital that followed. Cinnamon Shore's South expansion accelerated in its wake. The PUD model — insulated from town infrastructure, sold to buyers from elsewhere, operated by captive realtors and captive amenities — fits the post-disaster rebuild incentive structure almost too neatly.",

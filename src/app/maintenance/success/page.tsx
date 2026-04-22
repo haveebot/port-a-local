@@ -4,6 +4,7 @@ import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import PortalIcon from "@/components/brand/PortalIcon";
 
 function MaintenanceSuccessContent() {
   const searchParams = useSearchParams();
@@ -38,7 +39,7 @@ function MaintenanceSuccessContent() {
   if (status === "success") {
     return (
       <>
-        <div className="text-6xl mb-6">🔧</div>
+        <PortalIcon name="maintenance" className="w-20 h-20 mx-auto mb-6 text-coral-400" />
         <h1 className="font-display text-4xl font-bold text-sand-50 mb-4">Priority Dispatch Confirmed!</h1>
         <p className="text-lg text-navy-200 mb-6">
           Payment received. Your request is in — our local team is on it.

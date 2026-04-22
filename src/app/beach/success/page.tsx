@@ -4,6 +4,7 @@ import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import PortalIcon from "@/components/brand/PortalIcon";
 
 function BeachSuccessContent() {
   const searchParams = useSearchParams();
@@ -46,7 +47,7 @@ function BeachSuccessContent() {
   if (status === "success") {
     return (
       <>
-        <div className="text-6xl mb-6">🏖️</div>
+        <PortalIcon name="beach" className="w-20 h-20 mx-auto mb-6 text-coral-400" />
         <h1 className="font-display text-4xl font-bold text-sand-50 mb-4">
           Beach Setup Booked!
         </h1>

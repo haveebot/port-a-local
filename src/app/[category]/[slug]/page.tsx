@@ -11,6 +11,7 @@ import KnowThisPlace from "@/components/KnowThisPlace";
 import { LocalBusinessSchema } from "@/components/StructuredData";
 import { isOpenNow } from "@/lib/isOpenNow";
 import SaveToTrip from "@/components/SaveToTrip";
+import PortalIcon, { type PortalIconName } from "@/components/brand/PortalIcon";
 
 export function generateStaticParams() {
   return getAllBusinessSlugs();
@@ -64,9 +65,9 @@ export default async function BusinessDetailPage({
             <span className="text-coral-300/40">/</span>
             <Link
               href={`/${category.slug}`}
-              className="hover:text-coral-300 transition-colors whitespace-nowrap"
+              className="inline-flex items-center gap-1.5 hover:text-coral-300 transition-colors whitespace-nowrap"
             >
-              {category.icon} {category.name}
+              <PortalIcon name={category.slug as PortalIconName} className="w-3.5 h-3.5 text-coral-400" /> {category.name}
             </Link>
             <span className="text-coral-300/40">/</span>
             <span className="text-navy-200 truncate max-w-[200px] sm:max-w-none">{business.name}</span>
@@ -395,8 +396,8 @@ export default async function BusinessDetailPage({
         <section className="py-16 bg-sand-50 border-t border-sand-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
             <div className="flex items-center justify-between mb-8">
-              <h2 className="font-display text-2xl font-bold text-navy-900">
-                More in {category.icon} {category.name}
+              <h2 className="font-display text-2xl font-bold text-navy-900 inline-flex items-center gap-2">
+                More in <PortalIcon name={category.slug as PortalIconName} className="w-6 h-6 text-navy-900 inline-block" /> {category.name}
               </h2>
               <Link
                 href={`/${category.slug}`}

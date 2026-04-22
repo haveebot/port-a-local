@@ -9,6 +9,7 @@ import Link from "next/link";
 import type { Category } from "@/data/categories";
 import type { Business } from "@/data/businesses";
 import { isOpenNow } from "@/lib/isOpenNow";
+import PortalIcon, { type PortalIconName } from "@/components/brand/PortalIcon";
 
 type SortOption = "featured" | "name" | "name-desc";
 
@@ -60,7 +61,7 @@ export default function CategoryPage({
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-center gap-3 mb-2">
-            <span className="text-4xl">{category.icon}</span>
+            <PortalIcon name={category.slug as PortalIconName} className="w-12 h-12 text-coral-400 shrink-0" />
             <h1 className="font-display text-4xl sm:text-5xl font-bold text-sand-50">
               {category.name}
             </h1>

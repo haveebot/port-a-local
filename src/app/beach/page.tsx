@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import PortalIcon from "@/components/brand/PortalIcon";
 
 const PRODUCTS = [
   {
@@ -108,7 +109,7 @@ export default function BeachPage() {
         <section className="pt-28 pb-20 hero-gradient relative">
           <div className="absolute bottom-0 left-0 right-0 coral-line" />
           <div className="max-w-2xl mx-auto px-4 sm:px-6 text-center">
-            <div className="text-6xl mb-6">🏖️</div>
+            <PortalIcon name="beach" className="w-20 h-20 mx-auto mb-6 text-coral-400" />
             <h1 className="font-display text-4xl font-bold text-sand-50 mb-4">
               Request Received!
             </h1>
@@ -136,7 +137,7 @@ export default function BeachPage() {
         <div className="absolute inset-0 palm-pattern opacity-15" />
         <div className="relative max-w-3xl mx-auto px-4 sm:px-6">
           <div className="flex items-center gap-3 mb-2">
-            <span className="text-4xl">🏖️</span>
+            <PortalIcon name="beach" className="w-12 h-12 text-coral-400 shrink-0" />
             <h1 className="font-display text-4xl sm:text-5xl font-bold text-sand-50">
               Beach Rentals
             </h1>

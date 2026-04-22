@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import { businesses } from "@/data/businesses";
 import { categories } from "@/data/categories";
 import Link from "next/link";
+import PortalIcon, { type PortalIconName } from "@/components/brand/PortalIcon";
 
 // Port Aransas center
 const PORT_A_CENTER: [number, number] = [27.8339, -97.0611];
@@ -86,7 +87,7 @@ export default function MapPage() {
                       : "bg-white/10 text-sand-200 border-white/20 hover:bg-white/20"
                   }`}
                 >
-                  {cat.icon} {cat.name}
+                  <PortalIcon name={cat.slug as PortalIconName} className="inline-block align-text-bottom w-3.5 h-3.5 mr-1.5" /> {cat.name}
                 </button>
               ))}
             </div>

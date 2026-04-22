@@ -259,8 +259,8 @@ export default async function DispatchArticlePage({
               Published by Port A Local
             </p>
             <p className="text-xs text-navy-400 font-light max-w-sm leading-relaxed">
-              Editorial, analysis, and reporting on the island as it is — not as
-              it is advertised. <span className="font-mono">27°50′N 97°03′W</span>
+              Features, analysis and reporting on the island as it is — not as
+              it&apos;s advertised. <span className="font-mono">27°50′N 97°03′W</span>
             </p>
           </div>
         </div>

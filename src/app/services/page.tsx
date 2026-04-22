@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import { getBusinessesByCategory } from "@/data/businesses";
 import type { Metadata } from "next";
 import Link from "next/link";
+import PortalIcon, { type PortalIconName } from "@/components/brand/PortalIcon";
 
 export const metadata: Metadata = {
   title: "Services — Port A Local | Port Aransas, TX",
@@ -11,10 +12,16 @@ export const metadata: Metadata = {
     "Book golf cart rentals, beach setups & maintenance directly through Port A Local. Plus every local service provider on the island — vetted and approved.",
 };
 
-const PORTALS = [
+const PORTALS: Array<{
+  href: string;
+  iconName: PortalIconName;
+  title: string;
+  description: string;
+  cta: string;
+}> = [
   {
     href: "/rent",
-    emoji: "🛺",
+    iconName: "cart",
     title: "Golf Cart Rentals",
     description:
       "The best way to get around the island. Reserve your cart and we handle the rest — delivery available.",
@@ -22,7 +29,7 @@ const PORTALS = [
   },
   {
     href: "/beach",
-    emoji: "🏖️",
+    iconName: "beach",
     title: "Beach Rentals",
     description:
       "Cabana setups and chair & umbrella packages delivered straight to your spot on the sand.",
@@ -30,7 +37,7 @@ const PORTALS = [
   },
   {
     href: "/maintenance",
-    emoji: "🔧",
+    iconName: "maintenance",
     title: "Maintenance",
     description:
       "Need something fixed? Submit a request and our trusted local crew gets on it — Priority Dispatch available.",
@@ -87,7 +94,7 @@ export default function ServicesPage() {
               >
                 <div className="h-1 bg-gradient-to-r from-navy-600 via-coral-400 to-gold-400" />
                 <div className="p-8">
-                  <div className="text-4xl mb-4">{portal.emoji}</div>
+                  <PortalIcon name={portal.iconName} className="w-12 h-12 mb-4 text-navy-900 group-hover:text-coral-500 transition-colors" />
                   <h3 className="font-display text-xl font-bold text-navy-900 group-hover:text-coral-600 transition-colors mb-2">
                     {portal.title}
                   </h3>

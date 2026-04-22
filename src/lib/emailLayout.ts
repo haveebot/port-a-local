@@ -103,7 +103,7 @@ export function emailLayout({
                   <td style="font-size: 12px; color: #8896ab; line-height: 1.6;">
                     <div><a href="${SITE_URL}" style="color:#e8656f; text-decoration:none; font-weight:600;">theportalocal.com</a></div>
                     <div style="font-family: monospace; margin-top: 4px;">27°50′N · 97°03′W</div>
-                    <div style="margin-top: 8px;">Editorial, analysis, and the island as it is.</div>
+                    <div style="margin-top: 8px;">Features, analysis and the island as it is.</div>
                   </td>
                 </tr>
               </table>
