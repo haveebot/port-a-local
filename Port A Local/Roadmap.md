@@ -1,6 +1,6 @@
 # Port A Local — Roadmap & To-Do
 _Living document. Updated each session._
-_Last updated: 2026-04-22 (A2P fix + 3 new listings + Miguel routing)_
+_Last updated: 2026-04-22 (full-site emoji eradication — 55 silhouettes live)_
 
 ---
 
@@ -70,35 +70,20 @@ _Last updated: 2026-04-22 (A2P fix + 3 new listings + Miguel routing)_
 - [ ] Merch mock (sticker, tee, or cap)
 - After 3–4 surfaces, decide: one canonical lockup, or 2–3 approved configurations.
 
-### Icon rollout — rounds 2+ (after Collie reviews round 1 on live site)
-**Round 1 (LIVE 2026-04-21):** PortalIcon component with 9 silhouette SVGs (eat, drink, stay, do, fish, shop, beach, maintenance, cart) wired across nav, homepage, category pages, portal headers, essentials, map, business detail, services, footer. White-on-navy favicon.
+### Icon rollout — ALL ROUNDS LIVE (2026-04-22)
+**55 silhouettes across 4 rounds — full-site emoji eradication complete.** Winston authorized skipping the Collie-review step between rounds: "assume Collie signed off, let's swap all of them out. if she makes changes we will do it again." Iteration cost is one-line SVG swap in `PortalIcon.tsx` with zero call-site impact.
 
-**Round 2 — Tier 1 nav icons (if Collie designs them):**
-- [ ] Services (currently 🛠️)
-- [ ] Events (🎪)
-- [ ] Heritage (📖)
-- [ ] Dispatch (🧭)
-- [ ] Archives (🏛️)
-- [ ] Guides (📋)
-- [ ] Essentials (🧭 — needs distinct from Dispatch)
-- [ ] Island Pulse (📡)
-- [ ] Map (🗺️)
-- [ ] Photos (📸)
-- [ ] My Trip / Saved Spots (❤️)
-- Free swaps (no new design needed): Fishing Report → reuse Fish icon; Where to Stay → reuse Stay icon
+- **Round 1 (2026-04-21, commit `1770fe0`):** 9 Collie-approved directory + portal silhouettes (eat/drink/stay/do/fish/shop + beach/maintenance/cart).
+- **Round 2 (2026-04-22, commit `35ca1b3`):** 26 silhouettes — Tier 1 nav (11), Tier 2 Gully chips (9), Tier 3 Essentials sections (6). Free reuses for Fishing Report + Where to Stay.
+- **Round 3 (2026-04-22, commit `f625efb`):** 7 Tier 4 decoratives + `EmojiIcon` helper for data-driven renders with graceful fallback.
+- **Round 4 (2026-04-22, commit `c4d63e2`):** 13 UI affordance silhouettes + 21 emoji aliases + `brandedOG` accepts `badgeIcon` prop; all 19 OG share cards now render inline SVG.
 
-**Round 3 — Tier 2 Gully search chips (if Collie designs them):**
-🍔 Burgers · 🍹 Happy Hour · 🌮 Tacos · ☕ Coffee · 🦞 Seafood · ⛵ Sailing · 🏄 Surfing · 🌙 Late Night · 🚤 Offshore Fishing
+**Still emoji (deliberate):**
+- SMS body text (plain text, no SVG support)
+- Email subject lines + some email HTML (mixed client support for inline SVG)
+- Event data emojis with no silhouette — fall back gracefully via EmojiIcon
 
-**Round 4 — Tier 3 Essentials section headers (if Collie designs them):**
-⛴️ Ferry · 🅿️ Parking · 🌊 Weather · 🐬 Wildlife · 🏥 Emergency · 📱 Connectivity
-
-**Tier 4 — decorative content (likely keep as emoji):**
-🌅 🏝️ 🌴 ⚡ 🏆 🎨 📅
-
-**Technical follow-on (independent of Collie):**
-- [ ] Swap OG share-card badges from emoji to inline SVG (Dispatch, Rent, Beach, Maintenance OGs). Uses existing PortalIcon SVG source.
-- [ ] Swap transactional email headers from emoji to inline SVG. Same source.
+**Next step:** Collie reviews on live site, flags any icon that reads poorly, swap SVG in `PortalIcon.tsx`.
 
 ### Future — blocked or deferred
 - [ ] **Gully V2** — community tagging with gamification (badges, Verified Local) — needs Supabase
@@ -112,12 +97,15 @@ _Last updated: 2026-04-22 (A2P fix + 3 new listings + Miguel routing)_
 
 ## Completed ✅
 
-### Session — April 22, 2026 (2 commits)
-- **A2P 10DLC failure → fix → resubmit.** Forms decoupled SMS consent from submission via separate unchecked-by-default opt-in checkbox; shared `src/lib/twilioSms.ts` gates consumer SMS on `smsConsent`; customer SMS now on all 3 revenue flows (was maintenance-only); STOP opt-out appended to every customer message. Twilio account + messaging service renamed off Twilio defaults. New Usa2p compliance record submitted with rewritten MessageFlow. Commit `132b312`.
-- **3 new vendor listings from inbound requests.** Portable Detail Service (Miguel Cantu — mobile RV detailing + undercoating since 1994) → `/services`. Salty Beach Babes (boutique at 345 N Alister St F1) → `/shop` (phone still blank). Barefoot Beans (coffee shop at 345 N Alister St E1, organic/fair-trade) → `/eat`. Aloha Açaí duplicate caught + removed (already live under slug `aloha-acai`). Commit `e0c5a73`.
-- **Miguel routing through /maintenance dropdown.** Added "Detailing / Wash" and "RV Undercoating" to `SERVICE_TYPES`; John Brown dispatches, John calls Miguel. Zero new infra.
-- **Email signature standardization.** All 6 transactional email templates now sign off with `— The Port A Local` (entity + person voice, no "team"). Rule saved to workspace memory (`feedback_pal_email_signature.md`).
-- **Email Automation spec drafted** (`Port A Local/Email Automation.md`). Layer 1 filter rules + labels + canned responses + vacation responders for admin@ / hello@ / bookings@, copy-paste-ready for Gmail UI. Layer 2 (server-side inbound parsing) flagged as future cart-marketplace work.
+### Session — April 22, 2026 (5 commits — morning + afternoon)
+- **A2P 10DLC failure → fix → resubmit** (morning). Forms decoupled SMS consent from submission via separate unchecked-by-default opt-in checkbox; shared `src/lib/twilioSms.ts` gates consumer SMS on `smsConsent`; customer SMS now on all 3 revenue flows (was maintenance-only); STOP opt-out appended to every customer message. Twilio account + messaging service renamed off Twilio defaults. New Usa2p compliance record submitted with rewritten MessageFlow. Commit `132b312`.
+- **3 new vendor listings from inbound requests** (morning). Portable Detail Service (Miguel Cantu — mobile RV detailing + undercoating since 1994) → `/services`. Salty Beach Babes (boutique at 345 N Alister St F1) → `/shop` (phone still blank). Barefoot Beans (coffee shop at 345 N Alister St E1, organic/fair-trade) → `/eat`. Aloha Açaí duplicate caught + removed (already live under slug `aloha-acai`). Commit `e0c5a73`.
+- **Miguel routing through /maintenance dropdown** (morning). Added "Detailing / Wash" and "RV Undercoating" to `SERVICE_TYPES`; John Brown dispatches, John calls Miguel. Zero new infra.
+- **Email signature standardization** (morning). All 6 transactional email templates now sign off with `— The Port A Local` (entity + person voice, no "team"). Rule saved to workspace memory (`feedback_pal_email_signature.md`).
+- **Email Automation spec drafted** (morning). `Port A Local/Email Automation.md` — Layer 1 filter rules + labels + canned responses + vacation responders for admin@ / hello@ / bookings@, copy-paste-ready for Gmail UI. Layer 2 (server-side inbound parsing) flagged as future cart-marketplace work.
+- **Icon rollout Round 2 — Tier 1 nav + Tier 2 Gully chips + Tier 3 Essentials sections** (afternoon, commit `35ca1b3`). 26 new silhouettes in Collie's style, wired site-wide. Nav dropdowns (desktop + mobile), Gully popularChips, Essentials section headers.
+- **Icon rollout Round 3 — Tier 4 decorative + EmojiIcon helper** (afternoon, commit `f625efb`). 7 new silhouettes (sunrise, island, palm, urgent, trophy, art, calendar) + EmojiIcon helper for data-driven renders with graceful emoji fallback.
+- **Icon rollout Round 4 — Full-site eradication + OG refactor + aliasing** (evening, commit `c4d63e2`, 42 files). 13 new silhouettes + 21 emoji aliases + `brandedOG` accepts `badgeIcon`; all 19 OG share cards now render inline SVG. Footer, GullyPalette, services/rent/beach/maintenance pages, photos, my-trip, admin, archives, KnowThisPlace, CategoryPage, IslandConditions, fishing-report, where-to-stay, history page — all swept.
 
 ### Session — April 21, 2026 evening (Collie round 1 — 1 commit on top of the dumptruck commit)
 - **PortalIcon component** — 9 single-color silhouette SVGs matching Collie's refs (eat, drink, stay, do, fish, shop, beach, maintenance, cart). All `currentColor`, coral on navy bg / navy on white bg per Collie's rule.

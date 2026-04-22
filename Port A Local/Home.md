@@ -1,6 +1,6 @@
 # Port A Local — Company Brain
 _Winston + Claude's living knowledge base. Updated every session._
-_Last updated: 2026-04-22 (A2P fix + 3 new listings + Miguel routing + email automation spec)_
+_Last updated: 2026-04-22 (full-site emoji eradication — 55 silhouettes across 4 rounds live)_
 
 ---
 
@@ -64,7 +64,7 @@ _Last updated: 2026-04-22 (A2P fix + 3 new listings + Miguel routing + email aut
 | Portals | `/rent` (marketplace model) · `/beach` · `/maintenance` (urgency coupling) |
 | Search | Gully — unified index (businesses + heritage + dispatch + menus + archives) |
 | Brand | Lighthouse mark locked; full-site saturation complete; full lockup intentionally not yet locked |
-| Icon system | **PortalIcon component live** — 9 monochrome silhouettes (eat/drink/stay/do/fish/shop + beach/maintenance/cart); rounds 2+ pending Collie design |
+| Icon system | **PortalIcon component — 55 silhouettes live** across 4 rounds. Full-site emoji eradication complete (deliberate exceptions: SMS bodies + some email HTML). `EmojiIcon` helper renders data-driven icons with graceful fallback. `brandedOG` renders inline SVG in all 19 OG share cards. |
 | Favicon | White-monochrome lighthouse on navy |
 | Social | FB profile + FB banner routes shipped (`/social/*`) |
 | Print | Branded QR poster route (`/print/qr/[slug]`) — home + sandfest targets |
