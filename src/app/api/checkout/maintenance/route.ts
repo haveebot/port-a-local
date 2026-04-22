@@ -11,7 +11,7 @@ const DISPATCH_FEE = 20; // $20 priority dispatch fee
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const { name, phone, email, address, serviceType, description, urgency, contactPref } = body;
+  const { name, phone, email, address, serviceType, description, urgency, contactPref, smsConsent } = body;
 
   if (!name || !phone || !email || !address || !serviceType || !description) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
@@ -45,6 +45,7 @@ export async function POST(req: NextRequest) {
         description: description.slice(0, 500), // Stripe metadata limit
         urgency,
         contactPref,
+        smsConsent: smsConsent ? "true" : "false",
         dispatchFee: String(DISPATCH_FEE),
       },
       success_url: `${APP_URL}/maintenance/success?session_id={CHECKOUT_SESSION_ID}`,

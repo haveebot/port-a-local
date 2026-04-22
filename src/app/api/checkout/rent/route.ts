@@ -18,6 +18,7 @@ export async function POST(req: NextRequest) {
     returnDate,
     numDays,
     reservationFee,
+    smsConsent,
   } = body;
 
   if (!name || !phone || !email || !cartSize || !pickupDate || !returnDate || !numDays || !reservationFee) {
@@ -52,6 +53,7 @@ export async function POST(req: NextRequest) {
         returnDate,
         numDays: String(numDays),
         reservationFee: String(reservationFee),
+        smsConsent: smsConsent ? "true" : "false",
       },
       success_url: `${APP_URL}/rent/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${APP_URL}/rent`,

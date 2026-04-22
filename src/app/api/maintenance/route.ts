@@ -1,13 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { emailLayout } from "@/lib/emailLayout";
+import { sendSms, sendConsumerSms } from "@/lib/twilioSms";
 
 const JOHN_PHONE = process.env.JOHN_BROWN_PHONE || "(361) 455-8606";
 const ADMIN_PHONE = process.env.ADMIN_PHONE || "";
 const INTERNAL_EMAIL = process.env.INTERNAL_ALERT_EMAIL || "";
-const TWILIO_SID = process.env.TWILIO_ACCOUNT_SID || "";
-const TWILIO_TOKEN = process.env.TWILIO_AUTH_TOKEN || "";
-const TWILIO_FROM = process.env.TWILIO_PHONE_NUMBER || "";
-const TWILIO_MESSAGING_SID = process.env.TWILIO_MESSAGING_SERVICE_SID || "";
 const RESEND_KEY = process.env.RESEND_API_KEY || "";
 
 // John Brown is SMS-only by design — vendor doesn't take email.
@@ -17,42 +14,6 @@ function urgencyLabel(u: string) {
   if (u === "emergency") return "🚨 EMERGENCY — ASAP";
   if (u === "urgent") return "⚡ URGENT — Within 48 hrs";
   return "📋 Routine — Within a week";
-}
-
-async function sendSMS(to: string, body: string) {
-  if (!TWILIO_SID || !TWILIO_TOKEN || (!TWILIO_MESSAGING_SID && !TWILIO_FROM)) {
-    console.log("[SMS] Twilio not configured — would send to", to, ":", body);
-    return;
-  }
-  const toClean = to.replace(/\D/g, "").replace(/^1/, ""); // strip leading 1 if present
-  const toFormatted = `+1${toClean}`;
-  if (toClean.length !== 10) {
-    console.error(`[SMS] Invalid phone number: ${to} → ${toFormatted}`);
-    return;
-  }
-  const url = `https://api.twilio.com/2010-04-01/Accounts/${TWILIO_SID}/Messages.json`;
-  const params: Record<string, string> = { To: toFormatted, Body: body };
-  if (TWILIO_MESSAGING_SID) {
-    params.MessagingServiceSid = TWILIO_MESSAGING_SID;
-    console.log(`[SMS] Sending to ${toFormatted} via Messaging Service ${TWILIO_MESSAGING_SID}`);
-  } else {
-    params.From = TWILIO_FROM;
-    console.log(`[SMS] Sending to ${toFormatted} from ${TWILIO_FROM}`);
-  }
-  const res = await fetch(url, {
-    method: "POST",
-    headers: {
-      Authorization: "Basic " + Buffer.from(`${TWILIO_SID}:${TWILIO_TOKEN}`).toString("base64"),
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-    body: new URLSearchParams(params),
-  });
-  const result = await res.json();
-  if (!res.ok) {
-    console.error("[SMS] Twilio error:", JSON.stringify(result));
-  } else {
-    console.log("[SMS] Sent successfully. SID:", result.sid, "Status:", result.status);
-  }
 }
 
 async function sendEmail(to: string, subject: string, html: string) {
@@ -81,7 +42,7 @@ async function sendEmail(to: string, subject: string, html: string) {
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const { name, phone, email, address, serviceType, description, urgency, contactPref } = body;
+  const { name, phone, email, address, serviceType, description, urgency, contactPref, smsConsent } = body;
 
   if (!name || !phone || !email || !address || !serviceType || !description) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
@@ -127,17 +88,17 @@ export async function POST(req: NextRequest) {
     `,
   });
 
-  // SMS confirmation to customer
-  const customerSMS = `Port A Local: We received your maintenance request for "${serviceType}" at ${address}. Our team is reviewing it and will be in touch shortly.`;
+  // SMS confirmation to customer — only if they opted in via the form checkbox.
+  const customerSMS = `Port A Local: We received your maintenance request for "${serviceType}" at ${address}. Our team will be in touch shortly. Reply STOP to opt out.`;
 
-  console.log(`[Maintenance] Customer phone raw: "${phone}" | John phone: "${JOHN_PHONE}"`);
+  console.log(`[Maintenance] Customer phone raw: "${phone}" | John phone: "${JOHN_PHONE}" | smsConsent: ${smsConsent}`);
 
-  // Fire all in parallel — always send both email AND SMS to customer
-  // Internal record email goes to INTERNAL_ALERT_EMAIL (admin@theportalocal.com)
+  // Vendor / internal-ops SMS (John Brown + admin) always fires — internal B2B, not consumer.
+  // Customer SMS is gated on smsConsent === true (collected via the opt-in checkbox).
   await Promise.allSettled([
-    sendSMS(JOHN_PHONE, smsBody),
-    ADMIN_PHONE ? sendSMS(ADMIN_PHONE, smsBody) : Promise.resolve(),
-    sendSMS(phone, customerSMS),
+    sendSms(JOHN_PHONE, smsBody),
+    ADMIN_PHONE ? sendSms(ADMIN_PHONE, smsBody) : Promise.resolve(),
+    sendConsumerSms(phone, customerSMS, smsConsent),
     INTERNAL_EMAIL ? sendEmail(INTERNAL_EMAIL, `[${urgency.toUpperCase()}] Maintenance Request — ${name} — ${serviceType}`, vendorHtml) : Promise.resolve(),
     sendEmail(email, "We received your maintenance request — Port A Local", customerHtml),
   ]);

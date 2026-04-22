@@ -26,6 +26,7 @@ export async function POST(req: NextRequest) {
     numDays,
     totalPrice,
     qty,
+    smsConsent,
   } = body;
 
   if (!name || !phone || !email || !product || !pickupDate || !returnDate || !deliveryAddress || !numDays || !totalPrice) {
@@ -65,6 +66,7 @@ export async function POST(req: NextRequest) {
         deliveryAddress,
         numDays: String(numDays),
         totalPrice: String(totalPrice),
+        smsConsent: smsConsent ? "true" : "false",
       },
       success_url: `${APP_URL}/beach/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${APP_URL}/beach`,

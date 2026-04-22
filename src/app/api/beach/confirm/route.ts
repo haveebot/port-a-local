@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { emailLayout } from "@/lib/emailLayout";
+import { sendConsumerSms } from "@/lib/twilioSms";
 
 const getStripe = () => new Stripe(process.env.STRIPE_SECRET_KEY || "", {
   apiVersion: "2026-03-25.dahlia",
@@ -63,7 +64,7 @@ export async function POST(req: NextRequest) {
     }
 
     const m = session.metadata || {};
-    const { name, phone, email, product, quantity, pickupDate, returnDate, deliveryAddress, numDays, totalPrice } = m;
+    const { name, phone, email, product, quantity, pickupDate, returnDate, deliveryAddress, numDays, totalPrice, smsConsent } = m;
 
     const startFormatted = formatDate(pickupDate);
     const endFormatted = formatDate(returnDate);
@@ -117,9 +118,12 @@ export async function POST(req: NextRequest) {
 
     console.log(`[Beach/Confirm] Payment confirmed — ${name} | ${productLabel} x${qty} | ${pickupDate} → ${returnDate} | $${total}`);
 
+    const customerSMS = `Port A Local: Your ${productLabel} (${days} day${days !== 1 ? "s" : ""}) is booked for ${startFormatted}. Delivered to: ${deliveryAddress}. Reply STOP to opt out.`;
+
     await Promise.allSettled([
       sendEmail(INTERNAL_EMAIL, `✅ Beach Rental PAID — ${name} — ${pickupDate} to ${returnDate}`, internalHtml),
       sendEmail(email, "Your Beach Setup is Booked — Port A Local", customerHtml),
+      sendConsumerSms(phone, customerSMS, smsConsent),
     ]);
 
     return NextResponse.json({ success: true });

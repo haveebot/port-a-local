@@ -36,6 +36,7 @@ export default function MaintenancePage() {
     description: "",
     urgency: "routine",
     contactPref: "either",
+    smsConsent: false,
   });
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
@@ -352,6 +353,20 @@ export default function MaintenancePage() {
               <p className="text-red-500 text-sm text-center">{errorMsg}</p>
             )}
 
+            <label className="flex items-start gap-2.5 text-sm text-navy-600 bg-sand-50 border border-sand-200 rounded-lg px-4 py-3 cursor-pointer">
+              <input
+                type="checkbox"
+                name="smsConsent"
+                checked={form.smsConsent}
+                onChange={(e) => setForm({ ...form, smsConsent: e.target.checked })}
+                className="mt-0.5 accent-coral-500 w-4 h-4 shrink-0"
+              />
+              <span className="leading-relaxed">
+                Text me confirmations and updates about this request{" "}
+                <span className="text-navy-400/70">(optional)</span>. Msg &amp; data rates may apply. Reply STOP to opt out.
+              </span>
+            </label>
+
             <button
               type="submit"
               disabled={status === "loading"}
@@ -365,9 +380,7 @@ export default function MaintenancePage() {
             <p className="text-center text-xs text-navy-400/70 leading-relaxed">
               By submitting, you agree to our{" "}
               <Link href="/terms" className="underline hover:text-navy-600">Terms</Link> and{" "}
-              <Link href="/privacy" className="underline hover:text-navy-600">Privacy Policy</Link>{" "}
-              and consent to receive SMS and email updates about your request.
-              Msg &amp; data rates may apply. Reply STOP to opt out.
+              <Link href="/privacy" className="underline hover:text-navy-600">Privacy Policy</Link>.
             </p>
 
             <p className="text-center text-sm text-navy-400">

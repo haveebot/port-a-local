@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { emailLayout } from "@/lib/emailLayout";
+import { sendSms, sendConsumerSms } from "@/lib/twilioSms";
 
 const getStripe = () => new Stripe(process.env.STRIPE_SECRET_KEY || "", {
   apiVersion: "2026-03-25.dahlia",
@@ -9,41 +10,10 @@ const getStripe = () => new Stripe(process.env.STRIPE_SECRET_KEY || "", {
 const JOHN_PHONE = process.env.JOHN_BROWN_PHONE || "(361) 455-8606";
 const ADMIN_PHONE = process.env.ADMIN_PHONE || "";
 const INTERNAL_EMAIL = process.env.INTERNAL_ALERT_EMAIL || "";
-const TWILIO_SID = process.env.TWILIO_ACCOUNT_SID || "";
-const TWILIO_TOKEN = process.env.TWILIO_AUTH_TOKEN || "";
-const TWILIO_FROM = process.env.TWILIO_PHONE_NUMBER || "";
-const TWILIO_MESSAGING_SID = process.env.TWILIO_MESSAGING_SERVICE_SID || "";
 const RESEND_KEY = process.env.RESEND_API_KEY || "";
 
 // John Brown is SMS-only by design — vendor doesn't take email.
 // All maintenance internal emails go to INTERNAL_ALERT_EMAIL for records.
-
-async function sendSMS(to: string, body: string) {
-  if (!TWILIO_SID || !TWILIO_TOKEN || (!TWILIO_MESSAGING_SID && !TWILIO_FROM)) {
-    console.log("[SMS] Twilio not configured — would send to", to, ":", body);
-    return;
-  }
-  const toClean = to.replace(/\D/g, "").replace(/^1/, "");
-  const toFormatted = `+1${toClean}`;
-  if (toClean.length !== 10) {
-    console.error(`[SMS] Invalid phone number: ${to}`);
-    return;
-  }
-  const params: Record<string, string> = { To: toFormatted, Body: body };
-  if (TWILIO_MESSAGING_SID) params.MessagingServiceSid = TWILIO_MESSAGING_SID;
-  else params.From = TWILIO_FROM;
-  const res = await fetch(`https://api.twilio.com/2010-04-01/Accounts/${TWILIO_SID}/Messages.json`, {
-    method: "POST",
-    headers: {
-      Authorization: "Basic " + Buffer.from(`${TWILIO_SID}:${TWILIO_TOKEN}`).toString("base64"),
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-    body: new URLSearchParams(params),
-  });
-  const result = await res.json();
-  if (!res.ok) console.error("[SMS] Twilio error:", JSON.stringify(result));
-  else console.log("[SMS] Sent. SID:", result.sid);
-}
 
 async function sendEmail(to: string, subject: string, html: string) {
   if (!RESEND_KEY) {
@@ -81,7 +51,7 @@ export async function POST(req: NextRequest) {
     }
 
     const m = session.metadata || {};
-    const { name, phone, email, address, serviceType, description, urgency, contactPref, dispatchFee } = m;
+    const { name, phone, email, address, serviceType, description, urgency, contactPref, dispatchFee, smsConsent } = m;
 
     // --- Priority SMS to John — marked clearly as paid dispatch ---
     const smsPriority = `🚨 PRIORITY DISPATCH — PORT A LOCAL\n$${dispatchFee} paid. Respond within 4 hours.\n\nFrom: ${name}\nPhone: ${phone}\nAddress: ${address}\nService: ${serviceType}\n\n"${description?.slice(0, 100)}${(description?.length || 0) > 100 ? "..." : ""}"\n\nPreferred contact: ${contactPref}`;
@@ -126,14 +96,14 @@ export async function POST(req: NextRequest) {
       `,
     });
 
-    const customerSMS = `Port A Local: Priority dispatch confirmed! $${dispatchFee} received. Our team will contact you within 4 hours about your ${serviceType} request at ${address}.`;
+    const customerSMS = `Port A Local: Priority dispatch confirmed! $${dispatchFee} received. Our team will contact you within 4 hours about your ${serviceType} request at ${address}. Reply STOP to opt out.`;
 
-    console.log(`[Maintenance/Priority] Paid dispatch confirmed — ${name} (${phone}) — ${serviceType}`);
+    console.log(`[Maintenance/Priority] Paid dispatch confirmed — ${name} (${phone}) — ${serviceType} | smsConsent: ${smsConsent}`);
 
     await Promise.allSettled([
-      sendSMS(JOHN_PHONE, smsPriority),
-      ADMIN_PHONE ? sendSMS(ADMIN_PHONE, smsPriority) : Promise.resolve(),
-      sendSMS(phone, customerSMS),
+      sendSms(JOHN_PHONE, smsPriority),
+      ADMIN_PHONE ? sendSms(ADMIN_PHONE, smsPriority) : Promise.resolve(),
+      sendConsumerSms(phone, customerSMS, smsConsent),
       INTERNAL_EMAIL ? sendEmail(INTERNAL_EMAIL, `🚨 PRIORITY DISPATCH — ${name} — ${serviceType}`, vendorHtml) : Promise.resolve(),
       sendEmail(email, "Priority Dispatch Confirmed — Port A Local", customerHtml),
     ]);

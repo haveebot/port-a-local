@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { emailLayout } from "@/lib/emailLayout";
 import { getBlastableVendors, getBlastCount } from "@/data/cart-vendors";
+import { sendConsumerSms } from "@/lib/twilioSms";
 
 const getStripe = () => new Stripe(process.env.STRIPE_SECRET_KEY || "", {
   apiVersion: "2026-03-25.dahlia",
@@ -59,7 +60,7 @@ export async function POST(req: NextRequest) {
     }
 
     const m = session.metadata || {};
-    const { name, phone, email, cartSize, pickupDate, returnDate, numDays, reservationFee } = m;
+    const { name, phone, email, cartSize, pickupDate, returnDate, numDays, reservationFee, smsConsent } = m;
 
     const pickupFormatted = formatDate(pickupDate);
     const returnFormatted = formatDate(returnDate);
@@ -151,9 +152,12 @@ export async function POST(req: NextRequest) {
 
     console.log(`[Rent/Blast] Sending lead to ${vendors.length} vendors (${totalVendorCount} total on list)`);
 
+    const customerSMS = `Port A Local: Your ${cartLabel} is reserved for ${pickupFormatted}. Pickup details will arrive 24-48 hours before your trip. Reply STOP to opt out.`;
+
     await Promise.allSettled([
       sendEmail(INTERNAL_EMAIL, `✅ Golf Cart PAID — ${name} — ${pickupDate} to ${returnDate}`, internalHtml),
       sendEmail(email, "Your Golf Cart is Reserved — Port A Local", customerHtml),
+      sendConsumerSms(phone, customerSMS, smsConsent),
       ...vendorBlastPromises,
     ]);
 
