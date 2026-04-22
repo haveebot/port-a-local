@@ -6,15 +6,16 @@ import Footer from "@/components/Footer";
 import Link from "next/link";
 import { getTripItems, removeFromTrip, clearTrip } from "@/lib/tripPlanner";
 import type { TripItem } from "@/lib/tripPlanner";
+import PortalIcon, { EmojiIcon, type PortalIconName } from "@/components/brand/PortalIcon";
 
-const categoryEmoji: Record<string, string> = {
-  eat: "🍽️",
-  drink: "🍹",
-  fish: "🎣",
-  do: "🏄",
-  shop: "🛍️",
-  stay: "🏨",
-  heritage: "📖",
+const categoryIcon: Record<string, PortalIconName> = {
+  eat: "eat",
+  drink: "drink",
+  fish: "fish",
+  do: "surfing",
+  shop: "shop",
+  stay: "stay",
+  heritage: "heritage",
 };
 
 function getHref(item: TripItem): string {
@@ -67,7 +68,7 @@ export default function MyTripPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           {items.length === 0 ? (
             <div className="text-center py-20">
-              <span className="text-5xl block mb-4">🗺️</span>
+              <PortalIcon name="map" className="w-16 h-16 mx-auto mb-4 text-coral-400" />
               <h2 className="font-display text-2xl font-bold text-navy-900 mb-3">
                 Your trip is empty
               </h2>
@@ -97,9 +98,7 @@ export default function MyTripPage() {
                         key={`${item.type}-${item.slug}`}
                         className="flex items-center gap-4 bg-white rounded-xl border border-sand-200 p-4"
                       >
-                        <span className="text-xl flex-shrink-0">
-                          {categoryEmoji[item.category] ?? "📍"}
-                        </span>
+                        <PortalIcon name={categoryIcon[item.category] ?? "map"} className="w-6 h-6 flex-shrink-0 text-navy-900" />
                         <Link href={getHref(item)} className="flex-1 min-w-0 group">
                           <p className="font-medium text-navy-900 group-hover:text-coral-600 transition-colors">
                             {item.name}
@@ -135,7 +134,7 @@ export default function MyTripPage() {
                         key={`${item.type}-${item.slug}`}
                         className="flex items-center gap-4 bg-white rounded-xl border border-sand-200 p-4"
                       >
-                        <span className="text-xl flex-shrink-0">{item.icon ?? "📖"}</span>
+                        <EmojiIcon emoji={item.icon ?? "📖"} className="w-6 h-6 flex-shrink-0 text-navy-900" />
                         <Link href={getHref(item)} className="flex-1 min-w-0 group">
                           <p className="font-medium text-navy-900 group-hover:text-coral-600 transition-colors">
                             {item.name}

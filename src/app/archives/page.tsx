@@ -3,6 +3,7 @@ import Footer from "@/components/Footer";
 import Link from "next/link";
 import { archivePhotos, getPhotosByEra } from "@/data/archives";
 import type { Metadata } from "next";
+import PortalIcon from "@/components/brand/PortalIcon";
 
 export const metadata: Metadata = {
   title: "Historical Photo Archives — Port Aransas Through the Decades | Port A Local",
@@ -102,7 +103,7 @@ export default function ArchivesPage() {
                         ) : (
                           <div className="w-full h-full flex items-center justify-center bg-navy-100 group-hover:bg-navy-200 transition-colors">
                             <div className="text-center p-6">
-                              <span className="text-4xl block mb-3">🏛️</span>
+                              <PortalIcon name="archives" className="w-12 h-12 mx-auto mb-3 text-navy-400" />
                               <p className="text-sm font-medium text-navy-600 group-hover:text-coral-600 transition-colors">
                                 View at {photo.source}
                               </p>

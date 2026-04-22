@@ -63,57 +63,57 @@ export default function Footer() {
               <li>
                 <Link
                   href="/gully"
-                  className="text-navy-300 hover:text-coral-300 transition-colors text-sm"
+                  className="inline-flex items-center gap-2 text-navy-300 hover:text-coral-300 transition-colors text-sm"
                 >
-                  🔍 Gully Search
+                  <PortalIcon name="search" className="w-3.5 h-3.5 text-coral-400 shrink-0" /> Gully Search
                 </Link>
               </li>
               <li>
                 <Link
                   href="/history"
-                  className="text-navy-300 hover:text-coral-300 transition-colors text-sm"
+                  className="inline-flex items-center gap-2 text-navy-300 hover:text-coral-300 transition-colors text-sm"
                 >
-                  📖 Heritage
+                  <PortalIcon name="heritage" className="w-3.5 h-3.5 text-coral-400 shrink-0" /> Heritage
                 </Link>
               </li>
               <li>
                 <Link
                   href="/dispatch"
-                  className="text-navy-300 hover:text-coral-300 transition-colors text-sm"
+                  className="inline-flex items-center gap-2 text-navy-300 hover:text-coral-300 transition-colors text-sm"
                 >
-                  🧭 Dispatch
+                  <PortalIcon name="dispatch" className="w-3.5 h-3.5 text-coral-400 shrink-0" /> Dispatch
                 </Link>
               </li>
               <li>
                 <Link
                   href="/archives"
-                  className="text-navy-300 hover:text-coral-300 transition-colors text-sm"
+                  className="inline-flex items-center gap-2 text-navy-300 hover:text-coral-300 transition-colors text-sm"
                 >
-                  🏛️ Archives
+                  <PortalIcon name="archives" className="w-3.5 h-3.5 text-coral-400 shrink-0" /> Archives
                 </Link>
               </li>
               <li>
                 <Link
                   href="/rent"
-                  className="text-navy-300 hover:text-coral-300 transition-colors text-sm"
+                  className="inline-flex items-center gap-2 text-navy-300 hover:text-coral-300 transition-colors text-sm"
                 >
-                  🛺 Golf Cart Rentals
+                  <PortalIcon name="cart" className="w-3.5 h-3.5 text-coral-400 shrink-0" /> Golf Cart Rentals
                 </Link>
               </li>
               <li>
                 <Link
                   href="/beach"
-                  className="text-navy-300 hover:text-coral-300 transition-colors text-sm"
+                  className="inline-flex items-center gap-2 text-navy-300 hover:text-coral-300 transition-colors text-sm"
                 >
-                  🏖️ Beach Rentals
+                  <PortalIcon name="beach" className="w-3.5 h-3.5 text-coral-400 shrink-0" /> Beach Rentals
                 </Link>
               </li>
               <li>
                 <Link
                   href="/maintenance"
-                  className="text-navy-300 hover:text-coral-300 transition-colors text-sm"
+                  className="inline-flex items-center gap-2 text-navy-300 hover:text-coral-300 transition-colors text-sm"
                 >
-                  🔧 Maintenance
+                  <PortalIcon name="maintenance" className="w-3.5 h-3.5 text-coral-400 shrink-0" /> Maintenance
                 </Link>
               </li>
             </ul>

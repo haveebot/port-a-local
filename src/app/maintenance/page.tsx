@@ -113,7 +113,7 @@ export default function MaintenancePage() {
         <section className="pt-28 pb-20 hero-gradient relative">
           <div className="absolute bottom-0 left-0 right-0 coral-line" />
           <div className="max-w-2xl mx-auto px-4 sm:px-6 text-center">
-            <div className="text-6xl mb-6">✅</div>
+            <PortalIcon name="check" className="w-20 h-20 mx-auto mb-6 text-coral-400" />
             <h1 className="font-display text-4xl font-bold text-sand-50 mb-4">Request Received!</h1>
             <p className="text-lg text-navy-200 mb-4">
               We&apos;ve received your maintenance request and our local service team is reviewing the details.

@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { gullyFuse, getGullyHref } from "@/lib/gullySearch";
 import type { GullyItem } from "@/lib/gullySearch";
-import PortalIcon, { type PortalIconName } from "@/components/brand/PortalIcon";
+import PortalIcon, { EmojiIcon, type PortalIconName } from "@/components/brand/PortalIcon";
 
 const RECENT_KEY = "gully-recent";
 const MAX_RECENT = 5;
@@ -26,15 +26,15 @@ function saveRecentSearch(q: string) {
   localStorage.setItem(RECENT_KEY, JSON.stringify(recent.slice(0, MAX_RECENT)));
 }
 
-const categoryEmoji: Record<string, string> = {
-  eat: "🍽️",
-  drink: "🍹",
-  fish: "🎣",
-  do: "🏄",
-  shop: "🛍️",
-  stay: "🏨",
-  maintenance: "🔧",
-  realty: "🏠",
+const categoryIcon: Record<string, PortalIconName> = {
+  eat: "eat",
+  drink: "drink",
+  fish: "fish",
+  do: "surfing",
+  shop: "shop",
+  stay: "stay",
+  maintenance: "maintenance",
+  realty: "stay",
 };
 
 const popularChips: Array<{ icon: PortalIconName; label: string; query: string }> = [
@@ -217,10 +217,12 @@ export default function GullyPalette() {
                   onClick={() => navigateTo(getGullyHref(item))}
                   className="w-full text-left flex items-center gap-3 px-4 py-3 hover:bg-sand-50 cursor-pointer transition-colors border-b border-sand-100 last:border-0"
                 >
-                  <span className="text-xl flex-shrink-0">
-                    {item.type === "story" || item.type === "dispatch"
-                      ? (item.icon ?? "📖")
-                      : (categoryEmoji[item.category] ?? "📍")}
+                  <span className="flex-shrink-0 w-5 h-5 text-navy-900">
+                    {item.type === "story" || item.type === "dispatch" ? (
+                      <EmojiIcon emoji={item.icon ?? "📖"} className="w-5 h-5" />
+                    ) : (
+                      <PortalIcon name={categoryIcon[item.category] ?? "map"} className="w-5 h-5" />
+                    )}
                   </span>
                   <div className="flex-1 min-w-0">
                     <p className="font-medium text-navy-900">{item.name}</p>
@@ -246,7 +248,7 @@ export default function GullyPalette() {
           ) : (
             /* No results */
             <div className="px-4 py-8 text-center">
-              <span className="text-3xl block mb-2">🌊</span>
+              <PortalIcon name="do" className="w-10 h-10 mx-auto mb-2 text-coral-400" />
               <p className="text-navy-400 mb-3">Nothing washed up for &ldquo;{query}&rdquo;</p>
               <button
                 onClick={() => navigateTo(`/gully?q=${encodeURIComponent(query)}`)}

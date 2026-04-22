@@ -6,7 +6,8 @@ export const contentType = ogContentType;
 
 export default function Image() {
   return brandedOG({
-    badge: "🏖️ Beach Setup",
+    badge: "Beach Setup",
+    badgeIcon: "beach",
     title: "Beach Setups, Delivered",
     subtitle:
       "Cabana ($300/day) or chairs & umbrellas ($85/day), set up and taken down for you. Anywhere on Mustang Island.",

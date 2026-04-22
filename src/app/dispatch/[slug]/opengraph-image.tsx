@@ -44,7 +44,8 @@ export default async function Image({
   });
 
   return brandedOG({
-    badge: `🧭 Dispatch · ${dispatch.category}`,
+    badge: `Dispatch · ${dispatch.category}`,
+    badgeIcon: "dispatch",
     title: dispatch.title,
     subtitle: dispatch.subtitle,
     meta: `${dispatch.readTime} · ${date}`,

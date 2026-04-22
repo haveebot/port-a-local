@@ -3,6 +3,7 @@ import Footer from "@/components/Footer";
 import Link from "next/link";
 import { businesses } from "@/data/businesses";
 import type { Metadata } from "next";
+import PortalIcon, { EmojiIcon } from "@/components/brand/PortalIcon";
 
 export const metadata: Metadata = {
   title: "Where to Stay in Port Aransas — Lodging Guide | Port A Local",
@@ -102,7 +103,7 @@ export default function WhereToStayPage() {
             {neighborhoods.map((hood) => (
               <div key={hood.name} className="bg-white rounded-2xl border border-sand-200 p-6 sm:p-8">
                 <div className="flex items-center gap-3 mb-2">
-                  <span className="text-3xl">{hood.icon}</span>
+                  <EmojiIcon emoji={hood.icon} className="w-9 h-9 text-navy-900 shrink-0" />
                   <div>
                     <h3 className="font-display text-xl font-bold text-navy-900">{hood.name}</h3>
                     <p className="text-sm text-coral-500 font-medium">{hood.vibe}</p>
@@ -169,7 +170,7 @@ export default function WhereToStayPage() {
                   href={`/stay/${biz.slug}`}
                   className="group flex items-start gap-4 bg-white rounded-xl border border-sand-200 p-5 card-hover"
                 >
-                  <span className="text-2xl flex-shrink-0">🏠</span>
+                  <PortalIcon name="stay" className="w-7 h-7 flex-shrink-0 text-navy-900" />
                   <div>
                     <p className="font-semibold text-navy-900 group-hover:text-coral-600 transition-colors text-sm">
                       {biz.name}

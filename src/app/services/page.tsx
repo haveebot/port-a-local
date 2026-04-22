@@ -58,7 +58,7 @@ export default function ServicesPage() {
         <div className="absolute inset-0 palm-pattern opacity-15" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-center gap-3 mb-2">
-            <span className="text-4xl">🛠️</span>
+            <PortalIcon name="services" className="w-12 h-12 text-coral-400 shrink-0" />
             <h1 className="font-display text-4xl sm:text-5xl font-bold text-sand-50">
               Services
             </h1>

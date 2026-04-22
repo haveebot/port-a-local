@@ -3,7 +3,7 @@ import Footer from "@/components/Footer";
 import Link from "next/link";
 import { stories } from "@/data/stories";
 import type { Metadata } from "next";
-import { EmojiIcon } from "@/components/brand/PortalIcon";
+import PortalIcon, { EmojiIcon } from "@/components/brand/PortalIcon";
 
 export const metadata: Metadata = {
   title: "Port A Heritage — Port Aransas History | Port A Local",
@@ -212,7 +212,7 @@ export default function HistoryPage() {
               href="/archives"
               className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-coral-500/15 text-coral-300 border border-coral-500/30 hover:bg-coral-500/25 hover:border-coral-500/50 transition-all duration-300 text-sm font-semibold whitespace-nowrap"
             >
-              🏛️ Browse Archives
+              <PortalIcon name="archives" className="w-4 h-4 inline-block align-text-bottom mr-1" /> Browse Archives
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>

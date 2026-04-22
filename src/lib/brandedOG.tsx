@@ -1,6 +1,7 @@
 import { ImageResponse } from "next/og";
 import fs from "fs";
 import path from "path";
+import PortalIcon, { type PortalIconName } from "@/components/brand/PortalIcon";
 
 /**
  * Shared branded OG image generator.
@@ -21,8 +22,10 @@ export function loadLighthouse(variant: LighthouseVariant = "standard"): string 
 }
 
 interface BrandedOGProps {
-  /** Small pill at the top — e.g. "Heritage · 12 min read" */
+  /** Small pill at the top — text of the badge */
   badge?: string;
+  /** Optional silhouette icon rendered inside the badge, before the text */
+  badgeIcon?: PortalIconName;
   /** Headline — the biggest piece of type. Required. */
   title: string;
   /** Sub-headline / dek */
@@ -40,6 +43,7 @@ interface BrandedOGProps {
 /** Generate a consistent, branded 1200×630 OG image. */
 export function brandedOG({
   badge,
+  badgeIcon,
   title,
   subtitle,
   lockupVariant = "standard",
@@ -90,6 +94,11 @@ export function brandedOG({
                 textTransform: "uppercase",
               }}
             >
+              {badgeIcon && (
+                <div style={{ display: "flex", width: 20, height: 20 }}>
+                  <PortalIcon name={badgeIcon} width={20} height={20} />
+                </div>
+              )}
               {badge}
             </div>
           ) : (

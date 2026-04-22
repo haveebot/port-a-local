@@ -68,7 +68,7 @@ export default function KnowThisPlace({ businessSlug, businessName }: Props) {
   if (status === "success") {
     return (
       <div className="mt-10 rounded-2xl bg-sand-50 border border-sand-200 p-6 text-center">
-        <span className="text-2xl block mb-2">🤙</span>
+        <PortalIcon name="handshake" className="w-8 h-8 mx-auto mb-2 text-coral-400" />
         <p className="font-display text-lg font-bold text-navy-900 mb-1">
           Thanks for sharing!
         </p>

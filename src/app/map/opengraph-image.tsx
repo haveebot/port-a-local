@@ -6,7 +6,8 @@ export const contentType = ogContentType;
 
 export default function Image() {
   return brandedOG({
-    badge: "🗺️ Map",
+    badge: "Map",
+    badgeIcon: "map",
     title: "The Island, Mapped",
     subtitle:
       "Every business on Port A Local, placed on real coordinates. 127+ spots across Mustang Island.",

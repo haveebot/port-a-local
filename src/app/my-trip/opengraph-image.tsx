@@ -6,7 +6,8 @@ export const contentType = ogContentType;
 
 export default function Image() {
   return brandedOG({
-    badge: "❤️ My Trip",
+    badge: "My Trip",
+    badgeIcon: "mytrip",
     title: "Your Port A, Saved",
     subtitle:
       "Pin businesses, heritage stories, and dispatch pieces. Plan the trip you want, with the places you actually care about.",

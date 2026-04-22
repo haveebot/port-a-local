@@ -6,7 +6,8 @@ export const contentType = ogContentType;
 
 export default function Image() {
   return brandedOG({
-    badge: "🏠 Where to Stay",
+    badge: "Where to Stay",
+    badgeIcon: "stay",
     title: "Where to Stay",
     subtitle:
       "Neighborhoods, lodging styles, and how to pick where on the island fits how you want to be here.",

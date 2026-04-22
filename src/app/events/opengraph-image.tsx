@@ -6,7 +6,8 @@ export const contentType = ogContentType;
 
 export default function Image() {
   return brandedOG({
-    badge: "🎪 Events",
+    badge: "Events",
+    badgeIcon: "events",
     title: "Events & Happenings",
     subtitle:
       "Annual festivals, recurring gatherings, and what is actually happening on the island this month.",

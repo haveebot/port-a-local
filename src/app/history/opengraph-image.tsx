@@ -6,7 +6,8 @@ export const contentType = ogContentType;
 
 export default function Image() {
   return brandedOG({
-    badge: "📖 Heritage",
+    badge: "Heritage",
+    badgeIcon: "heritage",
     title: "Port A Heritage",
     subtitle:
       "The people, places, and moments that shaped Port Aransas. Preserved by locals, built to last.",

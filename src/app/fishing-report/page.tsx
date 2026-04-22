@@ -3,6 +3,7 @@ import Footer from "@/components/Footer";
 import IslandConditions from "@/components/IslandConditions";
 import Link from "next/link";
 import type { Metadata } from "next";
+import PortalIcon, { EmojiIcon } from "@/components/brand/PortalIcon";
 
 export const metadata: Metadata = {
   title: "Fishing Report & Conditions — Port Aransas, TX | Port A Local",
@@ -147,7 +148,7 @@ export default function FishingReportPage() {
             {seasons.map((season) => (
               <div key={season.name} className="bg-white rounded-2xl border border-sand-200 p-6">
                 <div className="flex items-center gap-3 mb-4">
-                  <span className="text-2xl">{season.icon}</span>
+                  <EmojiIcon emoji={season.icon} className="w-7 h-7 text-navy-900 shrink-0" />
                   <div>
                     <h3 className="font-display font-bold text-navy-900">{season.name}</h3>
                     <p className="text-xs text-navy-400">{season.months}</p>
@@ -185,7 +186,7 @@ export default function FishingReportPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {fishingTypes.map((type) => (
               <div key={type.name} className="bg-white rounded-xl border border-sand-200 p-5">
-                <span className="text-2xl block mb-3">{type.icon}</span>
+                <EmojiIcon emoji={type.icon} className="w-7 h-7 mx-auto mb-3 text-navy-900" />
                 <h3 className="font-display font-bold text-navy-900 text-sm mb-1">{type.name}</h3>
                 <p className="text-xs text-coral-500 font-medium mb-2">{type.species}</p>
                 <p className="text-xs text-navy-400 font-light leading-relaxed">{type.description}</p>
@@ -260,7 +261,7 @@ export default function FishingReportPage() {
                 rel="noopener noreferrer"
                 className="group flex items-start gap-4 bg-white rounded-xl border border-sand-200 p-5 card-hover"
               >
-                <span className="text-2xl flex-shrink-0">🎣</span>
+                <PortalIcon name="fish" className="w-7 h-7 flex-shrink-0 text-navy-900" />
                 <div>
                   <p className="font-semibold text-navy-900 group-hover:text-coral-600 transition-colors text-sm">
                     {link.name}

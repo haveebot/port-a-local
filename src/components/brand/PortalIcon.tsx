@@ -66,7 +66,21 @@ export type PortalIconName =
   | "urgent"
   | "trophy"
   | "art"
-  | "calendar";
+  | "calendar"
+  // Round 4 — UI affordances + content coverage
+  | "check"
+  | "warning"
+  | "sun"
+  | "thermometer"
+  | "wind"
+  | "search"
+  | "handshake"
+  | "shell"
+  | "video"
+  | "winter"
+  | "storm"
+  | "castle"
+  | "hammer";
 
 const svgBase = {
   viewBox: "0 0 64 64",
@@ -768,6 +782,183 @@ function Calendar(props: SVGProps<SVGSVGElement>) {
 }
 
 // ═══════════════════════════════════════════════════════════════════
+// ROUND 4 — UI affordances + broader content coverage
+// ═══════════════════════════════════════════════════════════════════
+
+function Check(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...svgBase} {...props}>
+      <path d="M10 32 L24 46 L54 14 L48 8 L24 34 L16 26 Z" />
+    </svg>
+  );
+}
+
+function Warning(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...svgBase} {...props}>
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M32 6 L58 56 H6 Z M30 24 h4 v18 h-4 z M30 46 h4 v6 h-4 z"
+      />
+    </svg>
+  );
+}
+
+function Sun(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...svgBase} {...props}>
+      <circle cx="32" cy="32" r="11" />
+      <rect x="31" y="4" width="2" height="8" />
+      <rect x="31" y="52" width="2" height="8" />
+      <rect x="4" y="31" width="8" height="2" />
+      <rect x="52" y="31" width="8" height="2" />
+      <rect x="31" y="4" width="2" height="8" transform="rotate(45 32 32)" />
+      <rect x="31" y="4" width="2" height="8" transform="rotate(90 32 32)" />
+      <rect x="31" y="4" width="2" height="8" transform="rotate(135 32 32)" />
+      <rect x="31" y="4" width="2" height="8" transform="rotate(180 32 32)" />
+      <rect x="31" y="4" width="2" height="8" transform="rotate(225 32 32)" />
+      <rect x="31" y="4" width="2" height="8" transform="rotate(270 32 32)" />
+      <rect x="31" y="4" width="2" height="8" transform="rotate(315 32 32)" />
+    </svg>
+  );
+}
+
+function Thermometer(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...svgBase} {...props}>
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M26 10 q0 -4 6 -4 q6 0 6 4 v32 a10 10 0 1 1 -12 0 z M30 14 h4 v28 h-4 z"
+      />
+      <circle cx="32" cy="48" r="7" />
+    </svg>
+  );
+}
+
+function Wind(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...svgBase} {...props}>
+      <path
+        d="M4 20 Q18 14 36 16 Q48 18 52 24"
+        stroke="currentColor"
+        strokeWidth="4"
+        fill="none"
+        strokeLinecap="round"
+      />
+      <path
+        d="M4 34 Q16 28 40 32 Q54 34 58 40"
+        stroke="currentColor"
+        strokeWidth="4"
+        fill="none"
+        strokeLinecap="round"
+      />
+      <path
+        d="M4 48 Q16 42 32 46 Q46 48 50 54"
+        stroke="currentColor"
+        strokeWidth="4"
+        fill="none"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function Search(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...svgBase} {...props}>
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M26 6 a20 20 0 100 40 20 20 0 000-40 z m0 6 a14 14 0 110 28 14 14 0 010-28 z"
+      />
+      <rect
+        x="38"
+        y="38"
+        width="22"
+        height="6"
+        rx="3"
+        transform="rotate(45 49 41)"
+      />
+    </svg>
+  );
+}
+
+function Handshake(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...svgBase} {...props}>
+      <path d="M4 26 L18 22 L24 28 L32 26 L40 28 L46 22 L60 26 L60 36 L46 40 L40 46 L32 44 L24 46 L18 40 L4 36 Z" />
+      <rect x="4" y="38" width="14" height="4" />
+      <rect x="46" y="38" width="14" height="4" />
+    </svg>
+  );
+}
+
+function Shell(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...svgBase} {...props}>
+      <path d="M32 8 Q12 14 8 34 Q6 48 20 54 Q26 56 32 52 L28 44 L22 40 L22 32 L28 26 L32 22 L34 28 L34 36 L38 40 L36 48 L32 52 Q52 52 54 32 Q56 14 32 8 Z" />
+    </svg>
+  );
+}
+
+function Video(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...svgBase} {...props}>
+      <rect x="6" y="20" width="34" height="24" rx="3" />
+      <path d="M40 28 L56 18 V46 L40 36 Z" />
+      <circle cx="14" cy="26" r="2" />
+    </svg>
+  );
+}
+
+function Winter(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...svgBase} {...props}>
+      <rect x="30" y="6" width="4" height="52" rx="1" />
+      <rect x="6" y="30" width="52" height="4" rx="1" />
+      <rect x="30" y="6" width="4" height="52" rx="1" transform="rotate(45 32 32)" />
+      <rect x="30" y="6" width="4" height="52" rx="1" transform="rotate(-45 32 32)" />
+      <path d="M26 10 L32 14 L38 10" stroke="currentColor" strokeWidth="3" fill="none" strokeLinecap="round" />
+      <path d="M26 54 L32 50 L38 54" stroke="currentColor" strokeWidth="3" fill="none" strokeLinecap="round" />
+      <path d="M10 26 L14 32 L10 38" stroke="currentColor" strokeWidth="3" fill="none" strokeLinecap="round" />
+      <path d="M54 26 L50 32 L54 38" stroke="currentColor" strokeWidth="3" fill="none" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function Storm(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...svgBase} {...props}>
+      <path d="M8 26 Q8 16 18 16 Q22 8 32 10 Q44 10 44 20 Q52 20 52 28 Q52 34 46 34 H14 Q8 34 8 26 Z" />
+      <path d="M28 36 L20 52 L28 52 L22 62 L40 44 L32 44 L36 36 Z" />
+    </svg>
+  );
+}
+
+function Castle(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...svgBase} {...props}>
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M6 26 h4 v-4 h4 v4 h4 v-4 h4 v4 h4 v-4 h4 v-6 h4 v-4 h4 v4 h4 v6 h4 v4 h4 v-4 h4 v4 h4 v-4 h4 v4 h4 v34 h-52 z M28 42 h8 v16 h-8 z"
+      />
+    </svg>
+  );
+}
+
+function Hammer(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...svgBase} {...props}>
+      <path d="M10 10 h28 v10 h-6 v4 h-16 v-4 h-6 z" />
+      <rect x="22" y="20" width="8" height="40" />
+    </svg>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════
 // Icon registry + component
 // ═══════════════════════════════════════════════════════════════════
 
@@ -817,6 +1008,19 @@ const icons: Record<
   trophy: Trophy,
   art: Art,
   calendar: Calendar,
+  check: Check,
+  warning: Warning,
+  sun: Sun,
+  thermometer: Thermometer,
+  wind: Wind,
+  search: Search,
+  handshake: Handshake,
+  shell: Shell,
+  video: Video,
+  winter: Winter,
+  storm: Storm,
+  castle: Castle,
+  hammer: Hammer,
 };
 
 /**
@@ -870,6 +1074,45 @@ export const emojiToIconName: Record<string, PortalIconName> = {
   "🏆": "trophy",
   "🎨": "art",
   "📅": "calendar",
+  // Round 4 — UI affordances
+  "✅": "check",
+  "✓": "check",
+  "⚠️": "warning",
+  "☀️": "sun",
+  "🌡️": "thermometer",
+  "💨": "wind",
+  "🌬️": "wind",
+  "🔍": "search",
+  "🤝": "handshake",
+  "🤙": "handshake",
+  "🐚": "shell",
+  "📹": "video",
+  "❄️": "winter",
+  "🌀": "storm",
+  "⛈️": "storm",
+  "🏰": "castle",
+  "🔨": "hammer",
+  // Round 4 — aliases to existing icons (no new design)
+  "🏨": "stay",
+  "🏘️": "stay",
+  "🏕️": "stay",
+  "🛣️": "map",
+  "📍": "map",
+  "🛥️": "offshore",
+  "🪨": "fish",
+  "🛶": "fish",
+  "🐟": "fish",
+  "🦅": "wildlife",
+  "🎵": "art",
+  "🌿": "palm",
+  "🪵": "palm",
+  "🏮": "sunrise",
+  "📜": "guides",
+  "🌸": "sun",
+  "🍂": "palm",
+  "🎆": "urgent",
+  "🎭": "art",
+  "🪁": "sailing",
 };
 
 /**

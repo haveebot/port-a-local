@@ -6,7 +6,8 @@ export const contentType = ogContentType;
 
 export default function Image() {
   return brandedOG({
-    badge: "🎣 Fishing Report",
+    badge: "Fishing Report",
+    badgeIcon: "fish",
     title: "Port A Fishing Report",
     subtitle:
       "Seasonal species, fishing types, TPWD regulations, live conditions, and captain report links.",

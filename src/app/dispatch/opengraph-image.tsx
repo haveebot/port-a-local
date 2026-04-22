@@ -6,7 +6,8 @@ export const contentType = ogContentType;
 
 export default function Image() {
   return brandedOG({
-    badge: "🧭 Dispatch",
+    badge: "Dispatch",
+    badgeIcon: "dispatch",
     title: "Dispatch",
     subtitle:
       "Features, analysis and reporting on the island as it is — not as it's advertised.",

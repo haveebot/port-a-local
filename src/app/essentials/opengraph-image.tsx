@@ -6,7 +6,8 @@ export const contentType = ogContentType;
 
 export default function Image() {
   return brandedOG({
-    badge: "🧭 Essentials",
+    badge: "Essentials",
+    badgeIcon: "essentials",
     title: "Island Essentials",
     subtitle:
       "Ferry times, beach rules, parking, emergency contacts. Everything first-time and returning visitors actually need.",

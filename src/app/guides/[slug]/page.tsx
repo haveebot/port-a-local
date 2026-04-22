@@ -6,7 +6,7 @@ import { notFound } from "next/navigation";
 import { guides, getGuideBySlug } from "@/data/guides";
 import { businesses } from "@/data/businesses";
 import type { Metadata } from "next";
-import { EmojiIcon } from "@/components/brand/PortalIcon";
+import PortalIcon, { EmojiIcon } from "@/components/brand/PortalIcon";
 
 export function generateStaticParams() {
   return guides.map((g) => ({ slug: g.slug }));
@@ -107,7 +107,7 @@ export default async function GuidePage({
             </div>
           ) : (
             <div className="text-center py-20">
-              <span className="text-5xl block mb-4">🌊</span>
+              <PortalIcon name="do" className="w-16 h-16 mx-auto mb-4 text-coral-400" />
               <p className="text-navy-400 font-light">
                 No spots matched this guide yet. Check back soon.
               </p>

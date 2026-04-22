@@ -144,7 +144,7 @@ export default function CategoryPage({
             </div>
           ) : (
             <div className="text-center py-20">
-              <span className="text-5xl block mb-4">🌊</span>
+              <PortalIcon name="do" className="w-16 h-16 mx-auto mb-4 text-coral-400" />
               <h2 className="font-display text-2xl font-bold text-navy-900 mb-3">
                 Nothing washed up
               </h2>

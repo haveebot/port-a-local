@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import PortalIcon from "@/components/brand/PortalIcon";
 
 interface Suggestion {
   id: string;
@@ -101,7 +102,7 @@ export default function SuggestionsAdmin() {
           <p className="text-navy-400 text-center py-12">Loading...</p>
         ) : filtered.length === 0 ? (
           <div className="text-center py-16">
-            <span className="text-4xl block mb-3">🌊</span>
+            <PortalIcon name="do" className="w-12 h-12 mx-auto mb-3 text-coral-400" />
             <p className="text-navy-400 font-light">
               {filter === "pending"
                 ? "No pending suggestions. Check back later."

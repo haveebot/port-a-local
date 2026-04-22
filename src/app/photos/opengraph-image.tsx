@@ -6,7 +6,8 @@ export const contentType = ogContentType;
 
 export default function Image() {
   return brandedOG({
-    badge: "📸 Community Photos",
+    badge: "Community Photos",
+    badgeIcon: "photos",
     title: "Port A Through Your Eyes",
     subtitle:
       "The island, as locals and visitors see it. Anonymous submissions welcome.",

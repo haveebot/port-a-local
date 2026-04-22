@@ -30,18 +30,19 @@ import { businesses } from "@/data/businesses";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import Link from "next/link";
+import PortalIcon, { EmojiIcon, type PortalIconName } from "@/components/brand/PortalIcon";
 
-const popularChips = [
-  { label: "🍔 Burgers", query: "Burgers" },
-  { label: "🎣 Charter Fishing", query: "Charter Fishing" },
-  { label: "🍹 Happy Hour", query: "Happy Hour" },
-  { label: "🌮 Tacos", query: "Tacos" },
-  { label: "☕ Coffee", query: "Coffee" },
-  { label: "🏖️ Family Friendly", query: "Family Friendly" },
-  { label: "🌙 Late Night", query: "Late Night" },
-  { label: "🦞 Seafood", query: "Seafood" },
-  { label: "📖 Heritage", query: "heritage" },
-  { label: "⛵ Farley Boats", query: "Farley" },
+const popularChips: Array<{ icon: PortalIconName; label: string; query: string }> = [
+  { icon: "burger", label: "Burgers", query: "Burgers" },
+  { icon: "fish", label: "Charter Fishing", query: "Charter Fishing" },
+  { icon: "happyhour", label: "Happy Hour", query: "Happy Hour" },
+  { icon: "taco", label: "Tacos", query: "Tacos" },
+  { icon: "coffee", label: "Coffee", query: "Coffee" },
+  { icon: "beach", label: "Family Friendly", query: "Family Friendly" },
+  { icon: "latenight", label: "Late Night", query: "Late Night" },
+  { icon: "seafood", label: "Seafood", query: "Seafood" },
+  { icon: "heritage", label: "Heritage", query: "heritage" },
+  { icon: "sailing", label: "Farley Boats", query: "Farley" },
 ];
 
 function GullyContent() {
@@ -214,7 +215,9 @@ function GullyContent() {
                     : "bg-white/10 text-sand-200 border-white/20 hover:bg-white/20"
                 }`}
               >
-                {cat === "Heritage" ? "📖 Heritage" : cat}
+                {cat === "Heritage" ? (
+                  <span className="inline-flex items-center gap-1.5"><PortalIcon name="heritage" className="w-3.5 h-3.5" /> Heritage</span>
+                ) : cat}
               </button>
             ))}
           </div>
@@ -251,8 +254,9 @@ function GullyContent() {
                 <button
                   key={chip.query}
                   onClick={() => setQuery(chip.query)}
-                  className="px-4 py-2 rounded-full text-sm bg-white/10 text-sand-200 hover:bg-white/20 border border-white/20 transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm bg-white/10 text-sand-200 hover:bg-white/20 border border-white/20 transition-colors cursor-pointer"
                 >
+                  <PortalIcon name={chip.icon} className="w-4 h-4 shrink-0" />
                   {chip.label}
                 </button>
               ))}
@@ -300,7 +304,7 @@ function GullyContent() {
                     <div className="p-6 sm:p-8">
                       <div className="flex items-center justify-between mb-4">
                         <span className={chipClass}>
-                          {item.icon} {label}
+                          <EmojiIcon emoji={item.icon ?? ""} className="w-3.5 h-3.5" /> {label}
                         </span>
                         <span className="text-xs text-navy-400">{item.readTime} read</span>
                       </div>
@@ -317,7 +321,7 @@ function GullyContent() {
             </div>
           ) : (
             <div className="text-center py-20">
-              <span className="text-5xl block mb-4">🌊</span>
+              <PortalIcon name="do" className="w-16 h-16 mx-auto mb-4 text-coral-400" />
               <h2 className="font-display text-2xl font-bold text-navy-900 mb-3">
                 Nothing washed up
               </h2>

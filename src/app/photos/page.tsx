@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import PortalIcon from "@/components/brand/PortalIcon";
 
 const photoTags = [
   "Sunset",
@@ -96,7 +97,7 @@ export default function PhotosPage() {
           <div className="max-w-2xl mx-auto px-4 sm:px-6">
             {status === "success" ? (
               <div className="text-center py-8">
-                <span className="text-4xl block mb-3">🤙</span>
+                <PortalIcon name="handshake" className="w-12 h-12 mx-auto mb-3 text-coral-400" />
                 <h3 className="font-display text-xl font-bold text-navy-900 mb-2">
                   Thanks for sharing!
                 </h3>
@@ -219,7 +220,7 @@ export default function PhotosPage() {
           </div>
 
           <div className="text-center py-16">
-            <span className="text-5xl block mb-4">📸</span>
+            <PortalIcon name="photos" className="w-16 h-16 mx-auto mb-4 text-coral-400" />
             <h3 className="font-display text-xl font-bold text-navy-900 mb-3">
               Be the First to Share
             </h3>
@@ -259,7 +260,8 @@ export default function PhotosPage() {
               href="/archives"
               className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-coral-500/15 text-coral-300 border border-coral-500/30 hover:bg-coral-500/25 hover:border-coral-500/50 transition-all duration-300 text-sm font-semibold whitespace-nowrap"
             >
-              🏛️ Browse Archives
+              <PortalIcon name="archives" className="w-4 h-4" />
+              Browse Archives
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>

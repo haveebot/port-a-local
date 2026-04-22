@@ -68,7 +68,7 @@ function MaintenanceSuccessContent() {
 
   return (
     <>
-      <div className="text-6xl mb-6">⚠️</div>
+      <PortalIcon name="warning" className="w-20 h-20 mx-auto mb-6 text-coral-400" />
       <h1 className="font-display text-4xl font-bold text-sand-50 mb-4">Payment Issue</h1>
       <p className="text-lg text-navy-200 mb-4">
         Your payment may have gone through but we couldn&apos;t confirm it automatically. Reach out and we&apos;ll get it sorted immediately.

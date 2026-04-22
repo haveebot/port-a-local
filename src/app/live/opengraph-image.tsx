@@ -6,7 +6,8 @@ export const contentType = ogContentType;
 
 export default function Image() {
   return brandedOG({
-    badge: "📡 Island Pulse",
+    badge: "Island Pulse",
+    badgeIcon: "live",
     title: "Live from the Island",
     subtitle:
       "Webcams, tides, weather, marine traffic. Real-time conditions on Mustang Island.",

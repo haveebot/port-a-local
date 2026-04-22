@@ -160,12 +160,12 @@ export default function BeachPage() {
               <p className="text-navy-500 text-sm mt-1">Pick your setup and how many days you need it.</p>
             </div>
             <div>
-              <div className="text-3xl mb-2">✅</div>
+              <PortalIcon name="check" className="w-9 h-9 mx-auto mb-2 text-navy-900" />
               <p className="font-semibold text-navy-900 text-sm">We Confirm</p>
               <p className="text-navy-500 text-sm mt-1">Our local team locks in your reservation and follows up.</p>
             </div>
             <div>
-              <div className="text-3xl mb-2">☀️</div>
+              <PortalIcon name="sun" className="w-9 h-9 mx-auto mb-2 text-navy-900" />
               <p className="font-semibold text-navy-900 text-sm">Just Show Up</p>
               <p className="text-navy-500 text-sm mt-1">Your setup is ready and waiting when you hit the beach.</p>
             </div>

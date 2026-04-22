@@ -6,7 +6,8 @@ export const contentType = ogContentType;
 
 export default function Image() {
   return brandedOG({
-    badge: "🔍 Gully",
+    badge: "Gully",
+    badgeIcon: "search",
     title: "Just Gully It",
     subtitle:
       "Port A's local search engine. Every business, every heritage story, every dispatch — one unified index. Built by locals.",

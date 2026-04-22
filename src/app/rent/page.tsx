@@ -146,12 +146,12 @@ export default function RentPage() {
               <p className="text-navy-500 text-sm mt-1">Choose your cart size and rental dates. Pay a small reservation fee to lock it in.</p>
             </div>
             <div>
-              <div className="text-3xl mb-2">✅</div>
+              <PortalIcon name="check" className="w-9 h-9 mx-auto mb-2 text-navy-900" />
               <p className="font-semibold text-navy-900 text-sm">We Confirm Your Cart</p>
               <p className="text-navy-500 text-sm mt-1">We source a quality cart from our network of local rental companies. You don&apos;t lift a finger.</p>
             </div>
             <div>
-              <div className="text-3xl mb-2">📍</div>
+              <PortalIcon name="map" className="w-9 h-9 mx-auto mb-2 text-navy-900" />
               <p className="font-semibold text-navy-900 text-sm">Pick Up & Explore</p>
               <p className="text-navy-500 text-sm mt-1">Pickup details sent 24–48 hours before your arrival. Show up, grab the keys, ride.</p>
             </div>
@@ -164,19 +164,19 @@ export default function RentPage() {
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
             <div className="flex items-center justify-center gap-2">
-              <span className="text-coral-400 text-lg">✓</span>
+              <PortalIcon name="check" className="w-4 h-4 text-coral-400 shrink-0" />
               <span className="text-sand-200 text-sm font-medium">Quality Guaranteed</span>
             </div>
             <div className="flex items-center justify-center gap-2">
-              <span className="text-coral-400 text-lg">✓</span>
+              <PortalIcon name="check" className="w-4 h-4 text-coral-400 shrink-0" />
               <span className="text-sand-200 text-sm font-medium">Vetted Local Companies</span>
             </div>
             <div className="flex items-center justify-center gap-2">
-              <span className="text-coral-400 text-lg">✓</span>
+              <PortalIcon name="check" className="w-4 h-4 text-coral-400 shrink-0" />
               <span className="text-sand-200 text-sm font-medium">Guaranteed $20 Off Rental</span>
             </div>
             <div className="flex items-center justify-center gap-2">
-              <span className="text-coral-400 text-lg">✓</span>
+              <PortalIcon name="check" className="w-4 h-4 text-coral-400 shrink-0" />
               <span className="text-sand-200 text-sm font-medium">Full Refund if Unfulfilled</span>
             </div>
           </div>

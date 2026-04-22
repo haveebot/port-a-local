@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import PortalIcon, { type PortalIconName } from "@/components/brand/PortalIcon";
 
 interface Conditions {
   waterTemp: string | null;
@@ -12,10 +13,10 @@ interface Conditions {
   updatedAt: string;
 }
 
-function ConditionCard({ icon, label, value, unit }: { icon: string; label: string; value: string; unit: string }) {
+function ConditionCard({ icon, label, value, unit }: { icon: PortalIconName; label: string; value: string; unit: string }) {
   return (
     <div className="bg-white rounded-xl border border-sand-200 p-5 text-center">
-      <span className="text-2xl block mb-2">{icon}</span>
+      <PortalIcon name={icon} className="w-7 h-7 mx-auto mb-2 text-navy-900" />
       <p className="text-2xl font-bold text-navy-900">
         {value}
         <span className="text-sm font-normal text-navy-400 ml-1">{unit}</span>
@@ -70,25 +71,25 @@ export default function IslandConditions() {
       {/* Condition cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
         <ConditionCard
-          icon="🌡️"
+          icon="thermometer"
           label="Water Temp"
           value={data.waterTemp ?? "--"}
           unit="°F"
         />
         <ConditionCard
-          icon="☀️"
+          icon="sun"
           label="Air Temp"
           value={data.airTemp ?? "--"}
           unit="°F"
         />
         <ConditionCard
-          icon="💨"
+          icon="wind"
           label={`Wind ${data.windDirection ?? ""}`}
           value={data.windSpeed ?? "--"}
           unit="kts"
         />
         <ConditionCard
-          icon="🌬️"
+          icon="wind"
           label="Wind Gust"
           value={data.windGust ?? "--"}
           unit="kts"

@@ -1,6 +1,7 @@
 import { getStoryBySlug } from "@/data/stories";
 import { brandedOG, ogSize, ogContentType } from "@/lib/brandedOG";
 import { ImageResponse } from "next/og";
+import { emojiToIconName } from "@/components/brand/PortalIcon";
 
 export const alt = "Port A Heritage";
 export const size = ogSize;
@@ -38,7 +39,8 @@ export default async function Image({
   }
 
   return brandedOG({
-    badge: `${story.icon} Heritage · ${story.category}`,
+    badge: `Heritage · ${story.category}`,
+    badgeIcon: emojiToIconName[story.icon] ?? "heritage",
     title: story.title,
     subtitle: story.subtitle,
     meta: `${story.readTime} read`,
