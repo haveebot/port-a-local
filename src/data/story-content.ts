@@ -1527,6 +1527,127 @@ export const storyContent: Record<string, StoryContent> = {
     ],
   },
 
+  "pat-magees-surf-shop": {
+    lede: "Pat Magee was still in high school when he went into business. In the summer of 1967, a junior at Port Aransas High School, he partnered with a buddy named Mike Lee to rent surfboards and rubber floats out of a small building at the dune line along the island beach. Two years later, when he graduated, he bought out Island Surf Shop at the corner of Beach and Station Street, put his own name on the door, and kept it there for the next thirty-six years. At its peak, Pat Magee's had nearly a dozen stores across Texas — Port Aransas, San Marcos, Austin, San Antonio, Dallas, Padre Island, College Station. The t-shirts are in closets all over the state. The boards and the posters and the magazines are behind glass at a museum in Corpus Christi that Pat himself co-founded after he closed the shop. The retail is gone. Almost everything it built is still here.",
+
+    sections: [
+      {
+        heading: "The Shack at the Dune Line",
+        body: [
+          "The first iteration of what would become Pat Magee's was not a shop. It was a rental operation on the sand — surfboards, rubber surf rafts (the direct predecessor to the Boogie Board), and a sideline in huarache sandals that Pat brought back from trips to San Blas on Mexico's Pacific coast. The sandals sold alongside the boards because the kids renting the boards needed something to wear back to the car. It was the sort of small, adjacent-inventory decision that would define the shop's merchandising logic for the next four decades.",
+          "Mike Lee was his partner at the dune line. Lee was one of several young Port Aransans who had put up rental stands in the mid-to-late 1960s; the island's surf economy at that point was still improvised and seasonal. What Pat and Mike had, by 1967, was a small wooden building at the dune line, a rental inventory, and summer weekends on the Gulf.",
+          "That's a very short apprenticeship for retail. Pat turned it into a career.",
+        ],
+      },
+      {
+        heading: "Beach and Station (1969)",
+        body: [
+          "When Pat graduated from high school in 1969, he bought out a local shop called Island Surf Shop at the intersection of Beach and Station Street. He renamed it Pat Magee's Surf Shop. That corner would be the center of his business for the next thirty-six years.",
+          "The timing mattered. Port Aransas surf culture in 1969 was just crossing the line from novelty to industry. Board shapers up and down the Coastal Bend were producing serious work. A surf shop at Beach and Station wasn't just a retail operation — it was the physical anchor of the scene. Locals knew where to find boards. Out-of-town surfers driving down 361 knew where to stop. The shop became a gathering point as much as a storefront.",
+        ],
+        fact: [
+          { label: "Beach-rental shack", value: "1967 (partnership with Mike Lee)" },
+          { label: "Pat Magee's Surf Shop opens", value: "1969 (acquired Island Surf Shop)" },
+          { label: "Location", value: "Beach and Station Street, Port Aransas" },
+          { label: "Pat's high school class", value: "1969" },
+        ],
+      },
+      {
+        heading: "Champion Circuit",
+        body: [
+          "Pat wasn't just running a shop. He was a two-time Texas Gulf Coast Surfing Champion. He surfed on the Dewey Weber Surf Team — Weber being one of the most prestigious surfboard manufacturers in Southern California, with a team roster that read like a who's-who of mid-century American surfing. Pat's membership on that team put a Texas Gulf surfer on equal footing with the California circuit during a period when most of the American surf industry treated anything east of San Diego as regional at best.",
+          "He competed in the United States Surfing Championships at Huntington Beach, California — the highest level of amateur surfing in the country at the time. Coastal Bend surfers consistently punched above their weight at those events. The Gulf, with its smaller and less predictable waves, turned out to be an unusual training ground: surfers who grew up reading subtle, shifting swells were often faster and more adaptive than competitors raised on cleaner breaks.",
+        ],
+      },
+      {
+        heading: "The Endless Summer Orbit",
+        body: [
+          "In 1969, Pat traveled to San Blas, Mexico — the same stretch of coast the huaraches came from — and met Robert August. August was, and remains, one of the most recognizable names in American surfing. He was the co-star of Bruce Brown's 1966 documentary The Endless Summer, the film that did more than any other single work to introduce surf culture to mainstream America. August had been a competitive surfer, a shaper, and a traveler; he also had a working surf team.",
+          "Pat and Robert surfed together in Mexico and later in Costa Rica. The San Blas meeting started what would become a decades-long working relationship. August brought his surf team — itself a rotating roster of national figures — to Port Aransas for annual promotional events at Pat Magee's. Drawings were held during those events for surfboards and for surf trips to Mexico and Costa Rica. For a teenager in Port Aransas or Corpus Christi, a drawing at Pat Magee's was a non-trivial shot at a life-changing trip.",
+        ],
+        pullQuote: {
+          text: "August brought his surf team — itself a rotating roster of national figures — to Port Aransas for annual promotional events at Pat Magee's.",
+        },
+      },
+      {
+        heading: "The Dozen Pat Magee's",
+        body: [
+          "The Port Aransas shop grew, and Pat expanded. At the peak of the business, there were close to a dozen Pat Magee's locations — Port Aransas, San Marcos, Austin, San Antonio, Dallas, Padre Island, College Station. The model wasn't pure surf retail. Texas is a big, mostly landlocked state, and Pat figured out early that the ocean-adjacent lifestyle had a market well inland. The shops carried swimwear, sportswear, sandals, and — most famously — t-shirts.",
+          "The t-shirts were the thing. For a generation of Texans who grew up in the 1970s and 1980s, a Pat Magee's tee in a college dorm room in San Marcos or Austin was shorthand for the coast. The shop stocked exclusive deals with Hang Ten and O.P. — two of the major beachwear brands of the era — and the California-connection gave Pat's inventory legitimacy that a pure regional shop couldn't match. Dewey Weber boards in the front, Hang Ten in the back, Pat Magee's logo on the chest.",
+          "The promotional footprint matched the retail one. Pat Magee's sponsored concerts by the Beach Boys and by Jimmy Buffett — both fits for the island-wear market. In 1999, the Art Museum of South Texas hosted a Surfin' Art Exhibit featuring surf-culture painters Rick Rietveld, Drew Brophy, and Peter Schroff, with an opening-night concert by The Ventures. Pat was instrumental in the exhibit. For a Corpus Christi institution in 1999, getting The Ventures to headline a surf-art opening was not ordinary programming.",
+        ],
+      },
+      {
+        heading: "The Downturns That Closed the Others",
+        body: [
+          "The Texas oil bust of the mid-1980s took Texas retail with it. Then the real estate slumps of the 1990s and 2000s did their own damage. A dozen stores is a large footprint even in a strong economy; in a soft one, the carrying costs across multiple lease locations, staff, and inventory became untenable. Pat gradually contracted the chain — closing the inland locations, consolidating toward the coast. By the early 2000s, the Port Aransas shop was again the center of the business, and a handful of other locations continued as brand extensions rather than full-scale retail.",
+          "Thirty-six years is a long time in surf retail. Most shops don't last a decade. Pat's kept the doors open through three Texas economic cycles, multiple shifts in teenage taste, the transition from surf films to surf video, and the arrival of the internet as a competitor to the physical store. That it closed when it did is less a story of failure than of timing. Pat and Mary Lynn Magee — Pat's wife and business partner through the entire run — decided in 2005 to retire. The Port Aransas shop closed that year.",
+        ],
+      },
+      {
+        heading: "The Museum That Preserved It",
+        body: [
+          "Retirement was not the end of Pat's involvement in Texas surf history. In 2005 — the same year the Port A shop closed — Pat and Corpus Christi restaurateur Brad Lomax co-founded the Texas Surf Museum in downtown Corpus Christi. Lomax owns Water Street Seafood Company; he is also one of the most significant private surfboard collectors in the Coastal Bend. Pat's personal collection, combined with Lomax's, represents the most complete physical record of Texas Gulf surf culture that exists anywhere.",
+          "The Texas Surf Museum, at 309 N. Water Street in downtown Corpus Christi, is free to visit. It runs a permanent exhibit — Pat Magee Surf Shop, The Collection: A \"For See and Sale\" Exhibit — that draws directly from the shop's archives: records, posters, artwork, books, and a rotating display of vintage boards. The museum is small. You can see everything in an hour. What you are actually seeing is a compressed version of a four-decade business: the cultural ephemera of a Texas surf economy that mostly no longer operates at the scale it once did.",
+          "Pat and Mary Lynn retired to Goliad, an inland Texas town far enough from the Gulf that it requires a drive. He keeps another residence in Punta Mita, on the Mexican Pacific — not far, in spirit, from the San Blas where the whole thing started with huarache sandals and a meeting with Robert August.",
+        ],
+      },
+      {
+        heading: "What It Left Behind",
+        body: [
+          "Pat Magee's is not operating in Port Aransas today. The corner at Beach and Station, where the shop anchored the surf economy for thirty-six years, is part of the island's built history now rather than its active commerce. A licensed version of the brand continues in San Antonio under different ownership. The original shop, the one Pat and Mary Lynn ran, closed in 2005 and has stayed closed.",
+          "What's left is larger than a storefront. The Texas Surf Museum has the boards. The Port Aransas Museum has a surf exhibit curated in part from the Magee and Lomax collections. A generation of Texans still has the t-shirts. Every Port A surfer who paddled out in the 1970s, 80s, or 90s bought, rented, or browsed at a Pat Magee's at some point. The shop was the connective tissue of a regional scene that outsiders often assumed didn't exist. Pat's role was to keep that scene visible, supplied, and legible — first to itself, and then, through the museum, to everyone who came after.",
+          "Thirty-six years behind the counter at Beach and Station, and a museum where it all now lives. It is a long ride by any measure.",
+        ],
+        pullQuote: {
+          text: "The shop was the connective tissue of a regional scene that outsiders often assumed didn't exist.",
+        },
+      },
+    ],
+
+    sources: [
+      {
+        label: "The Bend Magazine — \"A Life Well Surfed: Pat Magee\"",
+        url: "https://www.thebendmag.com/a-life-well-surfed-pat-magee/",
+      },
+      {
+        label: "Pat Magee's Surf Shop — official history",
+        url: "https://www.patmageessurfshop.com/",
+      },
+      {
+        label: "Texas Surf Museum — Pat Magee Surf Shop, The Collection exhibit",
+        url: "https://texassurfmuseum.org/tsm_events/pat-magee-surf-shop-the-collection-a-for-see-and-sale-exhibit/",
+      },
+      {
+        label: "Port Aransas Visitors Guide — Texas Surf Museum",
+        url: "https://visitorsguide.portasouthjetty.com/articles/texas-surf-museum-is-worth-the-visit-to-corpus-christi/",
+      },
+      {
+        label: "Port Aransas South Jetty — Sept 1, 2005 (retirement coverage, via Portal to Texas History)",
+        url: "https://texashistory.unt.edu/ark:/67531/metapth556280/m1/11/",
+      },
+    ],
+
+    visitToday: [
+      {
+        place: "Texas Surf Museum",
+        detail: "309 N. Water St., Corpus Christi. Free admission. Tue–Sat 11 AM–7 PM, Sun 11 AM–5 PM, closed Mondays. Phone (361) 882-2364. The \"Pat Magee Surf Shop, The Collection\" exhibit draws directly from the shop's archives.",
+      },
+      {
+        place: "Port Aransas Museum — Surfing Exhibit",
+        detail: "101 E. Brundrett Ave. Roughly 20 boards plus memorabilia from the 1960s onward — Dan Parker's curation, Pat Magee and Brad Lomax collections.",
+      },
+      {
+        place: "Beach and Station Street",
+        detail: "The corner where Pat Magee's operated for thirty-six years. The shop is gone but the intersection still anchors the downtown grid.",
+      },
+      {
+        place: "Horace Caldwell Pier",
+        detail: "The primary surf break in Port Aransas. Still active. Boards go out on swells; spectators watch from the pier.",
+      },
+    ],
+  },
+
   "surfing-port-aransas": {
     lede: "Surf culture arrived in Port Aransas the way most good things did — quietly, in the early 1960s, brought by a handful of young men who had seen what was happening in California and decided the Texas Gulf was worth trying. The Gulf doesn't make big waves often. But it makes them consistently enough that by 1970, thousands of people had caught the bug. The Coastal Bend would go on to produce national champions who beat surfers from Hawaii and the East Coast. The boards from those years are now behind glass at the Port Aransas Museum — classic longboards shaped by hand in shops that once operated within a few blocks of the water.",
 
