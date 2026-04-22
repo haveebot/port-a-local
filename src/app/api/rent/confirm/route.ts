@@ -108,7 +108,7 @@ export async function POST(req: NextRequest) {
         <p><strong>Your savings:</strong> Every PAL reservation includes a guaranteed <strong>$20 discount</strong> off the rental company's standard rate.</p>
         <p><strong>Our guarantee:</strong> If we're unable to source a cart for your dates, your reservation fee is fully refunded.</p>
         <p>Questions? Reply to this email.</p>
-        <p style="margin-top:20px;">— the Port A Local team</p>
+        <p style="margin-top:20px;">— The Port A Local</p>
       `,
     });
 

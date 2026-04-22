@@ -14,6 +14,8 @@ const SERVICE_TYPES = [
   "Electrical",
   "HVAC / AC",
   "Landscaping",
+  "Detailing / Wash",
+  "RV Undercoating",
   "Other",
 ];
 

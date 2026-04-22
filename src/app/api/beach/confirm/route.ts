@@ -112,7 +112,7 @@ export async function POST(req: NextRequest) {
           <li><strong>Total paid:</strong> $${total}</li>
         </ul>
         <p>Questions? Reply to this email.</p>
-        <p style="margin-top:20px;">— the Port A Local team</p>
+        <p style="margin-top:20px;">— The Port A Local</p>
       `,
     });
 

@@ -92,7 +92,7 @@ export async function POST(req: NextRequest) {
           <li><strong>Priority dispatch fee:</strong> $${dispatchFee}</li>
         </ul>
         <p>Questions? Reply to this email or give us a call.</p>
-        <p style="margin-top:20px;">— the Port A Local team</p>
+        <p style="margin-top:20px;">— The Port A Local</p>
       `,
     });
 
