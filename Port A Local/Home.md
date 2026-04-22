@@ -1,6 +1,6 @@
 # Port A Local — Company Brain
 _Winston + Claude's living knowledge base. Updated every session._
-_Last updated: 2026-04-21_
+_Last updated: 2026-04-21 (evening — Collie round 1 + attorney scope defined)_
 
 ---
 
@@ -42,6 +42,7 @@ _Last updated: 2026-04-21_
 ### Session Notes
 - [[Session Notes/Session Notes Index]]
 - [[Session Notes/2026-04-16]] — Printable QR poster pattern (Sandfest signage)
+- [[Session Notes/2026-04-21]] — Vault catch-up dumptruck + Collie round 1 (9 silhouette icons shipped, 5 copy fixes, favicon monochrome, sticky header) + attorney scope defined
 - [[Session Notes/2026-04-15]] — PUD scrub, cart marketplace pivot, Sandfest heritage, first FB assets, maintenance coupling
 - [[Session Notes/2026-04-14]] — Dispatch launches, Lighthouse brand, full-site saturation, editorial workflow locked
 - [[Session Notes/2026-04-13]] — Infrastructure live day (domain, Resend, Stripe, Twilio, heritage batch 1, GBP skip)
@@ -59,13 +60,16 @@ _Last updated: 2026-04-21_
 | Domain | theportalocal.com (primary) |
 | Businesses | 140+ across 6 categories |
 | Heritage | **22 published stories** — Port A Heritage |
-| Dispatch | **1 published** — "The Two Port Aransases" (editorial/journalism) |
+| Dispatch | **1 published** — "Port Aransas — A Tale of Two Islands" (features/analysis/reporting) |
 | Portals | `/rent` (marketplace model) · `/beach` · `/maintenance` (urgency coupling) |
 | Search | Gully — unified index (businesses + heritage + dispatch + menus + archives) |
 | Brand | Lighthouse mark locked; full-site saturation complete; full lockup intentionally not yet locked |
+| Icon system | **PortalIcon component live** — 9 monochrome silhouettes (eat/drink/stay/do/fish/shop + beach/maintenance/cart); rounds 2+ pending Collie design |
+| Favicon | White-monochrome lighthouse on navy |
 | Social | FB profile + FB banner routes shipped (`/social/*`) |
 | Print | Branded QR poster route (`/print/qr/[slug]`) — home + sandfest targets |
 | Revenue | $0 — Stripe LIVE, keys in Vercel, awaiting first transactions |
+| Legal | ⚠️ **T&C + vendor agreements + indemnification pending attorney review** — marketplace liability thesis needs paperwork to hold up |
 | A2P 10DLC | Brand APPROVED; campaign IN_PROGRESS at TCR (passive wait) |
 | Repo | https://github.com/haveebot/port-a-local |
 
@@ -89,6 +93,8 @@ _Last updated: 2026-04-21_
 - **Community Photos:** "Port A Through Your Eyes" submissions gallery
 - **Know This Place:** anonymous tag suggestions, admin review queue
 - **Brand:** LighthouseMark component (4 detail levels + monochrome), full-site saturation across every surface, shared OG helper (`brandedOG`), shared email helper (`emailLayout`)
+- **Icon system (2026-04-21):** `PortalIcon` component with 9 single-color silhouette SVGs (eat/drink/stay/do/fish/shop/beach/maintenance/cart) using `currentColor`; coral on navy bg, navy on white bg
+- **Favicon (2026-04-21):** white-monochrome lighthouse on navy
 - **Social assets:** `/social/facebook-profile`, `/social/facebook-banner` (extensible pattern)
 - **Print assets:** `/print/qr/[slug]` — QR posters for physical signage
 - **SEO:** complete meta + JSON-LD (WebSite, Organization, LocalBusiness, Article, NewsArticle), sitemap 175+ URLs
@@ -106,6 +112,7 @@ See [[Decision Log]] for all major decisions.
 - Dispatch: `src/data/dispatches.ts`, `src/data/dispatch-content.ts`
 - Cart vendors: `src/data/cart-vendors.ts` — 20 selected PA cart companies, `getBlastableVendors()` helper
 - Brand mark: `src/components/brand/LighthouseMark.tsx`
+- **Portal icons: `src/components/brand/PortalIcon.tsx`** — 9 silhouette SVGs, `currentColor`-driven
 - Shared OG: `src/lib/brandedOG.tsx`
 - Shared email: `src/lib/emailLayout.ts`
 - Static logos: `public/logos/lighthouse-{full,standard,simple,icon}.svg`

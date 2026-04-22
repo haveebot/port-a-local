@@ -3,7 +3,7 @@
 > Running log of what we build and decide each session.
 
 ## Sessions
-- [[2026-04-21]] — Vault catch-up dumptruck (backfill 4/13–4/16 session notes, refresh Home + Roadmap + Decision Log) + PAL task work
+- [[2026-04-21]] — Vault catch-up dumptruck (backfill 4/13–4/16 session notes, refresh Home + Roadmap + Decision Log) + **Collie round 1 ships** (9 silhouette icons, 5 copy fixes, monochrome favicon, sticky header) + attorney-review scope defined (T&C + vendor agreements + indemnification)
 - [[2026-04-16]] — Printable QR poster pattern (home + sandfest targets) for Sandfest weekend signage — first physical-world PAL artifact
 - [[2026-04-15]] — PUD listing scrub, cart portal MARKETPLACE PIVOT, Sandfest Heritage #22, first FB assets (1939 "Straddle the Rail"), maintenance urgency coupling, archives surfaced
 - [[2026-04-14]] — Port A Dispatch launches with "The Two Port Aransases"; Lighthouse mark locked; full-site brand saturation; editorial workflow captured

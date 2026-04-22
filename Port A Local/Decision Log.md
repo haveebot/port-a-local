@@ -169,3 +169,32 @@ _This is institutional memory. Never delete an entry._
 **Decision:** New dynamic route `/print/qr/[slug]` generates letter-size branded posters with a lighthouse-in-center QR code. Two initial targets: `home` and `sandfest`.
 **Why:** First physical-world PAL artifact. Bridges the site to in-person signage (Sandfest weekend was the forcing function). Pattern is trivially extensible to per-portal and per-heritage posters.
 **Tech:** `qrcode` npm package, error correction H (survives the center overlay), navy-on-sand, lighthouse icon overlay. `robots: noindex`. Letter-size `@page`.
+
+---
+
+## 2026-04-21 (evening — Collie round 1)
+
+### Icon system: monochrome silhouettes (replacing emoji site-wide)
+**Decision:** Replace emoji icons site-wide with single-color silhouette SVGs. One `PortalIcon` component (`src/components/brand/PortalIcon.tsx`) exports 9 icons matching Collie's design refs: eat, drink, stay, do, fish, shop, beach, maintenance, cart. All use `currentColor`, color set at the call site via Tailwind.
+**Color rule (from Collie):** coral on navy backgrounds, navy on white backgrounds. Universal — not per-icon.
+**Why:** Emoji is inconsistent across browsers/OS, renders with OS-native colors that break brand cohesion, and reads as casual at small sizes. Silhouettes render identically everywhere, scale cleanly, and match the anti-Bureau "serious local media" posture established with the lighthouse and Dispatch.
+**Scope — round 1 (shipped):** the 9 Collie designed, wired into nav, homepage, category pages, portal pages, services, essentials, map, footer, business detail.
+**Scope — rounds 2+ (pending Collie design):** nav items she didn't design (Services, Events, Heritage, Dispatch, Archives, Guides, Essentials, Island Pulse, Map, Photos, My Trip), Gully chips, Essentials section headers. Decorative content emoji likely stays.
+**Alternatives considered:** Lucide icon library (doesn't match our brand voice), keeping emoji (Collie vetoed).
+
+### Dispatch tagline: "Editorial" → "Features"
+**Decision:** Change the Dispatch tagline on all 5 surfaces (index, article footer, OG alt text, OG subtitle, email footer) from "Editorial, analysis, and reporting on the island as it is — not as it is advertised" to **"Features, analysis and reporting on the island as it is — not as it's advertised."**
+**Why:** Collie's feedback — "editorial" implies an editor or editorial board/publisher. PAL is written by Winston; no editorial board exists. "Features" is more accurate to the actual operating model and still carries journalistic weight.
+**Alternatives considered:** keep "Editorial" (Collie flagged), use "Reporting" alone (too narrow — Dispatch also does analysis).
+
+### Dispatch #1 title change, slug preserved
+**Decision:** Change Dispatch #1 title from "The Two Port Aransases" to **"Port Aransas — A Tale of Two Islands"** — but keep the slug at `/dispatch/the-two-port-aransases`.
+**Why:** Collie flagged "Aransases" as awkward with the "-es". Her suggestion was cleaner. Slug kept because: (a) any already-shared URLs continue to work with no redirect needed, (b) the new title is a display-only change — SEO/link equity preserved.
+**Alternatives considered:** change both title + slug with 301 redirect (more surface area, unnecessary at this stage), keep original title (Collie's point stands).
+
+### Marketplace model requires legal paperwork — attorney engagement
+**Decision:** Engage a Texas business attorney for a one-time review and drafting of (1) platform T&C positioning PAL as a marketplace and disclaiming liability for vendor actions, (2) a one-page vendor agreement confirming independent-contractor status, insurance, and indemnification, (3) assumption-of-risk and indemnification language that holds up under Texas doctrine.
+**Why:** The 4/15 cart marketplace pivot assumes vendor-liability (customer's service contract is with the vendor, not PAL). That assumption only holds if the T&C explicitly says so and vendor agreements exist. Right now vendors claim leads by email reply with no signed terms, and PAL's existing T&C doesn't explicitly position PAL as a marketplace. Without the paperwork, a plaintiff's lawyer can argue PAL operated as the service provider, and a judge may agree. With it, the marketplace thesis holds (Airbnb / Thumbtack / HomeAdvisor pattern). Texas-specific: fair notice doctrine and express-negligence test mean generic template language often fails.
+**Cost:** $500–1,500 one-time. Cheap vs. one slip-and-sue on a rented cart or beach setup.
+**Scope exclusion:** Claude does not draft this. Templates create false confidence; Texas doctrine fails most generic templates. Attorney-only.
+**Alternatives considered:** (a) DIY from templates — rejected (Texas indemnification doctrine is specific), (b) template service like Rocket Lawyer — works for simple cases but PAL's vendor marketplace is not simple enough, (c) defer — rejected (current vendor-claim process has zero paper trail; exposure grows with every booking).

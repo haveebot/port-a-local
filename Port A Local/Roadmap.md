@@ -1,6 +1,6 @@
 # Port A Local — Roadmap & To-Do
 _Living document. Updated each session._
-_Last updated: 2026-04-21_
+_Last updated: 2026-04-21 (evening — Collie round 1)_
 
 ---
 
@@ -31,7 +31,17 @@ _Last updated: 2026-04-21_
 
 ## Backlog (prioritized for next session)
 
-### Cart Portal Marketplace (HIGHEST — revenue blocking)
+### Legal — one-time attorney review (HIGHEST — unblocks marketplace liability thesis)
+- [ ] **Engage a Texas business attorney** for one-time review + drafting. Deliverables:
+  - **Platform T&C** that explicitly position PAL as a marketplace (not the service provider), customer's service contract is with the vendor, PAL disclaims liability for vendor actions, customer assumes risk of the rental.
+  - **Vendor agreement (one-pager)** per vendor — independent contractor, carries insurance, indemnifies PAL, honors the discount + service commitments.
+  - **Indemnification + assumption-of-risk** language that holds up under Texas doctrine (fair notice, express negligence test).
+- **Why:** without this paperwork, a plaintiff's lawyer can argue PAL operated as the service provider — not a marketplace — and a judge may agree. Every rental, every maintenance dispatch, every beach setup has tail risk. With the paperwork, the vendor-liability thesis holds cleanly (same model as Airbnb, Thumbtack, HomeAdvisor).
+- **Cost estimate:** $500–1,500 one-time. Cheap vs. one slip-and-sue. Budget lives under Palm Family Ventures, LLC.
+- **Blocker removes:** cart marketplace operating without signed vendor agreements, current "vetted local companies" marketing claim (needs insurance verification to be defensible).
+- **Scope exclusion:** Claude does not draft this. Templates fail Texas indemnification doctrine and create false confidence. Attorney-only.
+
+### Cart Portal Marketplace (revenue blocking — after legal)
 - [ ] **Collect 12 missing vendor emails** (Winston task). Call or web-scrape: Coastal Ed's, Port A Beach Buggies, Texas Red, First Stop, Tarpon Carts, Bron's, Kacie's, Island Outfitters, Gulf Carts, Ash Cart, Port A Carts, PA Golf Cart Rental. Drop into `src/data/cart-vendors.ts` → live on next deploy.
 - [ ] **Click-to-claim mechanism** — needs Vercel KV (free tier). Unique claim links per vendor per lead. First click wins. Replaces manual reply-based claiming.
 - [ ] **SMS blast channel** — code ready; flips on when A2P 10DLC campaign clears TCR. All 20 vendor phone numbers already in data file.
@@ -60,6 +70,36 @@ _Last updated: 2026-04-21_
 - [ ] Merch mock (sticker, tee, or cap)
 - After 3–4 surfaces, decide: one canonical lockup, or 2–3 approved configurations.
 
+### Icon rollout — rounds 2+ (after Collie reviews round 1 on live site)
+**Round 1 (LIVE 2026-04-21):** PortalIcon component with 9 silhouette SVGs (eat, drink, stay, do, fish, shop, beach, maintenance, cart) wired across nav, homepage, category pages, portal headers, essentials, map, business detail, services, footer. White-on-navy favicon.
+
+**Round 2 — Tier 1 nav icons (if Collie designs them):**
+- [ ] Services (currently 🛠️)
+- [ ] Events (🎪)
+- [ ] Heritage (📖)
+- [ ] Dispatch (🧭)
+- [ ] Archives (🏛️)
+- [ ] Guides (📋)
+- [ ] Essentials (🧭 — needs distinct from Dispatch)
+- [ ] Island Pulse (📡)
+- [ ] Map (🗺️)
+- [ ] Photos (📸)
+- [ ] My Trip / Saved Spots (❤️)
+- Free swaps (no new design needed): Fishing Report → reuse Fish icon; Where to Stay → reuse Stay icon
+
+**Round 3 — Tier 2 Gully search chips (if Collie designs them):**
+🍔 Burgers · 🍹 Happy Hour · 🌮 Tacos · ☕ Coffee · 🦞 Seafood · ⛵ Sailing · 🏄 Surfing · 🌙 Late Night · 🚤 Offshore Fishing
+
+**Round 4 — Tier 3 Essentials section headers (if Collie designs them):**
+⛴️ Ferry · 🅿️ Parking · 🌊 Weather · 🐬 Wildlife · 🏥 Emergency · 📱 Connectivity
+
+**Tier 4 — decorative content (likely keep as emoji):**
+🌅 🏝️ 🌴 ⚡ 🏆 🎨 📅
+
+**Technical follow-on (independent of Collie):**
+- [ ] Swap OG share-card badges from emoji to inline SVG (Dispatch, Rent, Beach, Maintenance OGs). Uses existing PortalIcon SVG source.
+- [ ] Swap transactional email headers from emoji to inline SVG. Same source.
+
 ### Future — blocked or deferred
 - [ ] **Gully V2** — community tagging with gamification (badges, Verified Local) — needs Supabase
 - [ ] **Buy/Sell / Classifieds** — Fox Yacht Sales as anchor, user-posted listings, pay to feature — Supabase
@@ -71,6 +111,13 @@ _Last updated: 2026-04-21_
 ---
 
 ## Completed ✅
+
+### Session — April 21, 2026 evening (Collie round 1 — 1 commit on top of the dumptruck commit)
+- **PortalIcon component** — 9 single-color silhouette SVGs matching Collie's refs (eat, drink, stay, do, fish, shop, beach, maintenance, cart). All `currentColor`, coral on navy bg / navy on white bg per Collie's rule.
+- **Wired site-wide:** nav dropdowns + portal pills (desktop + mobile), homepage category tiles + book-direct cards, category pages, CategoryCard, Footer, rent/beach/maintenance page headers + success states, services page, business detail breadcrumb + "More in", map filter chips, essentials (cart + beach).
+- **Copy fixes:** carts "discount off" spacing; maintenance subheader ("the most trusted maintenance team in Port Aransas"); Surf Report URL → Horace Caldwell Pier; Dispatch tagline on 5 surfaces ("Editorial…" → "Features, analysis and reporting on the island as it is — not as it's advertised"); Dispatch #1 title ("The Two Port Aransases" → "Port Aransas — A Tale of Two Islands", slug preserved); Dispatch #1 section caps ("The Frame", "The Historical Pattern").
+- **Favicon** — white-monochrome lighthouse on navy.
+- **Sticky header** — removed pre-scroll gradient overlay on homepage.
 
 ### Session — April 16, 2026 (1 commit)
 - Printable QR poster pattern — letter-size branded posters at `/print/qr/[slug]`. Lighthouse-in-center QR, error correction H, navy-on-sand. Two targets live: `home`, `sandfest`. Pattern extensible to per-portal + per-heritage posters.
