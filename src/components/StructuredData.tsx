@@ -2,6 +2,8 @@ import type { Business } from "@/data/businesses";
 import type { Story } from "@/data/stories";
 import type { Dispatch } from "@/data/dispatches";
 
+const SITE = "https://theportalocal.com";
+
 function JsonLd({ data }: { data: Record<string, unknown> }) {
   return (
     <script
@@ -153,6 +155,131 @@ export function ArticleSchema({ story }: { story: Story }) {
       }}
     />
   );
+}
+
+export interface FAQItem {
+  question: string;
+  answer: string;
+}
+
+export function FAQPageSchema({ items }: { items: FAQItem[] }) {
+  return (
+    <JsonLd
+      data={{
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: items.map((item) => ({
+          "@type": "Question",
+          name: item.question,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: item.answer,
+          },
+        })),
+      }}
+    />
+  );
+}
+
+export interface BreadcrumbItem {
+  name: string;
+  path?: string;
+}
+
+export function BreadcrumbListSchema({ items }: { items: BreadcrumbItem[] }) {
+  return (
+    <JsonLd
+      data={{
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: items.map((item, i) => {
+          const entry: Record<string, unknown> = {
+            "@type": "ListItem",
+            position: i + 1,
+            name: item.name,
+          };
+          if (item.path) {
+            entry.item = `${SITE}${item.path}`;
+          }
+          return entry;
+        }),
+      }}
+    />
+  );
+}
+
+export interface ItemListEntry {
+  name: string;
+  url: string;
+  description?: string;
+}
+
+export function ItemListSchema({
+  name,
+  description,
+  items,
+}: {
+  name: string;
+  description?: string;
+  items: ItemListEntry[];
+}) {
+  return (
+    <JsonLd
+      data={{
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        name,
+        ...(description ? { description } : {}),
+        numberOfItems: items.length,
+        itemListElement: items.map((entry, i) => ({
+          "@type": "ListItem",
+          position: i + 1,
+          name: entry.name,
+          url: entry.url,
+          ...(entry.description ? { description: entry.description } : {}),
+        })),
+      }}
+    />
+  );
+}
+
+export function PlaceSchema({
+  name,
+  description,
+  latitude,
+  longitude,
+  url,
+  type = "Place",
+}: {
+  name: string;
+  description?: string;
+  latitude?: number;
+  longitude?: number;
+  url?: string;
+  type?: "Place" | "TouristAttraction" | "LandmarksOrHistoricalBuildings";
+}) {
+  const data: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": type,
+    name,
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Port Aransas",
+      addressRegion: "TX",
+      postalCode: "78373",
+      addressCountry: "US",
+    },
+  };
+  if (description) data.description = description;
+  if (url) data.url = url;
+  if (latitude !== undefined && longitude !== undefined) {
+    data.geo = {
+      "@type": "GeoCoordinates",
+      latitude,
+      longitude,
+    };
+  }
+  return <JsonLd data={data} />;
 }
 
 export function DispatchSchema({ dispatch }: { dispatch: Dispatch }) {

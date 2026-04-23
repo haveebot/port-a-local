@@ -3,6 +3,7 @@ import Footer from "@/components/Footer";
 import Link from "next/link";
 import type { Metadata } from "next";
 import PortalIcon, { type PortalIconName } from "@/components/brand/PortalIcon";
+import { FAQPageSchema, BreadcrumbListSchema } from "@/components/StructuredData";
 
 export const metadata: Metadata = {
   title: "Island Essentials — Everything You Need to Know | Port A Local",
@@ -152,8 +153,20 @@ const essentials: EssentialSection[] = [
 ];
 
 export default function EssentialsPage() {
+  const faqItems = essentials.map((section) => ({
+    question: section.title,
+    answer: section.items.join(" "),
+  }));
+
   return (
     <main className="min-h-screen">
+      <FAQPageSchema items={faqItems} />
+      <BreadcrumbListSchema
+        items={[
+          { name: "Home", path: "/" },
+          { name: "Island Essentials", path: "/essentials" },
+        ]}
+      />
       <Navigation />
 
       {/* Hero */}

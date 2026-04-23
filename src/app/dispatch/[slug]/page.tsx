@@ -8,7 +8,7 @@ import {
 } from "@/data/dispatches";
 import { dispatchContent } from "@/data/dispatch-content";
 import { stories } from "@/data/stories";
-import { DispatchSchema } from "@/components/StructuredData";
+import { DispatchSchema, BreadcrumbListSchema } from "@/components/StructuredData";
 import LighthouseMark from "@/components/brand/LighthouseMark";
 import type { Metadata } from "next";
 
@@ -77,6 +77,13 @@ export default async function DispatchArticlePage({
   return (
     <main className="min-h-screen">
       <DispatchSchema dispatch={dispatch} />
+      <BreadcrumbListSchema
+        items={[
+          { name: "Home", path: "/" },
+          { name: "Dispatch", path: "/dispatch" },
+          { name: dispatch.title, path: `/dispatch/${dispatch.slug}` },
+        ]}
+      />
       <Navigation />
 
       {/* Hero */}

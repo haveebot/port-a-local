@@ -8,7 +8,7 @@ import { getBusinessBySlug, getAllBusinessSlugs, getBusinessesByCategory } from 
 import { getCategoryBySlug } from "@/data/categories";
 import BusinessCard from "@/components/BusinessCard";
 import KnowThisPlace from "@/components/KnowThisPlace";
-import { LocalBusinessSchema } from "@/components/StructuredData";
+import { LocalBusinessSchema, BreadcrumbListSchema } from "@/components/StructuredData";
 import { isOpenNow } from "@/lib/isOpenNow";
 import SaveToTrip from "@/components/SaveToTrip";
 import PortalIcon, { type PortalIconName } from "@/components/brand/PortalIcon";
@@ -51,6 +51,13 @@ export default async function BusinessDetailPage({
   return (
     <main className="min-h-screen">
       <LocalBusinessSchema business={business} />
+      <BreadcrumbListSchema
+        items={[
+          { name: "Home", path: "/" },
+          { name: category.name, path: `/${category.slug}` },
+          { name: business.name, path: `/${category.slug}/${business.slug}` },
+        ]}
+      />
       <Navigation />
 
       <section className="pt-28 pb-16 hero-gradient relative">

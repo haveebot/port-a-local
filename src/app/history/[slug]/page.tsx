@@ -4,7 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { stories, getStoryBySlug } from "@/data/stories";
 import { storyContent } from "@/data/story-content";
-import { ArticleSchema } from "@/components/StructuredData";
+import { ArticleSchema, BreadcrumbListSchema } from "@/components/StructuredData";
 import SaveToTrip from "@/components/SaveToTrip";
 import type { Metadata } from "next";
 import { EmojiIcon } from "@/components/brand/PortalIcon";
@@ -62,6 +62,13 @@ export default async function StoryPage({
   return (
     <main className="min-h-screen">
       <ArticleSchema story={story} />
+      <BreadcrumbListSchema
+        items={[
+          { name: "Home", path: "/" },
+          { name: "Port A Heritage", path: "/history" },
+          { name: story.title, path: `/history/${story.slug}` },
+        ]}
+      />
       <Navigation />
 
       {/* Hero */}

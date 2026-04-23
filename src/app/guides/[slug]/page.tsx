@@ -7,6 +7,7 @@ import { guides, getGuideBySlug } from "@/data/guides";
 import { businesses } from "@/data/businesses";
 import type { Metadata } from "next";
 import PortalIcon, { EmojiIcon } from "@/components/brand/PortalIcon";
+import { BreadcrumbListSchema, ItemListSchema } from "@/components/StructuredData";
 
 export function generateStaticParams() {
   return guides.map((g) => ({ slug: g.slug }));
@@ -59,6 +60,22 @@ export default async function GuidePage({
 
   return (
     <main className="min-h-screen">
+      <BreadcrumbListSchema
+        items={[
+          { name: "Home", path: "/" },
+          { name: "Guides", path: "/guides" },
+          { name: guide.title, path: `/guides/${guide.slug}` },
+        ]}
+      />
+      <ItemListSchema
+        name={guide.title}
+        description={guide.metaDescription}
+        items={matched.map((b) => ({
+          name: b.name,
+          url: `https://theportalocal.com/${b.category}/${b.slug}`,
+          description: b.tagline,
+        }))}
+      />
       <Navigation />
 
       {/* Hero */}
