@@ -14,6 +14,7 @@ const SERVICE_TYPES = [
   "Electrical",
   "HVAC / AC",
   "Landscaping",
+  "Carpet / Upholstery Cleaning",
   "Detailing / Wash",
   "RV Undercoating",
   "Other",

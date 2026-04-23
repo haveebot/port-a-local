@@ -1691,6 +1691,19 @@ export const businesses: Business[] = [
     tags: ["detailing", "RV detailing", "undercoating", "mobile detailing", "on-site", "boat detailing", "auto detailing", "since 1994", "locally owned"],
     priceRange: "$$",
   },
+  {
+    slug: "coastal-carpet-cleaners",
+    name: "Coastal Carpet Cleaners",
+    category: "services",
+    tagline: "Long-established, locally owned carpet & upholstery cleaning — mobile, by appointment",
+    description: "Coastal Carpet Cleaners is a long-established, locally owned carpet and upholstery cleaning operation serving Port Aransas homes, short-term rentals, and vehicles. Commercial-grade hot-water extraction and spot treatment for the stains this island specializes in — sand, salt, tracked-in oil, rental turnover, pet accidents — on-site, no furniture to move, no drop-off required. By appointment.",
+    address: "Port Aransas, TX 78373",
+    phone: "(361) 813-6958",
+    hours: "By appointment",
+    featured: false,
+    tags: ["carpet cleaning", "upholstery cleaning", "furniture cleaning", "rug cleaning", "rental turnover", "deep cleaning", "hot water extraction", "mobile service", "on-site", "locally owned"],
+    priceRange: "$$",
+  },
   // --- STAY ---
   {
     slug: "best-western-port-a",
