@@ -4,7 +4,56 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { stories, getStoryBySlug } from "@/data/stories";
 import { storyContent } from "@/data/story-content";
-import { ArticleSchema, BreadcrumbListSchema } from "@/components/StructuredData";
+import { ArticleSchema, BreadcrumbListSchema, PlaceSchema } from "@/components/StructuredData";
+
+// Heritage stories that are about specific physical landmarks.
+// PlaceSchema here gives these URLs rich-result eligibility for queries like
+// "port aransas lighthouse," "tarpon inn," "farley boat works," etc.
+const PHYSICAL_PLACES: Record<
+  string,
+  {
+    name: string;
+    description: string;
+    type: "Place" | "TouristAttraction" | "LandmarksOrHistoricalBuildings";
+  }
+> = {
+  "lydia-ann-lighthouse": {
+    name: "Lydia Ann Lighthouse",
+    description:
+      "1857 Texas coastal lighthouse on Harbor Island guarding the Aransas Pass — one of the oldest operating lighthouses on the Gulf Coast.",
+    type: "LandmarksOrHistoricalBuildings",
+  },
+  "farley-boat-works": {
+    name: "Farley Boat Works",
+    description:
+      "Historic wooden boat shop at 716 W Ave C, Port Aransas. Revived in 2011 as a community boat-building workshop and maritime museum.",
+    type: "TouristAttraction",
+  },
+  "port-aransas-museum": {
+    name: "Port Aransas Museum",
+    description:
+      "The island's local history museum — maritime artifacts, Fresnel lens, photographic archives, generational records of Port Aransas families.",
+    type: "TouristAttraction",
+  },
+  "chapel-on-the-dunes": {
+    name: "Chapel on the Dunes",
+    description:
+      "Sand-dune chapel built in 1937 by Texas Poet Laureate Aline Carter. A handmade, still-standing landmark on Mustang Island.",
+    type: "LandmarksOrHistoricalBuildings",
+  },
+  "tarpon-inn": {
+    name: "The Tarpon Inn",
+    description:
+      "1886 coastal inn — host of President Franklin D. Roosevelt's 1937 tarpon-fishing visit. Historic lodging on the National Register.",
+    type: "TouristAttraction",
+  },
+  "port-aransas-jetties": {
+    name: "Port Aransas Jetties",
+    description:
+      "The north and south jetties guarding the Aransas Pass — a century-old coastal engineering project that remains a fishing, surfing, and walking destination.",
+    type: "TouristAttraction",
+  },
+};
 import SaveToTrip from "@/components/SaveToTrip";
 import type { Metadata } from "next";
 import { EmojiIcon } from "@/components/brand/PortalIcon";
@@ -69,6 +118,12 @@ export default async function StoryPage({
           { name: story.title, path: `/history/${story.slug}` },
         ]}
       />
+      {PHYSICAL_PLACES[story.slug] && (
+        <PlaceSchema
+          {...PHYSICAL_PLACES[story.slug]}
+          url={`https://theportalocal.com/history/${story.slug}`}
+        />
+      )}
       <Navigation />
 
       {/* Hero */}
