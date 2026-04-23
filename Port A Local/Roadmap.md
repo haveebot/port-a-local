@@ -1,6 +1,6 @@
 # Port A Local — Roadmap & To-Do
 _Living document. Updated each session._
-_Last updated: 2026-04-22 (full-site emoji eradication — 55 silhouettes live)_
+_Last updated: 2026-04-22 evening (OG round 5 + Heritage #18 + Dispatch tip form + featured swap)_
 
 ---
 
@@ -58,10 +58,14 @@ _Last updated: 2026-04-22 (full-site emoji eradication — 55 silhouettes live)_
 - [ ] **Dispatch #2 — "The Landlord Nobody Voted For"** — shopping center acquisition + rent-doubling pattern. Needs tenant sourcing. **Tim Parke** (2026 Sandfest president, Lone Star Taste) is a potential source *and* a cart-portal vendor relationship — dual relationship, handle carefully.
 
 ### Infrastructure / Polish
-- [ ] **A2P campaign approval re-check** (waiting on TCR — passive). Re-verify status today.
+- [ ] **A2P campaign approval re-check** (waiting on TCR — passive). Re-verify status next session.
 - [ ] **Classifieds / Want Board** — needs Supabase (still deferred).
-- [ ] **Per-business OG images** — 130+ business detail pages currently fall back to root OG.
-- [ ] **FeaturedSpots audit** — review which businesses are currently featured; confirm the mix.
+- [x] ~~**Per-business OG images** — 130+ business detail pages~~ **DONE 2026-04-22 (round 5).** Per-business + per-category + per-guide OG all shipped via brandedOG.
+- [x] ~~**FeaturedSpots audit**~~ **DONE 2026-04-22.** Swapped Red Dragon Pirate Ship → Aloha Açaí.
+
+### Next Session — explicit asks from Winston (2026-04-22)
+- [ ] **Configure haveebot email for direct Collie comms.** Claude should be able to read Collie's design emails directly (not relayed through Winston). Keep PAL infrastructure accounts on admin@ per existing rule — this is strictly a collaboration channel. Cross-checks memory rule `feedback_pal_vs_sageem_accounts.md` — flag with Winston before building.
+- [ ] **Full Collie update briefing.** Prepare a comprehensive document at `Port A Local/Collie Update — 2026-04-22.md` covering everything that shipped since her Round 1 sign-off (4/21) through 4/22 end-of-day. Self-contained prompt ready at `Port A Local/Next Session — Collie Update Prompt.md` — paste into next Claude session to execute.
 
 ### Brand — next surfaces before locking lockup
 - [ ] Twitter/X profile + banner
@@ -97,7 +101,7 @@ _Last updated: 2026-04-22 (full-site emoji eradication — 55 silhouettes live)_
 
 ## Completed ✅
 
-### Session — April 22, 2026 (5 commits — morning + afternoon)
+### Session — April 22, 2026 (13 commits — morning + afternoon + evening)
 - **A2P 10DLC failure → fix → resubmit** (morning). Forms decoupled SMS consent from submission via separate unchecked-by-default opt-in checkbox; shared `src/lib/twilioSms.ts` gates consumer SMS on `smsConsent`; customer SMS now on all 3 revenue flows (was maintenance-only); STOP opt-out appended to every customer message. Twilio account + messaging service renamed off Twilio defaults. New Usa2p compliance record submitted with rewritten MessageFlow. Commit `132b312`.
 - **3 new vendor listings from inbound requests** (morning). Portable Detail Service (Miguel Cantu — mobile RV detailing + undercoating since 1994) → `/services`. Salty Beach Babes (boutique at 345 N Alister St F1) → `/shop` (phone still blank). Barefoot Beans (coffee shop at 345 N Alister St E1, organic/fair-trade) → `/eat`. Aloha Açaí duplicate caught + removed (already live under slug `aloha-acai`). Commit `e0c5a73`.
 - **Miguel routing through /maintenance dropdown** (morning). Added "Detailing / Wash" and "RV Undercoating" to `SERVICE_TYPES`; John Brown dispatches, John calls Miguel. Zero new infra.
@@ -105,7 +109,11 @@ _Last updated: 2026-04-22 (full-site emoji eradication — 55 silhouettes live)_
 - **Email Automation spec drafted** (morning). `Port A Local/Email Automation.md` — Layer 1 filter rules + labels + canned responses + vacation responders for admin@ / hello@ / bookings@, copy-paste-ready for Gmail UI. Layer 2 (server-side inbound parsing) flagged as future cart-marketplace work.
 - **Icon rollout Round 2 — Tier 1 nav + Tier 2 Gully chips + Tier 3 Essentials sections** (afternoon, commit `35ca1b3`). 26 new silhouettes in Collie's style, wired site-wide. Nav dropdowns (desktop + mobile), Gully popularChips, Essentials section headers.
 - **Icon rollout Round 3 — Tier 4 decorative + EmojiIcon helper** (afternoon, commit `f625efb`). 7 new silhouettes (sunrise, island, palm, urgent, trophy, art, calendar) + EmojiIcon helper for data-driven renders with graceful emoji fallback.
-- **Icon rollout Round 4 — Full-site eradication + OG refactor + aliasing** (evening, commit `c4d63e2`, 42 files). 13 new silhouettes + 21 emoji aliases + `brandedOG` accepts `badgeIcon`; all 19 OG share cards now render inline SVG. Footer, GullyPalette, services/rent/beach/maintenance pages, photos, my-trip, admin, archives, KnowThisPlace, CategoryPage, IslandConditions, fishing-report, where-to-stay, history page — all swept.
+- **Icon rollout Round 4 — Full-site eradication + OG refactor + aliasing** (afternoon, commit `c4d63e2`, 42 files). 13 new silhouettes + 21 emoji aliases + `brandedOG` accepts `badgeIcon`; all 19 OG share cards now render inline SVG. Footer, GullyPalette, services/rent/beach/maintenance pages, photos, my-trip, admin, archives, KnowThisPlace, CategoryPage, IslandConditions, fishing-report, where-to-stay, history page — all swept.
+- **Featured Spots rebalance** (evening, commit `6f8651f`). Swapped Red Dragon Pirate Ship → Aloha Açaí on the homepage 9 tiles. Rebalances "do" (3→2) and "eat" (2→3).
+- **Heritage #18 — "Pat Magee's Long Ride"** (evening, commit `418b694`). 9 min read, ~2,200 words. 1967 dune-line shack → 1969 Beach and Station shop → Dewey Weber team → Robert August/Endless Summer orbit → dozen Pat Magee's across Texas → 2005 retirement + Texas Surf Museum co-founding with Brad Lomax. Full public-record version; personal angle held for future. Total Heritage now 23.
+- **Dispatch tip form** (evening, commit `0dd95e1`). Triggered by Julie Janda empty-mailto incident. New `/api/dispatch/tip` route + inline form on `/dispatch` with required textarea, optional name + contact, Resend email to admin@ + hello@. Blank sends blocked client + server side.
+- **OG round 5 — per-business + per-category + per-guide share cards** (evening, commit `2add0e4`). Closes the last OG gap. 150+ routes now have unique, route-specific previews with the Lighthouse lockup and page identity.
 
 ### Session — April 21, 2026 evening (Collie round 1 — 1 commit on top of the dumptruck commit)
 - **PortalIcon component** — 9 single-color silhouette SVGs matching Collie's refs (eat, drink, stay, do, fish, shop, beach, maintenance, cart). All `currentColor`, coral on navy bg / navy on white bg per Collie's rule.

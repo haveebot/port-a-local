@@ -1,6 +1,6 @@
 # Port A Local — Company Brain
 _Winston + Claude's living knowledge base. Updated every session._
-_Last updated: 2026-04-22 (full-site emoji eradication — 55 silhouettes across 4 rounds live)_
+_Last updated: 2026-04-22 (13-commit marathon: A2P + listings + email sig + emoji eradication + featured swap + Heritage #18 + Dispatch tip form + OG round 5)_
 
 ---
 
@@ -59,12 +59,13 @@ _Last updated: 2026-04-22 (full-site emoji eradication — 55 silhouettes across
 | Live site | https://theportalocal.com (HTTPS, 200 OK) |
 | Domain | theportalocal.com (primary) |
 | Businesses | 140+ across 6 categories |
-| Heritage | **22 published stories** — Port A Heritage |
-| Dispatch | **1 published** — "Port Aransas — A Tale of Two Islands" (features/analysis/reporting) |
+| Heritage | **23 published stories** — Port A Heritage (Pat Magee's Long Ride added 2026-04-22) |
+| Dispatch | **1 published** — "Port Aransas — A Tale of Two Islands" (features/analysis/reporting). Tip form at /dispatch (Resend-powered; replaces old mailto) |
 | Portals | `/rent` (marketplace model) · `/beach` · `/maintenance` (urgency coupling) |
 | Search | Gully — unified index (businesses + heritage + dispatch + menus + archives) |
 | Brand | Lighthouse mark locked; full-site saturation complete; full lockup intentionally not yet locked |
-| Icon system | **PortalIcon component — 55 silhouettes live** across 4 rounds. Full-site emoji eradication complete (deliberate exceptions: SMS bodies + some email HTML). `EmojiIcon` helper renders data-driven icons with graceful fallback. `brandedOG` renders inline SVG in all 19 OG share cards. |
+| Icon system | **PortalIcon component — 55 silhouettes live** across 4 rounds. Full-site emoji eradication complete (deliberate exceptions: SMS bodies + some email HTML). `EmojiIcon` helper renders data-driven icons with graceful fallback. `brandedOG` renders inline SVG across all OG share cards. |
+| OG share cards | **Every directory link has a branded preview** — static routes + per-dispatch + per-heritage (rounds 1–4) + per-business + per-category + per-guide (round 5). ~150+ route-specific previews. |
 | Favicon | White-monochrome lighthouse on navy |
 | Social | FB profile + FB banner routes shipped (`/social/*`) |
 | Print | Branded QR poster route (`/print/qr/[slug]`) — home + sandfest targets |
