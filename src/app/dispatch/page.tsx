@@ -3,6 +3,7 @@ import Footer from "@/components/Footer";
 import Link from "next/link";
 import { dispatches } from "@/data/dispatches";
 import type { Metadata } from "next";
+import DispatchTipForm from "@/components/DispatchTipForm";
 
 export const metadata: Metadata = {
   title: "Dispatch — Port Aransas Editorial & Analysis | Port A Local",
@@ -177,20 +178,17 @@ export default function DispatchIndexPage() {
         <div className="absolute bottom-0 left-0 right-0 coral-line" />
         <div className="absolute inset-0 palm-pattern opacity-20" />
 
-        <div className="relative max-w-3xl mx-auto px-4 sm:px-6 text-center">
-          <h2 className="font-display text-3xl font-bold text-sand-50 mb-4">
-            Got a tip?
-          </h2>
-          <p className="text-lg text-navy-200 font-light mb-8">
-            If you know something about Port Aransas that the dashboards don&apos;t, we&apos;re
-            listening. Anonymous tips welcome — confirmable is better.
-          </p>
-          <a
-            href="mailto:hello@theportalocal.com?subject=Dispatch%20Tip"
-            className="inline-flex items-center justify-center px-8 py-3 rounded-xl btn-coral text-sm font-semibold"
-          >
-            Send a Tip
-          </a>
+        <div className="relative max-w-3xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-8">
+            <h2 className="font-display text-3xl font-bold text-sand-50 mb-4">
+              Got a tip?
+            </h2>
+            <p className="text-lg text-navy-200 font-light">
+              If you know something about Port Aransas that the dashboards don&apos;t, we&apos;re
+              listening.
+            </p>
+          </div>
+          <DispatchTipForm />
         </div>
       </section>
 
