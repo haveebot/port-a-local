@@ -1,9 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
-  <rect width="64" height="64" rx="12" fill="#0b1120"/>
-  <rect x="8" y="58" width="48" height="3" fill="#f5f0e8"/>
-  <path d="M 17 58 L 20 24 L 44 24 L 47 58 Z" fill="#f5f0e8"/>
-  <rect x="15" y="20" width="34" height="4" fill="#f5f0e8"/>
-  <rect x="23" y="12" width="18" height="8" fill="#f5f0e8"/>
-  <rect x="26" y="14" width="12" height="4" fill="#f5f0e8"/>
-  <path d="M 21 12 Q 32 3 43 12 Z" fill="#f5f0e8"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <rect width="128" height="128" rx="24" fill="#0b1120"/>
+  <path d="M47.74,121.7l1.32-13.84c.07-.72-.02-1.33.35-2.02l28.18-12.01,2.66,27.86h-32.52Z" fill="#f5f0e8"/>
+  <polygon points="76.4 81.09 50.56 92.1 51.81 78.93 75.21 68.94 76.4 81.09" fill="#f5f0e8"/>
+  <rect x="57" y="37" width="14" height="40" fill="#f5f0e8"/>
+  <path d="M 54 37 L 64 22 L 74 37 Z" fill="#f5f0e8"/>
+  <rect x="27.38" y="41.5" width="10.51" height="2.8" fill="#f5f0e8"/>
+  <rect x="90.11" y="41.5" width="10.51" height="2.8" fill="#f5f0e8"/>
 </svg>
