@@ -1,6 +1,6 @@
 # Port A Local — Roadmap & To-Do
 _Living document. Updated each session._
-_Last updated: 2026-04-22 evening (OG round 5 + Heritage #18 + Dispatch tip form + featured swap)_
+_Last updated: 2026-04-23 (haveebot comms channel + SEO schema expansion + GSC indexing diagnostic + Coastal Carpet Cleaners)_
 
 ---
 
@@ -64,7 +64,7 @@ _Last updated: 2026-04-22 evening (OG round 5 + Heritage #18 + Dispatch tip form
 - [x] ~~**FeaturedSpots audit**~~ **DONE 2026-04-22.** Swapped Red Dragon Pirate Ship → Aloha Açaí.
 
 ### Next Session — explicit asks from Winston (2026-04-22)
-- [ ] **Configure haveebot email for direct Collie comms.** Claude should be able to read Collie's design emails directly (not relayed through Winston). Keep PAL infrastructure accounts on admin@ per existing rule — this is strictly a collaboration channel. Cross-checks memory rule `feedback_pal_vs_sageem_accounts.md` — flag with Winston before building.
+- [x] ~~**Configure haveebot email for direct Collie comms.**~~ **DONE 2026-04-23.** Gmail IMAP/SMTP via app password, tool at `workspace/scripts/haveebot_mail.py`. Memory rule `feedback_pal_vs_sageem_accounts.md` updated with a comms-only carve-out. Subcommands: `check`, `inbox`, `unread`, `from`, `collie`, `thread <uid>`, `send`. Sending requires explicit Winston authorization per `reference_haveebot_mail.md`.
 - [ ] **Full Collie update briefing.** Prepare a comprehensive document at `Port A Local/Collie Update — 2026-04-22.md` covering everything that shipped since her Round 1 sign-off (4/21) through 4/22 end-of-day. Self-contained prompt ready at `Port A Local/Next Session — Collie Update Prompt.md` — paste into next Claude session to execute.
 
 ### Brand — next surfaces before locking lockup

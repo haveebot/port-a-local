@@ -49,7 +49,7 @@ export const stories: Story[] = [
     date: "2026-04-12",
     tags: ["tarpon", "Silver King", "fishing history", "Tarpon Texas", "guides", "sport fishing"],
     relatedBusinesses: [],
-    relatedStories: ["fdr-tarpon-port-aransas", "farley-boat-works", "tarpon-inn", "ropesville-to-port-aransas", "deep-sea-roundup"],
+    relatedStories: ["fdr-tarpon-port-aransas", "farley-boat-works", "tarpon-inn", "ropesville-to-port-aransas", "deep-sea-roundup", "red-snapper-fleet"],
   },
   {
     slug: "farley-boat-works",
@@ -65,7 +65,7 @@ export const stories: Story[] = [
     date: "2026-04-12",
     tags: ["Farley", "boat building", "wooden boats", "maritime heritage", "PAPHA", "craftsmanship"],
     relatedBusinesses: [],
-    relatedStories: ["fdr-tarpon-port-aransas", "port-aransas-museum", "tarpon-era"],
+    relatedStories: ["fdr-tarpon-port-aransas", "port-aransas-museum", "tarpon-era", "red-snapper-fleet"],
   },
   {
     slug: "hurricane-celia",
@@ -191,7 +191,7 @@ export const stories: Story[] = [
     date: "2026-04-12",
     tags: ["Deep Sea Roundup", "fishing tournament", "Boatmen", "Tarpon Rodeo", "competition"],
     relatedBusinesses: [],
-    relatedStories: ["tarpon-era", "fdr-tarpon-port-aransas", "farley-boat-works"],
+    relatedStories: ["tarpon-era", "fdr-tarpon-port-aransas", "farley-boat-works", "red-snapper-fleet"],
   },
 
   // --- Expansion stories ---
@@ -258,7 +258,7 @@ export const stories: Story[] = [
     date: "2026-04-12",
     tags: ["UTMSI", "red tide", "marine science", "university", "ecology", "fish kill", "research"],
     relatedBusinesses: [],
-    relatedStories: ["karankawa-legacy", "storms-of-port-aransas"],
+    relatedStories: ["karankawa-legacy", "storms-of-port-aransas", "red-snapper-fleet"],
   },
   {
     slug: "port-aransas-ferry",
@@ -306,7 +306,7 @@ export const stories: Story[] = [
     date: "2026-04-13",
     tags: ["jetties", "Army Corps of Engineers", "Aransas Harbor Terminal Railway", "granite", "Llano Uplift", "D.M. Picton", "1919", "infrastructure"],
     relatedBusinesses: [],
-    relatedStories: ["tarpon-era", "tarpon-inn", "ropesville-to-port-aransas", "port-aransas-ferry"],
+    relatedStories: ["tarpon-era", "tarpon-inn", "ropesville-to-port-aransas", "port-aransas-ferry", "red-snapper-fleet"],
   },
   {
     slug: "ropesville-to-port-aransas",
@@ -410,6 +410,47 @@ export const stories: Story[] = [
     tags: ["Cinnamon Shore", "development", "Mustang Island", "growth", "preservation", "housing"],
     relatedBusinesses: [],
     relatedStories: ["port-aransas-ferry", "storms-of-port-aransas"],
+  },
+  {
+    slug: "red-snapper-fleet",
+    title: "The Red Snapper Fleet",
+    subtitle: "How commercial fishing built Port Aransas — and how overfishing and regulation turned the island into a charter-fishing capital",
+    description:
+      "Before Port Aransas became a charter-fishing destination, it was a commercial red snapper port. A fleet of working boats, fish houses on the harbor, ice makers and packers shipping snapper to inland markets. The commercial era peaked mid-century, crashed under overfishing in the 1980s, and was reshaped by the Individual Fishing Quota system in 2007. This is the story of how the working fleet gave way to the charter fleet — and what remains of both.",
+    category: "heritage",
+    icon: "🐟",
+    readTime: "10 min",
+    featured: true,
+    // Temporarily unpublished — story content coming in a follow-on commit
+    // once background research agent completes. Cross-linked bidirectionally
+    // from tarpon-era / deep-sea-roundup / port-aransas-jetties / red-tide-utmsi
+    // / farley-boat-works — those relatedStories filters ignore unpublished entries.
+    published: false,
+    date: "2026-04-23",
+    tags: [
+      "red snapper",
+      "commercial fishing",
+      "Gulf of Mexico",
+      "fishing fleet",
+      "Port Aransas",
+      "IFQ",
+      "Individual Fishing Quota",
+      "overfishing",
+      "charter fishing",
+      "Fisherman's Wharf",
+      "fish houses",
+      "NOAA",
+      "Magnuson-Stevens",
+      "Gulf Fishery Management Council",
+    ],
+    relatedBusinesses: [],
+    relatedStories: [
+      "tarpon-era",
+      "deep-sea-roundup",
+      "port-aransas-jetties",
+      "red-tide-utmsi",
+      "farley-boat-works",
+    ],
   },
 ];
 

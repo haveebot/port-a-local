@@ -1,6 +1,6 @@
 # Port A Local — Company Brain
 _Winston + Claude's living knowledge base. Updated every session._
-_Last updated: 2026-04-22 (13-commit marathon: A2P + listings + email sig + emoji eradication + featured swap + Heritage #18 + Dispatch tip form + OG round 5)_
+_Last updated: 2026-04-23 (haveebot comms channel live + SEO schema expansion + GSC indexing diagnostic + Coastal Carpet Cleaners listing + Heritage #19 Red Snapper Fleet scaffolded)_
 
 ---
 
@@ -41,8 +41,10 @@ _Last updated: 2026-04-22 (13-commit marathon: A2P + listings + email sig + emoj
 
 ### Session Notes
 - [[Session Notes/Session Notes Index]]
-- [[Session Notes/2026-04-16]] — Printable QR poster pattern (Sandfest signage)
+- [[Session Notes/2026-04-23]] — Collie comms channel live + SEO schema expansion (FAQ/Breadcrumb/ItemList/Place) + GSC diagnostic + 9 URL indexing requests + Coastal Carpet listing + Heritage #19 Red Snapper Fleet scaffolded
+- [[Session Notes/2026-04-22]] — 13-commit marathon: A2P fix, 3 listings, Miguel routing, 55 silhouettes, Featured swap, Heritage #18 Pat Magee, Dispatch tip form, OG round 5
 - [[Session Notes/2026-04-21]] — Vault catch-up dumptruck + Collie round 1 (9 silhouette icons shipped, 5 copy fixes, favicon monochrome, sticky header) + attorney scope defined
+- [[Session Notes/2026-04-16]] — Printable QR poster pattern (Sandfest signage)
 - [[Session Notes/2026-04-15]] — PUD scrub, cart marketplace pivot, Sandfest heritage, first FB assets, maintenance coupling
 - [[Session Notes/2026-04-14]] — Dispatch launches, Lighthouse brand, full-site saturation, editorial workflow locked
 - [[Session Notes/2026-04-13]] — Infrastructure live day (domain, Resend, Stripe, Twilio, heritage batch 1, GBP skip)
@@ -52,15 +54,18 @@ _Last updated: 2026-04-22 (13-commit marathon: A2P + listings + email sig + emoj
 
 ---
 
-## Current Status — April 21, 2026
+## Current Status — April 23, 2026
 
 | What | Detail |
 |------|--------|
 | Live site | https://theportalocal.com (HTTPS, 200 OK) |
 | Domain | theportalocal.com (primary) |
-| Businesses | 140+ across 6 categories |
-| Heritage | **23 published stories** — Port A Heritage (Pat Magee's Long Ride added 2026-04-22) |
+| Businesses | **143+** across 6 categories (+ Coastal Carpet Cleaners added 2026-04-23) |
+| Heritage | **23 published stories** (+ Heritage #19 Red Snapper Fleet scaffolded, research in progress) |
 | Dispatch | **1 published** — "Port Aransas — A Tale of Two Islands" (features/analysis/reporting). Tip form at /dispatch (Resend-powered; replaces old mailto) |
+| SEO schema | **Complete layer stack (2026-04-23):** WebSite, Organization, LocalBusiness, Article, NewsArticle (pre-existing) + FAQPage on /essentials + BreadcrumbList on all 4 detail route types + ItemList on /guides/[slug] + Place/TouristAttraction/LandmarksOrHistoricalBuildings on 6 Heritage landmark pieces |
+| GSC indexing | 13/192 indexed (young-site crawl budget; 0 quality exclusions, 0 404s — clean health). 9 priority URLs submitted for indexing 2026-04-23. |
+| Collie channel | **Direct IMAP/SMTP via haveebot@gmail.com live 2026-04-23** — `workspace/scripts/haveebot_mail.py`; session-start auto-check; briefing for 2026-04-22 sent. |
 | Portals | `/rent` (marketplace model) · `/beach` · `/maintenance` (urgency coupling) |
 | Search | Gully — unified index (businesses + heritage + dispatch + menus + archives) |
 | Brand | Lighthouse mark locked; full-site saturation complete; full lockup intentionally not yet locked |
