@@ -69,7 +69,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ];
 
   const CONTENT_PAGES = [
-    "gully", "guides", "live", "essentials", "events",
+    "gully", "guides", "live", "live-music", "essentials", "events",
     "fishing-report", "where-to-stay", "photos", "archives", "map", "my-trip",
   ];
 

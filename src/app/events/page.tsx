@@ -79,7 +79,7 @@ const recurringEvents: PAEvent[] = [
   { name: "Second Saturday at Farley Boat Works", timing: "2nd Saturday, Oct-Mar", location: "716 W. Ave C", description: "Potluck dinners with live music and dancing in the boat barn. PAPHA members eat free; guests $10.", icon: "🪵" },
   { name: "Art Center First Friday", timing: "1st Friday of each month", location: "Port Aransas Art Center", description: "Opening reception for new monthly exhibit with live music, wine, and art demos. 5:30-7:30 PM.", icon: "🎨" },
   { name: "UTMSI Wetlands Tours", timing: "Tuesdays & Thursdays, 9 AM", location: "UTMSI Visitors Center", description: "Free guided boardwalk tours of the 3.5-acre marsh and wetland habitat. Year-round.", icon: "🌿" },
-  { name: "Live Music Nightly", timing: "Year-round, most nights", location: "Multiple venues", description: "The Gaff, Shorty's, Bron's Backyard, BierHaus, and more. Check portaransas.org/portalive for the weekly schedule.", icon: "🎵" },
+  { name: "Live Music Nightly", timing: "Year-round, most nights", location: "Multiple venues", description: "The Gaff, Shorty's, Bron's Backyard, Treasure Island, Sip Yard, VFW, Salty Dog, and more. See who's playing this week on our weekly roundup at /live-music.", icon: "🎵" },
 ];
 
 export default function EventsPage() {

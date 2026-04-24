@@ -104,6 +104,10 @@ export default function Navigation() {
                       <PortalIcon name="events" className="w-4 h-4 text-coral-400 shrink-0" />
                       Events
                     </Link>
+                    <Link href="/live-music" onClick={() => setExploreOpen(false)} className={dropdownLinkClass}>
+                      <PortalIcon name="art" className="w-4 h-4 text-coral-400 shrink-0" />
+                      Live Music
+                    </Link>
                     <Link href="/fishing-report" onClick={() => setExploreOpen(false)} className={dropdownLinkClass}>
                       <PortalIcon name="fish" className="w-4 h-4 text-coral-400 shrink-0" />
                       Fishing Report
@@ -252,6 +256,7 @@ export default function Navigation() {
             ))}
             <Link href="/services" onClick={() => setMobileOpen(false)} className={`${mobileLinkClass} flex items-center gap-2`}><PortalIcon name="services" className="w-4 h-4 text-coral-400 shrink-0" /> Services</Link>
             <Link href="/events" onClick={() => setMobileOpen(false)} className={`${mobileLinkClass} flex items-center gap-2`}><PortalIcon name="events" className="w-4 h-4 text-coral-400 shrink-0" /> Events</Link>
+            <Link href="/live-music" onClick={() => setMobileOpen(false)} className={`${mobileLinkClass} flex items-center gap-2`}><PortalIcon name="art" className="w-4 h-4 text-coral-400 shrink-0" /> Live Music</Link>
             <Link href="/fishing-report" onClick={() => setMobileOpen(false)} className={`${mobileLinkClass} flex items-center gap-2`}><PortalIcon name="fish" className="w-4 h-4 text-coral-400 shrink-0" /> Fishing Report</Link>
 
             {/* Discover */}
