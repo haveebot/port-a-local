@@ -1870,4 +1870,152 @@ export const storyContent: Record<string, StoryContent> = {
       { place: "The Logo Mountain", detail: "The 15-foot-tall centerpiece sculpture is raised fresh on the beach each year, carrying the season's sponsor logos. This year, it also carries Lisa \"Wiggly\" Shelton's name." },
     ],
   },
+
+  "red-snapper-fleet": {
+    lede: "The first commercial red snapper landed in Port Aransas didn't come off a Port Aransas boat. It came down a narrow-gauge rail line that reached the island in 1888, from schooners working out of Pensacola, Florida — at the time the undisputed capital of Gulf red snapper. At its peak the Pensacola fleet ran nearly fifty sailing smacks. Port Aransas had fifty residents. The island's commercial red snapper story is not about dominance. It is about a town that landed fish when the trains showed up, kept landing fish after the schooners gave way to diesel boats, and then — slowly, over decades of federal quotas, blockades, and lawsuits — learned to sell the fishing trip instead of the fish.",
+
+    sections: [
+      {
+        heading: "The Pensacola Problem",
+        body: [
+          "Any honest history of Gulf red snapper begins in Pensacola. Commercial snapper fishing in the Gulf dates to the 1840s, and for roughly ninety years the center of the industry sat on the Florida panhandle. The vessels were sailing \"smacks\" — schooners with live wells large enough to hold five or six thousand pounds of fish. The name came from the sound of water slapping inside the wells against the hull. At the industry's height, forty-eight smacks sailed from Pensacola.",
+          "The Western Gulf came to the snapper story later. According to NOAA's baseline history of the Gulf red snapper fishery, peak landings-per-trip from U.S. coastal trips ran from about 1900 to 1915; trips to the Campeche Bank off the Yucatán peaked between 1910 and 1930. The commercial fishery did not expand to the outer continental shelf waters off Louisiana and Texas until after 1935 — when new rock ridges and snapper banks were charted, and when diesel engines made longer trips economical.",
+          "So when Port Aransas enters the story, it enters in the second and third acts. The island was a landing port. It was a shipping point. Eventually, after the Second World War, it was a fleet home. But the canonical image of the red snapper industry — weathered smacks at anchor in a working harbor, hold stuffed with two-foot fish — belongs to another town, on another Gulf coast.",
+        ],
+      },
+      {
+        heading: "A Narrow-Gauge Fishery",
+        body: [
+          "What made commercial fish landings viable anywhere on the Gulf coast was not seamanship. It was infrastructure. When ice became commercially available and trains could haul it — and haul fish out — longer voyages became profitable, and small ports could suddenly participate in a regional market. Port Aransas got both at once. The Corpus Christi, San Diego and Rio Grande Narrow Gauge Railroad reached the island in 1888. The post office opened the same year, under the name Ropesville.",
+          "Before the rail there was Robert Ainsworth Mercer, who had landed on the island in 1855 and set up El Mar Rancho, the Mercer docks, and the first general store. The Mercer docks were the island's Gulf-to-mainland shipping hub for decades. After the rail reached the island, the town renamed itself Tarpon — in 1896, after the sport fish — then renamed itself again in 1911, finally settling on Port Aransas.",
+          "The earliest commercial export from the island was not snapper. It was not shrimp, either. It was live sea turtles, weighing up to five hundred pounds each, shipped by rail to markets across the South. That trade ran through the turn of the century and then collapsed, and it has been largely forgotten in the local memory. A different trade — the one that endured — grew up in its place.",
+          "The Aransas Harbor Terminal Railway, chartered on June 13, 1892, was a ten-mile line from Aransas Harbor across Harbor Island to Mustang Island. It was built primarily for jetty construction, oil, and cotton, not for fish. But the docks and rails and storage it created were the structural bones of a commercial port, and what the commercial snapper fishery needed most was a structural bone yard to land on.",
+        ],
+        fact: [
+          { label: "Mercer lands on the island", value: "1855" },
+          { label: "Rail reaches the island", value: "1888" },
+          { label: "Town renamed Tarpon", value: "1896" },
+          { label: "Town renamed Port Aransas", value: "1911" },
+          { label: "Population, 1925", value: "50" },
+          { label: "Population, 1931", value: "300" },
+        ],
+      },
+      {
+        heading: "The Industrial Decade",
+        body: [
+          "The snapper fleet that mattered to Port Aransas was the one that showed up after the Second World War. The war had drafted mariners, rationed fuel and steel, and paused civilian boat-building. It also left behind cheap surplus diesel engines, and it was the diesel conversions of older hulls — and the new-build diesel boats that followed — that actually put Port Aransas on the commercial red snapper map. Gulf-wide, commercial landings climbed through the 1950s and 1960s, and by 1971 the U.S. Gulf red snapper fishery hit its all-time peak landings.",
+          "The Port Aransas waterfront that sat under this peak was a working industrial port, not a tourist harbor. By the 1940s, Port Aransas was the nation's twelfth-largest oil shipping port. Shrimp boats, snapper boats, and oil infrastructure shared the channel. The shrimp fleet was by far the larger of the two fishing fleets — Gulf-wide shrimping effort rose from roughly 100,000 days fished per year in 1960 to about 200,000 days by 1978 — and the visual signature of the harbor was shrimp booms and nets, not hook-and-line snapper boats.",
+          "The civic institutions that anchored the fleet in this era are the ones you can still recognize. Farley Boat Works, founded in 1915 by Fred Farley, was primarily a tarpon-boat builder but was the most important boatyard on the island. The Silver King Cafe opened on the present-day Fisherman's Wharf site in January of 1929 and was renamed Matthew's Place in 1933, paired with a fishing guide service and tackle shop. The Deep Sea Roundup — first held in 1932, and run every year since except for the Second World War and the 2020 pandemic — was organized by twenty-five captains who called themselves the Boatmen Association. In 1950, the Port Aransas–Harbor Island ferry service opened, and the number of visitors a commercial-fishing family could feed rose with it.",
+          "It is a small and somewhat haunting coincidence that the all-time peak of U.S. Gulf red snapper landings — 1971 — is also the year the Port Aransas South Jetty was founded. The paper's first issues appeared in the same season as the fishery's last undisturbed year. Everything after 1971 is a different story.",
+        ],
+        pullQuote: {
+          text: "The all-time peak of U.S. Gulf red snapper landings — 1971 — is the same year the Port Aransas South Jetty was founded.",
+        },
+      },
+      {
+        heading: "Flags in the Channel",
+        body: [
+          "The first sign that the fishery was in trouble was not on the snapper boats. It was on the shrimp boats. By the late 1980s, federal assessments pointed to the loss of juvenile red snapper — age zero and age one fish, the ones that would have grown into the spawning population — as the primary driver of the stock's collapse. The cause was shrimp trawl bycatch. Historically, shrimpers pulled up about ten pounds of assorted fish for every pound of shrimp they kept. Most of the assorted fish were young snapper. No amount of commercial snapper restraint was going to rebuild a population being killed as a byproduct before it ever reached a hook.",
+          "The federal response was Turtle Excluder Devices — hard grates installed in shrimp nets that allowed large bycatch, including turtles, to escape — and a set of related bycatch-reduction rules for the shrimp fleet. Shrimpers resisted. On July 22, 1989, fifty or sixty Gulf shrimp boats anchored in the main commercial channel at Port Aransas, some flying skull-and-crossbones flags, as part of a Gulf-wide blockade coordinated by the 2,000-member Concerned Shrimpers of America. Several hundred boats blocked channels along the Texas and Louisiana coast. In Port Aransas, two men in a pleasure craft threw a foreign object through the window of a forty-one-foot Coast Guard cutter.",
+          "The blockade was real, and local, and it lasted days. It is one of the most dramatic civic episodes the harbor has seen in the last forty years, and it has almost entirely disappeared from the travel-facing version of the island's story. The uncomfortable subtext was this: the regulatory pressure that would soon fall hardest on the commercial snapper fleet was, in the first instance, driven by the environmental damage of a different fleet sharing the same water.",
+        ],
+      },
+      {
+        heading: "Fifty-One / Forty-Nine",
+        body: [
+          "In 1977, a decade before the TED blockade, federal regulators had already declared Gulf red snapper overfished. In 1984, the Gulf of Mexico Fishery Management Council — based in Tampa, Florida and established under the 1976 Magnuson-Stevens Fishery Conservation and Management Act — set its first minimum size limit: twelve inches. The first formal stock assessment, in 1988, confirmed what commercial captains already knew from their trip totals: the population was overfished and was still undergoing overfishing. By 1990, spawning potential for Gulf red snapper had dropped to two percent of its unfished historical level.",
+          "The Council's answer, in 1990, was Reef Fish Amendment 1. It set the first annual commercial quota — 3.1 million pounds — and it drew the most consequential line in Gulf fisheries management since the creation of Magnuson-Stevens itself. Based on landings data from 1979 to 1987, the Amendment allocated fifty-one percent of the Gulf red snapper catch to the commercial sector and forty-nine percent to the recreational sector. The 51/49 split would become the most-fought-over number in Gulf fisheries politics for the next thirty years. It has been upheld by federal courts, challenged repeatedly in Council meetings, survived multiple amendments, and still governs, in its basic form, who can catch how much.",
+        ],
+        fact: [
+          { label: "First overfished declaration", value: "1977" },
+          { label: "First federal size limit", value: "1984 (12 in.)" },
+          { label: "First commercial quota", value: "1990 (3.1M lbs)" },
+          { label: "Commercial / recreational split", value: "51% / 49%" },
+          { label: "Spawning potential, 1990", value: "2% of unfished level" },
+        ],
+      },
+      {
+        heading: "A Stroke of the Pen",
+        body: [
+          "Through the 1990s the regime tightened. The Sustainable Fisheries Act of 1996 amended Magnuson-Stevens to require separate, enforceable quotas for commercial and recreational fishing, along with hard rebuilding deadlines. In 1998, the federal minimum size rose from fourteen inches to fifteen. Season closures — first short, then long — phased in through the decade. Annual stock assessments were conducted in almost every year from the late 1980s forward.",
+          "Captain Kelly Owens bought Deep Sea Headquarters at 440 W. Cotter Road in Port Aransas in 1996, and his account of the period, as told to the South Jetty, is the plainest local record of what changed. When he took the business over, the red snapper season was open year-round. Within two or three years, it was closed for two months. Then four. Then six. The winter snapper fishery that had been part of the island's trade for a half-century — the reason a working boat could keep running crew through the cold months — was erased by a small number of rulemakings in Washington.",
+          "\"This was a good winter fishery,\" Owens told the paper. \"With a stroke of the pen they took that away.\"",
+        ],
+        pullQuote: {
+          text: "\"This was a good winter fishery. With a stroke of the pen they took that away.\"",
+          attribution: "Capt. Kelly Owens, Deep Sea Headquarters, on the closure of the year-round red snapper season",
+        },
+      },
+      {
+        heading: "Two Thousand Seven",
+        body: [
+          "In 2007, NOAA Fisheries implemented Reef Fish Amendment 26 — the Gulf Individual Fishing Quota program. It was the first catch-share regime in the Gulf of Mexico. Commercial fishermen received IFQ shares based on their documented historical catch. Each share entitled the holder to an annual pound allocation that could be fished, leased, or sold. During the program's first five years, shares could only be transferred between holders of a valid commercial reef fish permit; after 2012, any U.S. citizen or permanent resident could hold them.",
+          "The program arrived simultaneously with a large quota cut. The combined commercial and recreational quota was reduced from 9.12 million pounds in 2006 to 5.0 million pounds in 2008 — a 45 percent cut in two years. The recreational bag limit dropped from five fish to two. The federal season compressed to a three-month window in 2008 and, in subsequent years, to a few weekends.",
+          "What the IFQ was meant to do was rebuild the population. By most measures, it did. Red snapper abundance recovered faster than even optimistic projections. What the IFQ also did — and what academic analysis confirmed by the program's fifth year — was consolidate the commercial fishery in ways that changed its character. By 2014, twenty-nine percent of Gulf red snapper quota was held by shareholders who did not hold a commercial reef fish permit. Thirty-nine percent of actual red snapper landings came from vessels whose operators had leased quota rather than owning it. The IFQ had, in effect, created a tier of absentee owners — quota landlords — collecting rent from working captains.",
+        ],
+      },
+      {
+        heading: "Texas Gets Its Six Percent",
+        body: [
+          "The commercial-versus-recreational allocation argument, meanwhile, metastasized into a set of federal lawsuits and a set of federal amendments. In 2015, the Gulf Council passed Amendment 40 — \"sector separation\" — by a ten-to-seven vote, splitting the recreational allocation into federal for-hire (charter) and private-angling components. Four of the five Gulf states opposed the amendment. The Coastal Conservation Association, a Texas-born organization with its roots in Houston, sued to stop it. The suit failed in federal district court in Louisiana, and the Fifth Circuit affirmed.",
+          "Part of the Fifth Circuit's reasoning was simple numerical honesty. The recreational sector, the court noted, had exceeded its quota in every year from 1991 through 2005, from 2007 through 2009, and from 2011 through 2013. A management system that lets one side overrun its allocation year after year while the other side stays within it is unstable by design. Amendment 40 was an attempt to stabilize it.",
+          "In December 2018, Congress passed the Modern Fish Act. The Gulf Council followed with Amendment 50, delegating state management of private recreational red snapper to each of the five Gulf states. The allocation split now runs Florida 44.822 percent, Alabama 26.298 percent, Louisiana 19.120 percent, Texas 6.211 percent, Mississippi 3.550 percent. Texas's share is small by federal share-of-shelf-water logic, but the state compensates by keeping its own state waters — which reach only nine nautical miles offshore — open year-round at four fish per day, fifteen-inch minimum. Texas Parks and Wildlife requests a federal closure off the Texas coast once the state quota is landed, which happens now every summer.",
+          "For Port Aransas specifically, Amendment 40 was, on net, a help. Most of the island's modern captains run for-hire charters rather than private boats, and the sector-separation split generally protected their season length. But the arithmetic created intense anti-federal sentiment among the private Texas anglers who trailer boats to the island every summer. It is a social fault line the harbor lives with to this day, and one no local captain will volunteer an opinion on in front of strangers.",
+        ],
+      },
+      {
+        heading: "What the Fleet Looks Like Now",
+        body: [
+          "Three operators anchor the modern Port Aransas deep-sea fleet. Fisherman's Wharf, descended from the 1929 Silver King Cafe and Matthew's Place, runs headboats and offshore trips on the Wharf Cat and Scat Cat. Deep Sea Headquarters, on West Cotter Road, operates a five-vessel fleet under Captain Kelly Owens: the Gulf Eagle (custom-built, the largest), the Kingfisher (a forty-person party boat), the Pelican (a seventy-foot private charter), the Scarlet Lady (a catamaran running dolphin tours), and the Red Dragon (a pirate cruise). Dolphin Docks operates the Dolphin and Dolphin Express headboats alongside La Pesca, Capt. Paul, and Flipper, offering shared four-, five-, eight-, and twelve-hour charters and long-range \"safari\" trips of thirty to sixty hours.",
+          "The captains who work these docks are the named inheritors of the post-1971 adaptation. Kelly Owens runs Deep Sea HQ. Keith Schoolcraft runs the Gulf Eagle headboat. Nate Forbes runs Iced Down, a thirty-eight-foot Bertram. Marvin Horner has run the New Pelican headboat out of Port A for more than thirty-three years. Asked by the South Jetty about current conditions, Horner's answer was the opposite of what the decade's headlines would predict: \"There's more snapper here now. More snapper out there than I've ever seen in my life.\"",
+          "Since 1992, proceeds from the Deep Sea Roundup — founded by the Boatmen Association ninety-four years ago — have funded a scholarship program that has awarded more than $200,000 to over 150 local students. The tournament that was a civic ritual older than most of the federal regulations now governing the fishery has quietly turned into the island's longest-running community investment.",
+          "The commercial tension is not fully gone. Texas Parks and Wildlife's patrol vessel, the Captain Murchison, has recovered more than 60,000 feet of illegal long lines off the South Texas coast since the mid-2000s. Illegal long-lining is precisely the kind of activity that the IFQ system was meant to make unnecessary — a sign that regulated scarcity, even in recovery, still produces black-market pressure.",
+          "And the fleet has had to absorb the other great modern disruption. On August 25, 2017, Hurricane Harvey made landfall near Port Aransas as a Category 4 storm with 130-mile-per-hour winds, generating roughly $1 billion in damage and affecting 100 percent of the island's businesses and 85 percent of its homes. Woody's Sports Center owner and former mayor Glenn Martin took out $300,000 in personal loans to keep his tackle and charter-accessory business open. The 2017 and most of the 2018 charter seasons were carried on debt and grit.",
+        ],
+        pullQuote: {
+          text: "\"There's more snapper here now. More snapper out there than I've ever seen in my life.\"",
+          attribution: "Capt. Marvin Horner, New Pelican headboat, 33+ years running Port A headboats",
+        },
+      },
+      {
+        heading: "Adaptation",
+        body: [
+          "The island was never the Gulf's red snapper capital. Pensacola was. At its peak, the Pensacola smack fleet was bigger than Port Aransas's entire population. What Port Aransas had instead was structure — a rail connection, a harbor, a population of working captains — and a willingness to adjust when the water changed. The sea turtle trade collapsed. The schooners gave way to diesel. The winter snapper season was closed. The quotas split and re-split. The shrimpers blockaded the channel. The charter fleet rose alongside the commercial fleet and, eventually, surpassed it. A hurricane took the island apart and the charter captains rebuilt it on borrowed money.",
+          "What is left of the commercial red snapper fleet in Port Aransas today is not a dock full of working boats. It is a quota file in a federal database, a set of leased allocations, and a handful of captains who still remember buying their business when the season was open year-round. What is not left is more interesting than what is. Farley Boat Works no longer builds boats commercially. The Aransas Harbor Terminal Railway ran its last train in 1947. The five-hundred-pound sea turtles have been gone for a century. The schooners never came at all.",
+          "What is left, and what the island has quietly turned into its defining economic identity, is the fishing trip itself — the Gulf Eagle pulling out of its slip at dawn, the Deep Sea Roundup's ninety-fourth annual weigh-in on the courthouse lawn every July, a scholarship fund built on entry fees, and a charter captain who can stand on his dock and say, truthfully, that there is more snapper in the Gulf today than there has been in his lifetime.",
+          "A working port adapts. The fish stopped being what the port sold. The access to the fish became what the port sold instead. That, more than any single amendment or any single boat, is how Port Aransas got from the narrow-gauge 1880s to the charter fleet of the 2020s. It is a long ride by any measure.",
+        ],
+      },
+    ],
+
+    sources: [
+      { label: "NOAA Fisheries — History of Management of Gulf of America Red Snapper", url: "https://www.fisheries.noaa.gov/southeast/sustainable-fisheries/history-management-gulf-america-red-snapper" },
+      { label: "NOAA Fisheries — Baseline of the Gulf of Mexico Red Snapper Fishery 1874–1986", url: "https://www.fisheries.noaa.gov/inport/item/56147" },
+      { label: "NOAA Fisheries — Gulf of Mexico Reef Fish Historical Amendments and Rulemaking (1983–2017)", url: "https://www.fisheries.noaa.gov/action/gulf-mexico-reef-fish-historical-amendments-and-rulemaking-1983-2017" },
+      { label: "Gulf of Mexico Fishery Management Council — Reef Fish Amendment 26 (IFQ)", url: "https://gulfcouncil.org/amendments/reef-fish-amendment-26/" },
+      { label: "Solís, del Corral, Perruso & Agar — \"The Gulf of Mexico Red Snapper IFQ Program: The First Five Years,\" Marine Resource Economics 29(2), 2014", url: "https://www.journals.uchicago.edu/doi/10.1086/676825" },
+      { label: "Coastal Conservation Association v. U.S. Department of Commerce (5th Cir., on Amendment 40)", url: "https://caselaw.findlaw.com/us-5th-circuit/1765986.html" },
+      { label: "NOAA Fisheries — Amendment 50A–F State Management Program", url: "https://www.fisheries.noaa.gov/action/amendment-50a-f-state-management-program-recreational-red-snapper" },
+      { label: "Texas Parks & Wildlife — Red Snapper regulations", url: "https://tpwd.texas.gov/regulations/outdoor-annual/fishing/saltwater-fishing/red-snapper" },
+      { label: "Texas State Historical Association — Port Aransas, TX", url: "https://www.tshaonline.org/handbook/entries/port-aransas-tx" },
+      { label: "Texas State Historical Association — Aransas Harbor Terminal Railway", url: "https://www.tshaonline.org/handbook/entries/aransas-harbor-terminal-railway" },
+      { label: "Port Aransas Preservation & Historical Association — History of the Island", url: "https://portaransasmuseum.org/history-of-the-island/" },
+      { label: "Port Aransas South Jetty — \"The rap on snapper caps\"", url: "https://www.portasouthjetty.com/articles/the-rap-on-snapper-caps/" },
+      { label: "Port Aransas Deep Sea Roundup (official site)", url: "https://roundup.portasouthjetty.com/" },
+      { label: "UPI Archives — \"Shrimpboats blockade pass to protest turtle devices\" (July 22, 1989)", url: "https://www.upi.com/Archives/1989/07/22/Shrimpboats-blockade-pass-to-protest-turtle-devices/4735617083200/" },
+      { label: "Hart, Primrose, Nance & Williams — \"Changes in Shrimping Effort in the Gulf of Mexico and the Impacts to Red Snapper\" (PMC)", url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC7240115/" },
+      { label: "Florida Public Archaeology Network — \"Talking Smack: The Sailing Vessels of Pensacola's Red Snapper Fishing Industry\"", url: "https://www.fpan.us/presentations/talking-smack-the-sailing-vessels-of-pensacolas-red-snapper-fishing-industry/" },
+      { label: "Deep Sea Headquarters — fleet page", url: "https://deepseaheadquarters.com/our-fleet/" },
+      { label: "Fisherman's Wharf Port Aransas", url: "https://www.fishermanswharfporta.com/" },
+      { label: "Dolphin Docks Deep Sea Fishing", url: "https://dolphindocks.com/" },
+      { label: "Houston Public Media — \"Harvey damaged 100 percent of Port Aransas businesses, but the island town is working its way back\"", url: "https://www.houstonpublicmedia.org/articles/news/2018/08/20/300865/harvey-damaged-100-percent-of-port-aransas-businesses-but-the-island-town-is-working-its-way-back/" },
+    ],
+
+    visitToday: [
+      { place: "Deep Sea Roundup weigh-in", detail: "Held annually the second week of July at the Port Aransas Civic Center and harbor. The ninety-fourth edition of the tournament that the Boatmen Association started in 1932. Scholarship proceeds have topped $200,000 since 1992." },
+      { place: "Fisherman's Wharf", detail: "Current working dock at the site of the 1929 Silver King Cafe and 1933 Matthew's Place. Headboats, offshore snapper trips, and the Wharf Cat / Scat Cat run from here." },
+      { place: "Deep Sea Headquarters", detail: "440 W. Cotter Road. Captain Kelly Owens's five-vessel fleet — Gulf Eagle, Kingfisher, Pelican, Scarlet Lady, Red Dragon — works the post-IFQ federal season April through October." },
+      { place: "Port Aransas Museum", detail: "The PAPHA collection holds the primary visual record of the island's commercial fleet era — photographs, gear, oral histories. The commercial side is less celebrated than the tarpon side, but the archive is there.", slug: "port-aransas-museum" },
+    ],
+  },
 };

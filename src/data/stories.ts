@@ -421,12 +421,8 @@ export const stories: Story[] = [
     icon: "🐟",
     readTime: "10 min",
     featured: true,
-    // Temporarily unpublished — story content coming in a follow-on commit
-    // once background research agent completes. Cross-linked bidirectionally
-    // from tarpon-era / deep-sea-roundup / port-aransas-jetties / red-tide-utmsi
-    // / farley-boat-works — those relatedStories filters ignore unpublished entries.
-    published: false,
-    date: "2026-04-23",
+    published: true,
+    date: "2026-04-24",
     tags: [
       "red snapper",
       "commercial fishing",
