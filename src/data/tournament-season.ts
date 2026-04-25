@@ -94,25 +94,25 @@ export const seasonMembers: SeasonMember[] = [
   {
     name: "Texas Legends Billfish Tournament",
     alias: "Texas Legends",
-    detailHref: null,
+    detailHref: "/events/texas-legends-billfish-2026",
     icon: "🎣",
     positioning:
       "The biggest purse on the Texas Gulf Coast — a Triple Crown circuit anchor.",
     founded: 2010, // approximate — confirm closer to event
-    sanctioning: "Texas Legends (independent)",
-    dates2026: "Early August (TBD — 2025 was Aug 6–10)",
+    sanctioning: "Texas Legends (independent) · Dee Wallace, co-tournament director",
+    dates2026: "August 6–10, 2026",
     divisions:
-      "Billfish + offshore species, calcuttas, jackpots.",
+      "3 species — Blue Marlin (weighed or released), White Marlin (release), Sailfish (release).",
     scoring:
-      "Catch-and-release billfish with weighted points; large cash purse + jackpots stacked across categories.",
+      "Points by species (weight-or-release for blue marlin; release-only for white marlin and sailfish). Mandatory + optional cash pools stack on top of points.",
     beneficiary:
-      "Tournament-funded prizes; portions of fees historically support local charities.",
+      "Tournament-funded prize purse (no central charity); portions of fees historically support local causes.",
     scaleSignal:
-      "$800,000+ in prize money in recent editions. One of three legs of the Texas Triple Crown Billfish Series (with Lone Star Shootout in Port O'Connor and TIFT in South Padre Island).",
+      "$800,000+ in prize money. One of three legs of the Texas Triple Crown Billfish Series (with Lone Star Shootout in Port O'Connor and TIFT in South Padre Island, since 2020).",
     cultureNote:
-      "The big-money one. Multi-million-dollar offshore yachts, professional captains, serious leaderboard battles. Triple Crown points feed a season-long champion.",
+      "The big-money one. Multi-million-dollar offshore yachts, professional captains, serious leaderboard battles. Dee Wallace runs it — Texas Saltwater Fishing Hall of Famer who wrote the billfish release verification protocol now used coast-wide.",
     viewingNotes:
-      "Public weigh-in at Fisherman's Wharf evenings. Check official site for 2026 dates + schedule.",
+      "Public weigh-ins at Fisherman's Wharf each evening Wed–Sat. Saturday is the most-watched. Sunday awards at the Wharf, 1 PM.",
     officialUrl: "https://www.txlegends.com/",
   },
   {

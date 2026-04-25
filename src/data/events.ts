@@ -179,6 +179,39 @@ export const events: EventDetails[] = [
       donateUrl: "https://purpledoortx.org/donate/",
     },
   },
+  {
+    slug: "texas-legends-billfish-2026",
+    name: "Texas Legends Billfish Tournament 2026",
+    tagline:
+      "$800,000+ in prize money. The biggest billfish tournament in Port Aransas. One leg of the Texas Triple Crown.",
+    description:
+      "The Texas Legends Billfish Tournament — Port Aransas's premier offshore tournament. August 6–10, 2026. $800,000+ in prize money split across mandatory + optional billfish pools and blue marlin pools. Boats may depart any Texas port; all weigh-ins and video releases verified at Fisherman's Wharf, Port Aransas. Dee Wallace, lifelong Port Aransan and Texas Saltwater Fishing Hall of Fame inductee, runs it as co-tournament director. One of three legs of the Texas Triple Crown Billfish Series — with Lone Star Shootout (Port O'Connor) and TIFT (South Padre Island).",
+    startISO: "2026-08-05T17:00:00-05:00",
+    endISO: "2026-08-09T22:00:00-05:00",
+    dateLabel: "August 6–10, 2026",
+    headlineTime: "Weigh-ins at Fisherman's Wharf · final day Saturday Aug 8",
+    venueName: "Fisherman's Wharf, Port Aransas (HQ)",
+    venueAddress: "900 Tarpon St, Port Aransas, TX 78373",
+    coordinates: [27.8338, -97.0623],
+    cost: "Spectators free · Anglers register",
+    icon: "🎣",
+    featured: true,
+    published: true,
+    hostBusinessSlug: undefined,
+    hostName: "Texas Legends Billfish Tournament — Dee Wallace, co-tournament director",
+    tags: [
+      "Texas Legends",
+      "billfish",
+      "blue marlin",
+      "white marlin",
+      "sailfish",
+      "Triple Crown",
+      "Port Aransas",
+      "Fisherman's Wharf",
+      "Dee Wallace",
+      "tournament coverage",
+    ],
+  },
 ];
 
 export function getEventBySlug(slug: string): EventDetails | undefined {

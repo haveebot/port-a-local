@@ -197,6 +197,190 @@ export interface TournamentResults {
 }
 
 export const tournamentResults: Record<string, TournamentResults> = {
+  "texas-legends-billfish-2026": {
+    eventSlug: "texas-legends-billfish-2026",
+    edition: "2026 edition",
+    sanctioningOrg: "Texas Legends Billfish Tournament",
+    sanctioningOrgNote:
+      "Independent tournament headquartered at Fisherman's Wharf, Port Aransas. Co-directed by Dee Wallace (Texas Saltwater Fishing Hall of Fame). One of three legs of the Texas Triple Crown Billfish Series alongside Lone Star Shootout (Port O'Connor) and TIFT (South Padre Island).",
+    divisions: [
+      {
+        slug: "blue-marlin",
+        name: "Blue Marlin (Weighed or Released)",
+        short:
+          "The marquee species. Can be weighed at the dock OR released and verified by video.",
+        rules:
+          "Blue marlin caught and released score points; blue marlin brought to the scale also score and qualify for the optional blue marlin pools. Released fish require frame-by-frame video verification per the Wallace protocol — angler in frame, leader visible, hook position confirmed.",
+        scoring: "release",
+      },
+      {
+        slug: "white-marlin",
+        name: "White Marlin (Release Only)",
+        short: "Catch-and-release only. Points by count.",
+        rules:
+          "Release-only. Video verification required. Each verified white marlin release scores per the official points matrix.",
+        scoring: "release",
+      },
+      {
+        slug: "sailfish",
+        name: "Sailfish (Release Only)",
+        short: "Catch-and-release only. Points by count.",
+        rules:
+          "Release-only. Video verification required. Each verified sailfish release scores per the official points matrix.",
+        scoring: "release",
+      },
+    ],
+    specialAwards: [
+      {
+        name: "Top Boat (Overall Points)",
+        description:
+          "Highest total points across blue marlin (weighed or released), white marlin (release), and sailfish (release). The marquee trophy.",
+        eligibility: "All registered boats.",
+      },
+      {
+        name: "Top Angler",
+        description:
+          "Highest individual angler points across the field.",
+        eligibility: "All registered anglers.",
+      },
+      {
+        name: "Triple Crown Points",
+        description:
+          "Cumulative points from Texas Legends + Lone Star Shootout (Port O'Connor) + TIFT (South Padre Island) crown the Grand Champion of the Texas Gulf Coast at the end of the season.",
+        eligibility: "Boats fishing all three Triple Crown legs.",
+      },
+      {
+        name: "Mandatory + Optional Pools",
+        description:
+          "Mandatory billfish pool ($1,000). Optional billfish pools ($2K / $4K / $6K) and optional blue marlin pools ($2K / $4K / $6K) stack on top — anglers pick their exposure level. The bigger the pool, the bigger the check.",
+        eligibility: "Per-pool opt-in.",
+      },
+    ],
+    leaderboards: {
+      "blue-marlin": {
+        divisionSlug: "blue-marlin",
+        entries: [],
+        status: "Lines-in is Thursday, Aug 6 at first light",
+      },
+      "white-marlin": {
+        divisionSlug: "white-marlin",
+        entries: [],
+        status: "Lines-in is Thursday, Aug 6 at first light",
+      },
+      sailfish: {
+        divisionSlug: "sailfish",
+        entries: [],
+        status: "Lines-in is Thursday, Aug 6 at first light",
+      },
+    },
+    captains: [],
+    rules: {
+      edition: "2026 edition",
+      officialUrl: "https://www.txlegends.com/",
+      universal: [
+        "All boats may depart from any Texas port; all weigh-ins and releases must be verified at Fisherman's Wharf, Port Aransas.",
+        "Fish must be caught on IGFA conventional rod, reel, and leader, and boated by hand or gaff.",
+        "All billfish releases must be verified by video device — no exceptions. The 'Wallace protocol' (frame-by-frame angler / leader / hook verification) is the standard.",
+        "No frozen fish accepted at the scale.",
+        "Mandatory billfish pool ($1,000) is required for all entries; optional billfish + blue marlin pools at $2K / $4K / $6K stack on top per angler/boat election.",
+        "Live leaderboards run through the official Texas Legends Billfish app (Reel Time Apps).",
+        "Triple Crown points are awarded automatically based on Texas Legends finish and roll into the Series total.",
+      ],
+      divisionNotes: {
+        "blue-marlin": [
+          "Blue marlin can be weighed OR released. Weighed fish qualify for blue marlin pools and score per weight matrix.",
+          "Released blue marlin score per the points matrix and require video verification.",
+        ],
+        "white-marlin": [
+          "Release only. Each verified release scores per the points matrix.",
+        ],
+        sailfish: [
+          "Release only. Each verified release scores per the points matrix.",
+        ],
+      },
+    },
+    pastChampions: [
+      // 2024
+      {
+        year: 2024,
+        edition: "Aug 7–11, 2024",
+        division: "Overall",
+        category: "Top Boat",
+        angler: "Crew of Freebird (Owner: David Blackbird)",
+        boat: "Freebird",
+        notes:
+          "3,000 points overall. Crew released 4 blue marlin, 2 white marlin, and 7 sailfish across the tournament. Dominant performance.",
+        sourceUrl:
+          "https://www.reeltimeapps.com/live/tournaments/2024-texas-legends-billfish",
+      },
+      {
+        year: 2024,
+        edition: "Aug 7–11, 2024",
+        division: "Overall",
+        category: "4th Place",
+        angler: "Crew of Sigsbee Deep (Owner / Captain: Terrell Miller)",
+        boat: "Sigsbee Deep",
+        notes:
+          "Released 7 sailfish in the 2024 Texas Legends. Same crew was overall champ at the Pachanga that year (1,700 pts).",
+        sourceUrl:
+          "https://www.portasouthjetty.com/articles/sigsbee-deep-wins-texas-legends/",
+      },
+    ],
+    milestones: [
+      {
+        year: "2020",
+        label: "Texas Triple Crown formed",
+        value: "3 tournaments",
+        detail:
+          "Texas Legends + Lone Star Shootout (Port O'Connor) + TIFT (South Padre) banded together to crown a Grand Champion of the Texas Gulf Coast.",
+      },
+      {
+        year: "Recent",
+        label: "Prize purse",
+        value: "$800,000+",
+        detail:
+          "Total prize money across the mandatory and optional pools. Among the largest single-tournament purses on the Texas coast.",
+      },
+      {
+        year: "Standard",
+        label: "Wallace release protocol",
+        value: "Industry standard",
+        detail:
+          "Dee Wallace's frame-by-frame billfish release verification is now used by most Texas (and Gulf-wide) tournaments. Originated in his 21 years with the Deep Sea Roundup.",
+      },
+      {
+        year: "Today",
+        label: "HQ at Fisherman's Wharf",
+        value: "Port Aransas",
+        detail:
+          "Boats can depart from any Texas port — every catch returns to Fisherman's Wharf in Port A for video verification or the scale.",
+      },
+    ],
+    sources: [
+      {
+        label: "Texas Legends Billfish — official site",
+        url: "https://www.txlegends.com/",
+      },
+      {
+        label: "Reel Time Apps — TXL 2024 + 2025 leaderboards",
+        url: "https://www.reeltimeapps.com/live/tournaments/2025-texas-legends-billfish",
+      },
+      {
+        label: "Dee Wallace — Texas Saltwater Fishing Hall of Fame",
+        url: "https://txswfhof.com/dee-wallace/",
+      },
+      {
+        label:
+          "Port Aransas Museum (PAPHA) — Capt. Dee Wallace on fishing + sportfishing",
+        url: "https://portaransasmuseum.org/capt-dee-wallace-fishing-sportfishing/",
+      },
+      {
+        label: "Fisherman's Wharf — TXL tournament HQ",
+        url: "https://www.fishermanswharfporta.com/tournaments/texas-legends-billfish-tournament/",
+      },
+    ],
+  },
+
   "texas-women-anglers-tournament-2026": {
     eventSlug: "texas-women-anglers-tournament-2026",
     edition: "2026 (40+ years on)",

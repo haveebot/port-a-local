@@ -545,6 +545,207 @@ export const eventContent: Record<string, EventContent> = {
     },
   },
 
+  "texas-legends-billfish-2026": {
+    lede:
+      "Eight hundred thousand dollars in prize money. The biggest billfish tournament in Port Aransas. One of three legs of the Texas Triple Crown Billfish Series — with Lone Star Shootout in Port O'Connor and the Texas International Fishing Tournament (TIFT) in South Padre Island — that crowns the Grand Champion of the Texas Gulf Coast at the end of August. Boats can depart from any Texas port, but every weigh-in and every video-verified billfish release runs through Fisherman's Wharf in Port Aransas. Dee Wallace, who showed up as an eight-year-old Woody's dock boy in 1963 and was a licensed captain by twenty, runs it as co-tournament director. He also wrote the billfish release verification protocol that most tournaments on this coast now use.",
+    whatToExpect: [
+      "The Texas Legends format is offshore-only, billfish-focused, and pool-driven. Boats fish for blue marlin (weighed or released), white marlin (release), and sailfish (release) across three full days. Mandatory $1,000 billfish pool plus optional $2K / $4K / $6K billfish pools and matching $2K / $4K / $6K blue marlin pools — anglers stack their own jackpot exposure to whatever level they want.",
+      "Wednesday is the registration evening at Fisherman's Wharf — the captain's meeting plus a kickoff reception. Thursday morning is lines-in for the first fishing day. Friday and Saturday are the long days on the water; weigh-ins happen at the wharf each evening as boats return to verify their videos and put any blue marlin on the scale. Sunday is awards.",
+      "What you watch from shore: the Wharf in late afternoon as the offshore fleet pulls back into the channel, the live leaderboard ticking over as releases get logged via the official app, and the cleanest billfish-release verification operation on the Texas coast — Wallace's protocol, in motion. Every billfish caught requires video proof, frame-by-frame, before the points hit the board.",
+    ],
+    schedule: [
+      {
+        time: "Wed Aug 5 · evening",
+        label: "Registration + captain's meeting + kickoff reception",
+        body:
+          "Fisherman's Wharf headquarters. Boats register, pools are paid, captains review the year's rules with the tournament committee. Public welcome to the reception.",
+      },
+      {
+        time: "Thu Aug 6 · pre-dawn",
+        label: "Day 1 — lines in the water",
+        body:
+          "Boats may depart from any Texas port. Lines-in is set per the official rules — typically before sunrise. Long offshore day in pursuit of billfish.",
+      },
+      {
+        time: "Thu Aug 6 · evening",
+        label: "Day 1 weigh-in / video review",
+        body:
+          "Boats return to Fisherman's Wharf. Any blue marlin weighed; releases verified by video against the Wallace protocol. Leaderboard goes live on the app.",
+      },
+      {
+        time: "Fri Aug 7 + Sat Aug 8",
+        label: "Day 2 + Day 3 fishing + weigh-ins",
+        body:
+          "Same rhythm. Some boats run further offshore each day; others work the same proven grounds. Saturday evening is the most-watched weigh-in — final chance to climb the leaderboard before the cutoff.",
+      },
+      {
+        time: "Sun Aug 9 · 1 PM",
+        label: "Awards ceremony at Fisherman's Wharf",
+        body:
+          "Top boat, top angler, individual species champions, pool payouts, Triple Crown points awarded. Public welcome.",
+      },
+    ],
+    goodToKnow: [
+      {
+        label: "Watching is free",
+        detail:
+          "Fisherman's Wharf weigh-ins each evening are open to the public. Saturday evening is peak — most points scored, most boats returning. Bring a chair, walk the dock.",
+      },
+      {
+        label: "How the pools work",
+        detail:
+          "Mandatory billfish pool ($1,000) is required for all entries. Optional billfish pools at $2K / $4K / $6K and optional blue marlin pools at $2K / $4K / $6K stack on top — anglers pick their exposure level. The bigger pools pay the bigger checks.",
+      },
+      {
+        label: "Triple Crown points carry forward",
+        detail:
+          "Texas Legends is one of three legs (Lone Star Shootout in Port O'Connor + TIFT in South Padre Island). Cumulative points across all three crown the Grand Champion of the Texas Gulf Coast at the end of the season.",
+      },
+      {
+        label: "Where to watch",
+        detail:
+          "Fisherman's Wharf, 900 Tarpon St. Plan to be there by 5 PM Saturday for the most action. Roberts Point Park is right next door — easy parking and a short walk to the dock.",
+      },
+      {
+        label: "Tournament app",
+        detail:
+          "Live leaderboard runs through the Reel Time Apps platform — Texas Legends Billfish app on iOS + Android. Same backbone as TWAT and several other major billfish tournaments.",
+      },
+      {
+        label: "Video verification",
+        detail:
+          "Every billfish released must be verified by video — that's the Wallace protocol. No video, no points. The protocol is the standard most coastal tournaments now use.",
+      },
+    ],
+    faq: [
+      {
+        q: "Can I just show up to watch?",
+        a: "Yes. Weigh-ins at Fisherman's Wharf are public Wednesday evening through Saturday evening, and the Sunday awards ceremony is open to anyone who shows up. Bring a chair, a hat, and time.",
+      },
+      {
+        q: "Do all boats fish out of Port Aransas?",
+        a: "No. Boats may depart from any Texas port. Some run from Port O'Connor, Galveston, or even South Padre. But every catch — weighed or released — has to make it to Fisherman's Wharf in Port A for video verification or the scale. That's where points get scored.",
+      },
+      {
+        q: "What's the Wallace protocol?",
+        a: "Dee Wallace, the tournament's co-director, wrote the billfish release verification protocol that most Gulf Coast tournaments now use. Frame-by-frame video review of every billfish release — angler, fish, leader, hook position — before points are awarded. Fish swims away; the points get earned honestly.",
+      },
+      {
+        q: "What's the prize purse?",
+        a: "$800,000+ in recent editions, split across mandatory and optional pools. The pools stack — anglers pay into whichever pools they want exposure to, and the payouts grow with participation.",
+      },
+      {
+        q: "How does Triple Crown work?",
+        a: "Three Texas tournaments — Lone Star Shootout (Port O'Connor, July), Texas Legends (Port Aransas, early August), and TIFT (South Padre Island, late August) — joined forces in 2020. Cumulative points across all three name the Grand Champion of the Texas Gulf Coast at season's end.",
+      },
+      {
+        q: "How do I register to fish?",
+        a: "Through the official site at txlegends.com. Registration typically opens in spring; spots fill on a rolling basis.",
+      },
+    ],
+    hostBlurb: [
+      "Dee Wallace got off the boat in Port Aransas at age eight. His family arrived in 1963. By the time he was twenty he had a licensed captain's ticket — having worked his way up from a Woody's dock boy to a deckhand to the helm. He fished offshore for the next several decades and learned every named ledge and unnamed structure between Port A and the deepwater shelf.",
+      "In 2002 he came back home — full-time — to do three things: broker boats, direct tournaments, and keep fishing. He's now a board member of the Texas Legends Billfish Tournament and serves as its co-tournament director, with the tournament headquartered at Fisherman's Wharf where he holds the weighmaster role year over year. He's been inducted into the Texas Saltwater Fishing Hall of Fame.",
+      "His most consequential contribution might be invisible to anyone who hasn't fished a tournament: he wrote the billfish release verification protocol that's now standard practice across the Texas coast and beyond. Frame-by-frame video review of every billfish release — angler in frame, leader visible, hook position confirmed. He saw what was needed (the fish needed to swim away with the integrity of the release verifiable) and built the rules. Twenty-one years on the Deep Sea Roundup has given him the throughline; Texas Legends is where that work scales.",
+      "If you're standing on the wharf at 6 PM during tournament week and you see somebody quietly running the operation while everyone else is excited — that's probably Dee.",
+    ],
+    liveLog: [],
+    hostTimeline: [
+      {
+        year: "1963",
+        title: "Wallace family arrives in Port Aransas",
+        body:
+          "Dee is eight. Spends the rest of his childhood on the docks, in the channel, learning the island.",
+      },
+      {
+        year: "Teens",
+        title: "Woody's dock boy → deckhand",
+        body:
+          "Worked Woody's Last Stand from kid jobs up. The family-friend connection that runs through Port A's working waterfront.",
+      },
+      {
+        year: "Age 20",
+        title: "Licensed captain",
+        body:
+          "Earned the ticket. Started running offshore charters out of Port Aransas.",
+      },
+      {
+        year: "~Mid-1980s on",
+        title: "Deep Sea Roundup volunteer + organizer",
+        body:
+          "Twenty-one years of contribution. Took catch-release identification from Polaroid shots to video recording — the start of the verification protocol.",
+      },
+      {
+        year: "2002",
+        title: "Returns to Port Aransas full-time",
+        body:
+          "Boat broker, tournament director, weighmaster. Three jobs, one island.",
+      },
+      {
+        year: "Recent",
+        title: "Texas Saltwater Fishing Hall of Fame inductee",
+        body:
+          "Big Game Fishing track. The release-verification protocol is the contribution most-cited in the induction case.",
+      },
+      {
+        year: "Today",
+        title: "Co-tournament director, Texas Legends Billfish",
+        body:
+          "Board member + day-of director at Fisherman's Wharf. Three years running the tournament's tournament-week operations.",
+      },
+    ],
+    relatedHistory: {
+      href: "/history/deep-sea-roundup",
+      title: "Texas's Oldest Fishing Tournament",
+      blurb:
+        "The Heritage piece on the 1932 Tarpon Rodeo through today's Deep Sea Roundup. Wallace's twenty-one years inside DSR are part of why the modern release-verification protocol exists at all. Eight minutes, sourced.",
+    },
+    photoCTA: {
+      headline: "Got a Texas Legends photo? Send it.",
+      body: "Past tournaments, your boat at Fisherman's Wharf, a billfish video frame, the awards-night crowd, captain spotlights, anything that shows what tournament week actually looks like on the dock. We'll feature them leading up to August 6.",
+      secondaryBody: "Day-of, the same inbox loads release videos and weigh-in photos in real time. Tag the boat, the species, the day.",
+      mailSubject: "Texas Legends photo — TXL 2026",
+    },
+    liveCoverage: {
+      heading: "Live from the wharf",
+      emptyState:
+        "This page goes live as the first boats return to Fisherman's Wharf Thursday evening. Real-time leaderboard updates, billfish-release video stills as they're verified, top boat / top angler ticking over, and the Triple Crown points-implications all land here as they happen. If you're on the dock with a phone, send shots to hello@theportalocal.com — they go straight into the feed with credit.",
+    },
+    sources: [
+      {
+        label: "Texas Legends Billfish Tournament — official site",
+        url: "https://www.txlegends.com/",
+      },
+      {
+        label: "Texas Legends Billfish — official Facebook",
+        url: "https://www.facebook.com/txlegends/",
+      },
+      {
+        label: "Reel Time Apps — 2025 leaderboards + rules",
+        url: "https://www.reeltimeapps.com/live/tournaments/2025-texas-legends-billfish",
+      },
+      {
+        label: "Fisherman's Wharf — tournament HQ",
+        url: "https://www.fishermanswharfporta.com/tournaments/texas-legends-billfish-tournament/",
+      },
+      {
+        label:
+          "Dee Wallace — Texas Saltwater Fishing Hall of Fame profile",
+        url: "https://txswfhof.com/dee-wallace/",
+      },
+      {
+        label:
+          "Port Aransas South Jetty — Wallace HOF coverage",
+        url: "https://www.portasouthjetty.com/articles/wallaces-experience-expertise-earn-him-place-in-hall-of-fame/",
+      },
+      {
+        label:
+          "Capt. Dee Wallace at Port Aransas Museum (PAPHA) — talk on fishing + sportfishing",
+        url: "https://portaransasmuseum.org/capt-dee-wallace-fishing-sportfishing/",
+      },
+    ],
+  },
+
   "texas-women-anglers-tournament-2026": {
     lede:
       "Dozens of boats. Hundreds of women. One shelter. Pete Fox started the Texas Women Anglers Tournament in 1984 with the same idea his family still runs it on today — women fishing for women, with every dollar that doesn't go to the winners going to The Purple Door, the Coastal Bend's shelter for survivors of domestic violence and sexual assault. Forty-plus years and $130,000 later, the fishing is still real and the community is still the point. The Saturday weigh-in at Fisherman's Wharf — themed boats parading in (Candy Land, Wizard of Oz, Mardi Gras), full costumes, money sprayers, smoke machines, multi-million-dollar yachts turned into parade floats, beads thrown to the crowd, the kind of cheering you'd expect at actual Mardi Gras — pulls a bigger audience than several mega-money tournaments on this coast. The shirts are everywhere for a reason.",
