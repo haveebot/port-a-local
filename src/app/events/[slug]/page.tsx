@@ -12,6 +12,7 @@ import {
 import LighthouseMark from "@/components/brand/LighthouseMark";
 import { EmojiIcon } from "@/components/brand/PortalIcon";
 import EventCountdown from "@/components/EventCountdown";
+import EventOrganizerClaim from "@/components/EventOrganizerClaim";
 import type { Metadata } from "next";
 
 export function generateStaticParams() {
@@ -574,6 +575,9 @@ export default async function EventDetailPage({
           </div>
         </section>
       )}
+
+      {/* "Are you the organizer?" — claim/contact CTA */}
+      <EventOrganizerClaim eventSlug={event.slug} eventName={event.name} />
 
       {/* Signature seal */}
       <section className="py-16">
