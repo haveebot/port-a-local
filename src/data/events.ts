@@ -212,6 +212,41 @@ export const events: EventDetails[] = [
       "tournament coverage",
     ],
   },
+  {
+    slug: "billfish-pachanga-2026",
+    name: "The Billfish Pachanga 2026",
+    tagline:
+      "40 boats max. Catch-and-release only. The science-funding edition of Tournament Season.",
+    description:
+      "The Billfish Pachanga is Port Aransas's smallest-by-design marquee tournament — a 40-boat-cap, catch-and-release-only billfish event hosted at Virginia's on the Bay. Founded in 2019 by Virginia's co-owner Gabe Goodman. Mid-July 2026 (typically the 3rd weekend; 2025 was July 16–19). 100-nautical-mile fence from the tip of the south jetty — no chasing fish across the Gulf. Half the proceeds go to Harte Research Institute for Sportfish Science (Texas A&M University-Corpus Christi); the other half to the Port Aransas Scholarship fund. The tournament that funds the science of the fish it chases.",
+    startISO: "2026-07-15T17:00:00-05:00",
+    endISO: "2026-07-18T22:00:00-05:00",
+    dateLabel: "Mid-July 2026 (tentative — 2025 was July 16–19)",
+    headlineTime: "Wednesday check-in at Virginia's · 3 fishing days",
+    venueName: "Virginia's on the Bay (HQ)",
+    venueAddress: "815 Trout St, Port Aransas, TX 78373",
+    coordinates: [27.8396169, -97.0603272],
+    cost: "Spectators free · Anglers register (40-boat cap)",
+    icon: "🐟",
+    featured: true,
+    published: true,
+    hostBusinessSlug: "virginias-on-the-bay",
+    hostName: "The Billfish Pachanga — Gabe Goodman + Virginia's on the Bay",
+    tags: [
+      "Pachanga",
+      "billfish",
+      "blue marlin",
+      "white marlin",
+      "sailfish",
+      "catch and release",
+      "Virginia's on the Bay",
+      "Harte Research Institute",
+      "scholarship",
+      "limited field",
+      "Sport Fishing Championship",
+      "tournament coverage",
+    ],
+  },
 ];
 
 export function getEventBySlug(slug: string): EventDetails | undefined {

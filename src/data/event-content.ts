@@ -746,6 +746,193 @@ export const eventContent: Record<string, EventContent> = {
     ],
   },
 
+  "billfish-pachanga-2026": {
+    lede:
+      "Forty boats fish for three days, but the actual Pachanga is what happens after the lines come out of the water. Virginia's on the Bay shuts down its entire parking lot, brings in a headline band, and throws a real party for the awards ceremony — the kind that pulls Port A out of its houses on a Saturday night in July. \"Pachanga\" is Spanish for party, and the people running this one are locals who treat the name as a promise. The fishing is catch-and-release-only inside a 100-nautical-mile fence; co-founder Gabe Goodman launched it in 2019 from his own restaurant; eight years in, the purse hit $845K and roughly $50K a year goes to Harte Research Institute for Sportfish Science and the Port Aransas Scholarship Fund. The tournament that funds the science of the fish it chases — and the awards night that earns the name on the truck.",
+    whatToExpect: [
+      "Wednesday is check-in and registration at Virginia's on the Bay — the dockside restaurant that is also the tournament's full-time HQ. Cocktails and appetizers upstairs, captain's meeting on the deck, last pool entries paid. Most of the boats are already at the harbor for sea trials.",
+      "Thursday, Friday, and Saturday are the three fishing days. Boats fish the 100-mile fence — no farther than 100 nautical miles from the tip of the south jetty. Lines-in is per the official rules. Every billfish caught is released and verified by video; sailfish, white marlin, and blue marlin all release-only. Each evening boats return to Virginia's where the Sport Fishing Championship live-update coverage rolls in real time.",
+      "What's distinct on the water: the field cap. Texas Legends pays a bigger purse but doesn't cap the field. TWAT runs ~70 boats. DSR runs hundreds of fishermen across all divisions. Pachanga is intentionally smaller — meaning fewer boats fishing the same water, more accountable competition, and the tournament team can actually keep their arms around the operation. Most years it sells out.",
+      "What's distinct on shore: the awards night earns the name. Virginia's shuts down the entire parking lot Saturday for a full block-party setup — stage, headline band brought in for the night, food, drinks, and the boats' crews mixing with everyone in town who came for the music. It's hosted by locals, not a circuit production company, and it shows: less corporate, more actual party. The check presentations to Harte Research Institute and the Port Aransas Scholarship Fund happen on the same stage between sets.",
+    ],
+    schedule: [
+      {
+        time: "Wed afternoon",
+        label: "Check-in + registration at Virginia's on the Bay",
+        body:
+          "5–7 PM under a tent on Virginia's deck, then upstairs for cocktails and appetizers. Captain's meeting closes the night.",
+      },
+      {
+        time: "Thu morning",
+        label: "Day 1 — lines in the water",
+        body:
+          "Boats depart for the 100-mile fishing fence. Lines-in per official rules; release-only for all billfish; video required.",
+      },
+      {
+        time: "Thu evening",
+        label: "Day 1 wrap + Sport Fishing Championship live-update",
+        body:
+          "Boats return to Virginia's. Releases verified, leaderboard updates live on the Sport Fishing Championship platform.",
+      },
+      {
+        time: "Fri + Sat",
+        label: "Day 2 + Day 3 fishing + evening updates",
+        body:
+          "Same rhythm. Saturday is the most-watched evening at Virginia's — final pushes for points, last billfish releases of the tournament.",
+      },
+      {
+        time: "Sat night",
+        label: "The actual Pachanga — headline band + awards in the parking lot",
+        body:
+          "Virginia's shuts down its whole parking lot. A headline band is brought in for the night. Stage goes up, food and drinks flow, the crews mix with the town. Awards announced + check presentations to Harte Research Institute and the Port Aransas Scholarship Fund happen between sets. Open to anyone who shows up — this is the part you tell your friends about.",
+      },
+    ],
+    goodToKnow: [
+      {
+        label: "Field is capped at 40 boats",
+        detail:
+          "The only marquee Tournament Season tournament that turns boats away. Entries fill first-come; early registration discount typically through mid-June. If you're thinking about it, you're already late.",
+      },
+      {
+        label: "100-mile fence",
+        detail:
+          "All fishing must happen within 100 nautical miles of the south jetty's tip. Geographic boundary keeps the field on the same waters and the boats accountable to each other.",
+      },
+      {
+        label: "Catch-and-release only",
+        detail:
+          "Every billfish — blue marlin, white marlin, sailfish — is released. Video verification required. No fish goes to the scale.",
+      },
+      {
+        label: "Where to watch",
+        detail:
+          "Virginia's on the Bay, 815 Trout St. Each evening as boats return is the show — live updates on the screens, captains comparing notes, and the cooking is excellent (catch your own and Virginia's prepares it).",
+      },
+      {
+        label: "Saturday night is the actual Pachanga",
+        detail:
+          "Virginia's shuts down the entire parking lot for the awards night — full stage, headline band brought in, the kind of party that pulls the rest of Port A out of their houses for a Saturday in July. Awards announced + charity check presentations happen between sets. Open to anyone — this is the part most fishing tournaments don't have.",
+      },
+      {
+        label: "Sport Fishing Championship circuit",
+        detail:
+          "Pachanga is part of the Sport Fishing Championship platform — same live-update infrastructure used by major billfish tournaments across Florida and the Caribbean. Live coverage at sportfishingchampionship.com.",
+      },
+      {
+        label: "Where the money goes",
+        detail:
+          "Half of the tournament's giving goes to Harte Research Institute for Sportfish Science (Texas A&M University-Corpus Christi). The other half funds the Port Aransas Scholarship Fund. 2023 alone: $25K to Harte + $20K to PA Scholarship.",
+      },
+    ],
+    faq: [
+      {
+        q: "Can I just show up to watch?",
+        a: "Yes. Virginia's on the Bay is a public restaurant — the upstairs deck and bar are open during tournament evenings, and the live updates run on the screens. Get there by 5 PM Friday or Saturday for the best vibe.",
+      },
+      {
+        q: "Why is the field capped at 40?",
+        a: "Smaller field = more accountable competition + the team can actually run the operation tightly. Bigger tournaments with 80+ boats (Texas Legends) trade tightness for purse size; Pachanga goes the other way. Both choices work; Pachanga's choice is what makes it Pachanga.",
+      },
+      {
+        q: "What does 'Pachanga' mean?",
+        a: "Spanish for 'party.' The tournament has the energy to match — Virginia's deck, music, food, captains rotating in and out as the boats come back. Different tone from the Triple Crown gravity of Texas Legends; closer to TWAT's spectacle without the costumes.",
+      },
+      {
+        q: "Can I fish if I'm not from Texas?",
+        a: "Yes. Boats register from across the Gulf Coast and beyond. The 100-mile fence applies regardless of home port, but you have to register early — the cap is real.",
+      },
+      {
+        q: "Where do the donations actually go?",
+        a: "Harte Research Institute for Sportfish Science (Texas A&M University-Corpus Christi) — they study the same billfish populations Pachanga catches. And the Port Aransas Scholarship Fund — local kids going to college. Documented donation totals in the milestones panel below.",
+      },
+      {
+        q: "How do I register to fish?",
+        a: "Through billfishpachanga.com. Spots fill on a rolling basis once registration opens; early-bird discount usually runs through mid-June.",
+      },
+    ],
+    hostBlurb: [
+      "Pachanga is run by locals — not a circuit production company, not a national tournament series, not anyone parachuting in for a week. Virginia's on the Bay co-owner Gabe Goodman launched the inaugural edition July 17–20, 2019, and the team that has built it edition over edition is the same team running the restaurant year-round. That distinction shows up in the operations: tournament week feels like the staff hosting a big party at their own house, because that is functionally what is happening.",
+      "Virginia's itself has been a Port A waterfront fixture since 1996 — two-story open-air deck, harbor views, lighthouse and channel in the frame, and the bring-your-own-catch tradition that built its reputation. For three days a year, the deck becomes tournament HQ; for one Saturday night a year, the parking lot becomes a concert venue.",
+      "The two-beneficiary structure (Harte Research Institute for Sportfish Science + Port Aransas Scholarship Fund) is unusual on this coast — most tournaments pick one cause and stay there. Goodman's argument: the science protects the fishery; the scholarship protects the next generation of locals. Both are obligations the tournament owes to the place it runs in.",
+    ],
+    liveLog: [],
+    hostTimeline: [
+      {
+        year: "1996",
+        title: "Virginia's on the Bay opens",
+        body:
+          "The two-story waterfront restaurant at 815 Trout St becomes a Port A fixture. Bring-your-catch is a cornerstone of the menu from the start.",
+      },
+      {
+        year: "2019 (Jul 17–20)",
+        title: "Inaugural Billfish Pachanga",
+        body:
+          "Gabe Goodman launches the tournament out of Virginia's deck. Field capped at 40 boats, catch-and-release-only format, 100-mile fence — all from the start.",
+      },
+      {
+        year: "2023",
+        title: "$45K split to two beneficiaries",
+        body:
+          "$25,000 to Harte Research Institute for Sportfish Science. $20,000 to the Port Aransas Scholarship Fund. The two-charity model proves out at scale.",
+      },
+      {
+        year: "2024 (Jul 17–20)",
+        title: "Record $845K payout · Sigsbee Deep wins",
+        body:
+          "Anglers caught and released 187 billfish across 3 days (9 BM, 8 WM, 170 sailfish). Sigsbee Deep wins overall with 14 sailfish + 1 BM + 1 tuna + 1 dorado. Vamonos 2nd at 1,641 pts.",
+      },
+      {
+        year: "2026 (8th annual)",
+        title: "Mid-July (TBD on official site)",
+        body:
+          "Eighth edition. Same format. Same restaurant. Same 40-boat cap. Same two beneficiaries.",
+      },
+    ],
+    relatedHistory: undefined,
+    photoCTA: {
+      headline: "Got a Pachanga photo? Send it.",
+      body: "Virginia's deck during tournament week, your boat coming back at sunset, a billfish video frame, the awards-night check-presentation — anything from past Pachangas. We'll feature them leading up to July.",
+      secondaryBody: "Day-of, the same inbox loads release videos and dock-return shots in real time. Tag the boat, the species, the day.",
+      mailSubject: "Pachanga photo — Billfish Pachanga 2026",
+    },
+    liveCoverage: {
+      heading: "Live from Virginia's",
+      emptyState:
+        "This page goes live as the first boats return to Virginia's Thursday evening. Real-time leaderboard updates, billfish-release video stills as they're verified through the Sport Fishing Championship platform, and the deck-side energy at the restaurant all land here as they happen. If you're at Virginia's with a phone, send shots to hello@theportalocal.com — they go straight into the feed with credit.",
+    },
+    sources: [
+      {
+        label: "The Billfish Pachanga — official site",
+        url: "https://www.billfishpachanga.com/",
+      },
+      {
+        label: "Sport Fishing Championship — Pachanga 2025",
+        url: "https://sportfishingchampionship.com/events/billfish-pachanga-2025",
+      },
+      {
+        label: "Sport Fishing Championship — live updates feed",
+        url: "https://sportfishingchampionship.com/news/pachanga25-liveupdates",
+      },
+      {
+        label: "Virginia's on the Bay (host restaurant)",
+        url: "https://virginiasonthebay.com",
+      },
+      {
+        label: "Harte Research Institute for Sportfish Science",
+        url: "https://www.tamucc.edu/harte-research-institute/",
+      },
+      {
+        label:
+          "Port Aransas South Jetty — 'Sigsbee Deep is Pachanga champ' (2024 coverage)",
+        url: "https://www.portasouthjetty.com/articles/sigsbee-deep-is-pachanga-champ/",
+      },
+      {
+        label: "Port Aransas South Jetty — Pachanga set July 17–20 (founding-era coverage)",
+        url: "https://www.portasouthjetty.com/articles/billfish-pachanga-set-july-17-20/",
+      },
+    ],
+  },
+
   "texas-women-anglers-tournament-2026": {
     lede:
       "Dozens of boats. Hundreds of women. One shelter. Pete Fox started the Texas Women Anglers Tournament in 1984 with the same idea his family still runs it on today — women fishing for women, with every dollar that doesn't go to the winners going to The Purple Door, the Coastal Bend's shelter for survivors of domestic violence and sexual assault. Forty-plus years and $130,000 later, the fishing is still real and the community is still the point. The Saturday weigh-in at Fisherman's Wharf — themed boats parading in (Candy Land, Wizard of Oz, Mardi Gras), full costumes, money sprayers, smoke machines, multi-million-dollar yachts turned into parade floats, beads thrown to the crowd, the kind of cheering you'd expect at actual Mardi Gras — pulls a bigger audience than several mega-money tournaments on this coast. The shirts are everywhere for a reason.",

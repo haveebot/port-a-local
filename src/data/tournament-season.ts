@@ -70,25 +70,25 @@ export const seasonMembers: SeasonMember[] = [
   {
     name: "The Billfish Pachanga",
     alias: "Pachanga",
-    detailHref: null,
+    detailHref: "/events/billfish-pachanga-2026",
     icon: "🐟",
     positioning:
-      "The newest of the marquee four — limited-field, conservation-anchored billfish tournament.",
-    founded: 2018, // approximate — 2025 was 7th annual
-    sanctioning: "Independent (held at Virginia's on the Bay)",
-    dates2026: "Mid-July (TBD — 2025 was July 16–19)",
+      "The smallest-by-design marquee — 40 boats max, catch-and-release-only, hosted out of a restaurant.",
+    founded: 2019, // verified — first edition Jul 17-20, 2019
+    sanctioning: "Independent · founder Gabe Goodman, hosted at Virginia's on the Bay",
+    dates2026: "Mid-July 2026 (tentative — 2025 was July 16–19)",
     divisions:
-      "Billfish + standard offshore species, capped to 40 boats.",
+      "3 billfish species — Blue Marlin, White Marlin, Sailfish (all release-only). Field capped at 40 boats.",
     scoring:
-      "Catch-and-release for billfish with verification protocol; weighted scoring across the field.",
+      "Release-only points across blue marlin, white marlin, sailfish. Video verification required.",
     beneficiary:
-      "Harte Research Institute for Sportfish Science + Port Aransas Scholarship Fund.",
+      "Harte Research Institute for Sportfish Science (TAMU-CC) + Port Aransas Scholarship Fund. $45K+ given in 2023.",
     scaleSignal:
-      "7th annual edition by 2025. Field strictly capped at 40 boats — the only marquee tournament that turns boats away.",
+      "$845,000 record payout in 2024. 187 billfish released across 3 days. 40-boat field strictly capped — the only marquee tournament that turns boats away.",
     cultureNote:
-      "Smaller, science-anchored, more selective. The Pachanga benefits sportfish research at Harte Research Institute (Texas A&M Corpus Christi) — a tournament that funds the science of the fish it chases.",
+      "Small, conservation-anchored, restaurant-hosted. Half the giving goes to the science institute studying the fish — the tournament that funds the research that supports its own fishery. 100-nautical-mile fence keeps the field accountable.",
     viewingNotes:
-      "Check-in + registration at Virginia's on the Bay, evening kickoff. Public viewing details TBD per year.",
+      "Virginia's on the Bay (815 Trout St) — public restaurant + tournament HQ. Each evening as boats return, live updates roll on the Sport Fishing Championship platform. Saturday evening is peak.",
     officialUrl: "https://www.billfishpachanga.com/",
   },
   {

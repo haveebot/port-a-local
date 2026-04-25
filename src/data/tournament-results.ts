@@ -197,6 +197,230 @@ export interface TournamentResults {
 }
 
 export const tournamentResults: Record<string, TournamentResults> = {
+  "billfish-pachanga-2026": {
+    eventSlug: "billfish-pachanga-2026",
+    edition: "8th annual (2026)",
+    sanctioningOrg: "The Billfish Pachanga (Virginia's on the Bay)",
+    sanctioningOrgNote:
+      "Independent tournament hosted at Virginia's on the Bay, Port Aransas. Founded in 2019 by Virginia's co-owner Gabe Goodman. Field strictly capped at 40 boats. Catch-and-release-only across all billfish species.",
+    divisions: [
+      {
+        slug: "blue-marlin",
+        name: "Blue Marlin (Release)",
+        short: "Catch-and-release only. Highest per-species point value.",
+        rules:
+          "Release-only. Video verification required for all releases. Highest-value billfish in the points matrix.",
+        scoring: "release",
+      },
+      {
+        slug: "white-marlin",
+        name: "White Marlin (Release)",
+        short: "Catch-and-release only.",
+        rules:
+          "Release-only. Video verification required. Mid-tier billfish point value.",
+        scoring: "release",
+      },
+      {
+        slug: "sailfish",
+        name: "Sailfish (Release)",
+        short:
+          "Catch-and-release only. Most-released species; volume matters.",
+        rules:
+          "Release-only. Video verification required. Lower per-fish points than marlin, but high catch rate makes sailfish often decisive in the overall standings.",
+        scoring: "release",
+      },
+    ],
+    specialAwards: [
+      {
+        name: "Grand Champion (Top Boat)",
+        description:
+          "Highest total points across all three billfish species + side-species credit (sailfish are the most-numerous; tuna and dorado catches that come up incidental can also score per official rules).",
+        eligibility: "All registered boats.",
+      },
+      {
+        name: "Top Angler",
+        description:
+          "Highest individual angler points across the field.",
+        eligibility: "All registered anglers.",
+      },
+      {
+        name: "Sport Fishing Championship Points",
+        description:
+          "Pachanga is part of the Sport Fishing Championship platform. Cumulative points roll into the broader SFC season standings.",
+        eligibility: "Boats registered with SFC.",
+      },
+      {
+        name: "Pool Payouts",
+        description:
+          "Mandatory + optional billfish pool structure typical of Texas Gulf billfish tournaments. 2024 record total payout: $845,000.",
+        eligibility: "Per-pool opt-in.",
+      },
+    ],
+    leaderboards: {
+      "blue-marlin": {
+        divisionSlug: "blue-marlin",
+        entries: [],
+        status: "Lines-in is Thursday morning",
+      },
+      "white-marlin": {
+        divisionSlug: "white-marlin",
+        entries: [],
+        status: "Lines-in is Thursday morning",
+      },
+      sailfish: {
+        divisionSlug: "sailfish",
+        entries: [],
+        status: "Lines-in is Thursday morning",
+      },
+    },
+    captains: [],
+    rules: {
+      edition: "2026 (8th annual)",
+      officialUrl: "https://www.billfishpachanga.com/",
+      universal: [
+        "Field is strictly capped at 40 boats. Once it fills, registration closes.",
+        "All fishing must occur within a 100-nautical-mile fence from the tip of the south jetty.",
+        "Catch-and-release ONLY for all billfish (blue marlin, white marlin, sailfish). No fish is brought to the scale.",
+        "Video verification required for every billfish release — angler in frame, leader visible, hook position confirmed.",
+        "Boats may depart from any Texas port; all releases verified through the Sport Fishing Championship live-update platform.",
+        "Tournament HQ is Virginia's on the Bay, 815 Trout St, Port Aransas — check-in, captain's meeting, evening updates, and awards all happen here.",
+      ],
+      divisionNotes: {
+        "blue-marlin": [
+          "Release-only with the highest per-fish point value of the three billfish species.",
+          "Video verification required.",
+        ],
+        "white-marlin": [
+          "Release-only with mid-tier per-fish point value.",
+          "Video verification required.",
+        ],
+        sailfish: [
+          "Release-only with lower per-fish points but typically the highest-volume species in the catch.",
+          "Sailfish counts often decide the overall standings.",
+        ],
+      },
+    },
+    pastChampions: [
+      // 2024
+      {
+        year: 2024,
+        edition: "Jul 17-20, 2024",
+        division: "Overall",
+        category: "Grand Champion + Overall Billfish Champion",
+        angler: "Crew of Sigsbee Deep",
+        boat: "Sigsbee Deep",
+        notes:
+          "1,700 points. Crew released 14 sailfish (most in the tournament) + 1 blue marlin + 1 tuna + 1 dorado. Same crew finished 4th at Texas Legends 2024 — a remarkable two-tournament summer.",
+        sourceUrl:
+          "https://www.portasouthjetty.com/articles/sigsbee-deep-is-pachanga-champ/",
+      },
+      {
+        year: 2024,
+        edition: "Jul 17-20, 2024",
+        division: "Overall",
+        category: "2nd Place",
+        angler: "Crew of Vamonos (63-foot Spencer)",
+        boat: "Vamonos",
+        notes:
+          "1,641 points. 7 sailfish + 3 blue marlin releases.",
+        sourceUrl:
+          "https://www.portasouthjetty.com/articles/sigsbee-deep-is-pachanga-champ/",
+      },
+      // Founding
+      {
+        year: 2019,
+        edition: "Jul 17-20, 2019",
+        division: "Founding edition",
+        category: "Inaugural Pachanga",
+        angler: "First field of 40 boats",
+        notes:
+          "Co-founder Gabe Goodman launches the tournament out of Virginia's on the Bay. Catch-and-release-only billfish format with the 40-boat cap and 100-mile fence — same architecture as today.",
+      },
+    ],
+    milestones: [
+      {
+        year: "2019",
+        label: "Inaugural edition",
+        value: "Year One",
+        detail:
+          "Gabe Goodman launches Pachanga out of Virginia's on the Bay. Field capped at 40 boats from day one — by design, not by accident.",
+      },
+      {
+        year: "Always",
+        label: "Field cap",
+        value: "40 boats max",
+        detail:
+          "The only marquee Tournament Season tournament that strictly turns boats away. Smaller field by design.",
+      },
+      {
+        year: "Always",
+        label: "Fishing fence",
+        value: "100 nautical miles",
+        detail:
+          "All fishing must occur within 100 nm of the south jetty's tip. Geographic constraint keeps the field accountable.",
+      },
+      {
+        year: "Always",
+        label: "Format",
+        value: "Catch-and-release only",
+        detail:
+          "Every billfish — blue marlin, white marlin, sailfish — released alive with video verification. No fish goes to the scale.",
+      },
+      {
+        year: "2023",
+        label: "Two-beneficiary giving",
+        value: "$45,000 split",
+        detail:
+          "$25,000 to Harte Research Institute for Sportfish Science. $20,000 to the Port Aransas Scholarship Fund. The dual-charity model proves out at scale.",
+      },
+      {
+        year: "2024",
+        label: "Record payout",
+        value: "$845,000",
+        detail:
+          "Total payout to anglers across mandatory + optional pools. 187 billfish released across 3 days (9 blue marlin + 8 white marlin + 170 sailfish).",
+      },
+      {
+        year: "Saturday night",
+        label: "The actual Pachanga",
+        value: "Headline band",
+        detail:
+          "Virginia's shuts down the entire parking lot for the awards night. Headline music act brought in. Charity checks presented between sets. Open to anyone who shows up — the awards aren't just announced, they're celebrated.",
+      },
+      {
+        year: "2026",
+        label: "Editions to date",
+        value: "8 annual",
+        detail:
+          "Eighth edition. Same restaurant. Same 40-boat cap. Same two beneficiaries. Same locally-run team.",
+      },
+    ],
+    sources: [
+      {
+        label: "The Billfish Pachanga — official site",
+        url: "https://www.billfishpachanga.com/",
+      },
+      {
+        label: "Sport Fishing Championship — Pachanga 2025 page",
+        url: "https://sportfishingchampionship.com/events/billfish-pachanga-2025",
+      },
+      {
+        label:
+          "Harte Research Institute for Sportfish Science — beneficiary",
+        url: "https://www.tamucc.edu/harte-research-institute/",
+      },
+      {
+        label: "Virginia's on the Bay — tournament HQ + restaurant",
+        url: "https://virginiasonthebay.com",
+      },
+      {
+        label:
+          "Port Aransas South Jetty — 'Sigsbee Deep is Pachanga champ' (2024 coverage)",
+        url: "https://www.portasouthjetty.com/articles/sigsbee-deep-is-pachanga-champ/",
+      },
+    ],
+  },
+
   "texas-legends-billfish-2026": {
     eventSlug: "texas-legends-billfish-2026",
     edition: "2026 edition",
