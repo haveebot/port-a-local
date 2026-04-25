@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { track } from "@vercel/analytics";
 import PortalIcon from "@/components/brand/PortalIcon";
 
 /**
@@ -46,6 +47,11 @@ export default function DispatchTipForm() {
         body: JSON.stringify({ tip }),
       });
       if (!res.ok) throw new Error("Submission failed");
+      try {
+        track("dispatch_tip_submitted", { length: tip.length });
+      } catch {
+        // never block UX on analytics errors
+      }
       setStatus("success");
       setTopic("");
     } catch {

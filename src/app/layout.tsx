@@ -3,6 +3,7 @@ import "./globals.css";
 import GullyPalette from "@/components/GullyPalette";
 import { WebsiteSchema, OrganizationSchema } from "@/components/StructuredData";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://theportalocal.com"),
@@ -77,6 +78,7 @@ export default function RootLayout({
         {children}
         <GullyPalette />
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

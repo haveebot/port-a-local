@@ -1,4 +1,5 @@
 import type { EventDetails } from "@/data/events";
+import TrackedAnchor from "@/components/analytics/TrackedAnchor";
 
 /**
  * Prominent callout for events with a charitable beneficiary. Reusable
@@ -75,10 +76,12 @@ export default function CharityCallout({
 
       {/* Action row */}
       <div className="flex flex-wrap gap-3 relative">
-        <a
+        <TrackedAnchor
           href={charity.url}
           target="_blank"
           rel="noopener noreferrer"
+          event="charity_about_clicked"
+          properties={{ charity: charity.name }}
           className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold bg-purple-700 hover:bg-purple-800 text-white transition-colors"
         >
           About {charity.name}
@@ -95,12 +98,14 @@ export default function CharityCallout({
               d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
             />
           </svg>
-        </a>
+        </TrackedAnchor>
         {charity.donateUrl && (
-          <a
+          <TrackedAnchor
             href={charity.donateUrl}
             target="_blank"
             rel="noopener noreferrer"
+            event="charity_donate_clicked"
+            properties={{ charity: charity.name }}
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold border-2 border-purple-700 text-purple-700 hover:bg-purple-700 hover:text-white transition-colors"
           >
             Donate directly
@@ -117,7 +122,7 @@ export default function CharityCallout({
                 d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
               />
             </svg>
-          </a>
+          </TrackedAnchor>
         )}
       </div>
 

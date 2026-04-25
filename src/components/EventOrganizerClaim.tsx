@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { track } from "@vercel/analytics";
 import PortalIcon from "@/components/brand/PortalIcon";
 
 type Status = "idle" | "loading" | "success" | "error";
@@ -52,6 +53,11 @@ export default function EventOrganizerClaim({
         }),
       });
       if (res.ok) {
+        try {
+          track("organizer_claim_submitted", { eventSlug, role });
+        } catch {
+          // never block UX on analytics errors
+        }
         setStatus("success");
         setName("");
         setEmail("");

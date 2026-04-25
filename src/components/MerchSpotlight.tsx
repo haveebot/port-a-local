@@ -1,3 +1,5 @@
+import TrackedAnchor from "@/components/analytics/TrackedAnchor";
+
 /**
  * Merch spotlight section — for events where the merch is part of the
  * cultural footprint (TWAT shirts, Sandfest gear, anything iconic).
@@ -68,10 +70,12 @@ export default function MerchSpotlight({
 
       <div className="flex flex-wrap gap-3 relative">
         {storeUrl && (
-          <a
+          <TrackedAnchor
             href={storeUrl}
             target="_blank"
             rel="noopener noreferrer"
+            event="merch_store_clicked"
+            properties={{ subject: sightingSubject }}
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold btn-coral"
           >
             Where to buy
@@ -88,10 +92,12 @@ export default function MerchSpotlight({
                 d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
               />
             </svg>
-          </a>
+          </TrackedAnchor>
         )}
-        <a
+        <TrackedAnchor
           href={`mailto:hello@theportalocal.com?subject=${encodeURIComponent(sightingSubject)}`}
+          event="merch_sighting_clicked"
+          properties={{ subject: sightingSubject }}
           className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold border border-coral-400/40 text-coral-200 hover:bg-coral-500/10 transition-colors"
         >
           Send a sighting photo
@@ -108,7 +114,7 @@ export default function MerchSpotlight({
               d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
             />
           </svg>
-        </a>
+        </TrackedAnchor>
       </div>
 
       <p className="text-[11px] text-navy-400 font-light mt-5 relative italic max-w-xl">

@@ -15,6 +15,8 @@ import EventCountdown from "@/components/EventCountdown";
 import EventOrganizerClaim from "@/components/EventOrganizerClaim";
 import CharityCallout from "@/components/CharityCallout";
 import MerchSpotlight from "@/components/MerchSpotlight";
+import TrackedAnchor from "@/components/analytics/TrackedAnchor";
+import TrackedLink from "@/components/analytics/TrackedLink";
 import LeaderboardTable from "@/components/tournament/LeaderboardTable";
 import DivisionsPanel from "@/components/tournament/DivisionsPanel";
 import CaptainSpotlight from "@/components/tournament/CaptainSpotlight";
@@ -185,29 +187,35 @@ export default async function EventDetailPage({
 
           {/* Action row */}
           <div className="flex flex-wrap gap-3 mt-6">
-            <a
+            <TrackedAnchor
               href={googleCalendarUrl(event)}
               target="_blank"
               rel="noopener noreferrer"
+              event="event_calendar_added"
+              properties={{ eventSlug: event.slug, provider: "google" }}
               className="px-5 py-2.5 rounded-lg text-sm font-semibold bg-coral-500 hover:bg-coral-600 text-white transition-colors"
             >
               Add to Google Calendar
-            </a>
-            <a
+            </TrackedAnchor>
+            <TrackedAnchor
               href={icsHref(event)}
               download={`${event.slug}.ics`}
+              event="event_calendar_added"
+              properties={{ eventSlug: event.slug, provider: "ics" }}
               className="px-5 py-2.5 rounded-lg text-sm font-semibold bg-white/10 hover:bg-white/20 text-sand-100 border border-white/20 transition-colors"
             >
               Download .ics
-            </a>
-            <a
+            </TrackedAnchor>
+            <TrackedAnchor
               href={mapsLink}
               target="_blank"
               rel="noopener noreferrer"
+              event="event_maps_opened"
+              properties={{ eventSlug: event.slug }}
               className="px-5 py-2.5 rounded-lg text-sm font-semibold bg-white/10 hover:bg-white/20 text-sand-100 border border-white/20 transition-colors"
             >
               Open in Maps
-            </a>
+            </TrackedAnchor>
           </div>
         </div>
       </section>
@@ -837,8 +845,10 @@ export default async function EventDetailPage({
       {inSeason && (
         <section className="py-12 bg-navy-900 border-y border-coral-500/20">
           <div className="max-w-3xl mx-auto px-4 sm:px-6">
-            <Link
+            <TrackedLink
               href="/events/tournament-season"
+              event="tournament_season_cta_clicked"
+              properties={{ from: event.slug }}
               className="block group"
             >
               <div className="flex items-center justify-between gap-4">
@@ -868,7 +878,7 @@ export default async function EventDetailPage({
                   />
                 </svg>
               </div>
-            </Link>
+            </TrackedLink>
           </div>
         </section>
       )}

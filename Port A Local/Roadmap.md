@@ -17,13 +17,14 @@ _Last updated: 2026-04-25 (Tournament Season hub + DSR + TWAT full event hubs + 
 - Brand: Lighthouse mark + full-site saturation + shared OG/email helpers
 - Social: FB profile + FB banner routes shipped (`/social/*`)
 - Print: branded QR poster route (`/print/qr/[slug]`) — home + sandfest
+- Analytics: `@vercel/analytics` + `@vercel/speed-insights` wired (2026-04-25). Custom events firing on key conversions: `dispatch_tip_submitted`, `organizer_claim_submitted` (with eventSlug + role), `charity_about_clicked` + `charity_donate_clicked` (with charity name), `merch_store_clicked` + `merch_sighting_clicked`, `event_calendar_added` (with eventSlug + provider), `event_maps_opened`, `tournament_season_cta_clicked`. Reusable `<TrackedAnchor>` + `<TrackedLink>` wrappers in `src/components/analytics/`.
 
 ### ⏳ Waiting
 - [ ] **A2P 10DLC Campaign — RESUBMITTED 2026-04-22**. First submission failed 2026-04-22 on error 30923 (MESSAGE_FLOW: consent-as-required-condition). Root cause: forms bundled SMS consent into submit action. **Fix shipped (commit 132b312):** separate unchecked-by-default SMS opt-in checkbox on all three forms; shared `sendConsumerSms` helper gates consumer SMS on `smsConsent === true`; customer SMS copy now includes "Reply STOP to opt out." on every message. **Twilio-side:** account + messaging service renamed, failed Usa2p deleted, new Usa2p submitted with rewritten MessageFlow + 5 fresh consumer-facing sample messages. Brand remains APPROVED (`BCIXLIA`). Status: IN_PROGRESS at TCR. Messaging service code already prefers `MessagingServiceSid` when env var is set — auto-flips on approval. Expected timeline 1–5 business days.
 
 ### Decided — no migration, no GBP (2026-04-13)
 - **GitHub:** PAL stays on `haveebot/port-a-local`. No org migration.
-- **Vercel:** PAL stays on `haveebots-projects` team. Avoids Pro plan cost with zero functional benefit at current scale.
+- **Vercel:** PAL is on `haveebots-projects` team on the **Pro plan** (corrected 2026-04-25). Pro unlocks ~100K+ analytics events/month, custom events with conversion funnels, longer retention, and free Speed Insights per project — all material for the events strategy + future monetization conversation.
 - **Google Business Profile:** skipped. PAL is a media/directory platform, not a storefront.
 - **Sage Em is the opposite** — full company-only separation (`sageem` org + `sageem` team).
 
