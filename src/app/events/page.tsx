@@ -54,7 +54,7 @@ const eventsByMonth: { month: string; events: PAEvent[] }[] = [
   {
     month: "July",
     events: [
-      { name: "Deep Sea Roundup", timing: "Second weekend of July", location: "Port Aransas Civic Center / Harbor", description: "Texas's oldest fishing tournament, running since 1932. Bay, surf, offshore, fly, kayak, and junior divisions. Features the legendary Piggy Perch contest. Proceeds fund local scholarships.", icon: "🏆", nextDateISO: "2026-07-09" },
+      { name: "Port Aransas Deep Sea Roundup — 90th Annual", timing: "July 9–12, 2026 · main weigh-ins Fri & Sat evenings", location: "Roberts Point Park · Fred Rhodes Pavilion", description: "Texas's oldest fishing tournament — 1932 to today. Six divisions (Bay-Surf, Offshore, Fly, Kayak, Tarpon Release, Billfish Release) plus Junior brackets, Top Woman Angler, and the kids' Piggy Perch contest. Live leaderboards on the hub.", icon: "🏆", detailSlug: "deep-sea-roundup-2026", nextDateISO: "2026-07-09" },
       { name: "Fourth of July Celebration", timing: "July 4", location: "Roberts Point Park", description: "Free popcorn, snow cones, and bounce houses from 4 PM. Live music at 5 PM. Fireworks launched from Roberts Point Park at approximately 9:30 PM. Fireworks cruises available from Fisherman's Wharf.", icon: "🎆", nextDateISO: "2026-07-04" },
     ],
   },
@@ -80,6 +80,32 @@ const eventsByMonth: { month: string; events: PAEvent[] }[] = [
     ],
   },
 ];
+
+/**
+ * Reorder the month groups so the soonest-upcoming month comes first
+ * and the order then follows real chronological time. Past months in
+ * the current calendar year wrap to the end (their `nextDateISO`
+ * already points at next year's occurrence). Months without any
+ * `nextDateISO` (legacy data) sink to the bottom.
+ */
+function getMonthsInUpcomingOrder() {
+  const now = Date.now();
+  return [...eventsByMonth].sort((a, b) => {
+    const aSoon = Math.min(
+      ...a.events
+        .filter((e) => e.nextDateISO)
+        .map((e) => new Date(e.nextDateISO as string).getTime()),
+    );
+    const bSoon = Math.min(
+      ...b.events
+        .filter((e) => e.nextDateISO)
+        .map((e) => new Date(e.nextDateISO as string).getTime()),
+    );
+    // Math.min on empty array returns Infinity — sinks naturally to bottom
+    return (Number.isFinite(aSoon) ? aSoon : now + 1e15) -
+      (Number.isFinite(bSoon) ? bSoon : now + 1e15);
+  });
+}
 
 /**
  * Resolve the soonest upcoming event from both sources (events.ts + inline).
@@ -154,6 +180,8 @@ const recurringEvents: PAEvent[] = [
 
 export default function EventsPage() {
   const nextUp = getNextUpEvent();
+  const orderedMonths = getMonthsInUpcomingOrder();
+  const currentYear = new Date().getFullYear();
 
   return (
     <main className="min-h-screen">
@@ -259,10 +287,27 @@ export default function EventsPage() {
           </div>
 
           <div className="space-y-8">
-            {eventsByMonth.map((month) => (
+            {orderedMonths.map((month) => {
+              // Pull a year hint from the soonest event in this month — useful
+              // when the timeline wraps into next year so visitors aren't
+              // confused which "January" they're looking at.
+              const soonestISO = month.events
+                .map((e) => e.nextDateISO)
+                .filter(Boolean)
+                .sort()[0];
+              const monthYear = soonestISO
+                ? new Date(soonestISO).getFullYear()
+                : currentYear;
+              const showYear = monthYear !== currentYear;
+              return (
               <div key={month.month}>
-                <h3 className="font-display text-lg font-bold text-coral-600 mb-4 pb-2 border-b border-coral-100">
+                <h3 className="font-display text-lg font-bold text-coral-600 mb-4 pb-2 border-b border-coral-100 flex items-baseline gap-2">
                   {month.month}
+                  {showYear && (
+                    <span className="text-xs font-semibold text-navy-400 tracking-widest uppercase">
+                      {monthYear}
+                    </span>
+                  )}
                 </h3>
                 <div className="space-y-4">
                   {month.events.map((event) => {
@@ -297,7 +342,8 @@ export default function EventsPage() {
                   })}
                 </div>
               </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
