@@ -240,9 +240,9 @@ export const tournamentResults: Record<string, TournamentResults> = {
     ],
     specialAwards: [
       {
-        name: "Overall Top Boat",
+        name: "M.L. Walker Perpetual Trophy (Overall Top Boat)",
         description:
-          "Most total points across all divisions (billfish points + 1 point per pound for dolphin, tuna, and wahoo). The marquee trophy.",
+          "The marquee trophy. Awarded to the boat with the most total points across all divisions (billfish points + 1 point per pound for dolphin, tuna, and wahoo). Engraved with every winning boat going back decades — the perpetual trophy is the through-line.",
         eligibility: "All registered boats.",
       },
       {
@@ -323,15 +323,16 @@ export const tournamentResults: Record<string, TournamentResults> = {
       },
     },
     pastChampions: [
+      // 2025
       {
         year: 2025,
         edition: "2025 edition",
         division: "Overall",
-        category: "Top Boat",
+        category: "Top Boat (M.L. Walker Perpetual Trophy)",
         angler: "Crew of Sea Senora",
         boat: "Sea Senora",
         notes:
-          "Top boat overall. $128,527 share of the 2025 prize pool; one of 14 money-winning teams that split $403,809 across all categories.",
+          "$128,527 share of the 2025 prize pool; one of 14 money-winning teams that split $403,809 across all categories.",
         sourceUrl:
           "https://www.reeltimeapps.com/live/tournaments/2025-texas-women-angler-tournament/payouts",
       },
@@ -346,13 +347,69 @@ export const tournamentResults: Record<string, TournamentResults> = {
         sourceUrl:
           "https://www.reeltimeapps.com/live/tournaments/2025-texas-women-angler-tournament/leaderboards",
       },
+      // 2024
+      {
+        year: 2024,
+        edition: "Aug 23–25, 2024",
+        division: "Overall",
+        category: "Top Boat (M.L. Walker Perpetual Trophy)",
+        angler: "Crew of Instigator",
+        boat: "Instigator",
+        notes:
+          "840.9 total points. Caught and released the 1st-place white marlin and the 2nd-place blue marlin.",
+        sourceUrl:
+          "https://www.portasouthjetty.com/articles/instigator-first-place-at-women-anglers-tourney/",
+      },
+      {
+        year: 2024,
+        edition: "Aug 23–25, 2024",
+        division: "Spectacle",
+        category: "Best Decorated Boat",
+        angler: "Crew of Ambush",
+        boat: "Ambush",
+        notes:
+          'Theme: "Texas Women Anglers Tournament — A Performance." The judges agreed.',
+      },
+      {
+        year: 2024,
+        edition: "Aug 23–25, 2024",
+        division: "Special",
+        category: "TWAT Legacy Award",
+        angler: "Penny Slingerland",
+        notes:
+          "Recognition for years of contribution to the tournament. Awarded at the Sunday ceremony.",
+      },
+      // 2020 — ran through COVID
+      {
+        year: 2020,
+        edition: "Aug 21–23, 2020 (ran through COVID)",
+        division: "Overall",
+        category: "Top Boat (M.L. Walker Perpetual Trophy)",
+        angler: "Crew of Rebecca — Jae White, Rebecca Ramming, Cole Scott, Megan Keller",
+        boat: "Rebecca",
+        notes:
+          "654.6 total points. Released 5 white marlin and 1 sailfish; weighed 1 dorado. Field: 44 boats released 50 billfish across the weekend; the year's cash pots paid out $388,800 to winners.",
+        sourceUrl:
+          "https://www.portasouthjetty.com/articles/rebecca-takes-title-in-texas-women-anglers/",
+      },
+      {
+        year: 2020,
+        edition: "Aug 21–23, 2020",
+        division: "Spectacle",
+        category: "Best Decorated Boat (1st)",
+        angler: "Crew of Suthern's Pride",
+        boat: "Suthern's Pride",
+        notes:
+          "Walk West took 2nd; the Rebecca (overall winner) took 3rd in best-decorated.",
+      },
+      // 1989 — founding scale
       {
         year: 1989,
         division: "Founding scale",
         category: "Documented field size",
         angler: "18 boats · 50+ women anglers",
         notes:
-          "First documented year-by-year scale of the tournament. Today's field: ~40 boats and 300+ anglers — a roughly 6× growth in participation.",
+          "First documented year-by-year scale of the tournament. The format proves out — and becomes a fixture of August.",
       },
     ],
     sources: [
