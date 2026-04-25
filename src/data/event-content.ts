@@ -622,9 +622,9 @@ export const eventContent: Record<string, EventContent> = {
           "All anglers must be women. Captains can be any gender — many are dads, husbands, brothers running the boat for a daughter / wife / sister. Don't underestimate the number of mom-daughter teams that win money.",
       },
       {
-        label: "Family friendly",
+        label: "Especially for daughters",
         detail:
-          "Kids welcome at every public event. Saturday's weigh-in is the loudest, most fun part of the weekend if you have small humans — bring beads-catching gear.",
+          "Bring the kids — Saturday's weigh-in is the loudest, most fun part of the weekend if you have small humans, beads-catching gear recommended. But the bigger thing: Texas girls who spend a weekend at TWAT grow up knowing that women run multi-million-dollar offshore boats, fight billfish, work the scale, and headline the whole spectacle. The next-generation pipeline is the quiet engine of this whole tournament.",
       },
       {
         label: "Best viewing window",
