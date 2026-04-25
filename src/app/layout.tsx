@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import GullyPalette from "@/components/GullyPalette";
 import { WebsiteSchema, OrganizationSchema } from "@/components/StructuredData";
+import { Analytics } from "@vercel/analytics/next";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://theportalocal.com"),
@@ -75,6 +76,7 @@ export default function RootLayout({
       <body className="font-sans antialiased">
         {children}
         <GullyPalette />
+        <Analytics />
       </body>
     </html>
   );
