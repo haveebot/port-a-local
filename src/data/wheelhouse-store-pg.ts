@@ -361,10 +361,49 @@ export interface DrainAnalyticsEvent {
   deviceId?: number;
 }
 
+/**
+ * Idempotent — creates the analytics table + indexes if missing. Called
+ * defensively at the start of every ingest so the drain works the moment
+ * it lands, without needing a separate one-time migration.
+ */
+let _analyticsSchemaReady = false;
+async function ensureAnalyticsSchema(): Promise<void> {
+  if (_analyticsSchemaReady) return;
+  await sql`
+    CREATE TABLE IF NOT EXISTS wheelhouse_analytics_events (
+      id BIGSERIAL PRIMARY KEY,
+      event_type TEXT NOT NULL,
+      event_name TEXT,
+      event_data JSONB,
+      ts TIMESTAMPTZ NOT NULL,
+      origin TEXT,
+      path TEXT,
+      route TEXT,
+      referrer TEXT,
+      query_params TEXT,
+      country TEXT,
+      region TEXT,
+      city TEXT,
+      os_name TEXT,
+      client_name TEXT,
+      device_type TEXT,
+      vercel_environment TEXT,
+      session_id BIGINT,
+      device_id BIGINT,
+      inserted_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+  await sql`CREATE INDEX IF NOT EXISTS wheelhouse_analytics_events_ts_idx ON wheelhouse_analytics_events(ts DESC)`;
+  await sql`CREATE INDEX IF NOT EXISTS wheelhouse_analytics_events_path_ts_idx ON wheelhouse_analytics_events(path, ts DESC)`;
+  await sql`CREATE INDEX IF NOT EXISTS wheelhouse_analytics_events_event_name_idx ON wheelhouse_analytics_events(event_name) WHERE event_name IS NOT NULL`;
+  _analyticsSchemaReady = true;
+}
+
 export async function ingestAnalyticsEvents(
   events: DrainAnalyticsEvent[],
 ): Promise<{ inserted: number; skipped: number }> {
   if (!events.length) return { inserted: 0, skipped: 0 };
+  await ensureAnalyticsSchema();
   // Only persist production traffic — preview deploys + dev pollute aggregates.
   const prod = events.filter((e) => e.vercelEnvironment === "production");
   let inserted = 0;
@@ -430,62 +469,79 @@ export interface PalStats {
   lastEventAt: string | null;
 }
 
+const EMPTY_STATS: PalStats = {
+  totalToday: 0,
+  totalYesterday: 0,
+  totalLast7d: 0,
+  topPaths: [],
+  topEvents: [],
+  topCountries: [],
+  hasData: false,
+  lastEventAt: null,
+};
+
 export async function getPalStats(): Promise<PalStats> {
   const now = Date.now();
   const t24 = new Date(now - 24 * 60 * 60 * 1000).toISOString();
   const t48 = new Date(now - 48 * 60 * 60 * 1000).toISOString();
   const t7d = new Date(now - 7 * 24 * 60 * 60 * 1000).toISOString();
 
-  const [
-    { rows: today },
-    { rows: yesterday },
-    { rows: last7d },
-    { rows: paths },
-    { rows: events },
-    { rows: countries },
-    { rows: latest },
-  ] = await Promise.all([
-    sql`SELECT COUNT(*)::int AS n FROM wheelhouse_analytics_events
-        WHERE event_type = 'pageview' AND ts > ${t24}`,
-    sql`SELECT COUNT(*)::int AS n FROM wheelhouse_analytics_events
-        WHERE event_type = 'pageview' AND ts > ${t48} AND ts <= ${t24}`,
-    sql`SELECT COUNT(*)::int AS n FROM wheelhouse_analytics_events
-        WHERE event_type = 'pageview' AND ts > ${t7d}`,
-    sql`SELECT path, COUNT(*)::int AS views FROM wheelhouse_analytics_events
-        WHERE event_type = 'pageview' AND ts > ${t24} AND path IS NOT NULL
-        GROUP BY path ORDER BY views DESC LIMIT 5`,
-    sql`SELECT event_name, COUNT(*)::int AS count FROM wheelhouse_analytics_events
-        WHERE event_type = 'event' AND event_name IS NOT NULL AND ts > ${t24}
-        GROUP BY event_name ORDER BY count DESC LIMIT 5`,
-    sql`SELECT country, COUNT(*)::int AS views FROM wheelhouse_analytics_events
-        WHERE event_type = 'pageview' AND country IS NOT NULL AND ts > ${t24}
-        GROUP BY country ORDER BY views DESC LIMIT 5`,
-    sql`SELECT MAX(ts) AS latest FROM wheelhouse_analytics_events`,
-  ]);
+  // Table may not exist yet (first deploy, before any ingest). Treat that
+  // as "no data" rather than 500'ing the wheelhouse page.
+  try {
+    const [
+      { rows: today },
+      { rows: yesterday },
+      { rows: last7d },
+      { rows: paths },
+      { rows: events },
+      { rows: countries },
+      { rows: latest },
+    ] = await Promise.all([
+      sql`SELECT COUNT(*)::int AS n FROM wheelhouse_analytics_events
+          WHERE event_type = 'pageview' AND ts > ${t24}`,
+      sql`SELECT COUNT(*)::int AS n FROM wheelhouse_analytics_events
+          WHERE event_type = 'pageview' AND ts > ${t48} AND ts <= ${t24}`,
+      sql`SELECT COUNT(*)::int AS n FROM wheelhouse_analytics_events
+          WHERE event_type = 'pageview' AND ts > ${t7d}`,
+      sql`SELECT path, COUNT(*)::int AS views FROM wheelhouse_analytics_events
+          WHERE event_type = 'pageview' AND ts > ${t24} AND path IS NOT NULL
+          GROUP BY path ORDER BY views DESC LIMIT 5`,
+      sql`SELECT event_name, COUNT(*)::int AS count FROM wheelhouse_analytics_events
+          WHERE event_type = 'event' AND event_name IS NOT NULL AND ts > ${t24}
+          GROUP BY event_name ORDER BY count DESC LIMIT 5`,
+      sql`SELECT country, COUNT(*)::int AS views FROM wheelhouse_analytics_events
+          WHERE event_type = 'pageview' AND country IS NOT NULL AND ts > ${t24}
+          GROUP BY country ORDER BY views DESC LIMIT 5`,
+      sql`SELECT MAX(ts) AS latest FROM wheelhouse_analytics_events`,
+    ]);
 
-  const lastEventAt = latest[0]?.latest
-    ? new Date(latest[0].latest as string).toISOString()
-    : null;
+    const lastEventAt = latest[0]?.latest
+      ? new Date(latest[0].latest as string).toISOString()
+      : null;
 
-  return {
-    totalToday: (today[0]?.n as number) ?? 0,
-    totalYesterday: (yesterday[0]?.n as number) ?? 0,
-    totalLast7d: (last7d[0]?.n as number) ?? 0,
-    topPaths: paths.map((r) => ({
-      path: r.path as string,
-      views: r.views as number,
-    })),
-    topEvents: events.map((r) => ({
-      eventName: r.event_name as string,
-      count: r.count as number,
-    })),
-    topCountries: countries.map((r) => ({
-      country: r.country as string,
-      views: r.views as number,
-    })),
-    hasData: lastEventAt !== null,
-    lastEventAt,
-  };
+    return {
+      totalToday: (today[0]?.n as number) ?? 0,
+      totalYesterday: (yesterday[0]?.n as number) ?? 0,
+      totalLast7d: (last7d[0]?.n as number) ?? 0,
+      topPaths: paths.map((r) => ({
+        path: r.path as string,
+        views: r.views as number,
+      })),
+      topEvents: events.map((r) => ({
+        eventName: r.event_name as string,
+        count: r.count as number,
+      })),
+      topCountries: countries.map((r) => ({
+        country: r.country as string,
+        views: r.views as number,
+      })),
+      hasData: lastEventAt !== null,
+      lastEventAt,
+    };
+  } catch {
+    return EMPTY_STATS;
+  }
 }
 
 /* -------------------- Schema + seed bootstrap -------------------- */
