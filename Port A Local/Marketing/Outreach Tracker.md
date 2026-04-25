@@ -32,6 +32,7 @@ Structured list of local partners, press contacts, and community orgs to engage 
 | Salty Beach Babes | Shop · new | 🟠 | Phone still missing — Winston to follow up. |
 | Portable Detail Service (Miguel Cantu) | Services | 🟢 | Email established. John Brown routes to him. Good small-biz story for Phase 4. |
 | Coastal Carpet Cleaners (Tyler) | Services | 🟢 | New 4/23. Same John Brown routing. |
+| Fly It Port A (Jeremy & Courtney Timms) | Shop · event host | 🟠 | Owners since July 2022. Spring Kite Festival hub built and live: theportalocal.com/events/spring-kite-festival-2026. Collie has prior relationship with the organizer — pitch ammo at `Marketing/Outreach — Fly It Spring Kite Festival.md`. Win this and the same template runs for Fall Festival, Winter Festival, Wooden Boat, Whooping Crane, etc. |
 
 ## Community / Orgs
 
