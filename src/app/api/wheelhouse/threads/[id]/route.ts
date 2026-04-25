@@ -10,7 +10,7 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params;
-  const thread = getThreadWithMessages(id);
+  const thread = await getThreadWithMessages(id);
   if (!thread)
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   return NextResponse.json({ thread });
@@ -27,7 +27,7 @@ export async function PATCH(
       { error: "Missing 'state' field." },
       { status: 400 },
     );
-  const updated = transitionThread(id, body.state);
+  const updated = await transitionThread(id, body.state);
   if (!updated)
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   return NextResponse.json({ thread: updated });

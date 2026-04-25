@@ -1,17 +1,18 @@
 /**
- * Wheelhouse storage layer.
+ * Wheelhouse storage layer — public interface.
  *
- * Push 1 — in-memory mutable copy of seed data. Mutations succeed within a
- * single Node.js process lifetime but don't persist across deploys / cold
- * starts. This is intentional: gives the UI realistic feedback while we
- * validate shape, then Push 3 swaps the implementation for Vercel Postgres
- * without touching API routes.
+ * Auto-detects backend:
+ *   - POSTGRES_URL set         → Vercel Postgres (real persistence)
+ *   - POSTGRES_URL absent      → in-memory mock (Push 1 fallback)
+ *
+ * Same function signatures as both implementations. API routes import
+ * from here — they don't know which backend is active.
+ *
+ * Functions are async to match the Postgres impl. Mock impl is sync
+ * internally; we wrap reads in Promise.resolve so the surface stays
+ * uniform.
  */
 
-import {
-  SEED_THREADS,
-  SEED_MESSAGES,
-} from "./wheelhouse-seed";
 import type {
   Thread,
   ThreadWithMessages,
@@ -20,59 +21,51 @@ import type {
   ParticipantId,
   MessageType,
 } from "./wheelhouse-types";
+import * as mock from "./wheelhouse-store-mock";
+import * as pg from "./wheelhouse-store-pg";
 
-let _threads: Thread[] = [...SEED_THREADS];
-let _messages: Message[] = [...SEED_MESSAGES];
-
-function newId(prefix: string): string {
-  return `${prefix}-${Date.now().toString(36)}-${Math.random()
-    .toString(36)
-    .slice(2, 8)}`;
-}
+const USE_PG = !!process.env.POSTGRES_URL;
 
 /* -------------------- Reads -------------------- */
 
-export function getThreads(): Thread[] {
-  return [..._threads].sort((a, b) => {
-    // Pinned always sorts above non-pinned
-    if (a.pinned && !b.pinned) return -1;
-    if (!a.pinned && b.pinned) return 1;
-    // Within each group, most recently updated first
-    return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
-  });
+export async function getThreads(): Promise<Thread[]> {
+  return USE_PG ? pg.getThreads() : Promise.resolve(mock.getThreads());
 }
 
-export function getThread(id: string): Thread | null {
-  return _threads.find((t) => t.id === id) ?? null;
+export async function getThread(id: string): Promise<Thread | null> {
+  return USE_PG ? pg.getThread(id) : Promise.resolve(mock.getThread(id));
 }
 
-export function getMessagesForThread(threadId: string): Message[] {
-  return _messages
-    .filter((m) => m.threadId === threadId)
-    .sort(
-      (a, b) =>
-        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-    );
+export async function getMessagesForThread(
+  threadId: string,
+): Promise<Message[]> {
+  return USE_PG
+    ? pg.getMessagesForThread(threadId)
+    : Promise.resolve(mock.getMessagesForThread(threadId));
 }
 
-export function getThreadWithMessages(id: string): ThreadWithMessages | null {
-  const thread = getThread(id);
-  if (!thread) return null;
-  return { ...thread, messages: getMessagesForThread(id) };
+export async function getThreadWithMessages(
+  id: string,
+): Promise<ThreadWithMessages | null> {
+  return USE_PG
+    ? pg.getThreadWithMessages(id)
+    : Promise.resolve(mock.getThreadWithMessages(id));
 }
 
-/** All threads where the given participant is responsible right now */
-export function getThreadsAwaiting(participantId: ParticipantId): Thread[] {
-  return getThreads().filter(
-    (t) => t.state === `awaiting:${participantId}`,
-  );
-}
-
-/** All threads the participant is part of */
-export function getThreadsForParticipant(
+export async function getThreadsAwaiting(
   participantId: ParticipantId,
-): Thread[] {
-  return getThreads().filter((t) => t.participants.includes(participantId));
+): Promise<Thread[]> {
+  return USE_PG
+    ? pg.getThreadsAwaiting(participantId)
+    : Promise.resolve(mock.getThreadsAwaiting(participantId));
+}
+
+export async function getThreadsForParticipant(
+  participantId: ParticipantId,
+): Promise<Thread[]> {
+  return USE_PG
+    ? pg.getThreadsForParticipant(participantId)
+    : Promise.resolve(mock.getThreadsForParticipant(participantId));
 }
 
 /* -------------------- Mutations -------------------- */
@@ -82,44 +75,17 @@ export interface CreateThreadInput {
   tags: string[];
   participants: ParticipantId[];
   authorId: ParticipantId;
-  initialMessage?: {
-    type: MessageType;
-    body: string;
-  };
+  initialMessage?: { type: MessageType; body: string };
   state?: ThreadState;
   context?: { label: string; url: string }[];
 }
 
-export function createThread(input: CreateThreadInput): ThreadWithMessages {
-  const now = new Date().toISOString();
-  const thread: Thread = {
-    id: newId("thread"),
-    title: input.title.trim(),
-    tags: input.tags,
-    state: input.state ?? "open",
-    participants: input.participants,
-    authorId: input.authorId,
-    createdAt: now,
-    updatedAt: now,
-    context: input.context,
-  };
-  _threads = [thread, ..._threads];
-
-  const messages: Message[] = [];
-  if (input.initialMessage) {
-    const msg: Message = {
-      id: newId("msg"),
-      threadId: thread.id,
-      authorId: input.authorId,
-      type: input.initialMessage.type,
-      body: input.initialMessage.body.trim(),
-      createdAt: now,
-    };
-    _messages = [..._messages, msg];
-    messages.push(msg);
-  }
-
-  return { ...thread, messages };
+export async function createThread(
+  input: CreateThreadInput,
+): Promise<ThreadWithMessages> {
+  return USE_PG
+    ? pg.createThread(input)
+    : Promise.resolve(mock.createThread(input));
 }
 
 export interface CreateMessageInput {
@@ -130,36 +96,34 @@ export interface CreateMessageInput {
   payload?: Message["payload"];
 }
 
-export function createMessage(input: CreateMessageInput): Message | null {
-  const thread = getThread(input.threadId);
-  if (!thread) return null;
-  const now = new Date().toISOString();
-  const msg: Message = {
-    id: newId("msg"),
-    threadId: input.threadId,
-    authorId: input.authorId,
-    type: input.type,
-    body: input.body.trim(),
-    createdAt: now,
-    payload: input.payload,
-  };
-  _messages = [..._messages, msg];
-  // Bump thread's updatedAt
-  _threads = _threads.map((t) =>
-    t.id === input.threadId ? { ...t, updatedAt: now } : t,
-  );
-  return msg;
+export async function createMessage(
+  input: CreateMessageInput,
+): Promise<Message | null> {
+  return USE_PG
+    ? pg.createMessage(input)
+    : Promise.resolve(mock.createMessage(input));
 }
 
-export function transitionThread(
+export async function transitionThread(
   id: string,
   newState: ThreadState,
-): Thread | null {
-  const thread = getThread(id);
-  if (!thread) return null;
-  const now = new Date().toISOString();
-  _threads = _threads.map((t) =>
-    t.id === id ? { ...t, state: newState, updatedAt: now } : t,
-  );
-  return getThread(id);
+): Promise<Thread | null> {
+  return USE_PG
+    ? pg.transitionThread(id, newState)
+    : Promise.resolve(mock.transitionThread(id, newState));
+}
+
+/** Backend status — handy for the init / debug surface */
+export function backendStatus(): { backend: "postgres" | "mock" } {
+  return { backend: USE_PG ? "postgres" : "mock" };
+}
+
+/** Run only when Postgres is active. Bootstraps schema + seed. */
+export async function initSchemaAndSeed() {
+  if (!USE_PG) {
+    throw new Error(
+      "Postgres backend not active — POSTGRES_URL env var is not set. Provision a Vercel Postgres database first.",
+    );
+  }
+  return pg.initSchemaAndSeed();
 }

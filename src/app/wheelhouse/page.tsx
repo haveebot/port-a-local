@@ -26,8 +26,8 @@ export default async function WheelhousePage({
   const me = getParticipant(who as ParticipantId);
 
   const { filter } = await searchParams;
-  const allThreads = getThreads();
-  const awaitingMe = getThreadsAwaiting(me.id);
+  const allThreads = await getThreads();
+  const awaitingMe = await getThreadsAwaiting(me.id);
 
   let visible: Thread[] = allThreads;
   let title = "All threads";

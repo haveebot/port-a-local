@@ -6,7 +6,8 @@ import {
 } from "@/data/wheelhouse-store";
 
 export async function GET() {
-  return NextResponse.json({ threads: getThreads() });
+  const threads = await getThreads();
+  return NextResponse.json({ threads });
 }
 
 export async function POST(req: NextRequest) {
@@ -24,7 +25,7 @@ export async function POST(req: NextRequest) {
       { status: 400 },
     );
   }
-  const created = createThread({
+  const created = await createThread({
     title: body.title,
     tags: body.tags ?? [],
     participants: body.participants,

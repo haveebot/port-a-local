@@ -20,7 +20,7 @@ export async function POST(
     );
   }
 
-  const created = createMessage({
+  const created = await createMessage({
     threadId: id,
     authorId: body.authorId,
     type: body.type,

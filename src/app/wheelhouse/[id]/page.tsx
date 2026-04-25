@@ -26,7 +26,7 @@ export default async function WheelhouseThreadPage({
   const me = getParticipant(who as ParticipantId);
 
   const { id } = await params;
-  const thread = getThreadWithMessages(id);
+  const thread = await getThreadWithMessages(id);
   if (!thread) notFound();
 
   return (
