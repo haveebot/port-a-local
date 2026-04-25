@@ -547,7 +547,7 @@ export const eventContent: Record<string, EventContent> = {
 
   "texas-women-anglers-tournament-2026": {
     lede:
-      "Seventy boats. Four hundred women. One shelter. Pete Fox started the Texas Women Anglers Tournament in 1984 with the same idea his family still runs it on today — women fishing for women, with every dollar that doesn't go to the winners going to The Purple Door, the Coastal Bend's shelter for survivors of domestic violence and sexual assault. Forty-plus years and $130,000 later, the fishing is still real and the community is still the point. The Saturday weigh-in at Fisherman's Wharf — themed boats parading in (Candy Land, Wizard of Oz, Mardi Gras), full costumes, money sprayers, smoke machines, mariachi bands appearing out of nowhere on the captain's bridge of a multi-million-dollar yacht, beads thrown to the crowd, the kind of cheering you'd expect at actual Mardi Gras — pulls a bigger audience than several mega-money tournaments on this coast. The shirts are everywhere for a reason.",
+      "Dozens of boats. Hundreds of women. One shelter. Pete Fox started the Texas Women Anglers Tournament in 1984 with the same idea his family still runs it on today — women fishing for women, with every dollar that doesn't go to the winners going to The Purple Door, the Coastal Bend's shelter for survivors of domestic violence and sexual assault. Forty-plus years and $130,000 later, the fishing is still real and the community is still the point. The Saturday weigh-in at Fisherman's Wharf — themed boats parading in (Candy Land, Wizard of Oz, Mardi Gras), full costumes, money sprayers, smoke machines, mariachi bands appearing out of nowhere on the captain's bridge of a multi-million-dollar yacht, beads thrown to the crowd, the kind of cheering you'd expect at actual Mardi Gras — pulls a bigger audience than several mega-money tournaments on this coast. The shirts are everywhere for a reason.",
     whatToExpect: [
       "Friday evening is the warm-up: registration, dinner, a concert, and the cash-pot announcements at the downtown reception venue (we'll list the spot once it's publicly announced). Boats depart at 8 PM. The room fills with women who've been coming for years, women fishing their first tournament, daughters who've graduated from the dock to the deck, and the families that built this thing in the 1980s.",
       "Saturday morning is the long day on the water. Lines in at 6:30 AM. Bay and offshore fleets work two different worlds. Out-of-town anglers are gone before most spectators are awake.",
@@ -719,9 +719,9 @@ export const eventContent: Record<string, EventContent> = {
       },
       {
         year: "2025",
-        title: "Seventy boats. Four hundred women. $403,809 in prize money.",
+        title: "$403,809 in prize money across 14 money winners",
         body:
-          "Modern scale. Sea Senora wins overall. Jordan Soechting takes top angler. The shelter check is the loudest cheer of the night.",
+          "Modern scale. Sea Senora wins overall ($128,527). Jordan Soechting takes top angler. The shelter check is the loudest cheer of the night.",
       },
       {
         year: "2026 cumulative",

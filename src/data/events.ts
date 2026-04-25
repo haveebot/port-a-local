@@ -135,9 +135,9 @@ export const events: EventDetails[] = [
     slug: "texas-women-anglers-tournament-2026",
     name: "Texas Women Anglers Tournament 2026",
     tagline:
-      "Seventy boats. Four hundred women. One shelter. The fishing is real. The community is the point.",
+      "Dozens of boats. Hundreds of women. One shelter. The fishing is real. The community is the point.",
     description:
-      "TWAT — the Texas Women Anglers Tournament — is Port Aransas's women-only fishing tournament. Founded 1984 by Pete Fox; Fox family still runs it. ~70 boats, 400+ women anglers. Every dollar that doesn't go to the winners benefits The Purple Door, the Coastal Bend's shelter for survivors of domestic violence and sexual assault. Tournament has contributed over $130,000 to The Purple Door to date. Late August 2026.",
+      "TWAT — the Texas Women Anglers Tournament — is Port Aransas's women-only fishing tournament. Founded 1984 by Pete Fox; Fox family still runs it. Dozens of boats, hundreds of women anglers each summer. Every dollar that doesn't go to the winners benefits The Purple Door, the Coastal Bend's shelter for survivors of domestic violence and sexual assault. Tournament has contributed over $130,000 to The Purple Door to date. Late August 2026.",
     startISO: "2026-08-21T17:00:00-05:00",
     endISO: "2026-08-23T18:00:00-05:00",
     dateLabel: "August 21–23, 2026 (tentative — confirming via official site)",
