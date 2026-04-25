@@ -13,8 +13,18 @@ export interface EventLogEntry {
   title: string;
   /** Body paragraph(s) */
   body: string;
-  /** Optional kind for color/icon — info | conditions | photos | wrap */
-  kind?: "info" | "conditions" | "photos" | "wrap";
+  /** Optional kind for color/icon — info | conditions | photos | weigh-in | wrap */
+  kind?: "info" | "conditions" | "photos" | "weigh-in" | "wrap";
+  /** Optional structured weigh-in data — surfaces a richer card when kind === "weigh-in" */
+  weighIn?: {
+    angler: string;
+    boat?: string;
+    species: string;
+    weight?: string;
+    length?: string;
+    division?: string;
+    photo?: string;
+  };
 }
 
 export interface EventScheduleItem {
@@ -286,6 +296,193 @@ export const eventContent: Record<string, EventContent> = {
         label:
           "Port Aransas CVB — Q&A with the new owners of Fly It! Port A Kite Shop (2022)",
         url: "https://www.portaransas.org/blog/stories/post/meet-the-new-owners-of-fly-it-port-a-kite-shop/",
+      },
+    ],
+  },
+
+  "deep-sea-roundup-2026": {
+    lede:
+      "Ninety years ago this summer, Barney Farley and twenty-four other charter captains pulled up to the docks for a three-day tournament they called the Tarpon Rodeo. North Millican took home the first trophy — though everyone in town quietly knew it was his wife Totsy who landed the fish. Two world wars and a pandemic have come and gone since. The Roundup hasn't.",
+    whatToExpect: [
+      "Friday and Saturday are the fishing days. Six divisions run simultaneously across the bay, the surf, the jetties, and offshore as far as boats want to push. Tarpon and billfish are catch-and-release; everything else gets weighed at the Fred Rhodes Pavilion in Roberts Point Park starting around 5 PM each evening — and the pavilion is open to the public, free, no entry fee for spectators.",
+      "Sunday is the awards day. Civic Center fish fry starts at noon, awards ceremony and raffle at 1 PM. The community shows up. The trophies get handed out. The same names show up on the perpetual hardware year after year — but every year there's also a new junior angler holding a fish that's bigger than they are.",
+      "Three things make this tournament different from every other Texas billfish stop: it's been running continuously since 1932 (only WWII and 2020 caused a gap), the kids' Piggy Perch contest is a real award category not a sideshow, and the sanctioning org — Port Aransas Boatmen, Inc. — has been the same Boatmen Association since the first cast.",
+    ],
+    schedule: [
+      {
+        time: "Thu Jul 9 · evening",
+        label: "Captain's meeting + opening reception",
+        body:
+          "Mandatory captain's meeting for registered boats. Public welcome to the reception — it's the night to catch up with the captains before they're too busy to talk.",
+      },
+      {
+        time: "Fri Jul 10 · before sunrise",
+        label: "Boats depart",
+        body:
+          "First light. Offshore boats are gone before most spectators are awake. Fly, kayak, and bay-surf anglers can start anytime — they're scored by their best single fish either day.",
+      },
+      {
+        time: "Fri Jul 10 · 5 PM – 8 PM",
+        label: "Day 1 weigh-in (public)",
+        body:
+          "Roberts Point Park · Fred Rhodes Pavilion. Free to watch. The first leaderboards post here. Bay-Surf and Offshore divisions are usually the most-watched — biggest fish, biggest crowd at the scale.",
+      },
+      {
+        time: "Sat Jul 11 · morning",
+        label: "Piggy Perch (kids)",
+        body:
+          "The only fishing contest where the smallest fish is a trophy. Bait and tackle provided. Awards: Most Fish · Smallest Fish · Largest Fish · Best Sportsmanship. Free to enter. Best photo op of the weekend.",
+      },
+      {
+        time: "Sat Jul 11 · 5 PM – 8 PM",
+        label: "Day 2 weigh-in (public) + final standings",
+        body:
+          "Final official weigh-in. Last chance to overtake a Day 1 leader. The leaderboards we're posting here finalize tonight pending official ratification.",
+      },
+      {
+        time: "Sun Jul 12 · 12 PM",
+        label: "Public fish fry",
+        body:
+          "Civic Center. Open to the public. The best deal in Port A on a July Sunday.",
+      },
+      {
+        time: "Sun Jul 12 · 1 PM",
+        label: "Awards ceremony + raffle",
+        body:
+          "Civic Center. All division winners, Junior winners, Top Woman Angler, Piggy Perch. Raffle drawings follow.",
+      },
+    ],
+    goodToKnow: [
+      {
+        label: "Watching is free",
+        detail:
+          "Spectators don't register or pay. Roberts Point Park weigh-ins are public both Friday and Saturday evenings. Show up around 5 PM either night.",
+      },
+      {
+        label: "Where the boats live",
+        detail:
+          "Most offshore boats berth at Port Aransas Marina or Fisherman's Wharf — both walkable from the weigh-in pavilion. Worth a stroll Friday afternoon to see what's about to fish.",
+      },
+      {
+        label: "Parking",
+        detail:
+          "Roberts Point Park has a lot but it fills early on weigh-in nights. Walking from downtown is faster than circling. Golf carts welcome.",
+      },
+      {
+        label: "Ferry timing",
+        detail:
+          "Tournament weekend is a high-traffic ferry weekend. Plan a 30–60 minute ferry wait Friday evening and Sunday morning. AM 530 has the live status.",
+      },
+      {
+        label: "Junior anglers",
+        detail:
+          "Bay-Surf and Offshore each have a separate Junior bracket. Awarded alongside the adult divisions.",
+      },
+      {
+        label: "Top Woman Angler",
+        detail:
+          "Cross-division award. Eligible across every division. Honors a lineage that goes back to Dorothy Fair, who was the first woman champion in 1934.",
+      },
+    ],
+    faq: [
+      {
+        q: "Can I just show up to watch?",
+        a: "Yes. Weigh-ins at Roberts Point Park are public Friday and Saturday evenings — no ticket, no entry fee. Sunday awards at the Civic Center are also open to the public.",
+      },
+      {
+        q: "Do I have to be local to fish?",
+        a: "No. Anyone can register through deepsearoundup.org. The tournament draws boats from across the Texas coast, plus regulars from Louisiana and as far as Florida.",
+      },
+      {
+        q: "What's a 'release' division?",
+        a: "Tarpon Release and Billfish Release are catch-and-release only. Length is recorded on tarpon; billfish are scored by count (weighted per species). The fish swims away — modern conservation grafted onto the 1932 tradition.",
+      },
+      {
+        q: "Is the Piggy Perch only for kids?",
+        a: "Yes. It's the kids' contest — the only one where the smallest fish wins a trophy. Adults can spectate from the dock.",
+      },
+      {
+        q: "What if it storms?",
+        a: "Tournament fishing continues unless the Coast Guard pulls everyone in. Weigh-ins move under cover but stay on schedule. Check the official board for any storm-driven changes.",
+      },
+      {
+        q: "How do I know who's winning right now?",
+        a: "We post live leaderboards on this page from each weigh-in. Refresh during the 5–8 PM windows. Official board posts at the pavilion are the source of truth — we cite them.",
+      },
+      {
+        q: "Where does the money go?",
+        a: "Port Aransas Boatmen, Inc. runs scholarship + community programs year-round. The tournament is the org's main annual fundraiser.",
+      },
+    ],
+    hostBlurb: [
+      "Port Aransas Boatmen, Inc. is the organization that became the Boatmen Association in 1932 — twenty-five charter and commercial captains who decided their fishing waters needed protection, their community needed support, and their tournament needed running. They've been doing all three ever since.",
+      "The Roundup is their main annual event. Proceeds fund scholarships and community programs that touch nearly every kid who grows up on this island.",
+    ],
+    liveLog: [],
+    hostTimeline: [
+      {
+        year: "1932",
+        title: "Barney Farley organizes the first Tarpon Rodeo",
+        body:
+          "Twenty-five charter and commercial captains form the Boatmen Association. Three-day shotgun start. Tarpon-focused. North Millican wins the first perpetual trophy — though locals say his wife Totsy actually caught the fish.",
+      },
+      {
+        year: "1934",
+        title: "Dorothy Fair becomes the first woman champion",
+        body:
+          "Two years in. The Top Woman Angler award still carried in her lineage today.",
+      },
+      {
+        year: "1942–1945",
+        title: "WWII pause",
+        body:
+          "The only break in nine decades that wasn't a pandemic. Charter boats were doing other work.",
+      },
+      {
+        year: "Post-war",
+        title: "Renamed Deep Sea Roundup",
+        body:
+          "Tarpon populations had collapsed by mid-century. The tournament expanded beyond tarpon, the divisions multiplied, and the name changed with the catch list.",
+      },
+      {
+        year: "2020",
+        title: "COVID pause",
+        body: "Second and only other interruption in 90 years.",
+      },
+      {
+        year: "2026",
+        title: "90th annual edition",
+        body:
+          "Six divisions, the Piggy Perch contest, the same Boatmen Association at the helm. Run continuously every July except for the war and the pandemic.",
+      },
+    ],
+    sources: [
+      {
+        label: "Deep Sea Roundup — official site",
+        url: "https://deepsearoundup.org",
+      },
+      {
+        label: "Deep Sea Roundup — Port Aransas South Jetty edition",
+        url: "https://roundup.portasouthjetty.com",
+      },
+      {
+        label: "Port Aransas Boatmen, Inc.",
+        url: "https://paboatmen.org/",
+      },
+      {
+        label:
+          "Port Aransas CVB — Texas's Oldest Fishing Tournament",
+        url: "https://www.portaransas.org/blog/stories/post/deep-sea-roundup/",
+      },
+      {
+        label:
+          "PAL Heritage — Texas's Oldest Fishing Tournament (1932 → today)",
+        url: "https://theportalocal.com/history/deep-sea-roundup",
+      },
+      {
+        label:
+          "Tournament History — Deep Sea Roundup (Boatmen Association origin)",
+        url: "https://deepsearoundup.org/tournament-history/",
       },
     ],
   },

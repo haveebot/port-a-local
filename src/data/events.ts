@@ -79,6 +79,39 @@ export const events: EventDetails[] = [
     ],
     facebookEventURL: "https://www.facebook.com/events/",
   },
+  {
+    slug: "deep-sea-roundup-2026",
+    name: "Port Aransas Deep Sea Roundup — 90th Annual",
+    tagline:
+      "Texas's oldest fishing tournament. 1932 to today, no break but a war and a pandemic.",
+    description:
+      "The 90th annual Port Aransas Deep Sea Roundup runs July 9–12, 2026. Six divisions — Bay-Surf, Offshore, Flyfishing, Kayaking, Tarpon Release, Billfish Release — plus the Junior brackets, the Top Woman Angler award, and the kids' Piggy Perch contest. Live leaderboard, dock weigh-in coverage, captain spotlights, and the history that started it all in 1932.",
+    startISO: "2026-07-09T17:00:00-05:00",
+    endISO: "2026-07-12T15:00:00-05:00",
+    dateLabel: "July 9–12, 2026",
+    headlineTime: "Tournament fishing Friday & Saturday · Awards Sunday 1 PM",
+    venueName: "Roberts Point Park · Fred Rhodes Pavilion",
+    venueAddress: "301 N Alister St, Port Aransas, TX 78373",
+    coordinates: [27.8362, -97.0644],
+    cost: "Spectators free · Anglers register",
+    icon: "🏆",
+    featured: true,
+    published: true,
+    hostBusinessSlug: undefined,
+    hostName: "Port Aransas Boatmen, Inc.",
+    tags: [
+      "Deep Sea Roundup",
+      "fishing tournament",
+      "Boatmen",
+      "Texas's oldest tournament",
+      "Tarpon Rodeo",
+      "billfish",
+      "tarpon",
+      "Piggy Perch",
+      "Roberts Point Park",
+      "tournament coverage",
+    ],
+  },
 ];
 
 export function getEventBySlug(slug: string): EventDetails | undefined {

@@ -13,6 +13,11 @@ import LighthouseMark from "@/components/brand/LighthouseMark";
 import { EmojiIcon } from "@/components/brand/PortalIcon";
 import EventCountdown from "@/components/EventCountdown";
 import EventOrganizerClaim from "@/components/EventOrganizerClaim";
+import LeaderboardTable from "@/components/tournament/LeaderboardTable";
+import DivisionsPanel from "@/components/tournament/DivisionsPanel";
+import CaptainSpotlight from "@/components/tournament/CaptainSpotlight";
+import PiggyPerchHighlight from "@/components/tournament/PiggyPerchHighlight";
+import { getTournamentResults } from "@/data/tournament-results";
 import type { Metadata } from "next";
 
 export function generateStaticParams() {
@@ -95,6 +100,8 @@ export default async function EventDetailPage({
   const host = event.hostBusinessSlug
     ? businesses.find((b) => b.slug === event.hostBusinessSlug)
     : undefined;
+
+  const tournament = getTournamentResults(slug);
 
   const startDate = new Date(event.startISO).toLocaleDateString("en-US", {
     weekday: "long",
@@ -435,13 +442,108 @@ export default async function EventDetailPage({
             </div>
           </section>
 
+          {/* Tournament leaderboards — only renders for events with tournament data */}
+          {tournament && (
+            <section id="leaderboard" className="mb-14 scroll-mt-24">
+              <p className="text-coral-500 text-sm font-medium tracking-[0.2em] uppercase mb-3">
+                Live · {tournament.edition}
+              </p>
+              <h2 className="font-display text-2xl sm:text-3xl font-bold text-navy-900 mb-2">
+                Leaderboards
+              </h2>
+              <p className="text-sm text-navy-500 font-light mb-6 max-w-2xl">
+                One panel per division. Empty until weigh-ins start; updates
+                in real time during weigh-in windows. We cite the official
+                board at the pavilion as the source of truth and flag any
+                pre-official entry as <em>unofficial</em>.
+              </p>
+              <div className="space-y-5">
+                {tournament.divisions.map((d) => (
+                  <LeaderboardTable
+                    key={d.slug}
+                    division={d}
+                    leaderboard={tournament.leaderboards[d.slug]}
+                  />
+                ))}
+              </div>
+              {tournament.specialAwards && tournament.specialAwards.length > 0 && (
+                <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {tournament.specialAwards.map((a) => (
+                    <div
+                      key={a.name}
+                      className="bg-navy-900 text-sand-100 rounded-xl p-5 border border-coral-500/20"
+                    >
+                      <p className="text-coral-300 text-[10px] font-bold tracking-[0.2em] uppercase mb-2">
+                        Special award
+                      </p>
+                      <h3 className="font-display text-lg font-bold mb-1.5">
+                        {a.name}
+                      </h3>
+                      <p className="text-sm text-navy-200 font-light leading-relaxed mb-2">
+                        {a.description}
+                      </p>
+                      <p className="text-xs text-navy-300 font-light italic">
+                        {a.eligibility}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </section>
+          )}
+
+          {/* Tournament divisions panel */}
+          {tournament && (
+            <section className="mb-14">
+              <p className="text-coral-500 text-sm font-medium tracking-[0.2em] uppercase mb-3">
+                The divisions
+              </p>
+              <h2 className="font-display text-2xl sm:text-3xl font-bold text-navy-900 mb-2">
+                Six categories. One tournament.
+              </h2>
+              <p className="text-sm text-navy-500 font-light mb-6 max-w-2xl">
+                Adult and Junior brackets in Bay-Surf and Offshore;
+                everyone-eligible elsewhere. Tap any division for its rules.
+              </p>
+              <DivisionsPanel divisions={tournament.divisions} />
+            </section>
+          )}
+
+          {/* Piggy Perch highlight */}
+          {tournament?.piggyPerch && (
+            <section className="mb-14">
+              <PiggyPerchHighlight piggy={tournament.piggyPerch} />
+            </section>
+          )}
+
+          {/* Captain spotlights ("boats to watch") */}
+          {tournament && tournament.captains.length > 0 && (
+            <section className="mb-14">
+              <p className="text-coral-500 text-sm font-medium tracking-[0.2em] uppercase mb-3">
+                Boats to watch
+              </p>
+              <h2 className="font-display text-2xl sm:text-3xl font-bold text-navy-900 mb-2">
+                Captain spotlights
+              </h2>
+              <p className="text-sm text-navy-500 font-light mb-6 max-w-2xl">
+                A few of the boats and captains entered this year, with the
+                history they bring to the dock.
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                {tournament.captains.map((c) => (
+                  <CaptainSpotlight key={c.name} captain={c} />
+                ))}
+              </div>
+            </section>
+          )}
+
           {/* Day-of coverage */}
           <section className="mb-14">
             <p className="text-coral-500 text-sm font-medium tracking-[0.2em] uppercase mb-3">
               Day-of coverage
             </p>
             <h2 className="font-display text-2xl sm:text-3xl font-bold text-navy-900 mb-6">
-              Live from the beach
+              {tournament ? "Live from the dock" : "Live from the beach"}
             </h2>
             {content.liveLog.length === 0 ? (
               <div className="bg-sand-50 border border-sand-200 rounded-xl p-6">
