@@ -732,7 +732,7 @@ export const eventContent: Record<string, EventContent> = {
     ],
     relatedHistory: undefined,
     photoCTA: {
-      headline: "Got a TWAT photo? We want it.",
+      headline: "Got a Texas Women Anglers photo? We want it.",
       body: "Past tournaments, your team's themed boat in the parade, your kid on the dock, costumes, the check presentation to The Purple Door — anything from past years that shows what this weekend actually feels like. We'll feature them in the gallery leading up to August.",
       secondaryBody: "Day-of, the same inbox loads weigh-in photos in real time. Tag the team, the boat, the year — anonymous is fine.",
       mailSubject: "TWAT photo — Texas Women Anglers Tournament 2026",
