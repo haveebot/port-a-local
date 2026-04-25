@@ -187,9 +187,9 @@ export default function DispatchIndexPage() {
               A real share of Dispatch starts with you
             </h2>
             <p className="text-lg text-navy-200 font-light leading-relaxed mb-3">
-              Many of these pieces start as a topic somebody on the island sent
-              us — closures, rent hikes, patterns hiding in plain sight, things
-              the dashboards don&apos;t catch.
+              These pieces start as a topic somebody on the island sent us —
+              closures, rent hikes, patterns hiding in plain sight, things the
+              dashboards don&apos;t catch.
             </p>
             <p className="text-sm text-navy-300 font-light leading-relaxed max-w-xl mx-auto">
               Submissions are anonymous. No reply, no email trace, no follow-up

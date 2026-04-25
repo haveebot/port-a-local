@@ -62,7 +62,7 @@ const eventsByMonth: { month: string; events: PAEvent[] }[] = [
     month: "August",
     events: [
       { name: "Texas Legends Billfish Tournament", timing: "First week of August", location: "Port Aransas Harbor / Offshore", description: "Premier billfish competition — one of three legs of the Texas Triple Crown Billfish Series. High-stakes offshore fishing for blue marlin, white marlin, and sailfish.", icon: "🐟", nextDateISO: "2026-08-03" },
-      { name: "Texas Women Anglers Tournament (TWAT)", timing: "Late August (tentative Aug 21–23, 2026)", location: "Sip Yard (registration) · Fisherman's Wharf (weigh-in)", description: "Women-only fishing tournament, family-run by Pete Fox's family since 1984. ~70 boats, 400+ anglers, $130K+ raised for The Purple Door (Coastal Bend's shelter for survivors of domestic violence and sexual assault). Live leaderboards on the hub.", icon: "🎣", detailSlug: "texas-women-anglers-tournament-2026", nextDateISO: "2026-08-21" },
+      { name: "Texas Women Anglers Tournament (TWAT)", timing: "Late August (tentative Aug 21–23, 2026)", location: "Fisherman's Wharf (weigh-in) · Reception venue downtown", description: "Women-only fishing tournament, family-run by Pete Fox's family since 1984. ~70 boats, 400+ anglers. Famous for the Saturday weigh-in spectacle — themed boats, costumes, money sprayers, beads thrown to the crowd. $130K+ raised for The Purple Door (Coastal Bend's shelter for survivors of domestic violence and sexual assault).", icon: "🎣", detailSlug: "texas-women-anglers-tournament-2026", nextDateISO: "2026-08-21" },
     ],
   },
   {

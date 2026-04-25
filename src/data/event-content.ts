@@ -547,18 +547,19 @@ export const eventContent: Record<string, EventContent> = {
 
   "texas-women-anglers-tournament-2026": {
     lede:
-      "Seventy boats. Four hundred women. One shelter. Pete Fox started the Texas Women Anglers Tournament in 1984 with the same idea his family still runs it on today — women fishing for women, with every dollar that doesn't go to the winners going to The Purple Door, the Coastal Bend's shelter for survivors of domestic violence and sexual assault. Forty-plus years and $130,000 later, the fishing is still real. The community is still the point.",
+      "Seventy boats. Four hundred women. One shelter. Pete Fox started the Texas Women Anglers Tournament in 1984 with the same idea his family still runs it on today — women fishing for women, with every dollar that doesn't go to the winners going to The Purple Door, the Coastal Bend's shelter for survivors of domestic violence and sexual assault. Forty-plus years and $130,000 later, the fishing is still real and the community is still the point. The Saturday weigh-in at Fisherman's Wharf — boats decked out as Candy Land, Wizard of Oz, Mardi Gras, themed beyond reason; full costumes; money sprayers; smoke machines; beads thrown to the crowd onshore — pulls a bigger audience than several mega-money tournaments on this coast. The shirts are everywhere for a reason.",
     whatToExpect: [
-      "Friday evening at Port A Sip Yard is the warm-up. Registration, dinner, a concert, and the cash-pot announcements run from late afternoon through 8 PM, when the boats depart. The rooftop fills with women who've been coming for years, women fishing their first tournament, daughters who've graduated from the dock to the deck, and the families that built this thing in the 1980s.",
-      "Saturday is the long day. Lines in the water at 6:30 AM. The bay and offshore fleets work two different worlds. By 5 PM the weigh station at Fisherman's Wharf is open and a steady stream of boats pull in to put fish on the scale. Crowd, music, beer, leaderboard updates on the wall.",
+      "Friday evening is the warm-up: registration, dinner, a concert, and the cash-pot announcements at the downtown reception venue (we'll list the spot once it's publicly announced). Boats depart at 8 PM. The room fills with women who've been coming for years, women fishing their first tournament, daughters who've graduated from the dock to the deck, and the families that built this thing in the 1980s.",
+      "Saturday morning is the long day on the water. Lines in at 6:30 AM. Bay and offshore fleets work two different worlds. Out-of-town anglers are gone before most spectators are awake.",
+      "Saturday evening is the show. The weigh-in at Fisherman's Wharf opens at 5 PM and what arrives over the next two hours doesn't really resemble a fishing tournament weigh-in. Boats parade in fully themed — Candy Land, Wizard of Oz, Mariachi, Disney, whatever the team decided to commit to in March. Crews in costume. Money sprayers blasting confetti. Smoke machines. Beads tossed to the crowd onshore. Balloons and beach balls flying between boats and the dock. Awards are given for best-decorated boat, most-original theme, and best costumes — separate from the catches. This is the part that makes the crowd here bigger than at several Triple-Crown-circuit tournaments.",
       "Sunday is the awards ceremony, a check presentation to The Purple Door, and the moment you remember why this tournament exists. The 2025 edition handed out $403,809 in prizes across 14 money winners — and an undisclosed-but-substantial figure to the shelter. Both numbers are the point.",
     ],
     schedule: [
       {
         time: "Fri Aug 21 · 4 PM",
-        label: "Registration + dinner + concert at the Sip Yard",
+        label: "Registration + dinner + concert (downtown reception)",
         body:
-          "Doors open. Anglers check in, pay cash-pot entries, and the rooftop turns into a reunion. Public welcome to the dinner and concert.",
+          "Doors open at the downtown reception venue (location announced closer to the event). Anglers check in, pay cash-pot entries, the room fills up. Public welcome to the dinner and concert.",
       },
       {
         time: "Fri Aug 21 · 8 PM",
@@ -573,16 +574,16 @@ export const eventContent: Record<string, EventContent> = {
           "Official tournament start. Bay and offshore divisions fish until the weigh-in deadline. Long day. Friendly competition.",
       },
       {
-        time: "Sat Aug 22 · 5 PM",
-        label: "Weigh-in opens at Fisherman's Wharf",
+        time: "Sat Aug 22 · 5 PM – 7:30 PM",
+        label: "The weigh-in spectacle (Fisherman's Wharf)",
         body:
-          "Public, free to watch. The most-anticipated section of the day. Music, beer, leaderboards on the wall, and a steady parade of fish to the scale.",
+          "Public, free to watch. Boats parade in fully themed — past years have included Candy Land, Wizard of Oz, Mardi Gras, Mariachi. Costumes, money sprayers, smoke machines, beads tossed to the crowd, balloons and beach balls flying between boats and the dock. All boats must be inside the Port A little jetties by 7:30 PM. This is the part you tell your friends about.",
       },
       {
         time: "Sat Aug 22 · evening",
-        label: "Cash pot reveals + post-weigh-in social",
+        label: "Cash pot reveals + costume/decor awards",
         body:
-          "After the scale closes, the cash-pot winners get called and the rooftop turns back into a party. The check to The Purple Door is the loudest cheer of the night.",
+          "After the scale closes, the cash-pot winners get called along with awards for best-decorated boat, most-original theme, and best costumes — separate categories from the catches. Then the post-weigh-in social rolls into the night.",
       },
       {
         time: "Sun Aug 23 · morning",
@@ -595,7 +596,12 @@ export const eventContent: Record<string, EventContent> = {
       {
         label: "Watching is free",
         detail:
-          "Friday's Sip Yard reception and Saturday's Fisherman's Wharf weigh-in are open to the public. Bring a chair, a hat, and cash for the bar.",
+          "Friday's downtown reception and Saturday's Fisherman's Wharf weigh-in are open to the public. Bring a chair, a hat, and cash for the bar.",
+      },
+      {
+        label: "Awards beyond the fish",
+        detail:
+          "Best-decorated boat, most-original theme, and best costumes are real award categories. Anglers commit. Past themes include Candy Land, Wizard of Oz, Mariachi, Mardi Gras, and full Disney production numbers.",
       },
       {
         label: "Women only on the boats",
@@ -605,12 +611,12 @@ export const eventContent: Record<string, EventContent> = {
       {
         label: "Family friendly",
         detail:
-          "Kids welcome at every public event. Saturday's weigh-in is the loudest, most fun part of the weekend if you have small humans.",
+          "Kids welcome at every public event. Saturday's weigh-in is the loudest, most fun part of the weekend if you have small humans — bring beads-catching gear.",
       },
       {
         label: "Where to park",
         detail:
-          "Sip Yard is downtown, walk-in friendly. Fisherman's Wharf weigh-in lot fills fast Saturday around 4:30 PM — get there earlier or walk from downtown.",
+          "Fisherman's Wharf weigh-in lot fills fast Saturday around 4:30 PM — get there earlier or walk from downtown. Friday reception parking will be listed once the venue is publicly announced.",
       },
       {
         label: "Tournament app",
@@ -638,7 +644,7 @@ export const eventContent: Record<string, EventContent> = {
       },
       {
         q: "I'm not a fishing person — should I still come?",
-        a: "Yes. The Friday Sip Yard reception and the Saturday Fisherman's Wharf weigh-in are the social events of August in Port Aransas. Music, food, a real community on the dock, and a cause worth showing up for.",
+        a: "Yes — and especially for Saturday's weigh-in. Themed boats, costumes, beads thrown from the deck, money sprayers, beach balls bouncing across the crowd. People come for the spectacle and stay for the cause. The Friday-evening reception is also open to the public — music, food, a real community on the floor.",
       },
       {
         q: "How do I register to fish?",
@@ -708,14 +714,14 @@ export const eventContent: Record<string, EventContent> = {
     relatedHistory: undefined,
     photoCTA: {
       headline: "Got a TWAT photo? We want it.",
-      body: "Past tournaments, your team on the boat, your kid on the dock, the Sip Yard rooftop, the check presentation to The Purple Door — anything from past years that shows what this weekend actually feels like. We'll feature them in the gallery leading up to August.",
+      body: "Past tournaments, your team's themed boat in the parade, your kid on the dock, costumes, the check presentation to The Purple Door — anything from past years that shows what this weekend actually feels like. We'll feature them in the gallery leading up to August.",
       secondaryBody: "Day-of, the same inbox loads weigh-in photos in real time. Tag the team, the boat, the year — anonymous is fine.",
       mailSubject: "TWAT photo — Texas Women Anglers Tournament 2026",
     },
     liveCoverage: {
       heading: "Live from the wharf",
       emptyState:
-        "This page goes live as the first fish hit the scale Saturday evening. Real-time leaderboard updates, weigh-in photos, the rooftop scene at the Sip Yard, and the check presentation to The Purple Door all land here as they happen. If you're at the wharf with a phone, send shots to hello@theportalocal.com — they go straight into the feed with credit.",
+        "This page goes live as the first themed boat parades into Fisherman's Wharf Saturday evening. Real-time leaderboard updates, weigh-in photos, costume + boat-decor highlights, and the check presentation to The Purple Door all land here as they happen. If you're at the wharf with a phone, send shots to hello@theportalocal.com — they go straight into the feed with credit.",
     },
     merchSpotlight: {
       headline: "No online store. The merch tent is the merch.",

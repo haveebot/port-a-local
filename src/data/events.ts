@@ -142,7 +142,7 @@ export const events: EventDetails[] = [
     endISO: "2026-08-23T18:00:00-05:00",
     dateLabel: "August 21–23, 2026 (tentative — confirming via official site)",
     headlineTime: "Boats depart Friday 8 PM · weigh-in Saturday 5 PM",
-    venueName: "Port Aransas Sip Yard (registration) · Fisherman's Wharf (weigh-in)",
+    venueName: "Fisherman's Wharf (weigh-in) · Reception venue downtown (announced closer to event)",
     venueAddress: "Port Aransas, TX 78373",
     coordinates: [27.8338, -97.0623],
     cost: "Spectators free · Anglers register",
