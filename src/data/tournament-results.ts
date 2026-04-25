@@ -205,92 +205,120 @@ export const tournamentResults: Record<string, TournamentResults> = {
       "Founded in the 1980s as a women-only fishing tournament benefiting the Women's Shelter of South Texas (now The Purple Door). Family-run since day one. Proceeds-after-prizes go to the shelter.",
     divisions: [
       {
-        slug: "bay",
-        name: "Bay Division",
-        short: "Inshore — bays, jetties, surf. Trout, redfish, flounder, drum.",
-        rules:
-          "Eligible inshore species per official rules. Single biggest fish per angler scores. The bay fleet typically posts the most-watched leaderboard at the weigh-in.",
-        scoring: "weight",
-      },
-      {
-        slug: "offshore",
-        name: "Offshore Division",
-        short: "Beyond the jetties — kingfish, snapper, ling, dorado.",
-        rules:
-          "Eligible offshore species per official rules. Single biggest fish per angler scores. Offshore boats fish further from harbor; long day for the team.",
-        scoring: "weight",
-      },
-      {
-        slug: "release",
-        name: "Release Division (billfish + tarpon)",
+        slug: "billfish",
+        name: "Billfish (Release)",
         short:
-          "Catch-and-release for billfish (blue marlin, white marlin, sailfish) and tarpon.",
+          "Blue marlin, white marlin, sailfish — release-only, points-based.",
         rules:
-          "Release-only with photo verification per official protocol. Honors the conservation commitment built into the modern tournament format.",
+          "Release-only. Points awarded per species per official scoring matrix. Video verification with the day's designated object visible. Billfish points feed directly into the overall trophy calculation.",
         scoring: "release",
+      },
+      {
+        slug: "dolphin",
+        name: "Dolphin (Mahi-Mahi)",
+        short: "Brought to the scale. Heaviest dolphin scores.",
+        rules:
+          "Weight-based. 1 point per pound contributes to the overall trophy. Single biggest fish per boat in division.",
+        scoring: "weight",
+      },
+      {
+        slug: "tuna",
+        name: "Tuna",
+        short: "Brought to the scale. Heaviest tuna scores.",
+        rules:
+          "Weight-based. 1 point per pound contributes to the overall trophy. Single biggest fish per boat in division.",
+        scoring: "weight",
+      },
+      {
+        slug: "wahoo",
+        name: "Wahoo",
+        short: "Brought to the scale. Heaviest wahoo scores.",
+        rules:
+          "Weight-based. 1 point per pound contributes to the overall trophy. Single biggest fish per boat in division.",
+        scoring: "weight",
       },
     ],
     specialAwards: [
       {
-        name: "Top Boat",
-        description: "Highest-scoring boat across the field.",
-        eligibility: "Awarded Sunday at the awards ceremony.",
+        name: "Overall Top Boat",
+        description:
+          "Most total points across all divisions (billfish points + 1 point per pound for dolphin, tuna, and wahoo). The marquee trophy.",
+        eligibility: "All registered boats.",
       },
       {
         name: "Top Woman Angler",
         description:
-          "Highest individual angler — the lineage carried since 1989.",
+          "Highest individual angler across the field — the lineage carried since 1989.",
         eligibility: "All registered anglers.",
       },
       {
         name: "Cash Pots",
         description:
-          "Optional side bets paid into Friday night and called Saturday after the weigh-in.",
+          "Optional side bets paid in Friday night and called Saturday after the weigh-in. Multiple pot categories.",
         eligibility: "Opt-in per category.",
+      },
+      {
+        name: "Best-Decorated Boat / Theme / Costumes",
+        description:
+          "Three separate awards for the spectacle side of the weigh-in. Voted on by judges at the wharf.",
+        eligibility: "Every boat in the field is eligible.",
       },
     ],
     leaderboards: {
-      bay: {
-        divisionSlug: "bay",
+      billfish: {
+        divisionSlug: "billfish",
+        entries: [],
+        status: "Releases logged Saturday — points feed the overall trophy",
+      },
+      dolphin: {
+        divisionSlug: "dolphin",
         entries: [],
         status: "Weigh-in opens Saturday, August 22 at 5 PM",
       },
-      offshore: {
-        divisionSlug: "offshore",
+      tuna: {
+        divisionSlug: "tuna",
         entries: [],
         status: "Weigh-in opens Saturday, August 22 at 5 PM",
       },
-      release: {
-        divisionSlug: "release",
+      wahoo: {
+        divisionSlug: "wahoo",
         entries: [],
-        status: "Releases logged through the weekend",
+        status: "Weigh-in opens Saturday, August 22 at 5 PM",
       },
     },
     captains: [],
     rules: {
       edition: "2026 (forthcoming — confirming via official site)",
-      officialUrl: "https://texaswomenanglers.org/",
+      officialUrl: "https://texaswomenanglers.org/rules-regulations",
       universal: [
-        "All registered anglers must be women.",
+        "All registered anglers must be women. Captains can be any gender.",
+        "Anyone may set the hook, then hand the rod to a woman angler — she reels the fish in entirely on her own with no further assistance to the rod or reel.",
+        "All fish must be caught on rod and reel with hooks only.",
         "Boats depart Friday at 8 PM; lines in the water Saturday at 6:30 AM.",
-        "Weigh-in opens Saturday at 5 PM at Fisherman's Wharf.",
-        "Billfish (Blue Marlin, White Marlin, Sailfish) and Tarpon are catch-and-release ONLY.",
+        "Weigh-in opens Saturday at 5 PM at Fisherman's Wharf; all boats must be inside the Port A little jetties by 7:30 PM.",
+        "Billfish (Blue Marlin, White Marlin, Sailfish) are catch-and-release ONLY.",
+        "Video verification required for every fish — the day's designated object (revealed at Friday registration) must be visible in the frame.",
+        "Overall trophy = points from billfish + 1 point per pound for dolphin, tuna, and wahoo.",
         "Cash pots are opt-in and paid out per category Saturday evening.",
-        "Captains can be any gender — all anglers must be women.",
         "Live leaderboards run through the official Texas Women Angler Tournament app (Reel Time Apps).",
       ],
       divisionNotes: {
-        bay: [
-          "Inshore species per official rules — trout, redfish, flounder, drum, others.",
-          "Single biggest fish per angler scores per species.",
+        billfish: [
+          "Release-only. Points awarded per species per the official scoring matrix.",
+          "Video required with the day's designated object visible.",
+          "Billfish points feed directly into the overall trophy calculation — the ceiling on what a boat can score.",
         ],
-        offshore: [
-          "Offshore species per official rules — kingfish, snapper, ling, dorado, others.",
-          "Long day on the water; many teams pre-stage Friday night.",
+        dolphin: [
+          "Weight-based. 1 point per pound contributes to overall.",
+          "Single biggest fish per boat scores in this category.",
         ],
-        release: [
-          "Photo + verification required per official release protocol.",
-          "All billfish and all tarpon are release-only across every division.",
+        tuna: [
+          "Weight-based. 1 point per pound contributes to overall.",
+          "Single biggest fish per boat scores in this category.",
+        ],
+        wahoo: [
+          "Weight-based. 1 point per pound contributes to overall.",
+          "Single biggest fish per boat scores in this category.",
         ],
       },
     },
