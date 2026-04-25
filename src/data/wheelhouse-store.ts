@@ -127,6 +127,27 @@ export async function getRecentActivity(
     : Promise.resolve(mock.getRecentActivity(windowHours));
 }
 
+/* -------------------- Analytics -------------------- */
+
+export type {
+  DrainAnalyticsEvent,
+  PalStats,
+} from "./wheelhouse-store-mock";
+
+export async function ingestAnalyticsEvents(
+  events: import("./wheelhouse-store-mock").DrainAnalyticsEvent[],
+): Promise<{ inserted: number; skipped: number }> {
+  return USE_PG
+    ? pg.ingestAnalyticsEvents(events)
+    : Promise.resolve(mock.ingestAnalyticsEvents(events));
+}
+
+export async function getPalStats(): Promise<
+  import("./wheelhouse-store-mock").PalStats
+> {
+  return USE_PG ? pg.getPalStats() : Promise.resolve(mock.getPalStats());
+}
+
 /** Backend status — handy for the init / debug surface */
 export function backendStatus(): { backend: "postgres" | "mock" } {
   return { backend: USE_PG ? "postgres" : "mock" };

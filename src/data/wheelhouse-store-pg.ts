@@ -336,6 +336,158 @@ export async function getRecentActivity(
   };
 }
 
+/* -------------------- Analytics ingest + queries -------------------- */
+
+/** Shape of one event from a Vercel Web Analytics Drain payload */
+export interface DrainAnalyticsEvent {
+  schema?: string;
+  eventType?: string; // 'pageview' | 'event'
+  eventName?: string;
+  eventData?: string; // stringified JSON
+  timestamp?: number; // unix ms
+  origin?: string;
+  path?: string;
+  route?: string;
+  referrer?: string;
+  queryParams?: string;
+  country?: string;
+  region?: string;
+  city?: string;
+  osName?: string;
+  clientName?: string;
+  deviceType?: string;
+  vercelEnvironment?: string;
+  sessionId?: number;
+  deviceId?: number;
+}
+
+export async function ingestAnalyticsEvents(
+  events: DrainAnalyticsEvent[],
+): Promise<{ inserted: number; skipped: number }> {
+  if (!events.length) return { inserted: 0, skipped: 0 };
+  // Only persist production traffic — preview deploys + dev pollute aggregates.
+  const prod = events.filter((e) => e.vercelEnvironment === "production");
+  let inserted = 0;
+  for (const e of prod) {
+    if (!e.eventType || !e.timestamp) continue;
+    const ts = new Date(e.timestamp).toISOString();
+    let parsedData: string | null = null;
+    if (e.eventData) {
+      try {
+        parsedData = JSON.stringify(JSON.parse(e.eventData));
+      } catch {
+        parsedData = JSON.stringify({ raw: e.eventData });
+      }
+    }
+    await sql`
+      INSERT INTO wheelhouse_analytics_events (
+        event_type, event_name, event_data, ts,
+        origin, path, route, referrer, query_params,
+        country, region, city, os_name, client_name, device_type,
+        vercel_environment, session_id, device_id
+      ) VALUES (
+        ${e.eventType},
+        ${e.eventName ?? null},
+        ${parsedData}::jsonb,
+        ${ts},
+        ${e.origin ?? null},
+        ${e.path ?? null},
+        ${e.route ?? null},
+        ${e.referrer ?? null},
+        ${e.queryParams ?? null},
+        ${e.country ?? null},
+        ${e.region ?? null},
+        ${e.city ?? null},
+        ${e.osName ?? null},
+        ${e.clientName ?? null},
+        ${e.deviceType ?? null},
+        ${e.vercelEnvironment ?? null},
+        ${e.sessionId ?? null},
+        ${e.deviceId ?? null}
+      )
+    `;
+    inserted++;
+  }
+  return { inserted, skipped: events.length - inserted };
+}
+
+export interface PalStats {
+  /** Pageviews over the last 24h */
+  totalToday: number;
+  /** Pageviews 24-48h ago */
+  totalYesterday: number;
+  /** Pageviews over the last 7 days */
+  totalLast7d: number;
+  /** Top paths over the last 24h */
+  topPaths: { path: string; views: number }[];
+  /** Top custom events over the last 24h */
+  topEvents: { eventName: string; count: number }[];
+  /** Top countries over the last 24h */
+  topCountries: { country: string; views: number }[];
+  /** True if we have any events at all (even outside the 24h window) */
+  hasData: boolean;
+  /** ISO timestamp of the most recent event ingested */
+  lastEventAt: string | null;
+}
+
+export async function getPalStats(): Promise<PalStats> {
+  const now = Date.now();
+  const t24 = new Date(now - 24 * 60 * 60 * 1000).toISOString();
+  const t48 = new Date(now - 48 * 60 * 60 * 1000).toISOString();
+  const t7d = new Date(now - 7 * 24 * 60 * 60 * 1000).toISOString();
+
+  const [
+    { rows: today },
+    { rows: yesterday },
+    { rows: last7d },
+    { rows: paths },
+    { rows: events },
+    { rows: countries },
+    { rows: latest },
+  ] = await Promise.all([
+    sql`SELECT COUNT(*)::int AS n FROM wheelhouse_analytics_events
+        WHERE event_type = 'pageview' AND ts > ${t24}`,
+    sql`SELECT COUNT(*)::int AS n FROM wheelhouse_analytics_events
+        WHERE event_type = 'pageview' AND ts > ${t48} AND ts <= ${t24}`,
+    sql`SELECT COUNT(*)::int AS n FROM wheelhouse_analytics_events
+        WHERE event_type = 'pageview' AND ts > ${t7d}`,
+    sql`SELECT path, COUNT(*)::int AS views FROM wheelhouse_analytics_events
+        WHERE event_type = 'pageview' AND ts > ${t24} AND path IS NOT NULL
+        GROUP BY path ORDER BY views DESC LIMIT 5`,
+    sql`SELECT event_name, COUNT(*)::int AS count FROM wheelhouse_analytics_events
+        WHERE event_type = 'event' AND event_name IS NOT NULL AND ts > ${t24}
+        GROUP BY event_name ORDER BY count DESC LIMIT 5`,
+    sql`SELECT country, COUNT(*)::int AS views FROM wheelhouse_analytics_events
+        WHERE event_type = 'pageview' AND country IS NOT NULL AND ts > ${t24}
+        GROUP BY country ORDER BY views DESC LIMIT 5`,
+    sql`SELECT MAX(ts) AS latest FROM wheelhouse_analytics_events`,
+  ]);
+
+  const lastEventAt = latest[0]?.latest
+    ? new Date(latest[0].latest as string).toISOString()
+    : null;
+
+  return {
+    totalToday: (today[0]?.n as number) ?? 0,
+    totalYesterday: (yesterday[0]?.n as number) ?? 0,
+    totalLast7d: (last7d[0]?.n as number) ?? 0,
+    topPaths: paths.map((r) => ({
+      path: r.path as string,
+      views: r.views as number,
+    })),
+    topEvents: events.map((r) => ({
+      eventName: r.event_name as string,
+      count: r.count as number,
+    })),
+    topCountries: countries.map((r) => ({
+      country: r.country as string,
+      views: r.views as number,
+    })),
+    hasData: lastEventAt !== null,
+    lastEventAt,
+  };
+}
+
 /* -------------------- Schema + seed bootstrap -------------------- */
 
 /** Run once after Postgres is provisioned. Idempotent — safe to re-run. */
@@ -386,6 +538,35 @@ export async function initSchemaAndSeed(): Promise<{
   await sql`CREATE INDEX IF NOT EXISTS wheelhouse_threads_updated_at_idx ON wheelhouse_threads(updated_at DESC)`;
   await sql`CREATE INDEX IF NOT EXISTS wheelhouse_threads_state_idx ON wheelhouse_threads(state)`;
   await sql`CREATE INDEX IF NOT EXISTS wheelhouse_messages_created_at_idx ON wheelhouse_messages(created_at DESC)`;
+
+  // Vercel Analytics events arrive via Drain → /api/wheelhouse/analytics-ingest
+  await sql`
+    CREATE TABLE IF NOT EXISTS wheelhouse_analytics_events (
+      id BIGSERIAL PRIMARY KEY,
+      event_type TEXT NOT NULL,
+      event_name TEXT,
+      event_data JSONB,
+      ts TIMESTAMPTZ NOT NULL,
+      origin TEXT,
+      path TEXT,
+      route TEXT,
+      referrer TEXT,
+      query_params TEXT,
+      country TEXT,
+      region TEXT,
+      city TEXT,
+      os_name TEXT,
+      client_name TEXT,
+      device_type TEXT,
+      vercel_environment TEXT,
+      session_id BIGINT,
+      device_id BIGINT,
+      inserted_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+  await sql`CREATE INDEX IF NOT EXISTS wheelhouse_analytics_events_ts_idx ON wheelhouse_analytics_events(ts DESC)`;
+  await sql`CREATE INDEX IF NOT EXISTS wheelhouse_analytics_events_path_ts_idx ON wheelhouse_analytics_events(path, ts DESC)`;
+  await sql`CREATE INDEX IF NOT EXISTS wheelhouse_analytics_events_event_name_idx ON wheelhouse_analytics_events(event_name) WHERE event_name IS NOT NULL`;
 
   // Check if seed already ran
   const { rows: count } = await sql`SELECT COUNT(*)::int AS n FROM wheelhouse_threads`;

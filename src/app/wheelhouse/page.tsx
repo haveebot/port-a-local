@@ -3,8 +3,10 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import LighthouseMark from "@/components/brand/LighthouseMark";
 import ActivityFeed from "@/components/wheelhouse/ActivityFeed";
+import PalStatsCard from "@/components/wheelhouse/PalStats";
 import ThreadCard from "@/components/wheelhouse/ThreadCard";
 import {
+  getPalStats,
   getRecentActivity,
   getThreads,
   getThreadsAwaiting,
@@ -28,10 +30,11 @@ export default async function WheelhousePage({
   const me = getParticipant(who as ParticipantId);
 
   const { filter } = await searchParams;
-  const [allThreads, awaitingMe, activity] = await Promise.all([
+  const [allThreads, awaitingMe, activity, stats] = await Promise.all([
     getThreads(),
     getThreadsAwaiting(me.id),
     getRecentActivity(24),
+    getPalStats().catch(() => null),
   ]);
 
   let visible: Thread[] = allThreads;
@@ -94,6 +97,7 @@ export default async function WheelhousePage({
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
         <ActivityFeed activity={activity} />
+        {stats && <PalStatsCard stats={stats} />}
 
         {/* Filter bar + new thread button */}
         <div className="flex items-center justify-between gap-4 mb-6 flex-wrap">

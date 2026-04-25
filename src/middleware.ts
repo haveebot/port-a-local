@@ -19,6 +19,9 @@ const PUBLIC_WHEELHOUSE_PATHS = [
   "/wheelhouse/login",
   "/api/wheelhouse/login",
   "/api/wheelhouse/logout",
+  // Vercel Web Analytics Drain destination — auth via x-vercel-signature HMAC,
+  // not cookie or token.
+  "/api/wheelhouse/analytics-ingest",
 ];
 
 /**

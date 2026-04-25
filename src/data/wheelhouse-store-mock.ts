@@ -234,3 +234,46 @@ export function getRecentActivity(windowHours = 24): ActivitySummary {
     events,
   };
 }
+
+/* -------------------- Analytics (no-op in mock) -------------------- */
+
+export interface DrainAnalyticsEvent {
+  schema?: string;
+  eventType?: string;
+  eventName?: string;
+  eventData?: string;
+  timestamp?: number;
+  vercelEnvironment?: string;
+  [key: string]: unknown;
+}
+
+export interface PalStats {
+  totalToday: number;
+  totalYesterday: number;
+  totalLast7d: number;
+  topPaths: { path: string; views: number }[];
+  topEvents: { eventName: string; count: number }[];
+  topCountries: { country: string; views: number }[];
+  hasData: boolean;
+  lastEventAt: string | null;
+}
+
+export function ingestAnalyticsEvents(
+  _events: DrainAnalyticsEvent[],
+): { inserted: number; skipped: number } {
+  // Mock backend doesn't persist analytics — return as if accepted.
+  return { inserted: 0, skipped: _events.length };
+}
+
+export function getPalStats(): PalStats {
+  return {
+    totalToday: 0,
+    totalYesterday: 0,
+    totalLast7d: 0,
+    topPaths: [],
+    topEvents: [],
+    topCountries: [],
+    hasData: false,
+    lastEventAt: null,
+  };
+}
