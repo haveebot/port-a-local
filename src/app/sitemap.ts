@@ -52,14 +52,22 @@ export default function sitemap(): MetadataRoute.Sitemap {
       })),
   ];
 
-  const eventEntries: MetadataRoute.Sitemap = events
-    .filter((e) => e.published)
-    .map((e) => ({
-      url: `${BASE_URL}/events/${e.slug}`,
+  const eventEntries: MetadataRoute.Sitemap = [
+    {
+      url: `${BASE_URL}/events/tournament-season`,
       lastModified: new Date(),
-      changeFrequency: "daily" as const,
+      changeFrequency: "weekly" as const,
       priority: 0.85,
-    }));
+    },
+    ...events
+      .filter((e) => e.published)
+      .map((e) => ({
+        url: `${BASE_URL}/events/${e.slug}`,
+        lastModified: new Date(),
+        changeFrequency: "daily" as const,
+        priority: 0.85,
+      })),
+  ];
 
   const dispatchEntries: MetadataRoute.Sitemap = [
     {

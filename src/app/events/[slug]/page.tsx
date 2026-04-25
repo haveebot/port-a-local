@@ -24,6 +24,7 @@ import TournamentRulesPanel from "@/components/tournament/TournamentRulesPanel";
 import HistoricalPhotosShelf from "@/components/tournament/HistoricalPhotosShelf";
 import MilestonesPanel from "@/components/tournament/MilestonesPanel";
 import { getTournamentResults } from "@/data/tournament-results";
+import { isInTournamentSeason } from "@/data/tournament-season";
 import type { Metadata } from "next";
 
 export function generateStaticParams() {
@@ -108,6 +109,7 @@ export default async function EventDetailPage({
     : undefined;
 
   const tournament = getTournamentResults(slug);
+  const inSeason = isInTournamentSeason(slug);
 
   const startDate = new Date(event.startISO).toLocaleDateString("en-US", {
     weekday: "long",
@@ -827,6 +829,46 @@ export default async function EventDetailPage({
                 )}
               </div>
             </div>
+          </div>
+        </section>
+      )}
+
+      {/* Tournament Season cross-link — only on tournament-season events */}
+      {inSeason && (
+        <section className="py-12 bg-navy-900 border-y border-coral-500/20">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6">
+            <Link
+              href="/events/tournament-season"
+              className="block group"
+            >
+              <div className="flex items-center justify-between gap-4">
+                <div className="min-w-0">
+                  <p className="text-coral-300 text-[10px] font-bold tracking-[0.25em] uppercase mb-2">
+                    Part of Tournament Season
+                  </p>
+                  <p className="font-display text-xl sm:text-2xl font-bold text-sand-50 leading-tight mb-1">
+                    See the whole summer — DSR, Pachanga, Texas Legends, TWAT
+                  </p>
+                  <p className="text-sm text-navy-200 font-light">
+                    History, comparison, and how to plan a Tournament Season
+                    weekend on Mustang Island.
+                  </p>
+                </div>
+                <svg
+                  className="w-8 h-8 text-coral-300 flex-shrink-0 transition-transform group-hover:translate-x-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 8l4 4m0 0l-4 4m4-4H3"
+                  />
+                </svg>
+              </div>
+            </Link>
           </div>
         </section>
       )}

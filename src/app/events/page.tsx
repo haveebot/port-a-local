@@ -275,6 +275,45 @@ export default function EventsPage() {
         </section>
       )}
 
+      {/* Tournament Season cross-link */}
+      <section className="py-10 bg-sand-50 border-b border-sand-200">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+          <Link
+            href="/events/tournament-season"
+            className="block group bg-navy-900 text-sand-100 rounded-2xl p-6 sm:p-7 border border-coral-500/20 hover:border-coral-400 transition-colors"
+          >
+            <div className="flex items-center justify-between gap-4">
+              <div className="min-w-0">
+                <p className="text-coral-300 text-[10px] font-bold tracking-[0.25em] uppercase mb-2 inline-flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-coral-400" />
+                  Tournament Season hub
+                </p>
+                <p className="font-display text-lg sm:text-xl font-bold text-sand-50 leading-tight mb-1">
+                  Port Aransas&apos;s summer fishing fixture, all in one place
+                </p>
+                <p className="text-sm text-navy-200 font-light">
+                  DSR · Pachanga · Texas Legends · TWAT — history, comparison,
+                  and how to plan a Tournament Season weekend.
+                </p>
+              </div>
+              <svg
+                className="w-8 h-8 text-coral-300 flex-shrink-0 transition-transform group-hover:translate-x-1"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M17 8l4 4m0 0l-4 4m4-4H3"
+                />
+              </svg>
+            </div>
+          </Link>
+        </div>
+      </section>
+
       {/* Annual Events by Month */}
       <section className="py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
