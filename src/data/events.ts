@@ -45,6 +45,25 @@ export interface EventDetails {
   tags: string[];
   /** Optional Facebook event URL (RSVP source) */
   facebookEventURL?: string;
+  /** Optional charity beneficiary — renders a prominent callout on the page */
+  charity?: {
+    /** Display name (e.g. "The Purple Door") */
+    name: string;
+    /** Optional former / parent name shown as context */
+    formerly?: string;
+    /** One-sentence mission */
+    mission: string;
+    /** Pull-quote for the callout — the line we want to land */
+    pageTagline: string;
+    /** Service area or geography */
+    serviceArea?: string;
+    /** Optional dollar amount raised in the last edition or running total */
+    impactStat?: { label: string; value: string };
+    /** External URL to the charity */
+    url: string;
+    /** Optional direct donate URL */
+    donateUrl?: string;
+  };
 }
 
 export const events: EventDetails[] = [
@@ -111,6 +130,54 @@ export const events: EventDetails[] = [
       "Roberts Point Park",
       "tournament coverage",
     ],
+  },
+  {
+    slug: "texas-women-anglers-tournament-2026",
+    name: "Texas Women Anglers Tournament 2026",
+    tagline:
+      "Forty boats. Three hundred women. One shelter. The fishing is real. The bond is the point.",
+    description:
+      "TWAT — the Texas Women Anglers Tournament — is Port Aransas's women-only fishing tournament. Family-run since the 1980s. 40 boats, 300+ women anglers, and every dollar that doesn't go to the winners benefits The Purple Door, the Coastal Bend's shelter for survivors of domestic violence and sexual assault. Late August 2026.",
+    startISO: "2026-08-21T17:00:00-05:00",
+    endISO: "2026-08-23T18:00:00-05:00",
+    dateLabel: "August 21–23, 2026 (tentative — confirming via official site)",
+    headlineTime: "Boats depart Friday 8 PM · weigh-in Saturday 5 PM",
+    venueName: "Port Aransas Sip Yard (registration) · Fisherman's Wharf (weigh-in)",
+    venueAddress: "Port Aransas, TX 78373",
+    coordinates: [27.8338, -97.0623],
+    cost: "Spectators free · Anglers register",
+    icon: "🎣",
+    featured: true,
+    published: true,
+    hostBusinessSlug: undefined,
+    hostName: "Texas Women Anglers Tournament (family-run since 1980s)",
+    tags: [
+      "TWAT",
+      "Texas Women Anglers",
+      "women only",
+      "fishing tournament",
+      "The Purple Door",
+      "domestic violence",
+      "charity tournament",
+      "Coastal Bend",
+      "Port Aransas",
+      "tournament coverage",
+    ],
+    charity: {
+      name: "The Purple Door",
+      formerly: "Women's Shelter of South Texas",
+      mission:
+        "Empowers survivors of domestic violence and sexual assault to transition to a safe, healthy environment. Confidential, free of charge, available to anyone in the Coastal Bend.",
+      pageTagline:
+        "The only fishing tournament where the size of the prize is matched by what gets sent to people who need it.",
+      serviceArea: "Coastal Bend (Corpus Christi + surrounding counties)",
+      impactStat: {
+        label: "2025 prize pool that ran the engine",
+        value: "$403,809",
+      },
+      url: "https://purpledoortx.org/",
+      donateUrl: "https://purpledoortx.org/donate/",
+    },
   },
 ];
 

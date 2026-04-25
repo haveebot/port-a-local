@@ -535,4 +535,191 @@ export const eventContent: Record<string, EventContent> = {
         "This page goes live as the first boats hit the scale Friday evening. Real-time leaderboard updates, weigh-in photos, biggest-fish-of-the-hour highlights, and any wind-or-weather changes from the captain's stand will land here through Saturday night. If you're at the pavilion with a phone, send weigh-in shots to hello@theportalocal.com — they go straight into the feed with credit.",
     },
   },
+
+  "texas-women-anglers-tournament-2026": {
+    lede:
+      "Forty boats. Three hundred women. One shelter. The Texas Women Anglers Tournament has been turning Port Aransas's August wind into purposeful money since the 1980s — and every dollar that doesn't go to the winners goes to The Purple Door, the Coastal Bend's shelter for survivors of domestic violence and sexual assault. The fishing is real. The community is the point.",
+    whatToExpect: [
+      "Friday evening at Port A Sip Yard is the warm-up. Registration, dinner, a concert, and the cash-pot announcements run from late afternoon through 8 PM, when the boats depart. The rooftop fills with women who've been coming for years, women fishing their first tournament, daughters who've graduated from the dock to the deck, and the families that built this thing in the 1980s.",
+      "Saturday is the long day. Lines in the water at 6:30 AM. The bay and offshore fleets work two different worlds. By 5 PM the weigh station at Fisherman's Wharf is open and a steady stream of boats pull in to put fish on the scale. Crowd, music, beer, leaderboard updates on the wall.",
+      "Sunday is the awards ceremony, a check presentation to The Purple Door, and the moment you remember why this tournament exists. The 2025 edition handed out $403,809 in prizes across 14 money winners — and an undisclosed-but-substantial figure to the shelter. Both numbers are the point.",
+    ],
+    schedule: [
+      {
+        time: "Fri Aug 21 · 4 PM",
+        label: "Registration + dinner + concert at the Sip Yard",
+        body:
+          "Doors open. Anglers check in, pay cash-pot entries, and the rooftop turns into a reunion. Public welcome to the dinner and concert.",
+      },
+      {
+        time: "Fri Aug 21 · 8 PM",
+        label: "Boats depart",
+        body:
+          "Tournament boats leave the harbor for their staging anchorages. No fishing yet — official lines-in is Saturday morning.",
+      },
+      {
+        time: "Sat Aug 22 · 6:30 AM",
+        label: "Lines in the water",
+        body:
+          "Official tournament start. Bay and offshore divisions fish until the weigh-in deadline. Long day. Friendly competition.",
+      },
+      {
+        time: "Sat Aug 22 · 5 PM",
+        label: "Weigh-in opens at Fisherman's Wharf",
+        body:
+          "Public, free to watch. The most-anticipated section of the day. Music, beer, leaderboards on the wall, and a steady parade of fish to the scale.",
+      },
+      {
+        time: "Sat Aug 22 · evening",
+        label: "Cash pot reveals + post-weigh-in social",
+        body:
+          "After the scale closes, the cash-pot winners get called and the rooftop turns back into a party. The check to The Purple Door is the loudest cheer of the night.",
+      },
+      {
+        time: "Sun Aug 23 · morning",
+        label: "Awards ceremony + shelter check presentation",
+        body:
+          "Division winners, top boat, top angler. Then the moment that makes this tournament what it is — the check handover to The Purple Door, with someone from the shelter on stage.",
+      },
+    ],
+    goodToKnow: [
+      {
+        label: "Watching is free",
+        detail:
+          "Friday's Sip Yard reception and Saturday's Fisherman's Wharf weigh-in are open to the public. Bring a chair, a hat, and cash for the bar.",
+      },
+      {
+        label: "Women only on the boats",
+        detail:
+          "All anglers must be women. Captains can be any gender — many are dads, husbands, brothers running the boat for a daughter / wife / sister. Don't underestimate the number of mom-daughter teams that win money.",
+      },
+      {
+        label: "Family friendly",
+        detail:
+          "Kids welcome at every public event. Saturday's weigh-in is the loudest, most fun part of the weekend if you have small humans.",
+      },
+      {
+        label: "Where to park",
+        detail:
+          "Sip Yard is downtown, walk-in friendly. Fisherman's Wharf weigh-in lot fills fast Saturday around 4:30 PM — get there earlier or walk from downtown.",
+      },
+      {
+        label: "Tournament app",
+        detail:
+          "Live leaderboards run through the Reel Time Apps platform — Texas Women Angler Tournament app on iOS + Android. Download before Saturday.",
+      },
+      {
+        label: "Date is tentative",
+        detail:
+          "We've slotted Aug 21–23 based on the 2025 pattern (4th weekend of August). Will update as soon as the official site posts confirmed 2026 dates.",
+      },
+    ],
+    faq: [
+      {
+        q: "Can men fish?",
+        a: "No. Anglers are women only. Men can captain, crew, mate, or watch from the dock — many do.",
+      },
+      {
+        q: "How much goes to the shelter?",
+        a: "The tournament is family-run and the shelter check is presented at the Sunday awards. Past totals have been substantial but the exact figure varies year to year. The 2025 prize purse alone was over $403K — the engine that funds the giving.",
+      },
+      {
+        q: "What's The Purple Door?",
+        a: "The Coastal Bend's shelter and crisis intervention organization for survivors of domestic violence and sexual assault. Formerly called the Women's Shelter of South Texas. Based in Corpus Christi. All services confidential and free.",
+      },
+      {
+        q: "I'm not a fishing person — should I still come?",
+        a: "Yes. The Friday Sip Yard reception and the Saturday Fisherman's Wharf weigh-in are the social events of August in Port Aransas. Music, food, a real community on the dock, and a cause worth showing up for.",
+      },
+      {
+        q: "How do I register to fish?",
+        a: "Through the official site at texaswomenanglers.org. Registration usually opens in late spring / early summer.",
+      },
+      {
+        q: "Can I donate to The Purple Door directly?",
+        a: "Yes — purpledoortx.org. The tournament's check is one source; ongoing donations matter equally.",
+      },
+    ],
+    hostBlurb: [
+      "TWAT is family-run and has been since the 1980s. What started in 1989 as eighteen boats and just over fifty women has grown to forty boats and three hundred women, but the format hasn't changed: women fishing for women, with the prize purse and the charity check growing in lockstep.",
+      "Collie Caraker (PAL co-founder) is dear friends with the tournament's owner. We're covering it because we want it covered better than anyone else — and because the cause behind the prize purse is one we'd cover even if there were no fish involved.",
+    ],
+    liveLog: [],
+    hostTimeline: [
+      {
+        year: "1980s",
+        title: "Tournament founded as a charity fishing event",
+        body:
+          "A small, family-run idea: women anglers raising money for the Women's Shelter of South Texas. Started as a single-day event with just over a dozen boats.",
+      },
+      {
+        year: "1989",
+        title: "Eighteen boats. Fifty-plus women.",
+        body:
+          "Documented early-edition scale. The format proves out: women-only fishing + 100% of proceeds-after-prizes to the shelter.",
+      },
+      {
+        year: "Through the 2010s",
+        title: "Steady growth into one of Port A's signature summer events",
+        body:
+          "From a small charity tournament to a fixture of the August calendar. Boat count and angler count compound each year.",
+      },
+      {
+        year: "Recent",
+        title: "Women's Shelter rebrands as The Purple Door",
+        body:
+          "Same mission, new name. Tournament beneficiary continues unchanged.",
+      },
+      {
+        year: "2025",
+        title: "Forty boats. Three hundred women. $403,809 in prize money.",
+        body:
+          "88th year of women-fishing-for-women on Mustang Island. Sea Senora wins overall. Jordan Soechting takes top angler. The shelter check is the loudest cheer of the night.",
+      },
+      {
+        year: "2026",
+        title: "Late August on the calendar — bigger again",
+        body:
+          "The format that's worked since the 1980s, now with a digital home that does the story justice.",
+      },
+    ],
+    relatedHistory: undefined,
+    photoCTA: {
+      headline: "Got a TWAT photo? We want it.",
+      body: "Past tournaments, your team on the boat, your kid on the dock, the Sip Yard rooftop, the check presentation to The Purple Door — anything from past years that shows what this weekend actually feels like. We'll feature them in the gallery leading up to August.",
+      secondaryBody: "Day-of, the same inbox loads weigh-in photos in real time. Tag the team, the boat, the year — anonymous is fine.",
+      mailSubject: "TWAT photo — Texas Women Anglers Tournament 2026",
+    },
+    liveCoverage: {
+      heading: "Live from the wharf",
+      emptyState:
+        "This page goes live as the first fish hit the scale Saturday evening. Real-time leaderboard updates, weigh-in photos, the rooftop scene at the Sip Yard, and the check presentation to The Purple Door all land here as they happen. If you're at the wharf with a phone, send shots to hello@theportalocal.com — they go straight into the feed with credit.",
+    },
+    sources: [
+      {
+        label: "Texas Women Anglers Tournament — official site",
+        url: "https://texaswomenanglers.org/",
+      },
+      {
+        label: "TWAT — official Facebook",
+        url: "https://www.facebook.com/texaswomenanglerstournament/",
+      },
+      {
+        label: "TWAT — official Instagram",
+        url: "https://www.instagram.com/texas_women_anglers_tournament/",
+      },
+      {
+        label: "Reel Time Apps — 2025 leaderboards + payouts",
+        url: "https://www.reeltimeapps.com/live/tournaments/2025-texas-women-angler-tournament/leaderboards",
+      },
+      {
+        label: "The Purple Door — beneficiary",
+        url: "https://purpledoortx.org/",
+      },
+      {
+        label: "Port Aransas CVB — Texas Women Anglers Tournament",
+        url: "https://www.portaransas.org/blog/stories/post/texas-women-anglers-tournament/",
+      },
+    ],
+  },
 };

@@ -175,6 +175,156 @@ export interface TournamentResults {
 }
 
 export const tournamentResults: Record<string, TournamentResults> = {
+  "texas-women-anglers-tournament-2026": {
+    eventSlug: "texas-women-anglers-tournament-2026",
+    edition: "2026 (40+ years on)",
+    sanctioningOrg: "Texas Women Anglers Tournament (family-run)",
+    sanctioningOrgNote:
+      "Founded in the 1980s as a women-only fishing tournament benefiting the Women's Shelter of South Texas (now The Purple Door). Family-run since day one. Proceeds-after-prizes go to the shelter.",
+    divisions: [
+      {
+        slug: "bay",
+        name: "Bay Division",
+        short: "Inshore — bays, jetties, surf. Trout, redfish, flounder, drum.",
+        rules:
+          "Eligible inshore species per official rules. Single biggest fish per angler scores. The bay fleet typically posts the most-watched leaderboard at the weigh-in.",
+        scoring: "weight",
+      },
+      {
+        slug: "offshore",
+        name: "Offshore Division",
+        short: "Beyond the jetties — kingfish, snapper, ling, dorado.",
+        rules:
+          "Eligible offshore species per official rules. Single biggest fish per angler scores. Offshore boats fish further from harbor; long day for the team.",
+        scoring: "weight",
+      },
+      {
+        slug: "release",
+        name: "Release Division (billfish + tarpon)",
+        short:
+          "Catch-and-release for billfish (blue marlin, white marlin, sailfish) and tarpon.",
+        rules:
+          "Release-only with photo verification per official protocol. Honors the conservation commitment built into the modern tournament format.",
+        scoring: "release",
+      },
+    ],
+    specialAwards: [
+      {
+        name: "Top Boat",
+        description: "Highest-scoring boat across the field.",
+        eligibility: "Awarded Sunday at the awards ceremony.",
+      },
+      {
+        name: "Top Woman Angler",
+        description:
+          "Highest individual angler — the lineage carried since 1989.",
+        eligibility: "All registered anglers.",
+      },
+      {
+        name: "Cash Pots",
+        description:
+          "Optional side bets paid into Friday night and called Saturday after the weigh-in.",
+        eligibility: "Opt-in per category.",
+      },
+    ],
+    leaderboards: {
+      bay: {
+        divisionSlug: "bay",
+        entries: [],
+        status: "Weigh-in opens Saturday, August 22 at 5 PM",
+      },
+      offshore: {
+        divisionSlug: "offshore",
+        entries: [],
+        status: "Weigh-in opens Saturday, August 22 at 5 PM",
+      },
+      release: {
+        divisionSlug: "release",
+        entries: [],
+        status: "Releases logged through the weekend",
+      },
+    },
+    captains: [],
+    rules: {
+      edition: "2026 (forthcoming — confirming via official site)",
+      officialUrl: "https://texaswomenanglers.org/",
+      universal: [
+        "All registered anglers must be women.",
+        "Boats depart Friday at 8 PM; lines in the water Saturday at 6:30 AM.",
+        "Weigh-in opens Saturday at 5 PM at Fisherman's Wharf.",
+        "Billfish (Blue Marlin, White Marlin, Sailfish) and Tarpon are catch-and-release ONLY.",
+        "Cash pots are opt-in and paid out per category Saturday evening.",
+        "Captains can be any gender — all anglers must be women.",
+        "Live leaderboards run through the official Texas Women Angler Tournament app (Reel Time Apps).",
+      ],
+      divisionNotes: {
+        bay: [
+          "Inshore species per official rules — trout, redfish, flounder, drum, others.",
+          "Single biggest fish per angler scores per species.",
+        ],
+        offshore: [
+          "Offshore species per official rules — kingfish, snapper, ling, dorado, others.",
+          "Long day on the water; many teams pre-stage Friday night.",
+        ],
+        release: [
+          "Photo + verification required per official release protocol.",
+          "All billfish and all tarpon are release-only across every division.",
+        ],
+      },
+    },
+    pastChampions: [
+      {
+        year: 2025,
+        edition: "2025 edition",
+        division: "Overall",
+        category: "Top Boat",
+        angler: "Crew of Sea Senora",
+        boat: "Sea Senora",
+        notes:
+          "Top boat overall. $128,527 share of the 2025 prize pool; one of 14 money-winning teams that split $403,809 across all categories.",
+        sourceUrl:
+          "https://www.reeltimeapps.com/live/tournaments/2025-texas-women-angler-tournament/payouts",
+      },
+      {
+        year: 2025,
+        edition: "2025 edition",
+        division: "Overall",
+        category: "Top Woman Angler",
+        angler: "Jordan Soechting",
+        notes:
+          "Highest individual scoring angler in the 2025 field.",
+        sourceUrl:
+          "https://www.reeltimeapps.com/live/tournaments/2025-texas-women-angler-tournament/leaderboards",
+      },
+      {
+        year: 1989,
+        division: "Founding scale",
+        category: "Documented field size",
+        angler: "18 boats · 50+ women anglers",
+        notes:
+          "First documented year-by-year scale of the tournament. Today's field: ~40 boats and 300+ anglers — a roughly 6× growth in participation.",
+      },
+    ],
+    sources: [
+      {
+        label: "TWAT — official site",
+        url: "https://texaswomenanglers.org/",
+      },
+      {
+        label: "Reel Time Apps — TWAT live leaderboards (2025)",
+        url: "https://www.reeltimeapps.com/live/tournaments/2025-texas-women-angler-tournament/leaderboards",
+      },
+      {
+        label: "The Purple Door — beneficiary",
+        url: "https://purpledoortx.org/",
+      },
+      {
+        label: "Port Aransas CVB — TWAT listing",
+        url: "https://www.portaransas.org/blog/stories/post/texas-women-anglers-tournament/",
+      },
+    ],
+  },
+
   "deep-sea-roundup-2026": {
     eventSlug: "deep-sea-roundup-2026",
     edition: "90th Annual",

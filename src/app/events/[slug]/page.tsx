@@ -13,6 +13,7 @@ import LighthouseMark from "@/components/brand/LighthouseMark";
 import { EmojiIcon } from "@/components/brand/PortalIcon";
 import EventCountdown from "@/components/EventCountdown";
 import EventOrganizerClaim from "@/components/EventOrganizerClaim";
+import CharityCallout from "@/components/CharityCallout";
 import LeaderboardTable from "@/components/tournament/LeaderboardTable";
 import DivisionsPanel from "@/components/tournament/DivisionsPanel";
 import CaptainSpotlight from "@/components/tournament/CaptainSpotlight";
@@ -212,6 +213,13 @@ export default async function EventDetailPage({
           <p className="text-lg sm:text-xl text-navy-700 leading-relaxed font-light mb-8 first-letter:text-5xl first-letter:font-display first-letter:font-bold first-letter:text-coral-500 first-letter:float-left first-letter:mr-3 first-letter:mt-1">
             {content.lede}
           </p>
+
+          {/* Charity callout — when an event has a beneficiary, lead with it */}
+          {event.charity && (
+            <div className="mb-10">
+              <CharityCallout charity={event.charity} />
+            </div>
+          )}
 
           {/* Heritage link — read the full history */}
           {content.relatedHistory && (
