@@ -40,7 +40,7 @@ export default function FeaturedEventBanner() {
           <div className="flex-1 min-w-0">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-coral-500/30 bg-coral-500/10 text-coral-300 text-xs font-semibold tracking-widest uppercase mb-4">
               <EmojiIcon emoji={event.icon} className="w-3.5 h-3.5" />
-              Now hosting · local event
+              Now hosting · local events
             </div>
 
             <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold text-sand-50 leading-tight mb-3">
