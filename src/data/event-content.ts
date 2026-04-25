@@ -551,7 +551,8 @@ export const eventContent: Record<string, EventContent> = {
     whatToExpect: [
       "Friday evening is the warm-up: registration, dinner, a concert, and the cash-pot announcements at the downtown reception venue (we'll list the spot once it's publicly announced). Boats depart at 8 PM. The room fills with women who've been coming for years, women fishing their first tournament, daughters who've graduated from the dock to the deck, and the families that built this thing in the 1980s.",
       "Saturday morning is the long day on the water. Lines in at 6:30 AM. Bay and offshore fleets work two different worlds. Out-of-town anglers are gone before most spectators are awake.",
-      "Saturday evening is the show. The weigh-in at Fisherman's Wharf opens at 5 PM and what arrives over the next two hours doesn't really resemble a fishing tournament weigh-in. Boats parade in fully themed — Candy Land, Wizard of Oz, Mariachi, Disney, whatever the team decided to commit to in March. Crews in costume. Money sprayers blasting confetti. Smoke machines. Beads tossed to the crowd onshore. Balloons and beach balls flying between boats and the dock. Awards are given for best-decorated boat, most-original theme, and best costumes — separate from the catches. This is the part that makes the crowd here bigger than at several Triple-Crown-circuit tournaments.",
+      "Here's what you don't see at every other tournament: the boats leave the docks in the morning looking completely normal. Fish-finder, ice chests, bait, standard rig. The transformation happens on the run home. By the time they blast through the little jetties before the 7:30 PM cutoff, the props are deployed, the crew is in costume, smoke machines are armed. Then the harbor fills with decorated boats — circling, idling, finishing the decor, getting their timing right — sometimes for an hour before they back into the dock. That harbor-circle window is the spectacle before the spectacle. Boats from the Aransas Pass channel out to Roberts Point Park, all themed up, all waiting their turn. Worth getting to the wharf by 6 to see it.",
+      "When the boats finally back into Fisherman's Wharf, what arrives doesn't really resemble a fishing tournament weigh-in. Crews fully themed — Candy Land, Wizard of Oz, Mariachi, Disney, Mardi Gras, whatever the team committed to in March. Money sprayers blasting confetti. Smoke machines. Beads tossed to the crowd onshore. Balloons and beach balls flying between boats and the dock. Awards are given for best-decorated boat, most-original theme, and best costumes — separate from the catches. This is the part that makes the crowd here bigger than at several Triple-Crown-circuit tournaments.",
       "Sunday is the awards ceremony, a check presentation to The Purple Door, and the moment you remember why this tournament exists. The 2025 edition handed out $403,809 in prizes across 14 money winners — and an undisclosed-but-substantial figure to the shelter. Both numbers are the point.",
     ],
     schedule: [
@@ -574,10 +575,22 @@ export const eventContent: Record<string, EventContent> = {
           "Official tournament start. Bay and offshore divisions fish until the weigh-in deadline. Long day. Friendly competition.",
       },
       {
-        time: "Sat Aug 22 · 5 PM – 7:30 PM",
-        label: "The weigh-in spectacle (Fisherman's Wharf)",
+        time: "Sat Aug 22 · 5 PM",
+        label: "Scale opens at Fisherman's Wharf",
         body:
-          "Public, free to watch. Boats parade in fully themed — past years have included Candy Land, Wizard of Oz, Mardi Gras, Mariachi. Costumes, money sprayers, smoke machines, beads tossed to the crowd, balloons and beach balls flying between boats and the dock. All boats must be inside the Port A little jetties by 7:30 PM. This is the part you tell your friends about.",
+          "Public, free to watch. First boats start trickling in. Bay-division boats often arrive first — shorter run home from the inshore grounds.",
+      },
+      {
+        time: "Sat Aug 22 · ~6 PM – 7:30 PM",
+        label: "Harbor circle (the spectacle before the spectacle)",
+        body:
+          "Boats blast through the little jetties before the 7:30 PM cutoff, having transformed during the run home — props out, crews in costume, smoke machines armed. Then they circle and idle in the harbor finishing decor and waiting their turn at the dock. Best viewing window for the spectacle before the docking parade. Get to the wharf by 6.",
+      },
+      {
+        time: "Sat Aug 22 · 7:30 PM hard cutoff",
+        label: "All boats inside the little jetties",
+        body:
+          "No boat that hasn't crossed the jetties by 7:30 PM is eligible to weigh in. Hard line. Then the themed parade docking begins — boats back into Fisherman's Wharf one by one.",
       },
       {
         time: "Sat Aug 22 · evening",
@@ -612,6 +625,11 @@ export const eventContent: Record<string, EventContent> = {
         label: "Family friendly",
         detail:
           "Kids welcome at every public event. Saturday's weigh-in is the loudest, most fun part of the weekend if you have small humans — bring beads-catching gear.",
+      },
+      {
+        label: "Best viewing window",
+        detail:
+          "Get to Fisherman's Wharf by 6 PM Saturday. The harbor-circle hour (decorated boats blasting in through the jetties, then circling and idling while they finish their costumes) is its own show before the docking parade kicks off after the 7:30 PM cutoff.",
       },
       {
         label: "Where to park",
