@@ -7,12 +7,12 @@ function relativeTime(iso: string): string {
   const then = new Date(iso).getTime();
   const now = Date.now();
   const mins = Math.floor((now - then) / 60_000);
-  if (mins < 1) return "just now";
-  if (mins < 60) return `${mins}m ago`;
+  if (mins < 1) return "now";
+  if (mins < 60) return `${mins}m`;
   const hours = Math.floor(mins / 60);
-  if (hours < 24) return `${hours}h ago`;
+  if (hours < 24) return `${hours}h`;
   const days = Math.floor(hours / 24);
-  return `${days}d ago`;
+  return `${days}d`;
 }
 
 export default function ActivityFeed({
@@ -23,21 +23,27 @@ export default function ActivityFeed({
   const { newMessages, newThreads, activeThreads, events, windowHours } =
     activity;
   const hasActivity = newMessages > 0 || newThreads > 0;
+  const latest = events[0];
 
   return (
     <section className="mb-6 bg-white border border-sand-200 rounded-xl overflow-hidden">
-      <details className="group" open={hasActivity}>
-        <summary className="flex items-center justify-between gap-4 px-5 py-3 cursor-pointer list-none hover:bg-sand-50 transition-colors">
-          <div className="flex items-center gap-3 flex-wrap">
-            <span className="text-[10px] font-bold tracking-widest uppercase text-coral-600">
-              Last {windowHours}h
-            </span>
-            {hasActivity ? (
-              <span className="text-sm text-navy-700">
-                <span className="font-bold text-navy-900">{newMessages}</span>{" "}
-                {newMessages === 1 ? "message" : "messages"} ·{" "}
-                <span className="font-bold text-navy-900">{activeThreads}</span>{" "}
-                {activeThreads === 1 ? "thread" : "threads"}
+      <details className="group">
+        <summary className="flex items-center gap-3 px-5 py-2.5 cursor-pointer list-none hover:bg-sand-50 transition-colors">
+          <span className="text-[10px] font-bold tracking-widest uppercase text-coral-600 flex-shrink-0">
+            Last {windowHours}h
+          </span>
+
+          {hasActivity ? (
+            <>
+              <span className="text-xs text-navy-600 font-mono tabular-nums flex-shrink-0">
+                <span className="font-bold text-navy-900">{newMessages}</span>
+                <span className="text-navy-400"> msg</span>
+                {" · "}
+                <span className="font-bold text-navy-900">{activeThreads}</span>
+                <span className="text-navy-400">
+                  {" "}
+                  {activeThreads === 1 ? "thread" : "threads"}
+                </span>
                 {newThreads > 0 && (
                   <>
                     {" · "}
@@ -47,12 +53,31 @@ export default function ActivityFeed({
                   </>
                 )}
               </span>
-            ) : (
-              <span className="text-sm text-navy-500 font-light">
-                Quiet on the boat — no new activity.
-              </span>
-            )}
-          </div>
+
+              {latest && (
+                <span className="hidden sm:flex items-center gap-2 min-w-0 flex-1 text-xs text-navy-500 border-l border-sand-200 pl-3">
+                  <ParticipantBadge id={latest.authorId} size="sm" />
+                  <span className="text-navy-400 flex-shrink-0">→</span>
+                  <span className="font-display font-bold text-navy-900 truncate">
+                    {latest.threadTitle}
+                  </span>
+                  {latest.threadIsNew && (
+                    <span className="px-1.5 py-0.5 rounded text-[9px] font-bold tracking-widest uppercase bg-coral-500 text-white flex-shrink-0">
+                      new
+                    </span>
+                  )}
+                  <span className="text-navy-400 font-mono tabular-nums flex-shrink-0 ml-auto">
+                    {relativeTime(latest.createdAt)}
+                  </span>
+                </span>
+              )}
+            </>
+          ) : (
+            <span className="text-xs text-navy-500 font-light flex-1">
+              Quiet on the boat — no new activity.
+            </span>
+          )}
+
           <span className="text-navy-400 text-xs flex-shrink-0 group-open:rotate-180 transition-transform">
             ▾
           </span>
@@ -87,7 +112,7 @@ export default function ActivityFeed({
                       </p>
                     </div>
                     <span className="flex-shrink-0 text-[11px] text-navy-400 font-mono tabular-nums pt-1">
-                      {relativeTime(e.createdAt)}
+                      {relativeTime(e.createdAt)} ago
                     </span>
                   </div>
                 </Link>
