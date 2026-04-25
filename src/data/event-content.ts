@@ -650,9 +650,9 @@ export const eventContent: Record<string, EventContent> = {
       },
     ],
     hostBlurb: [
-      "Pete Fox formed the Texas Women Anglers Tournament in 1984. He'd grown up fishing and surfing in Port Aransas after his family moved to Corpus Christi from Ohio in 1958, built Marine Surveyors Inc. and Fox Yacht Sales, and was instrumental in starting nearly every modern Port A sportfishing tournament that still runs today — Texas Women Anglers, Dean Hawn Billfish, Texas Legends Billfish, the Masters. He was inducted into the Texas Saltwater Fishing Hall of Fame in 2021 as a Big Game Fishing Inductee.",
-      "The Fox family still runs TWAT today — it's been a family-run tournament from day one. Chris Fox is among the current organizers. The format hasn't changed since 1984: women fishing for women, prize purse and charity check growing in lockstep. To date the tournament has contributed over $130,000 to The Purple Door.",
-      "Collie Caraker (PAL co-founder) is dear friends with the tournament's owner. We're covering it because we want it covered better than anyone else — and because the cause behind the prize purse is one we'd cover even if there were no fish involved.",
+      "Pete Fox formed the Texas Women Anglers Tournament in 1984. He'd grown up fishing and surfing in Port Aransas after his family moved to Corpus Christi from Ohio in 1958, built Marine Surveyors Inc. and Fox Yacht Sales (the family yacht dealership at 203 W Cotter Ave, exclusive Texas Hatteras dealer since 1989), and was instrumental in starting nearly every modern Port A sportfishing tournament that still runs today — Texas Women Anglers, Dean Hawn Billfish, Texas Legends Billfish, the Masters. Inducted into the Texas Saltwater Fishing Hall of Fame in 2021.",
+      "The Fox family still runs TWAT today. Chris Fox lives on the island and operates Fox Yacht Sales — it's the family's primary local presence, and the most direct way to connect with the tournament organizers in person. The format hasn't changed since 1984: women fishing for women, prize purse and charity check growing in lockstep.",
+      "Collie Caraker (PAL co-founder) is dear friends with the Fox family. We're covering this tournament because we want it covered better than anyone else — and because the cause behind the prize purse is one we'd cover even if there were no fish involved.",
     ],
     liveLog: [],
     hostTimeline: [

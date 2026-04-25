@@ -149,7 +149,7 @@ export const events: EventDetails[] = [
     icon: "🎣",
     featured: true,
     published: true,
-    hostBusinessSlug: undefined,
+    hostBusinessSlug: "fox-yacht-sales",
     hostName: "Texas Women Anglers Tournament — founded 1984 by Pete Fox · run by the Fox family",
     tags: [
       "TWAT",
