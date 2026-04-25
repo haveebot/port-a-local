@@ -15,7 +15,9 @@ export const runtime = "nodejs";
  * persist to wheelhouse_analytics_events.
  *
  * Configure in Vercel: Team Settings → Drains → Add Drain → Web Analytics
- *   Endpoint: https://www.theportalocal.com/api/wheelhouse/analytics-ingest
+ *   Endpoint: https://theportalocal.com/api/wheelhouse/analytics-ingest
+ *     (Note: apex, not www. The www→apex 307 redirect breaks Vercel's
+ *     drain test and would also drop signed payloads in flight.)
  *   Signature secret: paste the value of WHEELHOUSE_DRAIN_SECRET
  *   Format: JSON or NDJSON (we accept both)
  */
