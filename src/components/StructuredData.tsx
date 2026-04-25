@@ -1,6 +1,7 @@
 import type { Business } from "@/data/businesses";
 import type { Story } from "@/data/stories";
 import type { Dispatch } from "@/data/dispatches";
+import type { EventDetails } from "@/data/events";
 
 const SITE = "https://theportalocal.com";
 
@@ -280,6 +281,58 @@ export function PlaceSchema({
     };
   }
   return <JsonLd data={data} />;
+}
+
+export function EventSchema({ event }: { event: EventDetails }) {
+  return (
+    <JsonLd
+      data={{
+        "@context": "https://schema.org",
+        "@type": "Event",
+        name: event.name,
+        description: event.description,
+        startDate: event.startISO,
+        endDate: event.endISO,
+        eventStatus: "https://schema.org/EventScheduled",
+        eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+        location: {
+          "@type": "Place",
+          name: event.venueName,
+          address: {
+            "@type": "PostalAddress",
+            streetAddress: event.venueAddress.split(",")[0]?.trim(),
+            addressLocality: "Port Aransas",
+            addressRegion: "TX",
+            postalCode: "78373",
+            addressCountry: "US",
+          },
+          geo: {
+            "@type": "GeoCoordinates",
+            latitude: event.coordinates[0],
+            longitude: event.coordinates[1],
+          },
+        },
+        organizer: {
+          "@type": "Organization",
+          name: event.hostName,
+          url: event.hostBusinessSlug
+            ? `https://theportalocal.com/shop/${event.hostBusinessSlug}`
+            : undefined,
+        },
+        offers: {
+          "@type": "Offer",
+          price: "0",
+          priceCurrency: "USD",
+          availability: "https://schema.org/InStock",
+          url: `https://theportalocal.com/events/${event.slug}`,
+        },
+        url: `https://theportalocal.com/events/${event.slug}`,
+        image: `https://theportalocal.com/events/${event.slug}/opengraph-image`,
+        keywords: event.tags.join(", "),
+        inLanguage: "en-US",
+      }}
+    />
+  );
 }
 
 export function DispatchSchema({ dispatch }: { dispatch: Dispatch }) {

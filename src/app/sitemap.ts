@@ -3,6 +3,7 @@ import { getAllBusinessSlugs } from "@/data/businesses";
 import { stories } from "@/data/stories";
 import { dispatches } from "@/data/dispatches";
 import { guides } from "@/data/guides";
+import { events } from "@/data/events";
 
 const BASE_URL = "https://theportalocal.com";
 
@@ -51,6 +52,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
       })),
   ];
 
+  const eventEntries: MetadataRoute.Sitemap = events
+    .filter((e) => e.published)
+    .map((e) => ({
+      url: `${BASE_URL}/events/${e.slug}`,
+      lastModified: new Date(),
+      changeFrequency: "daily" as const,
+      priority: 0.85,
+    }));
+
   const dispatchEntries: MetadataRoute.Sitemap = [
     {
       url: `${BASE_URL}/dispatch`,
@@ -97,6 +107,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...portalEntries,
     ...storyEntries,
     ...dispatchEntries,
+    ...eventEntries,
     ...contentEntries,
     ...guideEntries,
     ...categoryEntries,

@@ -16,6 +16,8 @@ interface PAEvent {
   location: string;
   description: string;
   icon: string;
+  /** If set, the event card links to this detail page slug under /events/ */
+  detailSlug?: string;
 }
 
 const eventsByMonth: { month: string; events: PAEvent[] }[] = [
@@ -42,7 +44,7 @@ const eventsByMonth: { month: string; events: PAEvent[] }[] = [
   {
     month: "May",
     events: [
-      { name: "Spring Kite Festival", timing: "Second weekend of May", location: "Beach near markers 1-20", description: "Free, family-friendly kite festival. Flyers set up Saturday morning around 10 AM. Bring your own kite or just watch. Beach parking permit required.", icon: "🪁" },
+      { name: "Fly It Port A's Spring Kite Festival", timing: "Mother's Day weekend (May 8–10, 2026)", location: "Port Aransas Beach, markers 1–20", description: "Free, family-friendly kite festival hosted by Fly It Port A. Setup Saturday at 10 AM. Bring your own kite or just watch. Beach parking permit required, no vendors on the beach.", icon: "🪁", detailSlug: "spring-kite-festival-2026" },
     ],
   },
   {
@@ -125,18 +127,36 @@ export default function EventsPage() {
                   {month.month}
                 </h3>
                 <div className="space-y-4">
-                  {month.events.map((event) => (
-                    <div key={event.name} className="bg-white rounded-xl border border-sand-200 p-5">
+                  {month.events.map((event) => {
+                    const inner = (
                       <div className="flex items-start gap-4">
                         <EmojiIcon emoji={event.icon} className="w-7 h-7 flex-shrink-0 mt-0.5 text-navy-900" />
-                        <div>
-                          <h4 className="font-display font-bold text-navy-900 mb-1">{event.name}</h4>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-baseline justify-between gap-3">
+                            <h4 className="font-display font-bold text-navy-900 mb-1">{event.name}</h4>
+                            {event.detailSlug && (
+                              <span className="text-xs font-semibold text-coral-500 whitespace-nowrap">Details →</span>
+                            )}
+                          </div>
                           <p className="text-xs font-medium text-coral-500 mb-2">{event.timing} · {event.location}</p>
                           <p className="text-sm text-navy-500 font-light leading-relaxed">{event.description}</p>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                    return event.detailSlug ? (
+                      <Link
+                        key={event.name}
+                        href={`/events/${event.detailSlug}`}
+                        className="block bg-white rounded-xl border border-sand-200 p-5 card-hover hover:border-coral-300 transition-colors"
+                      >
+                        {inner}
+                      </Link>
+                    ) : (
+                      <div key={event.name} className="bg-white rounded-xl border border-sand-200 p-5">
+                        {inner}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             ))}
