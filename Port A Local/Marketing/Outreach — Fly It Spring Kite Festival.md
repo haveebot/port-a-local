@@ -16,7 +16,8 @@
 - **Where:** Port Aransas Beach, markers 1–20 (south end, near the south jetty)
 - **Cost:** Free, no admission, no vendors on the beach
 - **Current FB social proof:** 443 going · 3.4K interested
-- **History:** Three festivals a year (Winter Presidents' Day weekend, Spring Mother's Day weekend, Fall Indigenous People Day weekend). Started under Jean Yocum (1985). Pyle family bought in 1991, ran for 31 years. Timms took over July 2022.
+- **Shop history:** Original Fly It opened ~1985 under Jean Yocum (sponsored competitive flyers). Ralph & Suanne Pyle bought July 1991, ran 31 years. Jeremy & Courtney Timms took over July 2022.
+- **Festival history:** The current three-festivals-a-year cadence (Winter Presidents' Day · Spring Mother's Day · Fall Indigenous People Day) is a Timms-era addition — only ~3 years old. Earlier "kite fun fly" gatherings happened informally under the Pyles, but the structured pattern is new. **This is a useful pitch angle, not a liability:** "We want to grow with you" plays better than "we want to ride your 40-year-old institution."
 - **Shop:** 405 W Ave G, daily 9 AM–6 PM, (361) 749-4190
 
 ---
@@ -133,7 +134,7 @@ The whole thing runs out of `hello@theportalocal.com` and Winston's phone — no
 2. Add a "Featured event" tile to the PAL homepage chip strip (replace one of the current 9 for the week of)
 3. Print 2–3 QR posters for the shop using `/print/qr/[slug]` pattern (we already have this for SandFest) — link straight to the festival page
 4. Open a private channel (text or email) so Jeremy / Courtney can flag any change in real time and we update the page in minutes
-5. After the event: write Heritage piece **"Forty Years of the Fly-It Festivals"** — three festivals a year since 1985, the kite-flier diaspora that drives across two states for it, the Yocum → Pyle → Timms ownership chain. Long-form, archival photos, the works. (Drop into the Heritage backlog.)
+5. After the event: write Heritage piece **"The Kite Shop on Avenue G"** — the Yocum → Pyle → Timms ownership chain across four decades, the competitive-flier sponsorships in the early years, the role the shop played in turning Mustang Island into a regional kite destination, and how the new Timms-era festival cadence is reshaping the rhythm. Long-form, archival photos. (Drop into the Heritage backlog. Note: the festival itself is too young to be a Heritage subject — the shop, its lineage, and the kite culture around it are.)
 
 ---
 

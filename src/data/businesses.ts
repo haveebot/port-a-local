@@ -1468,9 +1468,9 @@ export const businesses: Business[] = [
     slug: "fly-it-port-a",
     name: "Fly It! Port A",
     category: "shop",
-    tagline: "The island's only kite shop — 40 years on Ave G, hosts the Spring & Fall Kite Festivals",
+    tagline: "The island's only kite shop — on Ave G since 1991, hosts three free kite festivals a year",
     description:
-      "Fly It Port A has been on Avenue G since 1985, when Jean Yocum opened the original shop. The Pyle family bought it in 1991 and ran it for 31 years; Jeremy and Courtney Timms took over in 2022. Beyond kites of every shape, size, and complexity — beginner to elite stunt — the shop carries wind spinners, flags, windsocks, wind chimes, beach canopies, disc golf supplies, yard art, and wind-related gifts. The Timms host three free kite festivals a year: Winter (Presidents' Day weekend), Spring (Mother's Day weekend), and Fall (Indigenous People Day weekend). Ranked #2 of all shopping in Port Aransas on TripAdvisor.",
+      "Fly It is Port Aransas's only kite shop. The original storefront opened around 1985 under Jean Yocum, sponsoring competitive flyers in its early years. Ralph and Suanne Pyle bought it in July 1991 and built it into Fly-It! over a 31-year run; Jeremy and Courtney Timms took over in July 2022. Beyond kites of every shape, size, and complexity — beginner to elite stunt — the shop carries wind spinners, flags, windsocks, wind chimes, beach canopies, disc golf supplies, yard art, and wind-related gifts. Under the Timms, the shop hosts three free kite festivals a year: Winter (Presidents' Day weekend), Spring (Mother's Day weekend), and Fall (Indigenous People Day weekend). Ranked #2 of all shopping in Port Aransas on TripAdvisor.",
     address: "405 W Ave G, Port Aransas, TX 78373",
     coordinates: [27.8299071, -97.0695865],
     phone: "(361) 749-4190",

@@ -50,7 +50,7 @@ export interface EventContent {
 export const eventContent: Record<string, EventContent> = {
   "spring-kite-festival-2026": {
     lede:
-      "Forty years on, Port Aransas's longest-running grassroots beach event still doesn't charge admission, doesn't sell vendor space, and doesn't post a setlist. Just a flag line in the sand on Mother's Day weekend, a few hundred kites, and whoever shows up.",
+      "It's the third year of Port A's Mother's Day kite weekend in its current three-festivals-a-year shape, and the formula is the same one that worked the first time: a flag line in the sand, a few hundred kites, no admission, no vendor row, and whoever shows up.",
     whatToExpect: [
       "By 10 AM Saturday, Fly It Port A's flying line goes up between beach markers 1 and 20 — the south-end stretch of beach closest to the south jetty. Resident kite fliers from across the Gulf coast and beyond — Houston, Dallas, San Antonio, Louisiana, sometimes farther — set up large display kites, banners, line laundry, and rotating stunt demonstrations through the afternoon.",
       "It's a watch-or-fly event by design. Bring your own kite and you have the same flag-line real estate as anyone. Bring nothing and the show is just as good from a beach chair. Last year drew several hundred fliers at the peak; the 2026 Facebook event is already showing 443 going and 3,400+ interested.",
@@ -147,8 +147,8 @@ export const eventContent: Record<string, EventContent> = {
       },
     ],
     hostBlurb: [
-      "Fly It Port A — known locally as Fly-It! — has been on Avenue G since 1985, when Jean Yocum opened the original shop. The Pyle family bought it from Jean in 1991 and ran it for 31 years. In 2022, Jeremy and Courtney Timms took over and have kept the festivals, the inventory, and the no-admission, no-vendor format intact.",
-      "Three festivals a year is the rhythm: Winter (around Presidents' Day weekend), Spring (Mother's Day weekend), and Fall (around Indigenous People Day weekend). The festivals have never been monetized — they exist because the Timms (and the Pyles before them) wanted other fliers to have a reason to come to the island.",
+      "The kite shop on Avenue G has been a Port Aransas constant for four decades. Jean Yocum opened the original Fly It around 1985, sponsoring competitive flyers in the early years. The Pyle family bought it from Jean in 1991 and ran it as Fly-It! for 31 years — the long Pyle era is what most locals remember as the shop's identity. In July 2022, Jeremy and Courtney Timms took over.",
+      "The current three-festivals-a-year cadence — Winter (Presidents' Day weekend), Spring (Mother's Day weekend), and Fall (Indigenous People Day weekend) — is a Timms-era addition. Informal kite flies happened under the Pyles, but the structured Spring/Fall/Winter pattern is roughly three years old. The festivals have never been monetized: no admission, no vendor row, no sponsor logos. They exist because the shop wants other flyers to have a reason to come to the island.",
     ],
     liveLog: [],
     sources: [
