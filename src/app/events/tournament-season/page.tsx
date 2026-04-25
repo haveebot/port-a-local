@@ -76,17 +76,29 @@ export default function TournamentSeasonPage() {
               they called the Tarpon Rodeo. Barney Farley organized it. North
               Millican won the first perpetual trophy — though everyone in
               town knew it was his wife Totsy who actually landed the fish.
-              The Tarpon Rodeo became the Deep Sea Roundup, and except for
-              World War II and 2020, it&apos;s run every July since.
+              The Tarpon Rodeo became the{" "}
+              <Link
+                href="/events/deep-sea-roundup-2026"
+                className="text-coral-600 font-semibold underline decoration-coral-200 hover:decoration-coral-500"
+              >
+                Deep Sea Roundup
+              </Link>
+              , and except for World War II and 2020, it&apos;s run every
+              July since.
             </p>
             <p>
-              Half a century later, in 1984, Pete Fox started the Texas
-              Women Anglers Tournament — women fishing for women, with every
-              dollar that didn&apos;t go to the winners going to the
-              Women&apos;s Shelter of South Texas (now The Purple Door).
-              Women-only fishing tournaments weren&apos;t a category yet.
-              TWAT has been the matriarch of the category that grew up
-              around it.
+              Half a century later, in 1984, Pete Fox started the{" "}
+              <Link
+                href="/events/texas-women-anglers-tournament-2026"
+                className="text-coral-600 font-semibold underline decoration-coral-200 hover:decoration-coral-500"
+              >
+                Texas Women Anglers Tournament
+              </Link>
+              {" "}— women fishing for women, with every dollar that
+              didn&apos;t go to the winners going to the Women&apos;s
+              Shelter of South Texas (now The Purple Door). Women-only
+              fishing tournaments weren&apos;t a category yet. TWAT has
+              been the matriarch of the category that grew up around it.
             </p>
             <p>
               The 2010s brought the modern era — Texas Legends Billfish
