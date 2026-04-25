@@ -172,7 +172,7 @@ export default function DispatchIndexPage() {
         </section>
       )}
 
-      {/* Tip line */}
+      {/* Submission pipeline */}
       <section className="py-20 hero-gradient relative">
         <div className="absolute top-0 left-0 right-0 gold-line" />
         <div className="absolute bottom-0 left-0 right-0 coral-line" />
@@ -180,12 +180,21 @@ export default function DispatchIndexPage() {
 
         <div className="relative max-w-3xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-8">
+            <p className="text-coral-300 text-xs font-bold tracking-[0.25em] uppercase mb-3">
+              The pipeline
+            </p>
             <h2 className="font-display text-3xl font-bold text-sand-50 mb-4">
-              Got a tip?
+              A real share of Dispatch starts with you
             </h2>
-            <p className="text-lg text-navy-200 font-light">
-              If you know something about Port Aransas that the dashboards don&apos;t, we&apos;re
-              listening.
+            <p className="text-lg text-navy-200 font-light leading-relaxed mb-3">
+              Many of these pieces start as a topic somebody on the island sent
+              us — closures, rent hikes, patterns hiding in plain sight, things
+              the dashboards don&apos;t catch.
+            </p>
+            <p className="text-sm text-navy-300 font-light leading-relaxed max-w-xl mx-auto">
+              Submissions are anonymous. No reply, no email trace, no follow-up
+              — submit the topic, then watch the section. If a piece comes from
+              what you sent, you&apos;ll see it here same as everyone else.
             </p>
           </div>
           <DispatchTipForm />
