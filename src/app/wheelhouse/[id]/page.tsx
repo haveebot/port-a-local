@@ -48,12 +48,20 @@ export default async function WheelhouseThreadPage({
               </p>
             </div>
           </Link>
-          <Link
-            href="/wheelhouse"
-            className="text-xs text-navy-300 hover:text-coral-300"
-          >
-            ← All threads
-          </Link>
+          <div className="flex items-center gap-4">
+            <Link
+              href="/wheelhouse/welcome"
+              className="text-xs text-navy-300 hover:text-coral-300 underline decoration-navy-500 hover:decoration-coral-400"
+            >
+              Help
+            </Link>
+            <Link
+              href="/wheelhouse"
+              className="text-xs text-navy-300 hover:text-coral-300"
+            >
+              ← All threads
+            </Link>
+          </div>
         </div>
       </header>
 

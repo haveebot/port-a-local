@@ -206,6 +206,8 @@ export interface Thread {
   updatedAt: string;
   /** Optional links to context (commits, pages, docs, vault paths) */
   context?: { label: string; url: string }[];
+  /** When true, sorts to the top of every list regardless of updatedAt */
+  pinned?: boolean;
 }
 
 export interface ThreadWithMessages extends Thread {

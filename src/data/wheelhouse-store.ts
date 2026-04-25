@@ -33,10 +33,13 @@ function newId(prefix: string): string {
 /* -------------------- Reads -------------------- */
 
 export function getThreads(): Thread[] {
-  return [..._threads].sort(
-    (a, b) =>
-      new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
-  );
+  return [..._threads].sort((a, b) => {
+    // Pinned always sorts above non-pinned
+    if (a.pinned && !b.pinned) return -1;
+    if (!a.pinned && b.pinned) return 1;
+    // Within each group, most recently updated first
+    return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
+  });
 }
 
 export function getThread(id: string): Thread | null {

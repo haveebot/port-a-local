@@ -64,8 +64,14 @@ export default async function WheelhousePage({
               </p>
             </div>
           </Link>
-          <div className="flex items-center gap-3 text-sm">
-            <span className="text-navy-300">
+          <div className="flex items-center gap-4 text-sm">
+            <Link
+              href="/wheelhouse/welcome"
+              className="text-xs text-navy-300 hover:text-coral-300 underline decoration-navy-500 hover:decoration-coral-400"
+            >
+              Help
+            </Link>
+            <span className="text-navy-300 hidden sm:inline">
               Signed in as{" "}
               <span className="text-sand-50 font-semibold">{me.name}</span>
             </span>
