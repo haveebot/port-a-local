@@ -1,6 +1,6 @@
 # Port A Local — Company Brain
 _Winston + Claude's living knowledge base. Updated every session._
-_Last updated: 2026-04-23 (haveebot comms channel live + SEO schema expansion + GSC indexing diagnostic + Coastal Carpet Cleaners listing + Heritage #19 Red Snapper Fleet scaffolded)_
+_Last updated: 2026-04-24 (Live Music feature + Collie's design+marketing drop fully executed — icons v2 + lighthouse v2 + /brand kit + marketing ops + Heritage #19 Red Snapper Fleet shipped + PA Property Taxes Dispatch research in flight)_
 
 ---
 
@@ -41,6 +41,7 @@ _Last updated: 2026-04-23 (haveebot comms channel live + SEO schema expansion + 
 
 ### Session Notes
 - [[Session Notes/Session Notes Index]]
+- [[Session Notes/2026-04-24]] — Live Music feature from Winston's photo + Collie's full design/marketing drop executed (Round 1 icons v2 + Lighthouse v2 + /brand kit + Marketing ops vault) + Heritage #19 Red Snapper Fleet shipped + PA Property Taxes Dispatch research in flight (snapper-Dispatch wrong-turn corrected)
 - [[Session Notes/2026-04-23]] — Collie comms channel live + SEO schema expansion (FAQ/Breadcrumb/ItemList/Place) + GSC diagnostic + 9 URL indexing requests + Coastal Carpet listing + Heritage #19 Red Snapper Fleet scaffolded
 - [[Session Notes/2026-04-22]] — 13-commit marathon: A2P fix, 3 listings, Miguel routing, 55 silhouettes, Featured swap, Heritage #18 Pat Magee, Dispatch tip form, OG round 5
 - [[Session Notes/2026-04-21]] — Vault catch-up dumptruck + Collie round 1 (9 silhouette icons shipped, 5 copy fixes, favicon monochrome, sticky header) + attorney scope defined
@@ -54,30 +55,34 @@ _Last updated: 2026-04-23 (haveebot comms channel live + SEO schema expansion + 
 
 ---
 
-## Current Status — April 23, 2026
+## Current Status — April 24, 2026
 
 | What | Detail |
 |------|--------|
 | Live site | https://theportalocal.com (HTTPS, 200 OK) |
 | Domain | theportalocal.com (primary) |
-| Businesses | **143+** across 6 categories (+ Coastal Carpet Cleaners added 2026-04-23) |
-| Heritage | **23 published stories** (+ Heritage #19 Red Snapper Fleet scaffolded, research in progress) |
-| Dispatch | **1 published** — "Port Aransas — A Tale of Two Islands" (features/analysis/reporting). Tip form at /dispatch (Resend-powered; replaces old mailto) |
-| SEO schema | **Complete layer stack (2026-04-23):** WebSite, Organization, LocalBusiness, Article, NewsArticle (pre-existing) + FAQPage on /essentials + BreadcrumbList on all 4 detail route types + ItemList on /guides/[slug] + Place/TouristAttraction/LandmarksOrHistoricalBuildings on 6 Heritage landmark pieces |
-| GSC indexing | 13/192 indexed (young-site crawl budget; 0 quality exclusions, 0 404s — clean health). 9 priority URLs submitted for indexing 2026-04-23. |
-| Collie channel | **Direct IMAP/SMTP via haveebot@gmail.com live 2026-04-23** — `workspace/scripts/haveebot_mail.py`; session-start auto-check; briefing for 2026-04-22 sent. |
+| Businesses | **143+** across 6 categories |
+| Heritage | **24 published stories** (Heritage #19 Red Snapper Fleet shipped 2026-04-24 — 10 sections, ~2,800 words, fills the commercial-fishing gap) |
+| Dispatch | **1 published** — "Port Aransas — A Tale of Two Islands". **PA Property Taxes Dispatch IN FLIGHT 2026-04-24** — research run, fact base committed at `Port A Local/Dispatch Research/PA Property Tax — Fact Base 2026-04-24.md`, awaiting Winston news-hook + Collie local-prompting before angle lock. PAISD confirmed as Chapter 49 recapture donor ($16.3M → $28.8M trajectory 2019-2024). Tip form at /dispatch (Resend-powered) |
+| **Brand kit** | **Live at /brand 2026-04-24** (noindex). Comprehensive internal reference — full color palette (hex + usage), 4 lighthouse detail levels with download links, 9 directory icons (downloadable SVGs), full 46-icon library, typography (Playfair + Inter), 7-tagline bank, voice guide, positioning pillars, icon system rules |
+| **Marketing ops** | **Live in vault 2026-04-24** at `Port A Local/Marketing/` — Content Calendar (4 weeks), Caption Library (18 starter captions), Outreach Tracker, Targets (phase-gated + weekly dashboard), README. Built from Collie's Trust→Habit→Conversion launch plan |
+| **Live Music** | **Live at /live-music 2026-04-23** (built from Winston's emailed photo of South Jetty schedule). Tonight hero + week grid + upcoming, PA-only filter, 7 venues. **Weekly refresh workflow institutionalized:** photo to haveebot subject `Live Music — Week of MMM DD` → Claude OCRs + transcribes + ships |
+| SEO schema | Complete layer stack: WebSite, Organization, LocalBusiness, Article, NewsArticle, FAQPage, BreadcrumbList, ItemList, Place/TouristAttraction/LandmarksOrHistoricalBuildings |
+| GSC indexing | 13/192 indexed (young-site crawl budget; 0 quality exclusions, 0 404s). 9 priority URLs submitted 2026-04-23 — re-check this week |
+| Collie channel | **Direct IMAP/SMTP via haveebot@gmail.com (live 2026-04-23) + attachments subcommand (added 2026-04-24)** — `workspace/scripts/haveebot_mail.py`. Photo-to-feature workflow proven both directions (Winston→ Live Music; Collie→ icons + lighthouse + brand + marketing). Session-start auto-check |
 | Portals | `/rent` (marketplace model) · `/beach` · `/maintenance` (urgency coupling) |
 | Search | Gully — unified index (businesses + heritage + dispatch + menus + archives) |
-| Brand | Lighthouse mark locked; full-site saturation complete; full lockup intentionally not yet locked |
-| Icon system | **PortalIcon component — 55 silhouettes live** across 4 rounds. Full-site emoji eradication complete (deliberate exceptions: SMS bodies + some email HTML). `EmojiIcon` helper renders data-driven icons with graceful fallback. `brandedOG` renders inline SVG across all OG share cards. |
-| OG share cards | **Every directory link has a branded preview** — static routes + per-dispatch + per-heritage (rounds 1–4) + per-business + per-category + per-guide (round 5). ~150+ route-specific previews. |
-| Favicon | White-monochrome lighthouse on navy |
-| Social | FB profile + FB banner routes shipped (`/social/*`) |
-| Print | Branded QR poster route (`/print/qr/[slug]`) — home + sandfest targets |
+| **Lighthouse mark** | **Collie's Illustrator design v2 (2026-04-24)** — replaced prior Lydia Ann rendering. Three color variants (dark / light / coral), four detail levels preserved. Propagates through 17+ OG cards + 6 transactional emails + FB profile/banner + print QR posters + nav + footer + hero + 404 + Apple touch + PWA. Site ↔ Collie's FB posts now converged |
+| **Icon system** | **Round 1 v2 live 2026-04-24** — Collie's clean Illustrator SVGs replaced the distorted Canva versions for all 9 directory + portal icons (eat/drink/stay/do/fish/shop/beach/maintenance/cart). Tier 2-4 still Round 2-4 (46 silhouettes) with `EmojiIcon` fallback. Plug-and-play SVGs at `/icons/directory/*.svg` for Collie's external workflows |
+| OG share cards | Every directory link has a branded preview — ~170+ route-specific previews |
+| Favicon | Sand-on-navy simplified lighthouse (Collie's design v2) |
+| Social | FB profile + FB banner routes (`/social/*`) |
+| Print | Branded QR poster route (`/print/qr/[slug]`) |
 | Revenue | $0 — Stripe LIVE, keys in Vercel, awaiting first transactions |
-| Legal | ⚠️ **T&C + vendor agreements + indemnification pending attorney review** — marketplace liability thesis needs paperwork to hold up |
-| A2P 10DLC | Brand APPROVED; **campaign resubmitted 2026-04-22** after TCR failure on bundled consent — new submission has separate-opt-in architecture, IN_PROGRESS at TCR |
-| Email automation | Spec drafted (`Port A Local/Email Automation.md`); Layer 1 (Gmail UI filters/responders/templates) ready for Winston to configure (~20 min); Layer 2 (server-side inbound parsing) tied to cart marketplace buildout |
+| Legal | ⚠️ **T&C + vendor agreements + indemnification pending attorney review** — Roadmap highest-priority item |
+| A2P 10DLC | Brand APPROVED; campaign IN_PROGRESS at TCR (separate-opt-in architecture) |
+| Email automation | Spec drafted (`Email Automation.md`); Layer 1 ready for Winston to configure (~20 min) |
+| Email threading rule | Reply in-thread by default, keep subject line intact across replies (saved 2026-04-24 as `feedback_pal_email_threading.md`) |
 | Repo | https://github.com/haveebot/port-a-local |
 
 ---

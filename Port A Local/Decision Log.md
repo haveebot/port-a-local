@@ -291,3 +291,57 @@ _This is institutional memory. Never delete an entry._
 **Why:** Needed actual indexing state, not guesses. Setting up the GSC API via Google Cloud OAuth was a longer path; the browser path was zero-setup and gave immediate read access plus the ability to submit indexing requests. 9 priority URLs submitted on 2026-04-23: `/history`, `/dispatch`, `/essentials`, `/eat`, `/do`, `/stay`, `/dispatch/the-two-port-aransases`, `/history/pat-magees-surf-shop`, `/where-to-stay`.
 **Diagnostic result:** 13 / 192 URLs indexed. 175 "Discovered — currently not indexed" (crawl budget). 3 redirects to investigate. **Zero** "Crawled — not indexed" (no quality exclusions). **Zero** 404s. Clean bill of health; issue is purely site age / authority signals.
 **Follow-up:** GSC API via OAuth is worth setting up if we find ourselves doing this repeatedly. For now, the browser path is sufficient for periodic checks.
+
+---
+
+## 2026-04-24
+
+### Photo-driven feature intake — `/live-music` proves the workflow
+**Decision:** When Winston or Collie emails haveebot a photo with a "do this" framing, treat the email as a full feature spec. Pull attachments via the new `attachments <uid>` subcommand, OCR/transcribe via vision, ship the feature, reply with summary. No bottleneck on clarification.
+**Trigger:** Winston's 2026-04-23 evening email (uid 153) with the South Jetty's printed "Live Music Tonight" sheet attached. *"Example of a feature we could add via simple emails with screenshots or content. Think like - do it - if we don't like it then it changes or is removed - it can't be too bad or we would not have sent the idea."*
+**Outcome:** `/live-music` route built, deployed, and confirmed live in one evening. Tonight hero + week grid + upcoming, PA-only filter, 7 venues, 25 acts. Weekly refresh institutionalized: subject prefix `Live Music — Week of MMM DD` is the dedupe key. Source photos archived to `Port A Local/Winston Inbox/<date>-uid<n>/`.
+**Workflow rule saved:** `feedback_pal_photo_to_feature.md`. Script extension (commit `a1f6510` in workspace-memory) is the durable tool — basename-only filenames, traversal guards, collision numbering.
+
+### Collie Round 1 v2 — replace Canva icons with Illustrator SVGs
+**Decision:** Swap all 9 Round 1 directory + portal icons in `PortalIcon.tsx` with Collie's Illustrator output (received 2026-04-24, uid 156). Original Canva versions distorted at small sizes; the Illustrator SVGs are clean and proportionally consistent.
+**Why:** Round 1 icons appear in 150+ call sites. Distortion at small sizes was visible. Collie's Illustrator file fixes it cleanly. `viewBox="0 0 128 128"` per-icon, `fill="currentColor"` inheritance preserved — zero call-site changes needed.
+**Bonus:** Added `public/icons/directory/*.svg` standalone files for Collie's external workflows (Canva, Illustrator, anywhere she needs to plug-and-play the marks). Visible on `/brand` with download links.
+
+### Lighthouse mark v2 — Collie's design replaces the Lydia Ann rendering
+**Decision:** Adopt Collie's lighthouse design as the canonical PAL mark. Three color variants (dark / light / coral) replace the prior dark/light pair. Four detail levels preserved (full / standard / simple / icon) with progressive simplification from her 8-ray full design down to a silhouette-only icon.
+**Why:** Site lighthouse and Collie's FB posts had drifted. Her FB profile + banner posts showed her own lighthouse, not the site's. Single-source-of-truth resolved by adopting her design site-wide. Drift-prevention going forward: `/brand` is the arbiter.
+**Propagation:** All in one commit (`db3a65d`). Auto-flows through favicon, Apple touch, PWA, 17+ OG cards, 6 transactional email templates, FB profile/banner routes, print QR posters, nav, footer, hero, 404.
+**`monochrome` prop deprecated** (kept as no-op for backwards compat) since Collie's design is already monochromatic by default.
+
+### `/brand` page — internal reference, not public content
+**Decision:** Build a comprehensive brand kit page at `/brand` with `robots: noindex, nofollow`. NOT linked from nav. Bookmark-only access for Winston + Collie (and future Claude sessions reading state).
+**Why:** A public-facing brand page would compete for SEO with our actual content pages and confuse the audience (we're a directory + media outlet, not a design studio). Internal reference keeps decision-friction low: when a brand-level question arises, the answer is one URL away — no re-litigating colors / fonts / voice / icon names.
+**Sections (lock-in):** Colors → Lighthouse Mark → Directory + Portal Icons → Icon System Rules → Full Icon Library → Typography → Tagline Bank → Voice (We sound like / We don't) → Positioning Pillars → Quick Links.
+**Maintenance posture:** `/brand` is updated as Collie sends new designs. Memory rule `feedback_pal_brand_system.md` instructs future sessions to defer to `/brand` for any brand-level call.
+
+### Marketing operations — living docs, not PDF deliverables
+**Decision:** Translate Collie's "Trust → Habit → Conversion" launch plan PDF into 5 living markdown documents at `Port A Local/Marketing/`. Update them every Sunday. Fill the weekly dashboard in `Targets.md` Monday morning.
+**Why:** PDFs are time-stamped artifacts. Marketing operations are continuous. Living files make the work navigable, the targets verifiable, and the captions reusable.
+**Files:** README · Content Calendar (4 weeks Phase 1→2) · Caption Library (18 starter captions, 7 categories) · Outreach Tracker (press / businesses / orgs + outreach templates) · Targets (phase-gated goals + weekly funnel dashboard + explicit list of vanity metrics NOT chased).
+**Paid-ad guardrail:** any spend requires Winston's explicit go on budget + creative.
+
+### Email threading discipline — reply in-thread, keep subject intact
+**Decision:** When Winston or Collie emails haveebot, reply within the existing thread. Do not start new conversations for follow-ups. Keep the subject line intact across the conversation — do not add thematic tags mid-thread.
+**Trigger:** Winston flagged 2026-04-24: *"you can reply and communicate through emails Collie and I send, doesn't have to always be a new email thread."*
+**Why:** Threading keeps the conversation history continuous on Winston + Collie's phones. The "Catching you up on PAL" thread accidentally drifted to a new subject mid-conversation; Winston flagged, rule saved.
+**Memory:** `feedback_pal_email_threading.md`.
+
+### Heritage #19 — Red Snapper Fleet shipped (commit `abcb095`)
+**Decision:** Ship Heritage #19 with the thesis "adaptation, not dominance" — Port Aransas was never the Gulf's red snapper capital (Pensacola was), but it adapted across a century of fleet, regulatory, and economic change. 10 sections, ~2,800 words, 20 source citations.
+**Why:** The most honest version of the story is also the most defensible. Claiming Port A was the snapper hub is overclaiming and easy to falsify; framing it as adaptation gets at the actual local truth and avoids Chamber-of-Commerce framing. Aligns with anti-Bureau editorial posture without crossing into Dispatch territory.
+**Sources locked:** NOAA Fisheries history, Solís et al. (Marine Resource Economics 2014, IFQ consolidation), Gulf Council Reef Fish Amendment 26, *CCA v. U.S. Dept. of Commerce* (5th Cir.), TSHA Handbook entries, PAPHA, South Jetty (Owens / Horner / Schoolcraft on the record), UPI 1989 TED-blockade reporting, Houston Public Media Harvey-recovery coverage.
+
+### Don't manufacture Dispatch angles — wait for the brief
+**Decision:** Dispatch story ideas come from Winston's actual briefs (the email or chat message that names the topic + news hook), not from pattern-matching whatever Heritage piece I just shipped. Do not "park" research from misdirected angles for a future Dispatch.
+**Trigger:** I drove a "Two Landlord Systems" thesis correlating Heritage #19 (red snapper IFQ) with a hypothetical Dispatch piece, after Winston had actually emailed about PA Property Taxes (a separate topic, in a separate thread that I'd missed). Spawned a research agent on the wrong topic. Winston flagged: *"it does not go into the parking lot. we do not need a made up dispatch story about snapper."*
+**Recovery:** Background agent killed. Output dropped (not archived). Correction email sent to the mis-targeted thread. New rule saved: `feedback_pal_no_manufactured_dispatch.md`. Sister rule: when the inbox has unread mail from Winston or Collie, READ IT FIRST before making inferences about the current task.
+
+### PA Property Taxes Dispatch — facts-only research before angle lock
+**Decision:** Run baseline fact-gathering on PAISD recapture status, NCAD trendlines, 89th Lege bills, and South Jetty archive coverage — strictly raw numbers + citations, no analytical synthesis. Hold angle selection until Winston (news hook) and Collie (local prompting) weigh in.
+**Why:** Winston's concern: research can steer the angle even when "neutral." Mitigation: scope the research agent tightly to facts-only, deliver as data not narrative. Collie's local instinct stays unsteered. Avoids replaying the snapper rabbit hole.
+**Outcome:** Fact base committed (commit `264fa1e`) at `Port A Local/Dispatch Research/PA Property Tax — Fact Base 2026-04-24.md`. Headline finding: PAISD IS a Chapter 49 recapture donor, $16.3M (2019-20) → $28.8M (2023-24). Superintendent McKinney on record (South Jetty, Oct 2022): *"The majority of the taxes you pay to PAISD are not actually used for the education of children enrolled here in Port Aransas ISD."* 89th Lege passed a $10B relief package but Chapter 49 structural reform did NOT pass. New vault folder `Dispatch Research/` parallels existing `Heritage Research/`.

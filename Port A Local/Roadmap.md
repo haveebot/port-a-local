@@ -1,6 +1,6 @@
 # Port A Local — Roadmap & To-Do
 _Living document. Updated each session._
-_Last updated: 2026-04-23 (haveebot comms channel + SEO schema expansion + GSC indexing diagnostic + Coastal Carpet Cleaners)_
+_Last updated: 2026-04-24 (Live Music feature + Collie's full design+marketing drop executed + Heritage #19 Red Snapper Fleet shipped + PA Property Taxes Dispatch research in flight)_
 
 ---
 
@@ -54,8 +54,10 @@ _Last updated: 2026-04-23 (haveebot comms channel + SEO schema expansion + GSC i
 - [ ] **Build "Ask Gully" augmented search** (Option A). Fuse returns matches as usual; if query is a question, Claude Haiku synthesizes a short answer from top-N matches with inline citations. Single addition to existing Gully UX. Prompt-cached system prompt + corpus for cost efficiency.
 
 ### Content
-- [ ] **Heritage expansion batch 2** — candidates: Red Snapper Fleet, Vietnamese shrimping community, Aransas NWR whooping cranes, Harbor Island oil era, Port A ISD history, Pat Magee's Surf Shop (if it earns its own piece vs. Surfing piece).
-- [ ] **Dispatch #2 — "The Landlord Nobody Voted For"** — shopping center acquisition + rent-doubling pattern. Needs tenant sourcing. **Tim Parke** (2026 Sandfest president, Lone Star Taste) is a potential source *and* a cart-portal vendor relationship — dual relationship, handle carefully.
+- [ ] **Heritage expansion batch 2 (continued)** — remaining candidates: Vietnamese shrimping community, Aransas NWR whooping cranes, Harbor Island oil era, PAISD history (now adjacent to the PA Property Taxes Dispatch — sequencing matters).
+- [x] ~~**Heritage #19 — Red Snapper Fleet**~~ **DONE 2026-04-24 (commit `abcb095`).** 10 sections, ~2,800 words. Heritage total = 24.
+- [ ] **PA Property Taxes Dispatch — IN FLIGHT 2026-04-24.** Research run, fact base committed (`264fa1e`) at `Port A Local/Dispatch Research/PA Property Tax — Fact Base 2026-04-24.md`. Awaiting (a) Winston news-hook answer (specific trigger making it hot right now), (b) Collie local prompting (angriest voices, named incidents, voice check on McKinney quote), (c) angle lock (grievance / explainer / anchored-to-a-person). Four priority gaps to close before draft: PAISD 2024-25 M&O/I&S split, exact 2024-25 recapture, homestead/non-homestead share, NCAD Chief Appraiser current name.
+- [ ] **Dispatch — "The Landlord Nobody Voted For"** (deferred — possibly Dispatch #3 after Property Taxes lands) — shopping center acquisition + rent-doubling pattern. Tim Parke (2026 Sandfest president, Lone Star Taste) is a potential source *and* cart-portal vendor — dual relationship, handle carefully.
 
 ### Infrastructure / Polish
 - [ ] **A2P campaign approval re-check** (waiting on TCR — passive). Re-verify status next session.
@@ -63,9 +65,17 @@ _Last updated: 2026-04-23 (haveebot comms channel + SEO schema expansion + GSC i
 - [x] ~~**Per-business OG images** — 130+ business detail pages~~ **DONE 2026-04-22 (round 5).** Per-business + per-category + per-guide OG all shipped via brandedOG.
 - [x] ~~**FeaturedSpots audit**~~ **DONE 2026-04-22.** Swapped Red Dragon Pirate Ship → Aloha Açaí.
 
-### Next Session — explicit asks from Winston (2026-04-22)
-- [x] ~~**Configure haveebot email for direct Collie comms.**~~ **DONE 2026-04-23.** Gmail IMAP/SMTP via app password, tool at `workspace/scripts/haveebot_mail.py`. Memory rule `feedback_pal_vs_sageem_accounts.md` updated with a comms-only carve-out. Subcommands: `check`, `inbox`, `unread`, `from`, `collie`, `thread <uid>`, `send`. Sending requires explicit Winston authorization per `reference_haveebot_mail.md`.
-- [ ] **Full Collie update briefing.** Prepare a comprehensive document at `Port A Local/Collie Update — 2026-04-22.md` covering everything that shipped since her Round 1 sign-off (4/21) through 4/22 end-of-day. Self-contained prompt ready at `Port A Local/Next Session — Collie Update Prompt.md` — paste into next Claude session to execute.
+### Awaiting Winston + Collie (2026-04-24)
+- [ ] **Winston:** specific news hook for the PA Property Taxes Dispatch (Lege bill / appraisal notices / Robin Hood announcement / NCAD action / general grievance). Hook shapes the frame.
+- [ ] **Collie (after Sabine's 6th grade dance):** local prompting on PA Property Taxes — angriest voices, named incidents, voice check on McKinney's "majority of the taxes you pay to PAISD are not actually used for the education of children enrolled here" quote. Audience read on whether locals are ready for Dispatch to throw an elbow on this topic.
+- [ ] **Collie review of /brand on her design device.** Color, icon, tagline, voice — anything off, one line back; one-file fix.
+- [ ] **Collie's optional micro-tasks:** dedicated `music` silhouette for Live Music nav (currently placeholder `art` paint palette); regional influencer rows in Outreach Tracker; review whether 8-ray full lighthouse stays at all sizes vs. our current detail-gating.
+
+### Done — explicit asks from Winston (2026-04-22 / 2026-04-23)
+- [x] ~~**Configure haveebot email for direct Collie comms.**~~ **DONE 2026-04-23.** Plus `attachments <uid>` subcommand added 2026-04-24 (commit `a1f6510` workspace-memory). Subcommands: `check`, `inbox`, `unread`, `from`, `collie`, `thread <uid>`, `attachments <uid>`, `send`. Sending requires explicit Winston authorization per `reference_haveebot_mail.md`. Threading: stay in-thread per `feedback_pal_email_threading.md`.
+- [x] ~~**Full Collie update briefing.**~~ **DONE 2026-04-23.** Sent to collie.breah@gmail.com + admin@ on CC.
+- [x] ~~**Live Music feature from emailed photo.**~~ **DONE 2026-04-23 (commit `dcde9e1`).** Live at `/live-music`, weekly refresh workflow institutionalized.
+- [x] ~~**Collie's design+marketing drop full execution.**~~ **DONE 2026-04-24 (commits `dec0d30`, `db3a65d`).** Round 1 icons v2 (Illustrator SVGs), Lighthouse mark v2 (her design site-wide), `/brand` kit page, Marketing ops vault docs.
 
 ### Brand — next surfaces before locking lockup
 - [ ] Twitter/X profile + banner
@@ -100,6 +110,15 @@ _Last updated: 2026-04-23 (haveebot comms channel + SEO schema expansion + GSC i
 ---
 
 ## Completed ✅
+
+### Session — April 24, 2026 (5 commits across 2 repos)
+- **`/live-music` route shipped** (commit `dcde9e1`). Built from Winston's emailed photo of the South Jetty's "Live Music Tonight" sheet (uid 153). Tonight hero + week grid + upcoming. PA-only filter (mainland Brewster/Rockit's/Executive Surf Club/Fifth&Elm Portland/Harbor Listening Room Fulton stripped). 7 venues, 25 acts. ISR revalidate=3600. Branded OG, sitemap, Explore dropdown nav. Events page cross-link rewired off portaransas.org/portalive. Weekly refresh workflow institutionalized (subject `Live Music — Week of MMM DD` is dedupe key).
+- **haveebot `attachments <uid>` subcommand** (commit `a1f6510` in workspace-memory). Basename-only, traversal-safe, collision numbering. Default output `./attachments/uid<uid>/`. Vault convention: `Port A Local/<sender>/<date>-uid<n>/`.
+- **Round 1 icons v2 — Collie's Illustrator SVGs** (commit `dec0d30`). Replaced distorted Canva versions for all 9 directory + portal icons. 150+ call sites picked up the swap with zero changes. `viewBox="0 0 128 128"` per-icon, `currentColor` preserved. Standalone files at `public/icons/directory/*.svg`.
+- **Lighthouse mark v2 + /brand kit page + marketing ops** (commit `db3a65d`, 21 files). Collie's lighthouse swapped in across every surface (favicon, OG, emails, FB profile/banner, print, nav, footer, hero, 404). Three color variants (dark/light/coral), four detail levels. `/brand` page noindexed with full palette + lighthouse + 9 directory icons + 46-icon library + typography + 7-tagline bank + voice guide. Marketing ops vault: README + Content Calendar + Caption Library + Outreach Tracker + Targets.
+- **Heritage #19 — The Red Snapper Fleet** (commit `abcb095`). 10 sections, ~2,800 words. Thesis: adaptation, not dominance. Pensacola-honest framing. 1888 narrow-gauge → 1971 peak → 1989 TED blockade → 1990 51/49 split → 2007 IFQ landlord fishery → Amendment 40 → modern charter fleet. 20 source citations. Heritage total: 24.
+- **Dispatch Research vault folder** (commit `264fa1e`). New `Port A Local/Dispatch Research/` folder parallels `Heritage Research/`. First entry: PA Property Tax — Fact Base 2026-04-24.md. PAISD confirmed as Chapter 49 recapture donor; trajectory $16.3M (2019-20) → $28.8M (2023-24). Superintendent McKinney on the record (South Jetty Oct 2022). 89th Lege passed $10B relief but Chapter 49 reform did NOT pass.
+- **Memory rules saved (workspace memory):** `feedback_pal_brand_system.md` (voice + icons + emoji exceptions, point at /brand), `feedback_pal_photo_to_feature.md` (proven intake pattern), `feedback_pal_email_threading.md` (reply in-thread), `feedback_pal_no_manufactured_dispatch.md` (don't pattern-match Heritage to Dispatch). All four indexed in MEMORY.md.
 
 ### Session — April 22, 2026 (13 commits — morning + afternoon + evening)
 - **A2P 10DLC failure → fix → resubmit** (morning). Forms decoupled SMS consent from submission via separate unchecked-by-default opt-in checkbox; shared `src/lib/twilioSms.ts` gates consumer SMS on `smsConsent`; customer SMS now on all 3 revenue flows (was maintenance-only); STOP opt-out appended to every customer message. Twilio account + messaging service renamed off Twilio defaults. New Usa2p compliance record submitted with rewritten MessageFlow. Commit `132b312`.
