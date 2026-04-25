@@ -163,3 +163,74 @@ export function transitionThread(
   );
   return getThread(id);
 }
+
+/* -------------------- Activity -------------------- */
+
+export interface ActivityEvent {
+  messageId: string;
+  threadId: string;
+  threadTitle: string;
+  threadIsNew: boolean;
+  authorId: ParticipantId;
+  type: MessageType;
+  bodyPreview: string;
+  createdAt: string;
+}
+
+export interface ActivitySummary {
+  windowHours: number;
+  windowStart: string;
+  newMessages: number;
+  newThreads: number;
+  activeThreads: number;
+  events: ActivityEvent[];
+}
+
+const PREVIEW_LEN = 140;
+const MAX_EVENTS = 10;
+
+export function getRecentActivity(windowHours = 24): ActivitySummary {
+  const cutoff = new Date(Date.now() - windowHours * 60 * 60 * 1000);
+  const cutoffIso = cutoff.toISOString();
+  const threadsById = new Map(_threads.map((t) => [t.id, t]));
+
+  const recentMessages = _messages
+    .filter((m) => m.createdAt > cutoffIso)
+    .sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    );
+
+  const newThreads = _threads.filter((t) => t.createdAt > cutoffIso);
+  const newThreadIds = new Set(newThreads.map((t) => t.id));
+  const activeThreadIds = new Set(recentMessages.map((m) => m.threadId));
+  newThreadIds.forEach((id) => activeThreadIds.add(id));
+
+  const events: ActivityEvent[] = recentMessages
+    .slice(0, MAX_EVENTS)
+    .map((m) => {
+      const thread = threadsById.get(m.threadId);
+      const body = m.body.length > PREVIEW_LEN
+        ? m.body.slice(0, PREVIEW_LEN).trim() + "…"
+        : m.body;
+      return {
+        messageId: m.id,
+        threadId: m.threadId,
+        threadTitle: thread?.title ?? "(deleted thread)",
+        threadIsNew: newThreadIds.has(m.threadId),
+        authorId: m.authorId,
+        type: m.type,
+        bodyPreview: body,
+        createdAt: m.createdAt,
+      };
+    });
+
+  return {
+    windowHours,
+    windowStart: cutoffIso,
+    newMessages: recentMessages.length,
+    newThreads: newThreads.length,
+    activeThreads: activeThreadIds.size,
+    events,
+  };
+}

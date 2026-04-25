@@ -115,6 +115,18 @@ export async function transitionThread(
     : Promise.resolve(mock.transitionThread(id, newState));
 }
 
+/* -------------------- Activity -------------------- */
+
+export type { ActivityEvent, ActivitySummary } from "./wheelhouse-store-mock";
+
+export async function getRecentActivity(
+  windowHours = 24,
+): Promise<import("./wheelhouse-store-mock").ActivitySummary> {
+  return USE_PG
+    ? pg.getRecentActivity(windowHours)
+    : Promise.resolve(mock.getRecentActivity(windowHours));
+}
+
 /** Backend status — handy for the init / debug surface */
 export function backendStatus(): { backend: "postgres" | "mock" } {
   return { backend: USE_PG ? "postgres" : "mock" };

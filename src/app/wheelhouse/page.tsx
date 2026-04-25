@@ -2,8 +2,10 @@ import Link from "next/link";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import LighthouseMark from "@/components/brand/LighthouseMark";
+import ActivityFeed from "@/components/wheelhouse/ActivityFeed";
 import ThreadCard from "@/components/wheelhouse/ThreadCard";
 import {
+  getRecentActivity,
   getThreads,
   getThreadsAwaiting,
 } from "@/data/wheelhouse-store";
@@ -26,8 +28,11 @@ export default async function WheelhousePage({
   const me = getParticipant(who as ParticipantId);
 
   const { filter } = await searchParams;
-  const allThreads = await getThreads();
-  const awaitingMe = await getThreadsAwaiting(me.id);
+  const [allThreads, awaitingMe, activity] = await Promise.all([
+    getThreads(),
+    getThreadsAwaiting(me.id),
+    getRecentActivity(24),
+  ]);
 
   let visible: Thread[] = allThreads;
   let title = "All threads";
@@ -88,6 +93,8 @@ export default async function WheelhousePage({
       </header>
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
+        <ActivityFeed activity={activity} />
+
         {/* Filter bar + new thread button */}
         <div className="flex items-center justify-between gap-4 mb-6 flex-wrap">
           <div className="flex items-center gap-2 flex-wrap">

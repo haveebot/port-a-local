@@ -261,6 +261,81 @@ export async function transitionThread(
   return getThread(id);
 }
 
+/* -------------------- Activity -------------------- */
+
+export interface ActivityEvent {
+  messageId: string;
+  threadId: string;
+  threadTitle: string;
+  threadIsNew: boolean;
+  authorId: ParticipantId;
+  type: MessageType;
+  bodyPreview: string;
+  createdAt: string;
+}
+
+export interface ActivitySummary {
+  windowHours: number;
+  windowStart: string;
+  newMessages: number;
+  newThreads: number;
+  activeThreads: number;
+  events: ActivityEvent[];
+}
+
+const PREVIEW_LEN = 140;
+const MAX_EVENTS = 10;
+
+export async function getRecentActivity(
+  windowHours = 24,
+): Promise<ActivitySummary> {
+  const cutoff = new Date(Date.now() - windowHours * 60 * 60 * 1000);
+  const cutoffIso = cutoff.toISOString();
+
+  const { rows: msgRows } = await sql`
+    SELECT m.id, m.thread_id, m.author_id, m.type, m.body, m.created_at,
+           t.title AS thread_title, t.created_at AS thread_created_at
+    FROM wheelhouse_messages m
+    JOIN wheelhouse_threads t ON t.id = m.thread_id
+    WHERE m.created_at > ${cutoffIso}
+    ORDER BY m.created_at DESC
+  `;
+
+  const { rows: newThreadRows } = await sql`
+    SELECT id FROM wheelhouse_threads
+    WHERE created_at > ${cutoffIso}
+  `;
+
+  const newThreadIds = new Set(newThreadRows.map((r) => r.id as string));
+  const activeThreadIds = new Set<string>(newThreadIds);
+  msgRows.forEach((r) => activeThreadIds.add(r.thread_id as string));
+
+  const events: ActivityEvent[] = msgRows.slice(0, MAX_EVENTS).map((r) => {
+    const body = (r.body as string).length > PREVIEW_LEN
+      ? (r.body as string).slice(0, PREVIEW_LEN).trim() + "…"
+      : (r.body as string);
+    return {
+      messageId: r.id as string,
+      threadId: r.thread_id as string,
+      threadTitle: r.thread_title as string,
+      threadIsNew: newThreadIds.has(r.thread_id as string),
+      authorId: r.author_id as ParticipantId,
+      type: r.type as MessageType,
+      bodyPreview: body,
+      createdAt: new Date(r.created_at as string).toISOString(),
+    };
+  });
+
+  return {
+    windowHours,
+    windowStart: cutoffIso,
+    newMessages: msgRows.length,
+    newThreads: newThreadRows.length,
+    activeThreads: activeThreadIds.size,
+    events,
+  };
+}
+
 /* -------------------- Schema + seed bootstrap -------------------- */
 
 /** Run once after Postgres is provisioned. Idempotent — safe to re-run. */
@@ -297,9 +372,20 @@ export async function initSchemaAndSeed(): Promise<{
       read_by JSONB
     )
   `;
+  // Tracks "when did each user last check the inbox / each thread"
+  // Scope = "inbox" for the index page; otherwise the thread id
+  await sql`
+    CREATE TABLE IF NOT EXISTS wheelhouse_user_seen (
+      participant_id TEXT NOT NULL,
+      scope TEXT NOT NULL,
+      last_seen_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      PRIMARY KEY (participant_id, scope)
+    )
+  `;
   await sql`CREATE INDEX IF NOT EXISTS wheelhouse_messages_thread_id_idx ON wheelhouse_messages(thread_id)`;
   await sql`CREATE INDEX IF NOT EXISTS wheelhouse_threads_updated_at_idx ON wheelhouse_threads(updated_at DESC)`;
   await sql`CREATE INDEX IF NOT EXISTS wheelhouse_threads_state_idx ON wheelhouse_threads(state)`;
+  await sql`CREATE INDEX IF NOT EXISTS wheelhouse_messages_created_at_idx ON wheelhouse_messages(created_at DESC)`;
 
   // Check if seed already ran
   const { rows: count } = await sql`SELECT COUNT(*)::int AS n FROM wheelhouse_threads`;
