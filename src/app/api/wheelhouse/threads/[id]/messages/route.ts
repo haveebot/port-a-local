@@ -11,20 +11,29 @@ export async function POST(
     authorId?: ParticipantId;
     type?: MessageType;
     body?: string;
+    payload?: Parameters<typeof createMessage>[0]["payload"];
   } | null;
 
-  if (!body?.authorId || !body?.type || !body?.body) {
+  // Agent token auth (set by middleware when valid Bearer token present)
+  // overrides any authorId from the body — token holder can't impersonate.
+  const agentFromHeader = req.headers.get("x-wheelhouse-agent") as
+    | ParticipantId
+    | null;
+  const authorId = agentFromHeader ?? body?.authorId;
+
+  if (!authorId || !body?.type || !body?.body) {
     return NextResponse.json(
-      { error: "Missing required fields (authorId, type, body)." },
+      { error: "Missing required fields (authorId or token, type, body)." },
       { status: 400 },
     );
   }
 
   const created = await createMessage({
     threadId: id,
-    authorId: body.authorId,
+    authorId,
     type: body.type,
     body: body.body,
+    payload: body.payload,
   });
   if (!created)
     return NextResponse.json({ error: "Thread not found" }, { status: 404 });
