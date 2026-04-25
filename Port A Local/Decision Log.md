@@ -345,3 +345,69 @@ _This is institutional memory. Never delete an entry._
 **Decision:** Run baseline fact-gathering on PAISD recapture status, NCAD trendlines, 89th Lege bills, and South Jetty archive coverage — strictly raw numbers + citations, no analytical synthesis. Hold angle selection until Winston (news hook) and Collie (local prompting) weigh in.
 **Why:** Winston's concern: research can steer the angle even when "neutral." Mitigation: scope the research agent tightly to facts-only, deliver as data not narrative. Collie's local instinct stays unsteered. Avoids replaying the snapper rabbit hole.
 **Outcome:** Fact base committed (commit `264fa1e`) at `Port A Local/Dispatch Research/PA Property Tax — Fact Base 2026-04-24.md`. Headline finding: PAISD IS a Chapter 49 recapture donor, $16.3M (2019-20) → $28.8M (2023-24). Superintendent McKinney on record (South Jetty, Oct 2022): *"The majority of the taxes you pay to PAISD are not actually used for the education of children enrolled here in Port Aransas ISD."* 89th Lege passed a $10B relief package but Chapter 49 structural reform did NOT pass. New vault folder `Dispatch Research/` parallels existing `Heritage Research/`.
+
+---
+
+## 2026-04-25
+
+### Per-event hub pages — built first, no permission asked
+**Decision:** Per-event hub page architecture lives at `/events/[slug]`. Build the page first; pitch (or don't pitch) second. Page IS the pitch.
+**Why:** Asking organizers permission first guarantees a slow, gated process and gives them veto power before they've seen the value. Building first puts a concrete artifact in front of them that they can either approve, ask about, or decline — and once they see the depth of the coverage relative to what exists elsewhere (their own .org sites + Facebook), the decision typically tips toward engagement. For events that don't have orgs to talk to (small festivals, community happenings), the page just exists. We're a local site covering a public event.
+**Outcome:** Architecture shipped. First three event hub pages live: `/events/spring-kite-festival-2026` (Fly It Port A), `/events/deep-sea-roundup-2026` (Boatmen Inc.), `/events/texas-women-anglers-tournament-2026` (Fox family). Per-event hub built via `src/data/events.ts` + `src/data/event-content.ts` + `src/app/events/[slug]/page.tsx`. EventCountdown live-updating component on every hub.
+**Memory:** `project_pa_local.md` carries the architecture detail.
+
+### Tournament coverage as the events wedge
+**Decision:** Tournaments are the highest-value events category for PAL. Build deep coverage infrastructure for them specifically — leaderboards, divisions panels, captain spotlights, rules panels, past champions board, historical photos shelf, milestones panel — and treat them as the proof-of-concept for the broader events strategy.
+**Why:** PA tournaments are economically and culturally massive (Texas Legends $800K+ purse; TWAT 40+ years and $130K+ to The Purple Door; DSR running since 1932) but have terrible digital coverage outside Facebook and one-page .org sites. The infrastructure, once built once, templates to every tournament we add. Anchor: Deep Sea Roundup (Heritage piece already published, Farley/Tarpon Rodeo origin verified).
+**Components shipped under `src/components/tournament/`:** `LeaderboardTable` · `DivisionsPanel` · `CaptainSpotlight` · `PiggyPerchHighlight` · `TournamentRulesPanel` · `PastChampionsBoard` · `HistoricalPhotosShelf` · `MilestonesPanel`.
+**Data layer:** `src/data/tournament-results.ts` carries all per-tournament structured data; references `src/data/archives.ts` for historical photos via ID (single source of truth, no duplication).
+**Strategy doc:** `Port A Local/Features/Tournament Coverage — Spec.md`.
+
+### Tournament Season as the season-level cluster
+**Decision:** Build a dedicated hub at `/events/tournament-season` for the local-handle "Tournament Season" — Port Aransas's summer fishing-tournament cluster (May–November, 20+ tournaments, 4 marquee weekends in July and August: Deep Sea Roundup, Pachanga, Texas Legends Billfish, TWAT). Hub has hero, history blurb (1932→1984→2010s→today), per-tournament summary cards, at-a-glance comparison table, "How to plan a Tournament Season weekend" visitor practical, sources.
+**Why:** Each tournament hub answers "what is this tournament?" — Tournament Season hub answers "what is this season?" The cluster has its own cultural identity beyond any single event. Surfaces also build a natural cross-link network between event pages.
+**Architecture:** `src/data/tournament-season.ts` data layer with `seasonMembers[]` and `isInTournamentSeason(slug)` helper. Helper drives auto cross-link banner from each event detail page (renders only when slug is part of season). Pachanga + Texas Legends are stub members with `detailHref: null`; "Hub coming" pill renders until full hubs ship — at which point only the data file changes.
+**Editorial position:** "TWAT is the matriarch of the women-only-tournament category" framing accepted on the page (TWAT is 1984; most others are post-2010, defensible). Easy to soften if Fox family pushes back.
+
+### EventOrganizerClaim CTA on every event page
+**Decision:** Every event hub page renders a structured claim/contact form at the bottom — "Are you the organizer? Let's talk." Fields: name, email, role (organizer / co-organizer / host / sponsor / press / vendor / other), free-text message. POSTs to `/api/events/claim` → emails admin@ + hello@ via Resend.
+**Why:** Operationalizes the "do it anyway, force them to come to us" strategy. When an organizer eventually finds their own event on PAL (search will surface it), they don't have to figure out who to email or how — clean, professional path to engage. Conversion on "wait, who built this?" → "let me reach out" goes way up.
+**Pattern:** Mirrors the Dispatch tip form pattern; reused infrastructure.
+
+### Dispatch user-submission pipeline (hybrid + silent + minimal tracking)
+**Decision:** Dispatch's "Send a Tip" form reframed into a user-submission topic-suggestion pipeline. Three rules:
+- **Hybrid** — we still write our own pieces. The submission form is a primary input, not the only source. Pure-submission would lose our agency to break stories nobody asked for.
+- **Silent** — single textarea, no name field, no contact field, no email confirmation back, no tracking ID, no trace tied to the submitter. They see the article on /dispatch when it lands and can wonder if it's theirs (or tell their friends). Like Craigslist.
+- **Minimal tracking** — submissions email admin@ + hello@ as before; no queue, no admin panel, no DB. We look whenever.
+**Why:** Solves Dispatch idea scarcity, builds defensible "our editorial comes from the community" position, gives readers a reason to *look* for stories instead of consuming. Silent + anonymous protects sources for sensitive topics (development, taxes, etc.) where named tipsters wouldn't speak.
+**Source:** Winston, 2026-04-25 chat. Three decisions resolved before build (hybrid vs. pure / silent vs. acked rejection / tracking infra level).
+**Files:** `src/components/DispatchTipForm.tsx` rewritten; `/dispatch` heading reframed to "A real share of Dispatch starts with you" + "These pieces start as a topic somebody on the island sent us"; `/api/dispatch/tip` unchanged on the server side.
+
+### Reusable CharityCallout component for charity-led events
+**Decision:** Events with a charitable beneficiary get a dedicated `CharityCallout` component rendered prominently after the lede. Pull-quote leads, mission paragraph, stat strip (impact + service area), "About" + "Donate directly" actions, transparency note ("PAL has no financial relationship with the tournament or charity").
+**Why:** TWAT exists *because of* The Purple Door; the page should lead with that, not bury it under fishing infrastructure. Reusable: any future event with `event.charity` set automatically renders the callout.
+**Where it lives:** `src/components/CharityCallout.tsx`. `event.charity` field on `EventDetails` shape carries beneficiary metadata.
+
+### Event copy is content-driven, not page-hardcoded
+**Decision:** Anything that reads as event-specific (photo CTA copy + mailto subject; day-of liveblog header + empty-state copy; related-history cross-link; merch spotlight) lives on `EventContent` fields, not in the page render. Sensible defaults if a field is missing.
+**Why:** First three event pages (KiteFest, DSR, TWAT) accidentally inherited each other's copy because the page render was hardcoded. Once each new event ships, that bug recurs. Pulling the copy into per-event content fields fixes the whole category.
+**Fields added to `EventContent`:** `relatedHistory?` · `photoCTA?` · `liveCoverage?` · `merchSpotlight?`. Page render reads from each with default fallback.
+
+### MerchSpotlight reusable component (no online store as a feature, not a bug)
+**Decision:** Events where merch is part of the cultural footprint get a dedicated `MerchSpotlight` component. Editorial in tone, doesn't host or sell anything, links to official store when it exists, otherwise leans into scarcity ("the merch tent is the merch"). Always carries a "Send a sighting photo" CTA inviting people to send pictures of the gear in the wild.
+**Why:** TWAT shirts are a phenomenon — concert/Masters-merch energy, in-the-know identity, partial-proceeds-to-shelter. Page should acknowledge that as part of the story. Forcing a "buy here" link when there's no public store would misinform; scarcity is the actual story.
+**Where it lives:** `src/components/MerchSpotlight.tsx`.
+
+### Sip Yard reception venue scrubbed from TWAT (venue-agnostic editorial)
+**Decision:** TWAT page describes the Friday reception venue agnostically ("the downtown reception venue, location announced closer to the event") rather than naming Sip Yard. Sip Yard remains in legitimate venue contexts on PAL (live music page, recurring events) — TWAT specifically should not appear to be naming Sip Yard as the official organizer venue until the org publicly announces it.
+**Why:** Naming a specific venue before the org has read like editorial product placement. Sip Yard is a real PA venue PAL covers neutrally; lending it event-organizer status without the org's blessing crosses an editorial line.
+**Surface:** Once the organizer publicly advertises the venue, we list it. Until then, agnostic copy.
+
+### Boat/angler counts: when sources conflict with local read, hold to vague-but-defensible
+**Decision:** When an org's published statistic conflicts with Winston's local read, the page uses vague-but-defensible language ("Dozens of boats. Hundreds of women.") and leans on verified financial details for scale (purse totals, money winners, year-over-year contribution). Specific counts stay out until they can be verified independently.
+**Why:** TWAT's own marketing copy + the CVB blog cite "an average of seventy boats and over four hundred women anglers" — but Winston (who knows the actual annual field) flagged that as inflated. Even with attribution, citing an inflated number undermines the editorial seriousness of every other claim on the page. Defensible vagueness > confident inaccuracy.
+
+### Monetization conversation pinned for Winston ↔ Claude (NOT Collie's plate)
+**Decision:** Tournament Season + events monetization is a conversation between Winston and Claude. Collie's lane is trust + traffic; the revenue lane runs separately. Hard rule retained: no paid placements anywhere on editorial.
+**Why:** Org clarity. Collie's work is measured in traffic and trust; pulling her into monetization conversations early would muddy that incentive structure. Winston: *"she is marketing and design. get people to the site using what we have built, we will figure out how to make money."*
+**Outcome:** Notes pinned at `Port A Local/Revenue Model/Tournament Season + Events Monetization — Notes.md`. Five angles documented (cart-portal pattern extension to lodging/charters/restaurants; paid services TO orgs not paid placements FROM them; PAL-branded Tournament Season merch; charity-aligned partnerships; tournament data licensing). No build until conversation revisits.

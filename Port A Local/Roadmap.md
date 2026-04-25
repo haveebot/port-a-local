@@ -1,6 +1,6 @@
 # Port A Local — Roadmap & To-Do
 _Living document. Updated each session._
-_Last updated: 2026-04-24 (Live Music feature + Collie's full design+marketing drop executed + Heritage #19 Red Snapper Fleet shipped + PA Property Taxes Dispatch research in flight)_
+_Last updated: 2026-04-25 (Tournament Season hub + DSR + TWAT full event hubs + tournament coverage stack + Dispatch user-submission pipeline + EventOrganizerClaim CTA + monetization conversation pinned)_
 
 ---
 
@@ -26,6 +26,70 @@ _Last updated: 2026-04-24 (Live Music feature + Collie's full design+marketing d
 - **Vercel:** PAL stays on `haveebots-projects` team. Avoids Pro plan cost with zero functional benefit at current scale.
 - **Google Business Profile:** skipped. PAL is a media/directory platform, not a storefront.
 - **Sage Em is the opposite** — full company-only separation (`sageem` org + `sageem` team).
+
+---
+
+## Events Architecture — LIVE (2026-04-25)
+
+### ✅ Per-event hub pattern shipped
+- `src/data/events.ts` + `src/data/event-content.ts` + `src/app/events/[slug]/page.tsx`. Add a new event by adding one entry per file.
+- EventCountdown live-updating component (days/hr/min/sec, flips to "Happening now" mid-event, "Wrapped" after).
+- `EventOrganizerClaim` CTA on every event page → `/api/events/claim` → admin@ + hello@ via Resend.
+- `CharityCallout` component for events with a beneficiary (TWAT example). Reusable.
+- `MerchSpotlight` component for events where merch is part of the cultural footprint (TWAT example). Reusable.
+- Per-event content fields: `relatedHistory?` · `photoCTA?` · `liveCoverage?` · `merchSpotlight?` — each event customizes; sensible defaults if a field is missing.
+
+### ✅ Tournament coverage stack (`src/components/tournament/`)
+- `LeaderboardTable` — billfish.com-style per-division table; desktop tabular + mobile stacked; coral row + #1 marker for leader; "Live" pulse + "Unofficial" badge slot.
+- `DivisionsPanel` — per-division card grid with scoring badges + expandable rules.
+- `CaptainSpotlight` — "boats to watch" card with photo, bio, divisions, prior wins.
+- `PiggyPerchHighlight` — kids' contest section (DSR-specific so far).
+- `TournamentRulesPanel` — editorial rules summary + prominent "Official rules →" CTA + per-division collapsibles + crowd-source footer.
+- `PastChampionsBoard` — grouped by year, per-entry source citations, crowd-source footer for "send us missing years".
+- `HistoricalPhotosShelf` — references existing `archives.ts` photo IDs (single source of truth, no duplication); per-photo caption override.
+- `MilestonesPanel` — verified-facts grid (year/label/value/detail).
+- `liveLog` extended with `kind: "weigh-in"` + structured `weighIn` field for richer day-of cards.
+
+### ✅ Live event hubs
+- `/events/spring-kite-festival-2026` — Fly It Port A's Spring Kite Festival. Full hub. Awaiting Collie outreach to the Timms.
+- `/events/deep-sea-roundup-2026` — 90th Annual Deep Sea Roundup, July 9–12, 2026. Full hub with 7 past champions, historical photos shelf, milestones panel, Piggy Perch.
+- `/events/texas-women-anglers-tournament-2026` — TWAT, late August 2026 (tentative). Full hub with charity callout (The Purple Door), merch spotlight (no online store / Masters-week energy), 7 past champions, M.L. Walker Perpetual Trophy named correctly.
+- `/events/tournament-season` — local-handle hub for the cluster. History blurb (1932→1984→2010s→today), 4 marquee tournament cards, at-a-glance comparison table, "How to plan a Tournament Season weekend." Cross-link banner auto-renders from each event detail page via `isInTournamentSeason(slug)` helper.
+
+### Backlog — events
+- [ ] **Texas Legends Billfish full hub** — currently a stub member in `tournament-season.ts` with `detailHref: null`. Build the same way DSR + TWAT were built. Triple Crown circuit context, $800K+ purse beat. Once `detailHref` is set, comparison cards auto-promote from "Hub coming" to clickable.
+- [ ] **Billfish Pachanga full hub** — same pattern. Limited-field 40-boat angle, Harte Research Institute + PA Scholarship beneficiaries. Science-funding-the-fish-it-chases is a strong editorial beat.
+- [ ] **Continue building tournament coverage as public-info-derivable depth allows.** No outreach required per strategy.
+
+### Queued Dispatch (research backlog, not writing yet)
+- [ ] **"Not Like the Others"** — comparing DSR / Texas Legends / TWAT side by side. Thesis: most tournaments are about the prize; TWAT is about the after. Doc at `Port A Local/Dispatch Research/TWAT — Not Like the Others.md`.
+- [ ] **"Women Fishing Take Over"** — national-scale piece on the rise of women-only tournaments with TWAT as the matriarch of the category. Doc at `Port A Local/Dispatch Research/Women Fishing Take Over — Idea.md`. Triggers documented; needs full list of contemporary women-only tournaments compiled.
+
+---
+
+## Dispatch — LIVE (2026-04-25)
+
+### ✅ User-submission pipeline shipped
+- `/dispatch` page reframed: "A real share of Dispatch starts with you" + "These pieces start as a topic somebody on the island sent us"
+- `DispatchTipForm` rewritten — single textarea, no name/contact fields, silent confirmation only. No email back, no tracking ID, no trace tied to the submitter. Like Craigslist.
+- Hybrid model: we still write our own pieces; the submission pipeline is a primary input + the public-facing trust builder.
+- `/api/dispatch/tip` unchanged on the server side (still emails admin@ + hello@).
+- Decision rationale at `Port A Local/Dispatch Research/User-Submitted Dispatch Pipeline — Idea.md`.
+
+---
+
+## Monetization — PINNED (2026-04-25)
+
+### Conversation queued for Winston ↔ Claude (NOT for Collie's plate)
+- Lane split: Collie owns trust + traffic; Winston + Claude own monetization.
+- Hard rule: no paid placements anywhere on editorial. Non-negotiable.
+- Five angles documented at `Port A Local/Revenue Model/Tournament Season + Events Monetization — Notes.md`:
+  1. Cart-portal pattern extended to lodging / charters / restaurants (highest priority — proven model)
+  2. Paid services TO orgs (photo, video, social, leaderboard hosting) — not paid placements FROM them
+  3. PAL-branded "Tournament Season" merch via Shopify Storefront API
+  4. Charity-aligned partnerships (donate buttons that build equity, not direct revenue)
+  5. Tournament data licensing (long-tail, after 3+ years of coverage)
+- No build until conversation revisits with traffic signal.
 
 ---
 
