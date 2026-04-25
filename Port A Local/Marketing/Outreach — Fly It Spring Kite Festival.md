@@ -6,6 +6,12 @@
 
 **Show, don't tell.** The whole point is to put a real working page in front of them so the ask is "approve this" instead of "imagine this."
 
+## The angle (this is the throughline)
+
+> *"Three years in is when an event stops being a maybe and becomes the thing locals plan around. You guys earned that. We're hosting the festival here because of it — and because every event on this island deserves a digital home that isn't a Facebook post."*
+
+Lead the conversation with this. The festival being new under the Timms isn't a weakness — it's why we're showing up. They built it from informal Pyle-era flies into a real three-times-a-year cadence. Year three is the right moment to give it real digital infrastructure.
+
 ---
 
 ## Quick context (so Collie has the facts)
@@ -47,9 +53,9 @@
 
 ### Version A — text from Collie (lowest friction)
 
-> Hey Jeremy / Courtney — quick one. Winston and I have been building a directory + local journalism site for the island called Port A Local. We threw together a hub page for the spring festival to show what we could do for it: theportalocal.com/events/spring-kite-festival-2026
+> Hey Jeremy / Courtney — quick one. Three years in on the spring/fall/winter cadence and you've turned this into the thing people plan around. Winston and I have been building Port A Local — a directory + local journalism site for the island — and we put together a real hub page for the festival because of it: theportalocal.com/events/spring-kite-festival-2026
 >
-> If you like it, we'd love to run the day-of coverage too — photos, conditions, kite-of-the-hour highlights, the works. No charge, no ads, no strings. You just keep being the host. Tell us yes/no/edits and we run with whatever you want.
+> If you like it, we'd love to run the day-of coverage too — photos, conditions, kite-of-the-hour highlights. No charge, no ads, no strings. You stay the host. Tell us yes / no / edits.
 
 ### Version B — email (more context, useful if there's a thread to reply to)
 
@@ -59,7 +65,7 @@
 >
 > Quick intro: I'm Collie, working with Winston on Port A Local — a new directory + editorial site for Port Aransas at theportalocal.com. We're not a tourism bureau or a chamber, just two locals trying to build the site we wished existed.
 >
-> Fly It's already in our directory. For the spring festival, we put together a hub page first so we could show you what we mean rather than describe it:
+> Three years into your spring/fall/winter cadence, you've turned the festival from informal Pyle-era flies into the thing people on this island actually plan around. That's the reason this email is happening: year three is when something earns real digital infrastructure, and we wanted to put one in front of you rather than describe it.
 >
 > theportalocal.com/events/spring-kite-festival-2026
 >

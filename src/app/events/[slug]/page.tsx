@@ -11,6 +11,7 @@ import {
 } from "@/components/StructuredData";
 import LighthouseMark from "@/components/brand/LighthouseMark";
 import { EmojiIcon } from "@/components/brand/PortalIcon";
+import EventCountdown from "@/components/EventCountdown";
 import type { Metadata } from "next";
 
 export function generateStaticParams() {
@@ -77,11 +78,6 @@ function icsHref(event: ReturnType<typeof getEventBySlug>): string {
   return `data:text/calendar;charset=utf-8,${encodeURIComponent(ics)}`;
 }
 
-function daysUntil(iso: string): number {
-  const ms = new Date(iso).getTime() - Date.now();
-  return Math.max(0, Math.ceil(ms / 86_400_000));
-}
-
 export default async function EventDetailPage({
   params,
 }: {
@@ -99,7 +95,6 @@ export default async function EventDetailPage({
     ? businesses.find((b) => b.slug === event.hostBusinessSlug)
     : undefined;
 
-  const countdown = daysUntil(event.startISO);
   const startDate = new Date(event.startISO).toLocaleDateString("en-US", {
     weekday: "long",
     month: "long",
@@ -152,6 +147,14 @@ export default async function EventDetailPage({
             {event.tagline}
           </p>
 
+          {/* Live countdown — hero scale */}
+          <div className="mb-6">
+            <EventCountdown
+              startISO={event.startISO}
+              endISO={event.endISO}
+            />
+          </div>
+
           {/* When/Where pill row */}
           <div className="flex flex-wrap gap-3 items-center text-sm">
             <div className="px-4 py-2 rounded-lg bg-navy-800/60 border border-navy-700/60 text-sand-100">
@@ -162,14 +165,6 @@ export default async function EventDetailPage({
               <span className="text-navy-400 mr-2">Where</span>
               <span className="font-semibold">{event.venueName}</span>
             </div>
-            {countdown > 0 && (
-              <div className="px-4 py-2 rounded-lg bg-coral-500/15 border border-coral-500/30 text-coral-200">
-                <span className="font-semibold tabular-nums">{countdown}</span>
-                <span className="text-coral-300/80 ml-1">
-                  day{countdown === 1 ? "" : "s"} away
-                </span>
-              </div>
-            )}
           </div>
 
           {/* Action row */}
@@ -229,13 +224,17 @@ export default async function EventDetailPage({
           </section>
 
           {/* Schedule */}
-          <section className="mb-14">
+          <section id="schedule" className="mb-14 scroll-mt-24">
             <p className="text-coral-500 text-sm font-medium tracking-[0.2em] uppercase mb-3">
               Run of show
             </p>
-            <h2 className="font-display text-2xl sm:text-3xl font-bold text-navy-900 mb-6">
+            <h2 className="font-display text-2xl sm:text-3xl font-bold text-navy-900 mb-2">
               Schedule
             </h2>
+            <p className="text-sm text-navy-500 font-light mb-6">
+              Updated as we hear from the host. Check back the day before
+              for any wind-driven changes.
+            </p>
             <ol className="relative border-l-2 border-coral-200 ml-3 space-y-6">
               {content.schedule.map((s, i) => (
                 <li key={i} className="pl-6 relative">
@@ -274,6 +273,165 @@ export default async function EventDetailPage({
                 </div>
               ))}
             </dl>
+          </section>
+
+          {/* Beach cams covering the festival stretch */}
+          {content.beachCams && content.beachCams.length > 0 && (
+            <section className="mb-14">
+              <p className="text-coral-500 text-sm font-medium tracking-[0.2em] uppercase mb-3">
+                Watch from anywhere
+              </p>
+              <h2 className="font-display text-2xl sm:text-3xl font-bold text-navy-900 mb-2">
+                Beach cams covering the flag line
+              </h2>
+              <p className="text-sm text-navy-500 font-light mb-6">
+                Curated subset of Port A&apos;s live cams that point at the
+                south-end stretch where the festival sets up. HDOnTap
+                opens in a new tab.
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {content.beachCams.map((cam) => (
+                  <a
+                    key={cam.name}
+                    href={cam.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group bg-white border border-sand-200 rounded-xl p-4 hover:border-coral-300 hover:shadow-md transition-all"
+                  >
+                    <div className="flex items-start justify-between gap-3 mb-2">
+                      <h3 className="font-display font-bold text-navy-900 group-hover:text-coral-600 transition-colors text-sm leading-snug">
+                        {cam.name}
+                      </h3>
+                      <span className="flex items-center gap-1 text-[10px] font-semibold text-coral-500 uppercase tracking-widest whitespace-nowrap">
+                        <span className="relative flex h-1.5 w-1.5">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-coral-400 opacity-75" />
+                          <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-coral-500" />
+                        </span>
+                        Live
+                      </span>
+                    </div>
+                    <p className="text-xs text-navy-600 font-light leading-relaxed mb-2">
+                      {cam.description}
+                    </p>
+                    <p className="text-[11px] text-navy-400 font-mono">
+                      {cam.markerRange}
+                    </p>
+                  </a>
+                ))}
+              </div>
+              <p className="text-xs text-navy-400 font-light mt-4">
+                See all 10 cams + tides + ship traffic at{" "}
+                <Link
+                  href="/live"
+                  className="text-coral-600 underline decoration-coral-200 hover:decoration-coral-500"
+                >
+                  Island Pulse
+                </Link>
+                .
+              </p>
+            </section>
+          )}
+
+          {/* Host timeline */}
+          {content.hostTimeline && content.hostTimeline.length > 0 && host && (
+            <section className="mb-14">
+              <p className="text-coral-500 text-sm font-medium tracking-[0.2em] uppercase mb-3">
+                A Port A staple
+              </p>
+              <h2 className="font-display text-2xl sm:text-3xl font-bold text-navy-900 mb-2">
+                {host.name} — four decades on Avenue G
+              </h2>
+              <p className="text-sm text-navy-500 font-light mb-8">
+                The shop is older than the festival in its current shape.
+                Here&apos;s how it got here.
+              </p>
+              <ol className="relative border-l-2 border-coral-200 ml-3 space-y-7">
+                {content.hostTimeline.map((entry, i) => (
+                  <li key={i} className="pl-6 relative">
+                    <span className="absolute -left-[11px] top-1 w-5 h-5 rounded-full bg-sand-50 border-2 border-coral-500 flex items-center justify-center">
+                      <span className="w-2 h-2 rounded-full bg-coral-500" />
+                    </span>
+                    <p className="text-xs font-mono font-semibold tracking-widest text-coral-600 uppercase">
+                      {entry.year}
+                    </p>
+                    <p className="font-display font-bold text-navy-900 text-lg mt-1">
+                      {entry.title}
+                    </p>
+                    <p className="text-sm text-navy-600 font-light leading-relaxed mt-1.5">
+                      {entry.body}
+                    </p>
+                  </li>
+                ))}
+              </ol>
+
+              <div className="mt-10 pl-6 border-l-2 border-coral-400">
+                <p className="text-xs font-semibold tracking-[0.2em] uppercase text-coral-600 mb-2">
+                  Why this page exists
+                </p>
+                <p className="text-base sm:text-lg font-display font-bold text-navy-900 leading-snug">
+                  Three years in is when an event stops being a maybe and
+                  becomes the thing locals plan around. We&apos;re hosting
+                  the festival here because the {host.name} crew earned it
+                  — and because every event on this island deserves a
+                  digital home that isn&apos;t a Facebook post.
+                </p>
+              </div>
+            </section>
+          )}
+
+          {/* Photo submission CTA — open now for past-year, reframes day-of */}
+          <section className="mb-14">
+            <div className="bg-gradient-to-br from-coral-500/10 via-sand-50 to-coral-500/5 border-2 border-coral-300/50 rounded-2xl p-6 sm:p-8">
+              <p className="text-coral-600 text-sm font-semibold tracking-[0.2em] uppercase mb-3">
+                Send us your kite shot
+              </p>
+              <h2 className="font-display text-2xl sm:text-3xl font-bold text-navy-900 mb-3">
+                Got a photo from a past festival?
+              </h2>
+              <p className="text-base text-navy-700 font-light leading-relaxed mb-2 max-w-2xl">
+                We&apos;re collecting photos from previous Spring, Fall, and
+                Winter flies — anything from the past few years that captures
+                what this weekend actually looks like. They&apos;ll feature
+                in the gallery on this page leading up to May 9.
+              </p>
+              <p className="text-sm text-navy-500 font-light leading-relaxed mb-5 max-w-2xl">
+                Day-of, the same inbox loads photos in real time. Tag your
+                kite, the year, and your name (or stay anonymous).
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <a
+                  href={`mailto:hello@theportalocal.com?subject=Kite%20Festival%20photo%20%E2%80%94%20${encodeURIComponent(
+                    event.name,
+                  )}&body=Year%20of%20photo%3A%20%0AYour%20name%20(optional)%3A%20%0ACaption%20(optional)%3A%20%0A%0AAttach%20up%20to%204%20photos%20to%20this%20email.%20We'll%20feature%20them%20on%20theportalocal.com%2Fevents%2Fspring-kite-festival-2026.`}
+                  className="px-6 py-3 rounded-xl text-sm font-semibold btn-coral inline-flex items-center gap-2"
+                >
+                  Email a photo
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                    />
+                  </svg>
+                </a>
+                <Link
+                  href="/photos"
+                  className="px-6 py-3 rounded-xl text-sm font-semibold border border-navy-200 text-navy-700 hover:bg-navy-50 transition-colors"
+                >
+                  Or use the gallery uploader
+                </Link>
+              </div>
+              <p className="text-xs text-navy-400 font-light mt-4">
+                We won&apos;t publish your email or full name unless you ask
+                us to. Anonymous is the default.
+              </p>
+            </div>
           </section>
 
           {/* Day-of coverage */}

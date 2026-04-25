@@ -2,6 +2,7 @@ import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import CategoryCard from "@/components/CategoryCard";
 import FeaturedSpots from "@/components/FeaturedSpots";
+import FeaturedEventBanner from "@/components/FeaturedEventBanner";
 import Footer from "@/components/Footer";
 import { WebsiteSchema } from "@/components/StructuredData";
 import { categories } from "@/data/categories";
@@ -13,6 +14,7 @@ export default function Home() {
       <WebsiteSchema />
       <Navigation />
       <Hero />
+      <FeaturedEventBanner />
 
       {/* Gully — Just Gully It */}
       <section className="py-20 bg-navy-900 relative">

@@ -61,7 +61,7 @@ export const events: EventDetails[] = [
     headlineTime: "Saturday, May 9 · setup 10 AM",
     venueName: "Port Aransas Beach (Markers 1–20)",
     venueAddress: "Port Aransas Beach, Port Aransas, TX 78373",
-    coordinates: [27.8265, -97.0405],
+    coordinates: [27.8232, -97.0401],
     cost: "Free",
     icon: "🪁",
     featured: true,

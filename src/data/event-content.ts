@@ -28,6 +28,26 @@ export interface EventFAQ {
   a: string;
 }
 
+export interface EventBeachCam {
+  /** Display name */
+  name: string;
+  /** Short caption — what the camera shows */
+  description: string;
+  /** Approximate marker range or beach landmark */
+  markerRange: string;
+  /** External URL to the live stream (HDOnTap blocks iframe embeds) */
+  url: string;
+}
+
+export interface EventTimelineEntry {
+  /** Year or short period label, e.g. "1985", "1991–2022" */
+  year: string;
+  /** Headline phrase */
+  title: string;
+  /** One- or two-sentence detail */
+  body: string;
+}
+
 export interface EventContent {
   /** Lede paragraph at the top of the article body */
   lede: string;
@@ -43,6 +63,10 @@ export interface EventContent {
   hostBlurb: string[];
   /** Day-of liveblog entries — newest first. Empty until day-of. */
   liveLog: EventLogEntry[];
+  /** Curated subset of /live cams that cover this event's beach stretch */
+  beachCams?: EventBeachCam[];
+  /** Host history timeline — vertical-dot rendering on the page */
+  hostTimeline?: EventTimelineEntry[];
   /** Optional source citations — same shape as dispatch sources */
   sources: { label: string; url?: string }[];
 }
@@ -58,34 +82,52 @@ export const eventContent: Record<string, EventContent> = {
     ],
     schedule: [
       {
-        time: "Friday, May 8",
-        label: "Early arrivals fly",
+        time: "Fri May 8 · afternoon",
+        label: "Out-of-town fliers arrive",
         body:
-          "Out-of-town fliers begin arriving and putting up display kites informally through the afternoon. Not the main day, but a soft start.",
+          "Fliers from Houston, Dallas, San Antonio, and Louisiana begin arriving and putting display kites up informally. Not the main day, but worth driving the beach for a preview.",
       },
       {
-        time: "Saturday, May 9 · 10 AM",
+        time: "Sat May 9 · 8 AM",
+        label: "Park early — beach access fills",
+        body:
+          "South-end beach access (Access 1A) fills fastest. By 9 AM the closest parking is gone. Either roll in by 8 or plan to walk a quarter-mile.",
+      },
+      {
+        time: "Sat · 10 AM",
         label: "Setup begins",
         body:
-          "Flying line goes up at the marker 1 end of the beach. Bring kites, sand stakes, sunscreen.",
+          "Flying line goes up at the marker 1 end of the beach. Display kites are rigged, sand anchors driven, banners raised.",
       },
       {
-        time: "Saturday · 11 AM – 4 PM",
-        label: "Main fly + demonstrations",
+        time: "Sat · 11 AM – 12 PM",
+        label: "First kites in the air",
         body:
-          "Display kites in the air, rotating stunt demos, line laundry. Watch from anywhere along the beach behind the flag line.",
+          "First wave of large display kites and banners up. Onshore breeze typically freshens around this hour. Best photo window of the morning.",
       },
       {
-        time: "Saturday · evening (weather permitting)",
-        label: "Night kites",
+        time: "Sat · 12 PM – 2 PM",
+        label: "Peak attendance + stunt demos",
         body:
-          "Some years the wind cooperates and illuminated kites stay up after dark. Call (361) 749-4190 Friday for the night-kite call.",
+          "Peak crowd. Rotating stunt-kite demonstrations, dual-line and quad-line teams, line laundry. Bring shade — limited natural cover.",
       },
       {
-        time: "Sunday, May 10",
-        label: "Informal Sunday fly",
+        time: "Sat · 2 PM – 4 PM",
+        label: "Sustained fly + family hour",
         body:
-          "Lighter, less structured than Saturday — often the best wind window of the weekend.",
+          "Crowd thins slightly mid-afternoon. Best window for kids to walk up with their own kite — more flag-line space, friendlier wind.",
+      },
+      {
+        time: "Sat · 4 PM – sunset",
+        label: "Wind-down or night kites",
+        body:
+          "Either the line packs up around 5 PM or — if conditions hold — illuminated night kites stay up after dark. Call Fly It at (361) 749-4190 Friday for the night-kite call.",
+      },
+      {
+        time: "Sun May 10 · morning",
+        label: "Informal Sunday session",
+        body:
+          "Lighter and less structured than Saturday. Often the best wind window of the weekend — dawn-into-mid-morning onshore is reliably clean. Worth the early drive if Saturday's crowd was too much.",
       },
     ],
     goodToKnow: [
@@ -151,6 +193,76 @@ export const eventContent: Record<string, EventContent> = {
       "The current three-festivals-a-year cadence — Winter (Presidents' Day weekend), Spring (Mother's Day weekend), and Fall (Indigenous People Day weekend) — is a Timms-era addition. Informal kite flies happened under the Pyles, but the structured Spring/Fall/Winter pattern is roughly three years old. The festivals have never been monetized: no admission, no vendor row, no sponsor logos. They exist because the shop wants other flyers to have a reason to come to the island.",
     ],
     liveLog: [],
+    beachCams: [
+      {
+        name: "Aransas Princess Beach Cam",
+        description: "Beach and Gulf — closest cam to the festival flag line",
+        markerRange: "On the beach at Access 1A · approx. marker 5",
+        url: "https://hdontap.com/stream/167516/aransas-princess-port-aransas-beach-live-webcam/",
+      },
+      {
+        name: "Casa Condos Beach Cam",
+        description: "Rotating shoreline and surf views from the south stretch",
+        markerRange: "South end · approx. markers 8–15",
+        url: "https://hdontap.com/stream/831616/casa-condos-port-aransas-beach-live-webcam/",
+      },
+      {
+        name: "Sandpiper Beach Cam",
+        description: "Panoramic southeast-facing beach view",
+        markerRange: "South end · approx. markers 10–18",
+        url: "https://hdontap.com/stream/518728/port-aransas-beach-live-webvam/",
+      },
+      {
+        name: "Sea Gull Beach Cam",
+        description: "Northeast surf and shoreline on the south stretch",
+        markerRange: "South end · approx. markers 15–20",
+        url: "https://hdontap.com/stream/814199/port-aransas-beach-seagull-condos-live-webcam/",
+      },
+      {
+        name: "Gulf Shores Beach Cam",
+        description: "East-southeast — waves, horizon, often picks up flying line",
+        markerRange: "South end · approx. markers 6–12",
+        url: "https://hdontap.com/stream/776400/gulf-shores-port-aransas-live-beach-cam/",
+      },
+      {
+        name: "The Dunes (PTZ)",
+        description: "Pan/tilt/zoom — operator can scan south to catch the line",
+        markerRange: "Mid-island PTZ · scans south end",
+        url: "https://hdontap.com/stream/259405/the-dunes-port-aransas-live-beach-cam/",
+      },
+    ],
+    hostTimeline: [
+      {
+        year: "~1985",
+        title: "Jean Yocum opens the original Fly It",
+        body:
+          "First incarnation of the kite shop on the south end of Avenue G. Sponsored competitive kite flyers including Ralph Pyle in the early years.",
+      },
+      {
+        year: "1991",
+        title: "Ralph & Suanne Pyle buy the shop (July 13)",
+        body:
+          "Jean retires and asks the Pyles if they want to take it over. They say yes. The 31-year Pyle era — Fly-It! as the island knows it — begins.",
+      },
+      {
+        year: "1997",
+        title: "Move to 405 W Ave G (current location)",
+        body:
+          "Bigger building, room for expanded inventory. Avenue G stays the spine of the shop's identity through every owner.",
+      },
+      {
+        year: "2022",
+        title: "Jeremy & Courtney Timms take over",
+        body:
+          "The Pyles retire after 31 years. The Timms inherit the inventory, the location, and the kite-flier community that drives across two states for it.",
+      },
+      {
+        year: "~2023",
+        title: "Three-festivals-a-year cadence begins",
+        body:
+          "Winter (Presidents' Day weekend), Spring (Mother's Day weekend), Fall (Indigenous People Day weekend). Free, unmonetized, by design — same as the informal flies the Pyles ran before.",
+      },
+    ],
     sources: [
       {
         label: "Fly It Port A — official site",
