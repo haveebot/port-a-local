@@ -24,7 +24,9 @@ import type {
 import * as mock from "./wheelhouse-store-mock";
 import * as pg from "./wheelhouse-store-pg";
 
-const USE_PG = !!process.env.POSTGRES_URL;
+// Neon's current integration uses DATABASE_URL; older Vercel Postgres docs
+// used POSTGRES_URL. Detect either.
+const USE_PG = !!(process.env.POSTGRES_URL || process.env.DATABASE_URL);
 
 /* -------------------- Reads -------------------- */
 

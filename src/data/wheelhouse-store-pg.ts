@@ -10,8 +10,38 @@
  * interchangeable behind wheelhouse-store.ts.
  */
 
-import { sql } from "@vercel/postgres";
+import { createPool, type VercelPool } from "@vercel/postgres";
 import { SEED_THREADS, SEED_MESSAGES } from "./wheelhouse-seed";
+
+/**
+ * Pool factory that handles both Vercel's older POSTGRES_URL convention
+ * AND Neon's modern DATABASE_URL convention. The default `sql` export from
+ * @vercel/postgres reads POSTGRES_URL only; createPool() lets us explicitly
+ * pass either.
+ */
+let _pool: VercelPool | null = null;
+function getPool(): VercelPool {
+  if (!_pool) {
+    const connectionString =
+      process.env.POSTGRES_URL ?? process.env.DATABASE_URL;
+    if (!connectionString) {
+      throw new Error(
+        "Neither POSTGRES_URL nor DATABASE_URL env vars are set. " +
+          "Provision a Vercel Postgres / Neon database and connect it to this project.",
+      );
+    }
+    _pool = createPool({ connectionString });
+  }
+  return _pool;
+}
+
+/**
+ * SQL template tag bound to our pool. Use exactly like the default
+ * `import { sql } from '@vercel/postgres'` — same tagged-template API.
+ */
+const sql: VercelPool["sql"] = ((...args: Parameters<VercelPool["sql"]>) => {
+  return getPool().sql(...args);
+}) as VercelPool["sql"];
 import type {
   Thread,
   ThreadWithMessages,
