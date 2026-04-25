@@ -170,6 +170,28 @@ export interface TournamentResults {
   rules?: TournamentRules;
   /** Past champions archive — newest first. Crowd-sourced expansion expected. */
   pastChampions?: PastChampion[];
+  /**
+   * Historical photo references — points at IDs in src/data/archives.ts.
+   * Avoids duplicating photo data; lets the shelf component look up the
+   * full ArchivePhoto record at render time. Optional caption/year overrides
+   * let us re-frame an existing archive photo for tournament context.
+   */
+  historicalPhotos?: {
+    archiveId: string;
+    caption?: string;
+    year?: string;
+  }[];
+  /**
+   * Milestones & records — what makes this tournament defensibly historic.
+   * Verified-fact-only; speculative records belong in the crowd-source
+   * pipeline, not here.
+   */
+  milestones?: {
+    year?: string;
+    label: string;
+    value: string;
+    detail?: string;
+  }[];
   /** Source citations — official board + supporting */
   sources: { label: string; url?: string }[];
 }
@@ -524,6 +546,81 @@ export const tournamentResults: Record<string, TournamentResults> = {
         species: "Tarpon",
         notes:
           "Won the perpetual trophy at the inaugural 1932 Tarpon Rodeo. Locals still credit his wife Totsy as the angler who actually landed the fish.",
+      },
+    ],
+    historicalPhotos: [
+      {
+        archiveId: "fishing-grounds-tarpon-1900",
+        caption:
+          "The town of Tarpon (later renamed Port Aransas) at the height of the Tarpon Era. Steam-driven launches towed strings of rowboats out to the fishing grounds — the format the Boatmen Association would professionalize into the 1932 Tarpon Rodeo.",
+        year: "c. 1900",
+      },
+      {
+        archiveId: "ayres-fishing-1910",
+        caption:
+          "Robert M. Ayres lands a fish from a rowboat near Port Aransas. This is what \"sport fishing\" looked like before the Roundup standardized the divisions and the dock weigh-in.",
+        year: "c. 1910",
+      },
+      {
+        archiveId: "tarpon-inn-historic-1911",
+        caption:
+          "The Tarpon Inn — Port Aransas's social hub since 1886. The dining room and front porch have hosted every Roundup-era angler from FDR forward. 7,000+ signed tarpon scales line the lobby walls.",
+        year: "1911–1924",
+      },
+      {
+        archiveId: "fish-house-1939",
+        caption:
+          "A working Port Aransas fish house, photographed by Russell Lee for the Farm Security Administration. Seven years into the Tarpon Rodeo / Deep Sea Roundup era — the working waterfront that fed the tournament.",
+        year: "1939",
+      },
+      {
+        archiveId: "tarpon-inn-modern-2007",
+        caption:
+          "The Tarpon Inn in modern form — National Register of Historic Places. FDR's signed tarpon scale is still in the lobby, two doors down from the docks where the modern Roundup boats berth.",
+        year: "2007",
+      },
+    ],
+    milestones: [
+      {
+        year: "1932",
+        label: "Inaugural Tarpon Rodeo",
+        value: "Year One",
+        detail:
+          "25 charter and commercial captains form the Boatmen Association. Three-day shotgun start. North Millican wins the first perpetual trophy.",
+      },
+      {
+        year: "1934",
+        label: "First woman champion",
+        value: "Dorothy Fair",
+        detail:
+          "Two years into the tournament. The lineage that becomes the modern Top Woman Angler award.",
+      },
+      {
+        year: "1942–1945",
+        label: "WWII pause",
+        value: "1 of 2 ever",
+        detail:
+          "Charter captains were doing other work. Only break in the entire run that wasn't a global pandemic.",
+      },
+      {
+        year: "2020",
+        label: "COVID pause",
+        value: "2 of 2 ever",
+        detail: "Second and only other interruption in 90 years.",
+      },
+      {
+        year: "2026",
+        label: "Editions to date",
+        value: "90 annual",
+        detail:
+          "Texas's oldest fishing tournament — every documented year except the war and the pandemic.",
+      },
+      {
+        year: "Always",
+        label: "Sanctioning org",
+        value: "Boatmen Inc.",
+        detail:
+          "Same Boatmen Association that started it in 1932, continuously running scholarship + community programs alongside the tournament.",
       },
     ],
     sources: [

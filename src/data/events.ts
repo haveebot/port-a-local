@@ -135,9 +135,9 @@ export const events: EventDetails[] = [
     slug: "texas-women-anglers-tournament-2026",
     name: "Texas Women Anglers Tournament 2026",
     tagline:
-      "Forty boats. Three hundred women. One shelter. The fishing is real. The bond is the point.",
+      "Seventy boats. Four hundred women. One shelter. The fishing is real. The community is the point.",
     description:
-      "TWAT — the Texas Women Anglers Tournament — is Port Aransas's women-only fishing tournament. Family-run since the 1980s. 40 boats, 300+ women anglers, and every dollar that doesn't go to the winners benefits The Purple Door, the Coastal Bend's shelter for survivors of domestic violence and sexual assault. Late August 2026.",
+      "TWAT — the Texas Women Anglers Tournament — is Port Aransas's women-only fishing tournament. Founded 1984 by Pete Fox; Fox family still runs it. ~70 boats, 400+ women anglers. Every dollar that doesn't go to the winners benefits The Purple Door, the Coastal Bend's shelter for survivors of domestic violence and sexual assault. Tournament has contributed over $130,000 to The Purple Door to date. Late August 2026.",
     startISO: "2026-08-21T17:00:00-05:00",
     endISO: "2026-08-23T18:00:00-05:00",
     dateLabel: "August 21–23, 2026 (tentative — confirming via official site)",
@@ -150,7 +150,7 @@ export const events: EventDetails[] = [
     featured: true,
     published: true,
     hostBusinessSlug: undefined,
-    hostName: "Texas Women Anglers Tournament (family-run since 1980s)",
+    hostName: "Texas Women Anglers Tournament — founded 1984 by Pete Fox · run by the Fox family",
     tags: [
       "TWAT",
       "Texas Women Anglers",
@@ -172,8 +172,8 @@ export const events: EventDetails[] = [
         "The only fishing tournament where the size of the prize is matched by what gets sent to people who need it.",
       serviceArea: "Coastal Bend (Corpus Christi + surrounding counties)",
       impactStat: {
-        label: "2025 prize pool that ran the engine",
-        value: "$403,809",
+        label: "Total raised for The Purple Door to date",
+        value: "$130,000+",
       },
       url: "https://purpledoortx.org/",
       donateUrl: "https://purpledoortx.org/donate/",

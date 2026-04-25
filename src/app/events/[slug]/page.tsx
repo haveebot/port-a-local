@@ -14,12 +14,15 @@ import { EmojiIcon } from "@/components/brand/PortalIcon";
 import EventCountdown from "@/components/EventCountdown";
 import EventOrganizerClaim from "@/components/EventOrganizerClaim";
 import CharityCallout from "@/components/CharityCallout";
+import MerchSpotlight from "@/components/MerchSpotlight";
 import LeaderboardTable from "@/components/tournament/LeaderboardTable";
 import DivisionsPanel from "@/components/tournament/DivisionsPanel";
 import CaptainSpotlight from "@/components/tournament/CaptainSpotlight";
 import PiggyPerchHighlight from "@/components/tournament/PiggyPerchHighlight";
 import PastChampionsBoard from "@/components/tournament/PastChampionsBoard";
 import TournamentRulesPanel from "@/components/tournament/TournamentRulesPanel";
+import HistoricalPhotosShelf from "@/components/tournament/HistoricalPhotosShelf";
+import MilestonesPanel from "@/components/tournament/MilestonesPanel";
 import { getTournamentResults } from "@/data/tournament-results";
 import type { Metadata } from "next";
 
@@ -619,11 +622,58 @@ export default async function EventDetailPage({
                 Past champions
               </h2>
               <p className="text-sm text-navy-500 font-light mb-6 max-w-2xl">
-                Highlights from the lineage. The full 90-year archive is
+                Highlights from the lineage. The full archive is
                 being assembled — if you have a winner from a missing
                 year, send us the record and we&apos;ll add it with credit.
               </p>
               <PastChampionsBoard champions={tournament.pastChampions} />
+            </section>
+          )}
+
+          {/* Milestones & records */}
+          {tournament?.milestones && tournament.milestones.length > 0 && (
+            <section id="milestones" className="mb-14 scroll-mt-24">
+              <p className="text-coral-500 text-sm font-medium tracking-[0.2em] uppercase mb-3">
+                The record book
+              </p>
+              <h2 className="font-display text-2xl sm:text-3xl font-bold text-navy-900 mb-2">
+                Milestones &amp; records
+              </h2>
+              <p className="text-sm text-navy-500 font-light mb-6 max-w-2xl">
+                Verified milestones from the tournament&apos;s run. Records
+                we can&apos;t verify (biggest fish ever, longest streak)
+                stay out — send us provenance and they go in.
+              </p>
+              <MilestonesPanel milestones={tournament.milestones} />
+            </section>
+          )}
+
+          {/* Historical photos */}
+          {tournament?.historicalPhotos &&
+            tournament.historicalPhotos.length > 0 && (
+              <section id="historical-photos" className="mb-14 scroll-mt-24">
+                <p className="text-coral-500 text-sm font-medium tracking-[0.2em] uppercase mb-3">
+                  In the archive
+                </p>
+                <h2 className="font-display text-2xl sm:text-3xl font-bold text-navy-900 mb-2">
+                  Historical photos
+                </h2>
+                <p className="text-sm text-navy-500 font-light mb-6 max-w-2xl">
+                  Period imagery from PAL&apos;s historical archives that
+                  speaks to this tournament&apos;s era. Tap any photo for
+                  the source record.
+                </p>
+                <HistoricalPhotosShelf
+                  refs={tournament.historicalPhotos}
+                  archiveLabel="See the full Port Aransas archive"
+                />
+              </section>
+            )}
+
+          {/* Merch spotlight */}
+          {content.merchSpotlight && (
+            <section className="mb-14">
+              <MerchSpotlight {...content.merchSpotlight} />
             </section>
           )}
 

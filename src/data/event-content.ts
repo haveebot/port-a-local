@@ -98,6 +98,15 @@ export interface EventContent {
     /** Empty-state copy shown when liveLog is empty */
     emptyState: string;
   };
+  /** Optional merch spotlight — for events where the merch is part of the cultural footprint */
+  merchSpotlight?: {
+    headline: string;
+    body: string[];
+    pullQuote?: string;
+    storeUrl?: string;
+    proceedsTo?: string;
+    sightingSubject: string;
+  };
   /** Optional source citations — same shape as dispatch sources */
   sources: { label: string; url?: string }[];
 }
@@ -538,7 +547,7 @@ export const eventContent: Record<string, EventContent> = {
 
   "texas-women-anglers-tournament-2026": {
     lede:
-      "Forty boats. Three hundred women. One shelter. The Texas Women Anglers Tournament has been turning Port Aransas's August wind into purposeful money since the 1980s — and every dollar that doesn't go to the winners goes to The Purple Door, the Coastal Bend's shelter for survivors of domestic violence and sexual assault. The fishing is real. The community is the point.",
+      "Seventy boats. Four hundred women. One shelter. Pete Fox started the Texas Women Anglers Tournament in 1984 with the same idea his family still runs it on today — women fishing for women, with every dollar that doesn't go to the winners going to The Purple Door, the Coastal Bend's shelter for survivors of domestic violence and sexual assault. Forty-plus years and $130,000 later, the fishing is still real. The community is still the point.",
     whatToExpect: [
       "Friday evening at Port A Sip Yard is the warm-up. Registration, dinner, a concert, and the cash-pot announcements run from late afternoon through 8 PM, when the boats depart. The rooftop fills with women who've been coming for years, women fishing their first tournament, daughters who've graduated from the dock to the deck, and the families that built this thing in the 1980s.",
       "Saturday is the long day. Lines in the water at 6:30 AM. The bay and offshore fleets work two different worlds. By 5 PM the weigh station at Fisherman's Wharf is open and a steady stream of boats pull in to put fish on the scale. Crowd, music, beer, leaderboard updates on the wall.",
@@ -641,46 +650,59 @@ export const eventContent: Record<string, EventContent> = {
       },
     ],
     hostBlurb: [
-      "TWAT is family-run and has been since the 1980s. What started in 1989 as eighteen boats and just over fifty women has grown to forty boats and three hundred women, but the format hasn't changed: women fishing for women, with the prize purse and the charity check growing in lockstep.",
+      "Pete Fox formed the Texas Women Anglers Tournament in 1984. He'd grown up fishing and surfing in Port Aransas after his family moved to Corpus Christi from Ohio in 1958, built Marine Surveyors Inc. and Fox Yacht Sales, and was instrumental in starting nearly every modern Port A sportfishing tournament that still runs today — Texas Women Anglers, Dean Hawn Billfish, Texas Legends Billfish, the Masters. He was inducted into the Texas Saltwater Fishing Hall of Fame in 2021 as a Big Game Fishing Inductee.",
+      "The Fox family still runs TWAT today — it's been a family-run tournament from day one. Chris Fox is among the current organizers. The format hasn't changed since 1984: women fishing for women, prize purse and charity check growing in lockstep. To date the tournament has contributed over $130,000 to The Purple Door.",
       "Collie Caraker (PAL co-founder) is dear friends with the tournament's owner. We're covering it because we want it covered better than anyone else — and because the cause behind the prize purse is one we'd cover even if there were no fish involved.",
     ],
     liveLog: [],
     hostTimeline: [
       {
-        year: "1980s",
-        title: "Tournament founded as a charity fishing event",
+        year: "1958",
+        title: "Pete Fox arrives on the Texas coast",
         body:
-          "A small, family-run idea: women anglers raising money for the Women's Shelter of South Texas. Started as a single-day event with just over a dozen boats.",
+          "The Fox family moves from Sandusky, Ohio to Corpus Christi. Pete spends his adolescent summers fishing and surfing in Port Aransas — the foundation for everything that follows.",
+      },
+      {
+        year: "1984",
+        title: "Pete Fox forms the Texas Women Anglers Tournament",
+        body:
+          "Built the same idea the Fox family runs it on today: women fishing for women, with proceeds-after-prizes going to the Women's Shelter of South Texas (now The Purple Door).",
       },
       {
         year: "1989",
         title: "Eighteen boats. Fifty-plus women.",
         body:
-          "Documented early-edition scale. The format proves out: women-only fishing + 100% of proceeds-after-prizes to the shelter.",
+          "Documented early-edition scale. The format proves out and the tournament becomes a fixture of August.",
       },
       {
         year: "Through the 2010s",
         title: "Steady growth into one of Port A's signature summer events",
         body:
-          "From a small charity tournament to a fixture of the August calendar. Boat count and angler count compound each year.",
+          "Boat count and angler count compound year over year. The Fox family keeps the format intact: small enough to feel like family, big enough to write a substantial check at the end.",
       },
       {
         year: "Recent",
-        title: "Women's Shelter rebrands as The Purple Door",
+        title: "Women's Shelter of South Texas rebrands as The Purple Door",
         body:
           "Same mission, new name. Tournament beneficiary continues unchanged.",
       },
       {
-        year: "2025",
-        title: "Forty boats. Three hundred women. $403,809 in prize money.",
+        year: "2021",
+        title: "Pete Fox inducted into the Texas Saltwater Fishing Hall of Fame",
         body:
-          "88th year of women-fishing-for-women on Mustang Island. Sea Senora wins overall. Jordan Soechting takes top angler. The shelter check is the loudest cheer of the night.",
+          "Big Game Fishing Inductee, recognized for founding TWAT and being instrumental in starting many of the Port Aransas tournaments that make this an offshore destination.",
       },
       {
-        year: "2026",
-        title: "Late August on the calendar — bigger again",
+        year: "2025",
+        title: "Seventy boats. Four hundred women. $403,809 in prize money.",
         body:
-          "The format that's worked since the 1980s, now with a digital home that does the story justice.",
+          "Modern scale. Sea Senora wins overall. Jordan Soechting takes top angler. The shelter check is the loudest cheer of the night.",
+      },
+      {
+        year: "2026 cumulative",
+        title: "Over $130,000 contributed to The Purple Door",
+        body:
+          "Forty-plus years of writing checks to the same cause. The number compounds each August.",
       },
     ],
     relatedHistory: undefined,
@@ -694,6 +716,17 @@ export const eventContent: Record<string, EventContent> = {
       heading: "Live from the wharf",
       emptyState:
         "This page goes live as the first fish hit the scale Saturday evening. Real-time leaderboard updates, weigh-in photos, the rooftop scene at the Sip Yard, and the check presentation to The Purple Door all land here as they happen. If you're at the wharf with a phone, send shots to hello@theportalocal.com — they go straight into the feed with credit.",
+    },
+    merchSpotlight: {
+      headline: "No online store. The merch tent is the merch.",
+      body: [
+        "TWAT shirts have shown up at high school football games in Houston, on the docks in the Florida Keys, and in family photos from three different states. The reason they're a flex isn't a marketing budget — it's that there's no online store. You either know somebody who got one, or you were at the tournament. That's the whole supply chain.",
+        "Day one of the tournament weekend, the merch tent draws a crowd before the first cast hits the water. It's the same energy as Masters week or a sold-out tour stop: this gear exists for these three days, on this stretch of dock, and after Sunday it's done. Every shirt sold is another beat for The Purple Door.",
+      ],
+      pullQuote:
+        "Wearing one is like saying 'I was at the Masters' — except when somebody asks where you got it, the answer opens a much better conversation.",
+      proceedsTo: "The Purple Door (Coastal Bend shelter)",
+      sightingSubject: "TWAT shirt sighting",
     },
     sources: [
       {
