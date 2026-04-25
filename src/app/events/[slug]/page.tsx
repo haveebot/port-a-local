@@ -17,6 +17,8 @@ import LeaderboardTable from "@/components/tournament/LeaderboardTable";
 import DivisionsPanel from "@/components/tournament/DivisionsPanel";
 import CaptainSpotlight from "@/components/tournament/CaptainSpotlight";
 import PiggyPerchHighlight from "@/components/tournament/PiggyPerchHighlight";
+import PastChampionsBoard from "@/components/tournament/PastChampionsBoard";
+import TournamentRulesPanel from "@/components/tournament/TournamentRulesPanel";
 import { getTournamentResults } from "@/data/tournament-results";
 import type { Metadata } from "next";
 
@@ -513,6 +515,46 @@ export default async function EventDetailPage({
           {tournament?.piggyPerch && (
             <section className="mb-14">
               <PiggyPerchHighlight piggy={tournament.piggyPerch} />
+            </section>
+          )}
+
+          {/* Tournament rules — editorial summary + official link */}
+          {tournament?.rules && (
+            <section id="rules" className="mb-14 scroll-mt-24">
+              <p className="text-coral-500 text-sm font-medium tracking-[0.2em] uppercase mb-3">
+                Read before fishing
+              </p>
+              <h2 className="font-display text-2xl sm:text-3xl font-bold text-navy-900 mb-2">
+                Rules &amp; regulations
+              </h2>
+              <p className="text-sm text-navy-500 font-light mb-6 max-w-2xl">
+                The full rules live on the official site. Our summary covers the
+                universal rules + per-division specifics so you can read in 90
+                seconds. Always verify against the official rules before
+                registering.
+              </p>
+              <TournamentRulesPanel
+                rules={tournament.rules}
+                divisions={tournament.divisions}
+              />
+            </section>
+          )}
+
+          {/* Past champions archive */}
+          {tournament?.pastChampions && tournament.pastChampions.length > 0 && (
+            <section id="champions" className="mb-14 scroll-mt-24">
+              <p className="text-coral-500 text-sm font-medium tracking-[0.2em] uppercase mb-3">
+                The perpetual trophy
+              </p>
+              <h2 className="font-display text-2xl sm:text-3xl font-bold text-navy-900 mb-2">
+                Past champions
+              </h2>
+              <p className="text-sm text-navy-500 font-light mb-6 max-w-2xl">
+                Highlights from the lineage. The full 90-year archive is
+                being assembled — if you have a winner from a missing
+                year, send us the record and we&apos;ll add it with credit.
+              </p>
+              <PastChampionsBoard champions={tournament.pastChampions} />
             </section>
           )}
 

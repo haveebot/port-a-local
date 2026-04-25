@@ -93,6 +93,50 @@ export interface PiggyPerchAward {
   detail?: string;
 }
 
+export interface PastChampion {
+  /** Tournament year */
+  year: number;
+  /** Edition label, e.g. "88th Annual" — optional */
+  edition?: string;
+  /** Division slug or human label */
+  division: string;
+  /** Optional category — e.g. "Junior", "Top Woman Angler", "Grand Champion" */
+  category?: string;
+  /** Champion's name */
+  angler: string;
+  /** Optional boat name */
+  boat?: string;
+  /** Optional home port */
+  homePort?: string;
+  /** Species + winning fish detail */
+  species?: string;
+  /** Display-formatted weight */
+  weight?: string;
+  /** Display-formatted length for release-division winners */
+  length?: string;
+  /** Free-text note (e.g. "Stringer included 1st-place flounder and redfish") */
+  notes?: string;
+  /** Source URL for verification */
+  sourceUrl?: string;
+}
+
+export interface TournamentRules {
+  /** Display label for the most recent rules edition shown */
+  edition: string;
+  /** Last-updated date for the rules being summarized */
+  updatedAt?: string;
+  /** External URL to the official rules — primary CTA */
+  officialUrl: string;
+  /** Optional direct PDF link if the org publishes one */
+  officialPdfUrl?: string;
+  /** Universal rules across all divisions — short bullets */
+  universal: string[];
+  /** Per-division rule snippets keyed by division slug */
+  divisionNotes?: Record<string, string[]>;
+  /** Optional historical rules archive — past editions */
+  archive?: { year: number; label: string; url?: string }[];
+}
+
 export interface TournamentResults {
   /** Matches the events.ts slug */
   eventSlug: string;
@@ -122,6 +166,10 @@ export interface TournamentResults {
     note: string;
     awards: PiggyPerchAward[];
   };
+  /** Tournament rules — official link + editorial summary */
+  rules?: TournamentRules;
+  /** Past champions archive — newest first. Crowd-sourced expansion expected. */
+  pastChampions?: PastChampion[];
   /** Source citations — official board + supporting */
   sources: { label: string; url?: string }[];
 }
@@ -224,6 +272,110 @@ export const tournamentResults: Record<string, TournamentResults> = {
         { category: "best-sportsmanship", label: "Best Sportsmanship" },
       ],
     },
+    rules: {
+      edition: "2026 (90th Annual)",
+      officialUrl: "https://deepsearoundup.org/tournament-rules/",
+      universal: [
+        "Boats may not depart before 4:00 AM on any day of fishing.",
+        "Fishing begins at 7:00 AM official tournament time.",
+        "All catches must be at the weigh station by 7:00 PM the same day they were caught to score.",
+        "All anglers must register through deepsearoundup.org and read the full rule set before fishing.",
+        "Billfish (Blue Marlin, White Marlin, Sailfish) and Tarpon are catch-and-release ONLY in every division.",
+        "Trophies are awarded for 1st and 2nd place by weight per eligible species in each division.",
+        "Junior anglers compete in their own bracket within Bay-Surf and Offshore — same waters, separate awards.",
+        "Top Woman Angler is awarded across all divisions.",
+      ],
+      divisionNotes: {
+        "bay-surf": [
+          "Inshore species per official rules — redfish, trout, flounder, others.",
+          "Single biggest fish per angler per species scores.",
+          "Junior bracket runs in parallel.",
+        ],
+        offshore: [
+          "Offshore species per official rules.",
+          "Departure rule applies — first hooks aren't until 7 AM.",
+          "Junior bracket runs in parallel.",
+        ],
+        flyfishing: [
+          "Fly tackle exclusively — fly rod, fly reel, fly line, fly leader.",
+          "Eligible species per official rules; sometimes a length-only release category.",
+        ],
+        kayak: [
+          "Kayak / paddle craft only — no motor assistance, including pedal drives where prohibited.",
+          "Standard species rules per the kayak division specification.",
+        ],
+        "tarpon-release": [
+          "Catch-and-release only.",
+          "Length is recorded; fish swims away.",
+          "Honors the 1932 Tarpon Rodeo origin format.",
+        ],
+        "billfish-release": [
+          "Release-only with weighted scoring per species.",
+          "Boats fish offshore at their own risk and timing.",
+          "Photo + verification required per official protocol.",
+        ],
+      },
+      archive: [
+        {
+          year: 2024,
+          label: "2024 (88th edition) — coverage via PA South Jetty",
+          url: "https://roundup.portasouthjetty.com/edition/2025-07-10/",
+        },
+      ],
+    },
+    pastChampions: [
+      // 2024 (88th Annual)
+      {
+        year: 2024,
+        edition: "88th Annual",
+        division: "Bay-Surf",
+        category: "Grand Champion",
+        angler: "Adair Bates",
+        homePort: "Corpus Christi, TX",
+        notes:
+          "Stringer included the 1st-place flounder and redfish — wrapped both species on the same day.",
+        sourceUrl: "https://www.portasouthjetty.com/articles/bates-and-clay-win-roundup/",
+      },
+      {
+        year: 2024,
+        edition: "88th Annual",
+        division: "Offshore",
+        category: "Junior Grand Champion",
+        angler: "Charley Hicks",
+        homePort: "Ponder, TX",
+        notes:
+          "1st-place wahoo, 1st-place blue marlin (release), 2nd-place white marlin and sailfish — multi-species sweep.",
+        sourceUrl: "https://www.portasouthjetty.com/articles/bates-and-clay-win-roundup/",
+      },
+      {
+        year: 2024,
+        edition: "88th Annual",
+        division: "Offshore",
+        category: "1st Place Red Snapper",
+        angler: "Hannah Barnwell",
+        homePort: "Port Aransas, TX",
+        species: "Red Snapper",
+        sourceUrl: "https://portabucketlist.com/class/deep-sea-round-up/",
+      },
+      // Foundational champions — keepers
+      {
+        year: 1934,
+        division: "Tarpon Rodeo",
+        category: "First Woman Champion",
+        angler: "Dorothy Fair",
+        notes:
+          "First woman to win a Roundup category. Her championship is the lineage for the modern Top Woman Angler award.",
+      },
+      {
+        year: 1932,
+        division: "Tarpon Rodeo",
+        category: "Inaugural Champion",
+        angler: "North Millican",
+        species: "Tarpon",
+        notes:
+          "Won the perpetual trophy at the inaugural 1932 Tarpon Rodeo. Locals still credit his wife Totsy as the angler who actually landed the fish.",
+      },
+    ],
     sources: [
       {
         label: "Deep Sea Roundup — official site",
