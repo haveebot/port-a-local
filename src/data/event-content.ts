@@ -77,6 +77,27 @@ export interface EventContent {
   beachCams?: EventBeachCam[];
   /** Host history timeline — vertical-dot rendering on the page */
   hostTimeline?: EventTimelineEntry[];
+  /** Pointer to the full Heritage piece for this event, if any */
+  relatedHistory?: {
+    href: string;
+    title: string;
+    blurb: string;
+  };
+  /** Per-event photo submission CTA copy (falls back to a sensible default) */
+  photoCTA?: {
+    headline: string;
+    body: string;
+    secondaryBody?: string;
+    /** Subject line for the mailto: */
+    mailSubject: string;
+  };
+  /** Per-event copy for the day-of liveblog header + empty state */
+  liveCoverage?: {
+    /** Section heading shown above the liveblog (e.g. "Live from the dock") */
+    heading: string;
+    /** Empty-state copy shown when liveLog is empty */
+    emptyState: string;
+  };
   /** Optional source citations — same shape as dispatch sources */
   sources: { label: string; url?: string }[];
 }
@@ -298,6 +319,17 @@ export const eventContent: Record<string, EventContent> = {
         url: "https://www.portaransas.org/blog/stories/post/meet-the-new-owners-of-fly-it-port-a-kite-shop/",
       },
     ],
+    photoCTA: {
+      headline: "Got a photo from a past festival?",
+      body: "We're collecting photos from previous Spring, Fall, and Winter flies — anything from the past few years that captures what this weekend actually looks like. They'll feature in the gallery on this page leading up to May 9.",
+      secondaryBody: "Day-of, the same inbox loads photos in real time. Tag your kite, the year, and your name (or stay anonymous).",
+      mailSubject: "Kite Festival photo — Fly It Port A's 2026 Spring Kite Festival",
+    },
+    liveCoverage: {
+      heading: "Live from the beach",
+      emptyState:
+        "This page goes live the morning of the festival. Photos, conditions, kite-of-the-hour highlights, and any schedule updates will land here in real time. If you're on the beach and want a kite featured, email hello@theportalocal.com with a photo.",
+    },
   },
 
   "deep-sea-roundup-2026": {
@@ -485,5 +517,22 @@ export const eventContent: Record<string, EventContent> = {
         url: "https://deepsearoundup.org/tournament-history/",
       },
     ],
+    relatedHistory: {
+      href: "/history/deep-sea-roundup",
+      title: "Texas's Oldest Fishing Tournament",
+      blurb:
+        "The full Heritage piece — from the 1932 Tarpon Rodeo through North Millican, Dorothy Fair, the WWII pause, and the post-war rename. Eight minutes, sourced.",
+    },
+    photoCTA: {
+      headline: "Got a Roundup photo? Send it.",
+      body: "Dock weigh-ins, big fish, your kid at the Piggy Perch contest, three generations of your family at the same scale — anything from past Roundups that captures what these four days actually look like. We'll feature them in the gallery leading up to July 9.",
+      secondaryBody: "Day-of, the same inbox loads weigh-in photos in real time. Tag the angler, the boat, the year — anonymous is fine too.",
+      mailSubject: "Deep Sea Roundup photo — DSR 2026",
+    },
+    liveCoverage: {
+      heading: "Live from the dock",
+      emptyState:
+        "This page goes live as the first boats hit the scale Friday evening. Real-time leaderboard updates, weigh-in photos, biggest-fish-of-the-hour highlights, and any wind-or-weather changes from the captain's stand will land here through Saturday night. If you're at the pavilion with a phone, send weigh-in shots to hello@theportalocal.com — they go straight into the feed with credit.",
+    },
   },
 };

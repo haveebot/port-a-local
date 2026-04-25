@@ -209,9 +209,59 @@ export default async function EventDetailPage({
       {/* Lede */}
       <article className="py-16">
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
-          <p className="text-lg sm:text-xl text-navy-700 leading-relaxed font-light mb-12 first-letter:text-5xl first-letter:font-display first-letter:font-bold first-letter:text-coral-500 first-letter:float-left first-letter:mr-3 first-letter:mt-1">
+          <p className="text-lg sm:text-xl text-navy-700 leading-relaxed font-light mb-8 first-letter:text-5xl first-letter:font-display first-letter:font-bold first-letter:text-coral-500 first-letter:float-left first-letter:mr-3 first-letter:mt-1">
             {content.lede}
           </p>
+
+          {/* Heritage link — read the full history */}
+          {content.relatedHistory && (
+            <Link
+              href={content.relatedHistory.href}
+              className="block mb-10 group bg-navy-900 text-sand-100 rounded-2xl p-5 sm:p-6 border border-coral-500/20 hover:border-coral-400 transition-colors"
+            >
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 flex-shrink-0 rounded-xl bg-coral-500/15 border border-coral-500/30 flex items-center justify-center">
+                  <svg
+                    className="w-6 h-6 sm:w-7 sm:h-7 text-coral-300"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1.5}
+                      d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                    />
+                  </svg>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-coral-300 text-[10px] font-bold tracking-[0.2em] uppercase mb-1">
+                    Read the full history
+                  </p>
+                  <h3 className="font-display text-lg sm:text-xl font-bold leading-tight mb-1">
+                    {content.relatedHistory.title}
+                  </h3>
+                  <p className="text-sm text-navy-200 font-light leading-relaxed">
+                    {content.relatedHistory.blurb}
+                  </p>
+                </div>
+                <svg
+                  className="w-5 h-5 text-coral-300 flex-shrink-0 transition-transform group-hover:translate-x-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 8l4 4m0 0l-4 4m4-4H3"
+                  />
+                </svg>
+              </div>
+            </Link>
+          )}
 
           <div className="coral-line max-w-xs mb-12" />
 
@@ -389,60 +439,71 @@ export default async function EventDetailPage({
             </section>
           )}
 
-          {/* Photo submission CTA — open now for past-year, reframes day-of */}
-          <section className="mb-14">
-            <div className="bg-gradient-to-br from-coral-500/10 via-sand-50 to-coral-500/5 border-2 border-coral-300/50 rounded-2xl p-6 sm:p-8">
-              <p className="text-coral-600 text-sm font-semibold tracking-[0.2em] uppercase mb-3">
-                Send us your kite shot
-              </p>
-              <h2 className="font-display text-2xl sm:text-3xl font-bold text-navy-900 mb-3">
-                Got a photo from a past festival?
-              </h2>
-              <p className="text-base text-navy-700 font-light leading-relaxed mb-2 max-w-2xl">
-                We&apos;re collecting photos from previous Spring, Fall, and
-                Winter flies — anything from the past few years that captures
-                what this weekend actually looks like. They&apos;ll feature
-                in the gallery on this page leading up to May 9.
-              </p>
-              <p className="text-sm text-navy-500 font-light leading-relaxed mb-5 max-w-2xl">
-                Day-of, the same inbox loads photos in real time. Tag your
-                kite, the year, and your name (or stay anonymous).
-              </p>
-              <div className="flex flex-wrap gap-3">
-                <a
-                  href={`mailto:hello@theportalocal.com?subject=Kite%20Festival%20photo%20%E2%80%94%20${encodeURIComponent(
-                    event.name,
-                  )}&body=Year%20of%20photo%3A%20%0AYour%20name%20(optional)%3A%20%0ACaption%20(optional)%3A%20%0A%0AAttach%20up%20to%204%20photos%20to%20this%20email.%20We'll%20feature%20them%20on%20theportalocal.com%2Fevents%2Fspring-kite-festival-2026.`}
-                  className="px-6 py-3 rounded-xl text-sm font-semibold btn-coral inline-flex items-center gap-2"
-                >
-                  Email a photo
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                    />
-                  </svg>
-                </a>
-                <Link
-                  href="/photos"
-                  className="px-6 py-3 rounded-xl text-sm font-semibold border border-navy-200 text-navy-700 hover:bg-navy-50 transition-colors"
-                >
-                  Or use the gallery uploader
-                </Link>
-              </div>
-              <p className="text-xs text-navy-400 font-light mt-4">
-                We won&apos;t publish your email or full name unless you ask
-                us to. Anonymous is the default.
-              </p>
-            </div>
-          </section>
+          {/* Photo submission CTA — event-aware copy */}
+          {(() => {
+            const photoCTA = content.photoCTA ?? {
+              headline: "Got a photo we should see?",
+              body: "We're building this event page in public. Photos from past years help. Send anything that captures what the day actually looks like.",
+              secondaryBody: "Day-of, the same inbox loads photos in real time. Tag the moment, the year, and your name (or stay anonymous).",
+              mailSubject: `${event.name} — photo`,
+            };
+            const mailtoHref = `mailto:hello@theportalocal.com?subject=${encodeURIComponent(
+              photoCTA.mailSubject,
+            )}&body=${encodeURIComponent(
+              `Year of photo: \nYour name (optional): \nCaption (optional): \n\nAttach up to 4 photos to this email. We'll feature them on https://theportalocal.com/events/${event.slug}.`,
+            )}`;
+            return (
+              <section className="mb-14">
+                <div className="bg-gradient-to-br from-coral-500/10 via-sand-50 to-coral-500/5 border-2 border-coral-300/50 rounded-2xl p-6 sm:p-8">
+                  <p className="text-coral-600 text-sm font-semibold tracking-[0.2em] uppercase mb-3">
+                    Send us a photo
+                  </p>
+                  <h2 className="font-display text-2xl sm:text-3xl font-bold text-navy-900 mb-3">
+                    {photoCTA.headline}
+                  </h2>
+                  <p className="text-base text-navy-700 font-light leading-relaxed mb-2 max-w-2xl">
+                    {photoCTA.body}
+                  </p>
+                  {photoCTA.secondaryBody && (
+                    <p className="text-sm text-navy-500 font-light leading-relaxed mb-5 max-w-2xl">
+                      {photoCTA.secondaryBody}
+                    </p>
+                  )}
+                  <div className="flex flex-wrap gap-3">
+                    <a
+                      href={mailtoHref}
+                      className="px-6 py-3 rounded-xl text-sm font-semibold btn-coral inline-flex items-center gap-2"
+                    >
+                      Email a photo
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                        />
+                      </svg>
+                    </a>
+                    <Link
+                      href="/photos"
+                      className="px-6 py-3 rounded-xl text-sm font-semibold border border-navy-200 text-navy-700 hover:bg-navy-50 transition-colors"
+                    >
+                      Or use the gallery uploader
+                    </Link>
+                  </div>
+                  <p className="text-xs text-navy-400 font-light mt-4">
+                    We won&apos;t publish your email or full name unless you
+                    ask us to. Anonymous is the default.
+                  </p>
+                </div>
+              </section>
+            );
+          })()}
 
           {/* Tournament leaderboards — only renders for events with tournament data */}
           {tournament && (
@@ -579,28 +640,20 @@ export default async function EventDetailPage({
             </section>
           )}
 
-          {/* Day-of coverage */}
+          {/* Day-of coverage — event-aware copy */}
           <section className="mb-14">
             <p className="text-coral-500 text-sm font-medium tracking-[0.2em] uppercase mb-3">
               Day-of coverage
             </p>
             <h2 className="font-display text-2xl sm:text-3xl font-bold text-navy-900 mb-6">
-              {tournament ? "Live from the dock" : "Live from the beach"}
+              {content.liveCoverage?.heading ??
+                (tournament ? "Live from the dock" : "Live from the beach")}
             </h2>
             {content.liveLog.length === 0 ? (
               <div className="bg-sand-50 border border-sand-200 rounded-xl p-6">
                 <p className="text-sm text-navy-700 font-light leading-relaxed">
-                  This page goes live the morning of {startDate}. Photos,
-                  conditions, kite-of-the-hour highlights, and any
-                  schedule updates will land here in real time. If you&apos;re
-                  on the beach and want a kite featured, email{" "}
-                  <a
-                    href="mailto:hello@theportalocal.com?subject=Kite%20Festival%20photo"
-                    className="text-coral-600 font-semibold underline decoration-coral-200 hover:decoration-coral-500"
-                  >
-                    hello@theportalocal.com
-                  </a>{" "}
-                  with a photo.
+                  {content.liveCoverage?.emptyState ??
+                    `This page goes live the morning of ${startDate}. Photos and updates will land here in real time. If you're at the event and want something featured, email hello@theportalocal.com.`}
                 </p>
               </div>
             ) : (
