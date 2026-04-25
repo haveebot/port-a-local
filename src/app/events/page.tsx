@@ -3,6 +3,8 @@ import Footer from "@/components/Footer";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { EmojiIcon } from "@/components/brand/PortalIcon";
+import EventCountdown from "@/components/EventCountdown";
+import { events as detailedEvents } from "@/data/events";
 
 export const metadata: Metadata = {
   title: "Events & Happenings — Port Aransas, TX | Port A Local",
@@ -18,64 +20,130 @@ interface PAEvent {
   icon: string;
   /** If set, the event card links to this detail page slug under /events/ */
   detailSlug?: string;
+  /** Best-guess next occurrence (ISO date). Updated annually. Used for "next up" sort. */
+  nextDateISO?: string;
 }
 
 const eventsByMonth: { month: string; events: PAEvent[] }[] = [
   {
     month: "January",
     events: [
-      { name: "Restaurant Week", timing: "Mid-January through early February", location: "Island-wide", description: "Participating restaurants offer special prix-fixe menus — $25 lunch, $25 brunch, $35-$50 dinner. The best excuse to try somewhere new.", icon: "🍽️" },
-      { name: "PAPHA Winter Lecture Series", timing: "Mondays in January", location: "Port Aransas Museum", description: "Weekly lectures on local history, culture, and heritage. Topics range from Karankawa history to the founding of UTMSI. Free and open to the public.", icon: "📖" },
+      { name: "Restaurant Week", timing: "Mid-January through early February", location: "Island-wide", description: "Participating restaurants offer special prix-fixe menus — $25 lunch, $25 brunch, $35-$50 dinner. The best excuse to try somewhere new.", icon: "🍽️", nextDateISO: "2027-01-15" },
+      { name: "PAPHA Winter Lecture Series", timing: "Mondays in January", location: "Port Aransas Museum", description: "Weekly lectures on local history, culture, and heritage. Topics range from Karankawa history to the founding of UTMSI. Free and open to the public.", icon: "📖", nextDateISO: "2027-01-04" },
     ],
   },
   {
     month: "February",
     events: [
-      { name: "Whooping Crane Festival", timing: "Third weekend of February", location: "Island-wide + Aransas NWR", description: "Multi-day nature festival with expert birding tours, lectures, photography workshops, and boat trips to see the world's rarest crane at the Aransas National Wildlife Refuge.", icon: "🦅" },
-      { name: "Mardi Gras Parade", timing: "Fat Tuesday", location: "Downtown Port Aransas", description: "Community parade with decorated golf carts, porch parties, and festive food. Port A does Mardi Gras its own way.", icon: "🎭" },
+      { name: "Whooping Crane Festival", timing: "Third weekend of February", location: "Island-wide + Aransas NWR", description: "Multi-day nature festival with expert birding tours, lectures, photography workshops, and boat trips to see the world's rarest crane at the Aransas National Wildlife Refuge.", icon: "🦅", nextDateISO: "2027-02-19" },
+      { name: "Mardi Gras Parade", timing: "Fat Tuesday", location: "Downtown Port Aransas", description: "Community parade with decorated golf carts, porch parties, and festive food. Port A does Mardi Gras its own way.", icon: "🎭", nextDateISO: "2027-02-09" },
     ],
   },
   {
     month: "April",
     events: [
-      { name: "Texas SandFest", timing: "Third weekend of April", location: "Port Aransas Beach", description: "International sand sculpture competition drawing tens of thousands of visitors. Three days of master sculptors, live entertainment, food vendors, and kids' activities. One of the island's largest events.", icon: "🏖️" },
+      { name: "Texas SandFest", timing: "Third weekend of April", location: "Port Aransas Beach", description: "International sand sculpture competition drawing tens of thousands of visitors. Three days of master sculptors, live entertainment, food vendors, and kids' activities. One of the island's largest events.", icon: "🏖️", nextDateISO: "2027-04-16" },
     ],
   },
   {
     month: "May",
     events: [
-      { name: "Fly It Port A's Spring Kite Festival", timing: "Mother's Day weekend (May 8–10, 2026)", location: "Port Aransas Beach, markers 1–20", description: "Free, family-friendly kite festival hosted by Fly It Port A. Setup Saturday at 10 AM. Bring your own kite or just watch. Beach parking permit required, no vendors on the beach.", icon: "🪁", detailSlug: "spring-kite-festival-2026" },
+      { name: "Fly It Port A's Spring Kite Festival", timing: "Mother's Day weekend (May 8–10, 2026)", location: "Port Aransas Beach, markers 1–20", description: "Free, family-friendly kite festival hosted by Fly It Port A. Setup Saturday at 10 AM. Bring your own kite or just watch. Beach parking permit required, no vendors on the beach.", icon: "🪁", detailSlug: "spring-kite-festival-2026", nextDateISO: "2026-05-08" },
     ],
   },
   {
     month: "July",
     events: [
-      { name: "Deep Sea Roundup", timing: "Second weekend of July", location: "Port Aransas Civic Center / Harbor", description: "Texas's oldest fishing tournament, running since 1932. Bay, surf, offshore, fly, kayak, and junior divisions. Features the legendary Piggy Perch contest. Proceeds fund local scholarships.", icon: "🏆" },
-      { name: "Fourth of July Celebration", timing: "July 4", location: "Roberts Point Park", description: "Free popcorn, snow cones, and bounce houses from 4 PM. Live music at 5 PM. Fireworks launched from Roberts Point Park at approximately 9:30 PM. Fireworks cruises available from Fisherman's Wharf.", icon: "🎆" },
+      { name: "Deep Sea Roundup", timing: "Second weekend of July", location: "Port Aransas Civic Center / Harbor", description: "Texas's oldest fishing tournament, running since 1932. Bay, surf, offshore, fly, kayak, and junior divisions. Features the legendary Piggy Perch contest. Proceeds fund local scholarships.", icon: "🏆", nextDateISO: "2026-07-09" },
+      { name: "Fourth of July Celebration", timing: "July 4", location: "Roberts Point Park", description: "Free popcorn, snow cones, and bounce houses from 4 PM. Live music at 5 PM. Fireworks launched from Roberts Point Park at approximately 9:30 PM. Fireworks cruises available from Fisherman's Wharf.", icon: "🎆", nextDateISO: "2026-07-04" },
     ],
   },
   {
     month: "August",
     events: [
-      { name: "Texas Legends Billfish Tournament", timing: "First week of August", location: "Port Aransas Harbor / Offshore", description: "Premier billfish competition — one of three legs of the Texas Triple Crown Billfish Series. High-stakes offshore fishing for blue marlin, white marlin, and sailfish.", icon: "🐟" },
+      { name: "Texas Legends Billfish Tournament", timing: "First week of August", location: "Port Aransas Harbor / Offshore", description: "Premier billfish competition — one of three legs of the Texas Triple Crown Billfish Series. High-stakes offshore fishing for blue marlin, white marlin, and sailfish.", icon: "🐟", nextDateISO: "2026-08-03" },
     ],
   },
   {
     month: "October",
     events: [
-      { name: "Beachtober", timing: "All of October", location: "Island-wide", description: "Month-long celebration: Taco & Margarita Trail, Sweet Traditions Dessert Trail, Beachtober Beats concert series (Fridays at SipYard), Shoptober sales, and Flynn's Beach Run (10K/5K).", icon: "🎃" },
-      { name: "Wooden Boat Festival", timing: "Late October", location: "Roberts Point Park", description: "Three-day celebration of handcrafted boats. Five families compete to build a 14-foot Port A Skiff in three days. Historic Farley boats on display, vendors, live music.", icon: "⛵" },
-      { name: "Harvest Moon Regatta", timing: "Late October", location: "Port Aransas Harbor (finish line)", description: "150-nautical-mile sailboat race from Galveston to Port Aransas. Finish-line festivities include rum party, live music, and awards ceremony.", icon: "⛵" },
+      { name: "Beachtober", timing: "All of October", location: "Island-wide", description: "Month-long celebration: Taco & Margarita Trail, Sweet Traditions Dessert Trail, Beachtober Beats concert series (Fridays at SipYard), Shoptober sales, and Flynn's Beach Run (10K/5K).", icon: "🎃", nextDateISO: "2026-10-01" },
+      { name: "Wooden Boat Festival", timing: "Late October", location: "Roberts Point Park", description: "Three-day celebration of handcrafted boats. Five families compete to build a 14-foot Port A Skiff in three days. Historic Farley boats on display, vendors, live music.", icon: "⛵", nextDateISO: "2026-10-23" },
+      { name: "Harvest Moon Regatta", timing: "Late October", location: "Port Aransas Harbor (finish line)", description: "150-nautical-mile sailboat race from Galveston to Port Aransas. Finish-line festivities include rum party, live music, and awards ceremony.", icon: "⛵", nextDateISO: "2026-10-24" },
     ],
   },
   {
     month: "December",
     events: [
-      { name: "Lighted Boat Parade & Holiday Drone Show", timing: "Mid-December Saturday", location: "Port Aransas Harbor / Fisherman's Wharf", description: "Decorated boats glide through the harbor 6-7 PM, followed by 150+ synchronized drones in holiday patterns set to live music. Santa, snow machines, holiday cocktails.", icon: "🎄" },
-      { name: "Golf Cart Holiday Parade", timing: "Early December", location: "Downtown Port Aransas", description: "Community parade of decorated golf carts through downtown. Pure Port A energy.", icon: "🛺" },
+      { name: "Lighted Boat Parade & Holiday Drone Show", timing: "Mid-December Saturday", location: "Port Aransas Harbor / Fisherman's Wharf", description: "Decorated boats glide through the harbor 6-7 PM, followed by 150+ synchronized drones in holiday patterns set to live music. Santa, snow machines, holiday cocktails.", icon: "🎄", nextDateISO: "2026-12-12" },
+      { name: "Golf Cart Holiday Parade", timing: "Early December", location: "Downtown Port Aransas", description: "Community parade of decorated golf carts through downtown. Pure Port A energy.", icon: "🛺", nextDateISO: "2026-12-05" },
     ],
   },
 ];
+
+/**
+ * Resolve the soonest upcoming event from both sources (events.ts + inline).
+ * Prefers detail-page events when there's a tie. Returns null off-season.
+ */
+function getNextUpEvent() {
+  const now = Date.now();
+
+  type Candidate = {
+    name: string;
+    icon: string;
+    location: string;
+    description: string;
+    timing: string;
+    iso: string;
+    detailSlug?: string;
+    /** ISO end date if known — gives us a more accurate "still happening" check */
+    endISO?: string;
+    dateLabel?: string;
+  };
+
+  const fromInline: Candidate[] = eventsByMonth
+    .flatMap((m) => m.events)
+    .filter((e) => e.nextDateISO)
+    .map((e) => ({
+      name: e.name,
+      icon: e.icon,
+      location: e.location,
+      description: e.description,
+      timing: e.timing,
+      iso: e.nextDateISO as string,
+      detailSlug: e.detailSlug,
+    }));
+
+  const fromDetailed: Candidate[] = detailedEvents
+    .filter((e) => e.published)
+    .map((e) => ({
+      name: e.name,
+      icon: e.icon,
+      location: e.venueName,
+      description: e.description,
+      timing: e.headlineTime,
+      iso: e.startISO,
+      endISO: e.endISO,
+      detailSlug: e.slug,
+      dateLabel: e.dateLabel,
+    }));
+
+  // Detailed events take precedence when slug matches — they have richer data
+  const detailedSlugs = new Set(fromDetailed.map((e) => e.detailSlug));
+  const merged = [
+    ...fromDetailed,
+    ...fromInline.filter((e) => !e.detailSlug || !detailedSlugs.has(e.detailSlug)),
+  ];
+
+  const upcoming = merged
+    .filter((c) => {
+      const cutoff = c.endISO ? new Date(c.endISO).getTime() : new Date(c.iso).getTime() + 86_400_000;
+      return cutoff > now;
+    })
+    .sort((a, b) => new Date(a.iso).getTime() - new Date(b.iso).getTime());
+
+  return upcoming[0] ?? null;
+}
 
 const recurringEvents: PAEvent[] = [
   { name: "Second Saturday at Farley Boat Works", timing: "2nd Saturday, Oct-Mar", location: "716 W. Ave C", description: "Potluck dinners with live music and dancing in the boat barn. PAPHA members eat free; guests $10.", icon: "🪵" },
@@ -85,6 +153,8 @@ const recurringEvents: PAEvent[] = [
 ];
 
 export default function EventsPage() {
+  const nextUp = getNextUpEvent();
+
   return (
     <main className="min-h-screen">
       <Navigation />
@@ -107,6 +177,74 @@ export default function EventsPage() {
           </p>
         </div>
       </section>
+
+      {/* Coming Up Next — soonest event regardless of month */}
+      {nextUp && (
+        <section className="py-12 sm:py-14 bg-navy-900 relative border-b border-coral-500/20">
+          <div
+            className="absolute inset-0 opacity-40 pointer-events-none"
+            style={{
+              background:
+                "radial-gradient(circle at 85% 50%, rgba(232,101,111,0.18), transparent 60%)",
+            }}
+          />
+          <div className="relative max-w-5xl mx-auto px-4 sm:px-6">
+            <div className="flex flex-col lg:flex-row items-start lg:items-center gap-8">
+              <div className="flex-1 min-w-0">
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-coral-500/30 bg-coral-500/10 text-coral-300 text-xs font-semibold tracking-widest uppercase mb-4">
+                  <EmojiIcon emoji={nextUp.icon} className="w-3.5 h-3.5" />
+                  Coming up next
+                </div>
+
+                <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold text-sand-50 leading-tight mb-3">
+                  {nextUp.name}
+                </h2>
+
+                <p className="text-base sm:text-lg text-navy-200 font-light leading-relaxed max-w-2xl mb-4">
+                  {nextUp.description}
+                </p>
+
+                <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-navy-300 mb-5">
+                  <span className="font-semibold text-sand-100">
+                    {nextUp.dateLabel ?? nextUp.timing}
+                  </span>
+                  <span className="text-navy-500">·</span>
+                  <span>{nextUp.location}</span>
+                </div>
+
+                {nextUp.detailSlug && (
+                  <Link
+                    href={`/events/${nextUp.detailSlug}`}
+                    className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold btn-coral"
+                  >
+                    See the full hub
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M17 8l4 4m0 0l-4 4m4-4H3"
+                      />
+                    </svg>
+                  </Link>
+                )}
+              </div>
+
+              <div className="lg:flex-shrink-0">
+                <EventCountdown
+                  startISO={nextUp.iso}
+                  endISO={nextUp.endISO}
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Annual Events by Month */}
       <section className="py-16">
