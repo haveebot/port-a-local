@@ -55,6 +55,7 @@ const eventsByMonth: { month: string; events: PAEvent[] }[] = [
     month: "July",
     events: [
       { name: "Port Aransas Deep Sea Roundup — 90th Annual", timing: "July 9–12, 2026 · main weigh-ins Fri & Sat evenings", location: "Roberts Point Park · Fred Rhodes Pavilion", description: "Texas's oldest fishing tournament — 1932 to today. Six divisions (Bay-Surf, Offshore, Fly, Kayak, Tarpon Release, Billfish Release) plus Junior brackets, Top Woman Angler, and the kids' Piggy Perch contest. Live leaderboards on the hub.", icon: "🏆", detailSlug: "deep-sea-roundup-2026", nextDateISO: "2026-07-09" },
+      { name: "The Billfish Pachanga", timing: "Mid-July (TBD — 2025 was July 16–19)", location: "Virginia's on the Bay", description: "Limited-field billfish tournament capped at 40 boats. Catch-and-release for billfish, weighted scoring across the field. Benefits the Harte Research Institute for Sportfish Science and the Port Aransas Scholarship Fund. The science-funding edition of Tournament Season.", icon: "🐟", nextDateISO: "2026-07-15" },
       { name: "Fourth of July Celebration", timing: "July 4", location: "Roberts Point Park", description: "Free popcorn, snow cones, and bounce houses from 4 PM. Live music at 5 PM. Fireworks launched from Roberts Point Park at approximately 9:30 PM. Fireworks cruises available from Fisherman's Wharf.", icon: "🎆", nextDateISO: "2026-07-04" },
     ],
   },
@@ -292,8 +293,9 @@ export default function EventsPage() {
                   Port Aransas&apos;s summer fishing fixture, all in one place
                 </p>
                 <p className="text-sm text-navy-200 font-light">
-                  DSR · Pachanga · Texas Legends · TWAT — history, comparison,
-                  and how to plan a Tournament Season weekend.
+                  Deep Sea Roundup · Pachanga · Texas Legends · TWAT —
+                  history, comparison, and how to plan a Tournament Season
+                  weekend.
                 </p>
               </div>
               <svg

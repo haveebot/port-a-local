@@ -847,7 +847,7 @@ export default async function EventDetailPage({
                     Part of Tournament Season
                   </p>
                   <p className="font-display text-xl sm:text-2xl font-bold text-sand-50 leading-tight mb-1">
-                    See the whole summer — DSR, Pachanga, Texas Legends, TWAT
+                    See the whole summer — Deep Sea Roundup, Pachanga, Texas Legends, TWAT
                   </p>
                   <p className="text-sm text-navy-200 font-light">
                     History, comparison, and how to plan a Tournament Season
