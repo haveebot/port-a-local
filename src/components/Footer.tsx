@@ -246,12 +246,15 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Heye Lab platform attribution — same footer rail pattern as
-            CrossRef (the other Heye Lab beta tenant). Plain text for now;
-            link target lands when Heye Lab has its own surface. */}
+        {/* Heye Lab platform attribution — same footer rail pattern
+            as CrossRef (sibling Heye Lab tenant). PAL is the proof of
+            concept; CityDeploy is the templated engine sold to other
+            towns. See `Port A Local/Memory/CityDeploy — Platform
+            Vision.md` for full framing. */}
         <div className="pt-4 flex justify-center">
           <p className="text-[10px] font-mono tracking-[0.15em] uppercase text-navy-600">
-            Powered by Heye Lab
+            Powered by Heye Lab{" "}
+            <span className="text-coral-500/70">·</span> Built on CityDeploy
           </p>
         </div>
       </div>
