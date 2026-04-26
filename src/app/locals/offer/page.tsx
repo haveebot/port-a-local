@@ -38,8 +38,7 @@ export default function OfferPage() {
             <strong className="text-sand-100">
               You keep 100% of your quote
             </strong>{" "}
-            — any platform fees are added on the customer&apos;s side, never
-            deducted from your pay.
+            — PAL adds 10% on top, paid by the customer.
           </p>
         </div>
       </header>
@@ -70,12 +69,44 @@ export default function OfferPage() {
               When you&apos;re ready, we set up Stripe Connect for you and
               customers pay through PAL → auto-payout to your bank.{" "}
               <strong className="text-navy-900">
-                The customer covers the small platform fee on top — you
-                still keep your full quote.
+                PAL adds 10% on top of your quote — paid by the customer,
+                never deducted from your pay.
               </strong>{" "}
               Until then: you bill them direct, we don&apos;t touch the money.
             </li>
           </ol>
+
+          {/* Concrete fee example so vendors aren't surprised when they
+              see customer-facing pricing later. Locals see this BEFORE
+              they sign up so the model is unambiguous. */}
+          <div className="mt-6 bg-emerald-50 border border-emerald-200 rounded-lg p-4">
+            <p className="text-[10px] font-bold tracking-widest uppercase text-emerald-700 mb-2">
+              What the customer sees
+            </p>
+            <div className="space-y-1 text-sm font-mono text-navy-800">
+              <div className="flex justify-between">
+                <span>Your quote</span>
+                <span>$200.00</span>
+              </div>
+              <div className="flex justify-between text-navy-500">
+                <span>PAL platform fee (10%)</span>
+                <span>+$20.00</span>
+              </div>
+              <div className="flex justify-between font-bold text-navy-900 border-t border-emerald-200 pt-1 mt-1">
+                <span>Customer pays</span>
+                <span>$220.00</span>
+              </div>
+              <div className="flex justify-between font-bold text-emerald-700 pt-2">
+                <span>You receive</span>
+                <span>$200.00</span>
+              </div>
+            </div>
+            <p className="text-[11px] text-navy-500 font-light mt-3 italic">
+              Same model as Airbnb / Turo / DoorDash — customers expect a
+              platform fee on top. PAL&apos;s differentiator: it never
+              comes out of your pocket.
+            </p>
+          </div>
 
           <h3 className="font-display text-base font-bold text-navy-900 mt-8 mb-2">
             What we won&apos;t list
