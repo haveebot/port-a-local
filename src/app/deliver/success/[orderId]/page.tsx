@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import Stripe from "stripe";
+import { getDeliverStripe, getDeliverStripeKey } from "@/lib/deliverStripe";
 import { getOrder, markOrderPaid } from "@/data/delivery-store";
 import { getRestaurant } from "@/data/delivery-restaurants";
 import { formatUSD } from "@/data/delivery-pricing";
@@ -23,10 +23,9 @@ async function verifyStripePaymentIfNeeded(
   const order = await getOrder(orderId);
   if (!order) return;
   if (order.paymentStatus === "paid") return;
-  const stripeKey = process.env.STRIPE_SECRET_KEY;
-  if (!stripeKey) return;
+  if (!getDeliverStripeKey()) return;
   try {
-    const stripe = new Stripe(stripeKey, { apiVersion: "2026-03-25.dahlia" });
+    const stripe = getDeliverStripe();
     const session = await stripe.checkout.sessions.retrieve(sessionId);
     if (session.payment_status === "paid") {
       await markOrderPaid(

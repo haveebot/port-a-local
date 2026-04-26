@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import Stripe from "stripe";
+import type Stripe from "stripe";
+import { getDeliverStripe } from "@/lib/deliverStripe";
 import {
   getOrderByCheckoutSession,
   markOrderPaid,
@@ -12,11 +13,6 @@ import {
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
-function getStripe() {
-  return new Stripe(process.env.STRIPE_SECRET_KEY ?? "", {
-    apiVersion: "2026-03-25.dahlia",
-  });
-}
 
 /**
  * Stripe webhook for /deliver checkout sessions.
@@ -42,7 +38,7 @@ export async function POST(req: NextRequest) {
 
   let event: Stripe.Event;
   try {
-    event = getStripe().webhooks.constructEvent(rawBody, sig, secret);
+    event = getDeliverStripe().webhooks.constructEvent(rawBody, sig, secret);
   } catch (err) {
     const msg = err instanceof Error ? err.message : "verify failed";
     return NextResponse.json(

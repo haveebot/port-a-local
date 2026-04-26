@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import Stripe from "stripe";
+import { getDeliverStripe } from "@/lib/deliverStripe";
 import {
   createOrder,
   type CreateOrderInput,
@@ -19,11 +19,6 @@ export const runtime = "nodejs";
 const APP_URL =
   process.env.NEXT_PUBLIC_APP_URL ?? "https://theportalocal.com";
 
-function getStripe() {
-  return new Stripe(process.env.STRIPE_SECRET_KEY ?? "", {
-    apiVersion: "2026-03-25.dahlia",
-  });
-}
 
 interface OrderEmailInput {
   orderId: string;
@@ -285,7 +280,7 @@ export async function POST(req: NextRequest) {
   await sendOrderEmail({ ...emailInput, paid: false });
 
   // Open Stripe Checkout
-  const stripe = getStripe();
+  const stripe = getDeliverStripe();
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],
     mode: "payment",

@@ -12,7 +12,7 @@ import {
   notifyCustomerDelivered,
   notifyCustomerPickedUp,
 } from "@/lib/deliverDispatch";
-import Stripe from "stripe";
+import { getDeliverStripe, getDeliverStripeKey } from "@/lib/deliverStripe";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -106,12 +106,11 @@ async function triggerDriverPayout(
     );
     return;
   }
-  const stripeKey = process.env.STRIPE_SECRET_KEY;
-  if (!stripeKey) {
-    console.error("[payout] STRIPE_SECRET_KEY missing");
+  if (!getDeliverStripeKey()) {
+    console.error("[payout] STRIPE key missing for /deliver");
     return;
   }
-  const stripe = new Stripe(stripeKey, { apiVersion: "2026-03-25.dahlia" });
+  const stripe = getDeliverStripe();
   try {
     const transfer = await stripe.transfers.create({
       amount: amountCents,

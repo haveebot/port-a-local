@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import Stripe from "stripe";
+import { getDeliverStripe, getDeliverStripeKey } from "@/lib/deliverStripe";
 import { getDriverByToken } from "@/data/delivery-drivers";
 import {
   getDriverStatus,
@@ -30,14 +30,13 @@ export async function POST(req: NextRequest) {
   if (!driver) {
     return NextResponse.json({ error: "Invalid driver token" }, { status: 403 });
   }
-  const stripeKey = process.env.STRIPE_SECRET_KEY;
-  if (!stripeKey) {
+  if (!getDeliverStripeKey()) {
     return NextResponse.json(
-      { error: "Stripe not configured." },
+      { error: "Stripe not configured for /deliver." },
       { status: 500 },
     );
   }
-  const stripe = new Stripe(stripeKey, { apiVersion: "2026-03-25.dahlia" });
+  const stripe = getDeliverStripe();
 
   let status = await getDriverStatus(driver.id);
   let accountId = status.stripeAccountId;
