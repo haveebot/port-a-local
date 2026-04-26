@@ -679,6 +679,62 @@ export async function getLeaderboard(): Promise<LeaderboardSummary> {
   };
 }
 
+/**
+ * Delivered orders that DIDN'T fire a Stripe Connect transfer.
+ *
+ * Common cause: runner was payouts_enabled=false at the time of
+ * delivery (Stripe Express account not yet fully verified). Our
+ * `triggerDriverPayout` skips silently in that case, so the funds
+ * never moved from PAL → runner Connect balance.
+ *
+ * Use the custom-payouts admin tool to backfill — same Stripe machinery,
+ * just driven by Winston instead of the auto-trigger.
+ */
+export interface MissedPayoutRecord {
+  orderId: string;
+  driverId: string;
+  driverName: string;
+  signupNumber: number;
+  driverPayoutCents: number;
+  deliveredAt: string;
+  restaurantId: string;
+}
+
+export async function getMissedPayouts(): Promise<MissedPayoutRecord[]> {
+  await ensureSchema();
+  const { rows } = await sql`
+    WITH numbered AS (
+      SELECT id, ROW_NUMBER() OVER (ORDER BY applied_at ASC, id ASC) AS signup_num
+      FROM delivery_drivers
+    )
+    SELECT
+      o.id AS order_id,
+      o.driver_id,
+      d.name AS driver_name,
+      n.signup_num,
+      o.driver_payout_cents,
+      o.delivered_at,
+      o.restaurant_id
+    FROM delivery_orders o
+    JOIN delivery_drivers d ON d.id = o.driver_id
+    JOIN numbered n ON n.id = o.driver_id
+    LEFT JOIN delivery_driver_transfers t ON t.order_id = o.id
+    WHERE o.status = 'delivered'
+      AND t.order_id IS NULL
+      AND o.driver_payout_cents > 0
+    ORDER BY o.delivered_at DESC
+  `;
+  return rows.map((r) => ({
+    orderId: r.order_id as string,
+    driverId: r.driver_id as string,
+    driverName: r.driver_name as string,
+    signupNumber: Number(r.signup_num),
+    driverPayoutCents: Number(r.driver_payout_cents),
+    deliveredAt: new Date(r.delivered_at as string).toISOString(),
+    restaurantId: r.restaurant_id as string,
+  }));
+}
+
 export async function listCustomPayouts(
   limit = 20,
 ): Promise<CustomPayoutRecord[]> {

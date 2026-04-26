@@ -4,9 +4,12 @@ import Link from "next/link";
 import {
   getActiveDriversDb,
   getDriverStatus,
+  getMissedPayouts,
   listCustomPayouts,
 } from "@/data/delivery-store";
+import { getRestaurantById } from "@/data/delivery-restaurants";
 import CustomPayoutForm from "./CustomPayoutForm";
+import MissedPayoutsList from "./MissedPayoutsList";
 
 export const dynamic = "force-dynamic";
 
@@ -43,7 +46,15 @@ export default async function WheelhousePayoutsPage() {
   );
 
   const recent = await listCustomPayouts(20);
+  const missed = await getMissedPayouts();
   const driverNameById = new Map(drivers.map((d) => [d.id, d.name]));
+
+  // Decorate missed payouts with restaurant names for display
+  const missedDecorated = missed.map((m) => ({
+    ...m,
+    restaurantName:
+      getRestaurantById(m.restaurantId)?.name ?? m.restaurantId,
+  }));
 
   function fmt(cents: number) {
     return `$${(cents / 100).toFixed(2)}`;
@@ -67,6 +78,31 @@ export default async function WheelhousePayoutsPage() {
       </header>
 
       <div className="max-w-3xl mx-auto px-4 sm:px-6 py-8 space-y-8">
+        {/* Missed-payouts diagnostic — surfaces delivered orders that
+            didn't fire a Stripe Connect transfer (usually because the
+            runner's payouts_enabled was false at delivery time). One-click
+            backfill via the custom-payouts API. */}
+        {missedDecorated.length > 0 && (
+          <section className="bg-amber-50 rounded-2xl border-2 border-amber-300 p-6 shadow-sm">
+            <div className="flex items-baseline justify-between mb-3">
+              <h2 className="font-display text-xl font-bold text-amber-900">
+                ⚠️ {missedDecorated.length} missed payout
+                {missedDecorated.length === 1 ? "" : "s"}
+              </h2>
+              <p className="text-[10px] tracking-widest uppercase text-amber-700 font-mono">
+                Auto-trigger skipped
+              </p>
+            </div>
+            <p className="text-sm text-amber-900 mb-4 leading-relaxed">
+              These orders delivered, but the Stripe Connect transfer
+              didn&apos;t fire — usually because the runner&apos;s
+              payouts weren&apos;t enabled yet. Backfill below; same
+              Stripe machinery as auto-payouts, just on your timing.
+            </p>
+            <MissedPayoutsList missed={missedDecorated} />
+          </section>
+        )}
+
         <section className="bg-white rounded-2xl border border-sand-300 p-6 shadow-sm">
           <h1 className="font-display text-2xl font-bold mb-2">
             Send a one-off Stripe transfer
