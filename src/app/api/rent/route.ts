@@ -73,7 +73,7 @@ export async function POST(req: NextRequest) {
       <p><strong>Pickup:</strong> ${pickupFormatted}</p>
       <p><strong>Return:</strong> ${returnFormatted}</p>
       <p><strong>Duration:</strong> ${numDays} day${numDays !== 1 ? "s" : ""}</p>
-      <p><strong>Pickup:</strong> In Port Aransas (location TBD — sourcing vendor)</p>
+      <p><strong>Handoff:</strong> Pickup or delivery — vendor's call (TBD on claim)</p>
       <hr style="border:none; border-top:1px solid #e4dccc; margin:16px 0;"/>
       <p style="font-size:16px;"><strong>Reservation fee to collect:</strong> $${reservationFee}</p>
     `,

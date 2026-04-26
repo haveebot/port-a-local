@@ -103,7 +103,7 @@ export default function RentPage() {
               We&apos;re matching your reservation with a local cart company now.
             </p>
             <p className="text-navy-300 mb-6">
-              You&apos;ll receive pickup details <strong className="text-sand-100">24–48 hours before your arrival date</strong> — including location, hours, and what to bring.
+              You&apos;ll receive cart logistics <strong className="text-sand-100">24–48 hours before your arrival date</strong> — pickup at the shop or delivery to your door, vendor&apos;s call.
             </p>
             <p className="text-navy-400 text-sm">
               Full refund if we&apos;re unable to fulfill your reservation. Check your email for a confirmation.
@@ -153,7 +153,7 @@ export default function RentPage() {
             <div>
               <PortalIcon name="map" className="w-9 h-9 mx-auto mb-2 text-navy-900" />
               <p className="font-semibold text-navy-900 text-sm">Pick Up & Explore</p>
-              <p className="text-navy-500 text-sm mt-1">Pickup details sent 24–48 hours before your arrival. Show up, grab the keys, ride.</p>
+              <p className="text-navy-500 text-sm mt-1">Cart logistics sent 24–48 hours before your arrival — pickup or delivery, vendor&apos;s call.</p>
             </div>
           </div>
         </div>
@@ -249,7 +249,7 @@ export default function RentPage() {
                     <span className="font-semibold">${reservationFee}</span>
                   </div>
                   <p className="text-xs text-navy-400 mt-2">
-                    Reservation fee secures your cart. Rental balance paid directly to the cart company at pickup — with a guaranteed $20 off their standard rate.
+                    Reservation fee secures your cart. Rental balance paid directly to the cart company — with a guaranteed $20 off their standard rate.
                   </p>
                 </div>
               )}
@@ -304,19 +304,19 @@ export default function RentPage() {
               <ul className="space-y-2 text-sm text-navy-600">
                 <li className="flex items-start gap-2">
                   <span className="text-coral-500 font-bold mt-0.5">→</span>
-                  <span><strong>Pickup details</strong> are sent to your email 24–48 hours before your arrival date.</span>
+                  <span><strong>Cart logistics</strong> arrive in your email 24–48 hours before your arrival date — pickup or delivery, vendor&apos;s call.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-coral-500 font-bold mt-0.5">→</span>
-                  <span><strong>Valid ID required</strong> at pickup. Must be 18 or older to rent.</span>
+                  <span><strong>Valid ID required</strong> at handoff. Must be 18 or older to rent.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-coral-500 font-bold mt-0.5">→</span>
-                  <span><strong>Free cancellation</strong> 48+ hours before your pickup date. Non-refundable within 48 hours.</span>
+                  <span><strong>Free cancellation</strong> 48+ hours before your start date. Non-refundable within 48 hours.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-coral-500 font-bold mt-0.5">→</span>
-                  <span><strong>Damage deposit</strong> may be collected by the rental company at pickup.</span>
+                  <span><strong>Damage deposit</strong> may be collected by the rental company at handoff.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-coral-500 font-bold mt-0.5">→</span>
@@ -358,7 +358,7 @@ export default function RentPage() {
             </p>
 
             <p className="text-center text-sm text-navy-400">
-              Secure payment via Stripe. $10/day reservation fee — rental balance paid at pickup.
+              Secure payment via Stripe. $10/day reservation fee — rental balance paid directly to the vendor.
             </p>
           </form>
         </div>

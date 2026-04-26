@@ -82,7 +82,7 @@ export async function POST(req: NextRequest) {
         <p><strong>Pickup:</strong> ${pickupFormatted}</p>
         <p><strong>Return:</strong> ${returnFormatted}</p>
         <p><strong>Duration:</strong> ${days} day${days !== 1 ? "s" : ""}</p>
-        <p><strong>Pickup:</strong> Port Aransas (sourcing vendor)</p>
+        <p><strong>Handoff:</strong> Pickup or delivery — vendor's call</p>
         <hr style="border:none; border-top:1px solid #e4dccc; margin:16px 0;"/>
         <p style="font-size:16px;"><strong>Fee collected:</strong> $${fee}</p>
         <p style="font-size:11px; color:#8896ab; font-family:monospace; margin-top:12px;">Stripe session: ${session.id}</p>
@@ -132,7 +132,7 @@ export async function POST(req: NextRequest) {
         <hr style="border:none; border-top:1px solid #e4dccc; margin:16px 0;"/>
         <p style="font-size:13px; color:#4a5568;"><strong>By responding to claim this lead, you agree to:</strong></p>
         <ul style="font-size:13px; color:#4a5568; padding-left:20px;">
-          <li>Have a clean, well-maintained ${cartSize}-passenger cart ready for customer pickup on <strong>${pickupFormatted}</strong></li>
+          <li>Have a clean, well-maintained ${cartSize}-passenger cart ready for the customer on <strong>${pickupFormatted}</strong> — <strong>pickup at your shop OR delivery to their address, your call</strong> (whichever you offer)</li>
           <li>Provide the customer a <strong>minimum $20 discount</strong> off your standard rental rate</li>
           <li>Adhere to your standard rental practices — including rental agreements, ID verification, deposit handling, customer service, and emergency maintenance support for the duration of the rental</li>
         </ul>
@@ -152,7 +152,7 @@ export async function POST(req: NextRequest) {
 
     console.log(`[Rent/Blast] Sending lead to ${vendors.length} vendors (${totalVendorCount} total on list)`);
 
-    const customerSMS = `Port A Local: Your ${cartLabel} is reserved for ${pickupFormatted}. Pickup details will arrive 24-48 hours before your trip. Reply STOP to opt out.`;
+    const customerSMS = `Port A Local: Your ${cartLabel} is reserved for ${pickupFormatted}. Cart logistics (pickup or delivery, vendor's call) arrive 24-48 hours before your trip. Reply STOP to opt out.`;
 
     await Promise.allSettled([
       sendEmail(INTERNAL_EMAIL, `✅ Golf Cart PAID — ${name} — ${pickupDate} to ${returnDate}`, internalHtml),
