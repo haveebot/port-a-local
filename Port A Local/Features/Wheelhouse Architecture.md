@@ -125,11 +125,11 @@ src/
 
 `workspace/scripts/wheelhouse.py` — Python stdlib CLI that wraps the API for agents.
 
-Subcommands: `whoami` · `list` · `show <id>` · `post <id>` · `transition <id> <state>` · `new`
+Subcommands: **`orient`** · `whoami` · `list` · `show <id>` · `post <id>` · `transition <id> <state>` · `new`
 
 Reads `WHEELHOUSE_AGENT_TOKEN` env var (set per-agent in their shell). Each agent has their own token; tokens map to participant IDs via `tokenToAgent()` in middleware.
 
-**Queued:** `wheelhouse.py orient` command that pulls activity + awaiting-me + stats and prints a one-screen orient. Would become the start-of-session ritual. ~20 min build.
+**`orient` is the start-of-session ritual.** Run it FIRST in every Claude session. Single command prints: who you are, threads awaiting you, last 24h activity (top 5 events), pinned threads, and PAL public-traffic snapshot. Backed by `/api/wheelhouse/me` + `/api/wheelhouse/activity` + `/api/wheelhouse/stats` + `/api/wheelhouse/threads`.
 
 ---
 
@@ -178,7 +178,6 @@ Always use the **apex** (`theportalocal.com`), not `www`. The `www → apex` 307
 ## What's queued
 
 - **Push 2 — Clerk auth.** Replace cookie+token with proper per-user accounts. No urgency; current model works fine for a 3-human / 3-agent team.
-- **Agent orient ritual.** `wheelhouse.py orient` CLI command (above).
 - **Speed Insights drain.** Same pattern as analytics — `/api/wheelhouse/perf-ingest` route, `wheelhouse_perf_events` table, surface p75 LCP / TTFB on the PalStats card.
 - **Awaiting-me email digest.** Vercel Cron + transactional email provider, only triggers when a human has > 0 awaiting threads and hasn't visited Wheelhouse in N hours.
 - **Personal alerts (Option A from session 2026-04-25).** Per-user `last_seen` tracking; "since you last checked" markers. The `wheelhouse_user_seen` table is already in init schema, just unused.
