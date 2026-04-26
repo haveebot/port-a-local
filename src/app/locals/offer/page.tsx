@@ -33,9 +33,13 @@ export default function OfferPage() {
             List your stuff. Or your skills.
           </h1>
           <p className="text-sand-300 font-light mt-2 max-w-2xl text-sm sm:text-base">
-            Locals only. Tell us what you want to rent or what you do for
-            money. We&apos;ll vet, list it, and route inquiries to you. No
-            commitment, no fee — at all, ever, until you make money.
+            Locals only. Tell us what you rent or what you do. We&apos;ll vet,
+            list it, and route inquiries to you. No commitment.{" "}
+            <strong className="text-sand-100">
+              You keep 100% of your quote
+            </strong>{" "}
+            — any platform fees are added on the customer&apos;s side, never
+            deducted from your pay.
           </p>
         </div>
       </header>
@@ -64,9 +68,12 @@ export default function OfferPage() {
             <li>
               <strong className="text-navy-900">4. Optional: pay through PAL.</strong>{" "}
               When you&apos;re ready, we set up Stripe Connect for you and
-              customers pay through PAL → auto-payout to your bank. PAL
-              takes a small platform fee. Until then: you bill them direct,
-              we don&apos;t touch the money.
+              customers pay through PAL → auto-payout to your bank.{" "}
+              <strong className="text-navy-900">
+                The customer covers the small platform fee on top — you
+                still keep your full quote.
+              </strong>{" "}
+              Until then: you bill them direct, we don&apos;t touch the money.
             </li>
           </ol>
 

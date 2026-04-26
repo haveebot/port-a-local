@@ -10,7 +10,7 @@ export default function Image() {
     badgeIcon: "services",
     title: "List your stuff. Or your skills.",
     subtitle:
-      "Locals only. Tell us what you want to rent or what you do for money. We send you the customers — no commitment, no fee until you make money.",
+      "Locals only. Tell us what you rent or what you do. We send you the customers. You keep 100% of your quote — any platform fees are on the customer's side, never deducted from your pay.",
     lockupVariant: "standard",
   });
 }
