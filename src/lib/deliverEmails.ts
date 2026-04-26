@@ -176,7 +176,7 @@ export async function sendCustomerConfirmationEmail(
 
       <hr style="border: none; border-top: 1px solid #e5dcc7; margin: 24px 0;" />
 
-      <p style="font-size: 13px;">Issues with your order? Reply to this email or text Winston: (361) 428-1706.</p>
+      <p style="font-size: 13px;">Issues with your order? Reply to this email — we read every one.</p>
       <p style="font-size: 11px; color: #888; margin-top: 16px;">— The Port A Local</p>
     </div>
   `;
@@ -188,7 +188,7 @@ export async function sendCustomerConfirmationEmail(
     (order.customer.deliveryNotes ? `Notes: ${order.customer.deliveryNotes}\n` : "") +
     `Total charged: ${formatUSD(order.totalCents)}\n\n` +
     `Track: ${trackUrl}\n\n` +
-    `Issues? Reply or text Winston: (361) 428-1706.\n\n` +
+    `Issues? Just reply — we read every one.\n\n` +
     `— The Port A Local`;
   await sendResendEmail({
     to: [order.customer.email],

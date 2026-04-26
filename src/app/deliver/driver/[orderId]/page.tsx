@@ -30,8 +30,15 @@ export default async function DriverPage({
             Invalid driver link
           </p>
           <p className="text-sm text-navy-500 font-light">
-            This link doesn&apos;t match an active driver token. If you got this
-            from PAL Delivery dispatch, ping Winston for a fresh link.
+            This link doesn&apos;t match an active driver token. If you got
+            this from PAL Delivery dispatch, email{" "}
+            <a
+              href="mailto:hello@theportalocal.com?subject=Driver%20link%20expired"
+              className="underline decoration-sand-400 hover:text-coral-600"
+            >
+              hello@theportalocal.com
+            </a>{" "}
+            for a fresh link.
           </p>
         </div>
       </main>

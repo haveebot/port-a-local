@@ -124,7 +124,7 @@ async function sendDriverWelcomeEmail(i: WelcomeInput): Promise<void> {
         <li>Tap "Delivered" — your cut auto-deposits to your bank.</li>
       </ol>
 
-      <p style="font-size: 13px;">Questions, ping Winston: (361) 428-1706.</p>
+      <p style="font-size: 13px;">Questions? Hit reply, or email <a href="mailto:hello@theportalocal.com">hello@theportalocal.com</a>.</p>
       <p style="font-size: 11px; color: #888; margin-top: 16px;">— The Port A Local</p>
     </div>
   `;
@@ -134,7 +134,7 @@ async function sendDriverWelcomeEmail(i: WelcomeInput): Promise<void> {
     `1. Set up payouts (Stripe-hosted, ~5 min):\n   ${i.payoutsUrl}\n\n` +
     `2. Your on/off-duty toggle:\n   ${i.onDutyUrl}\n\n` +
     `Bookmark both. The on-duty link is what you tap before each shift.\n\n` +
-    `Questions: text Winston at (361) 428-1706.\n\n` +
+    `Questions? Reply to this email or write to hello@theportalocal.com.\n\n` +
     `— The Port A Local`;
   try {
     await fetch("https://api.resend.com/emails", {

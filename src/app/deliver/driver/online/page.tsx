@@ -24,8 +24,13 @@ export default async function DriverOnlinePage({
             Invalid driver link
           </p>
           <p className="text-sm text-navy-500 font-light">
-            This link doesn&apos;t match an active driver token. Ping Winston
-            for a fresh link.
+            This link doesn&apos;t match an active driver token.{" "}
+            <a
+              href="/deliver/driver/lookup"
+              className="underline decoration-sand-400 hover:text-coral-600"
+            >
+              Look up your driver links →
+            </a>
           </p>
         </div>
       </main>

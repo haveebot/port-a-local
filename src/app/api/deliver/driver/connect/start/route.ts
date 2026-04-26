@@ -68,7 +68,7 @@ export async function POST(req: NextRequest) {
           error:
             "Couldn't create your payout account. " +
             (msg.includes("not yet active") || msg.includes("not enabled")
-              ? "Stripe Connect isn't enabled on the PAL platform yet — Winston needs to flip it on in the dashboard."
+              ? "Stripe Connect isn't enabled on the PAL platform yet. Email hello@theportalocal.com and we'll get this unblocked."
               : msg),
         },
         { status: 500 },

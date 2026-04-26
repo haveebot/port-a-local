@@ -164,8 +164,14 @@ export default async function SuccessPage({
         </div>
 
         <p className="text-xs text-navy-500 font-light text-center">
-          Issue with your order? Reply to your SMS or text Winston directly.
-          We&apos;ll make it right.
+          Issue with your order?{" "}
+          <a
+            href="mailto:hello@theportalocal.com"
+            className="underline decoration-sand-400 hover:text-coral-600"
+          >
+            hello@theportalocal.com
+          </a>
+          . We&apos;ll make it right.
         </p>
 
         <div className="text-center">

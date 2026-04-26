@@ -262,10 +262,22 @@ export default function RunnerSignup() {
       <section className="bg-navy-950 text-sand-400 text-xs">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 flex items-center justify-between flex-wrap gap-4">
           <span>
-            Already a runner? <Link href="/deliver" className="text-coral-300 underline decoration-coral-500/40">Open PAL Delivery →</Link>
+            Already a runner?{" "}
+            <Link
+              href="/deliver/driver/lookup"
+              className="text-coral-300 underline decoration-coral-500/40"
+            >
+              Find your driver links →
+            </Link>
           </span>
           <span className="text-sand-500">
-            Questions? Text Winston: (361) 428-1706
+            Questions?{" "}
+            <a
+              href="mailto:hello@theportalocal.com"
+              className="text-coral-300 underline decoration-coral-500/40"
+            >
+              hello@theportalocal.com
+            </a>
           </span>
         </div>
       </section>

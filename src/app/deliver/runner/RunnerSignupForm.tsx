@@ -50,8 +50,15 @@ export default function RunnerSignupForm() {
           Got it.
         </p>
         <p className="text-sm text-emerald-800">
-          Winston will text or call you within a day or two. If you don&apos;t
-          hear from us, ping (361) 428-1706.
+          We&apos;ll text or call you within a day or two for a quick fit
+          chat. If you don&apos;t hear from us, drop a note to{" "}
+          <a
+            href="mailto:hello@theportalocal.com"
+            className="underline decoration-emerald-400 hover:text-emerald-700"
+          >
+            hello@theportalocal.com
+          </a>
+          .
         </p>
       </div>
     );

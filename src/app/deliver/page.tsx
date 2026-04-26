@@ -117,8 +117,8 @@ export default async function DeliverIndex() {
           </ol>
           <p className="text-xs text-navy-500 font-light mt-4">
             Brand-new and small on purpose. Two restaurants tonight, more soon.
-            Hit any rough edges? Reply to your order receipt — Winston reads
-            every one.
+            Hit any rough edges? Reply to your order receipt — we read every
+            one.
           </p>
         </div>
 
