@@ -252,7 +252,7 @@ export default function Navigation() {
 
         {/* Mobile menu — capped at viewport-minus-header with internal scroll */}
         {mobileOpen && (
-          <div className="md:hidden pb-4 border-t border-coral-500/20 bg-navy-950/98 backdrop-blur-md max-h-[calc(100vh-4.5rem)] overflow-y-auto overscroll-contain">
+          <div className="md:hidden pb-4 border-t border-coral-500/20 bg-navy-950/98 backdrop-blur-md max-h-[calc(100dvh-4.5rem)] overflow-y-auto overscroll-contain">
             {/* Gully */}
             <Link
               href="/gully"
