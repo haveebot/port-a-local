@@ -6,11 +6,11 @@ export const contentType = ogContentType;
 
 export default function Image() {
   return brandedOG({
-    badge: "Drive for PAL",
+    badge: "Run for PAL",
     badgeIcon: "services",
-    title: "Make beach-day money running PAL deliveries.",
+    title: "Make beach-day money running local food.",
     subtitle:
-      "Local runners only. Set your own hours. 100% of tip is yours, paid daily by Venmo. Sign up in two minutes.",
+      "Half the markup is yours. 100% of every tip is yours. Daily payouts to your bank. Local runners only.",
     lockupVariant: "standard",
   });
 }
