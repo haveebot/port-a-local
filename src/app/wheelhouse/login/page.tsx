@@ -126,6 +126,32 @@ function LoginInner() {
             Internal only. Not for public access.
           </p>
         </form>
+
+        {/* Craigslist-style "want in?" — public, agnostic, anonymous.
+            Anyone who clicks the footer link to /wheelhouse and isn't
+            signed in lands here. We don't recruit; we don't pitch.
+            Send a note. We read them. Most don't make it. */}
+        <div className="mt-10 border-t border-white/10 pt-6">
+          <p className="text-[10px] tracking-[0.25em] uppercase text-coral-300 font-bold mb-2 text-center">
+            Want in?
+          </p>
+          <p className="text-sm text-navy-200 font-light text-center leading-relaxed max-w-sm mx-auto">
+            Local. Think you can contribute to PAL? Send a note. We
+            read every one. Most don&apos;t make it through.
+            We like it that way.
+          </p>
+          <div className="mt-4 text-center">
+            <a
+              href="mailto:hello@theportalocal.com?subject=Wheelhouse%20%E2%80%94%20want%20in"
+              className="inline-block text-xs font-mono text-sand-200 underline decoration-coral-500/50 hover:decoration-coral-400 hover:text-coral-200 transition-colors tracking-wide"
+            >
+              hello@theportalocal.com
+            </a>
+          </div>
+          <p className="text-[10px] text-navy-500 font-light text-center mt-4 italic">
+            No portal. No application form. Just an inbox.
+          </p>
+        </div>
       </div>
     </main>
   );

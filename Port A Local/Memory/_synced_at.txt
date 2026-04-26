@@ -1,0 +1,15 @@
+Last sync: 2026-04-26 16:36:21 CDT
+Source: /Users/winstoncaraker/.claude/projects/-Users-winstoncaraker-Projects-workspace/memory
+Files synced: 17
+Files missing: 0
+Sync script: scripts/sync-memory.sh
+
+This directory is a one-way mirror of Winston's Claude memory files
+relevant to PAL + Heye Lab. The authoritative copy lives on Winston's
+machine; this mirror is git-tracked so Nick (and any future Heye Lab
+platform extraction work) can read the patterns + decisions without
+needing access to Winston's local filesystem.
+
+Don't edit these files directly — changes here will be overwritten
+on the next sync. Update the source memory instead (it'll mirror over
+on the next session-end push).
