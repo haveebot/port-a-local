@@ -29,6 +29,11 @@ export default function RentPage() {
     cartSize: "4",
     pickupDate: "",
     returnDate: "",
+    // "delivery" = vendor brings cart to customer's address (default).
+    // "pickup"   = customer picks up at vendor's shop.
+    // Captured as customer preference; passed in vendor blast so only
+    // vendors who can fulfill that handoff method respond.
+    handoff: "delivery" as "delivery" | "pickup",
     smsConsent: false,
   });
 
@@ -103,7 +108,7 @@ export default function RentPage() {
               We&apos;re matching your reservation with a local cart company now.
             </p>
             <p className="text-navy-300 mb-6">
-              You&apos;ll receive cart logistics <strong className="text-sand-100">24–48 hours before your arrival date</strong> — pickup at the shop or delivery to your door, vendor&apos;s call.
+              You&apos;ll receive cart logistics <strong className="text-sand-100">24–48 hours before your arrival date</strong> — pickup at the shop or delivery to your door, your call at booking.
             </p>
             <p className="text-navy-400 text-sm">
               Check your email for a confirmation.
@@ -131,7 +136,7 @@ export default function RentPage() {
             </h1>
           </div>
           <p className="text-lg text-navy-200 mt-2 font-light max-w-2xl">
-            The island runs on golf carts. Reserve yours through Port A Local and we guarantee a clean, well-maintained cart from a vetted local company — plus a <strong className="text-sand-100">guaranteed $20 off</strong> the rental company&apos;s daily standard rate. <strong className="text-sand-100">$10/day reservation fee</strong> · pickup or delivery, vendor&apos;s call.
+            The island runs on golf carts. Reserve yours through Port A Local and we guarantee a clean, well-maintained cart from a vetted local company — plus a <strong className="text-sand-100">guaranteed $20 off</strong> the rental company&apos;s daily standard rate. <strong className="text-sand-100">$10/day reservation fee</strong> · pickup or delivery, your call.
           </p>
         </div>
       </section>
@@ -153,7 +158,7 @@ export default function RentPage() {
             <div>
               <PortalIcon name="map" className="w-9 h-9 mx-auto mb-2 text-navy-900" />
               <p className="font-semibold text-navy-900 text-sm">Pick Up & Explore</p>
-              <p className="text-navy-500 text-sm mt-1">Cart logistics sent 24–48 hours before your arrival — pickup or delivery, vendor&apos;s call.</p>
+              <p className="text-navy-500 text-sm mt-1">Cart logistics sent 24–48 hours before your arrival — pickup or delivery, your call at booking.</p>
             </div>
           </div>
         </div>
@@ -241,6 +246,46 @@ export default function RentPage() {
                 </select>
               </div>
 
+              <div>
+                <label className="block text-sm font-medium text-navy-700 mb-2">
+                  Handoff *
+                </label>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setForm({ ...form, handoff: "delivery" })}
+                    className={
+                      form.handoff === "delivery"
+                        ? "px-4 py-3 rounded-lg border-2 border-coral-500 bg-coral-50 text-navy-900 font-bold text-sm transition-all"
+                        : "px-4 py-3 rounded-lg border-2 border-sand-300 bg-white text-navy-700 font-medium text-sm hover:border-coral-300 transition-all"
+                    }
+                  >
+                    Delivered to me
+                    <span className="block text-[11px] text-navy-500 font-light mt-0.5 normal-case">
+                      Brought to your address
+                    </span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setForm({ ...form, handoff: "pickup" })}
+                    className={
+                      form.handoff === "pickup"
+                        ? "px-4 py-3 rounded-lg border-2 border-coral-500 bg-coral-50 text-navy-900 font-bold text-sm transition-all"
+                        : "px-4 py-3 rounded-lg border-2 border-sand-300 bg-white text-navy-700 font-medium text-sm hover:border-coral-300 transition-all"
+                    }
+                  >
+                    I&apos;ll pick up
+                    <span className="block text-[11px] text-navy-500 font-light mt-0.5 normal-case">
+                      Grab it from the shop
+                    </span>
+                  </button>
+                </div>
+                <p className="text-xs text-navy-500 mt-2 font-light">
+                  Your call — we&apos;ll match you with a vendor who can do
+                  it that way.
+                </p>
+              </div>
+
               {/* Pricing summary */}
               {numDays && reservationFee && (
                 <div className="bg-sand-50 border border-sand-200 rounded-xl p-4 mt-2">
@@ -304,7 +349,7 @@ export default function RentPage() {
               <ul className="space-y-2 text-sm text-navy-600">
                 <li className="flex items-start gap-2">
                   <span className="text-coral-500 font-bold mt-0.5">→</span>
-                  <span><strong>Cart logistics</strong> arrive in your email 24–48 hours before your arrival date — pickup or delivery, vendor&apos;s call.</span>
+                  <span><strong>Cart logistics</strong> arrive in your email 24–48 hours before your arrival date — based on the handoff you chose at booking.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-coral-500 font-bold mt-0.5">→</span>

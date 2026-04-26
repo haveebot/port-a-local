@@ -82,7 +82,7 @@ export default function OfferPage() {
             >
               /maintenance
             </a>{" "}
-            where John handles them. PAL Locals is for the everything-else.
+            where our maintenance vendor handles them. PAL Locals is for the everything-else.
           </p>
 
           <p className="text-xs text-navy-500 font-light mt-6">

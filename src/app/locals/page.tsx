@@ -201,7 +201,7 @@ export default async function LocalsPage({
           >
             /maintenance
           </Link>{" "}
-          where John handles them, not /locals.
+          where our maintenance vendor handles them, not /locals.
         </p>
       </div>
     </main>
