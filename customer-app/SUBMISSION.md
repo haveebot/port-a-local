@@ -102,7 +102,8 @@ them before submitting:
 | `STRIPE_WEBHOOK_SECRET` | `/api/deliver/webhook` | Webhook signing |
 | `RESEND_API_KEY` | order intake email | optional but recommended |
 | `DELIVER_PUBLIC_LAUNCH` | `/api/deliver/order` | `true` to take real orders |
-| `CUSTOMER_SESSION_SECRET` | `/api/customer/apple-signin` | random 32+ chars |
+| `CUSTOMER_SESSION_SECRET` | `/api/customer/apple-signin` | random 32+ chars (the endpoint refuses to mint sessions without it) |
+| `APPLE_APP_BUNDLE_ID` | `/api/customer/apple-signin` | optional override; defaults to `co.portalocal.app`. Set if your bundle id changes. |
 
 Generate the session secret:
 `openssl rand -base64 48`

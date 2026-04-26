@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "node:crypto";
+import { createRemoteJWKSet, jwtVerify, type JWTPayload } from "jose";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -10,52 +11,41 @@ export const runtime = "nodejs";
  * Body:
  *   - identityToken: Apple-issued JWT (from expo-apple-authentication)
  *   - authorizationCode: optional, used for refresh-token exchange
- *   - appleUserId: stable Apple user id (the JWT `sub`); we trust the
- *     client to also send it for convenience
  *   - email, displayName: only present on first sign-in
  *
  * Returns:
- *   { sessionToken, customerId }
+ *   { customerId, sessionToken, email?, displayName?, expiresAt }
  *
- * Security note (TODO before going live):
- *   We currently parse the identity token without verifying its
- *   signature against Apple's JWKS. This is fine for a v1 closed beta
- *   but MUST be hardened before public launch. Steps:
- *     1. Fetch Apple's public keys from
- *        https://appleid.apple.com/auth/keys (cache for ~24h)
- *     2. Verify the JWT signature using the matching `kid`
- *     3. Validate iss=https://appleid.apple.com,
- *        aud=co.portalocal.app, exp not expired
- *     4. Confirm the `sub` matches the body's appleUserId
- *   See https://developer.apple.com/documentation/sign_in_with_apple/sign_in_with_apple_rest_api/verifying_a_user
+ * Verification flow (RFC-compliant):
+ *   1. Fetch Apple's public keys from
+ *      https://appleid.apple.com/auth/keys (cached 24h by jose)
+ *   2. Verify the JWT signature using the matching `kid`
+ *   3. Validate iss=https://appleid.apple.com, exp not expired,
+ *      aud matches the iOS bundle id
+ *   4. Mint a 30-day HMAC-signed session token
+ *
+ * Reference:
+ *   https://developer.apple.com/documentation/sign_in_with_apple/sign_in_with_apple_rest_api/verifying_a_user
  */
+
+const APPLE_BUNDLE_ID =
+  process.env.APPLE_APP_BUNDLE_ID ?? "co.portalocal.app";
+
+// jose's createRemoteJWKSet handles caching, retries, and key rotation.
+const APPLE_JWKS = createRemoteJWKSet(
+  new URL("https://appleid.apple.com/auth/keys")
+);
 
 interface AppleSignInBody {
   identityToken?: string;
   authorizationCode?: string;
-  appleUserId?: string;
   email?: string;
   displayName?: string;
 }
 
-interface AppleIdTokenPayload {
-  iss?: string;
-  aud?: string | string[];
-  sub?: string;
-  exp?: number;
+interface ApplePayload extends JWTPayload {
   email?: string;
   email_verified?: boolean | string;
-}
-
-function decodeJwtPayload(token: string): AppleIdTokenPayload | null {
-  const parts = token.split(".");
-  if (parts.length !== 3) return null;
-  try {
-    const json = Buffer.from(parts[1], "base64url").toString("utf8");
-    return JSON.parse(json) as AppleIdTokenPayload;
-  } catch {
-    return null;
-  }
 }
 
 export async function POST(req: NextRequest) {
@@ -73,25 +63,27 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const payload = decodeJwtPayload(body.identityToken);
-  if (!payload) {
-    return NextResponse.json(
-      { error: "Invalid identity token format" },
-      { status: 400 }
+  let payload: ApplePayload;
+  try {
+    const { payload: verified } = await jwtVerify<ApplePayload>(
+      body.identityToken,
+      APPLE_JWKS,
+      {
+        issuer: "https://appleid.apple.com",
+        audience: APPLE_BUNDLE_ID,
+      }
     );
-  }
-
-  // Light-weight checks (full signature verification is the TODO above).
-  if (payload.iss !== "https://appleid.apple.com") {
+    payload = verified;
+  } catch (err: unknown) {
+    const message =
+      err instanceof Error ? err.message : "Invalid identity token";
     return NextResponse.json(
-      { error: "Token has unexpected issuer" },
+      { error: `Identity token verification failed: ${message}` },
       { status: 401 }
     );
   }
-  if (payload.exp && payload.exp * 1000 < Date.now()) {
-    return NextResponse.json({ error: "Token expired" }, { status: 401 });
-  }
-  const subject = payload.sub ?? body.appleUserId;
+
+  const subject = payload.sub;
   if (!subject) {
     return NextResponse.json(
       { error: "Token missing subject" },
@@ -99,11 +91,21 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // TODO: persist a customer record here. For now we just mint a
-  // session token bound to the apple user id. The customer-app keeps
-  // this and sends it as Authorization: Bearer for future calls.
-  // Switch to a real session table when /api/customer/orders ships.
-  const sessionSecret = process.env.CUSTOMER_SESSION_SECRET ?? "dev-secret";
+  // TODO: persist a customer record here. For now we mint a session
+  // token bound to the apple user id. The customer-app keeps this and
+  // sends it as Authorization: Bearer for future calls. Switch to a
+  // real session table when /api/customer/orders ships.
+  const sessionSecret = process.env.CUSTOMER_SESSION_SECRET;
+  if (!sessionSecret) {
+    return NextResponse.json(
+      {
+        error:
+          "Server misconfigured: CUSTOMER_SESSION_SECRET is not set. Generate one with `openssl rand -base64 48` and add it to the Vercel env.",
+      },
+      { status: 500 }
+    );
+  }
+
   const issuedAt = Math.floor(Date.now() / 1000);
   const expiresAt = issuedAt + 60 * 60 * 24 * 30; // 30 days
   const sessionPayload = JSON.stringify({

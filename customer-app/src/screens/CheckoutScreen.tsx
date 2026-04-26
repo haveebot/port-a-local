@@ -24,12 +24,15 @@ import { ServicesStackParamList } from "../lib/navigation";
 
 type Props = NativeStackScreenProps<ServicesStackParamList, "Checkout">;
 
+// Matches the actual /api/deliver/order responses:
+//   live mode → { orderId, checkoutUrl, total }
+//   beta mode → { orderId, beta: true, redirectUrl }
 interface OrderResponse {
-  ok: true;
-  paid: boolean;
-  /** When paid=true (live mode), checkout URL to redirect the customer to */
-  checkoutUrl?: string;
   orderId: string;
+  checkoutUrl?: string;
+  beta?: boolean;
+  redirectUrl?: string;
+  total?: string;
 }
 
 export default function CheckoutScreen({ navigation }: Props) {
@@ -100,14 +103,28 @@ export default function CheckoutScreen({ navigation }: Props) {
         setSubmitting(false);
         return;
       }
-      cart.clear();
-      if (json.paid && json.checkoutUrl) {
+      // Branch on what the API actually returns:
+      //   live mode: checkoutUrl is set → must open Stripe before clearing
+      //   beta mode: beta=true / redirectUrl set → request-only, no charge
+      if (json.checkoutUrl) {
+        cart.clear();
         navigation.replace("PayWeb", {
           url: json.checkoutUrl,
           orderId: json.orderId,
         });
-      } else {
+      } else if (json.beta) {
+        cart.clear();
         navigation.replace("OrderSuccess", { orderId: json.orderId });
+      } else {
+        // Unexpected: server didn't give us a checkout URL and didn't flag
+        // beta. Don't pretend the order succeeded — keep the cart and
+        // prompt to retry.
+        Alert.alert(
+          "Order didn't go through",
+          "The server didn't return a payment link. Try again in a moment."
+        );
+        setSubmitting(false);
+        return;
       }
     } catch {
       Alert.alert(
