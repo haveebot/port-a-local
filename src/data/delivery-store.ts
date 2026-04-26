@@ -698,6 +698,10 @@ export interface MissedPayoutRecord {
   driverPayoutCents: number;
   deliveredAt: string;
   restaurantId: string;
+  /** PaymentIntent that funded the original order. Used as
+      `source_transaction` on the backfill transfer so Stripe can
+      fund from THAT charge even if available balance is $0. */
+  paymentIntentId: string | null;
 }
 
 export async function getMissedPayouts(): Promise<MissedPayoutRecord[]> {
@@ -714,7 +718,8 @@ export async function getMissedPayouts(): Promise<MissedPayoutRecord[]> {
       n.signup_num,
       o.driver_payout_cents,
       o.delivered_at,
-      o.restaurant_id
+      o.restaurant_id,
+      o.payment_intent_id
     FROM delivery_orders o
     JOIN delivery_drivers d ON d.id = o.driver_id
     JOIN numbered n ON n.id = o.driver_id
@@ -732,6 +737,7 @@ export async function getMissedPayouts(): Promise<MissedPayoutRecord[]> {
     driverPayoutCents: Number(r.driver_payout_cents),
     deliveredAt: new Date(r.delivered_at as string).toISOString(),
     restaurantId: r.restaurant_id as string,
+    paymentIntentId: (r.payment_intent_id as string) ?? null,
   }));
 }
 
