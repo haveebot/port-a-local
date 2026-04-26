@@ -10,7 +10,7 @@ export default function Image() {
     badgeIcon: "cart",
     title: "Golf Cart Rentals",
     subtitle:
-      "Reserve a cart delivered right to your door. $10 reservation fee locks it in. Paid through Port A Local.",
+      "Book through PAL — we route your reservation to 20+ Port A cart shops. First to claim wins, $20+ discount baked in. Pickup in town.",
     lockupVariant: "standard",
   });
 }
