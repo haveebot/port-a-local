@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { sql as vercelSql } from "@vercel/postgres";
-import { getDriverByToken } from "@/data/delivery-drivers";
+import { getApiRunner } from "@/lib/runnerSession";
 import { getDriverStatus } from "@/data/delivery-store";
 import { getRestaurant } from "@/data/delivery-restaurants";
 import type { OrderStatus } from "@/data/delivery-types";
@@ -37,11 +37,9 @@ interface FeedOrderSummary {
  * Polled every ~20s by the runner hub client to keep the UI live.
  */
 export async function GET(req: NextRequest) {
-  const url = new URL(req.url);
-  const token = url.searchParams.get("t") ?? "";
-  const driver = await getDriverByToken(token);
+  const driver = await getApiRunner(req);
   if (!driver) {
-    return NextResponse.json({ error: "Invalid driver token" }, { status: 403 });
+    return NextResponse.json({ error: "Not signed in" }, { status: 403 });
   }
 
   const status = await getDriverStatus(driver.id);
