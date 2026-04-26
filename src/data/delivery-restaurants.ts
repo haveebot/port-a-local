@@ -38,15 +38,16 @@ export const RESTAURANTS: DeliveryRestaurant[] = [
     cuisineTags: ["Cajun", "Seafood"],
     accent: "#C84A2C",
     deliveryHours: [
-      // Generous launch hours — driver will know if restaurant is actually
-      // open before pickup. Tighten once we have steady ops.
-      { day: "monday", open: "10:00", close: "21:00" },
-      { day: "tuesday", open: "10:00", close: "21:00" },
-      { day: "wednesday", open: "10:00", close: "21:00" },
-      { day: "thursday", open: "10:00", close: "21:00" },
-      { day: "friday", open: "10:00", close: "21:00" },
-      { day: "saturday", open: "10:00", close: "21:00" },
-      { day: "sunday", open: "10:00", close: "21:00" },
+      // Real Crazy Cajun published hours. Closed Mondays. Dinner-only
+      // weekdays. Weekends open earlier — Sat lunch confirmed at noon,
+      // Sun lunch unconfirmed (using 12:00 as a guess; verify w/ Winston
+      // on first weekend of ops).
+      { day: "tuesday", open: "17:00", close: "20:30" },
+      { day: "wednesday", open: "17:00", close: "20:30" },
+      { day: "thursday", open: "17:00", close: "20:30" },
+      { day: "friday", open: "17:00", close: "20:30" },
+      { day: "saturday", open: "12:00", close: "20:30" },
+      { day: "sunday", open: "12:00", close: "20:00" },
     ],
     markupPct: 45,
     isActive: true,

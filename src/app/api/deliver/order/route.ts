@@ -237,35 +237,31 @@ export async function POST(req: NextRequest) {
   };
   const order = await createOrder(orderInput);
 
-  // ALWAYS email admin at order creation — instant ping regardless of
-  // payment outcome. Stripe webhook (when configured) will follow up
-  // with a "PAID" email post-payment via the success-page Stripe verify
-  // path. Live without webhook still works because we already have the
-  // intake notification in admin@.
   const live = isDeliveryLive();
-  const emailInput = {
-    orderId: order.id,
-    restaurantName: restaurant.name,
-    pickupAddress: restaurant.pickupAddress,
-    customerName: order.customer.name,
-    customerPhone: order.customer.phone,
-    customerEmail: order.customer.email,
-    deliveryAddress: order.customer.deliveryAddress,
-    deliveryNotes: order.customer.deliveryNotes,
-    lineItems: order.items.map(
-      (li) =>
-        `${li.quantity}× ${li.itemName} — ${formatUSD(li.customerPriceCents * li.quantity)}`,
-    ),
-    subtotal: formatUSD(priced.subtotalCents),
-    tip: formatUSD(priced.tipCents),
-    total: formatUSD(priced.totalCents),
-    restaurantCost: formatUSD(priced.restaurantCostCents),
-    driverPayout: formatUSD(priced.driverPayoutCents),
-    palNet: formatUSD(priced.palNetCents),
-  };
 
   if (!live) {
-    // BETA path — no Stripe, just intake notification
+    // BETA path — no Stripe, just intake notification (admin email
+    // here is OK because there's no payment step that could fail)
+    const emailInput = {
+      orderId: order.id,
+      restaurantName: restaurant.name,
+      pickupAddress: restaurant.pickupAddress,
+      customerName: order.customer.name,
+      customerPhone: order.customer.phone,
+      customerEmail: order.customer.email,
+      deliveryAddress: order.customer.deliveryAddress,
+      deliveryNotes: order.customer.deliveryNotes,
+      lineItems: order.items.map(
+        (li) =>
+          `${li.quantity}× ${li.itemName} — ${formatUSD(li.customerPriceCents * li.quantity)}`,
+      ),
+      subtotal: formatUSD(priced.subtotalCents),
+      tip: formatUSD(priced.tipCents),
+      total: formatUSD(priced.totalCents),
+      restaurantCost: formatUSD(priced.restaurantCostCents),
+      driverPayout: formatUSD(priced.driverPayoutCents),
+      palNet: formatUSD(priced.palNetCents),
+    };
     await sendOrderEmail({ ...emailInput, paid: false });
     return NextResponse.json({
       orderId: order.id,
@@ -274,10 +270,12 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  // LIVE path — fire intake email immediately, then open Stripe Checkout.
-  // Customer redirects to success page, which verifies Stripe + sends a
-  // "PAID" follow-up email + marks order paid in DB.
-  await sendOrderEmail({ ...emailInput, paid: false });
+  // LIVE path — DO NOT email admin here. Order rows in 'placed' status
+  // that never make it to 'paid' are phantom orders we should ignore,
+  // not spam admin about. Admin gets emailed by sendAdminPaidEmail()
+  // from the success-page Stripe verify path (or webhook) once the
+  // customer actually pays. Customer also gets confirmation email
+  // there. See src/lib/deliverEmails.ts.
 
   // Open Stripe Checkout
   const stripe = getDeliverStripe();

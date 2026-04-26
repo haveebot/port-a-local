@@ -72,6 +72,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  const wasUnpaid = orderToMark.paymentStatus !== "paid";
   const paid = await markOrderPaid(
     orderToMark.id,
     (session.payment_intent as string) ?? "",
@@ -80,13 +81,23 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: true, error: "mark failed" });
   }
 
-  // Fire-and-forget: mirror + dispatch (errors logged, don't fail the webhook)
-  await mirrorToWheelhouse(paid, "paid");
-  const dispatch = await dispatchDriversForOrder(paid);
+  // Only fire downstream on FIRST transition to paid — webhook can
+  // re-fire and the success page can also handle this; both are
+  // gated on wasUnpaid for idempotency.
+  let dispatchSentTo: string[] = [];
+  if (wasUnpaid) {
+    const { sendAdminPaidEmail, sendCustomerConfirmationEmail } =
+      await import("@/lib/deliverEmails");
+    await mirrorToWheelhouse(paid, "paid");
+    await sendAdminPaidEmail(paid);
+    await sendCustomerConfirmationEmail(paid);
+    const dispatch = await dispatchDriversForOrder(paid);
+    dispatchSentTo = dispatch.sentTo;
+  }
 
   return NextResponse.json({
     ok: true,
     orderId: paid.id,
-    dispatchedTo: dispatch.sentTo,
+    dispatchedTo: dispatchSentTo,
   });
 }

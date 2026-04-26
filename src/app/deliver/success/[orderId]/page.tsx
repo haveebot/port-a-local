@@ -29,17 +29,24 @@ async function verifyStripePaymentIfNeeded(
     const stripe = getDeliverStripe();
     const session = await stripe.checkout.sessions.retrieve(sessionId);
     if (session.payment_status === "paid") {
+      // The early return at top of function guarantees order was unpaid
+      // when we entered, so this is the FIRST transition to paid —
+      // safe to fire all downstream effects. Subsequent re-renders hit
+      // the early return and skip this entire block.
       await markOrderPaid(
         orderId,
         (session.payment_intent as string) ?? "",
       );
-      // Best-effort: notify admin + fire dispatch in the background
-      const { dispatchDriversForOrder, mirrorToWheelhouse } = await import(
-        "@/lib/deliverDispatch"
-      );
       const updated = await getOrder(orderId);
       if (updated) {
+        const [{ dispatchDriversForOrder, mirrorToWheelhouse }, emails] =
+          await Promise.all([
+            import("@/lib/deliverDispatch"),
+            import("@/lib/deliverEmails"),
+          ]);
         await mirrorToWheelhouse(updated, "paid");
+        await emails.sendAdminPaidEmail(updated);
+        await emails.sendCustomerConfirmationEmail(updated);
         await dispatchDriversForOrder(updated);
       }
     }
