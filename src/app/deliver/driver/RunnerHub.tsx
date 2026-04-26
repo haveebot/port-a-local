@@ -156,6 +156,28 @@ export default function RunnerHub({
     }
   }
 
+  async function openStripeDashboard() {
+    setBusy("stripe-dashboard");
+    setErr(null);
+    try {
+      const res = await fetch("/api/deliver/driver/connect/dashboard", {
+        method: "POST",
+        credentials: "same-origin",
+      });
+      const data = await res.json();
+      if (!res.ok || !data.url) {
+        setErr(data.error ?? "Couldn't open Stripe dashboard.");
+      } else {
+        // One-time URL — open in new tab so the runner keeps their PAL session.
+        window.open(data.url, "_blank", "noopener,noreferrer");
+      }
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : String(e));
+    } finally {
+      setBusy(null);
+    }
+  }
+
   async function claim(orderId: string) {
     setBusy(`claim-${orderId}`);
     setErr(null);
@@ -324,6 +346,21 @@ export default function RunnerHub({
             </p>
           </div>
         </section>
+
+        {/* Stripe Express dashboard — only shown once payouts are set up.
+            Opens in a new tab so the PAL session stays put. Runner can see
+            balance, payout schedule, trigger an instant payout (1.5% fee). */}
+        {driver.payoutsEnabled && (
+          <button
+            onClick={openStripeDashboard}
+            disabled={busy === "stripe-dashboard"}
+            className="block w-full py-3 rounded-xl text-sm font-bold text-center bg-navy-800 border border-navy-700 hover:border-coral-500/50 hover:bg-navy-700 text-sand-200 disabled:opacity-50"
+          >
+            {busy === "stripe-dashboard"
+              ? "Opening Stripe…"
+              : "View Stripe payouts dashboard →"}
+          </button>
+        )}
 
         {err && (
           <div className="bg-red-500/15 border border-red-500/40 rounded-lg p-3 text-sm text-red-200">
