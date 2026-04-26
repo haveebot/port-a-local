@@ -15,6 +15,7 @@
     "@react-navigation/native-stack": "^7.14.12",
     "expo": "~54.0.33",
     "expo-apple-authentication": "^55.0.13",
+    "expo-asset": "^55.0.16",
     "expo-constants": "^55.0.15",
     "expo-device": "^55.0.15",
     "expo-linking": "^55.0.14",

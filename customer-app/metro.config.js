@@ -11,13 +11,14 @@ const config = getDefaultConfig(projectRoot);
 // for businesses, categories, delivery menu, etc.) without copying.
 config.watchFolders = [path.resolve(repoRoot, "src", "data")];
 
-// Resolve modules from this project first, then walk up. This keeps
-// React Native / Expo from accidentally picking up the website's
-// node_modules (which has Next.js's React, etc.).
+// Look in this project's node_modules first, then let Metro walk up
+// (hierarchical lookup stays enabled). Strict isolation breaks because
+// peer deps like expo-asset and @react-native/virtualized-lists get
+// hoisted to the repo root by npm dedupe.
 config.resolver.nodeModulesPaths = [
   path.resolve(projectRoot, "node_modules"),
+  path.resolve(repoRoot, "node_modules"),
 ];
-config.resolver.disableHierarchicalLookup = true;
 
 // Map `@palocal/data/*` to the website's `src/data/*` so both apps and
 // the website can share the same files. Mirrored in tsconfig paths.
