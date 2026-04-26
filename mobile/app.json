@@ -10,14 +10,14 @@
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#0c4a6e"
+      "backgroundColor": "#0b1120"
     },
     "plugins": [
       [
         "expo-notifications",
         {
           "icon": "./assets/icon.png",
-          "color": "#0c4a6e"
+          "color": "#e8656f"
         }
       ]
     ],
@@ -25,13 +25,14 @@
       "supportsTablet": true,
       "bundleIdentifier": "co.portalocal.tasks",
       "infoPlist": {
-        "UIBackgroundModes": ["remote-notification"]
+        "UIBackgroundModes": ["remote-notification"],
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#0c4a6e"
+        "backgroundColor": "#0b1120"
       },
       "package": "co.portalocal.tasks",
       "edgeToEdgeEnabled": true,

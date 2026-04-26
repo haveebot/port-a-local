@@ -2,12 +2,14 @@
 // e.g. "http://192.168.1.100:3001" or "https://abc123.ngrok.io"
 const API_BASE = "http://localhost:3001";
 
+type ApiGlobal = { __API_BASE?: string };
+
 export function setApiBase(url: string) {
-  (globalThis as Record<string, string>).__API_BASE = url;
+  (globalThis as unknown as ApiGlobal).__API_BASE = url;
 }
 
 function getBase(): string {
-  return (globalThis as Record<string, string>).__API_BASE || API_BASE;
+  return (globalThis as unknown as ApiGlobal).__API_BASE || API_BASE;
 }
 
 export interface Task {
@@ -29,6 +31,12 @@ export interface Worker {
   group_name: "runner" | "maintenance";
   push_token: string | null;
   created_at: string;
+}
+
+export async function fetchTask(taskId: string): Promise<Task> {
+  const res = await fetch(`${getBase()}/api/tasks/${taskId}`);
+  if (!res.ok) throw new Error("Failed to fetch task");
+  return res.json();
 }
 
 export async function fetchTasks(params?: {
