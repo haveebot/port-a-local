@@ -127,6 +127,15 @@ export async function getRecentActivity(
     : Promise.resolve(mock.getRecentActivity(windowHours));
 }
 
+/* -------------------- Pulse thread (anchor for daily digests) -------------------- */
+
+export async function findOrCreatePulseThread(): Promise<Thread> {
+  if (!USE_PG) {
+    throw new Error("Pulse thread requires Postgres backend");
+  }
+  return pg.findOrCreatePulseThread();
+}
+
 /* -------------------- Analytics -------------------- */
 
 export type {

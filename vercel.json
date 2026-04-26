@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/wheelhouse/cron/pulse",
+      "schedule": "0 13 * * *"
+    }
+  ]
+}

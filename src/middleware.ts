@@ -22,6 +22,9 @@ const PUBLIC_WHEELHOUSE_PATHS = [
   // Vercel Web Analytics Drain destination — auth via x-vercel-signature HMAC,
   // not cookie or token.
   "/api/wheelhouse/analytics-ingest",
+  // Vercel Cron destinations — auth via CRON_SECRET Bearer header,
+  // not cookie or token. Each cron route checks its own auth.
+  "/api/wheelhouse/cron/pulse",
 ];
 
 /**

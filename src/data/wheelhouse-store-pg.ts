@@ -336,6 +336,59 @@ export async function getRecentActivity(
   };
 }
 
+/* -------------------- Pulse thread (anchor for daily digests) -------------------- */
+
+const PULSE_THREAD_TAG = "pulse";
+const PULSE_THREAD_TITLE = "PAL Pulse — daily digest";
+
+/**
+ * Find or create the pinned Pulse thread used as the anchor for the
+ * daily-digest cron. Idempotent — only ever creates one thread total
+ * (uses the "pulse" tag to identify it on subsequent runs).
+ */
+export async function findOrCreatePulseThread(): Promise<Thread> {
+  const { rows } = await sql`
+    SELECT id, title, tags, state, participants, author_id, created_at,
+           updated_at, context, pinned
+    FROM wheelhouse_threads
+    WHERE tags ? ${PULSE_THREAD_TAG}
+    ORDER BY created_at ASC
+    LIMIT 1
+  `;
+  if (rows[0]) return rowToThread(rows[0]);
+
+  const id = `thread-pulse-${Date.now().toString(36)}`;
+  const now = new Date().toISOString();
+  const participants = [
+    "winston",
+    "collie",
+    "nick",
+    "winston-claude",
+    "collie-claude",
+    "nick-claude",
+  ];
+  await sql`
+    INSERT INTO wheelhouse_threads (
+      id, title, tags, state, participants, author_id,
+      created_at, updated_at, context, pinned
+    ) VALUES (
+      ${id},
+      ${PULSE_THREAD_TITLE},
+      ${JSON.stringify([PULSE_THREAD_TAG])}::jsonb,
+      'open',
+      ${JSON.stringify(participants)}::jsonb,
+      'winston-claude',
+      ${now},
+      ${now},
+      NULL,
+      true
+    )
+  `;
+  const t = await getThread(id);
+  if (!t) throw new Error("Pulse thread vanished after insert");
+  return t;
+}
+
 /* -------------------- Analytics ingest + queries -------------------- */
 
 /** Shape of one event from a Vercel Web Analytics Drain payload */
