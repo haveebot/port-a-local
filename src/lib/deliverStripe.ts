@@ -16,9 +16,12 @@
 import Stripe from "stripe";
 
 export function getDeliverStripeKey(): string | undefined {
-  return (
-    process.env.STRIPE_DELIVER_SECRET_KEY ?? process.env.STRIPE_SECRET_KEY
-  );
+  // Defensive trim — Vercel env vars can pick up trailing whitespace/newlines
+  // when pasted, and Node fetch rejects any non-ASCII char in the
+  // Authorization header (ERR_INVALID_CHAR). Burned us once.
+  const raw =
+    process.env.STRIPE_DELIVER_SECRET_KEY ?? process.env.STRIPE_SECRET_KEY;
+  return raw?.trim() || undefined;
 }
 
 /** Build a Stripe instance using the /deliver-scoped key (or fallback). */
