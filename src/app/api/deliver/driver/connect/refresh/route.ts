@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getDeliverStripe, getDeliverStripeKey } from "@/lib/deliverStripe";
-import { getDriverByToken } from "@/data/delivery-drivers";
+import { getApiRunner } from "@/lib/runnerSession";
 import {
   getDriverStatus,
   setDriverStripeAccount,
@@ -17,11 +17,9 @@ export const runtime = "nodejs";
  * payouts_enabled in our DB. Idempotent — safe to hit any time.
  */
 export async function GET(req: NextRequest) {
-  const url = new URL(req.url);
-  const token = url.searchParams.get("t") ?? "";
-  const driver = await getDriverByToken(token);
+  const driver = await getApiRunner(req);
   if (!driver) {
-    return NextResponse.json({ error: "Invalid driver token" }, { status: 403 });
+    return NextResponse.json({ error: "Not signed in" }, { status: 403 });
   }
   if (!getDeliverStripeKey()) {
     return NextResponse.json({ error: "Stripe not configured" }, { status: 500 });

@@ -1,4 +1,5 @@
-import { getDriverByToken } from "@/data/delivery-drivers";
+import { redirect } from "next/navigation";
+import { getCurrentRunner } from "@/lib/runnerSession";
 import { getDriverStatus } from "@/data/delivery-store";
 import PayoutsClient from "./PayoutsClient";
 
@@ -15,27 +16,14 @@ export default async function PayoutsPage({
   searchParams: Promise<{ t?: string; from?: string }>;
 }) {
   const sp = await searchParams;
-  const token = sp.t;
-  const driver = token ? await getDriverByToken(token) : null;
-  if (!driver) {
-    return (
-      <main className="min-h-screen bg-sand-50 flex items-center justify-center px-6">
-        <div className="text-center max-w-md">
-          <p className="font-display text-xl font-bold text-navy-900 mb-2">
-            Invalid driver link
-          </p>
-          <p className="text-sm text-navy-500 font-light">
-            This link doesn&apos;t match an active driver token.{" "}
-            <a
-              href="/deliver/driver/lookup"
-              className="underline decoration-sand-400 hover:text-coral-600"
-            >
-              Look up your driver links →
-            </a>
-          </p>
-        </div>
-      </main>
+  if (sp.t) {
+    redirect(
+      `/api/deliver/driver/login?t=${encodeURIComponent(sp.t)}&next=/deliver/driver/payouts${sp.from ? `?from=${sp.from}` : ""}`,
     );
+  }
+  const driver = await getCurrentRunner();
+  if (!driver) {
+    redirect("/deliver/driver/lookup?from=no-session");
   }
 
   const status = await getDriverStatus(driver.id);
@@ -54,7 +42,6 @@ export default async function PayoutsPage({
 
       <div className="flex-1 px-4 sm:px-6 py-8 max-w-md mx-auto w-full">
         <PayoutsClient
-          driverToken={driver.token}
           initialStatus={status}
           justReturnedFromStripe={justReturnedFromStripe}
         />

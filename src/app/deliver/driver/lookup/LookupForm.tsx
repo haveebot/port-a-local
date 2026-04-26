@@ -37,12 +37,13 @@ export default function LookupForm() {
     return (
       <div className="bg-emerald-500/15 border border-emerald-500/40 rounded-2xl p-6 text-center">
         <p className="font-display text-xl font-bold text-emerald-300 mb-2">
-          Sent ✓
+          Check your email ✓
         </p>
         <p className="text-sm text-emerald-200">
-          Check your inbox. The email has both your on/off-duty link and
-          your Stripe payouts setup link. If it doesn&apos;t arrive within
-          a few minutes, check spam or email{" "}
+          Tap the link in the email to sign in. After that, just bookmark
+          your runner home — you&apos;ll stay signed in for 30 days. If the
+          email doesn&apos;t arrive within a few minutes, check spam or
+          email{" "}
           <a
             href="mailto:hello@theportalocal.com"
             className="underline decoration-emerald-400 hover:text-emerald-100"
@@ -107,11 +108,11 @@ export default function LookupForm() {
         disabled={!valid || submitting}
         className="w-full py-4 rounded-xl text-base font-bold bg-coral-500 hover:bg-coral-600 text-white disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        {submitting ? "Looking…" : "Email me my links →"}
+        {submitting ? "Sending…" : "Email me a sign-in link →"}
       </button>
 
       <p className="text-[11px] text-sand-500 font-light text-center">
-        Same phone you signed up with. We email — never share.
+        Same phone you signed up with. One-tap sign in. We email — never share.
       </p>
     </form>
   );

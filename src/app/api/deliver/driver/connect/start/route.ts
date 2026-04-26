@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getDeliverStripe, getDeliverStripeKey } from "@/lib/deliverStripe";
-import { getDriverByToken } from "@/data/delivery-drivers";
+import { getApiRunner } from "@/lib/runnerSession";
 import {
   getDriverStatus,
   setDriverStripeAccount,
@@ -24,11 +24,9 @@ const APP_URL =
  * endpoint will work.
  */
 export async function POST(req: NextRequest) {
-  const url = new URL(req.url);
-  const token = url.searchParams.get("t") ?? "";
-  const driver = await getDriverByToken(token);
+  const driver = await getApiRunner(req);
   if (!driver) {
-    return NextResponse.json({ error: "Invalid driver token" }, { status: 403 });
+    return NextResponse.json({ error: "Not signed in" }, { status: 403 });
   }
   if (!getDeliverStripeKey()) {
     return NextResponse.json(
@@ -80,8 +78,9 @@ export async function POST(req: NextRequest) {
   try {
     const accountLink = await stripe.accountLinks.create({
       account: accountId,
-      refresh_url: `${APP_URL}/deliver/driver/payouts?t=${encodeURIComponent(driver.token)}`,
-      return_url: `${APP_URL}/deliver/driver/payouts?t=${encodeURIComponent(driver.token)}&from=stripe`,
+      // Cookie-session means we don't need the token in these URLs anymore
+      refresh_url: `${APP_URL}/deliver/driver/payouts`,
+      return_url: `${APP_URL}/deliver/driver/payouts?from=stripe`,
       type: "account_onboarding",
     });
     return NextResponse.json({ ok: true, url: accountLink.url });

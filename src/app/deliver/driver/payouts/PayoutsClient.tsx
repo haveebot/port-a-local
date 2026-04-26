@@ -4,11 +4,9 @@ import { useEffect, useState } from "react";
 import type { DriverStatus } from "@/data/delivery-store";
 
 export default function PayoutsClient({
-  driverToken,
   initialStatus,
   justReturnedFromStripe,
 }: {
-  driverToken: string;
   initialStatus: DriverStatus;
   justReturnedFromStripe: boolean;
 }) {
@@ -24,9 +22,9 @@ export default function PayoutsClient({
 
   async function refresh() {
     try {
-      const res = await fetch(
-        `/api/deliver/driver/connect/refresh?t=${encodeURIComponent(driverToken)}`,
-      );
+      const res = await fetch("/api/deliver/driver/connect/refresh", {
+        credentials: "same-origin",
+      });
       const data = await res.json();
       if (res.ok && data.payoutsEnabled !== undefined) {
         setStatus((s) => ({
@@ -44,10 +42,10 @@ export default function PayoutsClient({
     setBusy(true);
     setError(null);
     try {
-      const res = await fetch(
-        `/api/deliver/driver/connect/start?t=${encodeURIComponent(driverToken)}`,
-        { method: "POST" },
-      );
+      const res = await fetch("/api/deliver/driver/connect/start", {
+        method: "POST",
+        credentials: "same-origin",
+      });
       const data = await res.json();
       if (!res.ok || !data.url) {
         setError(data.error ?? "Couldn't start onboarding.");

@@ -63,13 +63,14 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  const onDutyUrl = `${APP_URL}/deliver/driver/online?t=${encodeURIComponent(driver.token!)}`;
-  const payoutsUrl = `${APP_URL}/deliver/driver/payouts?t=${encodeURIComponent(driver.token!)}`;
+  // Single sign-in link — sets cookie on first click and lands them on
+  // their runner home. After that they bookmark and don't need the link
+  // again until they clear cookies or switch devices.
+  const signInUrl = `${APP_URL}/api/deliver/driver/login?t=${encodeURIComponent(driver.token!)}&next=${encodeURIComponent("/deliver/driver")}`;
   await sendDriverLinkEmail({
     name: driver.name!,
     email: driver.email,
-    onDutyUrl,
-    payoutsUrl,
+    signInUrl,
   });
 
   return NextResponse.json({ ok: true, matched: true });
@@ -78,8 +79,7 @@ export async function POST(req: NextRequest) {
 interface LinkEmailInput {
   name: string;
   email: string;
-  onDutyUrl: string;
-  payoutsUrl: string;
+  signInUrl: string;
 }
 
 async function sendDriverLinkEmail(i: LinkEmailInput): Promise<void> {
@@ -88,42 +88,38 @@ async function sendDriverLinkEmail(i: LinkEmailInput): Promise<void> {
     console.warn("[driver lookup] RESEND_API_KEY not set");
     return;
   }
-  const subject = `Your PAL Delivery driver links`;
+  const subject = `Your PAL Delivery sign-in link`;
   const first = i.name.split(" ")[0];
   const html = `
     <div style="font-family: Inter, system-ui, sans-serif; color: #1a2433; line-height: 1.5;">
       <p style="text-transform: uppercase; letter-spacing: 0.15em; font-size: 11px; color: #C84A2C; margin: 0 0 4px;">
-        PAL Delivery · Driver
+        PAL Delivery · Runner
       </p>
-      <h2 style="margin: 0 0 16px; font-family: Georgia, serif;">Here you go, ${escapeHtml(first)}.</h2>
-      <p>Two links to bookmark — same as your welcome email:</p>
+      <h2 style="margin: 0 0 16px; font-family: Georgia, serif;">Tap to sign in, ${escapeHtml(first)}.</h2>
+      <p>One tap and you&apos;re back in your runner home — toggle on/off duty, see new orders, claim, run.</p>
 
-      <h3 style="margin: 24px 0 6px; font-size: 16px;">Set up payouts (one-time)</h3>
-      <p style="margin: 0;">If you haven't finished Stripe Connect onboarding, do it now. ~5 minutes.</p>
-      <p style="margin: 12px 0;">
-        <a href="${i.payoutsUrl}" style="display:inline-block; padding:12px 22px; background:#e8656f; color:#fff; text-decoration:none; border-radius:8px; font-weight:bold;">
-          Set up / update payouts →
+      <p style="margin: 24px 0;">
+        <a href="${i.signInUrl}" style="display:inline-block; padding:14px 28px; background:#e8656f; color:#fff; text-decoration:none; border-radius:8px; font-weight:bold; font-size:16px;">
+          Open my runner home →
         </a>
       </p>
 
-      <h3 style="margin: 24px 0 6px; font-size: 16px;">On / off duty toggle</h3>
-      <p style="margin: 0;">Tap before each shift. Auto-off after 4 hours so you don&apos;t forget.</p>
-      <p style="margin: 12px 0;">
-        <a href="${i.onDutyUrl}" style="display:inline-block; padding:12px 22px; background:#0b1120; color:#fff; text-decoration:none; border-radius:8px; font-weight:bold;">
-          On / off duty →
-        </a>
+      <p style="font-size: 13px; color: #555;">
+        After this tap, your phone stays signed in for 30 days. Just bookmark
+        the page — no more sign-in links unless you clear cookies or switch
+        devices.
       </p>
 
       <hr style="border: none; border-top: 1px solid #e5dcc7; margin: 24px 0;" />
-      <p style="font-size: 13px;">Anything else? Just reply.</p>
+      <p style="font-size: 13px;">Didn&apos;t request this? Ignore it — the link only works for you.</p>
       <p style="font-size: 11px; color: #888; margin-top: 16px;">— The Port A Local</p>
     </div>
   `;
   const text =
-    `Here you go, ${first}.\n\nTwo links to bookmark:\n\n` +
-    `Set up payouts (Stripe-hosted, ~5 min):\n  ${i.payoutsUrl}\n\n` +
-    `On / off duty toggle (tap before each shift):\n  ${i.onDutyUrl}\n\n` +
-    `Anything else? Just reply.\n\n— The Port A Local`;
+    `Tap to sign in, ${first}.\n\n` +
+    `Open your runner home → ${i.signInUrl}\n\n` +
+    `After that, bookmark the page — your phone stays signed in for 30 days.\n\n` +
+    `Didn't request this? Ignore it.\n\n— The Port A Local`;
   try {
     await fetch("https://api.resend.com/emails", {
       method: "POST",

@@ -21,10 +21,8 @@ function relativeFuture(iso: string): string {
 }
 
 export default function OnlineToggle({
-  driverToken,
   initialStatus,
 }: {
-  driverToken: string;
   initialStatus: DriverStatus;
 }) {
   const router = useRouter();
@@ -37,10 +35,10 @@ export default function OnlineToggle({
     setError(null);
     try {
       const path = status.isOnline ? "offline" : "online";
-      const res = await fetch(
-        `/api/deliver/driver/${path}?t=${encodeURIComponent(driverToken)}`,
-        { method: "POST" },
-      );
+      const res = await fetch(`/api/deliver/driver/${path}`, {
+        method: "POST",
+        credentials: "same-origin",
+      });
       const data = await res.json();
       if (!res.ok) {
         setError(data.error ?? "Toggle failed.");

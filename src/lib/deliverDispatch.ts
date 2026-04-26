@@ -49,7 +49,9 @@ export async function dispatchDriversForOrder(order: Order): Promise<{
   const driverPayout = order.driverPayoutCents;
   const sentTo: string[] = [];
   for (const d of drivers) {
-    const url = `${APP_URL}/deliver/driver/${order.id}?t=${d.token}`;
+    // Login redirect → sets cookie on first tap, then lands on the
+    // order detail page. After that, runner stays signed in for 30 days.
+    const url = `${APP_URL}/api/deliver/driver/login?t=${encodeURIComponent(d.token)}&next=${encodeURIComponent(`/deliver/driver/${order.id}`)}`;
     const lines = [
       `PAL Delivery — new order`,
       `${restaurant?.name ?? order.restaurantId} → ${order.customer.deliveryAddress}`,

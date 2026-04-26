@@ -1,4 +1,5 @@
-import { getDriverByToken } from "@/data/delivery-drivers";
+import { redirect } from "next/navigation";
+import { getCurrentRunner } from "@/lib/runnerSession";
 import { getDriverStatus } from "@/data/delivery-store";
 import OnlineToggle from "./OnlineToggle";
 
@@ -15,26 +16,14 @@ export default async function DriverOnlinePage({
   searchParams: Promise<{ t?: string }>;
 }) {
   const { t } = await searchParams;
-  const driver = t ? await getDriverByToken(t) : null;
-  if (!driver) {
-    return (
-      <main className="min-h-screen bg-sand-50 flex items-center justify-center px-6">
-        <div className="text-center max-w-md">
-          <p className="font-display text-xl font-bold text-navy-900 mb-2">
-            Invalid driver link
-          </p>
-          <p className="text-sm text-navy-500 font-light">
-            This link doesn&apos;t match an active driver token.{" "}
-            <a
-              href="/deliver/driver/lookup"
-              className="underline decoration-sand-400 hover:text-coral-600"
-            >
-              Look up your driver links →
-            </a>
-          </p>
-        </div>
-      </main>
+  if (t) {
+    redirect(
+      `/api/deliver/driver/login?t=${encodeURIComponent(t)}&next=/deliver/driver`,
     );
+  }
+  const driver = await getCurrentRunner();
+  if (!driver) {
+    redirect("/deliver/driver/lookup?from=no-session");
   }
 
   const status = await getDriverStatus(driver.id);
@@ -50,10 +39,7 @@ export default async function DriverOnlinePage({
 
       <div className="flex-1 flex items-center justify-center px-4 sm:px-6">
         <div className="max-w-sm w-full text-center">
-          <OnlineToggle
-            driverToken={driver.token}
-            initialStatus={status}
-          />
+          <OnlineToggle initialStatus={status} />
         </div>
       </div>
 

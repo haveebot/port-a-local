@@ -60,13 +60,14 @@ export async function GET(req: NextRequest) {
     return htmlError("Approval failed at the database step.");
   }
 
-  // Welcome email to the driver — only sent if we have their email
+  // Welcome email — single magic-link to their runner home. The login
+  // route sets the cookie and redirects them to the hub. From there
+  // they bookmark and never need a token again.
   await sendDriverWelcomeEmail({
     name: driver.name,
     email: driver.email ?? null,
     phone: driver.phone,
-    onDutyUrl: `${APP_URL}/deliver/driver/online?t=${encodeURIComponent(driver.token)}`,
-    payoutsUrl: `${APP_URL}/deliver/driver/payouts?t=${encodeURIComponent(driver.token)}`,
+    signInUrl: `${APP_URL}/api/deliver/driver/login?t=${encodeURIComponent(driver.token)}&next=${encodeURIComponent("/deliver/driver")}`,
   });
 
   return htmlSuccess(
@@ -81,8 +82,7 @@ interface WelcomeInput {
   name: string;
   email: string | null;
   phone: string;
-  onDutyUrl: string;
-  payoutsUrl: string;
+  signInUrl: string;
 }
 
 async function sendDriverWelcomeEmail(i: WelcomeInput): Promise<void> {
@@ -95,33 +95,27 @@ async function sendDriverWelcomeEmail(i: WelcomeInput): Promise<void> {
         PAL Delivery · Welcome, runner
       </p>
       <h2 style="margin: 0 0 16px; font-family: Georgia, serif;">You're approved, ${escapeHtml(i.name.split(" ")[0])}.</h2>
-      <p>Welcome to PAL Delivery. Two things you need to do — both quick:</p>
+      <p>One tap and you&apos;re in your runner home — where you&apos;ll set up payouts, toggle on/off duty, and see new orders.</p>
 
-      <h3 style="margin: 24px 0 6px; font-size: 16px;">1. Set up your bank for auto-payouts</h3>
-      <p style="margin: 0;">Stripe-hosted form. ~5 minutes. Your bank info is held by Stripe, not us. After this, your delivery cuts auto-deposit to your bank in 1-2 business days.</p>
-      <p style="margin: 12px 0;">
-        <a href="${i.payoutsUrl}" style="display:inline-block; padding:12px 22px; background:#e8656f; color:#fff; text-decoration:none; border-radius:8px; font-weight:bold;">
-          Set up payouts →
+      <p style="margin: 24px 0;">
+        <a href="${i.signInUrl}" style="display:inline-block; padding:14px 28px; background:#e8656f; color:#fff; text-decoration:none; border-radius:8px; font-weight:bold; font-size:16px;">
+          Open my runner home →
         </a>
       </p>
 
-      <h3 style="margin: 24px 0 6px; font-size: 16px;">2. Bookmark your on-duty toggle</h3>
-      <p style="margin: 0;">When you're ready to take orders, hit this link and tap "I'm here." When you're done for the day, tap off-duty. We only dispatch new orders to runners on-duty.</p>
-      <p style="margin: 12px 0;">
-        <a href="${i.onDutyUrl}" style="display:inline-block; padding:12px 22px; background:#0b1120; color:#fff; text-decoration:none; border-radius:8px; font-weight:bold;">
-          On/Off duty →
-        </a>
+      <p style="font-size: 13px; color: #555;">
+        Tap once, and your phone stays signed in for 30 days. Bookmark the
+        page after — no more sign-in links unless you clear cookies.
       </p>
 
       <hr style="border: none; border-top: 1px solid #e5dcc7; margin: 24px 0;" />
 
-      <p style="font-size: 13px;"><strong>How orders work:</strong></p>
+      <p style="font-size: 13px;"><strong>How it works:</strong></p>
       <ol style="font-size: 13px; padding-left: 20px;">
-        <li>You go on duty (link above)</li>
-        <li>An order comes in — you get a text + email with pickup, drop, and what you'd earn</li>
-        <li>First runner to tap the claim link wins. No bidding, no surge.</li>
-        <li>Pick up at the restaurant (PAL pays the restaurant — you just drive). Drop at the customer's address.</li>
-        <li>Tap "Delivered" — your cut auto-deposits to your bank.</li>
+        <li>Set up Stripe payouts (one-time, ~5 min). Bank info is held by Stripe.</li>
+        <li>Tap "I&apos;m here" before each shift. Auto-off after 4 hours so you can&apos;t accidentally leave it on.</li>
+        <li>New orders show up live in your runner home + send a text/email. First runner to tap claim wins.</li>
+        <li>Pick up at the restaurant, drop at the customer&apos;s address. Tap "Delivered" — your cut auto-deposits to your bank in 1-2 days.</li>
       </ol>
 
       <p style="font-size: 13px;">Questions? Hit reply, or email <a href="mailto:hello@theportalocal.com">hello@theportalocal.com</a>.</p>
@@ -130,11 +124,14 @@ async function sendDriverWelcomeEmail(i: WelcomeInput): Promise<void> {
   `;
   const text =
     `Welcome to PAL Delivery, ${i.name.split(" ")[0]}!\n\n` +
-    `Two quick setup links:\n\n` +
-    `1. Set up payouts (Stripe-hosted, ~5 min):\n   ${i.payoutsUrl}\n\n` +
-    `2. Your on/off-duty toggle:\n   ${i.onDutyUrl}\n\n` +
-    `Bookmark both. The on-duty link is what you tap before each shift.\n\n` +
-    `Questions? Reply to this email or write to hello@theportalocal.com.\n\n` +
+    `Open your runner home → ${i.signInUrl}\n\n` +
+    `One tap and your phone stays signed in for 30 days. Bookmark the page after.\n\n` +
+    `How it works:\n` +
+    `1. Set up Stripe payouts (one-time, ~5 min)\n` +
+    `2. Tap "I'm here" before each shift\n` +
+    `3. Claim new orders as they arrive\n` +
+    `4. Pickup → drop → tap "Delivered" → auto-deposit\n\n` +
+    `Questions? Reply or email hello@theportalocal.com.\n\n` +
     `— The Port A Local`;
   try {
     await fetch("https://api.resend.com/emails", {

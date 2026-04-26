@@ -6,13 +6,11 @@ import type { OrderStatus } from "@/data/delivery-types";
 
 export default function DriverActions({
   orderId,
-  token,
   status,
   driverIdInOrder,
   thisDriverId,
 }: {
   orderId: string;
-  token: string;
   status: OrderStatus;
   driverIdInOrder: string | null;
   thisDriverId: string;
@@ -30,10 +28,11 @@ export default function DriverActions({
     setBusy(true);
     setErr(null);
     try {
-      const url = `/api/deliver/order/${orderId}/${path}?t=${encodeURIComponent(token)}`;
+      const url = `/api/deliver/order/${orderId}/${path}`;
       const res = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "same-origin",
         body: body ? JSON.stringify(body) : undefined,
       });
       const data = await res.json();

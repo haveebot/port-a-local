@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { claimOrder, getOrder } from "@/data/delivery-store";
-import { getDriverByToken } from "@/data/delivery-drivers";
+import { getApiRunner } from "@/lib/runnerSession";
 import {
   mirrorToWheelhouse,
   notifyCustomerClaimed,
@@ -10,23 +10,22 @@ export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
 /**
- * POST /api/deliver/order/[id]/claim?t=<driver_token>
+ * POST /api/deliver/order/[id]/claim
  *
  * Atomic first-claim-wins. The driver who taps fastest gets the job;
  * everyone else gets a friendly "already claimed" response.
  *
- * Auth: query-param driver token. Tokens live in src/data/delivery-drivers.ts.
+ * Auth: cookie session (preferred) — falls back to ?t=<token> for
+ * legacy/email-link callers.
  */
 export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params;
-  const url = new URL(req.url);
-  const token = url.searchParams.get("t") ?? "";
-  const driver = await getDriverByToken(token);
+  const driver = await getApiRunner(req);
   if (!driver) {
-    return NextResponse.json({ error: "Invalid driver token" }, { status: 403 });
+    return NextResponse.json({ error: "Not signed in" }, { status: 403 });
   }
   if (!driver.isActive) {
     return NextResponse.json(

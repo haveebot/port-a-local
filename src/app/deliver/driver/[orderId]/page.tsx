@@ -1,6 +1,6 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { getOrder } from "@/data/delivery-store";
-import { getDriverByToken } from "@/data/delivery-drivers";
+import { getCurrentRunner } from "@/lib/runnerSession";
 import { getRestaurant } from "@/data/delivery-restaurants";
 import { formatUSD } from "@/data/delivery-pricing";
 import DriverActions from "./DriverActions";
@@ -21,26 +21,17 @@ export default async function DriverPage({
 }) {
   const { orderId } = await params;
   const { t } = await searchParams;
-  const driver = t ? await getDriverByToken(t) : null;
-  if (!driver) {
-    return (
-      <main className="min-h-screen bg-sand-50 flex items-center justify-center px-6">
-        <div className="text-center max-w-md">
-          <p className="font-display text-xl font-bold text-navy-900 mb-2">
-            Invalid driver link
-          </p>
-          <p className="text-sm text-navy-500 font-light">
-            This link doesn&apos;t match an active driver token.{" "}
-            <a
-              href="/deliver/driver/lookup"
-              className="underline decoration-sand-400 hover:text-coral-600"
-            >
-              Look up your driver links →
-            </a>
-          </p>
-        </div>
-      </main>
+
+  // Token in URL → set cookie via login route, then back here clean
+  if (t) {
+    redirect(
+      `/api/deliver/driver/login?t=${encodeURIComponent(t)}&next=${encodeURIComponent(`/deliver/driver/${orderId}`)}`,
     );
+  }
+
+  const driver = await getCurrentRunner();
+  if (!driver) {
+    redirect(`/deliver/driver/lookup?from=no-session`);
   }
 
   const order = await getOrder(orderId);
@@ -65,13 +56,13 @@ export default async function DriverPage({
         </div>
         <div className="flex flex-col items-end gap-1.5">
           <a
-            href={`/deliver/driver/online?t=${encodeURIComponent(driver.token)}`}
+            href="/deliver/driver"
             className="text-[11px] text-sand-300 underline decoration-sand-500/50 hover:text-coral-300"
           >
-            On/Off duty
+            Runner home
           </a>
           <a
-            href={`/deliver/driver/payouts?t=${encodeURIComponent(driver.token)}`}
+            href="/deliver/driver/payouts"
             className="text-[11px] text-sand-300 underline decoration-sand-500/50 hover:text-coral-300"
           >
             Payouts setup
@@ -198,7 +189,6 @@ export default async function DriverPage({
 
         <DriverActions
           orderId={order.id}
-          token={driver.token}
           status={order.status}
           driverIdInOrder={order.driverId ?? null}
           thisDriverId={driver.id}

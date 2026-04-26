@@ -6,7 +6,7 @@ import {
   recordDriverTransfer,
   transitionOrder,
 } from "@/data/delivery-store";
-import { getDriverByToken } from "@/data/delivery-drivers";
+import { getApiRunner } from "@/lib/runnerSession";
 import {
   mirrorToWheelhouse,
   notifyCustomerDelivered,
@@ -29,11 +29,9 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params;
-  const url = new URL(req.url);
-  const token = url.searchParams.get("t") ?? "";
-  const driver = await getDriverByToken(token);
+  const driver = await getApiRunner(req);
   if (!driver) {
-    return NextResponse.json({ error: "Invalid driver token" }, { status: 403 });
+    return NextResponse.json({ error: "Not signed in" }, { status: 403 });
   }
 
   let body: { status?: string };
