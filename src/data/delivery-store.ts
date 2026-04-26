@@ -244,6 +244,26 @@ export async function getDriverByTokenDb(
   return rows[0] ? rowToDriver(rows[0]) : null;
 }
 
+/**
+ * Look up by phone — matches on last 10 digits so +1 prefix variations
+ * don't matter. Returns the most recent record if multiples somehow
+ * exist (shouldn't, but defensive).
+ */
+export async function getDriverByPhone(
+  phone: string,
+): Promise<DriverRecord | null> {
+  await ensureSchema();
+  const last10 = phone.replace(/\D/g, "").slice(-10);
+  if (last10.length < 10) return null;
+  const { rows } = await sql`
+    SELECT * FROM delivery_drivers
+    WHERE regexp_replace(phone, '[^0-9]', '', 'g') LIKE ${"%" + last10}
+    ORDER BY applied_at DESC
+    LIMIT 1
+  `;
+  return rows[0] ? rowToDriver(rows[0]) : null;
+}
+
 export async function getActiveDriversDb(): Promise<DriverRecord[]> {
   await ensureSchema();
   const { rows } = await sql`

@@ -6,6 +6,9 @@ export default function RunnerSignupForm() {
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [duplicate, setDuplicate] = useState<
+    "already-active" | "pending-review" | "previously-rejected" | null
+  >(null);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
@@ -32,7 +35,11 @@ export default function RunnerSignupForm() {
       });
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error ?? "Could not submit.");
+        if (res.status === 409 && data.status) {
+          setDuplicate(data.status);
+        } else {
+          setError(data.error ?? "Could not submit.");
+        }
         setSubmitting(false);
         return;
       }
@@ -59,6 +66,70 @@ export default function RunnerSignupForm() {
             hello@theportalocal.com
           </a>
           .
+        </p>
+      </div>
+    );
+  }
+
+  if (duplicate === "already-active") {
+    return (
+      <div className="bg-amber-50 border border-amber-200 rounded-xl p-6 text-center">
+        <p className="font-display text-xl font-bold text-amber-900 mb-2">
+          You&apos;re already on the team.
+        </p>
+        <p className="text-sm text-amber-900 mb-4">
+          That phone is already active in our runner roster. Use the lookup
+          page to get your on-duty toggle and Stripe payouts links emailed
+          to you again.
+        </p>
+        <a
+          href="/deliver/driver/lookup"
+          className="inline-block px-4 py-2 rounded-lg text-sm font-bold bg-amber-500 text-white hover:bg-amber-600"
+        >
+          Find my driver links →
+        </a>
+      </div>
+    );
+  }
+
+  if (duplicate === "pending-review") {
+    return (
+      <div className="bg-amber-50 border border-amber-200 rounded-xl p-6 text-center">
+        <p className="font-display text-xl font-bold text-amber-900 mb-2">
+          We&apos;ve got you.
+        </p>
+        <p className="text-sm text-amber-900 mb-4">
+          That phone already has an application in. Give us a day or two
+          to get back to you. If you&apos;ve lost your follow-up email,
+          ping{" "}
+          <a
+            href="mailto:hello@theportalocal.com"
+            className="underline decoration-amber-400 hover:text-amber-700"
+          >
+            hello@theportalocal.com
+          </a>
+          .
+        </p>
+      </div>
+    );
+  }
+
+  if (duplicate === "previously-rejected") {
+    return (
+      <div className="bg-red-50 border border-red-200 rounded-xl p-6 text-center">
+        <p className="font-display text-xl font-bold text-red-900 mb-2">
+          Hold up
+        </p>
+        <p className="text-sm text-red-900">
+          There was an issue with a prior application from this phone.
+          Email{" "}
+          <a
+            href="mailto:hello@theportalocal.com"
+            className="underline decoration-red-400 hover:text-red-700"
+          >
+            hello@theportalocal.com
+          </a>{" "}
+          so we can sort it out together.
         </p>
       </div>
     );
