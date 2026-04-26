@@ -131,6 +131,83 @@ export async function sendAdminPaidEmail(order: Order): Promise<void> {
   });
 }
 
+/** Customer "out for delivery" email — fires when runner taps Picked up */
+export async function sendCustomerPickedUpEmail(order: Order): Promise<void> {
+  if (!order.customer.email) return;
+  const restaurant = getRestaurant(order.restaurantId);
+  const subject = `On the way — your ${restaurant?.name ?? "order"}`;
+  const trackUrl = `https://theportalocal.com/deliver/success/${order.id}`;
+  const html = `
+    <div style="font-family: Inter, system-ui, sans-serif; color: #1a2433; line-height: 1.5;">
+      <p style="text-transform: uppercase; letter-spacing: 0.15em; font-size: 11px; color: #C84A2C; margin: 0 0 4px;">
+        Port A Local · Delivery
+      </p>
+      <h2 style="margin: 0 0 12px; font-family: Georgia, serif;">Your runner&apos;s on the way, ${escapeHtml(order.customer.name.split(" ")[0])}.</h2>
+      <p>Just picked up at ${escapeHtml(restaurant?.name ?? "the restaurant")}. Heading to your spot now.</p>
+      <p style="margin: 16px 0;"><strong>Drop:</strong> ${escapeHtml(order.customer.deliveryAddress)}</p>
+      <p style="margin: 24px 0;">
+        <a href="${trackUrl}" style="display:inline-block; padding:12px 22px; background:#0b1120; color:#fff; text-decoration:none; border-radius:8px; font-weight:bold;">
+          Track your order →
+        </a>
+      </p>
+      <hr style="border: none; border-top: 1px solid #e5dcc7; margin: 24px 0;" />
+      <p style="font-size: 13px;">Issue with your order? Reply to this email — we read every one.</p>
+      <p style="font-size: 11px; color: #888; margin-top: 16px;">— The Port A Local</p>
+    </div>
+  `;
+  const text =
+    `On the way, ${order.customer.name.split(" ")[0]}.\n\n` +
+    `Your runner just picked up at ${restaurant?.name ?? "the restaurant"} and is heading to:\n${order.customer.deliveryAddress}\n\n` +
+    `Track: ${trackUrl}\n\n— The Port A Local`;
+  await sendResendEmail({
+    to: [order.customer.email],
+    subject,
+    html,
+    text,
+  });
+}
+
+/** Customer "delivered" email — fires when runner taps Delivered */
+export async function sendCustomerDeliveredEmail(order: Order): Promise<void> {
+  if (!order.customer.email) return;
+  const restaurant = getRestaurant(order.restaurantId);
+  const subject = `Delivered — enjoy your ${restaurant?.name ?? "order"}`;
+  const html = `
+    <div style="font-family: Inter, system-ui, sans-serif; color: #1a2433; line-height: 1.5;">
+      <p style="text-transform: uppercase; letter-spacing: 0.15em; font-size: 11px; color: #1f7a4d; margin: 0 0 4px;">
+        Port A Local · Delivered ✓
+      </p>
+      <h2 style="margin: 0 0 12px; font-family: Georgia, serif;">Done deal, ${escapeHtml(order.customer.name.split(" ")[0])}.</h2>
+      <p>Your ${escapeHtml(restaurant?.name ?? "order")} is at <strong>${escapeHtml(order.customer.deliveryAddress)}</strong>.</p>
+      ${order.customer.deliveryNotes ? `<p style="margin: 8px 0 0; color:#555; font-style: italic;">Note we passed to the runner: ${escapeHtml(order.customer.deliveryNotes)}</p>` : ""}
+
+      <p style="margin: 24px 0 12px;"><strong>Total charged:</strong> ${formatUSD(order.totalCents)}</p>
+
+      <hr style="border: none; border-top: 1px solid #e5dcc7; margin: 24px 0;" />
+
+      <p style="font-size: 14px;">Was the experience good? Bad? Anything we should fix?</p>
+      <p style="font-size: 14px;">Hit reply — we read every one. PAL Delivery is brand-new and we&apos;re tuning it on every order.</p>
+
+      <p style="font-size: 13px; margin-top: 24px;">Thanks for trying us. See you next round.</p>
+      <p style="font-size: 11px; color: #888; margin-top: 16px;">— The Port A Local</p>
+    </div>
+  `;
+  const text =
+    `Done deal, ${order.customer.name.split(" ")[0]}.\n\n` +
+    `Your ${restaurant?.name ?? "order"} is at ${order.customer.deliveryAddress}.\n` +
+    (order.customer.deliveryNotes ? `Note we passed to the runner: ${order.customer.deliveryNotes}\n` : "") +
+    `\nTotal charged: ${formatUSD(order.totalCents)}\n\n` +
+    `Was the experience good? Bad? Anything we should fix? Hit reply — we read every one.\n\n` +
+    `Thanks for trying us. See you next round.\n\n` +
+    `— The Port A Local`;
+  await sendResendEmail({
+    to: [order.customer.email],
+    subject,
+    html,
+    text,
+  });
+}
+
 /** Customer confirmation email — fires after payment confirms */
 export async function sendCustomerConfirmationEmail(
   order: Order,

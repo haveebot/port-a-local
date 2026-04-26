@@ -66,9 +66,18 @@ export async function POST(
 
   await mirrorToWheelhouse(order, next);
   if (next === "picked_up") {
-    await notifyCustomerPickedUp(order, true);
+    // Belt-and-suspenders: SMS (best-effort pre-A2P) + email (reliable)
+    const { sendCustomerPickedUpEmail } = await import("@/lib/deliverEmails");
+    await Promise.all([
+      notifyCustomerPickedUp(order, true),
+      sendCustomerPickedUpEmail(order),
+    ]);
   } else {
-    await notifyCustomerDelivered(order, true);
+    const { sendCustomerDeliveredEmail } = await import("@/lib/deliverEmails");
+    await Promise.all([
+      notifyCustomerDelivered(order, true),
+      sendCustomerDeliveredEmail(order),
+    ]);
     // Auto-transfer driver payout via Stripe Connect (best-effort, idempotent)
     void triggerDriverPayout(order.id, driver.id, order.driverPayoutCents).catch(
       (err) => console.error("[deliver] driver payout transfer failed:", err),
