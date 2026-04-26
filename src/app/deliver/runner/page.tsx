@@ -258,10 +258,31 @@ export default function RunnerSignup() {
           <h2 className="font-display text-3xl sm:text-4xl font-bold text-navy-900 text-center mb-2">
             Get on the runner list.
           </h2>
-          <p className="text-sm text-navy-600 font-light text-center mb-8 max-w-xl mx-auto">
+          <p className="text-sm text-navy-600 font-light text-center mb-6 max-w-xl mx-auto">
             Two minutes. We text or call within a day. Once you&apos;re vetted,
             we send you the dispatch link + the Stripe payout setup. Done.
           </p>
+
+          {/* Comforting Stripe heads-up before they apply. Sets expectation
+              that there's a 5-min Stripe step BEFORE first run for
+              immediate payouts — but doesn't make it sound scary. */}
+          <div className="max-w-md mx-auto mb-6 bg-amber-50 border border-amber-200 rounded-xl p-4">
+            <p className="text-[10px] font-bold tracking-widest uppercase text-amber-700 mb-1.5">
+              Quick heads up
+            </p>
+            <p className="text-xs text-navy-700 leading-relaxed">
+              After we approve you, you&apos;ll set up Stripe payouts —
+              about 5 minutes, one-time, your bank info stays with Stripe
+              (we never see it).{" "}
+              <strong className="text-navy-900">
+                Wrap that up before your first run
+              </strong>{" "}
+              so your earnings auto-deposit the second you tap Delivered.
+              If you run before finishing, no stress — we&apos;ll backfill
+              you once you&apos;re set up.
+            </p>
+          </div>
+
           <div className="max-w-md mx-auto">
             <RunnerSignupForm />
           </div>

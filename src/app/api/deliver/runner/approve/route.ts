@@ -110,9 +110,25 @@ async function sendDriverWelcomeEmail(i: WelcomeInput): Promise<void> {
 
       <hr style="border: none; border-top: 1px solid #e5dcc7; margin: 24px 0;" />
 
+      <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:8px; padding:14px 16px; margin: 0 0 20px;">
+        <p style="margin: 0 0 4px; font-size:11px; text-transform:uppercase; letter-spacing:0.15em; color:#a07a18; font-weight:bold;">
+          Do this first
+        </p>
+        <p style="margin: 4px 0; font-size:13px; line-height:1.55;">
+          <strong>Wrap up Stripe payouts before your first run</strong> so
+          your earnings auto-deposit the second you tap Delivered. Takes
+          about 5 minutes, one time. Stripe holds the bank info — we never
+          see it.
+        </p>
+        <p style="margin: 8px 0 0; font-size:12px; color:#7d6e5a; font-style:italic;">
+          If you run before finishing, no stress — we&apos;ll backfill
+          your earnings once you&apos;re set up.
+        </p>
+      </div>
+
       <p style="font-size: 13px;"><strong>How it works:</strong></p>
       <ol style="font-size: 13px; padding-left: 20px;">
-        <li>Set up Stripe payouts (one-time, ~5 min). Bank info is held by Stripe.</li>
+        <li>Set up Stripe payouts (one-time, ~5 min) — <em>before your first run for immediate auto-deposit</em>.</li>
         <li>Tap "I&apos;m here" before each shift. Auto-off after 4 hours so you can&apos;t accidentally leave it on.</li>
         <li>New orders show up live in your runner home + send a text/email. First runner to tap claim wins.</li>
         <li>Pick up at the restaurant, drop at the customer&apos;s address. Tap "Delivered" — your cut auto-deposits to your bank in 1-2 days.</li>
@@ -126,8 +142,14 @@ async function sendDriverWelcomeEmail(i: WelcomeInput): Promise<void> {
     `Welcome to PAL Delivery, ${i.name.split(" ")[0]}!\n\n` +
     `Open your runner home → ${i.signInUrl}\n\n` +
     `One tap and your phone stays signed in for 30 days. Bookmark the page after.\n\n` +
+    `* DO THIS FIRST *\n` +
+    `Wrap up Stripe payouts BEFORE your first run so your earnings\n` +
+    `auto-deposit the second you tap Delivered. Takes ~5 minutes,\n` +
+    `one time. Stripe holds the bank info — we never see it.\n` +
+    `If you run before finishing, no stress — we'll backfill once\n` +
+    `you're set up.\n\n` +
     `How it works:\n` +
-    `1. Set up Stripe payouts (one-time, ~5 min)\n` +
+    `1. Set up Stripe payouts (one-time, ~5 min) — before run #1 for immediate auto-deposit\n` +
     `2. Tap "I'm here" before each shift\n` +
     `3. Claim new orders as they arrive\n` +
     `4. Pickup → drop → tap "Delivered" → auto-deposit\n\n` +

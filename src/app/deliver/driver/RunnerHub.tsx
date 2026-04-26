@@ -416,15 +416,27 @@ export default function RunnerHub({
           </p>
         </section>
 
-        {/* Payouts setup nudge if not done */}
+        {/* Payouts setup nudge if not done. Comforting language —
+            we don't punish runners who go on duty first; we just
+            backfill manually. But best to finish Stripe first so the
+            auto-deposit kicks in from delivery #1. */}
         {!driver.payoutsEnabled && (
           <section className="bg-amber-500/15 border border-amber-500/40 rounded-2xl p-5">
             <p className="text-[10px] font-bold tracking-widest uppercase text-amber-300 mb-2">
-              Set up your bank
+              Set up your bank — best to do this first
             </p>
-            <p className="text-sm text-amber-100 mb-3">
-              Finish the Stripe payout setup so we can deposit your earnings
-              automatically. Takes ~5 minutes, one time.
+            <p className="text-sm text-amber-100 mb-2 leading-relaxed">
+              Finish Stripe payout setup{" "}
+              <strong className="text-amber-50">
+                before your first run
+              </strong>{" "}
+              so your earnings auto-deposit the second you tap Delivered.
+              Takes ~5 minutes, one time. Stripe holds the bank info — we
+              never see it.
+            </p>
+            <p className="text-xs text-amber-200/80 mb-4 leading-relaxed font-light italic">
+              If you run before finishing, no big deal — we&apos;ll backfill
+              your earnings manually once you&apos;re set up.
             </p>
             <a
               href="/deliver/driver/payouts"
