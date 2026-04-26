@@ -38,13 +38,15 @@ export const RESTAURANTS: DeliveryRestaurant[] = [
     cuisineTags: ["Cajun", "Seafood"],
     accent: "#C84A2C",
     deliveryHours: [
-      // Restaurant is closed Monday; matches their hoursOfOperation in the directory
-      { day: "tuesday", open: "17:00", close: "20:30" },
-      { day: "wednesday", open: "17:00", close: "20:30" },
-      { day: "thursday", open: "17:00", close: "20:30" },
-      { day: "friday", open: "17:00", close: "20:30" },
-      { day: "saturday", open: "12:00", close: "20:30" },
-      { day: "sunday", open: "17:00", close: "20:00" },
+      // Generous launch hours — driver will know if restaurant is actually
+      // open before pickup. Tighten once we have steady ops.
+      { day: "monday", open: "10:00", close: "21:00" },
+      { day: "tuesday", open: "10:00", close: "21:00" },
+      { day: "wednesday", open: "10:00", close: "21:00" },
+      { day: "thursday", open: "10:00", close: "21:00" },
+      { day: "friday", open: "10:00", close: "21:00" },
+      { day: "saturday", open: "10:00", close: "21:00" },
+      { day: "sunday", open: "10:00", close: "21:00" },
     ],
     markupPct: 45,
     isActive: true,
@@ -62,15 +64,14 @@ export const RESTAURANTS: DeliveryRestaurant[] = [
     cuisineTags: ["American", "Burgers", "Ice Cream"],
     accent: "#E1242C",
     deliveryHours: [
-      // Per published hours: Mon-Thu 10:30am-9pm, Fri 10:30am-10pm.
-      // Sat/Sun unconfirmed — treating as Mon-Thu pattern; verify w/ store.
-      { day: "monday", open: "10:30", close: "21:00" },
-      { day: "tuesday", open: "10:30", close: "21:00" },
-      { day: "wednesday", open: "10:30", close: "21:00" },
-      { day: "thursday", open: "10:30", close: "21:00" },
-      { day: "friday", open: "10:30", close: "22:00" },
-      { day: "saturday", open: "10:30", close: "21:00" },
-      { day: "sunday", open: "10:30", close: "21:00" },
+      // Generous launch hours — DQ is essentially open all day every day.
+      { day: "monday", open: "10:00", close: "21:00" },
+      { day: "tuesday", open: "10:00", close: "21:00" },
+      { day: "wednesday", open: "10:00", close: "21:00" },
+      { day: "thursday", open: "10:00", close: "21:00" },
+      { day: "friday", open: "10:00", close: "21:00" },
+      { day: "saturday", open: "10:00", close: "21:00" },
+      { day: "sunday", open: "10:00", close: "21:00" },
     ],
     markupPct: 45,
     isActive: true,
