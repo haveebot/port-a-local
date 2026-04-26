@@ -457,6 +457,116 @@ export interface CustomPayoutRecord {
   createdAt: string;
 }
 
+/**
+ * Public leaderboard data. Aggregates per-runner delivery totals across
+ * today / last 7 days / all time. First-name only on entries (small-town
+ * privacy default; full name only ever surfaces in admin contexts).
+ *
+ * Returns ALL active runners — the page filters to those with deliveries
+ * for the leaderboard row but keeps the active count for the header
+ * ("X runners on the road").
+ */
+export interface LeaderboardEntry {
+  driverId: string;
+  firstName: string;
+  todayCents: number;
+  todayCount: number;
+  weekCents: number;
+  weekCount: number;
+  totalCents: number;
+  totalCount: number;
+}
+
+export interface LeaderboardSummary {
+  activeRunnerCount: number;
+  runnersWithDeliveries: number;
+  todayTotalCents: number;
+  todayTotalCount: number;
+  weekTotalCents: number;
+  weekTotalCount: number;
+  allTimeTotalCents: number;
+  allTimeTotalCount: number;
+  entries: LeaderboardEntry[];
+}
+
+export async function getLeaderboard(): Promise<LeaderboardSummary> {
+  await ensureSchema();
+
+  // Same midnight-Central-time logic as the runner feed — keeps "today"
+  // consistent across runner-private and public-leaderboard surfaces.
+  const startOfTodayCt = (() => {
+    const now = new Date();
+    const ct = new Date(
+      now.toLocaleString("en-US", { timeZone: "America/Chicago" }),
+    );
+    const local = new Date(
+      ct.getFullYear(),
+      ct.getMonth(),
+      ct.getDate(),
+      0,
+      0,
+      0,
+    );
+    return local.toISOString();
+  })();
+  const sevenDaysAgo = new Date(
+    Date.now() - 7 * 24 * 60 * 60 * 1000,
+  ).toISOString();
+
+  const { rows } = await sql`
+    SELECT
+      d.id, d.name,
+      COALESCE(SUM(o.driver_payout_cents) FILTER (
+        WHERE o.status = 'delivered' AND o.delivered_at >= ${startOfTodayCt}
+      ), 0) AS today_cents,
+      COUNT(*) FILTER (
+        WHERE o.status = 'delivered' AND o.delivered_at >= ${startOfTodayCt}
+      ) AS today_count,
+      COALESCE(SUM(o.driver_payout_cents) FILTER (
+        WHERE o.status = 'delivered' AND o.delivered_at >= ${sevenDaysAgo}
+      ), 0) AS week_cents,
+      COUNT(*) FILTER (
+        WHERE o.status = 'delivered' AND o.delivered_at >= ${sevenDaysAgo}
+      ) AS week_count,
+      COALESCE(SUM(o.driver_payout_cents) FILTER (
+        WHERE o.status = 'delivered'
+      ), 0) AS total_cents,
+      COUNT(*) FILTER (WHERE o.status = 'delivered') AS total_count
+    FROM delivery_drivers d
+    LEFT JOIN delivery_orders o ON o.driver_id = d.id
+    WHERE d.is_active = TRUE
+    GROUP BY d.id, d.name
+    ORDER BY week_cents DESC, total_cents DESC, d.name ASC
+  `;
+
+  const entries: LeaderboardEntry[] = rows.map((r) => {
+    const fullName = (r.name as string) ?? "";
+    const firstName = fullName.split(" ")[0] || "Runner";
+    return {
+      driverId: r.id as string,
+      firstName,
+      todayCents: Number(r.today_cents ?? 0),
+      todayCount: Number(r.today_count ?? 0),
+      weekCents: Number(r.week_cents ?? 0),
+      weekCount: Number(r.week_count ?? 0),
+      totalCents: Number(r.total_cents ?? 0),
+      totalCount: Number(r.total_count ?? 0),
+    };
+  });
+
+  return {
+    activeRunnerCount: entries.length,
+    runnersWithDeliveries: entries.filter((e) => e.totalCount > 0).length,
+    todayTotalCents: entries.reduce((s, e) => s + e.todayCents, 0),
+    todayTotalCount: entries.reduce((s, e) => s + e.todayCount, 0),
+    weekTotalCents: entries.reduce((s, e) => s + e.weekCents, 0),
+    weekTotalCount: entries.reduce((s, e) => s + e.weekCount, 0),
+    allTimeTotalCents: entries.reduce((s, e) => s + e.totalCents, 0),
+    allTimeTotalCount: entries.reduce((s, e) => s + e.totalCount, 0),
+    entries,
+  };
+}
+
 export async function listCustomPayouts(
   limit = 20,
 ): Promise<CustomPayoutRecord[]> {

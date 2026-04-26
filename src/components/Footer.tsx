@@ -102,7 +102,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/deliver/runner"
+                  href="/deliver/runners"
                   className="inline-flex items-center gap-2 text-navy-300 hover:text-coral-300 transition-colors text-sm"
                 >
                   <PortalIcon name="services" className="w-3.5 h-3.5 text-coral-400 shrink-0" /> Drive for PAL
@@ -244,6 +244,15 @@ export default function Footer() {
               Terms &amp; Conditions
             </Link>
           </div>
+        </div>
+
+        {/* Heye Lab platform attribution — same footer rail pattern as
+            CrossRef (the other Heye Lab beta tenant). Plain text for now;
+            link target lands when Heye Lab has its own surface. */}
+        <div className="pt-4 flex justify-center">
+          <p className="text-[10px] font-mono tracking-[0.15em] uppercase text-navy-600">
+            Powered by Heye Lab
+          </p>
         </div>
       </div>
     </footer>
