@@ -1,11 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getOrder, transitionOrder } from "@/data/delivery-store";
+import {
+  getDriverStatus,
+  getOrder,
+  hasDriverTransfer,
+  recordDriverTransfer,
+  transitionOrder,
+} from "@/data/delivery-store";
 import { getDriverByToken } from "@/data/delivery-drivers";
 import {
   mirrorToWheelhouse,
   notifyCustomerDelivered,
   notifyCustomerPickedUp,
 } from "@/lib/deliverDispatch";
+import Stripe from "stripe";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -64,9 +71,69 @@ export async function POST(
     await notifyCustomerPickedUp(order, true);
   } else {
     await notifyCustomerDelivered(order, true);
+    // Auto-transfer driver payout via Stripe Connect (best-effort, idempotent)
+    void triggerDriverPayout(order.id, driver.id, order.driverPayoutCents).catch(
+      (err) => console.error("[deliver] driver payout transfer failed:", err),
+    );
   }
 
   return NextResponse.json({ ok: true, order });
+}
+
+/**
+ * Idempotent driver payout via Stripe Connect transfer. Skips if:
+ *   - Driver hasn't completed Stripe Connect onboarding
+ *   - Already paid for this order
+ *   - Order paid amount is 0
+ *
+ * Logs and returns; never throws (keeps the delivery transition succeeding
+ * even if payout fails — Winston can retry manually).
+ */
+async function triggerDriverPayout(
+  orderId: string,
+  driverId: string,
+  amountCents: number,
+): Promise<void> {
+  if (amountCents <= 0) return;
+  if (await hasDriverTransfer(orderId)) {
+    console.log(`[payout] order ${orderId} already paid out — skipping`);
+    return;
+  }
+  const status = await getDriverStatus(driverId);
+  if (!status.stripeAccountId || !status.payoutsEnabled) {
+    console.log(
+      `[payout] driver ${driverId} not Connect-onboarded — Venmo manually for order ${orderId}`,
+    );
+    return;
+  }
+  const stripeKey = process.env.STRIPE_SECRET_KEY;
+  if (!stripeKey) {
+    console.error("[payout] STRIPE_SECRET_KEY missing");
+    return;
+  }
+  const stripe = new Stripe(stripeKey, { apiVersion: "2026-03-25.dahlia" });
+  try {
+    const transfer = await stripe.transfers.create({
+      amount: amountCents,
+      currency: "usd",
+      destination: status.stripeAccountId,
+      transfer_group: orderId,
+      metadata: {
+        order_id: orderId,
+        driver_id: driverId,
+        source: "pal-delivery-auto-payout",
+      },
+    });
+    await recordDriverTransfer(orderId, driverId, transfer.id, amountCents);
+    console.log(
+      `[payout] order ${orderId} → driver ${driverId} ($${(amountCents / 100).toFixed(2)}) transfer ${transfer.id}`,
+    );
+  } catch (err) {
+    console.error(
+      `[payout] Stripe transfer failed for order ${orderId}:`,
+      err instanceof Error ? err.message : err,
+    );
+  }
 }
 
 export async function GET(

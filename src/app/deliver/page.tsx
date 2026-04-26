@@ -4,6 +4,7 @@ import {
   getActiveRestaurants,
   isOpenNow,
 } from "@/data/delivery-restaurants";
+import { getOnlineDriverIds } from "@/data/delivery-store";
 
 export const dynamic = "force-dynamic";
 
@@ -13,8 +14,10 @@ export const metadata: Metadata = {
     "Order from real Port Aransas spots. Local drivers. No app. Pickup and delivery handled by us.",
 };
 
-export default function DeliverIndex() {
+export default async function DeliverIndex() {
   const restaurants = getActiveRestaurants();
+  const onlineDriverCount = (await getOnlineDriverIds().catch(() => []))
+    .length;
   return (
     <main className="min-h-screen bg-sand-50">
       <header className="bg-navy-900 text-sand-100 border-b border-coral-500/20">
@@ -29,6 +32,20 @@ export default function DeliverIndex() {
             Real Port Aransas spots. Local drivers. No app. We pick up, we
             deliver — you eat on the porch.
           </p>
+
+          <div className="flex items-center gap-3 mt-4">
+            {onlineDriverCount > 0 ? (
+              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-xs font-bold">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                {onlineDriverCount}{" "}
+                {onlineDriverCount === 1 ? "runner" : "runners"} on duty
+              </span>
+            ) : (
+              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 text-xs font-bold">
+                No runners on duty — orders will queue
+              </span>
+            )}
+          </div>
         </div>
       </header>
 

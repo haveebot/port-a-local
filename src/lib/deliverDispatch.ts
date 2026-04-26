@@ -12,6 +12,7 @@ import {
 import { sendSms, sendConsumerSms } from "./twilioSms";
 import { DRIVERS, getActiveDrivers } from "@/data/delivery-drivers";
 import { getRestaurant } from "@/data/delivery-restaurants";
+import { getOnlineDriverIds } from "@/data/delivery-store";
 import type { Order } from "@/data/delivery-types";
 import { formatUSD } from "@/data/delivery-pricing";
 import { createMessage as createWheelhouseMessage } from "@/data/wheelhouse-store";
@@ -29,9 +30,15 @@ export async function dispatchDriversForOrder(order: Order): Promise<{
   sentTo: string[];
 }> {
   const restaurant = getRestaurant(order.restaurantId);
-  const drivers = getActiveDrivers();
+  // Only dispatch to drivers who are (a) configured + active in
+  // delivery-drivers.ts AND (b) currently on-duty per their online toggle.
+  const allActive = getActiveDrivers();
+  const onlineIds = new Set(await getOnlineDriverIds());
+  const drivers = allActive.filter((d) => onlineIds.has(d.id));
   if (drivers.length === 0) {
-    console.warn(`[deliver] order ${order.id} has no active drivers to dispatch`);
+    console.warn(
+      `[deliver] order ${order.id} has no on-duty drivers (${allActive.length} configured, ${onlineIds.size} on duty)`,
+    );
     return { sentTo: [] };
   }
   const itemSummary = order.items

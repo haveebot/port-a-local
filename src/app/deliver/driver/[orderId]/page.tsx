@@ -49,13 +49,29 @@ export default async function DriverPage({
 
   return (
     <main className="min-h-screen bg-navy-900 text-sand-50 pb-24">
-      <header className="bg-navy-900 border-b border-coral-500/30 px-4 sm:px-6 py-4">
-        <p className="text-[10px] tracking-widest uppercase text-coral-300">
-          PAL Delivery · Driver
-        </p>
-        <p className="font-display text-lg font-bold mt-1">
-          Hey {driver.name}
-        </p>
+      <header className="bg-navy-900 border-b border-coral-500/30 px-4 sm:px-6 py-4 flex items-start justify-between gap-3">
+        <div>
+          <p className="text-[10px] tracking-widest uppercase text-coral-300">
+            PAL Delivery · Driver
+          </p>
+          <p className="font-display text-lg font-bold mt-1">
+            Hey {driver.name}
+          </p>
+        </div>
+        <div className="flex flex-col items-end gap-1.5">
+          <a
+            href={`/deliver/driver/online?t=${encodeURIComponent(driver.token)}`}
+            className="text-[11px] text-sand-300 underline decoration-sand-500/50 hover:text-coral-300"
+          >
+            On/Off duty
+          </a>
+          <a
+            href={`/deliver/driver/payouts?t=${encodeURIComponent(driver.token)}`}
+            className="text-[11px] text-sand-300 underline decoration-sand-500/50 hover:text-coral-300"
+          >
+            Payouts setup
+          </a>
+        </div>
       </header>
 
       <div className="max-w-md mx-auto px-4 py-6 space-y-5">

@@ -67,7 +67,174 @@ async function ensureSchema(): Promise<void> {
   await sql`ALTER TABLE delivery_orders ADD COLUMN IF NOT EXISTS restaurant_cost_cents INTEGER NOT NULL DEFAULT 0`;
   await sql`ALTER TABLE delivery_orders ADD COLUMN IF NOT EXISTS driver_payout_cents INTEGER NOT NULL DEFAULT 0`;
   await sql`ALTER TABLE delivery_orders ADD COLUMN IF NOT EXISTS pal_net_cents INTEGER NOT NULL DEFAULT 0`;
+
+  // Driver availability — drivers toggle online/offline. last_online_at
+  // gets bumped on toggle. We treat a driver as ON-DUTY if their
+  // online_until is in the future. Default expiry: 4 hours (handles the
+  // "I forgot to toggle off" case).
+  // stripe_account_id tracks the driver's Stripe Connect Express account
+  // for auto-payouts; charges_enabled flips true after they finish
+  // onboarding.
+  await sql`
+    CREATE TABLE IF NOT EXISTS delivery_driver_status (
+      driver_id TEXT PRIMARY KEY,
+      online_until TIMESTAMPTZ,
+      last_online_at TIMESTAMPTZ,
+      last_offline_at TIMESTAMPTZ,
+      stripe_account_id TEXT,
+      payouts_enabled BOOLEAN NOT NULL DEFAULT FALSE
+    )
+  `;
+  // Migration for existing tables
+  await sql`ALTER TABLE delivery_driver_status ADD COLUMN IF NOT EXISTS stripe_account_id TEXT`;
+  await sql`ALTER TABLE delivery_driver_status ADD COLUMN IF NOT EXISTS payouts_enabled BOOLEAN NOT NULL DEFAULT FALSE`;
+
+  // Per-order driver transfer record — for idempotency + audit
+  await sql`
+    CREATE TABLE IF NOT EXISTS delivery_driver_transfers (
+      order_id TEXT PRIMARY KEY,
+      driver_id TEXT NOT NULL,
+      stripe_transfer_id TEXT NOT NULL,
+      amount_cents INTEGER NOT NULL,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
   _schemaReady = true;
+}
+
+/* -------------------- Driver availability -------------------- */
+
+/** Mark a driver online for the next N hours (default 4) */
+export async function setDriverOnline(
+  driverId: string,
+  hours = 4,
+): Promise<void> {
+  await ensureSchema();
+  const now = new Date().toISOString();
+  const until = new Date(Date.now() + hours * 60 * 60 * 1000).toISOString();
+  await sql`
+    INSERT INTO delivery_driver_status (driver_id, online_until, last_online_at)
+    VALUES (${driverId}, ${until}, ${now})
+    ON CONFLICT (driver_id) DO UPDATE
+    SET online_until = ${until}, last_online_at = ${now}
+  `;
+}
+
+/** Mark a driver offline immediately */
+export async function setDriverOffline(driverId: string): Promise<void> {
+  await ensureSchema();
+  const now = new Date().toISOString();
+  await sql`
+    INSERT INTO delivery_driver_status (driver_id, online_until, last_offline_at)
+    VALUES (${driverId}, NULL, ${now})
+    ON CONFLICT (driver_id) DO UPDATE
+    SET online_until = NULL, last_offline_at = ${now}
+  `;
+}
+
+/** Returns the IDs of all drivers currently on-duty (online_until > now). */
+export async function getOnlineDriverIds(): Promise<string[]> {
+  await ensureSchema();
+  const now = new Date().toISOString();
+  const { rows } = await sql`
+    SELECT driver_id FROM delivery_driver_status
+    WHERE online_until IS NOT NULL AND online_until > ${now}
+  `;
+  return rows.map((r) => r.driver_id as string);
+}
+
+export interface DriverStatus {
+  driverId: string;
+  onlineUntil: string | null;
+  lastOnlineAt: string | null;
+  lastOfflineAt: string | null;
+  isOnline: boolean;
+  stripeAccountId: string | null;
+  payoutsEnabled: boolean;
+}
+
+export async function getDriverStatus(
+  driverId: string,
+): Promise<DriverStatus> {
+  await ensureSchema();
+  const { rows } = await sql`
+    SELECT online_until, last_online_at, last_offline_at,
+           stripe_account_id, payouts_enabled
+    FROM delivery_driver_status
+    WHERE driver_id = ${driverId}
+    LIMIT 1
+  `;
+  if (!rows[0]) {
+    return {
+      driverId,
+      onlineUntil: null,
+      lastOnlineAt: null,
+      lastOfflineAt: null,
+      isOnline: false,
+      stripeAccountId: null,
+      payoutsEnabled: false,
+    };
+  }
+  const onlineUntil = rows[0].online_until
+    ? new Date(rows[0].online_until as string).toISOString()
+    : null;
+  return {
+    driverId,
+    onlineUntil,
+    lastOnlineAt: rows[0].last_online_at
+      ? new Date(rows[0].last_online_at as string).toISOString()
+      : null,
+    lastOfflineAt: rows[0].last_offline_at
+      ? new Date(rows[0].last_offline_at as string).toISOString()
+      : null,
+    isOnline: onlineUntil ? new Date(onlineUntil) > new Date() : false,
+    stripeAccountId: (rows[0].stripe_account_id as string) ?? null,
+    payoutsEnabled: rows[0].payouts_enabled === true,
+  };
+}
+
+export async function setDriverStripeAccount(
+  driverId: string,
+  stripeAccountId: string,
+  payoutsEnabled: boolean,
+): Promise<void> {
+  await ensureSchema();
+  await sql`
+    INSERT INTO delivery_driver_status (driver_id, stripe_account_id, payouts_enabled)
+    VALUES (${driverId}, ${stripeAccountId}, ${payoutsEnabled})
+    ON CONFLICT (driver_id) DO UPDATE
+    SET stripe_account_id = ${stripeAccountId},
+        payouts_enabled = ${payoutsEnabled}
+  `;
+}
+
+/**
+ * Idempotent record of "we transferred $X to driver Y for order Z" via
+ * Stripe Connect. Returns true if a NEW transfer was recorded; false if
+ * one already existed (we never double-pay).
+ */
+export async function recordDriverTransfer(
+  orderId: string,
+  driverId: string,
+  stripeTransferId: string,
+  amountCents: number,
+): Promise<boolean> {
+  await ensureSchema();
+  const { rowCount } = await sql`
+    INSERT INTO delivery_driver_transfers
+      (order_id, driver_id, stripe_transfer_id, amount_cents)
+    VALUES (${orderId}, ${driverId}, ${stripeTransferId}, ${amountCents})
+    ON CONFLICT (order_id) DO NOTHING
+  `;
+  return (rowCount ?? 0) > 0;
+}
+
+export async function hasDriverTransfer(orderId: string): Promise<boolean> {
+  await ensureSchema();
+  const { rows } = await sql`
+    SELECT 1 FROM delivery_driver_transfers WHERE order_id = ${orderId} LIMIT 1
+  `;
+  return rows.length > 0;
 }
 
 function newId(): string {

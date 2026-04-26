@@ -211,6 +211,14 @@ export default function Navigation() {
               Delivery
             </Link>
             <Link
+              href="/locals"
+              className={`${portalLinkClass} inline-flex items-center gap-1.5`}
+              title="PAL Locals — rent gear, hire services from locals"
+            >
+              <PortalIcon name="services" className="w-3.5 h-3.5" />
+              Locals
+            </Link>
+            <Link
               href="/deliver/runner"
               title="Drive for PAL — sign up"
               className="hidden lg:inline-flex items-center gap-1 px-3 py-2 rounded-full text-xs font-bold tracking-wide text-coral-300 hover:text-coral-200 border border-coral-500/30 hover:border-coral-500/50 hover:bg-coral-500/10 transition-all"
@@ -296,9 +304,17 @@ export default function Navigation() {
               <PortalIcon name="eat" className="w-4 h-4 shrink-0" />
               Delivery
             </Link>
+            <Link href="/locals" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors">
+              <PortalIcon name="services" className="w-4 h-4 shrink-0" />
+              Locals (rent + hire)
+            </Link>
             <Link href="/deliver/runner" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors">
               <PortalIcon name="services" className="w-4 h-4 shrink-0" />
               Drive for PAL
+            </Link>
+            <Link href="/locals/offer" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors">
+              <PortalIcon name="services" className="w-4 h-4 shrink-0" />
+              List on Locals
             </Link>
             <Link href="/beach" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors"><PortalIcon name="beach" className="w-4 h-4 shrink-0" /> Beach Rentals</Link>
             <Link href="/rent" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors"><PortalIcon name="cart" className="w-4 h-4 shrink-0" /> Rent a Cart</Link>
