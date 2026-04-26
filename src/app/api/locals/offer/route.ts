@@ -19,6 +19,9 @@ interface OfferBody {
   description?: string;
   pricing?: string;
   availability?: string;
+  /** Required for rent-mode listings — applicant attests they'll
+      email photos of their listing to hello@theportalocal.com. */
+  photosAcknowledged?: boolean;
 }
 
 /**
@@ -54,6 +57,17 @@ export async function POST(req: NextRequest) {
       { status: 400 },
     );
   }
+  // Rent-mode listings require photo attestation. Hire-mode (skills)
+  // is photo-optional — a description usually carries the listing.
+  if (body.mode === "rent" && body.photosAcknowledged !== true) {
+    return NextResponse.json(
+      {
+        error:
+          "Rent listings need the photo acknowledgement — confirm you'll email photos to hello@theportalocal.com.",
+      },
+      { status: 400 },
+    );
+  }
 
   const cat = CATEGORIES.find((c) => c.id === body.category);
   const apiKey = process.env.RESEND_API_KEY;
@@ -76,11 +90,29 @@ export async function POST(req: NextRequest) {
       <h3 style="margin: 20px 0 6px; font-size: 14px;">Description</h3>
       <p style="margin: 0; white-space: pre-wrap;">${escapeHtml(description)}</p>
 
+      ${
+        body.mode === "rent"
+          ? `
+      <div style="background:#fff5f0; padding:12px 14px; border-radius:8px; margin:16px 0; border:1px solid #fde0d4;">
+        <p style="margin: 0 0 4px; font-size:11px; text-transform:uppercase; letter-spacing:0.15em; color:#C84A2C; font-weight:bold;">Photos pending</p>
+        <p style="margin: 4px 0; font-size:13px;">
+          ${body.photosAcknowledged ? "✓ Acknowledged — applicant said they'll email photos to hello@" : "✗ Not acknowledged"}
+        </p>
+        <p style="margin: 6px 0 0; font-size:12px; color:#555;">
+          Wait for photos before activating the listing — customers need
+          to see what they're requesting.
+        </p>
+      </div>
+      `
+          : ""
+      }
+
       <hr style="border: none; border-top: 1px solid #e5dcc7; margin: 24px 0;" />
 
       <p style="font-size: 12px; color: #555;">
-        Phone for fit check. If approved, add to <code>src/data/locals-listings.ts</code>
-        with category id <code>${escapeHtml(body.category)}</code> and isActive=true.
+        Phone for fit check. If approved + photos in hand, add to
+        <code>src/data/locals-listings.ts</code> with category id
+        <code>${escapeHtml(body.category)}</code> and isActive=true.
       </p>
     </div>
   `;
@@ -91,6 +123,9 @@ export async function POST(req: NextRequest) {
     `Type: ${body.mode} · ${cat?.label ?? body.category}\n` +
     (body.pricing ? `Pricing: ${body.pricing}\n` : "") +
     (body.availability ? `Availability: ${body.availability}\n` : "") +
+    (body.mode === "rent"
+      ? `Photos: ${body.photosAcknowledged ? "Acknowledged — applicant emailing to hello@" : "NOT acknowledged"}\n`
+      : "") +
     `\nDescription:\n${description}`;
 
   if (apiKey) {

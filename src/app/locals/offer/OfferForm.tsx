@@ -17,6 +17,7 @@ export default function OfferForm() {
   const [description, setDescription] = useState("");
   const [pricing, setPricing] = useState("");
   const [availability, setAvailability] = useState("");
+  const [photosAcknowledged, setPhotosAcknowledged] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -30,12 +31,18 @@ export default function OfferForm() {
     setCategory("");
   }, [mode]);
 
+  // For "rent" mode (stuff), photos are required so customers can see
+  // what they're requesting. For "hire" mode (skills), photos are
+  // optional — a description of the work is usually enough.
+  const photosRequired = mode === "rent";
+
   const valid =
     name.trim().length > 1 &&
     phone.trim().replace(/\D/g, "").length >= 10 &&
     mode !== "" &&
     category !== "" &&
-    description.trim().length > 10;
+    description.trim().length > 10 &&
+    (!photosRequired || photosAcknowledged);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -55,6 +62,7 @@ export default function OfferForm() {
           description: description.trim(),
           pricing: pricing.trim(),
           availability: availability.trim(),
+          photosAcknowledged,
         }),
       });
       const data = await res.json();
@@ -72,14 +80,36 @@ export default function OfferForm() {
 
   if (done) {
     return (
-      <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-6 text-center">
-        <p className="font-display text-xl font-bold text-emerald-900 mb-2">
+      <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-6">
+        <p className="font-display text-xl font-bold text-emerald-900 mb-2 text-center">
           Got it.
         </p>
-        <p className="text-sm text-emerald-800">
+        <p className="text-sm text-emerald-800 text-center mb-4">
           We&apos;ll text or call within a day or two for a quick fit check,
-          then your listing goes up. If you don&apos;t hear from us, drop a
-          note to{" "}
+          then your listing goes up.
+        </p>
+        {photosRequired && (
+          <div className="bg-white border border-emerald-300 rounded-lg p-4 mt-4">
+            <p className="text-[10px] font-bold tracking-widest uppercase text-coral-600 mb-1">
+              Send photos →
+            </p>
+            <p className="text-sm text-navy-800 leading-relaxed">
+              Email a few photos of your{" "}
+              {category ? CATEGORIES.find((c) => c.id === category)?.label.toLowerCase() : "listing"}{" "}
+              to{" "}
+              <a
+                href={`mailto:hello@theportalocal.com?subject=${encodeURIComponent("Locals listing photos — " + (businessName || name))}`}
+                className="font-bold text-coral-600 underline decoration-coral-300"
+              >
+                hello@theportalocal.com
+              </a>
+              . Wide shot + a couple detail shots is plenty. Subject line
+              auto-filled when you tap the link.
+            </p>
+          </div>
+        )}
+        <p className="text-xs text-emerald-700 text-center mt-4">
+          If you don&apos;t hear from us, drop a note to{" "}
           <a
             href="mailto:hello@theportalocal.com"
             className="underline decoration-emerald-400 hover:text-emerald-700"
@@ -246,6 +276,43 @@ export default function OfferForm() {
           className="w-full px-3 py-2 border border-sand-300 rounded-lg text-sm focus:border-coral-400 focus:outline-none"
         />
       </div>
+
+      {/* Photo attestation. Required for "rent" listings (customers
+          need to see what they're requesting). Optional for "hire"
+          listings (a service description usually carries it).
+          Photos themselves are emailed to hello@ — we don't host
+          uploads in-app at v1. Same low-friction "photo to feature"
+          pattern as runner verification + Live Music intake. */}
+      {mode === "rent" && (
+        <div className="bg-coral-50 border border-coral-200 rounded-lg p-4 mt-2">
+          <p className="text-[10px] font-bold tracking-widest uppercase text-coral-700 mb-2">
+            Photos
+          </p>
+          <p className="text-xs text-navy-700 mb-3 leading-relaxed">
+            Customers want to see what they&apos;re renting before they
+            request it. After submitting, email a few photos of your
+            listing — wide shot + a couple detail shots is plenty.
+          </p>
+          <label className="flex items-start gap-2.5 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={photosAcknowledged}
+              onChange={(e) => setPhotosAcknowledged(e.target.checked)}
+              className="mt-0.5 shrink-0 accent-coral-500"
+            />
+            <span className="text-xs text-navy-800 leading-relaxed">
+              I&apos;ll email photos of my listing to{" "}
+              <a
+                href="mailto:hello@theportalocal.com?subject=Locals%20listing%20photos"
+                className="font-bold text-coral-600 underline decoration-coral-300"
+              >
+                hello@theportalocal.com
+              </a>{" "}
+              after submitting so PAL can post it live.
+            </span>
+          </label>
+        </div>
+      )}
 
       {error && (
         <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-sm text-red-800">
