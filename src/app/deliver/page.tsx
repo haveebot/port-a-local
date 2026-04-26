@@ -4,6 +4,8 @@ import {
   getActiveRestaurants,
   isOpenNow,
 } from "@/data/delivery-restaurants";
+import { isDeliveryLive } from "@/data/delivery-launch";
+import PreviewBanner from "@/components/deliver/PreviewBanner";
 
 export const dynamic = "force-dynamic";
 
@@ -15,8 +17,10 @@ export const metadata: Metadata = {
 
 export default function DeliverIndex() {
   const restaurants = getActiveRestaurants();
+  const live = isDeliveryLive();
   return (
     <main className="min-h-screen bg-sand-50">
+      {!live && <PreviewBanner />}
       <header className="bg-navy-900 text-sand-100 border-b border-coral-500/20">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6">
           <p className="text-[10px] tracking-widest uppercase text-coral-300 mb-1">
@@ -96,6 +100,27 @@ export default function DeliverIndex() {
             Hit any rough edges? Reply to your order receipt — Winston reads
             every one.
           </p>
+        </div>
+
+        <div className="mt-6 bg-navy-900 text-sand-100 border border-coral-500/30 rounded-xl p-6 flex items-start justify-between gap-4 flex-wrap">
+          <div className="min-w-0 flex-1">
+            <p className="text-[10px] font-bold tracking-widest uppercase text-coral-300 mb-1">
+              Drive for PAL
+            </p>
+            <p className="font-display text-lg font-bold leading-tight">
+              Local. Set your own hours. 100% of tip yours.
+            </p>
+            <p className="text-sm text-sand-300 font-light mt-1 max-w-xl">
+              Want to make beach-day money running food from PA restaurants to
+              vacation rentals? Sign up — we&apos;ll be in touch within a day.
+            </p>
+          </div>
+          <Link
+            href="/deliver/runner"
+            className="px-4 py-2.5 rounded-lg text-sm font-bold bg-coral-500 text-white hover:bg-coral-600 flex-shrink-0"
+          >
+            Sign up to drive →
+          </Link>
         </div>
       </div>
     </main>

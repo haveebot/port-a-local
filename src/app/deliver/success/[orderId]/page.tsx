@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getOrder } from "@/data/delivery-store";
 import { getRestaurant } from "@/data/delivery-restaurants";
 import { formatUSD } from "@/data/delivery-pricing";
+import PreviewBanner from "@/components/deliver/PreviewBanner";
 
 export const dynamic = "force-dynamic";
 
@@ -23,10 +24,14 @@ const STAGE_LABELS: Record<string, { label: string; tone: string }> = {
 
 export default async function SuccessPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ orderId: string }>;
+  searchParams: Promise<{ beta?: string; session_id?: string }>;
 }) {
   const { orderId } = await params;
+  const sp = await searchParams;
+  const isBeta = sp.beta === "1";
   const order = await getOrder(orderId);
   if (!order) notFound();
   const r = getRestaurant(order.restaurantId);
@@ -34,12 +39,15 @@ export default async function SuccessPage({
 
   return (
     <main className="min-h-screen bg-sand-50">
+      {isBeta && <PreviewBanner />}
       <header className="bg-navy-900 text-sand-100 border-b border-coral-500/20">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6">
           <p className="text-[10px] tracking-widest uppercase text-coral-300 mb-1">
             Port A Local · Delivery
           </p>
-          <h1 className="font-display text-2xl font-bold">Thanks!</h1>
+          <h1 className="font-display text-2xl font-bold">
+            {isBeta ? "Got it." : "Thanks!"}
+          </h1>
           <p className="text-sand-300 font-light text-sm mt-1">
             Order ID <span className="font-mono">{order.id}</span>
           </p>
@@ -52,10 +60,12 @@ export default async function SuccessPage({
             Status
           </p>
           <p className="font-display text-xl font-bold text-navy-900">
-            {stage.label}
+            {isBeta ? "Request received" : stage.label}
           </p>
           <p className="text-xs text-navy-500 font-light mt-1">
-            We&apos;ll text you at every step. Refresh this page any time.
+            {isBeta
+              ? "We've got your request. We'll text you to confirm whether we can fulfill — and to take payment if so. No charge yet."
+              : "We'll text you at every step. Refresh this page any time."}
           </p>
         </div>
 
@@ -87,7 +97,7 @@ export default async function SuccessPage({
             <Row label="Tax" value={formatUSD(order.taxCents)} />
             <hr className="border-sand-200 my-2" />
             <Row
-              label="Total charged"
+              label={isBeta ? "Total (would be)" : "Total charged"}
               value={formatUSD(order.totalCents)}
               bold
             />

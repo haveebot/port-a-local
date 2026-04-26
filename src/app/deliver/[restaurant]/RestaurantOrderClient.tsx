@@ -52,12 +52,14 @@ export default function RestaurantOrderClient({
   restaurantSlug,
   restaurantName,
   isOpen,
+  live,
   categories,
   items,
 }: {
   restaurantSlug: string;
   restaurantName: string;
   isOpen: boolean;
+  live: boolean;
   categories: MenuCategoryView[];
   items: MenuItemView[];
 }) {
@@ -230,7 +232,7 @@ export default function RestaurantOrderClient({
               disabled={!isOpen}
               className="px-4 py-2 rounded-lg text-sm font-semibold bg-coral-500 text-white hover:bg-coral-600 disabled:bg-coral-500/50"
             >
-              Checkout →
+              {live ? "Checkout →" : "Request order →"}
             </button>
           </div>
 

@@ -46,7 +46,7 @@ export const RESTAURANTS: DeliveryRestaurant[] = [
       { day: "saturday", open: "12:00", close: "20:30" },
       { day: "sunday", open: "17:00", close: "20:00" },
     ],
-    markupPct: 12,
+    markupPct: 20,
     isActive: true,
   },
   {
@@ -72,7 +72,7 @@ export const RESTAURANTS: DeliveryRestaurant[] = [
       { day: "saturday", open: "10:30", close: "21:00" },
       { day: "sunday", open: "10:30", close: "21:00" },
     ],
-    markupPct: 12,
+    markupPct: 20,
     isActive: true,
   },
 ];

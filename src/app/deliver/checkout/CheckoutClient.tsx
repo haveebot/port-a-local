@@ -21,7 +21,7 @@ function fmt(cents: number): string {
   return `$${(cents / 100).toFixed(2)}`;
 }
 
-export default function CheckoutClient() {
+export default function CheckoutClient({ live }: { live: boolean }) {
   const [stash, setStash] = useState<StashedCheckout | null>(null);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -93,14 +93,16 @@ export default function CheckoutClient() {
         setSubmitting(false);
         return;
       }
-      // Clear cart on success — Stripe Checkout takes over
+      // Clear cart on success
       try {
         window.localStorage.removeItem(`pal-deliver-cart-${stash.restaurantSlug}`);
         window.sessionStorage.removeItem("pal-deliver-checkout");
       } catch {
         // ignore
       }
-      window.location.href = data.checkoutUrl;
+      // Beta mode: redirect to internal success page
+      // Live mode: redirect to Stripe Checkout
+      window.location.href = data.beta ? data.redirectUrl : data.checkoutUrl;
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
       setSubmitting(false);
@@ -250,8 +252,9 @@ export default function CheckoutClient() {
       </div>
 
       <p className="text-xs text-navy-500 font-light px-1">
-        We&apos;ll show the final total — including delivery fee, service
-        fee, and Texas sales tax — on the next screen at Stripe Checkout.
+        {live
+          ? "We'll show the final total — including delivery fee, service fee, and Texas sales tax — on the next screen at Stripe Checkout."
+          : "Beta: this sends a request to PAL — no charge. We'll text you to confirm whether we can fulfill, then take payment."}
       </p>
 
       {error && (
@@ -265,7 +268,13 @@ export default function CheckoutClient() {
         disabled={!formValid || submitting}
         className="w-full px-4 py-3 rounded-lg font-bold bg-coral-500 text-white hover:bg-coral-600 disabled:bg-coral-500/50 disabled:cursor-not-allowed"
       >
-        {submitting ? "Opening checkout…" : "Continue to payment →"}
+        {submitting
+          ? live
+            ? "Opening checkout…"
+            : "Sending request…"
+          : live
+            ? "Continue to payment →"
+            : "Send order request →"}
       </button>
     </div>
   );

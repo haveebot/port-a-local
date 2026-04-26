@@ -8,6 +8,8 @@ import {
   getRestaurant,
   isOpenNow,
 } from "@/data/delivery-restaurants";
+import { isDeliveryLive } from "@/data/delivery-launch";
+import PreviewBanner from "@/components/deliver/PreviewBanner";
 import RestaurantOrderClient from "./RestaurantOrderClient";
 
 export const dynamic = "force-dynamic";
@@ -38,6 +40,7 @@ export default async function RestaurantPage({
   const categories = getCategoriesFor(r.id);
   const items = getItemsFor(r.id);
   const open = isOpenNow(r);
+  const live = isDeliveryLive();
 
   // Pre-compute display prices for the client component (so cart math
   // matches what the customer saw on the menu)
@@ -52,6 +55,7 @@ export default async function RestaurantPage({
 
   return (
     <main className="min-h-screen bg-sand-50 pb-32">
+      {!live && <PreviewBanner />}
       <header
         className="border-b border-sand-200 bg-white"
         style={{ borderTopColor: r.accent ?? "#C84A2C", borderTopWidth: 4 }}
@@ -89,6 +93,7 @@ export default async function RestaurantPage({
         restaurantSlug={r.slug}
         restaurantName={r.name}
         isOpen={open}
+        live={live}
         categories={categories.map((c) => ({ id: c.id, name: c.name }))}
         items={displayItems}
       />
