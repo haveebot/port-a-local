@@ -338,7 +338,7 @@ export default function RentPage() {
                 className="mt-0.5 accent-coral-500 w-4 h-4 shrink-0"
               />
               <span className="leading-relaxed">
-                Text me confirmations and pickup details about this reservation{" "}
+                Text me confirmations and cart logistics about this reservation{" "}
                 <span className="text-navy-400/70">(optional)</span>. Msg &amp; data rates may apply. Reply STOP to opt out.
               </span>
             </label>

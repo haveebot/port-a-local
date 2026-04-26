@@ -83,7 +83,7 @@ export async function POST(req: NextRequest) {
     preheader: "Your golf cart reservation request is in.",
     bodyHtml: `
       <h2 style="margin:0 0 8px 0; font-size:22px; color:#0b1120;">Your cart reservation is confirmed</h2>
-      <p style="margin:0 0 16px 0; color:#4a5568; font-size:14px;">We&apos;re matching your reservation with a vetted local cart company now. You&apos;ll receive <strong>pickup details 24–48 hours before your arrival date</strong> — including location, hours, and what to bring.</p>
+      <p style="margin:0 0 16px 0; color:#4a5568; font-size:14px;">We&apos;re matching your reservation with a vetted local cart company now. You&apos;ll receive <strong>cart logistics 24–48 hours before your arrival date</strong> — pickup at the shop or delivery to your door, vendor&apos;s call.</p>
       <p>Hi ${name},</p>
       <p><strong>Your reservation:</strong></p>
       <ul>
