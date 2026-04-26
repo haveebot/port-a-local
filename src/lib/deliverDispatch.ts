@@ -10,7 +10,7 @@ import {
   // Deliveries thread message; threads are auto-created if missing.
 } from "@/data/wheelhouse-store";
 import { sendSms, sendConsumerSms } from "./twilioSms";
-import { DRIVERS, getActiveDrivers } from "@/data/delivery-drivers";
+import { getActiveDrivers, getDriver } from "@/data/delivery-drivers";
 import { getRestaurant } from "@/data/delivery-restaurants";
 import { getOnlineDriverIds } from "@/data/delivery-store";
 import type { Order } from "@/data/delivery-types";
@@ -32,7 +32,7 @@ export async function dispatchDriversForOrder(order: Order): Promise<{
   const restaurant = getRestaurant(order.restaurantId);
   // Only dispatch to drivers who are (a) configured + active in
   // delivery-drivers.ts AND (b) currently on-duty per their online toggle.
-  const allActive = getActiveDrivers();
+  const allActive = await getActiveDrivers();
   const onlineIds = new Set(await getOnlineDriverIds());
   const drivers = allActive.filter((d) => onlineIds.has(d.id));
   if (drivers.length === 0) {
@@ -242,7 +242,7 @@ export async function mirrorToWheelhouse(
     const threadId = await findOrCreateDeliveriesThread();
     const restaurant = getRestaurant(order.restaurantId);
     const driver = order.driverId
-      ? DRIVERS.find((d) => d.id === order.driverId)
+      ? await getDriver(order.driverId)
       : null;
     const itemList = order.items
       .map((li) => `${li.quantity}× ${li.itemName}`)

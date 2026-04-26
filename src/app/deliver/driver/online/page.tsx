@@ -15,7 +15,7 @@ export default async function DriverOnlinePage({
   searchParams: Promise<{ t?: string }>;
 }) {
   const { t } = await searchParams;
-  const driver = t ? getDriverByToken(t) : null;
+  const driver = t ? await getDriverByToken(t) : null;
   if (!driver) {
     return (
       <main className="min-h-screen bg-sand-50 flex items-center justify-center px-6">

@@ -1,50 +1,52 @@
 /**
- * PAL Delivery — driver roster.
+ * PAL Delivery — driver lookups (DB-backed).
  *
- * V1 manual config. To add a driver:
- *   1. Append to DRIVERS with id/name/phone/token
- *   2. Token must also exist in Vercel env vars as
- *      WHEELHOUSE_DRIVER_TOKEN_<UPPER_ID> so the dispatch link works
- *      across deploys (or just generate-and-paste once)
- *   3. Set isActive=true to start receiving dispatch SMS
+ * v2 (2026-04-26): drivers live in the `delivery_drivers` Postgres
+ * table, NOT in a static array. New drivers self-apply via
+ * /deliver/runner, get reviewed by Winston via a magic-link approval
+ * email, and become active once approved.
  *
- * Drivers are kept separate from Wheelhouse participants on purpose —
- * delivery ops and internal coordination are different surfaces. We
- * mirror order events into Wheelhouse for visibility, but drivers don't
- * post threads.
+ * Adapter functions below preserve the v1 API names (getDriverByToken,
+ * getActiveDrivers, getDriver) so all the existing call sites in the
+ * dispatch + claim + status + connect routes keep working — they just
+ * need to await now.
  */
 
+import {
+  getActiveDriversDb,
+  getDriverById,
+  getDriverByTokenDb,
+  type DriverRecord,
+} from "./delivery-store";
 import type { DeliveryDriver } from "./delivery-types";
 
-export const DRIVERS: DeliveryDriver[] = [
-  // Placeholder — Winston will replace with the two real drivers he has
-  // in mind. Tokens are random base32-ish; rotate any time by editing.
-  {
-    id: "winston",
-    name: "Winston",
-    phone: "+13614281706", // ADMIN_PHONE for first-30-orders validation lap
-    isActive: false, // flip true once Winston wants to receive dispatch
-    token: "drv_winston_REPLACE_ME",
-    payoutMethod: "cash",
-  },
-  {
-    id: "driver-2",
-    name: "Driver Two (placeholder)",
-    phone: "+15555550100",
-    isActive: false,
-    token: "drv_two_REPLACE_ME",
-    payoutMethod: "venmo",
-  },
-];
-
-export function getActiveDrivers(): DeliveryDriver[] {
-  return DRIVERS.filter((d) => d.isActive);
+/** Map a DB record → the legacy DeliveryDriver shape used by callers */
+function recordToLegacy(r: DriverRecord): DeliveryDriver {
+  return {
+    id: r.id,
+    name: r.name,
+    phone: r.phone,
+    email: r.email ?? undefined,
+    isActive: r.isActive,
+    token: r.token,
+    payoutMethod: r.payoutMethod ?? "venmo",
+    payoutHandle: r.payoutHandle ?? undefined,
+  };
 }
 
-export function getDriver(id: string): DeliveryDriver | undefined {
-  return DRIVERS.find((d) => d.id === id);
+export async function getActiveDrivers(): Promise<DeliveryDriver[]> {
+  const rows = await getActiveDriversDb();
+  return rows.map(recordToLegacy);
 }
 
-export function getDriverByToken(token: string): DeliveryDriver | undefined {
-  return DRIVERS.find((d) => d.token === token);
+export async function getDriver(id: string): Promise<DeliveryDriver | undefined> {
+  const r = await getDriverById(id);
+  return r ? recordToLegacy(r) : undefined;
+}
+
+export async function getDriverByToken(
+  token: string,
+): Promise<DeliveryDriver | undefined> {
+  const r = await getDriverByTokenDb(token);
+  return r ? recordToLegacy(r) : undefined;
 }

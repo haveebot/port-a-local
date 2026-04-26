@@ -99,7 +99,193 @@ async function ensureSchema(): Promise<void> {
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     )
   `;
+
+  // The driver roster — replaces the static array in delivery-drivers.ts.
+  // Drivers self-apply via /deliver/runner; admin (Winston) approves
+  // via a magic-link email, which flips is_active=true + sends the
+  // driver their welcome links.
+  await sql`
+    CREATE TABLE IF NOT EXISTS delivery_drivers (
+      id TEXT PRIMARY KEY,
+      name TEXT NOT NULL,
+      phone TEXT NOT NULL,
+      email TEXT,
+      token TEXT NOT NULL UNIQUE,
+      is_active BOOLEAN NOT NULL DEFAULT FALSE,
+      payout_method TEXT,
+      payout_handle TEXT,
+      vehicle TEXT,
+      availability TEXT,
+      why TEXT,
+      applied_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      approved_at TIMESTAMPTZ,
+      approved_by TEXT,
+      rejected_at TIMESTAMPTZ,
+      rejected_reason TEXT
+    )
+  `;
+  await sql`CREATE INDEX IF NOT EXISTS delivery_drivers_token_idx ON delivery_drivers(token)`;
+  await sql`CREATE INDEX IF NOT EXISTS delivery_drivers_is_active_idx ON delivery_drivers(is_active)`;
+
   _schemaReady = true;
+}
+
+/* -------------------- Drivers (DB-backed, replaces static array) -------------------- */
+
+export interface DriverRecord {
+  id: string;
+  name: string;
+  phone: string;
+  email: string | null;
+  token: string;
+  isActive: boolean;
+  payoutMethod: "venmo" | "cash" | "check" | null;
+  payoutHandle: string | null;
+  vehicle: string | null;
+  availability: string | null;
+  why: string | null;
+  appliedAt: string;
+  approvedAt: string | null;
+  approvedBy: string | null;
+  rejectedAt: string | null;
+  rejectedReason: string | null;
+}
+
+function rowToDriver(row: Record<string, unknown>): DriverRecord {
+  return {
+    id: row.id as string,
+    name: row.name as string,
+    phone: row.phone as string,
+    email: (row.email as string) ?? null,
+    token: row.token as string,
+    isActive: row.is_active === true,
+    payoutMethod: (row.payout_method as DriverRecord["payoutMethod"]) ?? null,
+    payoutHandle: (row.payout_handle as string) ?? null,
+    vehicle: (row.vehicle as string) ?? null,
+    availability: (row.availability as string) ?? null,
+    why: (row.why as string) ?? null,
+    appliedAt: new Date(row.applied_at as string).toISOString(),
+    approvedAt: row.approved_at
+      ? new Date(row.approved_at as string).toISOString()
+      : null,
+    approvedBy: (row.approved_by as string) ?? null,
+    rejectedAt: row.rejected_at
+      ? new Date(row.rejected_at as string).toISOString()
+      : null,
+    rejectedReason: (row.rejected_reason as string) ?? null,
+  };
+}
+
+export interface CreateDriverInput {
+  name: string;
+  phone: string;
+  email?: string;
+  vehicle?: string;
+  availability?: string;
+  why?: string;
+}
+
+function newDriverId(): string {
+  return `drv-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+}
+
+function newDriverToken(): string {
+  // 32-char base32-ish random token, prefixed for grep-ability
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  let raw = "";
+  for (let i = 0; i < 28; i++) {
+    raw += chars[Math.floor(Math.random() * chars.length)];
+  }
+  return `drv_${raw}`;
+}
+
+export async function createDriverApplication(
+  input: CreateDriverInput,
+): Promise<DriverRecord> {
+  await ensureSchema();
+  const id = newDriverId();
+  const token = newDriverToken();
+  await sql`
+    INSERT INTO delivery_drivers (
+      id, name, phone, email, token, is_active,
+      vehicle, availability, why
+    ) VALUES (
+      ${id},
+      ${input.name},
+      ${input.phone},
+      ${input.email ?? null},
+      ${token},
+      FALSE,
+      ${input.vehicle ?? null},
+      ${input.availability ?? null},
+      ${input.why ?? null}
+    )
+  `;
+  const driver = await getDriverById(id);
+  if (!driver) throw new Error("Driver vanished after insert");
+  return driver;
+}
+
+export async function getDriverById(id: string): Promise<DriverRecord | null> {
+  await ensureSchema();
+  const { rows } = await sql`
+    SELECT * FROM delivery_drivers WHERE id = ${id} LIMIT 1
+  `;
+  return rows[0] ? rowToDriver(rows[0]) : null;
+}
+
+export async function getDriverByTokenDb(
+  token: string,
+): Promise<DriverRecord | null> {
+  await ensureSchema();
+  const { rows } = await sql`
+    SELECT * FROM delivery_drivers WHERE token = ${token} LIMIT 1
+  `;
+  return rows[0] ? rowToDriver(rows[0]) : null;
+}
+
+export async function getActiveDriversDb(): Promise<DriverRecord[]> {
+  await ensureSchema();
+  const { rows } = await sql`
+    SELECT * FROM delivery_drivers
+    WHERE is_active = TRUE
+    ORDER BY name ASC
+  `;
+  return rows.map(rowToDriver);
+}
+
+export async function approveDriver(
+  id: string,
+  approvedBy: string,
+): Promise<DriverRecord | null> {
+  await ensureSchema();
+  const now = new Date().toISOString();
+  await sql`
+    UPDATE delivery_drivers
+    SET is_active = TRUE,
+        approved_at = ${now},
+        approved_by = ${approvedBy},
+        rejected_at = NULL,
+        rejected_reason = NULL
+    WHERE id = ${id}
+  `;
+  return getDriverById(id);
+}
+
+export async function rejectDriver(
+  id: string,
+  reason: string,
+): Promise<DriverRecord | null> {
+  await ensureSchema();
+  const now = new Date().toISOString();
+  await sql`
+    UPDATE delivery_drivers
+    SET is_active = FALSE,
+        rejected_at = ${now},
+        rejected_reason = ${reason}
+    WHERE id = ${id}
+  `;
+  return getDriverById(id);
 }
 
 /* -------------------- Driver availability -------------------- */

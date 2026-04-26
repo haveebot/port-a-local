@@ -12,7 +12,7 @@ export const runtime = "nodejs";
 export async function POST(req: NextRequest) {
   const url = new URL(req.url);
   const token = url.searchParams.get("t") ?? "";
-  const driver = getDriverByToken(token);
+  const driver = await getDriverByToken(token);
   if (!driver) {
     return NextResponse.json({ error: "Invalid driver token" }, { status: 403 });
   }

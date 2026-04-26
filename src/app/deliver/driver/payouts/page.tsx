@@ -16,7 +16,7 @@ export default async function PayoutsPage({
 }) {
   const sp = await searchParams;
   const token = sp.t;
-  const driver = token ? getDriverByToken(token) : null;
+  const driver = token ? await getDriverByToken(token) : null;
   if (!driver) {
     return (
       <main className="min-h-screen bg-sand-50 flex items-center justify-center px-6">

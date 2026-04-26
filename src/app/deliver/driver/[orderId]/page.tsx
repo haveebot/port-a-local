@@ -21,7 +21,7 @@ export default async function DriverPage({
 }) {
   const { orderId } = await params;
   const { t } = await searchParams;
-  const driver = t ? getDriverByToken(t) : null;
+  const driver = t ? await getDriverByToken(t) : null;
   if (!driver) {
     return (
       <main className="min-h-screen bg-sand-50 flex items-center justify-center px-6">
