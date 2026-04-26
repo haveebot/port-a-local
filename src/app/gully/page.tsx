@@ -71,8 +71,15 @@ function GullyContent() {
   // Open Now filter — only applies to businesses
   const afterOpenFilter = openNow
     ? fuseResults.filter((item) => {
-        // Editorial content (heritage + dispatch) always passes through
-        if (item.type === "story" || item.type === "dispatch") return true;
+        // Editorial + portals + delivery vendors always pass — they have
+        // their own hours model (or are 24/7 like portals).
+        if (
+          item.type === "story" ||
+          item.type === "dispatch" ||
+          item.type === "portal" ||
+          item.type === "delivery-vendor"
+        )
+          return true;
         const biz = businesses.find((b) => b.slug === item.slug);
         return biz ? isOpenNow(biz) : false;
       })
@@ -91,7 +98,8 @@ function GullyContent() {
     ),
   ).sort();
 
-  // Category filter
+  // Category filter — businesses, portals, and delivery vendors all
+  // share the same category namespace (e.g. "delivery", "services").
   const afterCategoryFilter =
     activeCategory === "All"
       ? afterOpenFilter
@@ -100,7 +108,11 @@ function GullyContent() {
         : activeCategory === "Dispatch"
           ? afterOpenFilter.filter((item) => item.type === "dispatch")
           : afterOpenFilter.filter(
-              (item) => item.type === "business" && item.category === activeCategory
+              (item) =>
+                (item.type === "business" ||
+                  item.type === "portal" ||
+                  item.type === "delivery-vendor") &&
+                item.category === activeCategory,
             );
 
   // Sort: featured first, then alphabetical
@@ -279,6 +291,40 @@ function GullyContent() {
                       key={`biz-${item.slug}`}
                       business={businesses.find((b) => b.slug === item.slug)!}
                     />
+                  );
+                }
+
+                // PAL portal or delivery vendor — emerald accent so they
+                // visually pop as "this is a thing PAL does," distinct
+                // from directory listings + editorial.
+                if (
+                  item.type === "portal" ||
+                  item.type === "delivery-vendor"
+                ) {
+                  const label =
+                    item.type === "portal" ? "PAL" : "PAL Delivery";
+                  return (
+                    <Link
+                      key={`${item.type}-${item.slug}`}
+                      href={item.href ?? "/"}
+                      className="group relative rounded-2xl bg-white border border-emerald-200 overflow-hidden card-hover"
+                    >
+                      <div className="h-1 bg-gradient-to-r from-emerald-500 via-coral-400 to-gold-400" />
+                      <div className="p-6 sm:p-8">
+                        <div className="flex items-center justify-between mb-4">
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700">
+                            <EmojiIcon emoji={item.icon ?? ""} className="w-3.5 h-3.5" />{" "}
+                            {label}
+                          </span>
+                        </div>
+                        <h3 className="font-display text-lg font-bold text-navy-900 group-hover:text-coral-600 transition-colors mb-2">
+                          {item.name}
+                        </h3>
+                        <p className="text-sm text-navy-500 leading-relaxed font-light line-clamp-3">
+                          {item.tagline}
+                        </p>
+                      </div>
+                    </Link>
                   );
                 }
 

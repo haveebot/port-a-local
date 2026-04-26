@@ -106,7 +106,7 @@ export default function RentPage() {
               You&apos;ll receive cart logistics <strong className="text-sand-100">24–48 hours before your arrival date</strong> — pickup at the shop or delivery to your door, vendor&apos;s call.
             </p>
             <p className="text-navy-400 text-sm">
-              Full refund if we&apos;re unable to fulfill your reservation. Check your email for a confirmation.
+              Check your email for a confirmation.
             </p>
           </div>
         </section>
@@ -131,7 +131,7 @@ export default function RentPage() {
             </h1>
           </div>
           <p className="text-lg text-navy-200 mt-2 font-light max-w-2xl">
-            The island runs on golf carts. Reserve yours through Port A Local and we guarantee a clean, well-maintained cart from a vetted local company — plus a <strong className="text-sand-100">guaranteed $20 discount</strong>{" "}off the rental company&apos;s standard rate. No booking fees, no guesswork.
+            The island runs on golf carts. Reserve yours through Port A Local and we guarantee a clean, well-maintained cart from a vetted local company — plus a <strong className="text-sand-100">guaranteed $20 off</strong> the rental company&apos;s daily standard rate. <strong className="text-sand-100">$10/day reservation fee</strong> · pickup or delivery, vendor&apos;s call.
           </p>
         </div>
       </section>
@@ -317,10 +317,6 @@ export default function RentPage() {
                 <li className="flex items-start gap-2">
                   <span className="text-coral-500 font-bold mt-0.5">→</span>
                   <span><strong>Damage deposit</strong> may be collected by the rental company at handoff.</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-coral-500 font-bold mt-0.5">→</span>
-                  <span><strong>Full refund</strong> if we&apos;re unable to source a cart for your dates — no risk to you.</span>
                 </li>
               </ul>
             </div>
