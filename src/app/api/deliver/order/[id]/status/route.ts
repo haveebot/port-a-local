@@ -13,7 +13,11 @@ import {
   notifyCustomerDelivered,
   notifyCustomerPickedUp,
 } from "@/lib/deliverDispatch";
-import { getDeliverStripe, getDeliverStripeKey } from "@/lib/deliverStripe";
+import {
+  getDeliverStripe,
+  getDeliverStripeKey,
+  resolveChargeFromPaymentIntent,
+} from "@/lib/deliverStripe";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -146,6 +150,12 @@ async function triggerDriverPayout(
     return;
   }
   const stripe = getDeliverStripe();
+  // Resolve PaymentIntent → latest charge ID. Stripe's source_transaction
+  // expects a CHARGE (ch_...), not a PaymentIntent (pi_...). One extra
+  // API call per transfer; cheap and only fires on actual deliveries.
+  const chargeId = paymentIntentId
+    ? await resolveChargeFromPaymentIntent(stripe, paymentIntentId)
+    : null;
   try {
     const transfer = await stripe.transfers.create({
       amount: amountCents,
@@ -155,17 +165,18 @@ async function triggerDriverPayout(
       // Tie transfer to the specific charge so Stripe funds from THAT
       // charge as it clears — sidesteps the "available balance must be
       // ≥ amount" requirement that bites cold-start + surge gaps.
-      ...(paymentIntentId ? { source_transaction: paymentIntentId } : {}),
+      ...(chargeId ? { source_transaction: chargeId } : {}),
       metadata: {
         order_id: orderId,
         driver_id: driverId,
         source: "pal-delivery-auto-payout",
-        funding_mode: paymentIntentId ? "source-transaction" : "balance",
+        funding_mode: chargeId ? "source-transaction" : "balance",
+        ...(paymentIntentId ? { payment_intent_id: paymentIntentId } : {}),
       },
     });
     await recordDriverTransfer(orderId, driverId, transfer.id, amountCents);
     console.log(
-      `[payout] order ${orderId} → driver ${driverId} ($${(amountCents / 100).toFixed(2)}) transfer ${transfer.id} — funded via ${paymentIntentId ? "source_transaction" : "balance"}`,
+      `[payout] order ${orderId} → driver ${driverId} ($${(amountCents / 100).toFixed(2)}) transfer ${transfer.id} — funded via ${chargeId ? `source_transaction (${chargeId})` : "balance"}`,
     );
   } catch (err) {
     console.error(

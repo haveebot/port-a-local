@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { getDeliverStripe, getDeliverStripeKey } from "@/lib/deliverStripe";
+import {
+  getDeliverStripe,
+  getDeliverStripeKey,
+  resolveChargeFromPaymentIntent,
+} from "@/lib/deliverStripe";
 import {
   getDriverById,
   getDriverStatus,
@@ -117,6 +121,12 @@ export async function POST(req: NextRequest) {
   }
 
   const stripe = getDeliverStripe();
+  // Resolve PaymentIntent → latest charge ID if a PI was provided.
+  // Stripe's source_transaction expects a charge (ch_...) not a PI
+  // (pi_...). Pass-through unchanged if it's already a ch_ id.
+  const sourceChargeId = trimmedSource
+    ? await resolveChargeFromPaymentIntent(stripe, trimmedSource)
+    : null;
   try {
     const transfer = await stripe.transfers.create({
       amount: amountCents,
@@ -124,10 +134,10 @@ export async function POST(req: NextRequest) {
       destination: status.stripeAccountId,
       transfer_group: customId,
       // Optional source_transaction — when present, ties the transfer
-      // to a specific PaymentIntent / charge so Stripe can fund from
-      // THAT charge even if available balance is $0. Backfill flow
-      // uses this to bypass the pending-charge waiting period.
-      ...(trimmedSource ? { source_transaction: trimmedSource } : {}),
+      // to a specific charge so Stripe can fund from THAT charge even
+      // if available balance is $0. Backfill flow uses this to bypass
+      // the pending-charge waiting period.
+      ...(sourceChargeId ? { source_transaction: sourceChargeId } : {}),
       metadata: {
         custom_id: customId,
         driver_id: driverId,
@@ -135,12 +145,13 @@ export async function POST(req: NextRequest) {
         memo: trimmedMemo,
         source: "pal-delivery-custom-payout",
         initiated_by: who,
-        funding_mode: trimmedSource ? "source-transaction" : "balance",
+        funding_mode: sourceChargeId ? "source-transaction" : "balance",
+        ...(trimmedSource ? { payment_intent_id: trimmedSource } : {}),
       },
     });
     await recordDriverTransfer(customId, driverId, transfer.id, amountCents);
     console.log(
-      `[wheelhouse/payouts] custom payout ${customId} → ${driver.name} ($${(amountCents / 100).toFixed(2)}) by ${who} — transfer ${transfer.id} — funded via ${trimmedSource ? "source_transaction" : "balance"}${trimmedMemo ? ` — memo: ${trimmedMemo}` : ""}`,
+      `[wheelhouse/payouts] custom payout ${customId} → ${driver.name} ($${(amountCents / 100).toFixed(2)}) by ${who} — transfer ${transfer.id} — funded via ${sourceChargeId ? `source_transaction (${sourceChargeId})` : "balance"}${trimmedMemo ? ` — memo: ${trimmedMemo}` : ""}`,
     );
     return NextResponse.json({
       ok: true,
