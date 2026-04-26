@@ -24,6 +24,10 @@ import CartScreen from "./src/screens/CartScreen";
 import CheckoutScreen from "./src/screens/CheckoutScreen";
 import PayWebScreen from "./src/screens/PayWebScreen";
 import OrderSuccessScreen from "./src/screens/OrderSuccessScreen";
+import MaintenanceFormScreen from "./src/screens/MaintenanceFormScreen";
+import MaintenanceConfirmedScreen from "./src/screens/MaintenanceConfirmedScreen";
+import RentFormScreen from "./src/screens/RentFormScreen";
+import BeachFormScreen from "./src/screens/BeachFormScreen";
 
 import { registerForPushNotificationsAsync } from "./src/lib/notifications";
 import { CartProvider } from "./src/lib/cart";
@@ -111,6 +115,26 @@ function ServicesStackNav() {
         name="OrderSuccess"
         component={OrderSuccessScreen}
         options={{ title: "Order Placed" }}
+      />
+      <ServicesStack.Screen
+        name="MaintenanceForm"
+        component={MaintenanceFormScreen}
+        options={{ title: "Request Maintenance" }}
+      />
+      <ServicesStack.Screen
+        name="MaintenanceConfirmed"
+        component={MaintenanceConfirmedScreen}
+        options={{ title: "Request Sent" }}
+      />
+      <ServicesStack.Screen
+        name="RentForm"
+        component={RentFormScreen}
+        options={{ title: "Reserve Golf Cart" }}
+      />
+      <ServicesStack.Screen
+        name="BeachForm"
+        component={BeachFormScreen}
+        options={{ title: "Beach Gear" }}
       />
     </ServicesStack.Navigator>
   );

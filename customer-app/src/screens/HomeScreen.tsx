@@ -65,14 +65,24 @@ export default function HomeScreen({ navigation }: Props) {
               key={s.slug}
               style={styles.serviceCard}
               activeOpacity={0.85}
-              onPress={() =>
-                navigation.getParent()?.navigate(
-                  "Services",
-                  s.slug === "deliver"
-                    ? { screen: "DeliverHome" }
-                    : { screen: "Service", params: { slug: s.slug } }
-                )
-              }
+              onPress={() => {
+                const parent = navigation.getParent();
+                if (!parent) return;
+                if (s.slug === "deliver") {
+                  parent.navigate("Services", { screen: "DeliverHome" });
+                } else if (s.slug === "maintenance") {
+                  parent.navigate("Services", { screen: "MaintenanceForm" });
+                } else if (s.slug === "rent") {
+                  parent.navigate("Services", { screen: "RentForm" });
+                } else if (s.slug === "beach") {
+                  parent.navigate("Services", { screen: "BeachForm" });
+                } else {
+                  parent.navigate("Services", {
+                    screen: "Service",
+                    params: { slug: s.slug },
+                  });
+                }
+              }}
             >
               <View
                 style={[

@@ -17,6 +17,11 @@ export type ServicesStackParamList = {
   Checkout: undefined;
   PayWeb: { url: string; orderId: string };
   OrderSuccess: { orderId: string };
+  // Native service forms
+  MaintenanceForm: undefined;
+  MaintenanceConfirmed: undefined;
+  RentForm: undefined;
+  BeachForm: undefined;
 };
 
 export type AccountStackParamList = {

@@ -51,11 +51,19 @@ export default function ServicesHubScreen({ navigation }: Props) {
             key={s.slug}
             style={styles.card}
             activeOpacity={0.85}
-            onPress={() =>
-              s.slug === "deliver"
-                ? navigation.navigate("DeliverHome")
-                : navigation.navigate("Service", { slug: s.slug })
-            }
+            onPress={() => {
+              if (s.slug === "deliver") {
+                navigation.navigate("DeliverHome");
+              } else if (s.slug === "maintenance") {
+                navigation.navigate("MaintenanceForm");
+              } else if (s.slug === "rent") {
+                navigation.navigate("RentForm");
+              } else if (s.slug === "beach") {
+                navigation.navigate("BeachForm");
+              } else {
+                navigation.navigate("Service", { slug: s.slug });
+              }
+            }}
           >
             <View
               style={[
