@@ -98,7 +98,6 @@ export default function Footer() {
                   className="inline-flex items-center gap-2 text-navy-300 hover:text-coral-300 transition-colors text-sm"
                 >
                   <PortalIcon name="eat" className="w-3.5 h-3.5 text-coral-400 shrink-0" /> Delivery
-                  <span className="px-1.5 py-0.5 rounded text-[9px] font-bold tracking-widest uppercase bg-amber-400 text-navy-900">Beta</span>
                 </Link>
               </li>
               <li>

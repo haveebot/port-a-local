@@ -21,8 +21,9 @@ const APP_URL =
   process.env.NEXT_PUBLIC_APP_URL ?? "https://theportalocal.com";
 
 /**
- * SMS every active driver with the claim link. Driver who taps first wins.
- * Internal-ops SMS — does not require consumer consent.
+ * Notify every active driver about a new order via SMS AND email
+ * (belt-and-suspenders: SMS may be filtered by carriers pre-A2P 10DLC).
+ * Driver who taps the claim link first wins.
  */
 export async function dispatchDriversForOrder(order: Order): Promise<{
   sentTo: string[];
@@ -37,8 +38,8 @@ export async function dispatchDriversForOrder(order: Order): Promise<{
     .map((li) => `${li.quantity}× ${li.itemName}`)
     .join(", ")
     .slice(0, 120);
-  const driverPayout =
-    order.deliveryFeeCents + order.tipCents;
+  // driverPayoutCents already includes 50% markup + 50% delivery + 100% tip.
+  const driverPayout = order.driverPayoutCents;
   const sentTo: string[] = [];
   for (const d of drivers) {
     const url = `${APP_URL}/deliver/driver/${order.id}?t=${d.token}`;
@@ -49,14 +50,94 @@ export async function dispatchDriversForOrder(order: Order): Promise<{
       `You earn ${formatUSD(driverPayout)}.`,
       `Claim: ${url}`,
     ];
+    const smsBody = lines.join("\n");
+    // SMS — may fail silently pre-A2P 10DLC depending on carrier
     try {
-      await sendSms(d.phone, lines.join("\n"));
-      sentTo.push(d.id);
+      await sendSms(d.phone, smsBody);
     } catch (err) {
       console.error(`[deliver] dispatch SMS to ${d.id} failed:`, err);
     }
+    // Email backup — 100% reliable, no carrier filtering
+    if (d.email) {
+      await sendDriverDispatchEmail({
+        to: d.email,
+        driverName: d.name,
+        restaurantName: restaurant?.name ?? order.restaurantId,
+        pickupAddress: restaurant?.pickupAddress ?? "",
+        dropAddress: order.customer.deliveryAddress,
+        dropNotes: order.customer.deliveryNotes,
+        items: itemSummary,
+        payoutLabel: formatUSD(driverPayout),
+        claimUrl: url,
+      });
+    }
+    sentTo.push(d.id);
   }
   return { sentTo };
+}
+
+interface DriverEmailInput {
+  to: string;
+  driverName: string;
+  restaurantName: string;
+  pickupAddress: string;
+  dropAddress: string;
+  dropNotes?: string;
+  items: string;
+  payoutLabel: string;
+  claimUrl: string;
+}
+
+async function sendDriverDispatchEmail(i: DriverEmailInput): Promise<void> {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) return;
+  const subject = `🚗 PAL Delivery — new order, ${i.payoutLabel} — ${i.restaurantName}`;
+  const html = `
+    <div style="font-family: Inter, system-ui, sans-serif; color: #1a2433; line-height: 1.5;">
+      <p style="text-transform: uppercase; letter-spacing: 0.15em; font-size: 11px; color: #C84A2C; margin: 0 0 4px;">
+        PAL Delivery · Driver dispatch
+      </p>
+      <h2 style="margin: 0 0 16px; font-family: Georgia, serif;">Hey ${i.driverName} — first to claim wins.</h2>
+
+      <p style="margin: 0 0 4px;"><strong>You earn:</strong> <span style="color:#1f7a4d; font-weight:bold;">${i.payoutLabel}</span></p>
+      <p style="margin: 0 0 4px;"><strong>Pickup:</strong> ${i.restaurantName} — ${i.pickupAddress}</p>
+      <p style="margin: 0 0 4px;"><strong>Drop:</strong> ${i.dropAddress}</p>
+      ${i.dropNotes ? `<p style="margin: 0; color:#555; font-style: italic;">Notes: ${i.dropNotes}</p>` : ""}
+      <p style="margin: 12px 0;"><strong>Order:</strong> ${i.items}</p>
+
+      <p style="margin: 24px 0;">
+        <a href="${i.claimUrl}" style="display:inline-block; padding:14px 24px; background:#e8656f; color:#fff; text-decoration:none; border-radius:8px; font-weight:bold;">
+          Claim this delivery →
+        </a>
+      </p>
+
+      <p style="font-size: 12px; color: #888;">
+        First runner to tap wins. If someone else got it, the link will tell you.
+      </p>
+    </div>
+  `;
+  const text = `PAL Delivery — new order\n\n${i.restaurantName} → ${i.dropAddress}\n${i.items}\n\nYou earn ${i.payoutLabel}\n\nClaim: ${i.claimUrl}`;
+  try {
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from: "PAL Delivery <bookings@theportalocal.com>",
+        to: [i.to],
+        subject,
+        html,
+        text,
+      }),
+    });
+    if (!res.ok) {
+      console.error("[deliver dispatch email]", await res.text());
+    }
+  } catch (err) {
+    console.error("[deliver dispatch email] send failed:", err);
+  }
 }
 
 /** Notify customer that their order was claimed by a driver */

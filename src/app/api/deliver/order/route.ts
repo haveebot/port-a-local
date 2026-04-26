@@ -25,7 +25,7 @@ function getStripe() {
   });
 }
 
-interface BetaEmailInput {
+interface OrderEmailInput {
   orderId: string;
   restaurantName: string;
   pickupAddress: string;
@@ -38,22 +38,27 @@ interface BetaEmailInput {
   subtotal: string;
   tip: string;
   total: string;
+  /** When true, customer was charged; when false, beta path (no charge yet) */
+  paid: boolean;
+  /** Economics breakdown for ops awareness */
+  restaurantCost: string;
+  driverPayout: string;
+  palNet: string;
 }
 
-async function sendBetaOrderRequestEmail(i: BetaEmailInput): Promise<void> {
+async function sendOrderEmail(i: OrderEmailInput): Promise<void> {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
-    console.warn("[deliver beta] RESEND_API_KEY not set — skipping email");
+    console.warn("[deliver] RESEND_API_KEY not set — skipping admin email");
     return;
   }
-  const subject = `PAL Delivery beta — order request from ${i.customerName}`;
-  const itemsHtml = i.lineItems
-    .map((l) => `<li>${l}</li>`)
-    .join("");
+  const tag = i.paid ? "PAID" : "Request (no charge)";
+  const subject = `PAL Delivery — ${tag} — ${i.restaurantName} → ${i.customerName}`;
+  const itemsHtml = i.lineItems.map((l) => `<li>${l}</li>`).join("");
   const html = `
     <div style="font-family: Inter, system-ui, sans-serif; color: #1a2433; line-height: 1.5;">
-      <p style="text-transform: uppercase; letter-spacing: 0.15em; font-size: 11px; color: #C84A2C; margin: 0 0 4px;">
-        PAL Delivery · Beta order request
+      <p style="text-transform: uppercase; letter-spacing: 0.15em; font-size: 11px; color: ${i.paid ? "#1f7a4d" : "#C84A2C"}; margin: 0 0 4px;">
+        PAL Delivery · ${tag}
       </p>
       <h2 style="margin: 0 0 16px; font-family: Georgia, serif;">${i.restaurantName}</h2>
 
@@ -66,17 +71,35 @@ async function sendBetaOrderRequestEmail(i: BetaEmailInput): Promise<void> {
       <p style="margin: 0;">${i.deliveryAddress}</p>
       ${i.deliveryNotes ? `<p style="margin: 4px 0 0; color: #555; font-style: italic;">Notes: ${i.deliveryNotes}</p>` : ""}
 
+      <h3 style="margin: 20px 0 6px; font-size: 14px;">Pickup at</h3>
+      <p style="margin: 0;">${i.pickupAddress}</p>
+
       <h3 style="margin: 20px 0 6px; font-size: 14px;">Items</h3>
       <ul style="margin: 0; padding-left: 20px;">${itemsHtml}</ul>
 
-      <p style="margin: 16px 0 0;"><strong>Subtotal:</strong> ${i.subtotal} · <strong>Tip:</strong> ${i.tip} · <strong>Total (would be):</strong> ${i.total}</p>
+      <p style="margin: 16px 0 0;"><strong>Subtotal:</strong> ${i.subtotal} · <strong>Tip:</strong> ${i.tip} · <strong>${i.paid ? "Total charged" : "Total (would be)"}:</strong> ${i.total}</p>
+
+      <hr style="border: none; border-top: 1px solid #e5dcc7; margin: 24px 0;" />
+
+      <p style="text-transform: uppercase; letter-spacing: 0.15em; font-size: 11px; color: #4a5568; margin: 0 0 6px;">
+        Economics
+      </p>
+      <p style="margin: 0; font-size: 13px;">
+        Restaurant gets at pickup: <strong>${i.restaurantCost}</strong>
+      </p>
+      <p style="margin: 0; font-size: 13px;">
+        Driver Venmo: <strong>${i.driverPayout}</strong> (50% markup + 50% delivery + tip)
+      </p>
+      <p style="margin: 0; font-size: 13px;">
+        PAL net: <strong style="color:#1f7a4d;">${i.palNet}</strong>
+      </p>
 
       <hr style="border: none; border-top: 1px solid #e5dcc7; margin: 24px 0;" />
 
       <p style="font-size: 12px; color: #555;">
-        Beta mode is on (DELIVER_PUBLIC_LAUNCH != true). The customer was NOT
-        charged. Reach out by phone/SMS to confirm whether you can fulfill,
-        then place the order on their behalf or refund the interest.
+        ${i.paid
+          ? "Customer has paid in full. Drive to the restaurant, place the order, deliver, then text the customer with ETA."
+          : "Customer has NOT been charged. Reach out by phone/SMS to confirm fulfillment, then take payment manually."}
       </p>
 
       <p style="font-size: 11px; color: #888; margin-top: 16px;">
@@ -85,15 +108,16 @@ async function sendBetaOrderRequestEmail(i: BetaEmailInput): Promise<void> {
     </div>
   `;
   const text =
-    `PAL Delivery beta — order request from ${i.customerName}\n\n` +
+    `PAL Delivery ${tag} — ${i.customerName}\n\n` +
     `Restaurant: ${i.restaurantName}\nOrder ID: ${i.orderId}\n\n` +
     `Customer: ${i.customerName} · ${i.customerPhone}` +
     (i.customerEmail ? ` · ${i.customerEmail}` : "") +
     `\nDrop: ${i.deliveryAddress}` +
     (i.deliveryNotes ? `\nNotes: ${i.deliveryNotes}` : "") +
-    `\n\nItems:\n${i.lineItems.map((l) => `  - ${l}`).join("\n")}\n\n` +
-    `Subtotal: ${i.subtotal} · Tip: ${i.tip} · Total (would be): ${i.total}\n\n` +
-    `Beta mode is on. Customer was NOT charged.`;
+    `\nPickup: ${i.pickupAddress}\n\n` +
+    `Items:\n${i.lineItems.map((l) => `  - ${l}`).join("\n")}\n\n` +
+    `Subtotal: ${i.subtotal} · Tip: ${i.tip} · ${i.paid ? "Total charged" : "Total (would be)"}: ${i.total}\n\n` +
+    `Economics:\n  Restaurant: ${i.restaurantCost}\n  Driver Venmo: ${i.driverPayout}\n  PAL net: ${i.palNet}`;
   try {
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
@@ -111,10 +135,10 @@ async function sendBetaOrderRequestEmail(i: BetaEmailInput): Promise<void> {
       }),
     });
     if (!res.ok) {
-      console.error("[deliver beta] resend non-200:", await res.text());
+      console.error("[deliver] resend non-200:", await res.text());
     }
   } catch (err) {
-    console.error("[deliver beta] email send failed:", err);
+    console.error("[deliver] email send failed:", err);
   }
 }
 
@@ -212,35 +236,53 @@ export async function POST(req: NextRequest) {
     tipCents: priced.tipCents,
     taxCents: priced.taxCents,
     totalCents: priced.totalCents,
+    restaurantCostCents: priced.restaurantCostCents,
+    driverPayoutCents: priced.driverPayoutCents,
+    palNetCents: priced.palNetCents,
   };
   const order = await createOrder(orderInput);
 
-  // BETA MODE — DELIVER_PUBLIC_LAUNCH not set. Email PAL with the order
-  // request, skip Stripe + dispatch entirely.
-  if (!isDeliveryLive()) {
-    await sendBetaOrderRequestEmail({
-      orderId: order.id,
-      restaurantName: restaurant.name,
-      pickupAddress: restaurant.pickupAddress,
-      customerName: order.customer.name,
-      customerPhone: order.customer.phone,
-      customerEmail: order.customer.email,
-      deliveryAddress: order.customer.deliveryAddress,
-      deliveryNotes: order.customer.deliveryNotes,
-      lineItems: order.items.map(
-        (li) =>
-          `${li.quantity}× ${li.itemName} — ${formatUSD(li.customerPriceCents * li.quantity)}`,
-      ),
-      subtotal: formatUSD(priced.subtotalCents),
-      tip: formatUSD(priced.tipCents),
-      total: formatUSD(priced.totalCents),
-    });
+  // ALWAYS email admin at order creation — instant ping regardless of
+  // payment outcome. Stripe webhook (when configured) will follow up
+  // with a "PAID" email post-payment via the success-page Stripe verify
+  // path. Live without webhook still works because we already have the
+  // intake notification in admin@.
+  const live = isDeliveryLive();
+  const emailInput = {
+    orderId: order.id,
+    restaurantName: restaurant.name,
+    pickupAddress: restaurant.pickupAddress,
+    customerName: order.customer.name,
+    customerPhone: order.customer.phone,
+    customerEmail: order.customer.email,
+    deliveryAddress: order.customer.deliveryAddress,
+    deliveryNotes: order.customer.deliveryNotes,
+    lineItems: order.items.map(
+      (li) =>
+        `${li.quantity}× ${li.itemName} — ${formatUSD(li.customerPriceCents * li.quantity)}`,
+    ),
+    subtotal: formatUSD(priced.subtotalCents),
+    tip: formatUSD(priced.tipCents),
+    total: formatUSD(priced.totalCents),
+    restaurantCost: formatUSD(priced.restaurantCostCents),
+    driverPayout: formatUSD(priced.driverPayoutCents),
+    palNet: formatUSD(priced.palNetCents),
+  };
+
+  if (!live) {
+    // BETA path — no Stripe, just intake notification
+    await sendOrderEmail({ ...emailInput, paid: false });
     return NextResponse.json({
       orderId: order.id,
       beta: true,
       redirectUrl: `/deliver/success/${order.id}?beta=1`,
     });
   }
+
+  // LIVE path — fire intake email immediately, then open Stripe Checkout.
+  // Customer redirects to success page, which verifies Stripe + sends a
+  // "PAID" follow-up email + marks order paid in DB.
+  await sendOrderEmail({ ...emailInput, paid: false });
 
   // Open Stripe Checkout
   const stripe = getStripe();

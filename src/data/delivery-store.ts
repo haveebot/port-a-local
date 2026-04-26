@@ -44,6 +44,9 @@ async function ensureSchema(): Promise<void> {
       tip_cents INTEGER NOT NULL,
       tax_cents INTEGER NOT NULL,
       total_cents INTEGER NOT NULL,
+      restaurant_cost_cents INTEGER NOT NULL DEFAULT 0,
+      driver_payout_cents INTEGER NOT NULL DEFAULT 0,
+      pal_net_cents INTEGER NOT NULL DEFAULT 0,
       payment_intent_id TEXT,
       checkout_session_id TEXT,
       payment_status TEXT NOT NULL,
@@ -60,6 +63,10 @@ async function ensureSchema(): Promise<void> {
   await sql`CREATE INDEX IF NOT EXISTS delivery_orders_status_idx ON delivery_orders(status)`;
   await sql`CREATE INDEX IF NOT EXISTS delivery_orders_placed_at_idx ON delivery_orders(placed_at DESC)`;
   await sql`CREATE INDEX IF NOT EXISTS delivery_orders_checkout_session_idx ON delivery_orders(checkout_session_id)`;
+  // Migration for existing tables — add new columns if they don't exist
+  await sql`ALTER TABLE delivery_orders ADD COLUMN IF NOT EXISTS restaurant_cost_cents INTEGER NOT NULL DEFAULT 0`;
+  await sql`ALTER TABLE delivery_orders ADD COLUMN IF NOT EXISTS driver_payout_cents INTEGER NOT NULL DEFAULT 0`;
+  await sql`ALTER TABLE delivery_orders ADD COLUMN IF NOT EXISTS pal_net_cents INTEGER NOT NULL DEFAULT 0`;
   _schemaReady = true;
 }
 
@@ -81,6 +88,9 @@ function rowToOrder(row: Record<string, unknown>): Order {
     tipCents: row.tip_cents as number,
     taxCents: row.tax_cents as number,
     totalCents: row.total_cents as number,
+    restaurantCostCents: (row.restaurant_cost_cents as number) ?? 0,
+    driverPayoutCents: (row.driver_payout_cents as number) ?? 0,
+    palNetCents: (row.pal_net_cents as number) ?? 0,
     paymentIntentId: (row.payment_intent_id as string) ?? undefined,
     checkoutSessionId: (row.checkout_session_id as string) ?? undefined,
     paymentStatus: row.payment_status as Order["paymentStatus"],
@@ -115,6 +125,9 @@ export interface CreateOrderInput {
   tipCents: number;
   taxCents: number;
   totalCents: number;
+  restaurantCostCents: number;
+  driverPayoutCents: number;
+  palNetCents: number;
   checkoutSessionId?: string;
   paymentIntentId?: string;
 }
@@ -128,6 +141,7 @@ export async function createOrder(input: CreateOrderInput): Promise<Order> {
       id, restaurant_id, customer, items,
       subtotal_cents, delivery_fee_cents, service_fee_cents, tip_cents,
       tax_cents, total_cents,
+      restaurant_cost_cents, driver_payout_cents, pal_net_cents,
       checkout_session_id, payment_intent_id,
       payment_status, status, placed_at
     ) VALUES (
@@ -141,6 +155,9 @@ export async function createOrder(input: CreateOrderInput): Promise<Order> {
       ${input.tipCents},
       ${input.taxCents},
       ${input.totalCents},
+      ${input.restaurantCostCents},
+      ${input.driverPayoutCents},
+      ${input.palNetCents},
       ${input.checkoutSessionId ?? null},
       ${input.paymentIntentId ?? null},
       'pending',

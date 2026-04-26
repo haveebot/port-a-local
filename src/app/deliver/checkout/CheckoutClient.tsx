@@ -21,7 +21,7 @@ function fmt(cents: number): string {
   return `$${(cents / 100).toFixed(2)}`;
 }
 
-export default function CheckoutClient({ live }: { live: boolean }) {
+export default function CheckoutClient() {
   const [stash, setStash] = useState<StashedCheckout | null>(null);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -252,9 +252,8 @@ export default function CheckoutClient({ live }: { live: boolean }) {
       </div>
 
       <p className="text-xs text-navy-500 font-light px-1">
-        {live
-          ? "We'll show the final total — including delivery fee, service fee, and Texas sales tax — on the next screen at Stripe Checkout."
-          : "Beta: this sends a request to PAL — no charge. We'll text you to confirm whether we can fulfill, then take payment."}
+        We&apos;ll show the final total — including delivery fee, service
+        fee, and Texas sales tax — on the next screen at Stripe Checkout.
       </p>
 
       {error && (
@@ -268,13 +267,7 @@ export default function CheckoutClient({ live }: { live: boolean }) {
         disabled={!formValid || submitting}
         className="w-full px-4 py-3 rounded-lg font-bold bg-coral-500 text-white hover:bg-coral-600 disabled:bg-coral-500/50 disabled:cursor-not-allowed"
       >
-        {submitting
-          ? live
-            ? "Opening checkout…"
-            : "Sending request…"
-          : live
-            ? "Continue to payment →"
-            : "Send order request →"}
+        {submitting ? "Opening checkout…" : "Continue to payment →"}
       </button>
     </div>
   );

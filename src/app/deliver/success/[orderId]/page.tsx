@@ -1,11 +1,52 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { getOrder } from "@/data/delivery-store";
+import Stripe from "stripe";
+import { getOrder, markOrderPaid } from "@/data/delivery-store";
 import { getRestaurant } from "@/data/delivery-restaurants";
 import { formatUSD } from "@/data/delivery-pricing";
 import PreviewBanner from "@/components/deliver/PreviewBanner";
 
 export const dynamic = "force-dynamic";
+
+/**
+ * Server-side Stripe verification fallback. If a Stripe session_id is on
+ * the URL and the order is still 'placed' in our DB, fetch the session
+ * from Stripe — if payment_status is 'paid', mark our order paid +
+ * dispatch drivers. This is the no-webhook path; it makes the system
+ * work even before the Stripe webhook is configured.
+ */
+async function verifyStripePaymentIfNeeded(
+  orderId: string,
+  sessionId: string | undefined,
+): Promise<void> {
+  if (!sessionId) return;
+  const order = await getOrder(orderId);
+  if (!order) return;
+  if (order.paymentStatus === "paid") return;
+  const stripeKey = process.env.STRIPE_SECRET_KEY;
+  if (!stripeKey) return;
+  try {
+    const stripe = new Stripe(stripeKey, { apiVersion: "2026-03-25.dahlia" });
+    const session = await stripe.checkout.sessions.retrieve(sessionId);
+    if (session.payment_status === "paid") {
+      await markOrderPaid(
+        orderId,
+        (session.payment_intent as string) ?? "",
+      );
+      // Best-effort: notify admin + fire dispatch in the background
+      const { dispatchDriversForOrder, mirrorToWheelhouse } = await import(
+        "@/lib/deliverDispatch"
+      );
+      const updated = await getOrder(orderId);
+      if (updated) {
+        await mirrorToWheelhouse(updated, "paid");
+        await dispatchDriversForOrder(updated);
+      }
+    }
+  } catch (err) {
+    console.error("[deliver success] Stripe verify failed:", err);
+  }
+}
 
 export const metadata = {
   title: "Order placed — PAL Delivery",
@@ -32,6 +73,11 @@ export default async function SuccessPage({
   const { orderId } = await params;
   const sp = await searchParams;
   const isBeta = sp.beta === "1";
+
+  // Stripe-verify fallback: if returning from Stripe with a session_id,
+  // confirm payment + mark order paid + dispatch drivers. Idempotent.
+  await verifyStripePaymentIfNeeded(orderId, sp.session_id);
+
   const order = await getOrder(orderId);
   if (!order) notFound();
   const r = getRestaurant(order.restaurantId);

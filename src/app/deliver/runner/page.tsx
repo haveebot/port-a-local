@@ -40,9 +40,9 @@ export default function RunnerSignup() {
               call you, run a quick fit check, send you a unique driver link.
             </li>
             <li>
-              <strong className="text-navy-900">2. Get the SMS.</strong> When a
-              new order comes in, every active runner gets a text with the
-              pickup, drop, and what you&apos;d earn.
+              <strong className="text-navy-900">2. Get the ping.</strong> When
+              a new order comes in, every active runner gets a text + email
+              with the pickup, drop, and what you&apos;d earn.
             </li>
             <li>
               <strong className="text-navy-900">3. Tap to claim.</strong> First

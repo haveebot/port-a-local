@@ -154,6 +154,12 @@ export interface Order {
   /** Computed sales tax (Texas 8.25%) */
   taxCents: number;
   totalCents: number;
+  /** What the restaurant gets in cash at pickup */
+  restaurantCostCents: number;
+  /** What PAL pays the driver: 50% markup + 50% delivery + 100% tip */
+  driverPayoutCents: number;
+  /** What PAL keeps: 50% markup + 50% delivery + 100% service */
+  palNetCents: number;
   // Stripe
   paymentIntentId?: string;
   checkoutSessionId?: string;

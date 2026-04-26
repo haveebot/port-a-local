@@ -205,13 +205,10 @@ export default function Navigation() {
             <Link
               href="/deliver"
               className={`${portalLinkClass} inline-flex items-center gap-1.5`}
-              title="PAL Delivery — local food to your beach house (beta)"
+              title="PAL Delivery — local food to your beach house"
             >
               <PortalIcon name="eat" className="w-3.5 h-3.5" />
               Delivery
-              <span className="ml-1 px-1.5 py-0.5 rounded text-[9px] font-bold tracking-widest uppercase bg-amber-400 text-navy-900">
-                Beta
-              </span>
             </Link>
             <Link
               href="/deliver/runner"
@@ -298,7 +295,6 @@ export default function Navigation() {
             <Link href="/deliver" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors">
               <PortalIcon name="eat" className="w-4 h-4 shrink-0" />
               Delivery
-              <span className="ml-1 px-1.5 py-0.5 rounded text-[9px] font-bold tracking-widest uppercase bg-amber-400 text-navy-900">Beta</span>
             </Link>
             <Link href="/deliver/runner" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors">
               <PortalIcon name="services" className="w-4 h-4 shrink-0" />

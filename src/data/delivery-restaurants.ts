@@ -46,7 +46,7 @@ export const RESTAURANTS: DeliveryRestaurant[] = [
       { day: "saturday", open: "12:00", close: "20:30" },
       { day: "sunday", open: "17:00", close: "20:00" },
     ],
-    markupPct: 20,
+    markupPct: 30,
     isActive: true,
   },
   {
@@ -72,7 +72,7 @@ export const RESTAURANTS: DeliveryRestaurant[] = [
       { day: "saturday", open: "10:30", close: "21:00" },
       { day: "sunday", open: "10:30", close: "21:00" },
     ],
-    markupPct: 20,
+    markupPct: 30,
     isActive: true,
   },
 ];
@@ -390,7 +390,17 @@ export function customerPrice(item: MenuItem, markupPct: number): number {
   return Math.round(raw / 5) * 5;
 }
 
-/** Is the restaurant currently delivering (within an open window)? */
+/**
+ * PAL hard cutoff — orders close at 21:00 (9pm) Central regardless of
+ * what individual restaurants list. Protects driver / Winston time and
+ * gives the kitchen room to fulfill backlog before they close.
+ *
+ * To raise/lower: change this constant. To remove: pass a sentinel like
+ * 24 * 60 (24:00).
+ */
+export const PAL_HARD_CUTOFF_MINUTES = 21 * 60; // 21:00 Central
+
+/** Is the restaurant currently delivering (within an open window AND before PAL cutoff)? */
 export function isOpenNow(r: DeliveryRestaurant, now = new Date()): boolean {
   // Use the restaurant's local hours (America/Chicago).
   const fmt = new Intl.DateTimeFormat("en-US", {
@@ -406,10 +416,18 @@ export function isOpenNow(r: DeliveryRestaurant, now = new Date()): boolean {
   const hour = parts.find((p) => p.type === "hour")?.value ?? "00";
   const minute = parts.find((p) => p.type === "minute")?.value ?? "00";
   const nowMin = parseInt(hour, 10) * 60 + parseInt(minute, 10);
+
+  // PAL hard cutoff supersedes everything
+  if (nowMin >= PAL_HARD_CUTOFF_MINUTES) return false;
+
   return r.deliveryHours.some((w) => {
     if (w.day !== weekday) return false;
     const [oh, om] = w.open.split(":").map((n) => parseInt(n, 10));
     const [ch, cm] = w.close.split(":").map((n) => parseInt(n, 10));
-    return nowMin >= oh * 60 + om && nowMin <= ch * 60 + cm;
+    const effectiveClose = Math.min(
+      ch * 60 + cm,
+      PAL_HARD_CUTOFF_MINUTES,
+    );
+    return nowMin >= oh * 60 + om && nowMin <= effectiveClose;
   });
 }

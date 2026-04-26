@@ -4,8 +4,14 @@
  * Consent model:
  * - Consumer SMS must be gated on an explicit opt-in (`smsConsent === true`) collected
  *   via the separate unchecked-by-default checkbox on the maintenance/rent/beach forms.
- * - Vendor / internal-ops SMS (John Brown dispatch, admin alerts) is unaffected —
- *   those are internal B2B recipients, not end-consumers.
+ * - "Vendor / internal-ops SMS" (John Brown dispatch, admin alerts, driver dispatch)
+ *   gets the same plumbing but is NOT magically exempt from carrier filtering
+ *   pre-A2P 10DLC — AT&T and Verizon have been blocking or heavily throttling
+ *   unregistered long-code A2P traffic to consumer mobile numbers since ~2024,
+ *   regardless of B2B vs B2C intent. Twilio reports "delivered" even when the
+ *   carrier silently drops it. Treat ALL SMS as best-effort until A2P 10DLC is
+ *   approved at TCR. Always pair with email backup for any flow that ACTUALLY
+ *   has to reach someone (e.g. driver dispatch — see deliverDispatch.ts).
  */
 
 const TWILIO_SID = process.env.TWILIO_ACCOUNT_SID || "";
