@@ -11,6 +11,12 @@ Heye Lab is **Nick Merrill's** umbrella corporation — the platform-company lay
 - Nick is building a "datacenter" ("the lab") to self-host services internally.
 - Nick has "a couple brewing too" — more Heye Lab projects incoming.
 
+**The flagship product: CityDeploy** (locked in 2026-04-26, Winston):
+- Working name **"CityDeploy"** (a.k.a. "City Deployment") for the SaaS-ified PAL platform — sold to other towns. PAL is the proof-of-concept; CityDeploy is the engine that gets templated and deployed per city.
+- Tagline pattern: "Powered by Heye Lab · Built on CityDeploy"
+- The platform extraction Nick is mining for: same Next.js + Postgres + Stripe Connect + cookie-session + email/SMS comms + admin dashboards stack, configurable per town.
+- Memory mirror at `port-a-local/Port A Local/Memory/` is the working ground for pattern extraction — CityDeploy gets seeded from PAL's hard-won decisions.
+
 **Public framing:** `CrossRef — Powered by Heye Lab` (tagline pattern; expect similar on other beta projects).
 
 **Why:** Learned 2026-04-22 during the Xwalk → CrossRef rename discussion. The existing account-structure memory didn't reflect a platform-company layer — Heye Lab is that layer, and it reshapes how the projects present publicly and host technically.

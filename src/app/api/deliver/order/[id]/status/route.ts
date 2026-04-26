@@ -151,5 +151,33 @@ export async function GET(
   if (!order) {
     return NextResponse.json({ error: "Order not found" }, { status: 404 });
   }
-  return NextResponse.json({ order });
+
+  // Customer-facing tracker needs anonymous runner info — Driver #N
+  // (signup-number) + vehicle. Never the runner's real name.
+  let runner: {
+    signupNumber: number;
+    vehicle: string | null;
+  } | null = null;
+  if (order.driverId) {
+    const { sql } = await import("@vercel/postgres");
+    const { rows } = await sql`
+      WITH numbered AS (
+        SELECT id, ROW_NUMBER() OVER (ORDER BY applied_at ASC, id ASC) AS signup_num
+        FROM delivery_drivers
+      )
+      SELECT n.signup_num, d.vehicle
+      FROM delivery_drivers d
+      JOIN numbered n ON n.id = d.id
+      WHERE d.id = ${order.driverId}
+      LIMIT 1
+    `;
+    if (rows[0]) {
+      runner = {
+        signupNumber: Number(rows[0].signup_num),
+        vehicle: (rows[0].vehicle as string) ?? null,
+      };
+    }
+  }
+
+  return NextResponse.json({ order, runner });
 }

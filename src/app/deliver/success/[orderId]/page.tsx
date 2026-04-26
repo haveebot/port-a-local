@@ -1,11 +1,13 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { sql } from "@vercel/postgres";
 import LighthouseMark from "@/components/brand/LighthouseMark";
 import { getDeliverStripe, getDeliverStripeKey } from "@/lib/deliverStripe";
 import { getOrder, markOrderPaid } from "@/data/delivery-store";
 import { getRestaurant } from "@/data/delivery-restaurants";
 import { formatUSD } from "@/data/delivery-pricing";
 import PreviewBanner from "@/components/deliver/PreviewBanner";
+import OrderTracker from "./OrderTracker";
 
 export const dynamic = "force-dynamic";
 
@@ -59,16 +61,36 @@ export const metadata = {
   title: "Order placed — PAL Delivery",
 };
 
-const STAGE_LABELS: Record<string, { label: string; tone: string }> = {
-  placed: { label: "Order placed", tone: "navy" },
-  paid: { label: "Paid · awaiting driver", tone: "navy" },
-  dispatching: { label: "Looking for a driver", tone: "amber" },
-  claimed: { label: "Driver heading to pickup", tone: "coral" },
-  picked_up: { label: "Out for delivery", tone: "coral" },
-  delivered: { label: "Delivered", tone: "emerald" },
-  canceled: { label: "Canceled", tone: "red" },
-  refunded: { label: "Refunded", tone: "red" },
-};
+/**
+ * Initial server-side fetch of anonymized runner info — same query
+ * as /api/deliver/order/[id]/status GET, inlined here so we can SSR
+ * with real data instead of a flicker-then-replace.
+ */
+async function getInitialRunnerInfo(
+  driverId: string | null,
+): Promise<{ signupNumber: number; vehicle: string | null } | null> {
+  if (!driverId) return null;
+  try {
+    const { rows } = await sql`
+      WITH numbered AS (
+        SELECT id, ROW_NUMBER() OVER (ORDER BY applied_at ASC, id ASC) AS signup_num
+        FROM delivery_drivers
+      )
+      SELECT n.signup_num, d.vehicle
+      FROM delivery_drivers d
+      JOIN numbered n ON n.id = d.id
+      WHERE d.id = ${driverId}
+      LIMIT 1
+    `;
+    if (!rows[0]) return null;
+    return {
+      signupNumber: Number(rows[0].signup_num),
+      vehicle: (rows[0].vehicle as string) ?? null,
+    };
+  } catch {
+    return null;
+  }
+}
 
 export default async function SuccessPage({
   params,
@@ -88,7 +110,7 @@ export default async function SuccessPage({
   const order = await getOrder(orderId);
   if (!order) notFound();
   const r = getRestaurant(order.restaurantId);
-  const stage = STAGE_LABELS[order.status] ?? STAGE_LABELS.placed;
+  const initialRunner = await getInitialRunnerInfo(order.driverId ?? null);
 
   return (
     <main className="min-h-screen bg-sand-50">
@@ -114,19 +136,35 @@ export default async function SuccessPage({
       </header>
 
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-8 space-y-6">
-        <div className="bg-white border border-sand-200 rounded-xl p-5">
-          <p className="text-[10px] font-bold tracking-widest uppercase text-coral-600 mb-2">
-            Status
-          </p>
-          <p className="font-display text-xl font-bold text-navy-900">
-            {isBeta ? "Request received" : stage.label}
-          </p>
-          <p className="text-xs text-navy-500 font-light mt-1">
-            {isBeta
-              ? "We've got your request. We'll text you to confirm whether we can fulfill — and to take payment if so. No charge yet."
-              : "We'll text you at every step. Refresh this page any time."}
-          </p>
-        </div>
+        {isBeta ? (
+          <div className="bg-white border border-sand-200 rounded-xl p-5">
+            <p className="text-[10px] font-bold tracking-widest uppercase text-coral-600 mb-2">
+              Status
+            </p>
+            <p className="font-display text-xl font-bold text-navy-900">
+              Request received
+            </p>
+            <p className="text-xs text-navy-500 font-light mt-1">
+              We&apos;ve got your request. We&apos;ll text you to confirm
+              whether we can fulfill — and to take payment if so. No charge
+              yet.
+            </p>
+          </div>
+        ) : (
+          <OrderTracker
+            orderId={order.id}
+            initialOrder={{
+              id: order.id,
+              status: order.status,
+              paidAt: order.paidAt ?? null,
+              claimedAt: order.claimedAt ?? null,
+              pickedUpAt: order.pickedUpAt ?? null,
+              deliveredAt: order.deliveredAt ?? null,
+              driverId: order.driverId ?? null,
+            }}
+            initialRunner={initialRunner}
+          />
+        )}
 
         <div className="bg-white border border-sand-200 rounded-xl p-5">
           <p className="text-[10px] font-bold tracking-widest uppercase text-coral-600 mb-2">
