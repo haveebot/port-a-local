@@ -20,7 +20,7 @@
 import {
   customerPrice,
   getMenuItem,
-  getRestaurant,
+  getRestaurantById,
 } from "./delivery-restaurants";
 import type { OrderLineItem } from "./delivery-types";
 
@@ -96,7 +96,7 @@ export function priceCart(
         "Multi-restaurant carts aren't supported yet — finish this order first.",
       );
     }
-    const r = getRestaurant(getRestaurantSlug(item.restaurantId));
+    const r = getRestaurantById(item.restaurantId);
     if (!r) {
       throw new CartError("Restaurant unavailable.");
     }
@@ -148,13 +148,6 @@ export function priceCart(
     driverPayoutCents,
     palNetCents,
   };
-}
-
-// Lookup restaurant slug by id — local helper so we don't depend on the
-// restaurant id and slug being identical (they happen to be in v1).
-function getRestaurantSlug(restaurantId: string): string {
-  // In current seeds id === slug. If they ever diverge, this needs work.
-  return restaurantId;
 }
 
 export function formatUSD(cents: number): string {

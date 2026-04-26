@@ -364,6 +364,11 @@ export function getRestaurant(slug: string): DeliveryRestaurant | undefined {
   return RESTAURANTS.find((r) => r.slug === slug && r.isActive);
 }
 
+/** Lookup by internal id — used when id and slug diverge (e.g. DQ) */
+export function getRestaurantById(id: string): DeliveryRestaurant | undefined {
+  return RESTAURANTS.find((r) => r.id === id && r.isActive);
+}
+
 export function getActiveRestaurants(): DeliveryRestaurant[] {
   return RESTAURANTS.filter((r) => r.isActive);
 }

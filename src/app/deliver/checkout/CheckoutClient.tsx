@@ -26,7 +26,12 @@ export default function CheckoutClient() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
-  const [address, setAddress] = useState("");
+  // Structured delivery address — joined into a single string at submit
+  const [street, setStreet] = useState("");
+  const [unit, setUnit] = useState("");
+  const [city, setCity] = useState("Port Aransas");
+  const [state, setState] = useState("TX");
+  const [zip, setZip] = useState("78373");
   const [notes, setNotes] = useState("");
   const [tipDollars, setTipDollars] = useState(5);
   const [submitting, setSubmitting] = useState(false);
@@ -62,6 +67,16 @@ export default function CheckoutClient() {
     setPreviewTotal(null);
   }, [stash, tipDollars]);
 
+  // Single-line address joined from the structured fields
+  const deliveryAddress = (() => {
+    const s = street.trim();
+    if (!s) return "";
+    const parts = [s];
+    if (unit.trim()) parts[0] += ` #${unit.trim()}`;
+    parts.push(`${city.trim()}, ${state.trim()} ${zip.trim()}`.trim());
+    return parts.filter(Boolean).join(", ");
+  })();
+
   async function submit() {
     if (!stash) return;
     setSubmitting(true);
@@ -81,7 +96,7 @@ export default function CheckoutClient() {
             name: name.trim(),
             phone: phone.trim(),
             email: email.trim() || undefined,
-            deliveryAddress: address.trim(),
+            deliveryAddress,
             deliveryNotes: notes.trim() || undefined,
           },
           tipCents: Math.round(tipDollars * 100),
@@ -126,7 +141,9 @@ export default function CheckoutClient() {
   const formValid =
     name.trim().length > 1 &&
     phone.trim().replace(/\D/g, "").length >= 10 &&
-    address.trim().length > 4;
+    street.trim().length > 2 &&
+    city.trim().length > 1 &&
+    /^\d{5}$/.test(zip.trim());
 
   return (
     <div className="max-w-2xl mx-auto px-4 sm:px-6 py-8 space-y-6">
@@ -190,28 +207,94 @@ export default function CheckoutClient() {
             placeholder="you@example.com"
           />
         </div>
-        <div>
-          <label className="block text-xs font-bold tracking-widest uppercase text-navy-700 mb-1">
+        <div className="border-t border-sand-200 pt-4">
+          <p className="text-[10px] font-bold tracking-widest uppercase text-coral-600 mb-3">
             Delivery address
-          </label>
-          <input
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-            className="w-full px-3 py-2 border border-sand-300 rounded-lg text-sm focus:border-coral-400 focus:outline-none"
-            placeholder="123 Beach Access Rd, Port Aransas"
-            required
-          />
-        </div>
-        <div>
-          <label className="block text-xs font-bold tracking-widest uppercase text-navy-700 mb-1">
-            Delivery notes (gate code, beach house color, etc.)
-          </label>
-          <input
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-            className="w-full px-3 py-2 border border-sand-300 rounded-lg text-sm focus:border-coral-400 focus:outline-none"
-            placeholder="Leave at the door, blue house"
-          />
+          </p>
+
+          <div className="space-y-3">
+            <div className="grid grid-cols-3 gap-3">
+              <div className="col-span-2">
+                <label className="block text-[10px] font-semibold tracking-wider uppercase text-navy-600 mb-1">
+                  Street
+                </label>
+                <input
+                  value={street}
+                  onChange={(e) => setStreet(e.target.value)}
+                  className="w-full px-3 py-2 border border-sand-300 rounded-lg text-sm focus:border-coral-400 focus:outline-none"
+                  placeholder="123 Beach Access Rd"
+                  autoComplete="address-line1"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-[10px] font-semibold tracking-wider uppercase text-navy-600 mb-1">
+                  Apt / Unit
+                </label>
+                <input
+                  value={unit}
+                  onChange={(e) => setUnit(e.target.value)}
+                  className="w-full px-3 py-2 border border-sand-300 rounded-lg text-sm focus:border-coral-400 focus:outline-none"
+                  placeholder="optional"
+                  autoComplete="address-line2"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-6 gap-3">
+              <div className="col-span-3">
+                <label className="block text-[10px] font-semibold tracking-wider uppercase text-navy-600 mb-1">
+                  City
+                </label>
+                <input
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                  className="w-full px-3 py-2 border border-sand-300 rounded-lg text-sm focus:border-coral-400 focus:outline-none"
+                  autoComplete="address-level2"
+                  required
+                />
+              </div>
+              <div className="col-span-1">
+                <label className="block text-[10px] font-semibold tracking-wider uppercase text-navy-600 mb-1">
+                  State
+                </label>
+                <input
+                  value={state}
+                  onChange={(e) => setState(e.target.value.toUpperCase().slice(0, 2))}
+                  className="w-full px-3 py-2 border border-sand-300 rounded-lg text-sm focus:border-coral-400 focus:outline-none uppercase"
+                  maxLength={2}
+                  autoComplete="address-level1"
+                  required
+                />
+              </div>
+              <div className="col-span-2">
+                <label className="block text-[10px] font-semibold tracking-wider uppercase text-navy-600 mb-1">
+                  ZIP
+                </label>
+                <input
+                  value={zip}
+                  onChange={(e) => setZip(e.target.value.replace(/\D/g, "").slice(0, 5))}
+                  className="w-full px-3 py-2 border border-sand-300 rounded-lg text-sm focus:border-coral-400 focus:outline-none font-mono"
+                  inputMode="numeric"
+                  maxLength={5}
+                  autoComplete="postal-code"
+                  required
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-[10px] font-semibold tracking-wider uppercase text-navy-600 mb-1">
+                Delivery notes (gate code, color of house, etc.)
+              </label>
+              <input
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                className="w-full px-3 py-2 border border-sand-300 rounded-lg text-sm focus:border-coral-400 focus:outline-none"
+                placeholder="Leave at the door, blue beach house, gate code 1234"
+              />
+            </div>
+          </div>
         </div>
       </div>
 
