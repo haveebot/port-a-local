@@ -16,7 +16,11 @@ export const metadata: Metadata = {
 };
 
 export default async function DeliverIndex() {
-  const restaurants = getActiveRestaurants();
+  const all = getActiveRestaurants();
+  // Split into two visual sections so customers see "food spots" and
+  // "convenience runs" as distinct mental models. Same flow for both.
+  const restaurants = all.filter((r) => (r.kind ?? "restaurant") === "restaurant");
+  const stores = all.filter((r) => r.kind === "store");
   const onlineDriverCount = (await getOnlineDriverIds().catch(() => []))
     .length;
   return (
@@ -101,12 +105,72 @@ export default async function DeliverIndex() {
           })}
         </div>
 
+        {/* Convenience runs — separate visual section so customers
+            don't expect a full restaurant menu when tapping in.
+            Lower-margin loss-leaders to keep runners busy. */}
+        {stores.length > 0 && (
+          <div className="mt-10">
+            <div className="flex items-baseline justify-between mb-5">
+              <h2 className="font-display text-xl font-bold text-navy-900">
+                Convenience runs
+              </h2>
+              <p className="text-[10px] tracking-widest uppercase text-emerald-700 font-mono">
+                Beach-day essentials
+              </p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {stores.map((s) => {
+                const open = isOpenNow(s);
+                return (
+                  <Link
+                    key={s.id}
+                    href={`/deliver/${s.slug}`}
+                    className="block bg-white border border-sand-200 rounded-xl p-5 hover:border-emerald-400 hover:shadow-sm transition-all"
+                  >
+                    <div className="flex items-start justify-between gap-3 mb-2">
+                      <h3 className="font-display font-bold text-navy-900 text-lg leading-tight">
+                        {s.name}
+                      </h3>
+                      <span
+                        className={
+                          open
+                            ? "px-2 py-0.5 rounded text-[10px] font-bold tracking-widest uppercase bg-emerald-100 text-emerald-800 border border-emerald-200 flex-shrink-0"
+                            : "px-2 py-0.5 rounded text-[10px] font-bold tracking-widest uppercase bg-sand-100 text-navy-500 border border-sand-300 flex-shrink-0"
+                        }
+                      >
+                        {open ? "Open" : "Closed"}
+                      </span>
+                    </div>
+                    <p className="text-sm text-navy-600 font-light mb-3">
+                      {s.shortDescription}
+                    </p>
+                    <div className="flex flex-wrap gap-1">
+                      {s.cuisineTags.map((t) => (
+                        <span
+                          key={t}
+                          className="px-2 py-0.5 rounded text-[10px] font-mono uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200"
+                        >
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+            <p className="text-xs text-navy-500 font-light mt-3 italic">
+              Curated essentials only — not the full store. More items
+              coming as we see what you actually run for.
+            </p>
+          </div>
+        )}
+
         <div className="mt-12 bg-white border border-sand-200 rounded-xl p-6">
           <p className="text-[10px] font-bold tracking-widest uppercase text-coral-600 mb-2">
             How it works
           </p>
           <ol className="space-y-2 text-sm text-navy-700 font-light list-decimal list-inside">
-            <li>Pick a restaurant + build your order.</li>
+            <li>Pick a restaurant or convenience run + build your order.</li>
             <li>Pay through PAL — full retail + delivery + service + tip.</li>
             <li>
               Our local driver picks it up and brings it to your address.
@@ -116,7 +180,7 @@ export default async function DeliverIndex() {
             </li>
           </ol>
           <p className="text-xs text-navy-500 font-light mt-4">
-            Brand-new and small on purpose. Two restaurants tonight, more soon.
+            Brand-new and small on purpose. A few spots tonight, more soon.
             Hit any rough edges? Reply to your order receipt — we read every
             one.
           </p>

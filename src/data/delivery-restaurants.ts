@@ -77,6 +77,40 @@ export const RESTAURANTS: DeliveryRestaurant[] = [
     markupPct: 45,
     isActive: true,
   },
+  // ============================================================
+  // CONVENIENCE STORE (loss-leader runner-keep-busy track).
+  // Lower markup (20% vs 45%) — PAL takes less margin, runners
+  // still get their split, customers get convenience-priced
+  // essentials delivered. Same Stripe + runner + dispatch flow.
+  // ============================================================
+  {
+    id: "lowes-market-port-a",
+    slug: "lowes-market",
+    kind: "store",
+    name: "Lowe's Market — Port Aransas",
+    // TODO Winston: verify pickup address + phone + hours on first run.
+    // Best-guess from public knowledge — flag any drift.
+    pickupAddress: "611 N Alister St, Port Aransas, TX 78373",
+    pickupNotes:
+      "Tell the cashier it's a PAL Delivery pickup — we pre-bag essentials at the front register on arrival.",
+    phone: "(361) 749-6602",
+    shortDescription:
+      "Beach-house essentials in 30 minutes. Chips, sodas, paper towels, charcoal — quick runs without leaving the porch.",
+    cuisineTags: ["Convenience", "Essentials"],
+    accent: "#1f7a4d",
+    deliveryHours: [
+      // Generous 7am-10pm daily. Winston: confirm + adjust.
+      { day: "monday", open: "07:00", close: "21:00" },
+      { day: "tuesday", open: "07:00", close: "21:00" },
+      { day: "wednesday", open: "07:00", close: "21:00" },
+      { day: "thursday", open: "07:00", close: "21:00" },
+      { day: "friday", open: "07:00", close: "21:00" },
+      { day: "saturday", open: "07:00", close: "21:00" },
+      { day: "sunday", open: "07:00", close: "21:00" },
+    ],
+    markupPct: 20, // loss-leader rate vs restaurants at 45%
+    isActive: true,
+  },
 ];
 
 export const CATEGORIES: MenuCategory[] = [
@@ -92,6 +126,12 @@ export const CATEGORIES: MenuCategory[] = [
   { id: "dq-blizzards", restaurantId: "dq-port-a", name: "Blizzards", sort: 3 },
   { id: "dq-treats", restaurantId: "dq-port-a", name: "Cones, Sundaes & Shakes", sort: 4 },
   { id: "dq-drinks", restaurantId: "dq-port-a", name: "Drinks", sort: 5 },
+  // Lowe's Market — curated essentials only (not the full grocery store).
+  // Keeps the catalog tight + runs predictable. Add as demand justifies.
+  { id: "lm-snacks", restaurantId: "lowes-market-port-a", name: "Snacks", sort: 1 },
+  { id: "lm-drinks", restaurantId: "lowes-market-port-a", name: "Drinks", sort: 2 },
+  { id: "lm-beach", restaurantId: "lowes-market-port-a", name: "Beach Day", sort: 3 },
+  { id: "lm-paper", restaurantId: "lowes-market-port-a", name: "Paper & Cleaning", sort: 4 },
 ];
 
 /**
@@ -356,6 +396,133 @@ export const MENU_ITEMS: MenuItem[] = [
     basePriceCents: 295,
     isAvailable: true,
     sort: 1,
+  },
+
+  // ============================================================
+  // Lowe's Market — convenience essentials.
+  // basePriceCents = approximate retail at Lowe's. PAL applies the
+  // 20% loss-leader markup at display time. Verify on first run +
+  // adjust drift; absorb 2-3x small price changes via the markup.
+  // ============================================================
+  // Snacks
+  {
+    id: "lm-snack-chips",
+    restaurantId: "lowes-market-port-a",
+    categoryId: "lm-snacks",
+    name: "Chips (family bag)",
+    description: "Lay's, Doritos, Tostitos — pick what's in stock.",
+    basePriceCents: 549,
+    isAvailable: true,
+    sort: 1,
+  },
+  {
+    id: "lm-snack-candy-bar",
+    restaurantId: "lowes-market-port-a",
+    categoryId: "lm-snacks",
+    name: "Candy bars (3-pack)",
+    description: "Snickers / M&Ms / Hershey's — your call, runner picks.",
+    basePriceCents: 449,
+    isAvailable: true,
+    sort: 2,
+  },
+  {
+    id: "lm-snack-pretzels",
+    restaurantId: "lowes-market-port-a",
+    categoryId: "lm-snacks",
+    name: "Pretzels",
+    basePriceCents: 399,
+    isAvailable: true,
+    sort: 3,
+  },
+
+  // Drinks
+  {
+    id: "lm-drink-soda-12pk",
+    restaurantId: "lowes-market-port-a",
+    categoryId: "lm-drinks",
+    name: "Soda 12-pack",
+    description: "Coke / Diet Coke / Sprite / Dr Pepper — your pick.",
+    basePriceCents: 749,
+    isAvailable: true,
+    sort: 1,
+  },
+  {
+    id: "lm-drink-water-case",
+    restaurantId: "lowes-market-port-a",
+    categoryId: "lm-drinks",
+    name: "Bottled water (24-pack)",
+    basePriceCents: 599,
+    isAvailable: true,
+    sort: 2,
+  },
+  {
+    id: "lm-drink-gatorade",
+    restaurantId: "lowes-market-port-a",
+    categoryId: "lm-drinks",
+    name: "Gatorade (4-pack)",
+    description: "Lemon-lime, fruit punch, blue — runner picks.",
+    basePriceCents: 699,
+    isAvailable: true,
+    sort: 3,
+  },
+
+  // Beach Day
+  {
+    id: "lm-beach-charcoal",
+    restaurantId: "lowes-market-port-a",
+    categoryId: "lm-beach",
+    name: "Charcoal (10-lb bag)",
+    description: "Kingsford or store brand.",
+    basePriceCents: 1299,
+    isAvailable: true,
+    sort: 1,
+  },
+  {
+    id: "lm-beach-sunscreen",
+    restaurantId: "lowes-market-port-a",
+    categoryId: "lm-beach",
+    name: "Sunscreen (SPF 30+)",
+    basePriceCents: 1099,
+    isAvailable: true,
+    sort: 2,
+  },
+  {
+    id: "lm-beach-ice",
+    restaurantId: "lowes-market-port-a",
+    categoryId: "lm-beach",
+    name: "Bag of ice (10 lb)",
+    basePriceCents: 399,
+    isAvailable: true,
+    sort: 3,
+  },
+
+  // Paper & Cleaning
+  {
+    id: "lm-paper-towels",
+    restaurantId: "lowes-market-port-a",
+    categoryId: "lm-paper",
+    name: "Paper towels (6-pack)",
+    basePriceCents: 1099,
+    isAvailable: true,
+    sort: 1,
+  },
+  {
+    id: "lm-paper-tp",
+    restaurantId: "lowes-market-port-a",
+    categoryId: "lm-paper",
+    name: "Toilet paper (12-pack)",
+    basePriceCents: 1399,
+    isAvailable: true,
+    sort: 2,
+  },
+  {
+    id: "lm-paper-qtips",
+    restaurantId: "lowes-market-port-a",
+    categoryId: "lm-paper",
+    name: "Cotton swabs (Q-tips)",
+    basePriceCents: 449,
+    isAvailable: true,
+    sort: 3,
   },
 ];
 
