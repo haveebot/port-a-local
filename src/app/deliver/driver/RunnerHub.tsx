@@ -8,6 +8,7 @@ interface InitialStatus {
   onlineUntil: string | null;
   payoutsEnabled: boolean;
   hasStripeAccount: boolean;
+  firstDeliveryBonusEarned?: boolean;
 }
 
 interface FeedOrder {
@@ -44,6 +45,7 @@ interface Feed {
     todayCount: number;
     weekCents: number;
     weekCount: number;
+    allTimeCount: number;
   };
 }
 
@@ -219,6 +221,7 @@ export default function RunnerHub({
     todayCount: 0,
     weekCents: 0,
     weekCount: 0,
+    allTimeCount: 0,
   };
   const available = feed?.available ?? [];
   const active = feed?.active ?? [];
@@ -289,6 +292,128 @@ export default function RunnerHub({
                 ? "Go off duty"
                 : "I'm here — go on duty"}
           </button>
+        </section>
+
+        {/* Rewards ladder — Tier 1 is live (auto-fires via Stripe);
+            Tiers 2-4 are tracked but rewards deferred (per
+            "Runner Rewards Program — Design.md" in vault). Showing
+            the future tiers gives runners aspirational visibility
+            without committing to deliver them tonight. */}
+        <section className="bg-navy-800 border border-navy-700 rounded-2xl p-5">
+          <div className="flex items-baseline justify-between mb-4">
+            <p className="text-[10px] font-bold tracking-widest uppercase text-coral-300">
+              Rewards
+            </p>
+            <p className="text-[10px] text-sand-500 font-mono">
+              {earnings.allTimeCount} delivered
+            </p>
+          </div>
+          {(() => {
+            const tiers = [
+              {
+                threshold: 1,
+                label: "Welcome bonus",
+                reward: "$5 cash",
+                live: true,
+                earned:
+                  driver.firstDeliveryBonusEarned === true ||
+                  earnings.allTimeCount >= 1,
+              },
+              {
+                threshold: 10,
+                label: "Brand ambassador",
+                reward: "$25 + PAL shirt",
+                live: false,
+                earned: false,
+              },
+              {
+                threshold: 50,
+                label: "Loyalty tier",
+                reward: "$100 cash",
+                live: false,
+                earned: false,
+              },
+              {
+                threshold: 250,
+                label: "Apex tier",
+                reward: "Apple Watch",
+                live: false,
+                earned: false,
+              },
+            ];
+            return (
+              <div className="space-y-2.5">
+                {tiers.map((t) => {
+                  const progress = Math.min(
+                    earnings.allTimeCount / t.threshold,
+                    1,
+                  );
+                  const isCurrent =
+                    !t.earned && earnings.allTimeCount < t.threshold;
+                  return (
+                    <div key={t.threshold}>
+                      <div className="flex items-baseline justify-between gap-2 mb-1">
+                        <p className="text-sm">
+                          <span
+                            className={
+                              t.earned
+                                ? "font-display font-bold text-emerald-300"
+                                : "font-display font-bold text-sand-50"
+                            }
+                          >
+                            {t.earned ? "✓ " : ""}
+                            {t.threshold === 1
+                              ? "1st delivery"
+                              : `${t.threshold} deliveries`}
+                          </span>{" "}
+                          <span className="text-sand-400 font-light">
+                            · {t.reward}
+                          </span>
+                        </p>
+                        <p
+                          className={
+                            t.earned
+                              ? "text-[10px] font-bold tracking-widest uppercase text-emerald-300 font-mono"
+                              : t.live
+                                ? "text-[10px] font-bold tracking-widest uppercase text-coral-300 font-mono"
+                                : "text-[10px] font-bold tracking-widest uppercase text-sand-500 font-mono"
+                          }
+                        >
+                          {t.earned
+                            ? "Earned"
+                            : t.live
+                              ? "Live"
+                              : "Coming soon"}
+                        </p>
+                      </div>
+                      <div className="h-1.5 bg-navy-900 rounded-full overflow-hidden">
+                        <div
+                          className={
+                            t.earned
+                              ? "h-full bg-emerald-400"
+                              : isCurrent
+                                ? "h-full bg-coral-400"
+                                : "h-full bg-sand-700"
+                          }
+                          style={{ width: `${progress * 100}%` }}
+                        />
+                      </div>
+                      {isCurrent && (
+                        <p className="text-[11px] text-sand-400 font-mono mt-1">
+                          {earnings.allTimeCount} / {t.threshold}
+                        </p>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          })()}
+          <p className="text-[11px] text-sand-500 font-light italic mt-3">
+            Welcome bonus auto-paid to your bank on your first delivery.
+            Higher tiers tracked — we&apos;ll send rewards when the program
+            opens up.
+          </p>
         </section>
 
         {/* Payouts setup nudge if not done */}

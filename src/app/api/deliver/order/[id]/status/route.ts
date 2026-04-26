@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import {
+  getDeliveredCountForDriver,
   getDriverStatus,
   getOrder,
   hasDriverTransfer,
@@ -82,6 +83,13 @@ export async function POST(
     void triggerDriverPayout(order.id, driver.id, order.driverPayoutCents).catch(
       (err) => console.error("[deliver] driver payout transfer failed:", err),
     );
+    // First-delivery welcome bonus ($5). Idempotent — uses a custom
+    // ledger row keyed on driver-id so it can never fire twice for the
+    // same runner. Fires AFTER the order payout so the runner sees the
+    // bonus as a separate Stripe transfer line.
+    void triggerFirstDeliveryBonus(driver.id).catch((err) =>
+      console.error("[deliver] first-delivery bonus failed:", err),
+    );
   }
 
   return NextResponse.json({ ok: true, order });
@@ -137,6 +145,76 @@ async function triggerDriverPayout(
   } catch (err) {
     console.error(
       `[payout] Stripe transfer failed for order ${orderId}:`,
+      err instanceof Error ? err.message : err,
+    );
+  }
+}
+
+/**
+ * First-delivery welcome bonus — $5 to the runner's Stripe Connect
+ * balance after their first ever delivered order. Idempotent via a
+ * synthetic order_id ('bonus-first-{driverId}') in the existing
+ * transfer ledger; same row will only ever insert once.
+ *
+ * Skips if:
+ *   - Runner has already completed prior deliveries (we only count 1)
+ *   - Bonus already fired (synthetic id already in ledger)
+ *   - Stripe Connect not yet onboarded (will need manual backfill —
+ *     same as the regular payout case)
+ *
+ * Logs + swallows errors. Never throws — won't block the delivery.
+ */
+const FIRST_DELIVERY_BONUS_CENTS = 500;
+
+async function triggerFirstDeliveryBonus(driverId: string): Promise<void> {
+  const bonusOrderId = `bonus-first-${driverId}`;
+  if (await hasDriverTransfer(bonusOrderId)) {
+    // Already fired for this runner. No-op.
+    return;
+  }
+  const deliveredCount = await getDeliveredCountForDriver(driverId);
+  if (deliveredCount !== 1) {
+    // Either zero (somehow we got here too early) or 2+ (not their
+    // first). Either way: don't fire.
+    return;
+  }
+  const status = await getDriverStatus(driverId);
+  if (!status.stripeAccountId || !status.payoutsEnabled) {
+    console.log(
+      `[bonus] driver ${driverId} not Connect-onboarded — first-delivery bonus deferred`,
+    );
+    return;
+  }
+  if (!getDeliverStripeKey()) {
+    console.error("[bonus] STRIPE key missing for /deliver");
+    return;
+  }
+  const stripe = getDeliverStripe();
+  try {
+    const transfer = await stripe.transfers.create({
+      amount: FIRST_DELIVERY_BONUS_CENTS,
+      currency: "usd",
+      destination: status.stripeAccountId,
+      transfer_group: bonusOrderId,
+      metadata: {
+        bonus_kind: "first-delivery",
+        driver_id: driverId,
+        source: "pal-delivery-first-delivery-bonus",
+      },
+      description: "Welcome to PAL — first-delivery bonus 🎉",
+    });
+    await recordDriverTransfer(
+      bonusOrderId,
+      driverId,
+      transfer.id,
+      FIRST_DELIVERY_BONUS_CENTS,
+    );
+    console.log(
+      `[bonus] driver ${driverId} first-delivery $5 bonus → transfer ${transfer.id}`,
+    );
+  } catch (err) {
+    console.error(
+      `[bonus] Stripe transfer failed for driver ${driverId} first-delivery bonus:`,
       err instanceof Error ? err.message : err,
     );
   }

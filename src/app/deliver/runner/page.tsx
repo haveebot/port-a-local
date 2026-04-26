@@ -87,6 +87,16 @@ export default function RunnerSignup() {
             Average $25 order, $5 tip. Bigger orders, bigger tips, more
             money. Two runs an hour and you&apos;re at $30+/hour.
           </p>
+
+          {/* $5 first-delivery welcome bonus — auto-fires on first run. */}
+          <div className="mt-6 inline-flex items-center gap-3 px-5 py-2.5 rounded-xl bg-emerald-500/15 border border-emerald-500/40">
+            <span className="font-display text-xl font-bold text-emerald-300">
+              + $5
+            </span>
+            <span className="text-sm text-emerald-100 font-light">
+              welcome bonus on your first delivery — auto to your bank
+            </span>
+          </div>
         </div>
       </header>
 

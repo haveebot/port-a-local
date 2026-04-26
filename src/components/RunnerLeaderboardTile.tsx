@@ -37,9 +37,13 @@ export default async function RunnerLeaderboardTile() {
             <p className="text-[10px] tracking-[0.25em] uppercase text-coral-300 font-bold mb-2">
               PAL Delivery · Drive for us
             </p>
-            <h2 className="font-display text-2xl sm:text-3xl font-bold text-sand-50 mb-3 leading-tight">
+            <h2 className="font-display text-2xl sm:text-3xl font-bold text-sand-50 mb-2 leading-tight">
               Real cash. Your schedule. Your bank, every delivery.
             </h2>
+            <p className="text-sm text-emerald-300 font-bold mb-3">
+              <span className="font-display text-base">+ $5</span> welcome
+              bonus on your first delivery.
+            </p>
             <div className="flex flex-wrap items-baseline gap-x-5 gap-y-1 text-sm text-sand-300 font-light">
               {top && top.weekCents > 0 ? (
                 <span>

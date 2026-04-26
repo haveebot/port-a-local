@@ -511,6 +511,26 @@ export async function hasDriverTransfer(orderId: string): Promise<boolean> {
 }
 
 /**
+ * Count of completed deliveries by a runner. Used to detect first-
+ * delivery milestone for the welcome bonus, and could power further
+ * tiered rewards (10/50/250 milestones — currently deferred).
+ *
+ * Counts AFTER the current transition is recorded, so first delivery
+ * returns 1 not 0.
+ */
+export async function getDeliveredCountForDriver(
+  driverId: string,
+): Promise<number> {
+  await ensureSchema();
+  const { rows } = await sql`
+    SELECT COUNT(*) AS n
+    FROM delivery_orders
+    WHERE driver_id = ${driverId} AND status = 'delivered'
+  `;
+  return Number(rows[0]?.n ?? 0);
+}
+
+/**
  * One-off custom payouts (bonuses, profit-share, etc.) reuse the same
  * transfers table — distinguished by an order_id with the `custom-` prefix
  * vs. real orders which use `ord-`. Lets us share the idempotency table +
@@ -550,6 +570,9 @@ export interface LeaderboardEntry {
   weekCount: number;
   totalCents: number;
   totalCount: number;
+  /** Has this runner earned the $5 first-delivery welcome bonus?
+      Drives the small badge on the public leaderboard. */
+  welcomeBonusEarned: boolean;
 }
 
 export interface LeaderboardSummary {
@@ -595,6 +618,11 @@ export async function getLeaderboard(): Promise<LeaderboardSummary> {
     WITH numbered AS (
       SELECT id, ROW_NUMBER() OVER (ORDER BY applied_at ASC, id ASC) AS signup_num
       FROM delivery_drivers
+    ),
+    welcome_bonus AS (
+      SELECT driver_id, 1 AS earned
+      FROM delivery_driver_transfers
+      WHERE order_id LIKE 'bonus-first-%'
     )
     SELECT
       d.id, n.signup_num,
@@ -613,10 +641,12 @@ export async function getLeaderboard(): Promise<LeaderboardSummary> {
       COALESCE(SUM(o.driver_payout_cents) FILTER (
         WHERE o.status = 'delivered'
       ), 0) AS total_cents,
-      COUNT(*) FILTER (WHERE o.status = 'delivered') AS total_count
+      COUNT(*) FILTER (WHERE o.status = 'delivered') AS total_count,
+      MAX(wb.earned) AS welcome_bonus_earned
     FROM delivery_drivers d
     JOIN numbered n ON n.id = d.id
     LEFT JOIN delivery_orders o ON o.driver_id = d.id
+    LEFT JOIN welcome_bonus wb ON wb.driver_id = d.id
     WHERE d.is_active = TRUE
     GROUP BY d.id, n.signup_num
     ORDER BY week_cents DESC, total_cents DESC, n.signup_num ASC
@@ -632,6 +662,7 @@ export async function getLeaderboard(): Promise<LeaderboardSummary> {
       weekCount: Number(r.week_count ?? 0),
       totalCents: Number(r.total_cents ?? 0),
       totalCount: Number(r.total_count ?? 0),
+      welcomeBonusEarned: Number(r.welcome_bonus_earned ?? 0) === 1,
     };
   });
 

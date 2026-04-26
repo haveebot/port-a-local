@@ -42,7 +42,19 @@ export default async function RunnersLeaderboardPage() {
             screwing you on a bad week.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-3 justify-center mt-8">
+          {/* $5 first-delivery welcome bonus — auto-fires via Stripe
+              Connect on a runner's first delivered order. Marketing
+              callout up top so it's the first thing prospects see. */}
+          <div className="mt-7 inline-flex flex-col sm:flex-row items-center gap-2 sm:gap-3 px-5 py-3 rounded-2xl bg-emerald-500/15 border border-emerald-500/40">
+            <span className="font-display text-2xl font-bold text-emerald-300">
+              + $5
+            </span>
+            <span className="text-sm sm:text-base text-emerald-100 font-light">
+              welcome bonus on your first delivery — auto-paid to your bank
+            </span>
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-3 justify-center mt-7">
             <Link
               href="/deliver/runner"
               className="px-7 py-4 rounded-xl text-base font-bold bg-coral-500 hover:bg-coral-600 text-white"
@@ -171,6 +183,14 @@ export default async function RunnersLeaderboardPage() {
                     </div>
                     <div className="font-display font-bold text-base text-sand-50 truncate">
                       <span className="font-mono">Driver #{e.signupNumber}</span>
+                      {e.welcomeBonusEarned && (
+                        <span
+                          className="ml-2 inline-flex items-center px-1.5 py-0.5 rounded text-[9px] tracking-widest uppercase font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/40"
+                          title="Earned the $5 welcome bonus"
+                        >
+                          + $5
+                        </span>
+                      )}
                       {isLeader && (
                         <span className="ml-2 text-[10px] tracking-widest uppercase text-coral-300 font-mono">
                           ← leader
