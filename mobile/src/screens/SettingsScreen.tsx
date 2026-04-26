@@ -22,6 +22,12 @@ import {
   setApiUrl as saveApiUrl,
   clearAll,
 } from "../lib/storage";
+import {
+  isMockMode,
+  setMockMode,
+  resetMockTasks,
+  MOCK_WORKERS,
+} from "../lib/mock";
 
 export default function SettingsScreen() {
   const [name, setName] = useState("");
@@ -30,6 +36,7 @@ export default function SettingsScreen() {
   const [workerId, setWorkerIdState] = useState<string | null>(null);
   const [registering, setRegistering] = useState(false);
   const [registered, setRegistered] = useState(false);
+  const [mockOn, setMockOn] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -37,6 +44,7 @@ export default function SettingsScreen() {
       const savedName = await getWorkerName();
       const savedGroup = await getWorkerGroup();
       const savedUrl = await getApiUrl();
+      const mock = await isMockMode();
 
       if (id) {
         setWorkerIdState(id);
@@ -48,8 +56,43 @@ export default function SettingsScreen() {
         setApiUrlState(savedUrl);
         setApiBase(savedUrl);
       }
+      setMockOn(mock);
     })();
   }, []);
+
+  const signInAsMock = async (mockGroup: "runner" | "maintenance") => {
+    const worker = MOCK_WORKERS.find((w) => w.group_name === mockGroup);
+    if (!worker) return;
+    await setMockMode(true);
+    await setWorkerId(worker.id);
+    await saveWorkerName(worker.name);
+    await saveWorkerGroup(worker.group_name);
+    setMockOn(true);
+    setWorkerIdState(worker.id);
+    setName(worker.name);
+    setGroup(worker.group_name);
+    setRegistered(true);
+    Alert.alert(
+      "Signed in",
+      `You're now ${worker.name} (${worker.group_name}). Mock mode is on — all backend calls return seed data.`
+    );
+  };
+
+  const toggleMock = async (next: boolean) => {
+    await setMockMode(next);
+    setMockOn(next);
+    if (next) {
+      Alert.alert(
+        "Mock mode on",
+        "Tasks and workers come from local seed data. The server is not contacted."
+      );
+    } else {
+      Alert.alert(
+        "Mock mode off",
+        "Back to live server. You may need to re-register if the server doesn't know your worker id."
+      );
+    }
+  };
 
   const handleRegister = async () => {
     if (!name.trim()) {
@@ -115,6 +158,58 @@ export default function SettingsScreen() {
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Demo / Mock Mode</Text>
+        <Text style={styles.hint}>
+          Use seeded workers + tasks instead of the live server. Useful for
+          demos, App Review screenshots, and onboarding.
+        </Text>
+
+        <View style={[styles.mockToggle, mockOn && styles.mockToggleOn]}>
+          <Text style={styles.mockToggleLabel}>
+            Mock mode is {mockOn ? "ON" : "OFF"}
+          </Text>
+          <TouchableOpacity
+            style={styles.mockToggleButton}
+            onPress={() => toggleMock(!mockOn)}
+          >
+            <Text style={styles.mockToggleButtonText}>
+              {mockOn ? "Turn off" : "Turn on"}
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <Text style={[styles.label, { marginTop: 14 }]}>Quick sign-in</Text>
+        <View style={styles.mockRow}>
+          <TouchableOpacity
+            style={styles.mockButton}
+            onPress={() => signInAsMock("runner")}
+          >
+            <Text style={styles.mockButtonTitle}>🏃 Maya Cortez</Text>
+            <Text style={styles.mockButtonSubtitle}>Runner</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.mockButton}
+            onPress={() => signInAsMock("maintenance")}
+          >
+            <Text style={styles.mockButtonTitle}>🔧 Diego Alvarez</Text>
+            <Text style={styles.mockButtonSubtitle}>Maintenance</Text>
+          </TouchableOpacity>
+        </View>
+
+        {mockOn && (
+          <TouchableOpacity
+            style={styles.resetTasksButton}
+            onPress={() => {
+              resetMockTasks();
+              Alert.alert("Mock tasks reset", "Pull to refresh the lists.");
+            }}
+          >
+            <Text style={styles.resetTasksButtonText}>Reseed mock tasks</Text>
+          </TouchableOpacity>
+        )}
+      </View>
+
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Server Connection</Text>
         <Text style={styles.label}>API URL</Text>
@@ -296,4 +391,56 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   resetButtonText: { color: "#dc2626", fontWeight: "600", fontSize: 15 },
+  mockToggle: {
+    marginTop: 12,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    borderRadius: 10,
+    backgroundColor: "#f8fafc",
+    borderWidth: 1,
+    borderColor: "#e2e8f0",
+  },
+  mockToggleOn: { backgroundColor: "#fef3c7", borderColor: "#fcd34d" },
+  mockToggleLabel: { fontSize: 14, fontWeight: "700", color: "#1e293b" },
+  mockToggleButton: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 8,
+    backgroundColor: "#1e293b",
+  },
+  mockToggleButtonText: { color: "#fff", fontWeight: "700", fontSize: 13 },
+  mockRow: { flexDirection: "row", gap: 10, marginTop: 6 },
+  mockButton: {
+    flex: 1,
+    paddingVertical: 14,
+    paddingHorizontal: 12,
+    borderRadius: 10,
+    backgroundColor: "#f8fafc",
+    borderWidth: 1,
+    borderColor: "#e2e8f0",
+    alignItems: "center",
+  },
+  mockButtonTitle: { fontSize: 14, fontWeight: "700", color: "#1e293b" },
+  mockButtonSubtitle: {
+    fontSize: 11,
+    fontWeight: "600",
+    color: "#64748b",
+    marginTop: 2,
+    letterSpacing: 0.5,
+  },
+  resetTasksButton: {
+    marginTop: 12,
+    paddingVertical: 10,
+    alignItems: "center",
+    borderRadius: 8,
+    backgroundColor: "#f1f5f9",
+  },
+  resetTasksButtonText: {
+    color: "#475569",
+    fontWeight: "600",
+    fontSize: 13,
+  },
 });
