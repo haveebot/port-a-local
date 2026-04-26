@@ -74,6 +74,12 @@ export default async function WheelhousePage({
           </Link>
           <div className="flex items-center gap-4 text-sm">
             <Link
+              href="/wheelhouse/payouts"
+              className="text-xs text-navy-300 hover:text-coral-300 underline decoration-navy-500 hover:decoration-coral-400"
+            >
+              Payouts
+            </Link>
+            <Link
               href="/wheelhouse/welcome"
               className="text-xs text-navy-300 hover:text-coral-300 underline decoration-navy-500 hover:decoration-coral-400"
             >

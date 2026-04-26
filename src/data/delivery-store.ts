@@ -443,6 +443,40 @@ export async function hasDriverTransfer(orderId: string): Promise<boolean> {
   return rows.length > 0;
 }
 
+/**
+ * One-off custom payouts (bonuses, profit-share, etc.) reuse the same
+ * transfers table — distinguished by an order_id with the `custom-` prefix
+ * vs. real orders which use `ord-`. Lets us share the idempotency table +
+ * audit trail without a schema fork.
+ */
+export interface CustomPayoutRecord {
+  customId: string;
+  driverId: string;
+  transferId: string;
+  amountCents: number;
+  createdAt: string;
+}
+
+export async function listCustomPayouts(
+  limit = 20,
+): Promise<CustomPayoutRecord[]> {
+  await ensureSchema();
+  const { rows } = await sql`
+    SELECT order_id, driver_id, stripe_transfer_id, amount_cents, created_at
+    FROM delivery_driver_transfers
+    WHERE order_id LIKE 'custom-%'
+    ORDER BY created_at DESC
+    LIMIT ${limit}
+  `;
+  return rows.map((r) => ({
+    customId: r.order_id as string,
+    driverId: r.driver_id as string,
+    transferId: r.stripe_transfer_id as string,
+    amountCents: r.amount_cents as number,
+    createdAt: new Date(r.created_at as string).toISOString(),
+  }));
+}
+
 function newId(): string {
   return `ord-${Date.now().toString(36)}-${Math.random()
     .toString(36)

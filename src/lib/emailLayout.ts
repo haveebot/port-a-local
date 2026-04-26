@@ -116,7 +116,7 @@ export function emailLayout({
         <table role="presentation" width="560" cellspacing="0" cellpadding="0" border="0" style="max-width:560px; width:100%;">
           <tr>
             <td style="padding: 16px 16px 0 16px; font-size: 11px; color: #8896ab; text-align: center; line-height: 1.5;">
-              This message was sent by Port A Local · Palm Family Ventures, LLC · Port Aransas, TX
+              This message was sent by Port A Local · Port Aransas, TX
             </td>
           </tr>
         </table>

@@ -11,8 +11,8 @@
  * provider quotes + transacts directly. Beta until volume justifies
  * formalized booking + Stripe.
  *
- * Off-limits to /locals: anything overlapping John Brown's Maintenance
- * department (plumbing, electrical, AC, hurricane prep, locks, general
+ * Off-limits to /locals: anything overlapping our maintenance vendor's
+ * domain (plumbing, electrical, AC, hurricane prep, locks, general
  * repair, pool/lawn). Those go through /maintenance.
  */
 

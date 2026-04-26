@@ -7,7 +7,7 @@ const ADMIN_PHONE = process.env.ADMIN_PHONE || "";
 const INTERNAL_EMAIL = process.env.INTERNAL_ALERT_EMAIL || "";
 const RESEND_KEY = process.env.RESEND_API_KEY || "";
 
-// John Brown is SMS-only by design — vendor doesn't take email.
+// Maintenance vendor is SMS-only by design — doesn't take email.
 // All maintenance internal emails go to INTERNAL_ALERT_EMAIL for records.
 
 function urgencyLabel(u: string) {
@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
 
   const urgencyText = urgencyLabel(urgency);
 
-  // --- SMS to John Brown ---
+  // --- SMS to maintenance vendor ---
   const smsBody = `PORT A LOCAL — New Maintenance Request\n${urgencyText}\n\nFrom: ${name}\nPhone: ${phone}\nAddress: ${address}\nService: ${serviceType}\n\n"${description.slice(0, 120)}${description.length > 120 ? "..." : ""}"\n\nReply or call customer directly.`;
 
   const vendorHtml = emailLayout({
@@ -91,9 +91,9 @@ export async function POST(req: NextRequest) {
   // SMS confirmation to customer — only if they opted in via the form checkbox.
   const customerSMS = `Port A Local: We received your maintenance request for "${serviceType}" at ${address}. Our team will be in touch shortly. Reply STOP to opt out.`;
 
-  console.log(`[Maintenance] Customer phone raw: "${phone}" | John phone: "${JOHN_PHONE}" | smsConsent: ${smsConsent}`);
+  console.log(`[Maintenance] Customer phone raw: "${phone}" | vendor phone: "${JOHN_PHONE}" | smsConsent: ${smsConsent}`);
 
-  // Vendor / internal-ops SMS (John Brown + admin) always fires — internal B2B, not consumer.
+  // Vendor / internal-ops SMS (maintenance vendor + admin) always fires — internal B2B, not consumer.
   // Customer SMS is gated on smsConsent === true (collected via the opt-in checkbox).
   await Promise.allSettled([
     sendSms(JOHN_PHONE, smsBody),

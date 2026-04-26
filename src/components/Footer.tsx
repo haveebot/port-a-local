@@ -189,6 +189,17 @@ export default function Footer() {
                   Send a Tip
                 </a>
               </li>
+              <li>
+                <Link
+                  href="/wheelhouse"
+                  className="text-navy-300 hover:text-coral-300 transition-colors text-sm"
+                >
+                  The Wheelhouse
+                  <span className="text-[10px] text-navy-500 ml-1.5 tracking-wider">
+                    (internal)
+                  </span>
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
@@ -205,7 +216,7 @@ export default function Footer() {
           <div className="flex items-center gap-3 text-[10px] font-mono tracking-[0.15em] text-navy-500 uppercase">
             <span>Est. 2026</span>
             <span className="w-1 h-1 rounded-full bg-coral-500" />
-            <span>Palm Family Ventures, LLC</span>
+            <span>Independent · Local-owned</span>
           </div>
         </div>
 

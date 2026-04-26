@@ -12,7 +12,7 @@ const ADMIN_PHONE = process.env.ADMIN_PHONE || "";
 const INTERNAL_EMAIL = process.env.INTERNAL_ALERT_EMAIL || "";
 const RESEND_KEY = process.env.RESEND_API_KEY || "";
 
-// John Brown is SMS-only by design — vendor doesn't take email.
+// Maintenance vendor is SMS-only by design — doesn't take email.
 // All maintenance internal emails go to INTERNAL_ALERT_EMAIL for records.
 
 async function sendEmail(to: string, subject: string, html: string) {
@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
     const m = session.metadata || {};
     const { name, phone, email, address, serviceType, description, urgency, contactPref, dispatchFee, smsConsent } = m;
 
-    // --- Priority SMS to John — marked clearly as paid dispatch ---
+    // --- Priority SMS to maintenance vendor — marked clearly as paid dispatch ---
     const smsPriority = `🚨 PRIORITY DISPATCH — PORT A LOCAL\n$${dispatchFee} paid. Respond within 4 hours.\n\nFrom: ${name}\nPhone: ${phone}\nAddress: ${address}\nService: ${serviceType}\n\n"${description?.slice(0, 100)}${(description?.length || 0) > 100 ? "..." : ""}"\n\nPreferred contact: ${contactPref}`;
 
     const vendorHtml = emailLayout({
