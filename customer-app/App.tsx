@@ -18,8 +18,15 @@ import ServicesHubScreen from "./src/screens/ServicesHubScreen";
 import ServiceWebScreen from "./src/screens/ServiceWebScreen";
 import SearchScreen from "./src/screens/SearchScreen";
 import AccountScreen from "./src/screens/AccountScreen";
+import DeliverHomeScreen from "./src/screens/DeliverHomeScreen";
+import RestaurantScreen from "./src/screens/RestaurantScreen";
+import CartScreen from "./src/screens/CartScreen";
+import CheckoutScreen from "./src/screens/CheckoutScreen";
+import PayWebScreen from "./src/screens/PayWebScreen";
+import OrderSuccessScreen from "./src/screens/OrderSuccessScreen";
 
 import { registerForPushNotificationsAsync } from "./src/lib/notifications";
+import { CartProvider } from "./src/lib/cart";
 import { colors } from "./src/lib/theme";
 import {
   BrowseStackParamList,
@@ -74,6 +81,36 @@ function ServicesStackNav() {
         name="Service"
         component={ServiceWebScreen}
         options={{ title: "" }}
+      />
+      <ServicesStack.Screen
+        name="DeliverHome"
+        component={DeliverHomeScreen}
+        options={{ title: "Delivery" }}
+      />
+      <ServicesStack.Screen
+        name="Restaurant"
+        component={RestaurantScreen}
+        options={{ title: "" }}
+      />
+      <ServicesStack.Screen
+        name="Cart"
+        component={CartScreen}
+        options={{ title: "Your Cart" }}
+      />
+      <ServicesStack.Screen
+        name="Checkout"
+        component={CheckoutScreen}
+        options={{ title: "Checkout" }}
+      />
+      <ServicesStack.Screen
+        name="PayWeb"
+        component={PayWebScreen}
+        options={{ title: "Payment" }}
+      />
+      <ServicesStack.Screen
+        name="OrderSuccess"
+        component={OrderSuccessScreen}
+        options={{ title: "Order Placed" }}
       />
     </ServicesStack.Navigator>
   );
@@ -172,7 +209,7 @@ export default function App() {
   }, []);
 
   return (
-    <>
+    <CartProvider>
       <StatusBar style="light" />
       <NavigationContainer ref={navigationRef} theme={navTheme} linking={linking}>
         <Tab.Navigator
@@ -230,6 +267,6 @@ export default function App() {
           />
         </Tab.Navigator>
       </NavigationContainer>
-    </>
+    </CartProvider>
   );
 }

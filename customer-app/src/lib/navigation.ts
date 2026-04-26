@@ -1,4 +1,4 @@
-import type { Business } from "../data/businesses";
+import type { Business } from "@palocal/data/businesses";
 
 export type BrowseStackParamList = {
   Home: undefined;
@@ -10,6 +10,13 @@ export type BrowseStackParamList = {
 export type ServicesStackParamList = {
   ServicesHub: undefined;
   Service: { slug: ServiceSlug };
+  // Native deliver flow
+  DeliverHome: undefined;
+  Restaurant: { slug: string };
+  Cart: undefined;
+  Checkout: undefined;
+  PayWeb: { url: string; orderId: string };
+  OrderSuccess: { orderId: string };
 };
 
 export type AccountStackParamList = {

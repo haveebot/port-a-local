@@ -11,8 +11,8 @@ import { Ionicons } from "@expo/vector-icons";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
 import { colors } from "../lib/theme";
-import { categories } from "../data/categories";
-import { businesses } from "../data/businesses";
+import { categories } from "@palocal/data/categories";
+import { businesses } from "@palocal/data/businesses";
 import { BrowseStackParamList, SERVICES } from "../lib/navigation";
 
 type Nav = NativeStackScreenProps<BrowseStackParamList, "Home">["navigation"];
@@ -66,12 +66,12 @@ export default function HomeScreen({ navigation }: Props) {
               style={styles.serviceCard}
               activeOpacity={0.85}
               onPress={() =>
-                navigation
-                  .getParent()
-                  ?.navigate("Services", {
-                    screen: "Service",
-                    params: { slug: s.slug },
-                  })
+                navigation.getParent()?.navigate(
+                  "Services",
+                  s.slug === "deliver"
+                    ? { screen: "DeliverHome" }
+                    : { screen: "Service", params: { slug: s.slug } }
+                )
               }
             >
               <View

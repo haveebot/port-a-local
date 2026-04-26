@@ -8,8 +8,8 @@ import {
 } from "react-native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { colors } from "../lib/theme";
-import { businesses, Business } from "../data/businesses";
-import { getCategoryBySlug } from "../data/categories";
+import { businesses, Business } from "@palocal/data/businesses";
+import { getCategoryBySlug } from "@palocal/data/categories";
 import { BrowseStackParamList } from "../lib/navigation";
 
 type Props = NativeStackScreenProps<BrowseStackParamList, "Category">;

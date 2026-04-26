@@ -20,7 +20,8 @@
           "icon": "./assets/icon.png",
           "color": "#e8656f"
         }
-      ]
+      ],
+      "expo-apple-authentication"
     ],
     "ios": {
       "supportsTablet": true,
@@ -32,7 +33,8 @@
         "NSCameraUsageDescription": "Port A Local can attach photos to maintenance requests so vendors know what to expect.",
         "NSPhotoLibraryUsageDescription": "Port A Local can attach photos to maintenance requests so vendors know what to expect."
       },
-      "associatedDomains": ["applinks:port-a-local.vercel.app", "applinks:theportalocal.com"]
+      "associatedDomains": ["applinks:port-a-local.vercel.app", "applinks:theportalocal.com"],
+      "usesAppleSignIn": true
     },
     "android": {
       "adaptiveIcon": {

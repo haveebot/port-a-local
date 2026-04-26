@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -6,10 +6,19 @@ import {
   TouchableOpacity,
   StyleSheet,
   Linking,
+  Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import * as AppleAuthentication from "expo-apple-authentication";
 import { colors } from "../lib/theme";
 import { webUrl } from "../lib/config";
+import {
+  loadSession,
+  signInWithApple,
+  clearSession,
+  isAppleAuthAvailable,
+  type CustomerSession,
+} from "../lib/auth";
 
 interface RowProps {
   icon: string;
@@ -33,7 +42,7 @@ function Row({ icon, label, sublabel, onPress, accent }: RowProps) {
         ]}
       >
         <Ionicons
-          name={icon as any}
+          name={icon as never}
           size={18}
           color={accent ? "#fff" : colors.navy[700]}
         />
@@ -48,6 +57,50 @@ function Row({ icon, label, sublabel, onPress, accent }: RowProps) {
 }
 
 export default function AccountScreen() {
+  const [session, setSession] = useState<CustomerSession | null>(null);
+  const [authAvailable, setAuthAvailable] = useState(false);
+  const [signingIn, setSigningIn] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      setAuthAvailable(await isAppleAuthAvailable());
+      setSession(await loadSession());
+    })();
+  }, []);
+
+  const handleSignIn = async () => {
+    setSigningIn(true);
+    try {
+      const s = await signInWithApple();
+      setSession(s);
+    } catch (err: unknown) {
+      const e = err as { code?: string; message?: string };
+      if (e?.code !== "ERR_REQUEST_CANCELED") {
+        Alert.alert("Sign-In Failed", e?.message ?? "Try again.");
+      }
+    } finally {
+      setSigningIn(false);
+    }
+  };
+
+  const handleSignOut = () => {
+    Alert.alert("Sign Out?", "You'll go back to browsing as a guest.", [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Sign Out",
+        style: "destructive",
+        onPress: async () => {
+          await clearSession();
+          setSession(null);
+        },
+      },
+    ]);
+  };
+
+  const greeting = session?.displayName
+    ? `Hi, ${session.displayName.split(" ")[0]}.`
+    : "Welcome to Port A.";
+
   return (
     <ScrollView
       style={styles.container}
@@ -55,21 +108,58 @@ export default function AccountScreen() {
     >
       <View style={styles.header}>
         <Text style={styles.eyebrow}>YOUR ISLAND</Text>
-        <Text style={styles.title}>Welcome to Port A.</Text>
+        <Text style={styles.title}>{greeting}</Text>
         <View style={styles.coralLine} />
         <Text style={styles.sub}>
-          Sign in to track orders, save favorite spots, and get push updates from local runners.
+          {session
+            ? "You're signed in. Your orders, favorites, and saved addresses sync across devices."
+            : "Sign in to track orders, save favorite spots, and get push updates from local runners."}
         </Text>
       </View>
 
       <View style={styles.section}>
-        <TouchableOpacity style={styles.signinButton} activeOpacity={0.85}>
-          <Ionicons name="logo-apple" size={18} color="#fff" />
-          <Text style={styles.signinText}>Sign in with Apple</Text>
-        </TouchableOpacity>
-        <Text style={styles.signinHint}>
-          Sign-in is optional — you can order as a guest.
-        </Text>
+        {session ? (
+          <View style={styles.signedInCard}>
+            <Ionicons
+              name="checkmark-circle"
+              size={28}
+              color={colors.seafoam[500]}
+            />
+            <View style={{ flex: 1, marginLeft: 12 }}>
+              <Text style={styles.signedInLabel}>Signed in with Apple</Text>
+              {session.email && (
+                <Text style={styles.signedInEmail}>{session.email}</Text>
+              )}
+            </View>
+            <TouchableOpacity onPress={handleSignOut}>
+              <Text style={styles.signOutLink}>Sign out</Text>
+            </TouchableOpacity>
+          </View>
+        ) : authAvailable ? (
+          <>
+            <AppleAuthentication.AppleAuthenticationButton
+              buttonType={
+                AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN
+              }
+              buttonStyle={
+                AppleAuthentication.AppleAuthenticationButtonStyle.BLACK
+              }
+              cornerRadius={12}
+              style={styles.appleButton}
+              onPress={handleSignIn}
+            />
+            <Text style={styles.signinHint}>
+              {signingIn
+                ? "Signing in..."
+                : "Sign-in is optional — you can order as a guest."}
+            </Text>
+          </>
+        ) : (
+          <Text style={styles.signinHint}>
+            Apple Sign-In isn&apos;t available on this device. Continue as a
+            guest.
+          </Text>
+        )}
       </View>
 
       <View style={styles.section}>
@@ -204,6 +294,34 @@ const styles = StyleSheet.create({
     borderColor: colors.sand[200],
     overflow: "hidden",
   },
+  signedInCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#fff",
+    borderRadius: 14,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: colors.sand[200],
+  },
+  signedInLabel: {
+    fontSize: 14,
+    fontWeight: "700",
+    color: colors.navy[900],
+  },
+  signedInEmail: {
+    fontSize: 12,
+    color: colors.navy[500],
+    marginTop: 2,
+  },
+  signOutLink: {
+    fontSize: 13,
+    fontWeight: "600",
+    color: colors.coral[600],
+  },
+  appleButton: {
+    height: 50,
+    width: "100%",
+  },
   row: {
     flexDirection: "row",
     alignItems: "center",
@@ -225,17 +343,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.sand[100],
     marginLeft: 60,
   },
-  signinButton: {
-    backgroundColor: colors.navy[950],
-    paddingVertical: 14,
-    paddingHorizontal: 16,
-    borderRadius: 12,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 8,
-  },
-  signinText: { color: "#fff", fontWeight: "700", fontSize: 15 },
   signinHint: {
     color: colors.navy[400],
     fontSize: 12,

@@ -11,7 +11,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { colors } from "../lib/theme";
-import { businesses } from "../data/businesses";
+import { businesses } from "@palocal/data/businesses";
 import { BrowseStackParamList } from "../lib/navigation";
 
 type Props = NativeStackScreenProps<BrowseStackParamList, "Business">;

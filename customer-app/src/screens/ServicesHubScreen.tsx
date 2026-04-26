@@ -52,7 +52,9 @@ export default function ServicesHubScreen({ navigation }: Props) {
             style={styles.card}
             activeOpacity={0.85}
             onPress={() =>
-              navigation.navigate("Service", { slug: s.slug })
+              s.slug === "deliver"
+                ? navigation.navigate("DeliverHome")
+                : navigation.navigate("Service", { slug: s.slug })
             }
           >
             <View

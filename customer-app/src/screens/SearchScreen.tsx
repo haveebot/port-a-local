@@ -11,8 +11,8 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { colors } from "../lib/theme";
-import { businesses, Business } from "../data/businesses";
-import { categories } from "../data/categories";
+import { businesses, Business } from "@palocal/data/businesses";
+import { categories } from "@palocal/data/categories";
 
 const SUGGESTIONS = [
   "fish tacos",
