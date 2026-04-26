@@ -100,7 +100,9 @@ interface DriverEmailInput {
 async function sendDriverDispatchEmail(i: DriverEmailInput): Promise<void> {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) return;
-  const subject = `🚗 PAL Delivery — new order, ${i.payoutLabel} — ${i.restaurantName}`;
+  // Plain ASCII subject avoids Gmail's emoji-flag spam heuristics for new
+  // sender domains. Add emoji back once theportalocal.com has rep.
+  const subject = `New PAL Delivery order — ${i.payoutLabel} from ${i.restaurantName}`;
   const html = `
     <div style="font-family: Inter, system-ui, sans-serif; color: #1a2433; line-height: 1.5;">
       <p style="text-transform: uppercase; letter-spacing: 0.15em; font-size: 11px; color: #C84A2C; margin: 0 0 4px;">
@@ -130,15 +132,23 @@ async function sendDriverDispatchEmail(i: DriverEmailInput): Promise<void> {
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${apiKey}`,
+        Authorization: `Bearer ${apiKey.trim()}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         from: "PAL Delivery <bookings@theportalocal.com>",
         to: [i.to],
+        // Reply-to a real human inbox so replies don't bounce. Helps
+        // sender reputation too — Gmail favors mail with a real reply path.
+        reply_to: "hello@theportalocal.com",
         subject,
         html,
         text,
+        // X-Entity-Ref-ID makes Gmail group these as transactional rather
+        // than promotional. Different bucket, less likely to be flagged.
+        headers: {
+          "X-Entity-Ref-ID": `pal-deliver-dispatch`,
+        },
       }),
     });
     if (!res.ok) {

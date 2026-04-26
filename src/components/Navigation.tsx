@@ -226,6 +226,16 @@ export default function Navigation() {
               <PortalIcon name="services" className="w-3.5 h-3.5" />
               Services
             </Link>
+
+            {/* Runner home — for active runners. Page redirects unsigned-in
+                visitors to /lookup so it's harmless for non-runners. */}
+            <Link
+              href="/deliver/driver"
+              title="Runner home — your driver dashboard"
+              className="hidden lg:inline-flex items-center gap-1 px-3 py-2 rounded-full text-xs font-bold tracking-wide text-emerald-300 hover:text-emerald-200 border border-emerald-500/30 hover:border-emerald-500/50 hover:bg-emerald-500/10 transition-all"
+            >
+              Runner →
+            </Link>
           </div>
 
           {/* Mobile toggle */}
@@ -293,9 +303,13 @@ export default function Navigation() {
               <PortalIcon name="eat" className="w-4 h-4 shrink-0" />
               Order food
             </Link>
+            <Link href="/deliver/driver" onClick={() => setMobileOpen(false)} className={`${mobileLinkClass} flex items-center gap-2`}>
+              <PortalIcon name="services" className="w-4 h-4 text-emerald-400 shrink-0" />
+              Runner home
+            </Link>
             <Link href="/deliver/runner" onClick={() => setMobileOpen(false)} className={`${mobileLinkClass} flex items-center gap-2`}>
               <PortalIcon name="services" className="w-4 h-4 text-coral-400 shrink-0" />
-              Drive for PAL
+              Drive for PAL (sign up)
             </Link>
 
             {/* Rentals vertical */}
