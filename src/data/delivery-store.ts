@@ -127,6 +127,18 @@ async function ensureSchema(): Promise<void> {
   await sql`CREATE INDEX IF NOT EXISTS delivery_drivers_token_idx ON delivery_drivers(token)`;
   await sql`CREATE INDEX IF NOT EXISTS delivery_drivers_is_active_idx ON delivery_drivers(is_active)`;
 
+  // License + insurance verification fields (added 2026-04-26).
+  // Two-stage model: applicant ACKNOWLEDGES (checkbox at signup) → admin
+  // VERIFIES after seeing photos (separate magic-link). Acknowledged but
+  // not verified is the normal interim state. Carrier name is collected
+  // for record-keeping; not validated against the actual carrier.
+  await sql`ALTER TABLE delivery_drivers ADD COLUMN IF NOT EXISTS license_acknowledged BOOLEAN NOT NULL DEFAULT FALSE`;
+  await sql`ALTER TABLE delivery_drivers ADD COLUMN IF NOT EXISTS insurance_acknowledged BOOLEAN NOT NULL DEFAULT FALSE`;
+  await sql`ALTER TABLE delivery_drivers ADD COLUMN IF NOT EXISTS insurance_carrier TEXT`;
+  await sql`ALTER TABLE delivery_drivers ADD COLUMN IF NOT EXISTS license_verified_at TIMESTAMPTZ`;
+  await sql`ALTER TABLE delivery_drivers ADD COLUMN IF NOT EXISTS insurance_verified_at TIMESTAMPTZ`;
+  await sql`ALTER TABLE delivery_drivers ADD COLUMN IF NOT EXISTS verified_by TEXT`;
+
   _schemaReady = true;
 }
 
@@ -149,6 +161,15 @@ export interface DriverRecord {
   approvedBy: string | null;
   rejectedAt: string | null;
   rejectedReason: string | null;
+  // License + insurance verification (v2 intake, 2026-04-26).
+  // Acknowledged = applicant attested at signup. Verified = admin confirmed
+  // after seeing photos via email. Both required for "fully verified" state.
+  licenseAcknowledged: boolean;
+  insuranceAcknowledged: boolean;
+  insuranceCarrier: string | null;
+  licenseVerifiedAt: string | null;
+  insuranceVerifiedAt: string | null;
+  verifiedBy: string | null;
 }
 
 function rowToDriver(row: Record<string, unknown>): DriverRecord {
@@ -173,6 +194,16 @@ function rowToDriver(row: Record<string, unknown>): DriverRecord {
       ? new Date(row.rejected_at as string).toISOString()
       : null,
     rejectedReason: (row.rejected_reason as string) ?? null,
+    licenseAcknowledged: row.license_acknowledged === true,
+    insuranceAcknowledged: row.insurance_acknowledged === true,
+    insuranceCarrier: (row.insurance_carrier as string) ?? null,
+    licenseVerifiedAt: row.license_verified_at
+      ? new Date(row.license_verified_at as string).toISOString()
+      : null,
+    insuranceVerifiedAt: row.insurance_verified_at
+      ? new Date(row.insurance_verified_at as string).toISOString()
+      : null,
+    verifiedBy: (row.verified_by as string) ?? null,
   };
 }
 
@@ -183,6 +214,11 @@ export interface CreateDriverInput {
   vehicle?: string;
   availability?: string;
   why?: string;
+  // Verification intake (v2). Optional for backward-compat with any
+  // older callers; required at the API boundary on /api/deliver/runner.
+  licenseAcknowledged?: boolean;
+  insuranceAcknowledged?: boolean;
+  insuranceCarrier?: string;
 }
 
 function newDriverId(): string {
@@ -208,7 +244,8 @@ export async function createDriverApplication(
   await sql`
     INSERT INTO delivery_drivers (
       id, name, phone, email, token, is_active,
-      vehicle, availability, why
+      vehicle, availability, why,
+      license_acknowledged, insurance_acknowledged, insurance_carrier
     ) VALUES (
       ${id},
       ${input.name},
@@ -218,7 +255,10 @@ export async function createDriverApplication(
       FALSE,
       ${input.vehicle ?? null},
       ${input.availability ?? null},
-      ${input.why ?? null}
+      ${input.why ?? null},
+      ${input.licenseAcknowledged === true},
+      ${input.insuranceAcknowledged === true},
+      ${input.insuranceCarrier ?? null}
     )
   `;
   const driver = await getDriverById(id);
@@ -289,6 +329,33 @@ export async function approveDriver(
         rejected_reason = NULL
     WHERE id = ${id}
   `;
+  return getDriverById(id);
+}
+
+/**
+ * Mark license OR insurance verified by admin. Idempotent — re-marking
+ * just refreshes the timestamp + verified_by trail.
+ */
+export async function markDriverVerified(
+  id: string,
+  kind: "license" | "insurance",
+  verifiedBy: string,
+): Promise<DriverRecord | null> {
+  await ensureSchema();
+  const now = new Date().toISOString();
+  if (kind === "license") {
+    await sql`
+      UPDATE delivery_drivers
+      SET license_verified_at = ${now}, verified_by = ${verifiedBy}
+      WHERE id = ${id}
+    `;
+  } else {
+    await sql`
+      UPDATE delivery_drivers
+      SET insurance_verified_at = ${now}, verified_by = ${verifiedBy}
+      WHERE id = ${id}
+    `;
+  }
   return getDriverById(id);
 }
 
@@ -459,8 +526,16 @@ export interface CustomPayoutRecord {
 
 /**
  * Public leaderboard data. Aggregates per-runner delivery totals across
- * today / last 7 days / all time. First-name only on entries (small-town
- * privacy default; full name only ever surfaces in admin contexts).
+ * today / last 7 days / all time. Identifies runners by stable signup
+ * number ("Driver #1", "Driver #5") rather than name — preserves privacy
+ * at the customer-facing surface AND gives us a clean internal-reference
+ * shorthand when discussing specific runners.
+ *
+ * Signup numbers are computed at query time via ROW_NUMBER() OVER (ORDER
+ * BY applied_at) across ALL drivers — including rejected/inactive ones —
+ * so a rejected driver between two active ones reserves their slot
+ * forever. No reuse, ever. Stable for as long as applied_at doesn't
+ * change, which it doesn't.
  *
  * Returns ALL active runners — the page filters to those with deliveries
  * for the leaderboard row but keeps the active count for the header
@@ -468,7 +543,7 @@ export interface CustomPayoutRecord {
  */
 export interface LeaderboardEntry {
   driverId: string;
-  firstName: string;
+  signupNumber: number;
   todayCents: number;
   todayCount: number;
   weekCents: number;
@@ -513,9 +588,16 @@ export async function getLeaderboard(): Promise<LeaderboardSummary> {
     Date.now() - 7 * 24 * 60 * 60 * 1000,
   ).toISOString();
 
+  // Two-step query: (1) number ALL applicants by applied_at — including
+  // rejected ones, so they hold their slot forever; (2) join active
+  // drivers + their delivery aggregations against that numbered set.
   const { rows } = await sql`
+    WITH numbered AS (
+      SELECT id, ROW_NUMBER() OVER (ORDER BY applied_at ASC, id ASC) AS signup_num
+      FROM delivery_drivers
+    )
     SELECT
-      d.id, d.name,
+      d.id, n.signup_num,
       COALESCE(SUM(o.driver_payout_cents) FILTER (
         WHERE o.status = 'delivered' AND o.delivered_at >= ${startOfTodayCt}
       ), 0) AS today_cents,
@@ -533,18 +615,17 @@ export async function getLeaderboard(): Promise<LeaderboardSummary> {
       ), 0) AS total_cents,
       COUNT(*) FILTER (WHERE o.status = 'delivered') AS total_count
     FROM delivery_drivers d
+    JOIN numbered n ON n.id = d.id
     LEFT JOIN delivery_orders o ON o.driver_id = d.id
     WHERE d.is_active = TRUE
-    GROUP BY d.id, d.name
-    ORDER BY week_cents DESC, total_cents DESC, d.name ASC
+    GROUP BY d.id, n.signup_num
+    ORDER BY week_cents DESC, total_cents DESC, n.signup_num ASC
   `;
 
   const entries: LeaderboardEntry[] = rows.map((r) => {
-    const fullName = (r.name as string) ?? "";
-    const firstName = fullName.split(" ")[0] || "Runner";
     return {
       driverId: r.id as string,
-      firstName,
+      signupNumber: Number(r.signup_num ?? 0),
       todayCents: Number(r.today_cents ?? 0),
       todayCount: Number(r.today_count ?? 0),
       weekCents: Number(r.week_cents ?? 0),

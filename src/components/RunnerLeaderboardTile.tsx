@@ -44,8 +44,8 @@ export default async function RunnerLeaderboardTile() {
               {top && top.weekCents > 0 ? (
                 <span>
                   Top runner this week:{" "}
-                  <span className="font-display font-bold text-emerald-300">
-                    {top.firstName}
+                  <span className="font-mono font-bold text-emerald-300">
+                    Driver #{top.signupNumber}
                   </span>{" "}
                   ·{" "}
                   <span className="font-mono font-bold text-emerald-300">

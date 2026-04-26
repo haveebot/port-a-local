@@ -120,7 +120,7 @@ export default async function RunnersLeaderboardPage() {
               This week&apos;s leaderboard
             </h2>
             <p className="text-[10px] tracking-widest uppercase text-coral-300 font-mono">
-              First name shown
+              Anonymous · numbered by signup
             </p>
           </div>
 
@@ -170,7 +170,7 @@ export default async function RunnersLeaderboardPage() {
                       {i + 1}
                     </div>
                     <div className="font-display font-bold text-base text-sand-50 truncate">
-                      {e.firstName}
+                      <span className="font-mono">Driver #{e.signupNumber}</span>
                       {isLeader && (
                         <span className="ml-2 text-[10px] tracking-widest uppercase text-coral-300 font-mono">
                           ← leader
