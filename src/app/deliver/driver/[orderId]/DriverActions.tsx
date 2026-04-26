@@ -50,23 +50,40 @@ export default function DriverActions({
 
   if (status === "delivered") {
     return (
-      <div className="bg-emerald-500/15 border border-emerald-500/40 rounded-xl p-5 text-center">
-        <p className="font-display text-xl font-bold text-emerald-300">
-          Delivered ✓
-        </p>
-        <p className="text-xs text-sand-400 mt-1">
-          Payout will hit your account at end-of-day.
-        </p>
+      <div className="space-y-3">
+        <div className="bg-emerald-500/15 border border-emerald-500/40 rounded-xl p-5 text-center">
+          <p className="font-display text-xl font-bold text-emerald-300">
+            Delivered ✓
+          </p>
+          <p className="text-xs text-sand-400 mt-1">
+            Payout hits your bank in 1-2 business days. Stripe handles it
+            automatically.
+          </p>
+        </div>
+        <a
+          href="/deliver/driver"
+          className="block w-full py-4 rounded-xl text-base font-bold text-center bg-navy-800 border border-navy-700 hover:border-coral-500/50 hover:bg-navy-700 text-sand-50"
+        >
+          ← Back to runner home
+        </a>
       </div>
     );
   }
 
   if (status === "canceled" || status === "refunded") {
     return (
-      <div className="bg-red-500/15 border border-red-500/40 rounded-xl p-5 text-center">
-        <p className="font-display text-xl font-bold text-red-300">
-          {status === "canceled" ? "Canceled" : "Refunded"}
-        </p>
+      <div className="space-y-3">
+        <div className="bg-red-500/15 border border-red-500/40 rounded-xl p-5 text-center">
+          <p className="font-display text-xl font-bold text-red-300">
+            {status === "canceled" ? "Canceled" : "Refunded"}
+          </p>
+        </div>
+        <a
+          href="/deliver/driver"
+          className="block w-full py-4 rounded-xl text-base font-bold text-center bg-navy-800 border border-navy-700 hover:border-coral-500/50 hover:bg-navy-700 text-sand-50"
+        >
+          ← Back to runner home
+        </a>
       </div>
     );
   }
@@ -97,13 +114,21 @@ export default function DriverActions({
 
   if (!isMine) {
     return (
-      <div className="bg-navy-800 border border-navy-700 rounded-xl p-5 text-center">
-        <p className="font-display text-base font-bold">
-          Already claimed by another driver
-        </p>
-        <p className="text-xs text-sand-400 mt-1">
-          Status: <span className="font-mono">{status}</span>
-        </p>
+      <div className="space-y-3">
+        <div className="bg-navy-800 border border-navy-700 rounded-xl p-5 text-center">
+          <p className="font-display text-base font-bold">
+            Already claimed by another runner
+          </p>
+          <p className="text-xs text-sand-400 mt-1">
+            Status: <span className="font-mono">{status}</span>
+          </p>
+        </div>
+        <a
+          href="/deliver/driver"
+          className="block w-full py-4 rounded-xl text-base font-bold text-center bg-navy-800 border border-navy-700 hover:border-coral-500/50 hover:bg-navy-700 text-sand-50"
+        >
+          ← Back to runner home
+        </a>
       </div>
     );
   }
