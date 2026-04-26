@@ -3,6 +3,9 @@ _Last updated: 2026-04-25_
 
 ## Live Features
 
+### Internal Operations
+- **The Wheelhouse** — internal coordination dashboard at `/wheelhouse` (cookie-gated humans + token-gated agents). Threads + messages, 24h activity ticker, PalStats public-traffic card, daily auto-Pulse digest cron. Full architecture: [[Wheelhouse Architecture]]
+
 ### Search & Discovery
 - **Gully** — "Just Gully It" site-wide search engine
   - Unified Fuse.js index: 140+ businesses + 17 heritage stories + ~405 menu items
