@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import LighthouseMark from "@/components/brand/LighthouseMark";
 import { getDeliverStripe, getDeliverStripeKey } from "@/lib/deliverStripe";
 import { getOrder, markOrderPaid } from "@/data/delivery-store";
 import { getRestaurant } from "@/data/delivery-restaurants";
@@ -87,9 +88,15 @@ export default async function SuccessPage({
       {isBeta && <PreviewBanner />}
       <header className="bg-navy-900 text-sand-100 border-b border-coral-500/20">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6">
-          <p className="text-[10px] tracking-widest uppercase text-coral-300 mb-1">
-            Port A Local · Delivery
-          </p>
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 text-[10px] tracking-widest uppercase text-coral-300 mb-2 hover:text-coral-200 transition-colors group"
+          >
+            <LighthouseMark size={14} variant="light" detail="icon" />
+            <span className="group-hover:underline decoration-coral-400/40">
+              Port A Local · Delivery
+            </span>
+          </Link>
           <h1 className="font-display text-2xl font-bold">
             {isBeta ? "Got it." : "Thanks!"}
           </h1>

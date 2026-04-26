@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import LighthouseMark from "@/components/brand/LighthouseMark";
 import RunnerSignupForm from "./RunnerSignupForm";
 import {
   DELIVERY_FEE_CENTS,
@@ -54,9 +55,15 @@ export default function RunnerSignup() {
       {/* HERO */}
       <header className="bg-navy-900 text-sand-100 border-b border-coral-500/20 relative overflow-hidden">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12 sm:py-16 relative">
-          <p className="text-[10px] tracking-widest uppercase text-coral-300 mb-2">
-            Port A Local · Run for PAL
-          </p>
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 text-[10px] tracking-widest uppercase text-coral-300 mb-3 hover:text-coral-200 transition-colors group"
+          >
+            <LighthouseMark size={16} variant="light" detail="icon" />
+            <span className="group-hover:underline decoration-coral-400/40">
+              Port A Local · Run for PAL
+            </span>
+          </Link>
           <h1 className="font-display text-4xl sm:text-6xl font-bold leading-[1.05] tracking-tight">
             Make beach-day money
             <br />

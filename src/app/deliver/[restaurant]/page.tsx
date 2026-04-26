@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import LighthouseMark from "@/components/brand/LighthouseMark";
 import {
   customerPrice,
   getCategoriesFor,
@@ -57,12 +58,22 @@ export default async function RestaurantPage({
         style={{ borderTopColor: r.accent ?? "#C84A2C", borderTopWidth: 4 }}
       >
         <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6">
-          <Link
-            href="/deliver"
-            className="text-xs text-navy-500 hover:text-coral-600 underline decoration-sand-300 mb-2 inline-block"
-          >
-            ← All restaurants
-          </Link>
+          <div className="flex items-center gap-3 mb-2 flex-wrap">
+            <Link
+              href="/"
+              className="inline-flex items-center gap-1.5 text-[10px] tracking-widest uppercase text-navy-400 hover:text-coral-600 transition-colors"
+            >
+              <LighthouseMark size={14} variant="dark" detail="icon" />
+              Port A Local
+            </Link>
+            <span className="text-navy-300">·</span>
+            <Link
+              href="/deliver"
+              className="text-xs text-navy-500 hover:text-coral-600 underline decoration-sand-300"
+            >
+              ← All restaurants
+            </Link>
+          </div>
           <div className="flex items-start justify-between gap-3">
             <div>
               <h1 className="font-display text-2xl sm:text-3xl font-bold text-navy-900">

@@ -201,7 +201,7 @@ export default function Navigation() {
             {/* Divider */}
             <div className="w-px h-5 bg-white/15 mx-1" />
 
-            {/* Portal links */}
+            {/* Three-vertical portal cluster — cleaner than the previous 6-pill row */}
             <Link
               href="/deliver"
               className={`${portalLinkClass} inline-flex items-center gap-1.5`}
@@ -211,31 +211,20 @@ export default function Navigation() {
               Delivery
             </Link>
             <Link
-              href="/locals"
+              href="/rent"
               className={`${portalLinkClass} inline-flex items-center gap-1.5`}
-              title="PAL Locals — rent gear, hire services from locals"
+              title="PAL Rentals — golf carts, beach gear (more vendors coming)"
             >
-              <PortalIcon name="services" className="w-3.5 h-3.5" />
-              Locals
+              <PortalIcon name="cart" className="w-3.5 h-3.5" />
+              Rentals
             </Link>
             <Link
-              href="/deliver/runner"
-              title="Drive for PAL — sign up"
-              className="hidden lg:inline-flex items-center gap-1 px-3 py-2 rounded-full text-xs font-bold tracking-wide text-coral-300 hover:text-coral-200 border border-coral-500/30 hover:border-coral-500/50 hover:bg-coral-500/10 transition-all"
+              href="/locals"
+              className={`${portalLinkClass} inline-flex items-center gap-1.5`}
+              title="PAL Services — hire locals for photography, captains, cleaning, errands"
             >
-              Drive →
-            </Link>
-            <Link href="/beach" className={`${portalLinkClass} inline-flex items-center gap-1.5`}>
-              <PortalIcon name="beach" className="w-3.5 h-3.5" />
-              Beach
-            </Link>
-            <Link href="/rent" className={`${portalLinkClass} inline-flex items-center gap-1.5`}>
-              <PortalIcon name="cart" className="w-3.5 h-3.5" />
-              Carts
-            </Link>
-            <Link href="/maintenance" className={`${portalLinkClass} inline-flex items-center gap-1.5`}>
-              <PortalIcon name="maintenance" className="w-3.5 h-3.5" />
-              Maintenance
+              <PortalIcon name="services" className="w-3.5 h-3.5" />
+              Services
             </Link>
           </div>
 
@@ -298,27 +287,42 @@ export default function Navigation() {
             <p className={sectionHeaderClass}>My Trip</p>
             <Link href="/my-trip" onClick={() => setMobileOpen(false)} className={`${mobileLinkClass} flex items-center gap-2`}><PortalIcon name="mytrip" className="w-4 h-4 text-coral-400 shrink-0" /> Saved Spots</Link>
 
-            {/* Book Direct */}
-            <p className={sectionHeaderClass}>Book Direct</p>
+            {/* Delivery vertical */}
+            <p className={sectionHeaderClass}>Delivery</p>
             <Link href="/deliver" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors">
               <PortalIcon name="eat" className="w-4 h-4 shrink-0" />
-              Delivery
+              Order food
             </Link>
-            <Link href="/locals" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors">
-              <PortalIcon name="services" className="w-4 h-4 shrink-0" />
-              Locals (rent + hire)
-            </Link>
-            <Link href="/deliver/runner" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors">
-              <PortalIcon name="services" className="w-4 h-4 shrink-0" />
+            <Link href="/deliver/runner" onClick={() => setMobileOpen(false)} className={`${mobileLinkClass} flex items-center gap-2`}>
+              <PortalIcon name="services" className="w-4 h-4 text-coral-400 shrink-0" />
               Drive for PAL
             </Link>
-            <Link href="/locals/offer" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors">
-              <PortalIcon name="services" className="w-4 h-4 shrink-0" />
-              List on Locals
+
+            {/* Rentals vertical */}
+            <p className={sectionHeaderClass}>Rentals</p>
+            <Link href="/rent" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors">
+              <PortalIcon name="cart" className="w-4 h-4 shrink-0" />
+              Golf carts
             </Link>
-            <Link href="/beach" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors"><PortalIcon name="beach" className="w-4 h-4 shrink-0" /> Beach Rentals</Link>
-            <Link href="/rent" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors"><PortalIcon name="cart" className="w-4 h-4 shrink-0" /> Rent a Cart</Link>
-            <Link href="/maintenance" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors"><PortalIcon name="maintenance" className="w-4 h-4 shrink-0" /> Maintenance</Link>
+            <Link href="/beach" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors">
+              <PortalIcon name="beach" className="w-4 h-4 shrink-0" />
+              Beach gear
+            </Link>
+
+            {/* Services vertical */}
+            <p className={sectionHeaderClass}>Services</p>
+            <Link href="/locals" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors">
+              <PortalIcon name="services" className="w-4 h-4 shrink-0" />
+              Hire locals
+            </Link>
+            <Link href="/maintenance" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors">
+              <PortalIcon name="maintenance" className="w-4 h-4 shrink-0" />
+              Property maintenance
+            </Link>
+            <Link href="/locals/offer" onClick={() => setMobileOpen(false)} className={`${mobileLinkClass} flex items-center gap-2`}>
+              <PortalIcon name="services" className="w-4 h-4 text-coral-400 shrink-0" />
+              List on PAL
+            </Link>
           </div>
         )}
       </div>
