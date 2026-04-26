@@ -202,6 +202,24 @@ export default function Navigation() {
             <div className="w-px h-5 bg-white/15 mx-1" />
 
             {/* Portal links */}
+            <Link
+              href="/deliver"
+              className={`${portalLinkClass} inline-flex items-center gap-1.5`}
+              title="PAL Delivery — local food to your beach house (beta)"
+            >
+              <PortalIcon name="eat" className="w-3.5 h-3.5" />
+              Delivery
+              <span className="ml-1 px-1.5 py-0.5 rounded text-[9px] font-bold tracking-widest uppercase bg-amber-400 text-navy-900">
+                Beta
+              </span>
+            </Link>
+            <Link
+              href="/deliver/runner"
+              title="Drive for PAL — sign up"
+              className="hidden lg:inline-flex items-center gap-1 px-3 py-2 rounded-full text-xs font-bold tracking-wide text-coral-300 hover:text-coral-200 border border-coral-500/30 hover:border-coral-500/50 hover:bg-coral-500/10 transition-all"
+            >
+              Drive →
+            </Link>
             <Link href="/beach" className={`${portalLinkClass} inline-flex items-center gap-1.5`}>
               <PortalIcon name="beach" className="w-3.5 h-3.5" />
               Beach
@@ -277,6 +295,15 @@ export default function Navigation() {
 
             {/* Book Direct */}
             <p className={sectionHeaderClass}>Book Direct</p>
+            <Link href="/deliver" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors">
+              <PortalIcon name="eat" className="w-4 h-4 shrink-0" />
+              Delivery
+              <span className="ml-1 px-1.5 py-0.5 rounded text-[9px] font-bold tracking-widest uppercase bg-amber-400 text-navy-900">Beta</span>
+            </Link>
+            <Link href="/deliver/runner" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors">
+              <PortalIcon name="services" className="w-4 h-4 shrink-0" />
+              Drive for PAL
+            </Link>
             <Link href="/beach" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors"><PortalIcon name="beach" className="w-4 h-4 shrink-0" /> Beach Rentals</Link>
             <Link href="/rent" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors"><PortalIcon name="cart" className="w-4 h-4 shrink-0" /> Rent a Cart</Link>
             <Link href="/maintenance" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors"><PortalIcon name="maintenance" className="w-4 h-4 shrink-0" /> Maintenance</Link>
