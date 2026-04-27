@@ -136,13 +136,13 @@ export async function POST(req: NextRequest) {
         body.mode === "rent"
           ? `
       <div style="background:#fff5f0; padding:12px 14px; border-radius:8px; margin:16px 0; border:1px solid #fde0d4;">
-        <p style="margin: 0 0 4px; font-size:11px; text-transform:uppercase; letter-spacing:0.15em; color:#C84A2C; font-weight:bold;">Photos pending</p>
+        <p style="margin: 0 0 4px; font-size:11px; text-transform:uppercase; letter-spacing:0.15em; color:#C84A2C; font-weight:bold;">Photos (quality signal — optional)</p>
         <p style="margin: 4px 0; font-size:13px;">
           ${body.photosAcknowledged ? "✓ Acknowledged — applicant said they'll email photos to hello@" : "✗ Not acknowledged"}
         </p>
         ${
           verifyPhotosUrl
-            ? `<p style="margin: 12px 0 0; font-size:11px; color:#7d6e5a; font-style:italic;">When photos arrive at hello@, come back to this email and click below — only after you&apos;ve actually seen them.</p>
+            ? `<p style="margin: 12px 0 0; font-size:11px; color:#7d6e5a; font-style:italic;">When photos arrive at hello@ and look good, click below to mark this listing as photo-verified. Listings WITHOUT photos still go live on Verify — they just convert worse.</p>
                <p style="margin: 6px 0 0;"><a href="${verifyPhotosUrl}" style="display:inline-block; padding:8px 14px; background:#fff; color:#1f7a4d; text-decoration:none; border-radius:6px; font-weight:bold; font-size:12px; border:1px solid #1f7a4d;">✓ Mark photos verified</a></p>`
             : ""
         }
@@ -158,20 +158,19 @@ export async function POST(req: NextRequest) {
           ? `
       <div style="margin: 24px 0;">
         <a href="${approveUrl}" style="display:inline-block; padding:14px 28px; background:#1f7a4d; color:#fff; text-decoration:none; border-radius:8px; font-weight:bold; margin-right:8px;">
-          ✓ Verify ${escapeHtml(body.businessName || name)}${body.mode === "rent" ? " — photos still pending" : ""}
+          ✓ Verify ${escapeHtml(body.businessName || name)}
         </a>
         <a href="${rejectUrl}" style="display:inline-block; padding:14px 28px; background:#fff; color:#8a3a3a; text-decoration:none; border-radius:8px; font-weight:bold; border:1px solid #c83a3a;">
           Reject
         </a>
       </div>
       <p style="font-size:12px; color:#555; margin: 0 0 16px;">
-        <strong>Verify</strong> = you trust this listing's legit, even
-        before${body.mode === "rent" ? " photos arrive" : " any other follow-up"}.
-        Auto-emails them: <em>"You've been verified${body.mode === "rent" ? " — but still need to send photos before going live" : ""}."</em>
+        <strong>Verify</strong> = listed and live on PAL Locals. Auto-emails
+        them: <em>"You're verified — listing is in."</em>
         <strong>Reject</strong> is silent (no email to the applicant).
         ${
           body.mode === "rent"
-            ? `<br/><br/>Photos verification is a <em>separate</em> click — only mark them verified above once you&apos;ve actually seen them in hello@. Two stages on purpose; keeps us honest.`
+            ? `<br/><br/>Photos are optional but boost conversion. Mark them verified above once they arrive at hello@ — quality signal, not a gate.`
             : ""
         }
       </p>

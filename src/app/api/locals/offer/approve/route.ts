@@ -85,39 +85,32 @@ async function sendOfferApprovedEmail(i: ApprovedEmailInput): Promise<void> {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) return;
   const first = i.name.split(" ")[0];
-  const needsPhotos = i.mode === "rent";
-  // Subject + body intentionally honest about state: VERIFIED ≠ LIVE.
-  // Keeps the platform's word in alignment with the platform's reality —
-  // we verified you, photos still come next.
-  const subject = needsPhotos
-    ? `You've been verified — send us photos to go live`
-    : `You're in — PAL Locals verified your listing`;
-  const qrDataUrl = needsPhotos
+  const sendsPhotos = i.mode === "rent";
+  // Verified = listed = live. Photos are an optimization, not a gate —
+  // listings without photos still go live, they just convert worse.
+  const subject = `You're in — PAL Locals verified your listing`;
+  const qrDataUrl = sendsPhotos
     ? await magicLinkQrDataUrl(i.photoUploadMailto)
     : null;
   const html = `
     <div style="font-family: Inter, system-ui, sans-serif; color: #1a2433; line-height: 1.5;">
       <p style="text-transform: uppercase; letter-spacing: 0.15em; font-size: 11px; color: #C84A2C; margin: 0 0 4px;">
-        PAL Locals · Verified
+        PAL Locals · Verified · You&apos;re live
       </p>
-      <h2 style="margin: 0 0 16px; font-family: Georgia, serif;">${
-        needsPhotos
-          ? `You&apos;ve been verified, ${escapeHtml(first)}.`
-          : `You&apos;re in, ${escapeHtml(first)}.`
-      }</h2>
-      <p>We reviewed your submission and verified your listing on PAL Locals — locals only, vetted, no outsourcing.</p>
+      <h2 style="margin: 0 0 16px; font-family: Georgia, serif;">You&apos;re in, ${escapeHtml(first)}.</h2>
+      <p>We reviewed your submission and verified your listing on PAL Locals — locals only, vetted, no outsourcing. <strong>Customers can now find + request you.</strong></p>
 
       ${
-        needsPhotos
+        sendsPhotos
           ? `
       <div style="background:#fff5f0; padding:14px 16px; border-radius:8px; margin: 16px 0; border:1px solid #fde0d4;">
         <p style="margin: 0 0 6px; font-size:11px; text-transform:uppercase; letter-spacing:0.15em; color:#C84A2C; font-weight:bold;">
-          One thing before you go live — photos
+          Want way more requests? Send photos.
         </p>
         <p style="margin: 4px 0 8px; font-size:13px; line-height:1.55;">
-          You&apos;re verified, but your listing won&apos;t be visible to
-          customers until we&apos;ve seen photos. Wide shot + a couple
-          detail shots is plenty.
+          Listings with photos convert dramatically better than listings
+          without. You&apos;re live either way — but a wide shot + a
+          couple detail shots gets your inbox a lot busier.
         </p>
         <p style="margin: 8px 0;">
           <a href="${i.photoUploadMailto}" style="display:inline-block; padding:10px 18px; background:#e8656f; color:#fff; text-decoration:none; border-radius:8px; font-weight:bold; font-size:13px;">
@@ -141,13 +134,11 @@ async function sendOfferApprovedEmail(i: ApprovedEmailInput): Promise<void> {
     </div>
   `;
   const text =
-    (needsPhotos
-      ? `You've been verified, ${first}.\n\n`
-      : `You're in, ${first}.\n\n`) +
-    `PAL Locals reviewed and verified your submission.\n\n` +
-    (needsPhotos
-      ? `One thing before your listing goes visible to customers — photos. Email a few shots of your listing to hello@theportalocal.com.\n\n`
-      : `You're live — customers can now request your services.\n\n`) +
+    `You're in, ${first}.\n\n` +
+    `PAL Locals reviewed and verified your listing — customers can now find + request you.\n\n` +
+    (sendsPhotos
+      ? `Want way more requests? Send photos. Listings with photos convert dramatically better. You're live either way — photos just get your inbox busier. Email them to hello@theportalocal.com when you can.\n\n`
+      : ``) +
     `Questions? Reply or email hello@theportalocal.com.\n\n— The Port A Local`;
   try {
     await fetch("https://api.resend.com/emails", {
