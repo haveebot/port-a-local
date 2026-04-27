@@ -68,6 +68,31 @@ export default function MaintenanceFormScreen({ navigation }: Props) {
   const [submitting, setSubmitting] = useState(false);
   const [photos, setPhotos] = useState<string[]>([]);
 
+  // Mirror the server-side caps so we can reject before submitting and
+  // never even send a body Vercel will refuse (4.5MB function limit).
+  const MAX_PER_PHOTO_ENCODED = 960_000; // ~700KB raw, base64'd
+  const MAX_TOTAL_ENCODED = 3_000_000; // sum across all photos
+  const totalEncoded = photos.reduce((s, p) => s + p.length, 0);
+
+  const tryAddPhoto = (dataUri: string): boolean => {
+    if (dataUri.length > MAX_PER_PHOTO_ENCODED) {
+      Alert.alert(
+        "Photo too big",
+        "That image is too large. Try a smaller one or use a JPEG."
+      );
+      return false;
+    }
+    if (totalEncoded + dataUri.length > MAX_TOTAL_ENCODED) {
+      Alert.alert(
+        "Out of room",
+        "Adding this photo would push the request past what we can upload. Remove one of the existing photos and try again."
+      );
+      return false;
+    }
+    setPhotos((prev) => [...prev, dataUri]);
+    return true;
+  };
+
   useEffect(() => {
     navigation.setOptions({ title: "Request Maintenance" });
     (async () => {
@@ -103,7 +128,7 @@ export default function MaintenanceFormScreen({ navigation }: Props) {
     const asset = result.assets[0];
     if (!asset.base64) return;
     const dataUri = `data:${asset.mimeType ?? "image/jpeg"};base64,${asset.base64}`;
-    setPhotos((prev) => [...prev, dataUri]);
+    tryAddPhoto(dataUri);
   };
 
   const takePhoto = async () => {
@@ -132,7 +157,7 @@ export default function MaintenanceFormScreen({ navigation }: Props) {
     const asset = result.assets[0];
     if (!asset.base64) return;
     const dataUri = `data:${asset.mimeType ?? "image/jpeg"};base64,${asset.base64}`;
-    setPhotos((prev) => [...prev, dataUri]);
+    tryAddPhoto(dataUri);
   };
 
   const removePhoto = (idx: number) => {
