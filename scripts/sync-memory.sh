@@ -60,6 +60,7 @@ INCLUDE=(
   "feedback_pal_wheelhouse_orient.md"
   "feedback_pal_doesnt_gatekeep.md"
   "feedback_context_handoff.md"
+  "feedback_arnold_startup_drill.md"
   "feedback_heye_lab_framing.md"
   "feedback_coverage_vs_goal.md"
   "feedback_systemic_gaps_check.md"
