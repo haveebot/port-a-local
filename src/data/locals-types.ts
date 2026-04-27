@@ -16,7 +16,16 @@
  * repair, pool/lawn). Those go through /maintenance.
  */
 
-export type ListingMode = "rent" | "hire";
+/**
+ * Listing modes:
+ *   - rent: locals own a thing, customer rents for a period (kayak, paddleboard)
+ *   - hire: locals offer a service, customer requests/books (charter, lesson)
+ *   - sell: locals sell goods outright, customer buys-now via Stripe (crafts,
+ *     merch, art) — Etsy-style. Vendor handles fulfillment (ship/pickup/deliver
+ *     with the customer directly). PAL collects payment + 10% platform fee
+ *     on top, transfers vendor's full quote to their Stripe Connect account.
+ */
+export type ListingMode = "rent" | "hire" | "sell";
 
 export type RentCategory =
   | "beach-gear"

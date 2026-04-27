@@ -114,7 +114,7 @@ export async function POST(req: NextRequest) {
             currency: "usd",
             product_data: {
               name: `Housekeeping — ${estimatedHours}-hour cleaning`,
-              description: `${propertyAddress} · ~${propertySqft} sqft · provided by Local Girls Cleaning, a PAL service`,
+              description: `${propertyAddress} · ~${propertySqft} sqft · Local Girls Cleaning`,
             },
             unit_amount: totalCents,
           },

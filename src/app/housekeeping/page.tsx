@@ -8,9 +8,9 @@ import HousekeepingForm from "./HousekeepingForm";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Housekeeping — PAL · Local Girls Cleaning",
+  title: "Housekeeping — Port A Local",
   description:
-    "Book a Port Aransas vacation rental cleaning at $100/hr. 1-hour minimum, ~1 hour per 1,000 sqft. Local team, fully insured, dispatched by PAL.",
+    "Book a Port Aransas vacation rental cleaning at $100/hr. 1-hour minimum, ~1 hour per 1,000 sqft. Local team, fully insured.",
 };
 
 /**
@@ -88,7 +88,7 @@ export default function HousekeepingPage() {
             <Step
               n="3"
               title="We dispatch"
-              body="Our local team (Local Girls Cleaning) handles the rest."
+              body="Local Girls Cleaning takes it from here — confirmed timing, key handoff, the works."
             />
             <Step
               n="4"
@@ -110,8 +110,7 @@ export default function HousekeepingPage() {
           </h2>
           <p className="text-sm text-navy-600 font-light text-center mb-8 max-w-xl mx-auto">
             Auto-priced as you type. Pay through Stripe; we handle dispatch
-            + scheduling. By <strong>Local Girls Cleaning</strong>, a PAL
-            service.
+            + scheduling.
           </p>
           <HousekeepingForm />
         </div>

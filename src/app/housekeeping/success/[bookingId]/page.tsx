@@ -136,8 +136,8 @@ export default async function HousekeepingSuccessPage({
 
         <p className="text-xs text-navy-500 font-light text-center">
           Booked with{" "}
-          <strong className="text-navy-700">Local Girls Cleaning</strong>,
-          a PAL service. Issue with your booking? Email{" "}
+          <strong className="text-navy-700">Local Girls Cleaning</strong>.
+          Issue with your booking? Email{" "}
           <a
             href="mailto:hello@theportalocal.com"
             className="underline decoration-sand-400 hover:text-coral-600"
