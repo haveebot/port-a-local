@@ -101,65 +101,110 @@ export default function HomeScreen({ navigation }: Props) {
         </View>
       </View>
 
-      {/* Categories */}
+      {/* Categories — horizontal icon strip, Stitch-style */}
       <View style={styles.section}>
         <Text style={styles.sectionEyebrow}>BROWSE BY CATEGORY</Text>
         <Text style={styles.sectionTitle}>Explore Port Aransas</Text>
-        <View style={styles.categoryGrid}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.catStrip}
+        >
           {categories.map((cat) => (
             <TouchableOpacity
               key={cat.slug}
-              style={styles.categoryCard}
+              style={styles.catChip}
               activeOpacity={0.85}
               onPress={() =>
                 navigation.navigate("Category", { slug: cat.slug })
               }
             >
-              <Text style={styles.categoryIcon}>{cat.icon}</Text>
-              <Text style={styles.categoryName}>{cat.name}</Text>
-              <Text style={styles.categoryDesc} numberOfLines={2}>
-                {cat.description}
-              </Text>
+              <View style={styles.catChipIconWrap}>
+                <Text style={styles.catChipIcon}>{cat.icon}</Text>
+              </View>
+              <Text style={styles.catChipLabel}>{cat.name}</Text>
             </TouchableOpacity>
           ))}
-        </View>
+        </ScrollView>
       </View>
 
-      {/* Featured */}
+      {/* Featured — single big editorial card up top + supporting cards */}
       {featured.length > 0 && (
         <View style={styles.section}>
           <Text style={styles.sectionEyebrow}>LOCALS&apos; PICKS</Text>
           <Text style={styles.sectionTitle}>Featured spots</Text>
-          <View style={styles.featuredList}>
-            {featured.map((b) => (
-              <TouchableOpacity
-                key={b.slug}
-                style={styles.featuredCard}
-                activeOpacity={0.85}
-                onPress={() =>
-                  navigation.navigate("Business", { slug: b.slug, preview: b })
-                }
-              >
-                <View style={styles.featuredAccent} />
-                <View style={styles.featuredBody}>
-                  <View style={styles.featuredHeader}>
-                    <Text style={styles.featuredName}>{b.name}</Text>
-                    {b.verifiedPartner && (
-                      <View style={styles.verifiedBadge}>
-                        <Text style={styles.verifiedText}>VERIFIED</Text>
-                      </View>
-                    )}
-                  </View>
-                  <Text style={styles.featuredTagline} numberOfLines={2}>
-                    {b.tagline}
-                  </Text>
-                  <Text style={styles.featuredMeta}>
-                    {b.category.toUpperCase()} · {b.hours}
+
+          {/* Hero featured card */}
+          <TouchableOpacity
+            style={styles.heroFeatured}
+            activeOpacity={0.85}
+            onPress={() =>
+              navigation.navigate("Business", {
+                slug: featured[0].slug,
+                preview: featured[0],
+              })
+            }
+          >
+            <View style={styles.heroFeaturedImage}>
+              <Text style={styles.heroFeaturedEmoji}>
+                {categories.find((c) => c.slug === featured[0].category)
+                  ?.icon ?? "🌴"}
+              </Text>
+            </View>
+            <View style={styles.heroFeaturedBody}>
+              <Text style={styles.heroFeaturedKicker}>
+                {featured[0].category.toUpperCase()}
+              </Text>
+              <Text style={styles.heroFeaturedName}>{featured[0].name}</Text>
+              <Text style={styles.heroFeaturedTagline} numberOfLines={2}>
+                {featured[0].tagline}
+              </Text>
+              {featured[0].verifiedPartner && (
+                <View style={styles.heroFeaturedVerified}>
+                  <Text style={styles.heroFeaturedVerifiedText}>
+                    VERIFIED LOCAL
                   </Text>
                 </View>
-              </TouchableOpacity>
-            ))}
-          </View>
+              )}
+            </View>
+          </TouchableOpacity>
+
+          {/* Supporting featured row (compact) */}
+          {featured.slice(1, 5).length > 0 && (
+            <View style={styles.featuredList}>
+              {featured.slice(1, 5).map((b) => (
+                <TouchableOpacity
+                  key={b.slug}
+                  style={styles.featuredCard}
+                  activeOpacity={0.85}
+                  onPress={() =>
+                    navigation.navigate("Business", {
+                      slug: b.slug,
+                      preview: b,
+                    })
+                  }
+                >
+                  <View style={styles.featuredAccent} />
+                  <View style={styles.featuredBody}>
+                    <View style={styles.featuredHeader}>
+                      <Text style={styles.featuredName}>{b.name}</Text>
+                      {b.verifiedPartner && (
+                        <View style={styles.verifiedBadge}>
+                          <Text style={styles.verifiedText}>VERIFIED</Text>
+                        </View>
+                      )}
+                    </View>
+                    <Text style={styles.featuredTagline} numberOfLines={2}>
+                      {b.tagline}
+                    </Text>
+                    <Text style={styles.featuredMeta}>
+                      {b.category.toUpperCase()} · {b.hours}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              ))}
+            </View>
+          )}
         </View>
       )}
 
@@ -268,33 +313,85 @@ const styles = StyleSheet.create({
     color: colors.navy[400],
     lineHeight: 16,
   },
-  categoryGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 12,
-  },
-  categoryCard: {
-    width: "48%",
+  catStrip: { gap: 14, paddingRight: 16 },
+  catChip: { alignItems: "center", width: 76 },
+  catChipIconWrap: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
     backgroundColor: "#fff",
-    borderRadius: 16,
-    padding: 18,
+    alignItems: "center",
+    justifyContent: "center",
     borderWidth: 1,
     borderColor: colors.sand[200],
+    marginBottom: 8,
+    shadowColor: colors.navy[950],
+    shadowOpacity: 0.04,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 1,
   },
-  categoryIcon: {
-    fontSize: 32,
+  catChipIcon: { fontSize: 28 },
+  catChipLabel: {
+    fontSize: 12,
+    fontWeight: "700",
+    color: colors.navy[800],
+    textAlign: "center",
+  },
+  heroFeatured: {
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    overflow: "hidden",
+    borderWidth: 1,
+    borderColor: colors.sand[200],
+    marginBottom: 14,
+    shadowColor: colors.navy[950],
+    shadowOpacity: 0.06,
+    shadowRadius: 14,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 3,
+  },
+  heroFeaturedImage: {
+    height: 180,
+    backgroundColor: colors.navy[800],
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  heroFeaturedEmoji: { fontSize: 64, opacity: 0.85 },
+  heroFeaturedBody: { padding: 20 },
+  heroFeaturedKicker: {
+    fontSize: 11,
+    fontWeight: "700",
+    color: colors.coral[500],
+    letterSpacing: 1.6,
+    marginBottom: 6,
+  },
+  heroFeaturedName: {
+    fontSize: 24,
+    fontWeight: "700",
+    fontFamily: "Georgia",
+    color: colors.navy[900],
+    marginBottom: 6,
+    letterSpacing: -0.3,
+  },
+  heroFeaturedTagline: {
+    fontSize: 14,
+    color: colors.navy[600],
+    lineHeight: 20,
     marginBottom: 10,
   },
-  categoryName: {
-    fontSize: 17,
-    fontWeight: "700",
-    color: colors.navy[900],
-    marginBottom: 4,
+  heroFeaturedVerified: {
+    alignSelf: "flex-start",
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 8,
+    backgroundColor: colors.gold[100],
   },
-  categoryDesc: {
-    fontSize: 12,
-    color: colors.navy[400],
-    lineHeight: 16,
+  heroFeaturedVerifiedText: {
+    fontSize: 9,
+    fontWeight: "700",
+    color: colors.gold[600],
+    letterSpacing: 0.8,
   },
   featuredList: { gap: 12 },
   featuredCard: {

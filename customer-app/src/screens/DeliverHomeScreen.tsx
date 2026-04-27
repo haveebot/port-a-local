@@ -84,10 +84,20 @@ function RestaurantCard({
     >
       <View
         style={[
-          styles.cardAccent,
+          styles.cardBanner,
           { backgroundColor: restaurant.accent ?? colors.coral[500] },
         ]}
-      />
+      >
+        <Text style={styles.cardBannerEmoji}>
+          {restaurant.cuisineTags[0]?.toLowerCase().includes("seafood")
+            ? "🦐"
+            : restaurant.cuisineTags[0]?.toLowerCase().includes("burger")
+            ? "🍔"
+            : restaurant.cuisineTags[0]?.toLowerCase().includes("ice")
+            ? "🍦"
+            : "🍽️"}
+        </Text>
+      </View>
       <View style={styles.cardBody}>
         <View style={styles.cardHeader}>
           <Text style={styles.cardTitle}>{restaurant.name}</Text>
@@ -172,7 +182,12 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     elevation: 2,
   },
-  cardAccent: { height: 3 },
+  cardBanner: {
+    height: 110,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  cardBannerEmoji: { fontSize: 48, opacity: 0.9 },
   cardBody: { padding: 18 },
   cardHeader: {
     flexDirection: "row",
