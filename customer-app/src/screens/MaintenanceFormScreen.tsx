@@ -93,7 +93,10 @@ export default function MaintenanceFormScreen({ navigation }: Props) {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       base64: true,
-      quality: 0.6,
+      // Keep each photo under ~700KB raw so a 4-photo submission stays
+      // well under Vercel's 4.5MB request body limit. Server enforces
+      // the same cap defensively.
+      quality: 0.4,
       allowsEditing: false,
     });
     if (result.canceled || !result.assets || result.assets.length === 0) return;
@@ -119,7 +122,10 @@ export default function MaintenanceFormScreen({ navigation }: Props) {
     const result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       base64: true,
-      quality: 0.6,
+      // Keep each photo under ~700KB raw so a 4-photo submission stays
+      // well under Vercel's 4.5MB request body limit. Server enforces
+      // the same cap defensively.
+      quality: 0.4,
       allowsEditing: false,
     });
     if (result.canceled || !result.assets || result.assets.length === 0) return;

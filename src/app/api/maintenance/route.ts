@@ -42,15 +42,34 @@ async function sendEmail(to: string, subject: string, html: string) {
 
 // Reject anything that isn't a small image data URI — keeps the JSON
 // payload bounded and the email assembler defensive against junk input.
+//
+// Vercel's serverless function request body limit is ~4.5MB. With
+// base64 overhead (~1.37x), the entire photos array must stay under
+// ~3.2MB of raw bytes. We enforce per-photo + total caps so a valid
+// 3-4 photo submission can't blow past the platform limit and fail
+// before this handler can respond.
 const MAX_PHOTOS = 4;
-const MAX_PHOTO_BYTES = 1_500_000; // ~1.5MB per photo before base64 overhead
+const MAX_PHOTO_BYTES = 700_000; // ~700KB per photo (raw); ~960KB encoded
+const MAX_TOTAL_PHOTO_BYTES = 3_000_000; // total encoded bytes across all photos
 function sanitizePhotos(raw: unknown): string[] {
   if (!Array.isArray(raw)) return [];
-  return raw
+  const candidates = raw
     .filter((p): p is string => typeof p === "string")
-    .filter((p) => /^data:image\/(jpeg|jpg|png|heic|heif|webp);base64,/i.test(p))
-    .filter((p) => p.length < MAX_PHOTO_BYTES * 1.4) // base64 overhead
+    .filter((p) =>
+      /^data:image\/(jpeg|jpg|png|heic|heif|webp);base64,/i.test(p)
+    )
+    .filter((p) => p.length < MAX_PHOTO_BYTES * 1.4)
     .slice(0, MAX_PHOTOS);
+  // Enforce a total budget so 4 just-under-cap photos can't add up to
+  // a request that would be rejected by the runtime.
+  const out: string[] = [];
+  let total = 0;
+  for (const p of candidates) {
+    if (total + p.length > MAX_TOTAL_PHOTO_BYTES) break;
+    total += p.length;
+    out.push(p);
+  }
+  return out;
 }
 
 export async function POST(req: NextRequest) {
