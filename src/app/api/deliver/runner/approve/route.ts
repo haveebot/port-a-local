@@ -117,6 +117,26 @@ async function sendDriverWelcomeEmail(i: WelcomeInput): Promise<void> {
         "Reading this on your laptop? Scan with your phone camera to sign in there.",
       )}
 
+      <div style="background:#fdfaf3; padding:14px 16px; border-radius:8px; margin: 0 0 24px; border:1px solid #e5dcc7;">
+        <p style="margin: 0 0 6px; font-size:11px; text-transform:uppercase; letter-spacing:0.15em; color:#7d6e5a; font-weight:bold;">
+          📲 On iPhone? Add PAL to your home screen
+        </p>
+        <p style="margin: 4px 0 8px; font-size:13px; line-height:1.55;">
+          Apple requires it for instant push notifications when new orders
+          land. One-time setup, ~30 seconds:
+        </p>
+        <ol style="margin: 0; padding-left: 20px; font-size:12px; line-height:1.6; color:#1a2433;">
+          <li>Open this page in <strong>Safari</strong> (not Chrome — Apple rule)</li>
+          <li>Tap the <strong>Share button</strong> (square with up-arrow at bottom)</li>
+          <li>Scroll down → <strong>Add to Home Screen</strong> → Add</li>
+          <li>Open PAL from the new home-screen icon</li>
+          <li>On your runner home, tap the <strong>🔕 Enable</strong> button → Allow</li>
+        </ol>
+        <p style="margin: 8px 0 0; font-size:12px; color:#7d6e5a; font-style:italic;">
+          On Android? Just tap Enable on the runner home — push works directly.
+        </p>
+      </div>
+
       <hr style="border: none; border-top: 1px solid #e5dcc7; margin: 24px 0;" />
 
       <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:8px; padding:14px 16px; margin: 0 0 20px;">

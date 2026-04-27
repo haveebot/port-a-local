@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import InstallAsAppBanner from "@/components/deliver/InstallAsAppBanner";
 
 interface InitialStatus {
   isOnline: boolean;
@@ -391,6 +392,7 @@ export default function RunnerHub({
       </header>
 
       <div className="max-w-md mx-auto px-4 sm:px-6 py-6 space-y-5">
+        <InstallAsAppBanner context="hub" />
         {/* On-duty toggle card */}
         <section
           className={
