@@ -180,9 +180,39 @@ export default function RunnerHub({
     setErr(null);
     try {
       if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
-        setErr(
-          "This browser doesn't support push notifications. Try Chrome on Android or Safari (added to home screen) on iPhone.",
-        );
+        // Diagnose the unsupported case — iOS has a particularly
+        // confusing setup (every browser is a Safari shell; only
+        // Safari + PWA install gets push). Give specific guidance
+        // instead of generic "try Chrome" that ends up wrong on iOS.
+        const ua = navigator.userAgent || "";
+        const isIOS = /iPhone|iPad|iPod/.test(ua);
+        const isIOSSafari =
+          isIOS &&
+          /Safari/.test(ua) &&
+          !/CriOS|FxiOS|OPiOS|EdgiOS|YaBrowser|DuckDuckGo/.test(ua);
+        const isStandalone =
+          window.matchMedia?.("(display-mode: standalone)").matches ||
+          // legacy iOS Safari API
+          (window.navigator as unknown as { standalone?: boolean })
+            .standalone === true;
+
+        if (isIOS && !isIOSSafari) {
+          setErr(
+            "iOS Chrome / Firefox / etc. don't support push (Apple rule — they're all Safari under the hood). Open this page in Safari, tap the Share button → Add to Home Screen, then open PAL from your home screen and try again.",
+          );
+        } else if (isIOSSafari && !isStandalone) {
+          setErr(
+            "On iPhone, push works once PAL is installed as an app. Tap the Share button (square with arrow at the bottom) → Add to Home Screen. Open PAL from the new home-screen icon and try again.",
+          );
+        } else if (isIOS) {
+          setErr(
+            "iOS push needs version 16.4 or newer. Update iOS in Settings → General → Software Update, then try again.",
+          );
+        } else {
+          setErr(
+            "This browser doesn't support push notifications. Try Chrome (Android/desktop), Firefox, or Edge.",
+          );
+        }
         return;
       }
       const vapidPublic = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
