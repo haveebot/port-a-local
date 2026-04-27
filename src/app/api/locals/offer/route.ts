@@ -231,7 +231,7 @@ export async function POST(req: NextRequest) {
       name,
       email: body.email,
       mode: body.mode,
-      categoryLabel: cat.label,
+      categoryLabel: cat?.label ?? body.category,
       photosAcknowledged: body.photosAcknowledged === true,
     });
   }
