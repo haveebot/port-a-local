@@ -74,7 +74,28 @@ _Second handoff today. The morning one (`handoff-2026-04-27.md`) closed out the 
 
 Drop this into a fresh PAL chat:
 
-> Pick up from `Port A Local/Session Notes/handoff-2026-04-27-pm.md` — read that first, then `handoff-2026-04-27.md` for morning context. Then `python3 /Users/winstoncaraker/Projects/workspace/scripts/wheelhouse.py orient` to verify state and pull live activity. Ready when you say.
+> Do an arnold. Start from `Port A Local/Session Notes/handoff-2026-04-27-pm.md`. Then surface state and wait for my list — Winston has queued items from while usage was paused.
+
+That command triggers the full arnold drill (briefs + project memory + orient + verification) per `feedback_arnold_startup_drill.md`. **DO NOT dive into the Stripe Connect rock until Winston shares his list** — he explicitly said he has queued items. The build brief at `Port A Local/Features/Locals Sell-mode Stripe Connect Onboarding — Build Brief.md` is the *proposed* top rock; Winston's list may reshuffle it.
+
+## Top rock — fully designed, waiting on Winston's go-ahead
+
+**`Port A Local/Features/Locals Sell-mode Stripe Connect Onboarding — Build Brief.md`** — full design doc with:
+- Reference runner Connect flow files to mirror (3 files, 204 lines)
+- Architectural fork explained (Path A: extend offers table — recommended; Path B: DB-back listings — defer)
+- Build plan: schema + helpers, HMAC refactor, 3 API routes, vendor portal page, approval email update, Stripe webhook
+- Test plan (Stripe test data, end-to-end flow)
+- Edge cases (abandoned onboarding, leaked links, restricted accounts, multi-offer vendors, live vs test mode)
+- 5 open questions for Winston to answer in first 5 min
+- Time estimate: 1.5–2 hr practical with runner flow as copy template
+
+Skim it BEFORE Winston shares his list — even if his list bumps it, you'll know what's queued.
+
+## CityDeploy framing — every build is a template
+
+Per Winston end-of-PM-session: **every pattern PAL ships gets treated as a CityDeploy template**, not just Wheelhouse. The Stripe Connect onboarding rock above is itself a replication of the canonical runner Connect flow — the brief explicitly says "Mirror it. Don't invent." That's the meta-pattern.
+
+When building anything reusable, reference `feedback_citydeploy_pattern_thinking.md` and follow the rule: identify the canonical PAL implementation, document the cross-project shape, ship it once with the template doc filed alongside. Memory file will be in the mirror by next session.
 
 ---
 
