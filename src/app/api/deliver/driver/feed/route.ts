@@ -3,6 +3,7 @@ import { sql as vercelSql } from "@vercel/postgres";
 import { getApiRunner } from "@/lib/runnerSession";
 import {
   getDeliveredCountForDriver,
+  getDriverPushSubscription,
   getDriverStatus,
   hasDriverTransfer,
 } from "@/data/delivery-store";
@@ -134,10 +135,13 @@ export async function GET(req: NextRequest) {
   // Drives the "bonus pending" callout + rewards ladder on the runner hub.
   // All-time delivery count powers the higher-tier progress display
   // (10 / 50 / 250 milestones — currently soft-tracked, rewards deferred).
-  const [firstDeliveryBonusEarned, allTimeDeliveredCount] = await Promise.all([
-    hasDriverTransfer(`bonus-first-${driver.id}`),
-    getDeliveredCountForDriver(driver.id),
-  ]);
+  const [firstDeliveryBonusEarned, allTimeDeliveredCount, pushSub] =
+    await Promise.all([
+      hasDriverTransfer(`bonus-first-${driver.id}`),
+      getDeliveredCountForDriver(driver.id),
+      getDriverPushSubscription(driver.id),
+    ]);
+  const pushEnabled = !!pushSub;
 
   return NextResponse.json({
     driver: {
@@ -148,6 +152,7 @@ export async function GET(req: NextRequest) {
       payoutsEnabled: status.payoutsEnabled,
       hasStripeAccount: !!status.stripeAccountId,
       firstDeliveryBonusEarned,
+      pushEnabled,
     },
     available: availRows.map(rowToSummary),
     active: activeRows.map(rowToSummary),

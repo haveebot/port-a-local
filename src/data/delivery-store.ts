@@ -139,6 +139,12 @@ async function ensureSchema(): Promise<void> {
   await sql`ALTER TABLE delivery_drivers ADD COLUMN IF NOT EXISTS insurance_verified_at TIMESTAMPTZ`;
   await sql`ALTER TABLE delivery_drivers ADD COLUMN IF NOT EXISTS verified_by TEXT`;
 
+  // Web push subscription (added 2026-04-26). One subscription per runner
+  // for v1 — re-enabling on a new device overwrites the old. Stored as
+  // raw JSON since the shape is opaque to us (browser-controlled blob
+  // containing endpoint + p256dh + auth keys).
+  await sql`ALTER TABLE delivery_drivers ADD COLUMN IF NOT EXISTS push_subscription_json TEXT`;
+
   _schemaReady = true;
 }
 
@@ -330,6 +336,41 @@ export async function approveDriver(
     WHERE id = ${id}
   `;
   return getDriverById(id);
+}
+
+/**
+ * Web push subscription helpers. One subscription per runner for v1.
+ */
+export async function setDriverPushSubscription(
+  driverId: string,
+  subscription: object | null,
+): Promise<void> {
+  await ensureSchema();
+  const json = subscription === null ? null : JSON.stringify(subscription);
+  await sql`
+    UPDATE delivery_drivers
+    SET push_subscription_json = ${json}
+    WHERE id = ${driverId}
+  `;
+}
+
+export async function getDriverPushSubscription(
+  driverId: string,
+): Promise<object | null> {
+  await ensureSchema();
+  const { rows } = await sql`
+    SELECT push_subscription_json
+    FROM delivery_drivers
+    WHERE id = ${driverId}
+    LIMIT 1
+  `;
+  const raw = rows[0]?.push_subscription_json as string | undefined;
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw) as object;
+  } catch {
+    return null;
+  }
 }
 
 /**

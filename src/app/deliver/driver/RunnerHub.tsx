@@ -9,6 +9,7 @@ interface InitialStatus {
   payoutsEnabled: boolean;
   hasStripeAccount: boolean;
   firstDeliveryBonusEarned?: boolean;
+  pushEnabled?: boolean;
 }
 
 interface FeedOrder {
@@ -158,6 +159,117 @@ export default function RunnerHub({
     }
   }
 
+  // Convert URL-safe base64 VAPID public key to BufferSource for the
+  // browser pushManager.subscribe() call. We allocate a fresh
+  // ArrayBuffer (not SharedArrayBuffer) because the browser API's
+  // applicationServerKey type is strict about that distinction.
+  function urlBase64ToBufferSource(base64String: string): BufferSource {
+    const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+    const base64 = (base64String + padding)
+      .replace(/-/g, "+")
+      .replace(/_/g, "/");
+    const rawData = window.atob(base64);
+    const buffer = new ArrayBuffer(rawData.length);
+    const view = new Uint8Array(buffer);
+    for (let i = 0; i < rawData.length; i++) view[i] = rawData.charCodeAt(i);
+    return buffer;
+  }
+
+  async function enablePush() {
+    setBusy("push");
+    setErr(null);
+    try {
+      if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
+        setErr(
+          "This browser doesn't support push notifications. Try Chrome on Android or Safari (added to home screen) on iPhone.",
+        );
+        return;
+      }
+      const vapidPublic = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
+      if (!vapidPublic) {
+        setErr(
+          "Push notifications aren't configured server-side yet. Email hello@theportalocal.com.",
+        );
+        return;
+      }
+      const permission = await Notification.requestPermission();
+      if (permission !== "granted") {
+        setErr(
+          "You denied notifications. Re-enable in your browser settings (lock icon → Notifications → Allow), then try again.",
+        );
+        return;
+      }
+      // Register the service worker (idempotent — returns existing
+      // registration if already registered).
+      const reg = await navigator.serviceWorker.register("/sw.js");
+      // Re-use existing subscription if present + matches our VAPID key,
+      // otherwise create a new one.
+      let sub = await reg.pushManager.getSubscription();
+      if (!sub) {
+        sub = await reg.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: urlBase64ToBufferSource(vapidPublic),
+        });
+      }
+      const res = await fetch("/api/deliver/driver/push/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "same-origin",
+        body: JSON.stringify({ subscription: sub.toJSON() }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setErr(data.error ?? "Couldn't enable notifications.");
+      } else {
+        setFeed((f) =>
+          f
+            ? { ...f, driver: { ...f.driver, pushEnabled: true } }
+            : f,
+        );
+      }
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : String(e));
+    } finally {
+      setBusy(null);
+    }
+  }
+
+  async function disablePush() {
+    setBusy("push");
+    setErr(null);
+    try {
+      if ("serviceWorker" in navigator) {
+        const reg = await navigator.serviceWorker.getRegistration();
+        const sub = await reg?.pushManager.getSubscription();
+        if (sub) {
+          try {
+            await sub.unsubscribe();
+          } catch {
+            // Browser-side unsubscribe failed — server-side clear still happens
+          }
+        }
+      }
+      const res = await fetch("/api/deliver/driver/push/unsubscribe", {
+        method: "POST",
+        credentials: "same-origin",
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setErr(data.error ?? "Couldn't turn off notifications.");
+      } else {
+        setFeed((f) =>
+          f
+            ? { ...f, driver: { ...f.driver, pushEnabled: false } }
+            : f,
+        );
+      }
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : String(e));
+    } finally {
+      setBusy(null);
+    }
+  }
+
   async function openStripeDashboard() {
     setBusy("stripe-dashboard");
     setErr(null);
@@ -291,6 +403,50 @@ export default function RunnerHub({
               : isOnline
                 ? "Go off duty"
                 : "I'm here — go on duty"}
+          </button>
+        </section>
+
+        {/* Push notifications toggle. Off-state = subtle nudge; on-state =
+            confirmation. Browser-permission gated — tapping triggers
+            native browser permission prompt the first time. */}
+        <section
+          className={
+            driver.pushEnabled
+              ? "bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-4 flex items-center justify-between gap-3"
+              : "bg-navy-800 border border-navy-700 rounded-xl p-4 flex items-center justify-between gap-3"
+          }
+        >
+          <div className="flex items-center gap-3 min-w-0">
+            <span className="text-2xl flex-shrink-0">
+              {driver.pushEnabled ? "🔔" : "🔕"}
+            </span>
+            <div className="min-w-0">
+              <p className="text-sm font-display font-bold text-sand-50">
+                {driver.pushEnabled
+                  ? "Notifications on"
+                  : "Get pinged on new orders"}
+              </p>
+              <p className="text-[11px] text-sand-400 font-light">
+                {driver.pushEnabled
+                  ? "Your phone buzzes the second a new order dispatches."
+                  : "Faster than SMS or email — direct to your phone."}
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={driver.pushEnabled ? disablePush : enablePush}
+            disabled={busy === "push"}
+            className={
+              driver.pushEnabled
+                ? "px-3 py-2 rounded-lg text-xs font-bold bg-navy-800 border border-navy-700 hover:border-coral-500/50 hover:bg-navy-700 text-sand-200 disabled:opacity-50 flex-shrink-0"
+                : "px-3 py-2 rounded-lg text-xs font-bold bg-coral-500 hover:bg-coral-600 text-white disabled:opacity-50 flex-shrink-0"
+            }
+          >
+            {busy === "push"
+              ? "…"
+              : driver.pushEnabled
+                ? "Turn off"
+                : "Enable"}
           </button>
         </section>
 
