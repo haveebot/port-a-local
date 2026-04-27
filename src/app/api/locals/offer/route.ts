@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import crypto from "crypto";
 import {
   CATEGORIES,
   type ListingMode,
@@ -7,6 +6,7 @@ import {
 } from "@/data/locals-types";
 import { mirrorLocalsInquiryToWheelhouse } from "@/lib/localsDispatch";
 import { createLocalsOffer } from "@/data/locals-store";
+import { signLocalsToken } from "@/lib/locals-hmac";
 
 const APP_URL =
   process.env.NEXT_PUBLIC_APP_URL ?? "https://theportalocal.com";
@@ -132,23 +132,17 @@ export async function POST(req: NextRequest) {
   // HMAC-signed magic links for one-click admin actions. Distinct sigs
   // per kind so a leaked approve link can't be replayed against verify
   // or reject.
-  const adminSecret = process.env.ADMIN_APPROVAL_SECRET;
-  let approveUrl: string | null = null;
-  let rejectUrl: string | null = null;
-  let verifyPhotosUrl: string | null = null;
-  if (adminSecret) {
-    const sigApprove = crypto
-      .createHmac("sha256", adminSecret)
-      .update(offer.id)
-      .digest("hex");
-    const sigVerifyPhotos = crypto
-      .createHmac("sha256", adminSecret)
-      .update(`${offer.id}:verify-photos`)
-      .digest("hex");
-    approveUrl = `${APP_URL}/api/locals/offer/approve?id=${offer.id}&s=${sigApprove}`;
-    rejectUrl = `${APP_URL}/api/locals/offer/reject?id=${offer.id}&s=${sigApprove}`;
-    verifyPhotosUrl = `${APP_URL}/api/locals/offer/verify-photos?id=${offer.id}&s=${sigVerifyPhotos}`;
-  }
+  const sigAdmin = signLocalsToken("admin", offer.id);
+  const sigVerifyPhotos = signLocalsToken("verify-photos", offer.id);
+  const approveUrl = sigAdmin
+    ? `${APP_URL}/api/locals/offer/approve?id=${offer.id}&s=${sigAdmin}`
+    : null;
+  const rejectUrl = sigAdmin
+    ? `${APP_URL}/api/locals/offer/reject?id=${offer.id}&s=${sigAdmin}`
+    : null;
+  const verifyPhotosUrl = sigVerifyPhotos
+    ? `${APP_URL}/api/locals/offer/verify-photos?id=${offer.id}&s=${sigVerifyPhotos}`
+    : null;
 
   const subject = `PAL Locals — provider signup: ${body.businessName || name} (${cat?.label ?? body.category})`;
   const html = `

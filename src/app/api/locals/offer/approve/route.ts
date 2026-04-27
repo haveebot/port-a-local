@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import crypto from "crypto";
 import {
   approveLocalsOffer,
   getLocalsOffer,
 } from "@/data/locals-store";
+import { signLocalsToken, verifyLocalsToken } from "@/lib/locals-hmac";
 import { magicLinkQrDataUrl, qrEmailBlock } from "@/lib/qrEmail";
 
 export const dynamic = "force-dynamic";
@@ -31,17 +31,12 @@ export async function GET(req: NextRequest) {
   const url = new URL(req.url);
   const offerId = url.searchParams.get("id") ?? "";
   const sig = url.searchParams.get("s") ?? "";
-  const secret = process.env.ADMIN_APPROVAL_SECRET;
-  if (!secret) {
+  if (!process.env.ADMIN_APPROVAL_SECRET) {
     return htmlError(
       "Server is missing ADMIN_APPROVAL_SECRET — Winston needs to set it in Vercel env.",
     );
   }
-  const expected = crypto
-    .createHmac("sha256", secret)
-    .update(offerId)
-    .digest("hex");
-  if (!timingSafeEqual(sig, expected)) {
+  if (!verifyLocalsToken("admin", offerId, sig)) {
     return htmlError("Bad signature. This approval link is invalid or tampered with.");
   }
 
@@ -59,6 +54,13 @@ export async function GET(req: NextRequest) {
   // Send the applicant a "you're in" email — only if not already sent
   // (idempotency on re-clicks of approve link).
   if (!wasAlreadyApproved && offer.email) {
+    // Sell-mode vendors get a portal magic link to onboard Stripe
+    // Connect Express. signLocalsToken returns null when the secret
+    // isn't set, but we already gated on that above — safe to assert.
+    const vendorPortalUrl =
+      offer.mode === "sell"
+        ? `${APP_URL}/locals/vendor/${offer.id}?s=${signLocalsToken("vendor-connect", offer.id)}`
+        : null;
     await sendOfferApprovedEmail({
       name: offer.name,
       email: offer.email,
@@ -67,6 +69,8 @@ export async function GET(req: NextRequest) {
       photoUploadMailto: `mailto:hello@theportalocal.com?subject=${encodeURIComponent(
         `Locals listing photos — ${offer.businessName || offer.name}`,
       )}`,
+      vendorPortalUrl,
+      priceCents: offer.priceCents,
     });
   }
 
@@ -79,13 +83,22 @@ interface ApprovedEmailInput {
   mode: "rent" | "hire" | "sell";
   photosAcknowledged: boolean;
   photoUploadMailto: string;
+  /** Sell-mode only: HMAC-signed link to /locals/vendor/[offerId] for
+      Stripe Connect onboarding. Null when not sell-mode or secret unset. */
+  vendorPortalUrl: string | null;
+  /** Sell-mode only: vendor's price in cents (for receipt-shaped copy
+      explaining what they'll net per sale). */
+  priceCents: number | null;
 }
 
 async function sendOfferApprovedEmail(i: ApprovedEmailInput): Promise<void> {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) return;
   const first = i.name.split(" ")[0];
-  const sendsPhotos = i.mode === "rent";
+  const sendsPhotos = i.mode === "rent" || i.mode === "sell";
+  const isSellMode = i.mode === "sell" && !!i.vendorPortalUrl;
+  const priceDollars =
+    i.priceCents != null ? (i.priceCents / 100).toFixed(2) : null;
   // Verified = listed = live. Photos are an optimization, not a gate —
   // listings without photos still go live, they just convert worse.
   const subject = `You're in — PAL Locals verified your listing`;
@@ -99,6 +112,33 @@ async function sendOfferApprovedEmail(i: ApprovedEmailInput): Promise<void> {
       </p>
       <h2 style="margin: 0 0 16px; font-family: Georgia, serif;">You&apos;re in, ${escapeHtml(first)}.</h2>
       <p>We reviewed your submission and verified your listing on PAL Locals — locals only, vetted, no outsourcing. <strong>Customers can now find + request you.</strong></p>
+
+      ${
+        isSellMode
+          ? `
+      <div style="background:#f3ede0; padding:16px 18px; border-radius:8px; margin: 16px 0; border:1px solid #d9c9a5;">
+        <p style="margin: 0 0 6px; font-size:11px; text-transform:uppercase; letter-spacing:0.15em; color:#1f7a4d; font-weight:bold;">
+          Set up auto-payouts
+        </p>
+        <p style="margin: 4px 0 8px; font-size:14px; line-height:1.55;">
+          Hook up Stripe once and every sale auto-deposits to your bank in 1–2 business days. Skip and we&apos;ll relay payouts manually until you do — but auto is way smoother for both of us.
+        </p>
+        <p style="margin: 10px 0;">
+          <a href="${i.vendorPortalUrl}" style="display:inline-block; padding:12px 22px; background:#1f7a4d; color:#fff; text-decoration:none; border-radius:8px; font-weight:bold; font-size:14px;">
+            Set up Stripe payouts →
+          </a>
+        </p>
+        ${
+          priceDollars
+            ? `<p style=\"margin: 8px 0 0; font-size:12px; color:#5b4d3a; line-height:1.55;\">
+          Reminder on the math: customer pays <strong>$${priceDollars} + 10% PAL fee</strong> on top. You keep the full <strong>$${priceDollars}</strong> per sale. The fee covers Stripe + PAL — never deducted from your quote.
+        </p>`
+            : ``
+        }
+      </div>
+      `
+          : ``
+      }
 
       ${
         sendsPhotos
@@ -136,6 +176,13 @@ async function sendOfferApprovedEmail(i: ApprovedEmailInput): Promise<void> {
   const text =
     `You're in, ${first}.\n\n` +
     `PAL Locals reviewed and verified your listing — customers can now find + request you.\n\n` +
+    (isSellMode
+      ? `Set up auto-payouts: ${i.vendorPortalUrl}\n` +
+        `Hook up Stripe once and every sale auto-deposits to your bank in 1–2 business days. Skip it and we'll relay payouts manually until you do.\n` +
+        (priceDollars
+          ? `Customer pays $${priceDollars} + 10% PAL fee on top. You keep the full $${priceDollars} per sale.\n\n`
+          : `\n`)
+      : ``) +
     (sendsPhotos
       ? `Want way more requests? Send photos. Listings with photos convert dramatically better. You're live either way — photos just get your inbox busier. Email them to hello@theportalocal.com when you can.\n\n`
       : ``) +
@@ -159,13 +206,6 @@ async function sendOfferApprovedEmail(i: ApprovedEmailInput): Promise<void> {
   } catch (err) {
     console.error("[locals offer approve] email failed:", err);
   }
-}
-
-function timingSafeEqual(a: string, b: string): boolean {
-  const ab = Buffer.from(a);
-  const bb = Buffer.from(b);
-  if (ab.length !== bb.length) return false;
-  return crypto.timingSafeEqual(ab, bb);
 }
 
 function htmlSuccess(name: string, verb: string): NextResponse {
@@ -223,5 +263,3 @@ function htmlPage(inner: string): string {
   return `<!doctype html><html><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>PAL Locals Admin</title></head><body style="background:#f5f0e8; margin:0;">${inner}</body></html>`;
 }
 
-// Suppress unused-warning when ENABLE_APP_URL_LINKING is undefined
-void APP_URL;

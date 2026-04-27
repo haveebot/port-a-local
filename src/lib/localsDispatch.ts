@@ -101,3 +101,33 @@ export async function mirrorLocalsInquiryToWheelhouse(
     console.error("[locals mirror] failed:", err);
   }
 }
+
+/**
+ * One-shot mirror for "vendor finished Stripe Connect onboarding,
+ * payouts now auto-route." Fires from the account.updated webhook
+ * once when the row flips false → true, so the Wheelhouse activity
+ * ticker shows the moment a vendor goes self-serve.
+ */
+export async function mirrorLocalsVendorPayoutsLive(
+  vendorName: string,
+  offerId: string,
+): Promise<void> {
+  try {
+    const threadId = await findOrCreateLocalsThread();
+    const lines = [
+      `**Vendor payouts live** — ${vendorName}`,
+      "",
+      `Stripe Connect Express onboarding completed. Sales now auto-route to their bank — no manual relay needed.`,
+      "",
+      `**Offer:** \`${offerId}\``,
+    ];
+    await createMessage({
+      threadId,
+      authorId: "winston-claude",
+      type: "fyi",
+      body: lines.join("\n"),
+    });
+  } catch (err) {
+    console.error("[locals vendor payouts mirror] failed:", err);
+  }
+}

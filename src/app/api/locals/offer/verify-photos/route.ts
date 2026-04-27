@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import crypto from "crypto";
 import {
   getLocalsOffer,
   markLocalsOfferPhotosVerified,
 } from "@/data/locals-store";
+import { verifyLocalsToken } from "@/lib/locals-hmac";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -20,17 +20,12 @@ export async function GET(req: NextRequest) {
   const url = new URL(req.url);
   const offerId = url.searchParams.get("id") ?? "";
   const sig = url.searchParams.get("s") ?? "";
-  const secret = process.env.ADMIN_APPROVAL_SECRET;
-  if (!secret) {
+  if (!process.env.ADMIN_APPROVAL_SECRET) {
     return htmlError(
       "Server is missing ADMIN_APPROVAL_SECRET — set it in Vercel env.",
     );
   }
-  const expected = crypto
-    .createHmac("sha256", secret)
-    .update(`${offerId}:verify-photos`)
-    .digest("hex");
-  if (!timingSafeEqual(sig, expected)) {
+  if (!verifyLocalsToken("verify-photos", offerId, sig)) {
     return htmlError("Bad signature on verify-photos link.");
   }
 
@@ -66,13 +61,6 @@ export async function GET(req: NextRequest) {
     `),
     { status: 200, headers: { "Content-Type": "text/html; charset=utf-8" } },
   );
-}
-
-function timingSafeEqual(a: string, b: string): boolean {
-  const ab = Buffer.from(a);
-  const bb = Buffer.from(b);
-  if (ab.length !== bb.length) return false;
-  return crypto.timingSafeEqual(ab, bb);
 }
 
 function escapeHtml(s: string): string {

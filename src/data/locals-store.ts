@@ -49,6 +49,13 @@ async function ensureSchema(): Promise<void> {
   await sql`ALTER TABLE locals_offers ADD COLUMN IF NOT EXISTS price_cents INTEGER`;
   await sql`ALTER TABLE locals_offers ADD COLUMN IF NOT EXISTS fulfillment_note TEXT`;
 
+  // Stripe Connect columns for sell-mode vendor self-onboarding.
+  // Vendor portal at /locals/vendor/[offerId] mints accountLinks; the
+  // account.updated webhook flips stripe_payouts_enabled when Stripe
+  // confirms the vendor's Connect account is live for transfers.
+  await sql`ALTER TABLE locals_offers ADD COLUMN IF NOT EXISTS stripe_account_id TEXT`;
+  await sql`ALTER TABLE locals_offers ADD COLUMN IF NOT EXISTS stripe_payouts_enabled BOOLEAN NOT NULL DEFAULT FALSE`;
+
   // Sell-mode purchase ledger — one row per Stripe Checkout session
   // for sell-mode buys. Used for email-send idempotency (so a
   // customer refreshing the success page doesn't re-fire vendor
@@ -96,6 +103,13 @@ export interface LocalsOfferRecord {
   priceCents: number | null;
   /** Sell-mode only: vendor's fulfillment plan (free-form) */
   fulfillmentNote: string | null;
+  /** Sell-mode only: vendor's Stripe Connect Express account ID, set
+      when vendor onboards via /locals/vendor/[offerId]. */
+  stripeAccountId: string | null;
+  /** Sell-mode only: true after Stripe confirms vendor's Connect
+      account is live for transfers (charges_enabled + payouts_enabled).
+      Webhook + refresh route both flip this. */
+  stripePayoutsEnabled: boolean;
 }
 
 function rowToOffer(row: Record<string, unknown>): LocalsOfferRecord {
@@ -126,6 +140,8 @@ function rowToOffer(row: Record<string, unknown>): LocalsOfferRecord {
     rejectedReason: (row.rejected_reason as string) ?? null,
     priceCents: row.price_cents != null ? Number(row.price_cents) : null,
     fulfillmentNote: (row.fulfillment_note as string) ?? null,
+    stripeAccountId: (row.stripe_account_id as string) ?? null,
+    stripePayoutsEnabled: row.stripe_payouts_enabled === true,
   };
 }
 
@@ -238,6 +254,43 @@ export async function markLocalsOfferPhotosVerified(
     WHERE id = ${id}
   `;
   return getLocalsOffer(id);
+}
+
+/**
+ * Stamp Stripe Connect account ID + payouts state on an offer.
+ * Called by /api/locals/vendor/connect/start (after creating the
+ * Express account), the refresh route, and the account.updated
+ * webhook. Idempotent — safe to call repeatedly.
+ */
+export async function setLocalsOfferStripeAccount(
+  id: string,
+  stripeAccountId: string,
+  payoutsEnabled: boolean,
+): Promise<LocalsOfferRecord | null> {
+  await ensureSchema();
+  await sql`
+    UPDATE locals_offers
+    SET stripe_account_id = ${stripeAccountId},
+        stripe_payouts_enabled = ${payoutsEnabled}
+    WHERE id = ${id}
+  `;
+  return getLocalsOffer(id);
+}
+
+/**
+ * Lookup an offer by its Stripe Connect account ID — used by the
+ * account.updated webhook to find the row to flip on incoming events.
+ */
+export async function getLocalsOfferByStripeAccount(
+  stripeAccountId: string,
+): Promise<LocalsOfferRecord | null> {
+  await ensureSchema();
+  const { rows } = await sql`
+    SELECT * FROM locals_offers
+    WHERE stripe_account_id = ${stripeAccountId}
+    LIMIT 1
+  `;
+  return rows[0] ? rowToOffer(rows[0]) : null;
 }
 
 /* ------------------- Sell-mode purchase ledger ------------------- */
