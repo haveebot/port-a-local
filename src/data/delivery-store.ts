@@ -139,6 +139,12 @@ async function ensureSchema(): Promise<void> {
   await sql`ALTER TABLE delivery_drivers ADD COLUMN IF NOT EXISTS insurance_verified_at TIMESTAMPTZ`;
   await sql`ALTER TABLE delivery_drivers ADD COLUMN IF NOT EXISTS verified_by TEXT`;
 
+  // License plate + state of registration (added 2026-04-27 per
+  // insurance-agent advisory for PAL's umbrella liability coverage —
+  // need plate + tag-state on file for every active runner).
+  await sql`ALTER TABLE delivery_drivers ADD COLUMN IF NOT EXISTS license_plate TEXT`;
+  await sql`ALTER TABLE delivery_drivers ADD COLUMN IF NOT EXISTS license_plate_state TEXT`;
+
   // Web push subscription (added 2026-04-26). One subscription per runner
   // for v1 — re-enabling on a new device overwrites the old. Stored as
   // raw JSON since the shape is opaque to us (browser-controlled blob
@@ -176,6 +182,10 @@ export interface DriverRecord {
   licenseVerifiedAt: string | null;
   insuranceVerifiedAt: string | null;
   verifiedBy: string | null;
+  // Vehicle plate + state of registration (insurance-umbrella-coverage
+  // requirement, added 2026-04-27).
+  licensePlate: string | null;
+  licensePlateState: string | null;
 }
 
 function rowToDriver(row: Record<string, unknown>): DriverRecord {
@@ -210,6 +220,8 @@ function rowToDriver(row: Record<string, unknown>): DriverRecord {
       ? new Date(row.insurance_verified_at as string).toISOString()
       : null,
     verifiedBy: (row.verified_by as string) ?? null,
+    licensePlate: (row.license_plate as string) ?? null,
+    licensePlateState: (row.license_plate_state as string) ?? null,
   };
 }
 
@@ -225,6 +237,8 @@ export interface CreateDriverInput {
   licenseAcknowledged?: boolean;
   insuranceAcknowledged?: boolean;
   insuranceCarrier?: string;
+  licensePlate?: string;
+  licensePlateState?: string;
 }
 
 function newDriverId(): string {
@@ -251,7 +265,8 @@ export async function createDriverApplication(
     INSERT INTO delivery_drivers (
       id, name, phone, email, token, is_active,
       vehicle, availability, why,
-      license_acknowledged, insurance_acknowledged, insurance_carrier
+      license_acknowledged, insurance_acknowledged, insurance_carrier,
+      license_plate, license_plate_state
     ) VALUES (
       ${id},
       ${input.name},
@@ -264,7 +279,9 @@ export async function createDriverApplication(
       ${input.why ?? null},
       ${input.licenseAcknowledged === true},
       ${input.insuranceAcknowledged === true},
-      ${input.insuranceCarrier ?? null}
+      ${input.insuranceCarrier ?? null},
+      ${input.licensePlate ?? null},
+      ${input.licensePlateState ?? null}
     )
   `;
   const driver = await getDriverById(id);

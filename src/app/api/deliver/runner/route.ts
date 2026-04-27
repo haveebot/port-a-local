@@ -22,6 +22,9 @@ interface RunnerSignup {
   insuranceCarrier?: string;
   licenseAcknowledged?: boolean;
   insuranceAcknowledged?: boolean;
+  // v3 intake — vehicle plate + tag-state for PAL umbrella liability
+  licensePlate?: string;
+  licensePlateState?: string;
 }
 
 /**
@@ -65,6 +68,22 @@ export async function POST(req: NextRequest) {
       { status: 400 },
     );
   }
+  // Plate + state required for PAL's umbrella liability insurance.
+  // Insurance agent advisory 2026-04-27 — every active runner needs a
+  // plate on file. Light validation; uppercase normalize.
+  const licensePlate = (body.licensePlate ?? "").trim().toUpperCase();
+  const licensePlateState = (body.licensePlateState ?? "")
+    .trim()
+    .toUpperCase();
+  if (licensePlate.length < 2 || licensePlateState.length !== 2) {
+    return NextResponse.json(
+      {
+        error:
+          "License plate + state of registration are required for our liability coverage.",
+      },
+      { status: 400 },
+    );
+  }
 
   // Block duplicate applications — same phone shouldn't create two rows.
   // Direct them to the lookup flow instead so they can recover their links.
@@ -99,6 +118,8 @@ export async function POST(req: NextRequest) {
     licenseAcknowledged: body.licenseAcknowledged === true,
     insuranceAcknowledged: body.insuranceAcknowledged === true,
     insuranceCarrier: insuranceCarrier || undefined,
+    licensePlate,
+    licensePlateState,
   });
 
   // HMAC-signed magic links Winston (or anyone with admin secret) can click
@@ -140,6 +161,8 @@ export async function POST(req: NextRequest) {
     insuranceCarrier: driver.insuranceCarrier ?? undefined,
     licenseAcknowledged: driver.licenseAcknowledged,
     insuranceAcknowledged: driver.insuranceAcknowledged,
+    licensePlate: driver.licensePlate ?? undefined,
+    licensePlateState: driver.licensePlateState ?? undefined,
     approveUrl,
     rejectUrl,
     verifyLicenseUrl,
@@ -231,6 +254,8 @@ interface AdminEmailInput {
   insuranceCarrier?: string;
   licenseAcknowledged: boolean;
   insuranceAcknowledged: boolean;
+  licensePlate?: string;
+  licensePlateState?: string;
   approveUrl: string | null;
   rejectUrl: string | null;
   verifyLicenseUrl: string | null;
@@ -284,6 +309,7 @@ async function sendAdminApplicationEmail(i: AdminEmailInput): Promise<void> {
         <p style="margin: 0 0 6px; font-size:11px; text-transform:uppercase; letter-spacing:0.15em; color:#7d6e5a; font-weight:bold;">License + insurance attestation</p>
         <p style="margin: 4px 0;"><strong>License:</strong> ${i.licenseAcknowledged ? "✓ Attested" : "✗ Not attested"}</p>
         <p style="margin: 4px 0;"><strong>Insurance:</strong> ${i.insuranceAcknowledged ? "✓ Attested" : "✗ Not attested"} ${i.insuranceCarrier ? `· <em>${escapeHtml(i.insuranceCarrier)}</em>` : ""}</p>
+        ${i.licensePlate ? `<p style="margin: 4px 0;"><strong>Plate:</strong> <code>${escapeHtml(i.licensePlate)}</code> · ${escapeHtml(i.licensePlateState ?? "")}<span style="color:#7d6e5a; font-size:11px;"> &nbsp;(for umbrella liability)</span></p>` : `<p style="margin: 4px 0; color:#c83a3a;"><strong>Plate:</strong> ✗ Missing — should not be possible from the form</p>`}
         <p style="margin: 8px 0 0; font-size:12px; color:#666;">
           Applicant said they&apos;d email license + insurance card photos to hello@. Mark verified after they land.
         </p>
