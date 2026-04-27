@@ -91,11 +91,18 @@ That command triggers the full arnold drill (briefs + project memory + orient + 
 
 Skim it BEFORE Winston shares his list — even if his list bumps it, you'll know what's queued.
 
-## CityDeploy framing — every build is a template
+## HeyeDeploy framing — every build is a template (across ALL Heye Lab projects)
 
-Per Winston end-of-PM-session: **every pattern PAL ships gets treated as a CityDeploy template**, not just Wheelhouse. The Stripe Connect onboarding rock above is itself a replication of the canonical runner Connect flow — the brief explicitly says "Mirror it. Don't invent." That's the meta-pattern.
+Per Winston end-of-PM-session: **every pattern any Heye Lab project ships gets treated as a HeyeDeploy template**, not just patterns inside CityDeploy. Initial framing was CityDeploy-scoped (PAL specifically); refined same session to HeyeDeploy-scoped because the meta-pattern cuts across PAL + CrossRef + Sage Em + future projects.
 
-When building anything reusable, reference `feedback_citydeploy_pattern_thinking.md` and follow the rule: identify the canonical PAL implementation, document the cross-project shape, ship it once with the template doc filed alongside. Memory file will be in the mirror by next session.
+**Three-tier hierarchy (don't conflate):**
+- **HeyeDeploy** — framework / operating model. Cross-cuts everything Heye Lab does. Lives in `MEMORY.md`-level cross-project rules + `workspace/scripts/`.
+- **`<Vertical>Deploy`** — vertical-specific SaaS product built USING HeyeDeploy patterns. CityDeploy is the first (small/mid-town local-marketplace SaaS).
+- **Tenant instance** — concrete deployment of a `<Vertical>Deploy`. PAL is the first CityDeploy tenant.
+
+The Stripe Connect onboarding rock above is itself a HeyeDeploy template-replication of the canonical runner Connect flow — the brief explicitly says *"Mirror it. Don't invent."* That's the meta-pattern.
+
+When building anything reusable, reference `feedback_heyedeploy_pattern_thinking.md` and follow the rule: identify the canonical implementation across all Heye Lab projects, document the cross-project shape, ship it once with the template doc filed alongside.
 
 ---
 

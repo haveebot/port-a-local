@@ -32,11 +32,31 @@ Heye Lab is **Nick Merrill's** umbrella corporation — the platform-company lay
 - "Don't optimize Vercel because we'll migrate" is the wrong frame. The migration isn't planned; it's emergent. Optimize today as if Vercel is permanent.
 - Build with portability in mind (no Vercel-specific lock-in beyond the build / ISR conventions) — this stays true.
 
-**The flagship product: CityDeploy** (locked in 2026-04-26, Winston):
-- Working name **"CityDeploy"** (a.k.a. "City Deployment") for the SaaS-ified PAL platform — sold to other towns. PAL is the proof-of-concept; CityDeploy is the engine that gets templated and deployed per city.
-- Tagline pattern: "Powered by Heye Lab · Built on CityDeploy"
-- The platform extraction Nick is mining for: same Next.js + Postgres + Stripe Connect + cookie-session + email/SMS comms + admin dashboards stack, configurable per town.
-- Memory mirror at `port-a-local/Port A Local/Memory/` is the working ground for pattern extraction — CityDeploy gets seeded from PAL's hard-won decisions.
+**The product hierarchy: HeyeDeploy → vertical-Deploys → tenants** (locked in 2026-04-27 PM by Winston, refined from earlier CityDeploy-only framing):
+
+```
+HeyeDeploy             ← framework / operating model (cross-project)
+   ├─ CityDeploy       ← vertical: small/mid-town local-marketplace SaaS
+   │     └─ PAL        ← first CityDeploy tenant (proof of concept)
+   ├─ <future-Deploy>  ← vertical: e.g. electrical-brokerage SaaS
+   │     └─ CrossRef   ← could become first tenant if it productizes
+   ├─ <future-Deploy>  ← vertical: e.g. creative-studio SaaS
+   │     └─ Sage Em    ← could become first tenant if it productizes
+   └─ shared cross-project tooling (Wheelhouse, arnold/truck, sync-memory, scripts)
+```
+
+**Naming rules (non-conflate-able):**
+- **HeyeDeploy** = the framework. Operating model + pattern docs + shared tooling. Internal mostly. Could become public IP if Heye Lab ever publishes "build your own SaaS the Heye Lab way."
+- **`<Vertical>Deploy`** = a specific SaaS product built using HeyeDeploy patterns. CityDeploy is the first (small/mid towns). Sold/licensed to tenants in that vertical.
+- **Tenant instance** = one concrete deployment. PAL is the first CityDeploy tenant. theportalocal.com is the live site.
+
+**Footer chain stays the same:** `theportalocal.com` → "Powered by Heye Lab · Built on CityDeploy" — accurate as-is. CityDeploy IS Heye Lab's first vertical-Deploy. HeyeDeploy is the framework underneath that Heye Lab uses to make BOTH efficient.
+
+**Pattern docs already locked under HeyeDeploy** (filed 2026-04-27): Wheelhouse cross-project pattern, memory mirror sync, context-handoff "truck" protocol, startup-drill "arnold" protocol, plus `feedback_heyedeploy_pattern_thinking.md` itself as the meta-rule.
+
+**Memory mirror at `port-a-local/Port A Local/Memory/`** is the working ground for pattern extraction — every Heye Lab project gets the same HeyeDeploy framework files (when CrossRef + Sage Em get mirrors established, they get the same set).
+
+**The platform extraction Nick is mining for:** same Next.js + Postgres + Stripe Connect + cookie-session + email/SMS comms + admin dashboards stack, configurable per town under CityDeploy. The HeyeDeploy framework is the CONNECTIVE TISSUE — what makes that extraction efficient across multiple verticals, not just one.
 
 **Public framing:** `CrossRef — Powered by Heye Lab` (tagline pattern; expect similar on other beta projects).
 
