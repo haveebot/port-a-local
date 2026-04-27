@@ -76,7 +76,7 @@ export async function GET(req: NextRequest) {
 interface ApprovedEmailInput {
   name: string;
   email: string;
-  mode: "rent" | "hire";
+  mode: "rent" | "hire" | "sell";
   photosAcknowledged: boolean;
   photoUploadMailto: string;
 }

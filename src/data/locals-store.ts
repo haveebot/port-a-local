@@ -53,7 +53,7 @@ export interface LocalsOfferRecord {
   phone: string;
   email: string | null;
   businessName: string | null;
-  mode: "rent" | "hire";
+  mode: "rent" | "hire" | "sell";
   category: string;
   description: string;
   pricing: string | null;
@@ -75,7 +75,7 @@ function rowToOffer(row: Record<string, unknown>): LocalsOfferRecord {
     phone: row.phone as string,
     email: (row.email as string) ?? null,
     businessName: (row.business_name as string) ?? null,
-    mode: row.mode as "rent" | "hire",
+    mode: row.mode as "rent" | "hire" | "sell",
     category: row.category as string,
     description: row.description as string,
     pricing: (row.pricing as string) ?? null,
@@ -102,7 +102,7 @@ export interface CreateOfferInput {
   phone: string;
   email?: string;
   businessName?: string;
-  mode: "rent" | "hire";
+  mode: "rent" | "hire" | "sell";
   category: string;
   description: string;
   pricing?: string;
