@@ -259,8 +259,15 @@ export default async function LocalsPage({
             className="underline decoration-sand-300 hover:text-coral-600"
           >
             /maintenance
+          </Link>
+          . For vacation-rental cleaning, book direct through{" "}
+          <Link
+            href="/housekeeping"
+            className="underline decoration-sand-300 hover:text-coral-600"
+          >
+            /housekeeping
           </Link>{" "}
-          where our maintenance vendor handles them, not /locals.
+          ($100/hr, online).
         </p>
       </div>
     </main>

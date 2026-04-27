@@ -333,6 +333,10 @@ export default function Navigation() {
               <PortalIcon name="maintenance" className="w-4 h-4 shrink-0" />
               Property maintenance
             </Link>
+            <Link href="/housekeeping" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-coral-300 hover:bg-navy-800/50 rounded-lg transition-colors">
+              <PortalIcon name="services" className="w-4 h-4 shrink-0" />
+              Housekeeping
+            </Link>
             <Link href="/locals/offer" onClick={() => setMobileOpen(false)} className={`${mobileLinkClass} flex items-center gap-2`}>
               <PortalIcon name="services" className="w-4 h-4 text-coral-400 shrink-0" />
               List on PAL

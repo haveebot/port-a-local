@@ -270,4 +270,11 @@ export interface Listing {
       "I'll meet you at the marina" / "Pickup at studio (text first)" /
       "Ship USPS — flat $8 nationwide" / "Free local delivery in PA" */
   fulfillmentNote?: string;
+  /** Sell-mode only: vendor's email — fires the "you sold something"
+      notification on customer purchase. Falls back to admin@ when
+      missing (Winston manually relays until vendor wires this up). */
+  vendorEmail?: string;
+  /** Sell-mode only: vendor's phone — included in admin alert and
+      could power SMS notifications post-A2P approval. */
+  vendorPhone?: string;
 }

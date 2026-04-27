@@ -7,7 +7,11 @@ import {
   markHousekeepingPaid,
   formatUSD,
 } from "@/data/housekeeping-store";
-import { sendHousekeepingAdminEmail } from "@/lib/housekeepingEmails";
+import {
+  sendHousekeepingAdminEmail,
+  sendHousekeepingCustomerEmail,
+} from "@/lib/housekeepingEmails";
+import { mirrorHousekeepingBookingToWheelhouse } from "@/lib/housekeepingDispatch";
 
 export const dynamic = "force-dynamic";
 
@@ -43,8 +47,24 @@ async function verifyAndConfirmIfNeeded(
         bookingId,
         (session.payment_intent as string) ?? "",
       );
-      if (updated) {
-        await sendHousekeepingAdminEmail(updated);
+      // markHousekeepingPaid only updates rows in 'placed' state, so
+      // `updated` is the new paid row on the first transition and the
+      // already-paid row on refresh. Gate notifications on a status
+      // shift via the `paid_at` field that just landed.
+      if (updated && updated.status === "paid") {
+        const justPaid =
+          !!updated.paidAt &&
+          Date.now() - new Date(updated.paidAt).getTime() < 60_000;
+        if (justPaid) {
+          // Fan out: customer receipt, admin alert, Wheelhouse mirror.
+          // Each handler swallows its own errors so one failure can't
+          // break the cascade.
+          await Promise.all([
+            sendHousekeepingCustomerEmail(updated),
+            sendHousekeepingAdminEmail(updated),
+            mirrorHousekeepingBookingToWheelhouse(updated),
+          ]);
+        }
       }
     }
   } catch (err) {

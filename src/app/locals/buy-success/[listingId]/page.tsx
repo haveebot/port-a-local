@@ -3,6 +3,17 @@ import Link from "next/link";
 import Stripe from "stripe";
 import LighthouseMark from "@/components/brand/LighthouseMark";
 import { getListingById } from "@/data/locals-listings";
+import {
+  createOrGetLocalsPurchase,
+  markLocalsPurchaseEmailsSent,
+  type LocalsPurchaseRecord,
+} from "@/data/locals-store";
+import {
+  sendVendorSaleEmail,
+  sendCustomerSaleEmail,
+  sendAdminSaleEmail,
+} from "@/lib/localsBuyEmails";
+import { mirrorLocalsInquiryToWheelhouse } from "@/lib/localsDispatch";
 
 export const dynamic = "force-dynamic";
 
@@ -23,14 +34,16 @@ interface VerifiedDetails {
   palFeeCents?: number;
   customerName?: string;
   customerEmail?: string;
+  customerPhone?: string;
+  customerMessage?: string;
+  paymentIntentId?: string;
 }
 
 /**
  * Server-side Stripe verification on success-page load. Read the
  * Checkout session, return the totals + customer info to render
- * the receipt-style confirmation. Vendor admin email fires here
- * (idempotent — we use Stripe metadata as the source of truth, no
- * separate DB row needed for sell-mode v1).
+ * the receipt-style confirmation. Email cascade + DB upsert happen
+ * separately so this stays a pure read.
  */
 async function verifySession(
   sessionId: string | undefined,
@@ -52,11 +65,95 @@ async function verifySession(
         : undefined,
       customerName: session.metadata?.customer_name ?? undefined,
       customerEmail: session.customer_email ?? undefined,
+      customerPhone: session.metadata?.customer_phone ?? undefined,
+      customerMessage: session.metadata?.customer_message ?? undefined,
+      paymentIntentId:
+        typeof session.payment_intent === "string"
+          ? session.payment_intent
+          : (session.payment_intent?.id ?? undefined),
     };
   } catch (err) {
     console.error("[locals buy success] Stripe verify failed:", err);
     return null;
   }
+}
+
+/**
+ * Idempotent email cascade — runs once per Stripe session.
+ *
+ * Flow:
+ *   1. Upsert purchase row keyed by Stripe session ID (race-safe).
+ *   2. `markLocalsPurchaseEmailsSent` returns `true` only on the
+ *      first successful claim — subsequent refreshes return `false`
+ *      and skip sends.
+ *   3. Fire all three emails (vendor / customer / admin) + Wheelhouse
+ *      mirror in parallel. Failures log but don't block the page.
+ */
+async function fireSaleCascadeIfNeeded(
+  listingId: string,
+  verified: VerifiedDetails,
+  sessionId: string,
+): Promise<LocalsPurchaseRecord | null> {
+  const listing = getListingById(listingId);
+  if (!listing) return null;
+  if (
+    !verified.customerName ||
+    !verified.customerEmail ||
+    !verified.customerPhone ||
+    verified.vendorAmountCents == null ||
+    verified.palFeeCents == null
+  ) {
+    // Missing metadata — bail rather than write a half-row. Stripe
+    // session has the source of truth; if metadata is missing, we
+    // can re-run from a backfill script.
+    console.warn(
+      "[locals buy success] missing metadata, skipping cascade",
+      sessionId,
+    );
+    return null;
+  }
+
+  let purchase: LocalsPurchaseRecord;
+  try {
+    purchase = await createOrGetLocalsPurchase({
+      stripeSessionId: sessionId,
+      listingId: listing.id,
+      customerName: verified.customerName,
+      customerEmail: verified.customerEmail,
+      customerPhone: verified.customerPhone,
+      customerMessage: verified.customerMessage,
+      vendorAmountCents: verified.vendorAmountCents,
+      palFeeCents: verified.palFeeCents,
+      totalCents: verified.totalCents,
+      stripePaymentIntentId: verified.paymentIntentId,
+    });
+  } catch (err) {
+    console.error("[locals buy success] purchase upsert failed:", err);
+    return null;
+  }
+
+  const claimed = await markLocalsPurchaseEmailsSent(sessionId);
+  if (!claimed) return purchase; // already fired, just render
+
+  // Run sends in parallel — each handler swallows its own errors.
+  await Promise.all([
+    sendVendorSaleEmail(listing, purchase),
+    sendCustomerSaleEmail(listing, purchase),
+    sendAdminSaleEmail(listing, purchase),
+    mirrorLocalsInquiryToWheelhouse({
+      kind: "offer", // closest existing kind; emits a "fyi" thread message
+      name: `${purchase.customerName} → ${listing.provider}`,
+      phone: purchase.customerPhone,
+      email: purchase.customerEmail,
+      category: listing.category,
+      mode: "sell",
+      listingId: listing.id,
+      pricing: `$${(purchase.totalCents / 100).toFixed(2)} (vendor: $${(purchase.vendorAmountCents / 100).toFixed(2)} + PAL fee: $${(purchase.palFeeCents / 100).toFixed(2)})`,
+      details: `**Sale closed** — ${listing.title}\n${purchase.customerMessage ? `\nCustomer message:\n${purchase.customerMessage}` : ""}`,
+    }),
+  ]);
+
+  return purchase;
 }
 
 function fmt(cents: number): string {
@@ -77,6 +174,14 @@ export default async function BuySuccessPage({
 
   const verified = await verifySession(sp.session_id);
   const isPaid = verified?.paid === true;
+
+  // Fire the email cascade exactly once per Stripe session. This
+  // notifies the vendor (they made a sale!), confirms with the
+  // customer, alerts admin, and mirrors to Wheelhouse. Refreshes
+  // are no-ops thanks to the emails_sent_at gate.
+  if (isPaid && sp.session_id) {
+    await fireSaleCascadeIfNeeded(listingId, verified!, sp.session_id);
+  }
 
   return (
     <main className="min-h-screen bg-sand-50">

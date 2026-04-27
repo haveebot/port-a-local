@@ -48,6 +48,28 @@ async function ensureSchema(): Promise<void> {
   // Idempotent migration so existing rows continue to work.
   await sql`ALTER TABLE locals_offers ADD COLUMN IF NOT EXISTS price_cents INTEGER`;
   await sql`ALTER TABLE locals_offers ADD COLUMN IF NOT EXISTS fulfillment_note TEXT`;
+
+  // Sell-mode purchase ledger — one row per Stripe Checkout session
+  // for sell-mode buys. Used for email-send idempotency (so a
+  // customer refreshing the success page doesn't re-fire vendor
+  // notification emails) and as the audit trail for sales.
+  await sql`
+    CREATE TABLE IF NOT EXISTS locals_purchases (
+      stripe_session_id TEXT PRIMARY KEY,
+      listing_id TEXT NOT NULL,
+      customer_name TEXT NOT NULL,
+      customer_email TEXT NOT NULL,
+      customer_phone TEXT NOT NULL,
+      customer_message TEXT,
+      vendor_amount_cents INTEGER NOT NULL,
+      pal_fee_cents INTEGER NOT NULL,
+      total_cents INTEGER NOT NULL,
+      stripe_payment_intent_id TEXT,
+      paid_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      emails_sent_at TIMESTAMPTZ
+    )
+  `;
+
   _schemaReady = true;
 }
 
@@ -216,4 +238,119 @@ export async function markLocalsOfferPhotosVerified(
     WHERE id = ${id}
   `;
   return getLocalsOffer(id);
+}
+
+/* ------------------- Sell-mode purchase ledger ------------------- */
+
+export interface LocalsPurchaseRecord {
+  stripeSessionId: string;
+  listingId: string;
+  customerName: string;
+  customerEmail: string;
+  customerPhone: string;
+  customerMessage: string | null;
+  vendorAmountCents: number;
+  palFeeCents: number;
+  totalCents: number;
+  stripePaymentIntentId: string | null;
+  paidAt: string;
+  emailsSentAt: string | null;
+}
+
+function rowToPurchase(row: Record<string, unknown>): LocalsPurchaseRecord {
+  return {
+    stripeSessionId: row.stripe_session_id as string,
+    listingId: row.listing_id as string,
+    customerName: row.customer_name as string,
+    customerEmail: row.customer_email as string,
+    customerPhone: row.customer_phone as string,
+    customerMessage: (row.customer_message as string) ?? null,
+    vendorAmountCents: Number(row.vendor_amount_cents),
+    palFeeCents: Number(row.pal_fee_cents),
+    totalCents: Number(row.total_cents),
+    stripePaymentIntentId: (row.stripe_payment_intent_id as string) ?? null,
+    paidAt: new Date(row.paid_at as string).toISOString(),
+    emailsSentAt: row.emails_sent_at
+      ? new Date(row.emails_sent_at as string).toISOString()
+      : null,
+  };
+}
+
+export interface CreatePurchaseInput {
+  stripeSessionId: string;
+  listingId: string;
+  customerName: string;
+  customerEmail: string;
+  customerPhone: string;
+  customerMessage?: string;
+  vendorAmountCents: number;
+  palFeeCents: number;
+  totalCents: number;
+  stripePaymentIntentId?: string;
+}
+
+/**
+ * Idempotently insert a purchase row keyed by Stripe session ID.
+ * Returns the existing row if already present (so a customer
+ * refreshing the success page doesn't duplicate). The caller can
+ * inspect `emailsSentAt` to decide whether to fire the email cascade.
+ */
+export async function createOrGetLocalsPurchase(
+  input: CreatePurchaseInput,
+): Promise<LocalsPurchaseRecord> {
+  await ensureSchema();
+  await sql`
+    INSERT INTO locals_purchases (
+      stripe_session_id, listing_id,
+      customer_name, customer_email, customer_phone, customer_message,
+      vendor_amount_cents, pal_fee_cents, total_cents,
+      stripe_payment_intent_id
+    ) VALUES (
+      ${input.stripeSessionId},
+      ${input.listingId},
+      ${input.customerName},
+      ${input.customerEmail},
+      ${input.customerPhone},
+      ${input.customerMessage ?? null},
+      ${input.vendorAmountCents},
+      ${input.palFeeCents},
+      ${input.totalCents},
+      ${input.stripePaymentIntentId ?? null}
+    )
+    ON CONFLICT (stripe_session_id) DO NOTHING
+  `;
+  const purchase = await getLocalsPurchase(input.stripeSessionId);
+  if (!purchase) throw new Error("Purchase vanished after upsert");
+  return purchase;
+}
+
+export async function getLocalsPurchase(
+  stripeSessionId: string,
+): Promise<LocalsPurchaseRecord | null> {
+  await ensureSchema();
+  const { rows } = await sql`
+    SELECT * FROM locals_purchases
+    WHERE stripe_session_id = ${stripeSessionId}
+    LIMIT 1
+  `;
+  return rows[0] ? rowToPurchase(rows[0]) : null;
+}
+
+/**
+ * Stamp emails_sent_at so refreshes of the success page don't
+ * re-fire vendor/customer/admin notifications. Returns true on
+ * first successful stamp, false if already stamped (race-safe).
+ */
+export async function markLocalsPurchaseEmailsSent(
+  stripeSessionId: string,
+): Promise<boolean> {
+  await ensureSchema();
+  const now = new Date().toISOString();
+  const { rowCount } = await sql`
+    UPDATE locals_purchases
+    SET emails_sent_at = ${now}
+    WHERE stripe_session_id = ${stripeSessionId}
+      AND emails_sent_at IS NULL
+  `;
+  return (rowCount ?? 0) > 0;
 }
