@@ -223,7 +223,96 @@ export async function POST(req: NextRequest) {
     details: description,
   });
 
+  // Confirmation to the applicant — same shape as the runner-application
+  // confirmation. Sets expectations for next steps + reminds them about
+  // photos for rent listings.
+  if (body.email && apiKey) {
+    await sendApplicantReceivedEmail({
+      name,
+      email: body.email,
+      mode: body.mode,
+      categoryLabel: cat.label,
+      photosAcknowledged: body.photosAcknowledged === true,
+    });
+  }
+
   return NextResponse.json({ ok: true });
+}
+
+interface ApplicantConfirmationInput {
+  name: string;
+  email: string;
+  mode: ListingMode;
+  categoryLabel: string;
+  photosAcknowledged: boolean;
+}
+
+async function sendApplicantReceivedEmail(
+  i: ApplicantConfirmationInput,
+): Promise<void> {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) return;
+  const first = i.name.split(" ")[0];
+  const subject = `Got your listing — PAL Locals`;
+  const needsPhotos = i.mode === "rent";
+  const html = `
+    <div style="font-family: Inter, system-ui, sans-serif; color: #1a2433; line-height: 1.5;">
+      <p style="text-transform: uppercase; letter-spacing: 0.15em; font-size: 11px; color: #C84A2C; margin: 0 0 4px;">
+        PAL Locals · Listing received
+      </p>
+      <h2 style="margin: 0 0 16px; font-family: Georgia, serif;">Got it, ${escapeHtml(first)}.</h2>
+
+      <p>Your <strong>${escapeHtml(i.categoryLabel)}</strong> listing landed. Here&apos;s what happens next:</p>
+
+      <ol style="margin: 12px 0 16px; padding-left: 20px;">
+        <li>We review your info — usually within a day or two.</li>
+        <li>If you&apos;re a fit, we&apos;ll text or call for a quick chat.</li>
+        ${
+          needsPhotos
+            ? `<li>Once approved, you&apos;ll get a follow-up email asking for photos (or feel free to send them now to <a href="mailto:hello@theportalocal.com">hello@theportalocal.com</a>).</li>`
+            : ""
+        }
+        <li>Once we&apos;re both satisfied, your listing goes live and we route customer inquiries straight to you.</li>
+      </ol>
+
+      <p>Quality over volume on our end — PAL Locals stays small on purpose, real Port A locals only. Hang tight.</p>
+
+      <hr style="border: none; border-top: 1px solid #e5dcc7; margin: 24px 0;" />
+
+      <p style="font-size: 13px;">Anything urgent? Reply to this email — we read every one.</p>
+      <p style="font-size: 11px; color: #888; margin-top: 16px;">— The Port A Local</p>
+    </div>
+  `;
+  const text =
+    `Got it, ${first}.\n\n` +
+    `Your ${i.categoryLabel} listing landed on PAL Locals. Here's what happens next:\n\n` +
+    `1. We review your info — usually within a day or two.\n` +
+    `2. If you're a fit, we'll text or call for a quick chat.\n` +
+    (needsPhotos
+      ? `3. Once approved, you'll get a follow-up email asking for photos (or send them now to hello@theportalocal.com).\n`
+      : ``) +
+    `${needsPhotos ? "4" : "3"}. Once we're both satisfied, your listing goes live.\n\n` +
+    `Quality over volume — PAL Locals stays small on purpose. Hang tight.\n\n` +
+    `Questions? Reply to this email.\n\n— The Port A Local`;
+  try {
+    await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey.trim()}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from: "PAL Locals <bookings@theportalocal.com>",
+        to: [i.email],
+        reply_to: "hello@theportalocal.com",
+        subject,
+        html,
+        text,
+      }),
+    });
+  } catch (err) {
+    console.error("[locals offer applicant email] failed:", err);
+  }
 }
 
 function escapeHtml(s: string): string {
