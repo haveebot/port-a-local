@@ -56,9 +56,12 @@ export default function MissedPayoutsList({ missed }: { missed: Missed[] }) {
           driverId: m.driverId,
           amountCents: m.driverPayoutCents,
           memo: `Backfill — order ${m.orderId} (${m.restaurantName})`,
-          // Idempotent custom_id keyed on the original order — second
-          // click on Backfill will hit the unique-PK and 409 cleanly.
-          customId: `backfill-${m.orderId}`,
+          // Use the ORIGINAL orderId as the ledger key — same row the
+          // auto-trigger would've written. This way the missed-payouts
+          // query (LEFT JOIN on order_id) will no longer match and the
+          // row disappears from the UI after refresh. Backfill audit
+          // info lives in Stripe transfer metadata + the memo field.
+          customId: m.orderId,
           // source_transaction = the PaymentIntent that funded the
           // original order. Stripe funds the transfer from THAT charge
           // even if available balance is $0 — bypasses the cold-start

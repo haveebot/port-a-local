@@ -706,6 +706,13 @@ export interface MissedPayoutRecord {
 
 export async function getMissedPayouts(): Promise<MissedPayoutRecord[]> {
   await ensureSchema();
+  // NOT EXISTS handles BOTH ledger-key patterns:
+  //   - new (canonical): t.order_id = o.id
+  //   - legacy backfill: t.order_id = 'backfill-' || o.id
+  // The legacy keys exist because an earlier MissedPayoutsList build
+  // wrote backfill rows under `backfill-{orderId}`, and there are real
+  // transfers behind those rows. Treating both as "this order has been
+  // paid" prevents double-pay and clears them from the UI immediately.
   const { rows } = await sql`
     WITH numbered AS (
       SELECT id, ROW_NUMBER() OVER (ORDER BY applied_at ASC, id ASC) AS signup_num
@@ -723,10 +730,13 @@ export async function getMissedPayouts(): Promise<MissedPayoutRecord[]> {
     FROM delivery_orders o
     JOIN delivery_drivers d ON d.id = o.driver_id
     JOIN numbered n ON n.id = o.driver_id
-    LEFT JOIN delivery_driver_transfers t ON t.order_id = o.id
     WHERE o.status = 'delivered'
-      AND t.order_id IS NULL
       AND o.driver_payout_cents > 0
+      AND NOT EXISTS (
+        SELECT 1 FROM delivery_driver_transfers t
+        WHERE t.order_id = o.id
+           OR t.order_id = 'backfill-' || o.id
+      )
     ORDER BY o.delivered_at DESC
   `;
   return rows.map((r) => ({
