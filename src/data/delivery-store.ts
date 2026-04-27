@@ -968,3 +968,35 @@ export async function getRecentOrders(limit = 50): Promise<Order[]> {
   `;
   return rows.map(rowToOrder);
 }
+
+/**
+ * Orders matching a customer identity. v1 keys on the email captured at
+ * checkout; once `customer_id` columns exist, switch to those.
+ *
+ * Email is lowercased before comparison so casing differences from
+ * different sign-in flows don't fragment a customer's history.
+ */
+export async function getOrdersForCustomer(
+  identifier: { email?: string; phone?: string },
+  limit = 50
+): Promise<Order[]> {
+  await ensureSchema();
+  const email = identifier.email?.trim().toLowerCase();
+  const phone = identifier.phone?.trim();
+  if (!email && !phone) return [];
+
+  // jsonb path comparison — match either email or phone on the embedded
+  // customer object. Indexed by placed_at; small per-customer.
+  const { rows } = await sql`
+    SELECT * FROM delivery_orders
+    WHERE
+      (${email ?? null}::text IS NOT NULL
+        AND lower(customer->>'email') = ${email ?? null})
+      OR
+      (${phone ?? null}::text IS NOT NULL
+        AND customer->>'phone' = ${phone ?? null})
+    ORDER BY placed_at DESC
+    LIMIT ${limit}
+  `;
+  return rows.map(rowToOrder);
+}

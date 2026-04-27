@@ -1,0 +1,52 @@
+{
+  "expo": {
+    "name": "Port A Local",
+    "slug": "port-a-local",
+    "scheme": "portalocal",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0b1120"
+    },
+    "plugins": [
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/icon.png",
+          "color": "#e8656f"
+        }
+      ],
+      "expo-apple-authentication"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "co.portalocal.app",
+      "infoPlist": {
+        "UIBackgroundModes": ["remote-notification"],
+        "ITSAppUsesNonExemptEncryption": false,
+        "NSLocationWhenInUseUsageDescription": "Port A Local uses your location to suggest nearby restaurants, rentals, and services.",
+        "NSCameraUsageDescription": "Port A Local can attach photos to maintenance requests so vendors know what to expect.",
+        "NSPhotoLibraryUsageDescription": "Port A Local can attach photos to maintenance requests so vendors know what to expect."
+      },
+      "associatedDomains": ["applinks:port-a-local.vercel.app", "applinks:theportalocal.com"],
+      "usesAppleSignIn": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#f5f0e8"
+      },
+      "package": "co.portalocal.app",
+      "edgeToEdgeEnabled": true,
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}
