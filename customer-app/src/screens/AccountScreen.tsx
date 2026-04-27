@@ -267,10 +267,12 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   title: {
-    fontSize: 26,
-    fontWeight: "800",
+    fontSize: 30,
+    fontWeight: "700",
+    fontFamily: "Georgia",
     color: colors.sand[50],
     marginBottom: 8,
+    letterSpacing: -0.4,
   },
   coralLine: {
     height: 1,

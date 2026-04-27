@@ -222,10 +222,12 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   title: {
-    fontSize: 28,
-    fontWeight: "800",
+    fontSize: 32,
+    fontWeight: "700",
+    fontFamily: "Georgia",
     color: colors.navy[900],
     marginBottom: 8,
+    letterSpacing: -0.4,
   },
   verifiedRow: { flexDirection: "row", marginBottom: 8 },
   verifiedBadge: {

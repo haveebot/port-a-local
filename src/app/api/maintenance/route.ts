@@ -40,15 +40,41 @@ async function sendEmail(to: string, subject: string, html: string) {
   }
 }
 
+// Reject anything that isn't a small image data URI — keeps the JSON
+// payload bounded and the email assembler defensive against junk input.
+const MAX_PHOTOS = 4;
+const MAX_PHOTO_BYTES = 1_500_000; // ~1.5MB per photo before base64 overhead
+function sanitizePhotos(raw: unknown): string[] {
+  if (!Array.isArray(raw)) return [];
+  return raw
+    .filter((p): p is string => typeof p === "string")
+    .filter((p) => /^data:image\/(jpeg|jpg|png|heic|heif|webp);base64,/i.test(p))
+    .filter((p) => p.length < MAX_PHOTO_BYTES * 1.4) // base64 overhead
+    .slice(0, MAX_PHOTOS);
+}
+
 export async function POST(req: NextRequest) {
   const body = await req.json();
   const { name, phone, email, address, serviceType, description, urgency, contactPref, smsConsent } = body;
+  const photos = sanitizePhotos(body.photos);
 
   if (!name || !phone || !email || !address || !serviceType || !description) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
   }
 
   const urgencyText = urgencyLabel(urgency);
+  const photosHtml = photos.length
+    ? `
+      <hr style="border:none; border-top:1px solid #e4dccc; margin:16px 0;"/>
+      <p><strong>Photos from the customer:</strong></p>
+      ${photos
+        .map(
+          (uri, i) =>
+            `<img src="${uri}" alt="Photo ${i + 1}" style="display:block; max-width:100%; border-radius:8px; margin:0 0 10px 0; border:1px solid #e4dccc;" />`
+        )
+        .join("")}
+    `
+    : "";
 
   // --- SMS to maintenance vendor ---
   const smsBody = `PORT A LOCAL — New Maintenance Request\n${urgencyText}\n\nFrom: ${name}\nPhone: ${phone}\nAddress: ${address}\nService: ${serviceType}\n\n"${description.slice(0, 120)}${description.length > 120 ? "..." : ""}"\n\nReply or call customer directly.`;
@@ -68,6 +94,7 @@ export async function POST(req: NextRequest) {
       <p><strong>Service:</strong> ${serviceType}</p>
       <p><strong>Description:</strong></p>
       <p style="background:#f5f0e8; padding:12px; border-radius:8px; border:1px solid #e4dccc;">${description}</p>
+      ${photosHtml}
     `,
   });
 

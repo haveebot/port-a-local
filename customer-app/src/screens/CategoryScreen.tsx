@@ -109,10 +109,12 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   headerTitle: {
-    fontSize: 26,
-    fontWeight: "800",
+    fontSize: 30,
+    fontWeight: "700",
+    fontFamily: "Georgia",
     color: colors.navy[900],
     marginBottom: 8,
+    letterSpacing: -0.4,
   },
   coralLine: {
     height: 1,

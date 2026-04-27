@@ -10,7 +10,10 @@ import {
   Platform,
   ActivityIndicator,
   Switch,
+  Image,
 } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import * as ImagePicker from "expo-image-picker";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { colors } from "../lib/theme";
 import { apiUrl } from "../lib/config";
@@ -63,6 +66,7 @@ export default function MaintenanceFormScreen({ navigation }: Props) {
   );
   const [smsConsent, setSmsConsent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [photos, setPhotos] = useState<string[]>([]);
 
   useEffect(() => {
     navigation.setOptions({ title: "Request Maintenance" });
@@ -72,6 +76,62 @@ export default function MaintenanceFormScreen({ navigation }: Props) {
       if (session?.displayName && !name) setName(session.displayName);
     })();
   }, [navigation]);
+
+  const pickPhoto = async () => {
+    if (photos.length >= 4) {
+      Alert.alert("Limit reached", "Up to 4 photos per request.");
+      return;
+    }
+    const perm = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!perm.granted) {
+      Alert.alert(
+        "Photos needed",
+        "Allow photo access to attach a picture of the issue."
+      );
+      return;
+    }
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      base64: true,
+      quality: 0.6,
+      allowsEditing: false,
+    });
+    if (result.canceled || !result.assets || result.assets.length === 0) return;
+    const asset = result.assets[0];
+    if (!asset.base64) return;
+    const dataUri = `data:${asset.mimeType ?? "image/jpeg"};base64,${asset.base64}`;
+    setPhotos((prev) => [...prev, dataUri]);
+  };
+
+  const takePhoto = async () => {
+    if (photos.length >= 4) {
+      Alert.alert("Limit reached", "Up to 4 photos per request.");
+      return;
+    }
+    const perm = await ImagePicker.requestCameraPermissionsAsync();
+    if (!perm.granted) {
+      Alert.alert(
+        "Camera needed",
+        "Allow camera access to snap a picture of the issue."
+      );
+      return;
+    }
+    const result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      base64: true,
+      quality: 0.6,
+      allowsEditing: false,
+    });
+    if (result.canceled || !result.assets || result.assets.length === 0) return;
+    const asset = result.assets[0];
+    if (!asset.base64) return;
+    const dataUri = `data:${asset.mimeType ?? "image/jpeg"};base64,${asset.base64}`;
+    setPhotos((prev) => [...prev, dataUri]);
+  };
+
+  const removePhoto = (idx: number) => {
+    setPhotos((prev) => prev.filter((_, i) => i !== idx));
+  };
 
   const submit = async () => {
     if (
@@ -102,6 +162,7 @@ export default function MaintenanceFormScreen({ navigation }: Props) {
           urgency,
           contactPref,
           smsConsent,
+          photos,
         }),
       });
       const json = await res.json().catch(() => ({}));
@@ -217,6 +278,56 @@ export default function MaintenanceFormScreen({ navigation }: Props) {
             hint="The more detail, the faster the dispatch."
             style={{ marginTop: 12 }}
           />
+
+          <Text style={[styles.fieldLabel, { marginTop: 14 }]}>
+            Photos (optional)
+          </Text>
+          <Text style={styles.photoHint}>
+            A picture helps the vendor bring the right parts. Up to 4.
+          </Text>
+
+          {photos.length > 0 && (
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              style={styles.photoStrip}
+              contentContainerStyle={styles.photoStripContent}
+            >
+              {photos.map((uri, i) => (
+                <View key={i} style={styles.photoWrap}>
+                  <Image source={{ uri }} style={styles.photoImage} />
+                  <TouchableOpacity
+                    style={styles.photoRemove}
+                    onPress={() => removePhoto(i)}
+                    activeOpacity={0.85}
+                  >
+                    <Ionicons name="close" size={14} color="#fff" />
+                  </TouchableOpacity>
+                </View>
+              ))}
+            </ScrollView>
+          )}
+
+          <View style={styles.photoButtonsRow}>
+            <TouchableOpacity
+              style={styles.photoButton}
+              onPress={takePhoto}
+              activeOpacity={0.85}
+              disabled={photos.length >= 4}
+            >
+              <Ionicons name="camera" size={18} color={colors.coral[500]} />
+              <Text style={styles.photoButtonText}>Take photo</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.photoButton}
+              onPress={pickPhoto}
+              activeOpacity={0.85}
+              disabled={photos.length >= 4}
+            >
+              <Ionicons name="images" size={18} color={colors.coral[500]} />
+              <Text style={styles.photoButtonText}>From library</Text>
+            </TouchableOpacity>
+          </View>
         </View>
 
         <View style={styles.section}>
@@ -448,4 +559,40 @@ const styles = StyleSheet.create({
     marginTop: 12,
     paddingHorizontal: 24,
   },
+  photoHint: { fontSize: 12, color: colors.navy[400], marginBottom: 10 },
+  photoStrip: { marginBottom: 10 },
+  photoStripContent: { gap: 8, paddingVertical: 4 },
+  photoWrap: {
+    width: 80,
+    height: 80,
+    borderRadius: 10,
+    overflow: "hidden",
+    position: "relative",
+  },
+  photoImage: { width: "100%", height: "100%" },
+  photoRemove: {
+    position: "absolute",
+    top: 4,
+    right: 4,
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    backgroundColor: "rgba(11, 17, 32, 0.7)",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  photoButtonsRow: { flexDirection: "row", gap: 10 },
+  photoButton: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 6,
+    paddingVertical: 12,
+    borderRadius: 10,
+    borderWidth: 1.5,
+    borderColor: colors.coral[200],
+    backgroundColor: colors.coral[50],
+  },
+  photoButtonText: { color: colors.coral[600], fontWeight: "700", fontSize: 13 },
 });

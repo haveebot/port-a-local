@@ -60,6 +60,10 @@ export default function ServicesHubScreen({ navigation }: Props) {
                 navigation.navigate("RentForm");
               } else if (s.slug === "beach") {
                 navigation.navigate("BeachForm");
+              } else if (s.slug === "locals") {
+                navigation.navigate("Locals");
+              } else if (s.slug === "fishing-report") {
+                navigation.navigate("FishingReport");
               } else {
                 navigation.navigate("Service", { slug: s.slug });
               }
@@ -108,10 +112,12 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   title: {
-    fontSize: 28,
-    fontWeight: "800",
+    fontSize: 32,
+    fontWeight: "700",
+    fontFamily: "Georgia",
     color: colors.sand[50],
-    lineHeight: 34,
+    lineHeight: 38,
+    letterSpacing: -0.5,
   },
   coralLine: {
     height: 1,

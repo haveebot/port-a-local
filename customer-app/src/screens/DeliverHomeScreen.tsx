@@ -131,9 +131,11 @@ const styles = StyleSheet.create({
   },
   title: {
     color: colors.sand[50],
-    fontSize: 28,
-    fontWeight: "800",
-    lineHeight: 34,
+    fontSize: 32,
+    fontWeight: "700",
+    fontFamily: "Georgia",
+    lineHeight: 38,
+    letterSpacing: -0.5,
   },
   coralLine: {
     height: 1,

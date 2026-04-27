@@ -196,10 +196,12 @@ const styles = StyleSheet.create({
   },
   heroTitle: {
     color: colors.sand[50],
-    fontSize: 32,
-    fontWeight: "800",
-    lineHeight: 38,
+    fontSize: 36,
+    fontWeight: "700",
+    fontFamily: "Georgia",
+    lineHeight: 42,
     marginBottom: 14,
+    letterSpacing: -0.5,
   },
   coralLine: {
     height: 1,
@@ -222,10 +224,12 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   sectionTitle: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: "700",
+    fontFamily: "Georgia",
     color: colors.navy[900],
-    marginBottom: 16,
+    marginBottom: 18,
+    letterSpacing: -0.3,
   },
   serviceGrid: {
     flexDirection: "row",
@@ -246,12 +250,12 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   serviceIconWrap: {
-    width: 44,
-    height: 44,
-    borderRadius: 12,
+    width: 48,
+    height: 48,
+    borderRadius: 24,
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 12,
+    marginBottom: 14,
   },
   serviceTitle: {
     fontSize: 15,

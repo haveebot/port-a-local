@@ -22,6 +22,9 @@ export type ServicesStackParamList = {
   MaintenanceConfirmed: undefined;
   RentForm: undefined;
   BeachForm: undefined;
+  // Native content screens (locals + fishing)
+  Locals: undefined;
+  FishingReport: undefined;
 };
 
 export type AccountStackParamList = {
@@ -31,11 +34,13 @@ export type AccountStackParamList = {
   Settings: undefined;
 };
 
+import type { NavigatorScreenParams } from "@react-navigation/native";
+
 export type RootTabParamList = {
-  Browse: undefined;
-  Services: undefined;
+  Browse: NavigatorScreenParams<BrowseStackParamList> | undefined;
+  Services: NavigatorScreenParams<ServicesStackParamList> | undefined;
   Search: undefined;
-  Account: undefined;
+  Account: NavigatorScreenParams<AccountStackParamList> | undefined;
 };
 
 export type ServiceSlug =

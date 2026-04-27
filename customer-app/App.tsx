@@ -30,6 +30,8 @@ import RentFormScreen from "./src/screens/RentFormScreen";
 import BeachFormScreen from "./src/screens/BeachFormScreen";
 import OrdersScreen from "./src/screens/OrdersScreen";
 import OrderDetailScreen from "./src/screens/OrderDetailScreen";
+import FishingReportScreen from "./src/screens/FishingReportScreen";
+import LocalsScreen from "./src/screens/LocalsScreen";
 
 import { registerForPushNotificationsAsync } from "./src/lib/notifications";
 import { CartProvider } from "./src/lib/cart";
@@ -139,6 +141,16 @@ function ServicesStackNav() {
         component={BeachFormScreen}
         options={{ title: "Beach Gear" }}
       />
+      <ServicesStack.Screen
+        name="Locals"
+        component={LocalsScreen}
+        options={{ title: "Locals" }}
+      />
+      <ServicesStack.Screen
+        name="FishingReport"
+        component={FishingReportScreen}
+        options={{ title: "Fishing Report" }}
+      />
     </ServicesStack.Navigator>
   );
 }
@@ -209,7 +221,13 @@ const linking = {
         },
       },
       Search: "search",
-      Account: "account",
+      Account: {
+        screens: {
+          AccountHome: "account",
+          Orders: "orders",
+          OrderDetail: "orders/:orderId",
+        },
+      },
     },
   },
 };
@@ -225,18 +243,60 @@ export default function App() {
     null
   );
 
+  // When a notification's data has { orderId } or { restaurantSlug } or
+  // { serviceSlug }, route into the right screen. Backend just needs to
+  // include one of these fields in the push payload's data object.
+  const routeFromNotification = (
+    data: Record<string, unknown> | undefined
+  ) => {
+    if (!data || !navigationRef.current) return;
+    const orderId =
+      typeof data.orderId === "string" ? data.orderId : undefined;
+    const restaurantSlug =
+      typeof data.restaurantSlug === "string"
+        ? data.restaurantSlug
+        : undefined;
+    const serviceSlug =
+      typeof data.serviceSlug === "string" ? data.serviceSlug : undefined;
+
+    if (orderId) {
+      navigationRef.current.navigate("Account", {
+        screen: "OrderDetail",
+        params: { orderId },
+      });
+      return;
+    }
+    if (restaurantSlug) {
+      navigationRef.current.navigate("Services", {
+        screen: "Restaurant",
+        params: { slug: restaurantSlug },
+      });
+      return;
+    }
+    if (serviceSlug) {
+      navigationRef.current.navigate("Services", {
+        screen: "Service",
+        params: { slug: serviceSlug as never },
+      });
+    }
+  };
+
   useEffect(() => {
     (async () => {
       await registerForPushNotificationsAsync().catch(() => null);
-      await Notifications.getLastNotificationResponseAsync();
+      // Cold-start: app was launched by tapping a notification.
+      const last = await Notifications.getLastNotificationResponseAsync();
+      if (last) {
+        routeFromNotification(last.notification.request.content.data);
+      }
     })();
 
     notificationListener.current =
       Notifications.addNotificationReceivedListener(() => {});
 
     responseListener.current =
-      Notifications.addNotificationResponseReceivedListener(() => {
-        // Future: route from notification.request.content.data
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        routeFromNotification(response.notification.request.content.data);
       });
 
     return () => {

@@ -243,9 +243,11 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   heroTitle: {
-    fontSize: 24,
-    fontWeight: "800",
+    fontSize: 28,
+    fontWeight: "700",
+    fontFamily: "Georgia",
     color: colors.navy[900],
+    letterSpacing: -0.4,
   },
   heroDesc: {
     fontSize: 14,
