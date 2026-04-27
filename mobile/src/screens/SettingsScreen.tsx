@@ -22,6 +22,7 @@ import {
   setApiUrl as saveApiUrl,
   clearAll,
 } from "../lib/storage";
+import { colors } from "../lib/theme";
 
 export default function SettingsScreen() {
   const [name, setName] = useState("");
@@ -72,7 +73,6 @@ export default function SettingsScreen() {
       setWorkerIdState(worker.id);
       setRegistered(true);
 
-      // Register for push notifications
       const pushToken = await registerForPushNotificationsAsync();
       if (pushToken) {
         await registerPushToken(worker.id, pushToken);
@@ -97,91 +97,111 @@ export default function SettingsScreen() {
   };
 
   const handleReset = async () => {
-    Alert.alert("Reset?", "This will remove your registration. You'll need to register again.", [
-      { text: "Cancel", style: "cancel" },
-      {
-        text: "Reset",
-        style: "destructive",
-        onPress: async () => {
-          await clearAll();
-          setWorkerIdState(null);
-          setRegistered(false);
-          setName("");
-          setGroup("runner");
+    Alert.alert(
+      "Reset?",
+      "This will remove your registration. You'll need to register again.",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Reset",
+          style: "destructive",
+          onPress: async () => {
+            await clearAll();
+            setWorkerIdState(null);
+            setRegistered(false);
+            setName("");
+            setGroup("runner");
+          },
         },
-      },
-    ]);
+      ]
+    );
   };
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={styles.content}
+    >
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Server Connection</Text>
-        <Text style={styles.label}>API URL</Text>
-        <TextInput
-          style={styles.input}
-          value={apiUrl}
-          onChangeText={setApiUrlState}
-          placeholder="http://192.168.1.100:3001"
-          placeholderTextColor="#94a3b8"
-          autoCapitalize="none"
-          autoCorrect={false}
-          keyboardType="url"
-        />
-        <Text style={styles.hint}>
-          Your server&apos;s local IP or ngrok URL. Leave blank for localhost.
-        </Text>
+        <View style={styles.coralAccent} />
+        <View style={styles.sectionBody}>
+          <Text style={styles.eyebrow}>Connection</Text>
+          <Text style={styles.sectionTitle}>Server</Text>
+          <View style={styles.coralLine} />
+
+          <Text style={styles.label}>API URL</Text>
+          <TextInput
+            style={styles.input}
+            value={apiUrl}
+            onChangeText={setApiUrlState}
+            placeholder="http://192.168.1.100:3001"
+            placeholderTextColor={colors.navy[300]}
+            autoCapitalize="none"
+            autoCorrect={false}
+            keyboardType="url"
+          />
+          <Text style={styles.hint}>
+            Your server&apos;s local IP or ngrok URL. Leave blank for localhost.
+          </Text>
+        </View>
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Worker Profile</Text>
+        <View style={styles.coralAccent} />
+        <View style={styles.sectionBody}>
+          <Text style={styles.eyebrow}>Profile</Text>
+          <Text style={styles.sectionTitle}>Worker</Text>
+          <View style={styles.coralLine} />
 
-        <Text style={styles.label}>Your Name</Text>
-        <TextInput
-          style={styles.input}
-          value={name}
-          onChangeText={setName}
-          placeholder="e.g. Nick"
-          placeholderTextColor="#94a3b8"
-          editable={!registered}
-        />
+          <Text style={styles.label}>Your Name</Text>
+          <TextInput
+            style={styles.input}
+            value={name}
+            onChangeText={setName}
+            placeholder="e.g. Nick"
+            placeholderTextColor={colors.navy[300]}
+            editable={!registered}
+          />
 
-        <Text style={[styles.label, { marginTop: 16 }]}>Team</Text>
-        <View style={styles.groupRow}>
-          <TouchableOpacity
-            style={[
-              styles.groupButton,
-              group === "runner" && styles.groupButtonActive,
-            ]}
-            onPress={() => !registered && setGroup("runner")}
-            disabled={registered}
-          >
-            <Text
+          <Text style={[styles.label, { marginTop: 18 }]}>Team</Text>
+          <View style={styles.groupRow}>
+            <TouchableOpacity
               style={[
-                styles.groupButtonText,
-                group === "runner" && styles.groupButtonTextActive,
+                styles.groupButton,
+                group === "runner" && styles.groupButtonActive,
               ]}
+              onPress={() => !registered && setGroup("runner")}
+              disabled={registered}
+              activeOpacity={0.85}
             >
-              🏃 Runner
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.groupButton,
-              group === "maintenance" && styles.groupButtonActive,
-            ]}
-            onPress={() => !registered && setGroup("maintenance")}
-            disabled={registered}
-          >
-            <Text
+              <Text
+                style={[
+                  styles.groupButtonText,
+                  group === "runner" && styles.groupButtonTextActive,
+                ]}
+              >
+                🏃 Runner
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
               style={[
-                styles.groupButtonText,
-                group === "maintenance" && styles.groupButtonTextActive,
+                styles.groupButton,
+                group === "maintenance" && styles.groupButtonActive,
               ]}
+              onPress={() => !registered && setGroup("maintenance")}
+              disabled={registered}
+              activeOpacity={0.85}
             >
-              🔧 Maintenance
-            </Text>
-          </TouchableOpacity>
+              <Text
+                style={[
+                  styles.groupButtonText,
+                  group === "maintenance" && styles.groupButtonTextActive,
+                ]}
+              >
+                🔧 Maintenance
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
 
@@ -190,6 +210,7 @@ export default function SettingsScreen() {
           style={[styles.registerButton, registering && styles.buttonDisabled]}
           onPress={handleRegister}
           disabled={registering}
+          activeOpacity={0.85}
         >
           <Text style={styles.registerButtonText}>
             {registering ? "Registering..." : "Register & Enable Notifications"}
@@ -198,17 +219,23 @@ export default function SettingsScreen() {
       ) : (
         <View style={styles.registeredSection}>
           <View style={styles.registeredCard}>
-            <Text style={styles.registeredIcon}>✅</Text>
-            <Text style={styles.registeredTitle}>Registered</Text>
-            <Text style={styles.registeredSubtext}>
-              Worker ID: {workerId}
-            </Text>
-            <Text style={styles.registeredSubtext}>
-              Team: {group} | Name: {name}
-            </Text>
+            <View style={styles.goldAccent} />
+            <View style={styles.registeredBody}>
+              <Text style={styles.registeredIcon}>✅</Text>
+              <Text style={styles.registeredTitle}>Registered</Text>
+              <View style={styles.goldLine} />
+              <Text style={styles.registeredSubtext}>Worker ID: {workerId}</Text>
+              <Text style={styles.registeredSubtext}>
+                Team: {group} · Name: {name}
+              </Text>
+            </View>
           </View>
 
-          <TouchableOpacity style={styles.resetButton} onPress={handleReset}>
+          <TouchableOpacity
+            style={styles.resetButton}
+            onPress={handleReset}
+            activeOpacity={0.85}
+          >
             <Text style={styles.resetButtonText}>Reset Registration</Text>
           </TouchableOpacity>
         </View>
@@ -218,82 +245,146 @@ export default function SettingsScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#f8fafc" },
+  container: { flex: 1, backgroundColor: colors.sand[50] },
   content: { padding: 16, paddingBottom: 40 },
   section: {
     backgroundColor: "#fff",
     borderRadius: 16,
-    padding: 20,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: "#e2e8f0",
+    borderColor: colors.sand[200],
+    overflow: "hidden",
+    shadowColor: colors.navy[950],
+    shadowOpacity: 0.05,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 2,
+  },
+  coralAccent: { height: 3, backgroundColor: colors.coral[500] },
+  goldAccent: { height: 3, backgroundColor: colors.gold[500] },
+  sectionBody: { padding: 20 },
+  eyebrow: {
+    fontSize: 11,
+    fontWeight: "700",
+    color: colors.coral[500],
+    letterSpacing: 2,
+    textTransform: "uppercase",
+    marginBottom: 4,
   },
   sectionTitle: {
-    fontSize: 18,
+    fontSize: 24,
     fontWeight: "700",
-    color: "#1e293b",
-    marginBottom: 16,
+    color: colors.navy[900],
+    marginBottom: 8,
   },
-  label: { fontSize: 14, fontWeight: "600", color: "#475569", marginBottom: 6 },
+  coralLine: {
+    height: 1,
+    backgroundColor: colors.coral[200],
+    marginBottom: 18,
+    width: 60,
+  },
+  goldLine: {
+    height: 1,
+    backgroundColor: colors.gold[300],
+    marginBottom: 12,
+    width: 60,
+    alignSelf: "center",
+  },
+  label: {
+    fontSize: 13,
+    fontWeight: "600",
+    color: colors.navy[700],
+    marginBottom: 6,
+    letterSpacing: 0.3,
+  },
   input: {
-    backgroundColor: "#f8fafc",
+    backgroundColor: colors.sand[50],
     borderWidth: 1,
-    borderColor: "#e2e8f0",
+    borderColor: colors.sand[200],
     borderRadius: 10,
     paddingHorizontal: 14,
     paddingVertical: 12,
     fontSize: 16,
-    color: "#1e293b",
+    color: colors.navy[900],
   },
-  hint: { fontSize: 12, color: "#94a3b8", marginTop: 6 },
-  groupRow: {
-    flexDirection: "row",
-    gap: 10,
-  },
+  hint: { fontSize: 12, color: colors.navy[400], marginTop: 6 },
+  groupRow: { flexDirection: "row", gap: 10 },
   groupButton: {
     flex: 1,
     paddingVertical: 14,
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: "#e2e8f0",
+    borderColor: colors.sand[200],
     alignItems: "center",
+    backgroundColor: colors.sand[50],
   },
   groupButtonActive: {
-    borderColor: "#0369a1",
-    backgroundColor: "#f0f9ff",
+    borderColor: colors.coral[500],
+    backgroundColor: colors.coral[50],
   },
-  groupButtonText: { fontSize: 15, fontWeight: "600", color: "#94a3b8" },
-  groupButtonTextActive: { color: "#0369a1" },
+  groupButtonText: {
+    fontSize: 15,
+    fontWeight: "600",
+    color: colors.navy[400],
+  },
+  groupButtonTextActive: { color: colors.coral[600] },
   registerButton: {
-    backgroundColor: "#0369a1",
+    backgroundColor: colors.coral[500],
     borderRadius: 12,
     paddingVertical: 16,
     alignItems: "center",
+    shadowColor: colors.coral[600],
+    shadowOpacity: 0.35,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 3,
   },
   buttonDisabled: { opacity: 0.6 },
-  registerButtonText: { color: "#fff", fontWeight: "700", fontSize: 16 },
+  registerButtonText: {
+    color: "#fff",
+    fontWeight: "700",
+    fontSize: 16,
+    letterSpacing: 0.3,
+  },
   registeredSection: { gap: 12 },
   registeredCard: {
-    backgroundColor: "#f0fdf4",
+    backgroundColor: colors.navy[950],
     borderRadius: 16,
-    padding: 24,
+    overflow: "hidden",
+    shadowColor: colors.navy[950],
+    shadowOpacity: 0.18,
+    shadowRadius: 14,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 3,
+  },
+  registeredBody: {
+    padding: 28,
     alignItems: "center",
-    borderWidth: 1,
-    borderColor: "#bbf7d0",
   },
   registeredIcon: { fontSize: 40, marginBottom: 8 },
   registeredTitle: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: "700",
-    color: "#166534",
-    marginBottom: 8,
+    color: colors.gold[400],
+    marginBottom: 10,
+    letterSpacing: 0.5,
   },
-  registeredSubtext: { fontSize: 13, color: "#6b7280", marginTop: 2 },
+  registeredSubtext: {
+    fontSize: 13,
+    color: colors.navy[200],
+    marginTop: 2,
+  },
   resetButton: {
-    backgroundColor: "#fee2e2",
+    backgroundColor: colors.coral[100],
     borderRadius: 12,
     paddingVertical: 14,
     alignItems: "center",
+    borderWidth: 1,
+    borderColor: colors.coral[200],
   },
-  resetButtonText: { color: "#dc2626", fontWeight: "600", fontSize: 15 },
+  resetButtonText: {
+    color: colors.coral[700],
+    fontWeight: "600",
+    fontSize: 15,
+  },
 });

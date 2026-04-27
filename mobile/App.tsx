@@ -1,32 +1,107 @@
 import React, { useEffect, useRef } from "react";
 import { StatusBar } from "expo-status-bar";
-import { NavigationContainer } from "@react-navigation/native";
+import {
+  NavigationContainer,
+  NavigationContainerRef,
+} from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Ionicons } from "@expo/vector-icons";
 import * as Notifications from "expo-notifications";
 
 import TasksScreen from "./src/screens/TasksScreen";
 import MyTasksScreen from "./src/screens/MyTasksScreen";
 import SettingsScreen from "./src/screens/SettingsScreen";
-import { getApiUrl } from "./src/lib/storage";
-import { setApiBase } from "./src/lib/api";
+import TaskDetailScreen from "./src/screens/TaskDetailScreen";
+import { getApiUrl, getWorkerId } from "./src/lib/storage";
+import { setApiBase, registerPushToken } from "./src/lib/api";
 import { registerForPushNotificationsAsync } from "./src/lib/notifications";
-import { getWorkerId } from "./src/lib/storage";
-import { registerPushToken } from "./src/lib/api";
+import { colors } from "./src/lib/theme";
+import {
+  TasksStackParamList,
+  MyTasksStackParamList,
+  RootTabParamList,
+} from "./src/lib/navigation";
 
-const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator<RootTabParamList>();
+const TasksStack = createNativeStackNavigator<TasksStackParamList>();
+const MyTasksStack = createNativeStackNavigator<MyTasksStackParamList>();
+
+const stackHeader = {
+  headerStyle: { backgroundColor: colors.navy[950] },
+  headerTintColor: colors.sand[50],
+  headerTitleStyle: { fontWeight: "700" as const, letterSpacing: 0.5 },
+};
+
+function TasksStackNav() {
+  return (
+    <TasksStack.Navigator screenOptions={stackHeader}>
+      <TasksStack.Screen
+        name="TasksList"
+        component={TasksScreen}
+        options={{ title: "Available Tasks" }}
+      />
+      <TasksStack.Screen
+        name="TaskDetail"
+        component={TaskDetailScreen}
+        options={{ title: "Task Details" }}
+      />
+    </TasksStack.Navigator>
+  );
+}
+
+function MyTasksStackNav() {
+  return (
+    <MyTasksStack.Navigator screenOptions={stackHeader}>
+      <MyTasksStack.Screen
+        name="MyTasksList"
+        component={MyTasksScreen}
+        options={{ title: "My Tasks" }}
+      />
+      <MyTasksStack.Screen
+        name="MyTaskDetail"
+        component={TaskDetailScreen}
+        options={{ title: "Task Details" }}
+      />
+    </MyTasksStack.Navigator>
+  );
+}
 
 export default function App() {
-  const notificationListener = useRef<Notifications.EventSubscription>();
-  const responseListener = useRef<Notifications.EventSubscription>();
+  const navigationRef =
+    useRef<NavigationContainerRef<RootTabParamList> | null>(null);
+  const notificationListener = useRef<Notifications.EventSubscription | null>(
+    null
+  );
+  const responseListener = useRef<Notifications.EventSubscription | null>(
+    null
+  );
+
+  const navigateToTaskFromNotification = (
+    data: Record<string, unknown> | undefined
+  ) => {
+    const taskId = typeof data?.taskId === "string" ? data.taskId : undefined;
+    if (!taskId || !navigationRef.current) return;
+    const acceptedBy =
+      typeof data?.accepted_by === "string" ? data.accepted_by : null;
+    if (acceptedBy) {
+      navigationRef.current.navigate("MyTasks", {
+        screen: "MyTaskDetail",
+        params: { taskId },
+      });
+    } else {
+      navigationRef.current.navigate("Tasks", {
+        screen: "TaskDetail",
+        params: { taskId },
+      });
+    }
+  };
 
   useEffect(() => {
-    // Restore API URL from storage
     (async () => {
       const savedUrl = await getApiUrl();
       if (savedUrl) setApiBase(savedUrl);
 
-      // Re-register push token on every launch (tokens can rotate)
       const workerId = await getWorkerId();
       if (workerId) {
         const token = await registerForPushNotificationsAsync();
@@ -38,55 +113,56 @@ export default function App() {
           }
         }
       }
+
+      // Handle the case where the app was launched by tapping a notification
+      const lastResponse =
+        await Notifications.getLastNotificationResponseAsync();
+      if (lastResponse) {
+        navigateToTaskFromNotification(
+          lastResponse.notification.request.content.data
+        );
+      }
     })();
 
-    // Listen for incoming notifications while app is open
     notificationListener.current =
-      Notifications.addNotificationReceivedListener((notification) => {
-        console.log("Notification received:", notification);
+      Notifications.addNotificationReceivedListener(() => {
+        // Foreground notification arrived; handler in notifications.ts shows the banner.
       });
 
-    // Listen for user tapping on a notification
     responseListener.current =
       Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log("Notification tapped:", response);
+        navigateToTaskFromNotification(
+          response.notification.request.content.data
+        );
       });
 
     return () => {
-      if (notificationListener.current) {
-        Notifications.removeNotificationSubscription(
-          notificationListener.current
-        );
-      }
-      if (responseListener.current) {
-        Notifications.removeNotificationSubscription(responseListener.current);
-      }
+      notificationListener.current?.remove();
+      responseListener.current?.remove();
     };
   }, []);
 
   return (
     <>
-      <StatusBar style="dark" />
-      <NavigationContainer>
+      <StatusBar style="light" />
+      <NavigationContainer ref={navigationRef}>
         <Tab.Navigator
           screenOptions={{
-            tabBarActiveTintColor: "#0369a1",
-            tabBarInactiveTintColor: "#94a3b8",
+            headerShown: false,
+            tabBarActiveTintColor: colors.coral[500],
+            tabBarInactiveTintColor: colors.navy[300],
             tabBarStyle: {
-              backgroundColor: "#fff",
-              borderTopColor: "#e2e8f0",
+              backgroundColor: colors.navy[950],
+              borderTopColor: colors.navy[800],
               paddingBottom: 4,
             },
-            headerStyle: { backgroundColor: "#0c4a6e" },
-            headerTintColor: "#fff",
-            headerTitleStyle: { fontWeight: "700" },
           }}
         >
           <Tab.Screen
             name="Tasks"
-            component={TasksScreen}
+            component={TasksStackNav}
             options={{
-              title: "Available Tasks",
+              title: "Available",
               tabBarIcon: ({ color, size }) => (
                 <Ionicons name="list-circle" size={size} color={color} />
               ),
@@ -94,7 +170,7 @@ export default function App() {
           />
           <Tab.Screen
             name="MyTasks"
-            component={MyTasksScreen}
+            component={MyTasksStackNav}
             options={{
               title: "My Tasks",
               tabBarIcon: ({ color, size }) => (
@@ -107,6 +183,10 @@ export default function App() {
             component={SettingsScreen}
             options={{
               title: "Settings",
+              headerShown: true,
+              headerStyle: { backgroundColor: colors.navy[950] },
+              headerTintColor: colors.sand[50],
+              headerTitleStyle: { fontWeight: "700", letterSpacing: 0.5 },
               tabBarIcon: ({ color, size }) => (
                 <Ionicons name="settings" size={size} color={color} />
               ),
