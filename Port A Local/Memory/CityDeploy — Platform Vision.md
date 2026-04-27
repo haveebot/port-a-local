@@ -85,6 +85,26 @@ ground in every town. Each town gets:
 - Shopify templated storefronts → empire of merchants
 - CityDeploy templated marketplaces → empire of small-town economies
 
+## The anti-gatekeeping wedge (locked-in 2026-04-26)
+
+**"PAL doesn't gatekeep"** is CityDeploy's real positioning lever vs
+incumbent local platforms. Every town we sell to is already drowning
+in:
+- Yelp filtering reviews based on advertiser status
+- Google suppressing listings without verification gates
+- Tourism Bureaus curating a sanitized version of the town
+- Airbnb / DoorDash hiding listings below their quality thresholds
+
+CityDeploy's flip: **the town's actual texture, unfiltered.** Listers
+participate at their level. Customers see what's there and self-sort.
+Quality is surfaced (photo-conversion data, response-time stats) but
+never enforced as a gate. The platform IS the public utility, not the
+arbiter of who deserves to be on it.
+
+This is the line that separates CityDeploy from "another Yelp clone"
+— and the line that makes town governments + chambers of commerce sit
+forward when we pitch. Memory: `feedback_pal_doesnt_gatekeep.md`.
+
 ---
 
 ## What's needed for CityDeploy v1
