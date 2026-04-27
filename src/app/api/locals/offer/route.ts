@@ -1,10 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
+import crypto from "crypto";
 import {
   CATEGORIES,
   type ListingMode,
   type LocalsCategory,
 } from "@/data/locals-types";
 import { mirrorLocalsInquiryToWheelhouse } from "@/lib/localsDispatch";
+import { createLocalsOffer } from "@/data/locals-store";
+
+const APP_URL =
+  process.env.NEXT_PUBLIC_APP_URL ?? "https://theportalocal.com";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -72,6 +77,43 @@ export async function POST(req: NextRequest) {
   const cat = CATEGORIES.find((c) => c.id === body.category);
   const apiKey = process.env.RESEND_API_KEY;
 
+  // Persist the offer so admin can approve/reject via magic links and
+  // we have a durable record beyond the email inbox. Same shape as
+  // runner application -> approval flow.
+  const offer = await createLocalsOffer({
+    name,
+    phone,
+    email: body.email?.trim() || undefined,
+    businessName: body.businessName?.trim() || undefined,
+    mode: body.mode,
+    category: body.category,
+    description,
+    pricing: body.pricing?.trim() || undefined,
+    availability: body.availability?.trim() || undefined,
+    photosAcknowledged: body.photosAcknowledged === true,
+  });
+
+  // HMAC-signed magic links for one-click admin actions. Distinct sigs
+  // per kind so a leaked approve link can't be replayed against verify
+  // or reject.
+  const adminSecret = process.env.ADMIN_APPROVAL_SECRET;
+  let approveUrl: string | null = null;
+  let rejectUrl: string | null = null;
+  let verifyPhotosUrl: string | null = null;
+  if (adminSecret) {
+    const sigApprove = crypto
+      .createHmac("sha256", adminSecret)
+      .update(offer.id)
+      .digest("hex");
+    const sigVerifyPhotos = crypto
+      .createHmac("sha256", adminSecret)
+      .update(`${offer.id}:verify-photos`)
+      .digest("hex");
+    approveUrl = `${APP_URL}/api/locals/offer/approve?id=${offer.id}&s=${sigApprove}`;
+    rejectUrl = `${APP_URL}/api/locals/offer/reject?id=${offer.id}&s=${sigApprove}`;
+    verifyPhotosUrl = `${APP_URL}/api/locals/offer/verify-photos?id=${offer.id}&s=${sigVerifyPhotos}`;
+  }
+
   const subject = `PAL Locals — provider signup: ${body.businessName || name} (${cat?.label ?? body.category})`;
   const html = `
     <div style="font-family: Inter, system-ui, sans-serif; color: #1a2433; line-height: 1.5;">
@@ -98,10 +140,11 @@ export async function POST(req: NextRequest) {
         <p style="margin: 4px 0; font-size:13px;">
           ${body.photosAcknowledged ? "✓ Acknowledged — applicant said they'll email photos to hello@" : "✗ Not acknowledged"}
         </p>
-        <p style="margin: 6px 0 0; font-size:12px; color:#555;">
-          Wait for photos before activating the listing — customers need
-          to see what they're requesting.
-        </p>
+        ${
+          verifyPhotosUrl
+            ? `<p style="margin: 8px 0 0;"><a href="${verifyPhotosUrl}" style="display:inline-block; padding:8px 14px; background:#fff; color:#1f7a4d; text-decoration:none; border-radius:6px; font-weight:bold; font-size:12px; border:1px solid #1f7a4d;">✓ Mark photos verified</a></p>`
+            : ""
+        }
       </div>
       `
           : ""
@@ -109,10 +152,28 @@ export async function POST(req: NextRequest) {
 
       <hr style="border: none; border-top: 1px solid #e5dcc7; margin: 24px 0;" />
 
-      <p style="font-size: 12px; color: #555;">
-        Phone for fit check. If approved + photos in hand, add to
-        <code>src/data/locals-listings.ts</code> with category id
-        <code>${escapeHtml(body.category)}</code> and isActive=true.
+      ${
+        approveUrl && rejectUrl
+          ? `
+      <div style="margin: 24px 0;">
+        <a href="${approveUrl}" style="display:inline-block; padding:14px 28px; background:#1f7a4d; color:#fff; text-decoration:none; border-radius:8px; font-weight:bold; margin-right:8px;">
+          ✓ Approve ${escapeHtml(body.businessName || name)}
+        </a>
+        <a href="${rejectUrl}" style="display:inline-block; padding:14px 28px; background:#fff; color:#8a3a3a; text-decoration:none; border-radius:8px; font-weight:bold; border:1px solid #c83a3a;">
+          Reject
+        </a>
+      </div>
+      <p style="font-size:12px; color:#555; margin: 0 0 16px;">
+        Approve = list this provider${body.mode === "rent" ? " (photos can land later — mark verified above when they do)" : ""}.
+        Approval auto-emails them they're in.
+        Reject is silent (no email to the applicant).
+      </p>
+      `
+          : `<p style="font-size:12px; color:#c83a3a;">Set ADMIN_APPROVAL_SECRET in Vercel to enable one-click approval.</p>`
+      }
+
+      <p style="font-size: 12px; color: #888;">
+        Offer ID: <code>${escapeHtml(offer.id)}</code>
       </p>
     </div>
   `;
