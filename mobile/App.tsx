@@ -17,8 +17,12 @@ import { registerPushToken } from "./src/lib/api";
 const Tab = createBottomTabNavigator();
 
 export default function App() {
-  const notificationListener = useRef<Notifications.EventSubscription>();
-  const responseListener = useRef<Notifications.EventSubscription>();
+  const notificationListener = useRef<Notifications.EventSubscription | null>(
+    null
+  );
+  const responseListener = useRef<Notifications.EventSubscription | null>(
+    null
+  );
 
   useEffect(() => {
     // Restore API URL from storage
@@ -53,14 +57,8 @@ export default function App() {
       });
 
     return () => {
-      if (notificationListener.current) {
-        Notifications.removeNotificationSubscription(
-          notificationListener.current
-        );
-      }
-      if (responseListener.current) {
-        Notifications.removeNotificationSubscription(responseListener.current);
-      }
+      notificationListener.current?.remove();
+      responseListener.current?.remove();
     };
   }, []);
 
