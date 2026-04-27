@@ -85,29 +85,39 @@ async function sendOfferApprovedEmail(i: ApprovedEmailInput): Promise<void> {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) return;
   const first = i.name.split(" ")[0];
-  const subject = `You're in — PAL Locals approved your listing`;
   const needsPhotos = i.mode === "rent";
+  // Subject + body intentionally honest about state: VERIFIED ≠ LIVE.
+  // Keeps the platform's word in alignment with the platform's reality —
+  // we verified you, photos still come next.
+  const subject = needsPhotos
+    ? `You've been verified — send us photos to go live`
+    : `You're in — PAL Locals verified your listing`;
   const qrDataUrl = needsPhotos
     ? await magicLinkQrDataUrl(i.photoUploadMailto)
     : null;
   const html = `
     <div style="font-family: Inter, system-ui, sans-serif; color: #1a2433; line-height: 1.5;">
       <p style="text-transform: uppercase; letter-spacing: 0.15em; font-size: 11px; color: #C84A2C; margin: 0 0 4px;">
-        PAL Locals · Approved
+        PAL Locals · Verified
       </p>
-      <h2 style="margin: 0 0 16px; font-family: Georgia, serif;">You&apos;re in, ${escapeHtml(first)}.</h2>
-      <p>We reviewed your submission and want to list you on PAL Locals — locals only, vetted, no outsourcing.</p>
+      <h2 style="margin: 0 0 16px; font-family: Georgia, serif;">${
+        needsPhotos
+          ? `You&apos;ve been verified, ${escapeHtml(first)}.`
+          : `You&apos;re in, ${escapeHtml(first)}.`
+      }</h2>
+      <p>We reviewed your submission and verified your listing on PAL Locals — locals only, vetted, no outsourcing.</p>
 
       ${
         needsPhotos
           ? `
       <div style="background:#fff5f0; padding:14px 16px; border-radius:8px; margin: 16px 0; border:1px solid #fde0d4;">
         <p style="margin: 0 0 6px; font-size:11px; text-transform:uppercase; letter-spacing:0.15em; color:#C84A2C; font-weight:bold;">
-          One thing left — photos
+          One thing before you go live — photos
         </p>
         <p style="margin: 4px 0 8px; font-size:13px; line-height:1.55;">
-          We need a few photos of your listing before customers can request
-          it. Wide shot + a couple detail shots is plenty.
+          You&apos;re verified, but your listing won&apos;t be visible to
+          customers until we&apos;ve seen photos. Wide shot + a couple
+          detail shots is plenty.
         </p>
         <p style="margin: 8px 0;">
           <a href="${i.photoUploadMailto}" style="display:inline-block; padding:10px 18px; background:#e8656f; color:#fff; text-decoration:none; border-radius:8px; font-weight:bold; font-size:13px;">
@@ -126,15 +136,17 @@ async function sendOfferApprovedEmail(i: ApprovedEmailInput): Promise<void> {
       }
 
       <hr style="border: none; border-top: 1px solid #e5dcc7; margin: 24px 0;" />
-      <p style="font-size: 13px;">Questions? Reply to this email or hit{" "}<a href="mailto:hello@theportalocal.com">hello@theportalocal.com</a>.</p>
+      <p style="font-size: 13px;">Questions? Reply to this email or hit <a href="mailto:hello@theportalocal.com">hello@theportalocal.com</a>.</p>
       <p style="font-size: 11px; color: #888; margin-top: 16px;">— The Port A Local</p>
     </div>
   `;
   const text =
-    `You're in, ${first}.\n\n` +
-    `PAL Locals approved your submission.\n\n` +
     (needsPhotos
-      ? `One thing left — photos. Email a few photos of your listing to hello@theportalocal.com so we can post it live.\n\n`
+      ? `You've been verified, ${first}.\n\n`
+      : `You're in, ${first}.\n\n`) +
+    `PAL Locals reviewed and verified your submission.\n\n` +
+    (needsPhotos
+      ? `One thing before your listing goes visible to customers — photos. Email a few shots of your listing to hello@theportalocal.com.\n\n`
       : `You're live — customers can now request your services.\n\n`) +
     `Questions? Reply or email hello@theportalocal.com.\n\n— The Port A Local`;
   try {

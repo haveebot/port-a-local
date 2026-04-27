@@ -149,7 +149,8 @@ export async function POST(req: NextRequest) {
         </p>
         ${
           verifyPhotosUrl
-            ? `<p style="margin: 8px 0 0;"><a href="${verifyPhotosUrl}" style="display:inline-block; padding:8px 14px; background:#fff; color:#1f7a4d; text-decoration:none; border-radius:6px; font-weight:bold; font-size:12px; border:1px solid #1f7a4d;">✓ Mark photos verified</a></p>`
+            ? `<p style="margin: 12px 0 0; font-size:11px; color:#7d6e5a; font-style:italic;">When photos arrive at hello@, come back and click below — only after you&apos;ve actually seen them.</p>
+               <p style="margin: 6px 0 0;"><a href="${verifyPhotosUrl}" style="display:inline-block; padding:8px 14px; background:#fff; color:#1f7a4d; text-decoration:none; border-radius:6px; font-weight:bold; font-size:12px; border:1px solid #1f7a4d;">✓ Mark photos verified</a></p>`
             : ""
         }
       </div>
@@ -164,16 +165,22 @@ export async function POST(req: NextRequest) {
           ? `
       <div style="margin: 24px 0;">
         <a href="${approveUrl}" style="display:inline-block; padding:14px 28px; background:#1f7a4d; color:#fff; text-decoration:none; border-radius:8px; font-weight:bold; margin-right:8px;">
-          ✓ Approve ${escapeHtml(body.businessName || name)}
+          ✓ Verify ${escapeHtml(body.businessName || name)}${body.mode === "rent" ? " — photos still pending" : ""}
         </a>
         <a href="${rejectUrl}" style="display:inline-block; padding:14px 28px; background:#fff; color:#8a3a3a; text-decoration:none; border-radius:8px; font-weight:bold; border:1px solid #c83a3a;">
           Reject
         </a>
       </div>
       <p style="font-size:12px; color:#555; margin: 0 0 16px;">
-        Approve = list this provider${body.mode === "rent" ? " (photos can land later — mark verified above when they do)" : ""}.
-        Approval auto-emails them they're in.
-        Reject is silent (no email to the applicant).
+        <strong>Verify</strong> = you trust this listing's legit, even
+        before${body.mode === "rent" ? " photos arrive" : " any other follow-up"}.
+        Auto-emails them: <em>"You've been verified${body.mode === "rent" ? " — but still need to send photos before going live" : ""}."</em>
+        <strong>Reject</strong> is silent (no email to the applicant).
+        ${
+          body.mode === "rent"
+            ? `<br/><br/>Photos verification is a <em>separate</em> click — only mark them verified above once you&apos;ve actually seen them in hello@.`
+            : ""
+        }
       </p>
       `
           : `<p style="font-size:12px; color:#c83a3a;">Set ADMIN_APPROVAL_SECRET in Vercel to enable one-click approval.</p>`
