@@ -148,6 +148,14 @@ export default function Footer() {
                   <PortalIcon name="maintenance" className="w-3.5 h-3.5 text-coral-400 shrink-0" /> Maintenance
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="/housekeeping"
+                  className="inline-flex items-center gap-2 text-navy-300 hover:text-coral-300 transition-colors text-sm"
+                >
+                  <PortalIcon name="services" className="w-3.5 h-3.5 text-coral-400 shrink-0" /> Housekeeping
+                </Link>
+              </li>
             </ul>
           </div>
 
