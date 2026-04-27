@@ -26,6 +26,8 @@ export type ServicesStackParamList = {
 
 export type AccountStackParamList = {
   AccountHome: undefined;
+  Orders: undefined;
+  OrderDetail: { orderId: string };
   Settings: undefined;
 };
 

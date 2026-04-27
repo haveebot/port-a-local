@@ -28,6 +28,8 @@ import MaintenanceFormScreen from "./src/screens/MaintenanceFormScreen";
 import MaintenanceConfirmedScreen from "./src/screens/MaintenanceConfirmedScreen";
 import RentFormScreen from "./src/screens/RentFormScreen";
 import BeachFormScreen from "./src/screens/BeachFormScreen";
+import OrdersScreen from "./src/screens/OrdersScreen";
+import OrderDetailScreen from "./src/screens/OrderDetailScreen";
 
 import { registerForPushNotificationsAsync } from "./src/lib/notifications";
 import { CartProvider } from "./src/lib/cart";
@@ -35,6 +37,7 @@ import { colors } from "./src/lib/theme";
 import {
   BrowseStackParamList,
   ServicesStackParamList,
+  AccountStackParamList,
   RootTabParamList,
 } from "./src/lib/navigation";
 
@@ -42,7 +45,7 @@ const Tab = createBottomTabNavigator<RootTabParamList>();
 const BrowseStack = createNativeStackNavigator<BrowseStackParamList>();
 const ServicesStack = createNativeStackNavigator<ServicesStackParamList>();
 const SearchStack = createNativeStackNavigator();
-const AccountStack = createNativeStackNavigator();
+const AccountStack = createNativeStackNavigator<AccountStackParamList>();
 
 const stackHeader = {
   headerStyle: { backgroundColor: colors.navy[950] },
@@ -159,6 +162,16 @@ function AccountStackNav() {
         name="AccountHome"
         component={AccountScreen}
         options={{ headerShown: false }}
+      />
+      <AccountStack.Screen
+        name="Orders"
+        component={OrdersScreen}
+        options={{ title: "My Orders" }}
+      />
+      <AccountStack.Screen
+        name="OrderDetail"
+        component={OrderDetailScreen}
+        options={{ title: "Order" }}
       />
     </AccountStack.Navigator>
   );

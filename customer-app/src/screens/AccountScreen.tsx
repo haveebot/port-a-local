@@ -10,8 +10,11 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import * as AppleAuthentication from "expo-apple-authentication";
+import { useNavigation } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { colors } from "../lib/theme";
 import { webUrl } from "../lib/config";
+import type { AccountStackParamList } from "../lib/navigation";
 import {
   loadSession,
   signInWithApple,
@@ -57,6 +60,8 @@ function Row({ icon, label, sublabel, onPress, accent }: RowProps) {
 }
 
 export default function AccountScreen() {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<AccountStackParamList>>();
   const [session, setSession] = useState<CustomerSession | null>(null);
   const [authAvailable, setAuthAvailable] = useState(false);
   const [signingIn, setSigningIn] = useState(false);
@@ -170,7 +175,7 @@ export default function AccountScreen() {
             label="My Orders"
             sublabel="Track deliveries, requests, rentals"
             accent={colors.coral[500]}
-            onPress={() => Linking.openURL(webUrl("/deliver"))}
+            onPress={() => navigation.navigate("Orders")}
           />
           <View style={styles.divider} />
           <Row
