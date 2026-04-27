@@ -80,6 +80,12 @@ export default async function WheelhousePage({
               Payouts
             </Link>
             <Link
+              href="/wheelhouse/locals-resend"
+              className="text-xs text-navy-300 hover:text-coral-300 underline decoration-navy-500 hover:decoration-coral-400"
+            >
+              Locals re-fire
+            </Link>
+            <Link
               href="/wheelhouse/welcome"
               className="text-xs text-navy-300 hover:text-coral-300 underline decoration-navy-500 hover:decoration-coral-400"
             >
