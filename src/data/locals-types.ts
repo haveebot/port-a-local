@@ -46,7 +46,14 @@ export type HireCategory =
   | "childcare"
   | "wellness";
 
-export type LocalsCategory = RentCategory | HireCategory;
+export type SellCategory =
+  | "art-prints"
+  | "crafts-handmade"
+  | "merch-apparel"
+  | "baked-goods"
+  | "books-zines";
+
+export type LocalsCategory = RentCategory | HireCategory | SellCategory;
 
 export interface CategoryMeta {
   id: LocalsCategory;
@@ -181,6 +188,47 @@ export const CATEGORIES: CategoryMeta[] = [
       "Mobile massage, sound baths, meditation walks. Brought to your rental.",
     icon: "services",
   },
+  // Sell — locals who sell goods outright (Etsy-on-PAL pattern, added 2026-04-27)
+  {
+    id: "art-prints",
+    mode: "sell",
+    label: "Art & Prints",
+    blurb:
+      "Original art, prints, photography, beach-life pieces from local artists. They ship or hand off; PAL just connects you.",
+    icon: "art",
+  },
+  {
+    id: "crafts-handmade",
+    mode: "sell",
+    label: "Crafts & Handmade",
+    blurb:
+      "Shell jewelry, driftwood pieces, hand-poured candles, hand-stitched gear. The kind of thing you can only find from a local who makes it.",
+    icon: "shell",
+  },
+  {
+    id: "merch-apparel",
+    mode: "sell",
+    label: "Merch & Apparel",
+    blurb:
+      "Tees, hats, totes, stickers — limited runs from local boats, businesses, brands.",
+    icon: "shop",
+  },
+  {
+    id: "baked-goods",
+    mode: "sell",
+    label: "Baked Goods & Pantry",
+    blurb:
+      "Cookies, pies, hot sauces, jams. From a kitchen down the street. Vendor handles delivery + freshness.",
+    icon: "eat",
+  },
+  {
+    id: "books-zines",
+    mode: "sell",
+    label: "Books & Zines",
+    blurb:
+      "Self-published, locally-authored, sometimes signed. Coastal cookbooks, beach-town histories, fiction.",
+    icon: "heritage",
+  },
 ];
 
 /* ------------------- Listings (provider-supplied) ------------------- */
@@ -207,4 +255,19 @@ export interface Listing {
   isActive: boolean;
   /** ISO timestamp of when listing was added (for sort) */
   addedAt: string;
+
+  /* --------- Sell-mode only --------- */
+  /** Vendor's price in cents (sell mode). Customer pays this + 10% PAL
+      platform fee on top. Vendor keeps full priceCents amount via
+      Stripe Connect Express transfer at purchase. */
+  priceCents?: number;
+  /** Vendor's Stripe Connect account ID — destination for the
+      transfer of priceCents at purchase time. */
+  stripeAccountId?: string;
+  /** Sold-out flag (vendor toggles when inventory's gone). */
+  soldOut?: boolean;
+  /** Vendor's plan for getting it to the customer. Free-form. e.g.
+      "I'll meet you at the marina" / "Pickup at studio (text first)" /
+      "Ship USPS — flat $8 nationwide" / "Free local delivery in PA" */
+  fulfillmentNote?: string;
 }

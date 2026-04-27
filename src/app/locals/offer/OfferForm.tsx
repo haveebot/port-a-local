@@ -18,6 +18,9 @@ export default function OfferForm() {
   const [pricing, setPricing] = useState("");
   const [availability, setAvailability] = useState("");
   const [photosAcknowledged, setPhotosAcknowledged] = useState(false);
+  // Sell-mode only
+  const [sellPriceDollars, setSellPriceDollars] = useState("");
+  const [fulfillmentNote, setFulfillmentNote] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -31,10 +34,19 @@ export default function OfferForm() {
     setCategory("");
   }, [mode]);
 
-  // For "rent" mode (stuff), photos are required so customers can see
-  // what they're requesting. For "hire" mode (skills), photos are
-  // optional — a description of the work is usually enough.
-  const photosRequired = mode === "rent";
+  // Photos required for "rent" + "sell" (customers see the thing
+  // before requesting/buying). For "hire" (skills), photos are
+  // optional — a description of the work usually carries it.
+  const photosRequired = mode === "rent" || mode === "sell";
+  // Sell mode requires a real price + fulfillment plan
+  const sellPriceCents = sellPriceDollars
+    ? Math.round(parseFloat(sellPriceDollars) * 100)
+    : 0;
+  const sellModeValid =
+    mode !== "sell" ||
+    (sellPriceCents >= 100 &&
+      sellPriceCents <= 1_000_000 &&
+      fulfillmentNote.trim().length > 5);
 
   const valid =
     name.trim().length > 1 &&
@@ -42,7 +54,8 @@ export default function OfferForm() {
     mode !== "" &&
     category !== "" &&
     description.trim().length > 10 &&
-    (!photosRequired || photosAcknowledged);
+    (!photosRequired || photosAcknowledged) &&
+    sellModeValid;
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -63,6 +76,12 @@ export default function OfferForm() {
           pricing: pricing.trim(),
           availability: availability.trim(),
           photosAcknowledged,
+          ...(mode === "sell"
+            ? {
+                priceCents: sellPriceCents,
+                fulfillmentNote: fulfillmentNote.trim(),
+              }
+            : {}),
         }),
       });
       const data = await res.json();
@@ -190,28 +209,48 @@ export default function OfferForm() {
         <label className="block text-xs font-bold tracking-widest uppercase text-navy-700 mb-1">
           What kind of listing?
         </label>
-        <div className="flex gap-2">
+        <div className="grid grid-cols-3 gap-2">
           <button
             type="button"
             onClick={() => setMode("rent")}
             className={
               mode === "rent"
-                ? "flex-1 px-4 py-2.5 rounded-lg text-sm font-bold bg-navy-900 text-sand-50"
-                : "flex-1 px-4 py-2.5 rounded-lg text-sm font-semibold border border-sand-300 text-navy-700 hover:border-navy-400"
+                ? "px-3 py-2.5 rounded-lg text-sm font-bold bg-navy-900 text-sand-50"
+                : "px-3 py-2.5 rounded-lg text-sm font-semibold border border-sand-300 text-navy-700 hover:border-navy-400"
             }
           >
-            Rent (stuff)
+            Rent
+            <span className="block text-[10px] font-light opacity-75 mt-0.5">
+              your stuff
+            </span>
           </button>
           <button
             type="button"
             onClick={() => setMode("hire")}
             className={
               mode === "hire"
-                ? "flex-1 px-4 py-2.5 rounded-lg text-sm font-bold bg-navy-900 text-sand-50"
-                : "flex-1 px-4 py-2.5 rounded-lg text-sm font-semibold border border-sand-300 text-navy-700 hover:border-navy-400"
+                ? "px-3 py-2.5 rounded-lg text-sm font-bold bg-navy-900 text-sand-50"
+                : "px-3 py-2.5 rounded-lg text-sm font-semibold border border-sand-300 text-navy-700 hover:border-navy-400"
             }
           >
-            Hire (skills)
+            Hire
+            <span className="block text-[10px] font-light opacity-75 mt-0.5">
+              your skills
+            </span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setMode("sell")}
+            className={
+              mode === "sell"
+                ? "px-3 py-2.5 rounded-lg text-sm font-bold bg-navy-900 text-sand-50"
+                : "px-3 py-2.5 rounded-lg text-sm font-semibold border border-sand-300 text-navy-700 hover:border-navy-400"
+            }
+          >
+            Sell
+            <span className="block text-[10px] font-light opacity-75 mt-0.5">
+              goods + crafts
+            </span>
           </button>
         </div>
       </div>
@@ -253,29 +292,81 @@ export default function OfferForm() {
         />
       </div>
 
-      <div>
-        <label className="block text-xs font-bold tracking-widest uppercase text-navy-700 mb-1">
-          Pricing (rough range OK)
-        </label>
-        <input
-          value={pricing}
-          onChange={(e) => setPricing(e.target.value)}
-          placeholder="$80/half-day · $40 per session · $25/hour"
-          className="w-full px-3 py-2 border border-sand-300 rounded-lg text-sm focus:border-coral-400 focus:outline-none"
-        />
-      </div>
+      {/* Sell-mode: real price + fulfillment plan REQUIRED. Hide the
+          free-form pricing string for sell mode (we use exact cents). */}
+      {mode === "sell" ? (
+        <>
+          <div>
+            <label className="block text-xs font-bold tracking-widest uppercase text-navy-700 mb-1">
+              Price (USD)
+            </label>
+            <div className="relative">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-navy-500 font-mono">
+                $
+              </span>
+              <input
+                type="number"
+                step="0.01"
+                min="1"
+                max="10000"
+                inputMode="decimal"
+                value={sellPriceDollars}
+                onChange={(e) => setSellPriceDollars(e.target.value)}
+                placeholder="45.00"
+                className="w-full pl-8 pr-3 py-2 border border-sand-300 rounded-lg text-sm font-mono focus:border-coral-400 focus:outline-none"
+                required
+              />
+            </div>
+            <p className="text-[11px] text-navy-500 mt-1 font-light">
+              You keep 100% of this. Customer pays this + 10% PAL platform
+              fee on top.
+            </p>
+          </div>
 
-      <div>
-        <label className="block text-xs font-bold tracking-widest uppercase text-navy-700 mb-1">
-          Availability
-        </label>
-        <input
-          value={availability}
-          onChange={(e) => setAvailability(e.target.value)}
-          placeholder="Weekends · summer only · evenings"
-          className="w-full px-3 py-2 border border-sand-300 rounded-lg text-sm focus:border-coral-400 focus:outline-none"
-        />
-      </div>
+          <div>
+            <label className="block text-xs font-bold tracking-widest uppercase text-navy-700 mb-1">
+              How does the customer get it?
+            </label>
+            <input
+              value={fulfillmentNote}
+              onChange={(e) => setFulfillmentNote(e.target.value)}
+              placeholder="Ship USPS · pickup at studio · meet at marina · free local delivery in PA"
+              className="w-full px-3 py-2 border border-sand-300 rounded-lg text-sm focus:border-coral-400 focus:outline-none"
+              required
+            />
+            <p className="text-[11px] text-navy-500 mt-1 font-light">
+              Your call. PAL doesn&apos;t touch the goods — you reach out
+              to the buyer directly to coordinate.
+            </p>
+          </div>
+        </>
+      ) : (
+        <>
+          <div>
+            <label className="block text-xs font-bold tracking-widest uppercase text-navy-700 mb-1">
+              Pricing (rough range OK)
+            </label>
+            <input
+              value={pricing}
+              onChange={(e) => setPricing(e.target.value)}
+              placeholder="$80/half-day · $40 per session · $25/hour"
+              className="w-full px-3 py-2 border border-sand-300 rounded-lg text-sm focus:border-coral-400 focus:outline-none"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold tracking-widest uppercase text-navy-700 mb-1">
+              Availability
+            </label>
+            <input
+              value={availability}
+              onChange={(e) => setAvailability(e.target.value)}
+              placeholder="Weekends · summer only · evenings"
+              className="w-full px-3 py-2 border border-sand-300 rounded-lg text-sm focus:border-coral-400 focus:outline-none"
+            />
+          </div>
+        </>
+      )}
 
       {/* Photo attestation. Required for "rent" listings (customers
           need to see what they're requesting). Optional for "hire"

@@ -24,9 +24,13 @@ interface OfferBody {
   description?: string;
   pricing?: string;
   availability?: string;
-  /** Required for rent-mode listings — applicant attests they'll
-      email photos of their listing to hello@theportalocal.com. */
+  /** Required for rent + sell mode listings — applicant attests they'll
+      email photos to hello@theportalocal.com. */
   photosAcknowledged?: boolean;
+  /** Sell-mode only: integer price in cents (validated $1 — $10,000) */
+  priceCents?: number;
+  /** Sell-mode only: vendor's fulfillment plan, free-form */
+  fulfillmentNote?: string;
 }
 
 /**
@@ -62,16 +66,42 @@ export async function POST(req: NextRequest) {
       { status: 400 },
     );
   }
-  // Rent-mode listings require photo attestation. Hire-mode (skills)
-  // is photo-optional — a description usually carries the listing.
-  if (body.mode === "rent" && body.photosAcknowledged !== true) {
+  // Rent + sell mode listings need photo attestation (customers see
+  // what they're requesting/buying). Hire (skills) stays photo-optional.
+  if (
+    (body.mode === "rent" || body.mode === "sell") &&
+    body.photosAcknowledged !== true
+  ) {
     return NextResponse.json(
       {
         error:
-          "Rent listings need the photo acknowledgement — confirm you'll email photos to hello@theportalocal.com.",
+          "Rent + sell listings need the photo acknowledgement — confirm you'll email photos to hello@theportalocal.com.",
       },
       { status: 400 },
     );
+  }
+  // Sell mode requires a real price + fulfillment plan
+  if (body.mode === "sell") {
+    const price = Number(body.priceCents ?? 0);
+    if (
+      !Number.isInteger(price) ||
+      price < 100 ||
+      price > 1_000_000
+    ) {
+      return NextResponse.json(
+        { error: "Sell listings need a price between $1 and $10,000." },
+        { status: 400 },
+      );
+    }
+    if ((body.fulfillmentNote ?? "").trim().length < 5) {
+      return NextResponse.json(
+        {
+          error:
+            "Sell listings need a fulfillment plan ('ship USPS', 'pickup at studio', etc.) so customers know how they'll get it.",
+        },
+        { status: 400 },
+      );
+    }
   }
 
   const cat = CATEGORIES.find((c) => c.id === body.category);
@@ -91,6 +121,12 @@ export async function POST(req: NextRequest) {
     pricing: body.pricing?.trim() || undefined,
     availability: body.availability?.trim() || undefined,
     photosAcknowledged: body.photosAcknowledged === true,
+    priceCents:
+      body.mode === "sell" ? Number(body.priceCents ?? 0) : undefined,
+    fulfillmentNote:
+      body.mode === "sell"
+        ? body.fulfillmentNote?.trim() || undefined
+        : undefined,
   });
 
   // HMAC-signed magic links for one-click admin actions. Distinct sigs
@@ -126,8 +162,13 @@ export async function POST(req: NextRequest) {
       <p style="margin: 0 0 4px;"><strong>Phone:</strong> <a href="tel:${escapeHtml(phone.replace(/[^\d+]/g, ""))}">${escapeHtml(phone)}</a></p>
       ${body.email ? `<p style="margin: 0 0 4px;"><strong>Email:</strong> <a href="mailto:${escapeHtml(body.email)}">${escapeHtml(body.email)}</a></p>` : ""}
       <p style="margin: 0 0 4px;"><strong>Type:</strong> ${escapeHtml(body.mode)} · ${escapeHtml(cat?.label ?? body.category)}</p>
-      ${body.pricing ? `<p style="margin: 0 0 4px;"><strong>Pricing:</strong> ${escapeHtml(body.pricing)}</p>` : ""}
-      ${body.availability ? `<p style="margin: 0 0 4px;"><strong>Availability:</strong> ${escapeHtml(body.availability)}</p>` : ""}
+      ${
+        body.mode === "sell" && offer.priceCents
+          ? `<p style="margin: 0 0 4px;"><strong>Price:</strong> $${(offer.priceCents / 100).toFixed(2)} <span style="color:#7d6e5a; font-size:11px;">· customer pays + 10% PAL fee on top</span></p>${offer.fulfillmentNote ? `<p style=\"margin: 0 0 4px;\"><strong>Fulfillment:</strong> ${escapeHtml(offer.fulfillmentNote)}</p>` : ""}`
+          : ""
+      }
+      ${body.mode !== "sell" && body.pricing ? `<p style="margin: 0 0 4px;"><strong>Pricing:</strong> ${escapeHtml(body.pricing)}</p>` : ""}
+      ${body.mode !== "sell" && body.availability ? `<p style="margin: 0 0 4px;"><strong>Availability:</strong> ${escapeHtml(body.availability)}</p>` : ""}
 
       <h3 style="margin: 20px 0 6px; font-size: 14px;">Description</h3>
       <p style="margin: 0; white-space: pre-wrap;">${escapeHtml(description)}</p>

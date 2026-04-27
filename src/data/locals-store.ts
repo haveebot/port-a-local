@@ -44,6 +44,10 @@ async function ensureSchema(): Promise<void> {
       rejected_reason TEXT
     )
   `;
+  // Sell-mode columns (added 2026-04-27 — Etsy-style on-PAL listings).
+  // Idempotent migration so existing rows continue to work.
+  await sql`ALTER TABLE locals_offers ADD COLUMN IF NOT EXISTS price_cents INTEGER`;
+  await sql`ALTER TABLE locals_offers ADD COLUMN IF NOT EXISTS fulfillment_note TEXT`;
   _schemaReady = true;
 }
 
@@ -66,6 +70,10 @@ export interface LocalsOfferRecord {
   approvedBy: string | null;
   rejectedAt: string | null;
   rejectedReason: string | null;
+  /** Sell-mode only: vendor's set price in cents */
+  priceCents: number | null;
+  /** Sell-mode only: vendor's fulfillment plan (free-form) */
+  fulfillmentNote: string | null;
 }
 
 function rowToOffer(row: Record<string, unknown>): LocalsOfferRecord {
@@ -94,6 +102,8 @@ function rowToOffer(row: Record<string, unknown>): LocalsOfferRecord {
       ? new Date(row.rejected_at as string).toISOString()
       : null,
     rejectedReason: (row.rejected_reason as string) ?? null,
+    priceCents: row.price_cents != null ? Number(row.price_cents) : null,
+    fulfillmentNote: (row.fulfillment_note as string) ?? null,
   };
 }
 
@@ -108,6 +118,11 @@ export interface CreateOfferInput {
   pricing?: string;
   availability?: string;
   photosAcknowledged?: boolean;
+  /** Sell-mode only: vendor's price in cents */
+  priceCents?: number;
+  /** Sell-mode only: vendor's fulfillment plan ("ship USPS",
+      "pickup at studio", "I'll meet you at the marina", etc.) */
+  fulfillmentNote?: string;
 }
 
 function newOfferId(): string {
@@ -123,7 +138,7 @@ export async function createLocalsOffer(
     INSERT INTO locals_offers (
       id, name, phone, email, business_name,
       mode, category, description, pricing, availability,
-      photos_acknowledged
+      photos_acknowledged, price_cents, fulfillment_note
     ) VALUES (
       ${id},
       ${input.name},
@@ -135,7 +150,9 @@ export async function createLocalsOffer(
       ${input.description},
       ${input.pricing ?? null},
       ${input.availability ?? null},
-      ${input.photosAcknowledged === true}
+      ${input.photosAcknowledged === true},
+      ${input.priceCents ?? null},
+      ${input.fulfillmentNote ?? null}
     )
   `;
   const offer = await getLocalsOffer(id);
