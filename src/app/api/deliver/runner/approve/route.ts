@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { approveDriver, getDriverById } from "@/data/delivery-store";
+import { magicLinkQrDataUrl, qrEmailBlock } from "@/lib/qrEmail";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -89,6 +90,9 @@ async function sendDriverWelcomeEmail(i: WelcomeInput): Promise<void> {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey || !i.email) return;
   const subject = `You're in. Welcome to PAL Delivery, ${i.name.split(" ")[0]}.`;
+  // Generate QR for cross-device sign-in. If reading email on desktop
+  // and want to sign in on phone, scan with phone camera → done.
+  const qrDataUrl = await magicLinkQrDataUrl(i.signInUrl);
   const html = `
     <div style="font-family: Inter, system-ui, sans-serif; color: #1a2433; line-height: 1.5;">
       <p style="text-transform: uppercase; letter-spacing: 0.15em; font-size: 11px; color: #C84A2C; margin: 0 0 4px;">
@@ -107,6 +111,11 @@ async function sendDriverWelcomeEmail(i: WelcomeInput): Promise<void> {
         Tap once, and your phone stays signed in for 30 days. Bookmark the
         page after — no more sign-in links unless you clear cookies.
       </p>
+
+      ${qrEmailBlock(
+        qrDataUrl,
+        "Reading this on your laptop? Scan with your phone camera to sign in there.",
+      )}
 
       <hr style="border: none; border-top: 1px solid #e5dcc7; margin: 24px 0;" />
 

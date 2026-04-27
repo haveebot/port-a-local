@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { sql as vercelSql } from "@vercel/postgres";
 import type { DriverRecord } from "@/data/delivery-store";
+import { magicLinkQrDataUrl, qrEmailBlock } from "@/lib/qrEmail";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -90,6 +91,9 @@ async function sendDriverLinkEmail(i: LinkEmailInput): Promise<void> {
   }
   const subject = `Your PAL Delivery sign-in link`;
   const first = i.name.split(" ")[0];
+  // QR for cross-device sign-in. If reading on desktop and signing in
+  // on phone, scan with phone camera → done in 5 seconds.
+  const qrDataUrl = await magicLinkQrDataUrl(i.signInUrl);
   const html = `
     <div style="font-family: Inter, system-ui, sans-serif; color: #1a2433; line-height: 1.5;">
       <p style="text-transform: uppercase; letter-spacing: 0.15em; font-size: 11px; color: #C84A2C; margin: 0 0 4px;">
@@ -109,6 +113,11 @@ async function sendDriverLinkEmail(i: LinkEmailInput): Promise<void> {
         the page — no more sign-in links unless you clear cookies or switch
         devices.
       </p>
+
+      ${qrEmailBlock(
+        qrDataUrl,
+        "Reading this on your laptop? Scan with your phone camera to sign in there.",
+      )}
 
       <hr style="border: none; border-top: 1px solid #e5dcc7; margin: 24px 0;" />
       <p style="font-size: 13px;">Didn&apos;t request this? Ignore it — the link only works for you.</p>
