@@ -97,8 +97,8 @@ export default function TournamentSeasonPage() {
               {" "}— women fishing for women, with every dollar that
               didn&apos;t go to the winners going to the Women&apos;s
               Shelter of South Texas (now The Purple Door). Women-only
-              fishing tournaments weren&apos;t a category yet. TWAT has
-              been the matriarch of the category that grew up around it.
+              fishing tournaments weren&apos;t a category yet. TWAT is
+              one of the originals of the category that grew up around it.
             </p>
             <p>
               The 2010s brought the modern era — Texas Legends Billfish
