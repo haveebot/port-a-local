@@ -616,6 +616,271 @@ A council whose membership is dominated by tourism-trade business owners — inc
 
 ---
 
+## Tourism Bureau + HOT-tax angle
+
+This section was added in a follow-up research pass to test a specific working claim: that the Port Aransas Tourism Bureau (formerly Port Aransas Convention and Visitors Bureau, now formally **Port Aransas Tourism Bureau & Chamber of Commerce**) has been a vehicle through which Cinnamon Shore principal **Jeff Lamkin** projects influence into city governance — including, per a verbal claim worth testing, that a previous Bureau CEO was hand-picked by Lamkin and recruited from Florida.
+
+The records reviewed do **not** substantiate the strongest version of that claim — that Lamkin personally hand-picked a Bureau CEO. They **do** substantiate a weaker but still consequential set of facts: (a) the Bureau is governed by a 16-member board chaired and populated by lodging-industry stakeholders including a sitting Cinnamon Shore executive, (b) the prior CEO Jeffrey Hentz was indeed recruited from Deerfield Beach, Florida (with a Daytona Beach CVB background), under a board chaired during his tenure by **Deven Bhakta** of ZJZ Hospitality — the same Bhakta who was simultaneously Cinnamon Shore's hospitality-partner CEO on the 2019 hotel-conference center bid the city awarded to Cinnamon Shore 7-0, and (c) the Bureau's annual operating budget — funded almost entirely from Hotel Occupancy Tax revenue collected by the city — has more than doubled since 2017, with no public allocation formula on the visible record. Whatever the truth of the verbal claim, the structural overlap on the record is itself the story.
+
+### Legal structure + governance
+
+**Legal classification:** **501(c)(6) non-profit corporation** ([Port Aransas Tourism Bureau & Chamber of Commerce — Board of Directors](https://www.portaransas.org/about-us/board-of-directors/)). A 501(c)(6) is a "business league" under federal tax law — *not* part of city government, *not* a 501(c)(3) public-benefit charity, and *not* a city-controlled CVB of the kind some Texas municipalities operate as a city department. It is a private membership organization.
+
+**Funding source:** Hotel Occupancy Tax (HOT) revenue passed through from the City of Port Aransas under contract. *"All of that money going to the chamber is revenue from hotel-occupancy taxes."* ([South Jetty: $12.3 million budget proposed by city staff](https://www.portasouthjetty.com/articles/12-3-million-budget-proposed-by-city-staff/).) The contract terms (length, performance metrics, audit rights) are **[UNVERIFIED — recommend FOIA to City Secretary for the city's contract with the Tourism Bureau, and the most recent Bureau IRS Form 990.]**
+
+**HOT rate + revenue scale:**
+- Total HOT charged in Port Aransas: **15%** (City 9% + State 6%). ([City of Port Aransas — Hotel Motel Tax page](https://cityofportaransas.org/departments/finance/hotel-motel-tax/).)
+- 2023 HOT collections to City of Port Aransas: **$10.5 million** (per existing fact base section "The economic scale" above).
+- Texas Tax Code Chapter 351 governs municipal HOT — proceeds may only be spent on uses that *"directly promote tourism and the convention and hotel industry"* (per Texas Comptroller HOT guidance).
+
+**Bureau allocation history (proposed budgets):**
+- FY 2020–21: Bureau allocation **~$2.2 million** ([South Jetty: $12.3 million budget proposed by city staff](https://www.portasouthjetty.com/articles/12-3-million-budget-proposed-by-city-staff/).)
+- FY 2021–22: proposed **~$3 million** (a ~36% one-year increase). (Same source.)
+- FY 2024–25 / FY 2025–26: **[UNVERIFIED — pull from current city budget PDF; the 2025-26 budget PDF posted at cityofportaransas.org was not text-extractable for this fact base.]**
+
+That's a Bureau whose annual revenue is **roughly equal to the City of Port Aransas's entire sales tax revenue** ($3.86M in 2023) — and whose board, not the city council, controls its day-to-day spending decisions. The council's leverage is contractual (renew/don't renew, fund/don't fund), not directorial.
+
+### Bureau governance — current board (April 2026)
+
+Sixteen-member board ([Port Aransas Tourism Bureau & Chamber of Commerce — Board of Directors](https://www.portaransas.org/about-us/board-of-directors/)):
+
+| Role | Member | Affiliation / sector |
+|------|--------|---|
+| Chair | **Keith McMullin** | Real Estate / Developer Broker, Port Aransas Realty |
+| Vice-Chair | Laurie Soechting | Bar/Restaurant — Bluewater Cowboy Saloon & Mercantile |
+| Treasurer | Fred Samudio | Hotel/Lodging — General Manager, The Dunes Condominiums |
+| Immediate Past Chair (Ex-Officio) | **Tanya Chambers** | **Sitting City Council Place #4** — Casa Bella Salon, The Crazy Cajun |
+| Ex-Officio | David Parsons | City Manager, City of Port Aransas |
+| Member | Marsha Starkey | Owner, Starkey Property Management |
+| Member | **Greg Carr** | **Palmilla Beach** (the **losing** bidder in the 2019 hotel-conference center vote that Cinnamon Shore won 7-0) |
+| Member | Scott Clanton | General Manager, The Place Hotel |
+| Member | **Celeste Edwards** | **General Manager Vacation Rentals, Cinnamon Shore** |
+| Member | Marnie Pate | Owner/Broker, Coldwell Banker Island Escapes; Owner/Partner, Port A Escapes |
+| Member | Regina Love | SWAY X Avantstay (vacation-rental management) |
+| Member | Will Cocke | Fishing / Marina — Port Aransas Fisherman's Wharf and Grumbles Seafood |
+| Member | **Chris Collins** | **Bar/Restaurant — Fins Grill, MacDaddy's, Tortuga's Saltwater Grill** (the Owens-family restaurants — see Council Member Kelly Owens, Place #2) |
+| Member | Shannon Lafayette | Professional Services (Photography) |
+| Member | Kim Winton | Retail — Winton's Island Candy |
+| Member | Ed Buske | Director, UTMSI (University of Texas Marine Science Institute) |
+| Member | Greg Stunz | Director, Harte Research Institute |
+
+**What this composition shows:**
+
+- **Cinnamon Shore has a sitting board seat** through Celeste Edwards. The question of whether a Cinnamon Shore vacation-rental executive — whose employer's principal (Lamkin) regularly addresses council on STR, beach-access, and PUD matters — should be voting on how Port Aransas's tourism-marketing dollars are spent is the structural question the piece can frame. There is no indication on the record that Edwards has recused on any Bureau matter affecting Cinnamon Shore. **[UNVERIFIED — confirm via Bureau board minutes which are not posted publicly.]**
+- **Palmilla Beach has a sitting board seat** through Greg Carr — the *losing* 2019 conference-center bidder. Whether two competing developers (Cinnamon Shore and Palmilla) sitting on the same destination-marketing board produces dynamic equilibrium or back-channel deal-making is **[UNVERIFIED]** but worth flagging.
+- **The Owens-family restaurant empire has a board seat** through Chris Collins, whose listed restaurants (Fins Grill, MacDaddy's, Tortuga's) are the same six restaurants Council Member Kelly Owens (Place #2) co-owns. Same question of family/business overlap as flagged in the existing fact base.
+- **Sitting Council Member Tanya Chambers** holds an ex-officio "Immediate Past Chair" seat — meaning the same Council seat (Place #4) is *both* one of seven votes that approves the Bureau's annual HOT allocation *and* a permanent fixture on the Bureau's board overseeing how that money is spent. That is the architectural feature the piece should highlight.
+- **The Bureau's board has zero seats** indexed for permanent residents not affiliated with a tourism business, lodging operator, real-estate firm, restaurant, or research institute. Chamber-of-commerce style boards rarely do — but in a 2,904-resident city where the Bureau spends ~$3M/year of public HOT money, the absence of a non-stakeholder seat is itself notable.
+
+### CEO succession — what the public record shows
+
+Three CEOs span the 2017–present window:
+
+**1. Jeffrey Hentz (Jan. 2017 – Jan. 2020).**
+- **Recruited from:** Deerfield Beach, Florida; previously president/CEO of the Daytona Beach Area Convention and Visitors Bureau (~2012–2014); 28 years in destination marketing including stints at Walt Disney World, Yosemite & Mariposa County Tourism Bureau, Warner Brothers, United Airlines Vacations, multiple cruise lines. ([South Jetty: Chamber hires CEO](https://www.portasouthjetty.com/articles/chamber-hires-ceo/), [Inbound Report: Hodge Podge Feb. 2017](https://www.inboundreport.com/2017/02/21/hodge-podge-shifts-shakeups-and-occasional-shaftings-in-the-tour-and-travel-industry-73/), [LinkedIn: Jeffrey Hentz](https://www.linkedin.com/in/jeffrey-hentz-47a3a771/).)
+- **Hiring authority:** Chamber Board chairman **Suzette Freeman** (named in announcement) plus an unnamed search committee, with executive-search firm **Reaction Search International** (Newport Beach, California). Freeman's quoted reasoning: *"Members of the board appointed a search committee, and along with Reaction Search International, have spent many hours reviewing resumes and interviewing potential candidates to find the right fit for our community."* ([South Jetty: Chamber hires CEO](https://www.portasouthjetty.com/articles/chamber-hires-ceo/).)
+- **No public reference to Lamkin or Cinnamon Shore in the announcement of Hentz's hire.** The records reviewed do not include the search committee's full membership, the candidate slate, or any board-deliberation minutes — those are likely Bureau-internal documents not subject to Texas Public Information Act since the Bureau is a 501(c)(6), not a governmental body. **[UNVERIFIED — but flag: if the city's contract with the Bureau requires public-meetings posture, the search committee's records may be reachable; otherwise they are not.]**
+- **Departure:** Resigned Jan. 6, 2020 (effective Jan. 23, 2020) for the same role at North Lake Tahoe CVB. Board chairman **Deven Bhakta** signed the announcement: *"The Board would like to sincerely thank Mr. Hentz for his service, leadership and commitment…"* ([South Jetty: Hentz reportedly resigns from Port Aransas chamber](https://www.portasouthjetty.com/articles/hentz-reportedly-resigns-from-port-aransas-chamber/), [South Jetty: Hentz resigns as chamber head to take 'dream job' in Lake Tahoe](https://www.portasouthjetty.com/articles/hentz-resigns-as-chamber-head-to-take-dream-job-in-lake-tahoe/), [KIII-TV: Port Aransas Chamber CEO accepts new job in Lake Tahoe](https://www.kiiitv.com/article/news/local/port-aransas-chamber-ceo-accepts-new-job-in-lake-tahoe-cali/503-f96b4192-db87-4a25-aac1-7fb66e3f12cf).)
+- **The Bhakta overlap that's hard to ignore:** Bhakta was the chairman who oversaw Hentz's departure announcement. Bhakta is also the **CEO of ZJZ Hospitality**, which was the **hospitality partner on Cinnamon Shore's 2019 winning bid** for the city's hotel-conference center. ([South Jetty: Cinnamon Shore is city's pick](https://www.portasouthjetty.com/articles/cinnamon-shore-is-citys-pick-for-hotel-conference-center-developer/), [LinkedIn: Deven Bhakta](https://www.linkedin.com/in/zjzpres/).) That means the Bureau's board chairman during the Hentz-resignation/Stawar-search window was simultaneously Cinnamon Shore's contractual hospitality co-principal. **[VERIFIED via cross-reference of three independent press accounts.]** This is the closest public-record link between Bureau leadership succession and Cinnamon Shore that the records produce.
+
+**2. Keith McMullin (Jan. 2020 – Aug. 2020, interim).** Already on the Chamber board in real-estate / developer-broker capacity (Port Aransas Realty); stepped in as interim and conducted the search that produced Stawar. ([South Jetty: McMullin steps in as interim president, CEO at Port Aransas chamber](https://www.portasouthjetty.com/articles/mcmullin-steps-in-as-interim-president-ceo-at-port-aransas-chamber/), [South Jetty: Port Aransas chamber names new president and CEO](https://www.portasouthjetty.com/articles/port-aransas-chamber-names-new-president-and-ceo/).) McMullin remains Board Chair as of April 2026.
+
+**3. Brett Stawar (Aug. 19, 2020 – present).**
+- **Recruited from:** Edwardsville, Illinois — 16 years as president/CEO of the Great Rivers and Routes Tourism Bureau in southwest Illinois; two-term chairman of the Illinois Council of Convention and Visitors Bureau. ([South Jetty: Brett Stawar takes helm at chamber](https://www.portasouthjetty.com/articles/brett-stawar-takes-helm-at-chamber/), [LinkedIn: Brett Stawar](https://www.linkedin.com/in/stawar/), [Advantage News: Stawar takes tourism bureau post in Texas](https://www.advantagenews.com/news/stawar-takes-tourism-bureau-post-in-texas/article_dc85b3c4-b775-5db2-beae-fb98c286d5ca.html).)
+- **Hiring authority:** Selection committee chaired by interim CEO Keith McMullin, under board chairman Bhakta. McMullin: *"The selection committee interviewed and met with a group of very talented candidates for the position."* Specific committee membership **[UNVERIFIED]**.
+- **No public reference to Lamkin in the Stawar hire either.** ([South Jetty: Port Aransas chamber names new president and CEO](https://www.portasouthjetty.com/articles/port-aransas-chamber-names-new-president-and-ceo/).)
+
+### What the records do *not* show — the verbal-claim failure mode
+
+The verbal claim under examination — *"a previous Bureau CEO was hand-picked by Jeff Lamkin and recruited DIRECTLY FROM FLORIDA"* — is a hybrid statement that the public record can partly substantiate and partly cannot:
+
+- **"Recruited directly from Florida":** **TRUE for Hentz** (Deerfield Beach, FL → Daytona Beach CVB background → Port Aransas, Jan. 2017). **NOT TRUE for Stawar** (Edwardsville, IL → Port Aransas, Aug. 2020).
+- **"Hand-picked by Jeff Lamkin":** **NOT SUBSTANTIATED in any reviewed source.** Lamkin is not named on the Hentz hiring announcement, the search-committee disclosure, or the Reaction Search International contract reference. Lamkin is not on the Bureau board (he sits as principal of Sea Oats Group, a developer; the Bureau seat from his organizational orbit is held by Celeste Edwards as the on-record Cinnamon Shore representative). The strongest factual link is **structural rather than personal**: Bhakta — Cinnamon Shore's contractual hospitality partner on the conference-center bid — chaired the Bureau board during Hentz's tenure and announced his departure.
+- **What the verbal claim probably is:** an oral-tradition compression of (a) a Florida-recruited CEO + (b) a Cinnamon-Shore-aligned board chairman + (c) Cinnamon Shore's outsized policy footprint, into the simplified account that "Lamkin picked the CEO." That oral compression is not falsifiable on the visible record but is also not directly supported by it.
+- **Recommendation:** the piece should report what's on the record (Bhakta-Cinnamon Shore overlap; Florida recruitment of Hentz; current board composition with Cinnamon Shore + Palmilla seats) and **not** assert the personal Lamkin-picked-the-CEO narrative absent FOIA-recovered search-committee minutes or an on-record source. This is the kind of claim that lives or dies on a single interview with someone who was in the search-committee room — likely Suzette Freeman (2017 chair) or a 2017 search-committee member. **[UNVERIFIED — strongest single-step verification: open-records request for any city correspondence with the Bureau or with Reaction Search International from late 2016 through January 2017.]**
+
+### Lamkin's broader political footprint — what's documented
+
+Without imputing the CEO-pick claim, the on-record set of Lamkin / Sea Oats Group / Cinnamon Shore engagements with city government is itself substantial:
+
+- **2007:** Cinnamon Shore PUD created (Ordinance 2007-21) — the foundational zoning instrument for the development. ([Port Aransas Code of Ordinances via Municode](https://library.municode.com/tx/port_aransas/codes/code_of_ordinances).)
+- **Jan. 2016:** Lamkin announces $1 billion Phase II expansion (~1,000 new units, 234 acres). On density: *"We are doing about one-third of the density we could do (under city rules)."* On Starbucks: *"You won't ever see a Starbucks or any of that stuff."* ([South Jetty: $1 billion buildup](https://www.portasouthjetty.com/articles/1-billion-buildup/), [South Jetty: Lamkin talks about growth issues](https://www.portasouthjetty.com/articles/lamkin-talks-about-growth-issues/).)
+- **June 2017:** Sea Oats Group press release announces $1.3 billion expansion of Cinnamon Shore at "South" — the figure rises from $1B (2016) to $1.3B in 18 months. ([Globe Newswire: Sea Oats Group announces $1.3 billion Phase II expansion](https://www.globenewswire.com/news-release/2017/06/13/1018389/0/en/Sea-Oats-Group-Announces-1-3-Billion-Phase-II-Expansion-of-Cinnamon-Shore-on-the-Texas-Gulf-Coast.html).)
+- **Sept. 2018:** Cinnamon Shore South groundbreaking (Oct. 5, 2018). ([Globe Newswire: Sea Oats Group sets Cinnamon Shore South groundbreaking](https://www.globenewswire.com/news-release/2018/09/27/1577468/0/en/Sea-Oats-Group-Sets-Cinnamon-Shore-South-Groundbreaking-For-October-5.html).)
+- **Jan. 17, 2019:** Council awards hotel-conference center to Cinnamon Shore 7-0 over Palmilla Beach. Lamkin: *"We're not asking the city for anything … We're writing the checks."* ([South Jetty: Cinnamon Shore is city's pick](https://www.portasouthjetty.com/articles/cinnamon-shore-is-citys-pick-for-hotel-conference-center-developer/).) Bhakta-led ZJZ Hospitality is on the bid.
+- **Aug. 2020:** Lamkin proposes a *new* location for the conference center — west side of State Highway 361, two miles north of Cinnamon Shore South. ([CCBizNews: Cinnamon Shore wins Port A convention center bid](https://www.ccbiznews.com/news/cinnamon-shore-wins-port-a-convention-center-bid).) Project location migrates over time.
+- **Oct.–Nov. 2021:** Cinnamon Shore voter-registration email episode (see existing "Specific Named Examples" Example 6 above). Email instructed Cinnamon Shore homeowners to *"consider having one member of your family register to vote in Port A,"* citing opposition to Beach Access Road 1B. Of 526 Cinnamon Shore units, only 2 qualified as homestead. Texas Secretary of State referred the matter to AG March 17, 2022.
+- **Oct. 2021:** Lamkin warns city officials that *"several attorneys own property at Cinnamon Shore, and they might file for injunctions"* if the city pursues Beach Access Road 1B. ([South Jetty: Sea Oats files notice of a potential claim regarding beach road](https://www.portasouthjetty.com/articles/sea-oats-files-notice-of-a-potential-claim-regarding-beach-road/).)
+- **June 2022:** Sea Oats Group files a formal "notice of potential claim" — pre-litigation legal threat — against the city over Beach Access Road 1B. Council goes into ~45-min executive session to discuss. ([South Jetty: Sea Oats files notice of a potential claim](https://www.portasouthjetty.com/articles/sea-oats-files-notice-of-a-potential-claim-regarding-beach-road/).) Lamkin: the notice *"simply raises some concerns for issues that they may not have fully thought through"* and asks for discussion of *"legality, feasibility and need."*
+
+That's, on the documented record, **a developer who has appeared before or been the subject of council action at minimum 6 distinct times in 6 years on matters involving zoning, density, beach access, voter registration, and public-private partnership awards** — the highest frequency of any single private actor's engagement with Port Aransas city government in the period reviewed.
+
+### What this section adds to the working thesis
+
+The piece's working title — *"What happens when popularity contests run a tourist economy"* — frames stakeholder capture at the **electoral / appointment** level. The Tourism Bureau angle adds a **financial-flow layer**: the city collects $10.5M/year in HOT money, hands roughly 30% of it to a 501(c)(6) board on which the city's biggest developer's vacation-rental general manager sits (and on which a sitting council member sits ex-officio), and that board chooses the executive who decides where the city's tourism-marketing dollars go. Whatever happens between "voter casts ballot" and "STR ordinance gets rescinded" is one set of feedback loops; whatever happens between "tourist pays $250 hotel-room tax" and "$3M lands at the Bureau" is a separate, parallel one. The piece can run them in parallel without conflating them.
+
+**The single hardest question the records leave unanswered:** **What is the Bureau's contract performance metric, and who reviews it?** A 501(c)(6) receiving $3M/year of municipal pass-through revenue should be subject to either (a) a formal contract with measurable deliverables and city audit rights, or (b) annual budget approval that creates de facto accountability. The records reviewed don't establish which model Port Aransas operates. **[UNVERIFIED — single highest-leverage follow-up: FOIA the city's standing contract with the Tourism Bureau and the most recent IRS Form 990 the Bureau filed (a 501(c)(6) with $3M revenue must file annually and the 990 is publicly searchable on ProPublica's Nonprofit Explorer or GuideStar).]**
+
+---
+
+## Worst-case-scenario comparables (the cautionary tales)
+
+The existing fact base offers Bar Harbor, ME and Provincetown, MA as **success-story** comparables — small resort towns where citizen-initiated reform mechanisms (ballot measures, petitioned town-meeting articles) bypassed captured councils to enact STR or hotel-consolidation restraint.
+
+This section provides the **opposite** — towns where the structural pattern visible in Port Aransas today went unchecked, the consequences that followed, and the **leading indicators that were visible before the worst became inevitable.** Each subsection ends with a Port Aransas mapping: which of the leading indicators does PA share today.
+
+These are not predictions. They are pattern-matches. The piece can use them to argue that *"if Port A keeps these conditions, here is the trajectory the comparable towns followed."* The trajectory is not deterministic — but the conditions are diagnostic.
+
+### Aspen, CO — the longest-running cautionary tale
+
+**Population (year-round):** ~7,000. **Median home price (2024):** **$13.3 million** — single-family. ([AspenTimes: Housing spike drives declining Aspen School District enrollment](https://www.aspentimes.com/news/housing-spike-drives-declining-aspen-school-district-enrollment-official-says/).) **Median household income:** ~$73,000. The home-price-to-income ratio is ~182:1.
+
+**The capture pattern:** Aspen never had a single dramatic capture event. It had a 50-year drift in which growth-restriction politics — well-intentioned, designed to *protect* small-town character — ended up creating an artificial supply scarcity that *enriched existing property holders* faster than wages could keep up. Land-use decisions were made by people who already owned property; the people who would have to move in to staff the resort never had a seat.
+
+**The leading indicators (in the order they appeared, from public records):**
+1. **Housing vacancy rate climbs.** 2020 census: **42.9% of Aspen's housing units were vacant** — meaning second-home / investment, not occupied. ([Aspen Journalism: 2020 census data shows more vacant homes in Aspen, Vail](https://aspenjournalism.org/2020-census-data-highlights-the-relationship-between-resort-communities-and-downvalley-locales/).)
+2. **School enrollment drops.** Aspen School District enrollment dropped from ~1,665 (2014/15–2019/20 average) to ~1,570 (2020/21–2024/25 average) — a **~6% decline over 5 years** in a district whose population should have been growing with the regional economy. ([VailDaily: Over 10,000 fewer students enrolled in Colorado public schools in 2025](https://www.vaildaily.com/news/colorado-public-schools-ski-towns-fewer-students-enrolled/).)
+3. **Workforce moves "downvalley."** Aspen's workforce now lives in Basalt, Carbondale, El Jebel, Glenwood Springs — towns 30–60 minutes' commute away. ([Mountain Journal: Trouble in Aspen: What Happens When Working Class Employees Retire?](https://mountainjournal.org/aspen-colorado-bodes-will-for-jackson-hole-and-bozeman/).)
+4. **Affordable-housing waitlists grow faster than supply.** Despite 50 years of subsidized-housing programs, demand outstrips supply.
+5. **The "great urban exodus" of 2020–2022 amplified everything.** ([Colorado Sun: 'The great urban exodus'](https://coloradosun.com/2020/07/27/urban-exodus-colorado-resort-towns-second-home-buyers-school-enrollment/).)
+
+**Direct quote — Aspen Journalism on Aspen's transformation:**
+
+> *"Aspen's escalated property values have pushed much of the local workforce downvalley, an unintentional result of growth restrictions legislated to control sprawl that had threatened Aspen's small-town authenticity."*
+> ([Aspen Property Brothers: 'The Great Urban Exodus'](https://www.aspenpropertybrothers.com/aspen/the-great-urban-exodus-colorado-resort-towns-see-flood-of-second-home-buyers-burst-in-school-enrollment/).)
+
+**PA mapping:**
+- **Year-round population decline:** Port Aransas dropped **16.6% from 3,480 (2010) to 2,904 (2020)** — a steeper one-decade drop than Aspen's 2014–2025 enrollment slide. Post-Harvey, but the trajectory is consistent. ([Wikipedia: Port Aransas, Texas](https://en.wikipedia.org/wiki/Port_Aransas,_Texas).)
+- **Vacancy / second-home rate:** **[UNVERIFIED — Nueces CAD search for property-tax records would establish the homestead-exempt vs. non-homestead split. Lamkin's 2021 disclosure that of 526 Cinnamon Shore units only 2 qualified as homestead is a 0.4% homestead rate in that subdivision — a vacancy/second-home concentration above Aspen's 42.9% citywide rate.]**
+- **School enrollment:** Port Aransas ISD ~585 students (2024-25), but **[UNVERIFIED — confirm whether enrollment is trending up, flat, or down 2018–2025 against TEA historical data. If down, this is the most direct Aspen-pattern match.]**
+- **Workforce displacement:** *"the people who work here can't afford to live here"* is a Mary Henkel Judson editorial-board talking point (existing fact base) and a verifiable claim in any 5-min interview with a service-industry worker on Alister Street. **[UNVERIFIED — recommend short interview series to document.]**
+
+### Sedona, AZ — the STR-driven affordability collapse
+
+**Population:** ~10,000. **Median home price:** ~$1 million (vs. ~$300K pre-2018). ([12News: Tourists flock to Sedona; workers can't afford to live there](https://www.12news.com/article/news/local/arizona/sedona-has-become-too-expensive-for-the-people-who-work-there-to-live-there/75-65b523bb-ebec-4928-9674-ebd641f552fb).)
+
+**The capture pattern:** A 2016 Arizona state preemption law forbade municipalities from regulating STRs. Sedona's city council **had no tools left** even when STR conversion exploded. The capture wasn't local — it was at the state level — but the symptom is the same: a tourism-dependent city watched ~18% of its housing stock convert to STR with **66% of those STRs owned by people who don't live in Sedona.** ([ABC15: Sedona leaders say vacation rentals are driving a housing shortage emergency](https://www.abc15.com/news/state/sedona-leaders-say-vacation-rentals-are-driving-a-housing-shortage-emergency).)
+
+**The leading indicators:**
+1. **STR share of housing climbs above 15%.** Sedona crossed that threshold in the late 2010s.
+2. **Out-of-area STR ownership exceeds 50%.** Sedona: 66%.
+3. **Service workers leave.** *"A growing number of people who work in Sedona can no longer afford to live here."* (12News.)
+4. **Council declares a housing-shortage emergency.** Sedona's council passed a formal "housing shortage emergency" resolution. ([ABC15 above.](https://www.abc15.com/news/state/sedona-leaders-say-vacation-rentals-are-driving-a-housing-shortage-emergency))
+5. **The Arizona Republic's name for Sedona:** *"an aristocratic principality without affordable housing."* ([Sedona.biz: AZ Republic Calls Sedona 'An Aristocratic Principality without Affordable Housing'](https://sedona.biz/az-republic-calls-sedona-an-aristocratic-principality-without-affordable-housing/).)
+
+**Direct quote — Mayor Scott Jablow:**
+
+> *"We're saying give us local control. Let us enact a cap. Each city and town and even the county unincorporated areas should have the right to cap them."*
+> ([ABC15.](https://www.abc15.com/news/state/sedona-leaders-say-vacation-rentals-are-driving-a-housing-shortage-emergency))
+
+**PA mapping:**
+- **STR share of housing:** Port Aransas's **[UNVERIFIED]** STR-to-total-housing ratio — but the public record shows CCMS alone manages 700+ units, and the city's STR-registration roll is in the four-figure range based on HOT volume. With 2,904 year-round residents and ~115,000 summer room-nights, **the per-capita STR exposure is plausibly higher than Sedona's 18%**.
+- **Out-of-area ownership:** Cinnamon Shore's **0.4% homestead rate** (2 of 526 units) blows past Sedona's 66% out-of-area rate. The Cinnamon Shore voter-registration email episode is the most documented evidence in the country that a single resort development orchestrates *resident-of-record* manipulation to defend its property values.
+- **Texas pre-emption risk:** Texas does **not yet** have an Arizona-style STR pre-emption — 2023 federal court ruling on Austin's residency-rule (the ruling that forced Port A's 2023 rescission) was a federal-constitutional issue, not state preemption. But the Texas Legislature has considered STR preemption bills. **[UNVERIFIED — track Texas Legislature 89R sessions for SB/HB filings on municipal STR authority.]**
+
+### Telluride, CO — the school-district-as-canary
+
+**Population:** ~2,500 (town of Telluride; broader San Miguel County ~8,000). **Median home price-to-income ratio:** **37x** in Telluride town, **16x** in San Miguel County. ([Telluride Foundation: Telluride's Regional Housing Issue](https://telluridefoundation.org/tellurides-regional-housing-issue/).)
+
+**The capture pattern:** Telluride is the smallest comparable in this section and the closest population analog to Port Aransas (2,904). Its capture story is told most clearly through its **school district**: enrollment declined by **15% over 7 years**. The school district had to issue **$31.8 million in bonds in 2023** to construct workforce housing for its own teachers. ([Fortune: Housing crisis hits ski resort towns as Telluride draws down millions in municipal bonds](https://fortune.com/2024/02/21/telluride-colorado-affordable-housing-municipal-debt-school-district/).)
+
+**The leading indicators:**
+1. **Median-home-to-income ratio climbs above 15:1.** Telluride town: 37:1.
+2. **School enrollment declines >10% over 5–7 years.** Telluride: 15% over 7 years.
+3. **Teachers can't be hired or retained.** Director of finance, Telluride School District: *"If there are no homes, I can't fill positions."*
+4. **Voters approve school-district debt to build employee housing.** Nov. 7, 2023, Telluride: 64% in favor of $31.8M bond measure. (This is a *failure* indicator — when the school district has to mortgage itself to house its own staff, the housing market has already collapsed for the working class.)
+5. **The April 2026 Colorado Sun reporting on Telluride's renter-protection ordinances:** *"new regulations designed to help renters are instead driving many out of town."* ([Colorado Sun: In Telluride, new regulations designed to help renters are instead driving many out of town](https://coloradosun.com/2026/04/19/telluride-rent-regulations-renters-affordability-shandoka-sunnyside-voodoo-apartments/).) Late-stage reform attempts can backfire.
+
+**Direct quote — Telluride School District director of finance:**
+
+> *"If there are no homes, I can't fill positions."*
+> ([Fortune above.](https://fortune.com/2024/02/21/telluride-colorado-affordable-housing-municipal-debt-school-district/))
+
+**PA mapping:**
+- **Population analog:** This is the closest population match in this section. Both towns are 2,500–3,000 year-round.
+- **Home-to-income ratio:** **[UNVERIFIED — Port Aransas median home price 2024–25 vs. median household income; both are in Census ACS 5-year and Nueces CAD records. If the ratio is above 15:1, that is the Telluride leading indicator. A back-of-envelope: Cinnamon Shore homes start ~$700K; PA median household income is plausibly $50K–$60K based on Nueces County figures. That's a 12:1 to 14:1 ratio against Cinnamon Shore prices — already approaching Telluride's threshold.]**
+- **School-staffing crisis:** Port Aransas ISD has 585 students; whether the district can recruit/retain teachers in PA's housing market is **[UNVERIFIED — recommend interview with PAISD superintendent on teacher-housing situation. If PAISD is already paying differential or losing teachers to nearby districts (Aransas Pass, Rockport-Fulton), that is a Telluride-pattern early-warning signal worth surfacing.]**
+
+### Whitefish, MT — the recent-acceleration analog
+
+**Population:** ~8,000. **Median home price (2025):** ~$870K (up from $500K in 2020). **Median household income:** $60K–$70K. ([Ski Mag: The Ski Town Housing Crisis Is Coming For This Beloved Montana Community](https://www.skimag.com/ski-resort-life/northern-rockies/whitefish-montana-ski-town-housing-crisis/).)
+
+**The capture pattern:** Whitefish is what Port Aransas could look like in 5–7 years on the current trajectory. Whitefish in 2013 had **15 STRs**; by 2024 it had **487 in city limits + 1,271 in greater Whitefish.** ([Montana Free Press: Whitefish takes aim at illegal short-term rentals](https://montanafreepress.org/2023/11/16/whitefish-takes-aim-at-illegal-short-term-rentals/).) The town is now mid-late-cycle: locals souring on tourism, the council scrambling to enforce STR rules without state preemption blocking.
+
+**The leading indicators:**
+1. **STR count grows 30x in 11 years.** 15 → 487 (city limits).
+2. **Home-price-to-income ratio doubles in 5 years.** Whitefish: ~7:1 (2020) → ~14:1 (2025).
+3. **Public sentiment turns.** *"Only 22% of survey respondents agreed with the statement that tourism makes Whitefish a good place to live, compared to 54% who disagreed."* ([Whitefish Pilot: Locals sour on tourism's impact on Whitefish](https://whitefishpilot.com/news/2024/apr/10/locals-sour-on-tourisms-impact-on-whitefish/).)
+4. **Council enforcement actions begin.** STR enforcement crackdowns; task forces; emergency resolutions.
+
+**Direct quote — Whitefish Pilot, April 2024:**
+
+> *"Only 22% of survey respondents agreed with the statement that tourism makes Whitefish a good place to live, compared to 54% who disagreed."*
+> ([Whitefish Pilot above.](https://whitefishpilot.com/news/2024/apr/10/locals-sour-on-tourisms-impact-on-whitefish/))
+
+**PA mapping:**
+- **STR growth:** Port Aransas's STR count growth 2013–present is **[UNVERIFIED — recommend pulling annual STR-registration totals from city records 2013–2025 if reachable]**, but CCMS alone reaching 700+ units suggests Whitefish-scale concentration.
+- **Sentiment:** Existing fact base notes James King's April 2025 Conservancy editorial — *"It has expanded along Mustang Island, with the environment now threatened by industrial development"* — and Mary Henkel Judson's "unnecessary divide" editorial. **[UNVERIFIED — no published resident-survey on PA tourism sentiment found in the records reviewed. A Whitefish-style survey would be a high-value piece-companion data set.]**
+
+### Fredericksburg, TX — the closest Texas comparable
+
+**Population:** ~11,400. **Tourism volume:** **1.5 million visitors annually** — ~131x year-round population. ([Texas Hill Country: Fredericksburg's Growing Pains Felt in Housing Market](https://texashillcountry.com/fredericksburgs-growing-pains-felt-in-housing-market/).) PA's 1.2M summer visitors against 2,904 residents = ~413x — a *higher* ratio than Fredericksburg.
+
+**The capture pattern:** Fredericksburg's capture is most visible in its **near-total absence of entry-level housing**. *"There are only three homes in Fredericksburg selling for under $200,000."* (TexasHillCountry.com, citing Tim Lehmberg of GCEDC.) STR ordinance only effective Jan. 1, 2024 — ~6 years late by the leading-indicator timeline.
+
+**The leading indicators:**
+1. **Entry-level housing vanishes.** Fredericksburg: ~3 homes under $200K total in inventory.
+2. **Working-class houses convert to second homes.** *"A lot of homes that would fill the need of a lower income or working-class person are bought up as a second home."* (TexasHillCountry.com.)
+3. **STR ordinance lags by 5+ years.** Fredericksburg's STR ordinance came into effect 2024 — well after the housing-conversion damage was structural.
+
+**Direct quote — Tim Lehmberg, Gillespie County EDC:**
+
+> The housing issue is reaching *"epidemic proportions."*
+> ([TexasHillCountry.com.](https://texashillcountry.com/fredericksburgs-growing-pains-felt-in-housing-market/))
+
+**PA mapping:**
+- **Entry-level housing in PA:** **[UNVERIFIED — Nueces CAD search for residential listings in Port Aransas under $200K, $300K, $400K. If the under-$300K count is in single digits — likely — the Fredericksburg pattern is already active.]**
+- **STR ordinance lag:** PA's STR ordinance dates to 2014–2016 with multiple amendments. The **2023 rescission of the residency requirement** is the most recent material loosening — analogous to Fredericksburg's pre-2024 lack of any meaningful regulation.
+
+### Outer Banks (Nags Head / Dare County), NC — the coastal analog
+
+**The capture pattern:** Beach-town tourism + STR conversion produced a workforce housing crisis severe enough that businesses now build employer-provided housing because the local market won't supply it. ([TriplePundit: For Outer Banks Businesses, Retaining Workers Means Investing in Housing](https://www.triplepundit.com/story/2025/employee-housing-outer-banks/819326).)
+
+**The leading indicators:**
+1. **Long-term rental market disappears.** *"It's not uncommon to see a nice two-bedroom apartment go for close to $3000 … two-bedroom apartments going for $2000 or $2500."* ([WTKR: Outer Banks residents share perspectives about housing crisis](https://www.wtkr.com/news/in-the-community/outer-banks/outer-banks-residents-share-perspectives-about-housing-crisis-after-survey-results).)
+2. **Yearly rentals convert to weekly rentals.** *"If they can rent a house for $5,000 to $10,000 a week, they would not rent to a local worker who can only afford to pay $1,000 to $2,000 a month."* (WTKR.)
+3. **Businesses build employee dorms.** End-stage indicator: when tourism employers have to build their own housing, the public housing market has already failed.
+
+**PA mapping:**
+- **Rental market:** **[UNVERIFIED — recommend Zillow / Apartments.com search for Port Aransas long-term rentals; if the inventory under $1,500/month for a 1-2BR is in single-digits, the Outer Banks pattern is already in PA.]**
+- **Employer housing:** **[UNVERIFIED — has any major Port A employer (Cinnamon Shore, CCMS, Owens-family restaurants, hospital, school district) begun building or subsidizing employee housing? If yes, that is the Outer Banks late-stage indicator.]**
+
+### Synthesis — leading indicators most clearly visible in Port Aransas right now
+
+Of all the leading indicators surveyed across the five cautionary-tale towns, the ones that map most directly to Port Aransas's *currently observable* condition are:
+
+1. **Year-round population decline (Aspen analog).** PA dropped 16.6% in one decade. **VISIBLE NOW.**
+2. **Out-of-area / non-homestead ownership concentration (Sedona analog).** Cinnamon Shore alone: 0.4% homestead rate. **VISIBLE NOW** — and on the public record via Lamkin's 2021 voter-registration episode.
+3. **STR concentration in single-operator hands (Whitefish analog).** CCMS = 700+ units; CCMS principal is sitting Council Member Charles Crawford Jr. **VISIBLE NOW.**
+4. **Council/governance composition dominated by tourism-trade stakeholders (Sedona/Telluride pattern).** 6 of 7 council seats with documented tourism-industry ties. **VISIBLE NOW.**
+5. **Tourism Bureau / destination-marketing capture by stakeholder boards (universal pattern).** PA Bureau board: Cinnamon Shore, Palmilla, Owens-family restaurant rep, sitting council member ex-officio. **VISIBLE NOW.**
+
+The leading indicators **not yet documented** in PA but worth verifying:
+- School enrollment trend (Aspen / Telluride critical signal). **[UNVERIFIED — single-call to PAISD or single TEA query.]**
+- Median home-price-to-income ratio against Telluride's 15:1 threshold. **[UNVERIFIED — Census ACS + Nueces CAD.]**
+- Long-term rental inventory collapse below the affordable threshold (Outer Banks). **[UNVERIFIED — single-evening search of Zillow.]**
+- Public-sentiment survey on tourism's local cost (Whitefish 22-vs-54). **[UNVERIFIED — none found; a Port A Local-commissioned reader survey would be the single most original data point any Dispatch piece could produce.]**
+
+### What this section adds to the working thesis
+
+The piece's existing comparable-town section (Bar Harbor, Provincetown, South Padre, Galveston) shows that **reform is possible** — typically via citizen-initiated ballot measures bypassing captured councils. This new section shows the **counterfactual** — what happens when reform doesn't come, or comes too late. Aspen has spent 50 years and hundreds of millions of dollars on workforce-housing programs and is *still* losing students. Telluride has had to mortgage its school district. Sedona has declared a housing emergency.
+
+The Port Aransas-specific argument the piece can make: **the early-warning indicators are already visible, the capture mechanism is already documented, the structural reform path (charter amendment, citizen petition) is statutorily available, and the cautionary towns establish that the cost of waiting is measured in decades and tens of millions of dollars.** The 2027 Charter Review Commission cycle is the next available reform window.
+
+The thinnest part of this section is the absence of PA-specific 2024–2026 data on (a) school enrollment trend, (b) home-price-to-income ratio, (c) long-term rental inventory, and (d) resident-sentiment survey. Each is a single research step — a phone call, a Census query, a Zillow search, a reader survey — away from being citable. **The Dispatch piece should commission those four data points before publishing.**
+
+---
+
 ## Open questions / unverified rumors
 
 The human-verification layer. Each item below is a research follow-up that would meaningfully strengthen the piece — most of them are **single open-records requests away.**
