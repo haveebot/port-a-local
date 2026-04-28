@@ -2021,7 +2021,7 @@ export const storyContent: Record<string, StoryContent> = {
 
   "charles-bujan": {
     lede:
-      "In April 2026, eight and a half years after Hurricane Harvey, a small crowd gathered in downtown Port Aransas to cut a ribbon on the new Charles R. Bujan Public Safety Building. Fourteen thousand square feet, hurricane-resistant construction, $12 million, built to house everything that runs the city's emergency response — the police department, the dispatch center, the Emergency Operations Center where the next mandatory evacuation will be called. The man whose name was now on the front of it had died of pancreatic cancer four years earlier. To understand what he did to deserve that name on that building, you have to start with a ferry crossing in 1944.",
+      "In April 2026, eight and a half years after Hurricane Harvey, a small crowd gathered in downtown Port Aransas to cut a ribbon on the new Charles R. Bujan Public Safety Building. Fourteen thousand square feet, hurricane-resistant construction, $12 million, built to house everything that runs the city's emergency response — the police department, the dispatch center, the Emergency Operations Center where the next mandatory evacuation will be called. The man whose name is on the front of it had died of pancreatic cancer four years earlier. To understand what he did to deserve that name on that building, you have to start with a ferry crossing in 1944.",
 
     sections: [
       {
