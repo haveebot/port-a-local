@@ -29,7 +29,7 @@ export const cartVendors: CartVendor[] = [
     slug: "coastal-eds",
     name: "Coastal Ed's Coastal Carts",
     phone: "(361) 749-7001",
-    email: "contact@coastaleds.com", // HIGH (own site Contact page; flag the contact@coastleds.com typo on their footer when relationship warms)
+    email: "contact@coastaleds.com", // HIGH (own site Contact page); BOUNCED 2026-04-28 "inbox full" — soft bounce, retry auto, fall back to phone 361-749-7001 if persists. Footer typo `contact@coastleds.com` may be siphoning their legit traffic.
     address: "600 Cut Off Rd, Port Aransas, TX",
     cartSizes: ["4", "6", "8"],
     active: true,

@@ -252,13 +252,28 @@ export async function transitionThread(
   id: string,
   newState: ThreadState,
 ): Promise<Thread | null> {
+  // Capture prior state so push notifications only fire on real changes
+  const priorThread = await getThread(id);
+  const oldState = priorThread?.state;
   const now = new Date().toISOString();
   await sql`
     UPDATE wheelhouse_threads
     SET state = ${newState}, updated_at = ${now}
     WHERE id = ${id}
   `;
-  return getThread(id);
+  const updated = await getThread(id);
+  // Fire-and-forget push notification when a thread becomes
+  // awaiting:<participant>. Helper is defensive (errors logged + swallowed)
+  // so a push failure never blocks the actual transition.
+  if (updated) {
+    try {
+      const { pushOnThreadTransition } = await import("@/lib/wheelhousePush");
+      await pushOnThreadTransition(updated, oldState);
+    } catch (err) {
+      console.error("[wheelhouse-store-pg] push hook failed:", err);
+    }
+  }
+  return updated;
 }
 
 /* -------------------- Activity -------------------- */
