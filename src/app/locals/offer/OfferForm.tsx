@@ -18,6 +18,7 @@ export default function OfferForm() {
   const [pricing, setPricing] = useState("");
   const [availability, setAvailability] = useState("");
   const [photosAcknowledged, setPhotosAcknowledged] = useState(false);
+  const [termsAcknowledged, setTermsAcknowledged] = useState(false);
   // Sell-mode only
   const [sellPriceDollars, setSellPriceDollars] = useState("");
   const [fulfillmentNote, setFulfillmentNote] = useState("");
@@ -55,6 +56,7 @@ export default function OfferForm() {
     category !== "" &&
     description.trim().length > 10 &&
     (!photosRequired || photosAcknowledged) &&
+    termsAcknowledged &&
     sellModeValid;
 
   async function submit(e: React.FormEvent) {
@@ -76,6 +78,7 @@ export default function OfferForm() {
           pricing: pricing.trim(),
           availability: availability.trim(),
           photosAcknowledged,
+          termsAcknowledged,
           ...(mode === "sell"
             ? {
                 priceCents: sellPriceCents,
@@ -404,6 +407,26 @@ export default function OfferForm() {
           </label>
         </div>
       )}
+
+      <div className="bg-sand-50 border border-sand-200 rounded-lg p-4 mt-2">
+        <p className="text-[10px] font-bold tracking-widest uppercase text-navy-700 mb-2">
+          PAL standards
+        </p>
+        <label className="flex items-start gap-2.5 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={termsAcknowledged}
+            onChange={(e) => setTermsAcknowledged(e.target.checked)}
+            className="mt-0.5 shrink-0 accent-coral-500"
+          />
+          <span className="text-xs text-navy-800 leading-relaxed">
+            I&apos;m 18 or older. My listing is legal, family-appropriate,
+            and accurately described — no explicit content, no controlled
+            or stolen goods, nothing PAL or the law wouldn&apos;t
+            green-light.
+          </span>
+        </label>
+      </div>
 
       {error && (
         <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-sm text-red-800">

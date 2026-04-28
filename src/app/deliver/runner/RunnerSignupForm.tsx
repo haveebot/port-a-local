@@ -29,6 +29,7 @@ export default function RunnerSignupForm() {
   const [licenseAcknowledged, setLicenseAcknowledged] = useState(false);
   const [insuranceAcknowledged, setInsuranceAcknowledged] = useState(false);
   const [photosAcknowledged, setPhotosAcknowledged] = useState(false);
+  const [termsAcknowledged, setTermsAcknowledged] = useState(false);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -50,6 +51,7 @@ export default function RunnerSignupForm() {
           licensePlateState: licensePlateState.trim().toUpperCase(),
           licenseAcknowledged,
           insuranceAcknowledged,
+          termsAcknowledged,
         }),
       });
       const data = await res.json();
@@ -162,7 +164,8 @@ export default function RunnerSignupForm() {
     licensePlateState.trim().length === 2 &&
     licenseAcknowledged &&
     insuranceAcknowledged &&
-    photosAcknowledged;
+    photosAcknowledged &&
+    termsAcknowledged;
 
   return (
     <form
@@ -342,7 +345,7 @@ export default function RunnerSignupForm() {
           </span>
         </label>
 
-        <label className="flex items-start gap-2.5 cursor-pointer">
+        <label className="flex items-start gap-2.5 cursor-pointer mb-2">
           <input
             type="checkbox"
             checked={photosAcknowledged}
@@ -359,6 +362,20 @@ export default function RunnerSignupForm() {
               hello@theportalocal.com
             </a>{" "}
             so PAL can verify before my first run.
+          </span>
+        </label>
+
+        <label className="flex items-start gap-2.5 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={termsAcknowledged}
+            onChange={(e) => setTermsAcknowledged(e.target.checked)}
+            className="mt-0.5 shrink-0 accent-coral-500"
+          />
+          <span className="text-xs text-navy-700 leading-relaxed">
+            I&apos;m 18 or older and will only handle legal deliveries — no
+            controlled substances, no alcohol to minors, nothing PAL or the
+            law wouldn&apos;t green-light.
           </span>
         </label>
       </div>

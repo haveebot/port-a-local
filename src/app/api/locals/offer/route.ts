@@ -31,6 +31,8 @@ interface OfferBody {
   priceCents?: number;
   /** Sell-mode only: vendor's fulfillment plan, free-form */
   fulfillmentNote?: string;
+  /** 18+ + content-rules attestation. Required across all modes. */
+  termsAcknowledged?: boolean;
 }
 
 /**
@@ -76,6 +78,16 @@ export async function POST(req: NextRequest) {
       {
         error:
           "Rent + sell listings need the photo acknowledgement — confirm you'll email photos to hello@theportalocal.com.",
+      },
+      { status: 400 },
+    );
+  }
+  // All modes require the 18+ + content-rules attestation.
+  if (body.termsAcknowledged !== true) {
+    return NextResponse.json(
+      {
+        error:
+          "Please confirm you're 18 or older and that your listing follows PAL's content rules.",
       },
       { status: 400 },
     );
@@ -127,6 +139,7 @@ export async function POST(req: NextRequest) {
       body.mode === "sell"
         ? body.fulfillmentNote?.trim() || undefined
         : undefined,
+    termsAcknowledged: body.termsAcknowledged === true,
   });
 
   // HMAC-signed magic links for one-click admin actions. Distinct sigs
@@ -166,6 +179,8 @@ export async function POST(req: NextRequest) {
 
       <h3 style="margin: 20px 0 6px; font-size: 14px;">Description</h3>
       <p style="margin: 0; white-space: pre-wrap;">${escapeHtml(description)}</p>
+
+      <p style="margin: 14px 0 0; font-size:12px; color:#5b4d3a;"><strong>Attestation:</strong> ${body.termsAcknowledged ? "✓ 18+ &amp; content-rules acknowledged" : "✗ Not acknowledged (should not be possible from the form)"}</p>
 
       ${
         body.mode === "rent"

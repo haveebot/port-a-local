@@ -151,6 +151,12 @@ async function ensureSchema(): Promise<void> {
   // containing endpoint + p256dh + auth keys).
   await sql`ALTER TABLE delivery_drivers ADD COLUMN IF NOT EXISTS push_subscription_json TEXT`;
 
+  // 18+ + delivery-conduct attestation (added 2026-04-28). One combined
+  // checkbox at signup attesting the applicant is 18+ AND will only
+  // handle legal deliveries (no controlled substances, no alcohol to
+  // minors). Stored for audit trail / dispute defense.
+  await sql`ALTER TABLE delivery_drivers ADD COLUMN IF NOT EXISTS terms_acknowledged BOOLEAN NOT NULL DEFAULT FALSE`;
+
   _schemaReady = true;
 }
 
@@ -186,6 +192,9 @@ export interface DriverRecord {
   // requirement, added 2026-04-27).
   licensePlate: string | null;
   licensePlateState: string | null;
+  // 18+ + delivery-conduct attestation (added 2026-04-28). Combined
+  // attestation: applicant is 18+ AND will only handle legal deliveries.
+  termsAcknowledged: boolean;
 }
 
 function rowToDriver(row: Record<string, unknown>): DriverRecord {
@@ -222,6 +231,7 @@ function rowToDriver(row: Record<string, unknown>): DriverRecord {
     verifiedBy: (row.verified_by as string) ?? null,
     licensePlate: (row.license_plate as string) ?? null,
     licensePlateState: (row.license_plate_state as string) ?? null,
+    termsAcknowledged: row.terms_acknowledged === true,
   };
 }
 
@@ -239,6 +249,7 @@ export interface CreateDriverInput {
   insuranceCarrier?: string;
   licensePlate?: string;
   licensePlateState?: string;
+  termsAcknowledged?: boolean;
 }
 
 function newDriverId(): string {
@@ -266,7 +277,8 @@ export async function createDriverApplication(
       id, name, phone, email, token, is_active,
       vehicle, availability, why,
       license_acknowledged, insurance_acknowledged, insurance_carrier,
-      license_plate, license_plate_state
+      license_plate, license_plate_state,
+      terms_acknowledged
     ) VALUES (
       ${id},
       ${input.name},
@@ -281,7 +293,8 @@ export async function createDriverApplication(
       ${input.insuranceAcknowledged === true},
       ${input.insuranceCarrier ?? null},
       ${input.licensePlate ?? null},
-      ${input.licensePlateState ?? null}
+      ${input.licensePlateState ?? null},
+      ${input.termsAcknowledged === true}
     )
   `;
   const driver = await getDriverById(id);

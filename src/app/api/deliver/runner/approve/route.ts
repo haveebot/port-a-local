@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { approveDriver, getDriverById } from "@/data/delivery-store";
 import { magicLinkQrDataUrl, qrEmailBlock } from "@/lib/qrEmail";
+import { sendInsuranceAddRunnerEmail } from "@/lib/insuranceDispatch";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -69,6 +70,13 @@ export async function GET(req: NextRequest) {
     email: driver.email ?? null,
     phone: driver.phone,
     signInUrl: `${APP_URL}/api/deliver/driver/login?t=${encodeURIComponent(driver.token)}&next=${encodeURIComponent("/deliver/driver")}`,
+  });
+
+  // Insurance-agent dispatch — fires once per approval. Adds this
+  // runner to PAL's umbrella liability policy. Silently no-ops until
+  // INSURANCE_AGENT_EMAIL is set in Vercel.
+  await sendInsuranceAddRunnerEmail(driver, {
+    approvedAt: driver.approvedAt ?? new Date().toISOString(),
   });
 
   return htmlSuccess(

@@ -25,6 +25,8 @@ interface RunnerSignup {
   // v3 intake — vehicle plate + tag-state for PAL umbrella liability
   licensePlate?: string;
   licensePlateState?: string;
+  // v4 intake — combined 18+ + delivery-conduct attestation
+  termsAcknowledged?: boolean;
 }
 
 /**
@@ -64,6 +66,15 @@ export async function POST(req: NextRequest) {
       {
         error:
           "We need the license + insurance acknowledgements + your carrier name before we can review your application.",
+      },
+      { status: 400 },
+    );
+  }
+  if (!body.termsAcknowledged) {
+    return NextResponse.json(
+      {
+        error:
+          "Please confirm you're 18 or older and that you'll only handle legal deliveries.",
       },
       { status: 400 },
     );
@@ -120,6 +131,7 @@ export async function POST(req: NextRequest) {
     insuranceCarrier: insuranceCarrier || undefined,
     licensePlate,
     licensePlateState,
+    termsAcknowledged: body.termsAcknowledged === true,
   });
 
   // HMAC-signed magic links Winston (or anyone with admin secret) can click
@@ -163,6 +175,7 @@ export async function POST(req: NextRequest) {
     insuranceAcknowledged: driver.insuranceAcknowledged,
     licensePlate: driver.licensePlate ?? undefined,
     licensePlateState: driver.licensePlateState ?? undefined,
+    termsAcknowledged: driver.termsAcknowledged,
     approveUrl,
     rejectUrl,
     verifyLicenseUrl,
@@ -256,6 +269,7 @@ interface AdminEmailInput {
   insuranceAcknowledged: boolean;
   licensePlate?: string;
   licensePlateState?: string;
+  termsAcknowledged: boolean;
   approveUrl: string | null;
   rejectUrl: string | null;
   verifyLicenseUrl: string | null;
@@ -310,6 +324,7 @@ async function sendAdminApplicationEmail(i: AdminEmailInput): Promise<void> {
         <p style="margin: 4px 0;"><strong>License:</strong> ${i.licenseAcknowledged ? "✓ Attested" : "✗ Not attested"}</p>
         <p style="margin: 4px 0;"><strong>Insurance:</strong> ${i.insuranceAcknowledged ? "✓ Attested" : "✗ Not attested"} ${i.insuranceCarrier ? `· <em>${escapeHtml(i.insuranceCarrier)}</em>` : ""}</p>
         ${i.licensePlate ? `<p style="margin: 4px 0;"><strong>Plate:</strong> <code>${escapeHtml(i.licensePlate)}</code> · ${escapeHtml(i.licensePlateState ?? "")}<span style="color:#7d6e5a; font-size:11px;"> &nbsp;(for umbrella liability)</span></p>` : `<p style="margin: 4px 0; color:#c83a3a;"><strong>Plate:</strong> ✗ Missing — should not be possible from the form</p>`}
+        <p style="margin: 4px 0;"><strong>18+ &amp; conduct:</strong> ${i.termsAcknowledged ? "✓ Attested (18+, legal-deliveries-only)" : "✗ Not attested"}</p>
         <p style="margin: 8px 0 0; font-size:12px; color:#666;">
           Applicant said they&apos;d email license + insurance card photos to hello@. Mark verified after they land.
         </p>

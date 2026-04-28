@@ -42,7 +42,7 @@ const eventsByMonth: { month: string; events: PAEvent[] }[] = [
   {
     month: "April",
     events: [
-      { name: "Texas SandFest", timing: "Third weekend of April", location: "Port Aransas Beach", description: "International sand sculpture competition drawing tens of thousands of visitors. Three days of master sculptors, live entertainment, food vendors, and kids' activities. One of the island's largest events.", icon: "🏖️", nextDateISO: "2027-04-16" },
+      { name: "Texas SandFest 2027 — 30th Anniversary", timing: "April 16–18, 2027 (tentative — confirming with the board)", location: "Port Aransas Beach (Mile Markers 13–17)", description: "Three decades of impossibly intricate sand. Master sculptors, semi-pro + amateur tiers, kids' corner, live music, free to spectators. Half-million-dollar annual giveback to PAISD scholarships, the Volunteer Fire Department, the food pantry, and the Art Center where it started in 1997.", icon: "🏖️", detailSlug: "texas-sandfest-2027", nextDateISO: "2027-04-16" },
     ],
   },
   {

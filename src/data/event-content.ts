@@ -1168,4 +1168,213 @@ export const eventContent: Record<string, EventContent> = {
       },
     ],
   },
+
+  "texas-sandfest-2027": {
+    lede:
+      "Thirty years ago this April, Elleece Calvert and Sharon Schafer set folding chairs and a card table on the south end of Port Aransas beach so they could watch their kids build sandcastles. The 30th anniversary edition is the same weekend formula in long-form: master sculptors who fly in from across the world carve impossibly intricate native sand at Mile Markers 13–17 while the locals who built this thing from a card table walk the line to make sure nobody's run out of water.",
+    whatToExpect: [
+      "By Friday morning, the master and semi-pro sculptors are on their second day of carving — they get a head start before the public crowd lands. The competition tiers run together but separate: Master Solo and Master Duo at the front, Semi-Pro right behind, Advanced Amateur and Amateur further down the line. Most sculptures are head-high or taller, water-only (no glue, no bind, no resin — that's the rule that makes this sand sculpture, not just sand structures), and chiseled with everything from a paint scraper to a melon-baller.",
+      "Saturday is the peak day. Tens of thousands of people walk the line. Live music rolls all afternoon at the main stage. The Kids' Corner has free hands-on builds for under-12s with the same beach + the same techniques the masters use — small hands, small piles, same rule about water-only. Vendors line a parallel stretch of beach selling food, art, gear; sponsors have their tents and hand out the kind of swag people actually wear. Judging happens late afternoon. Awards ceremony Saturday evening.",
+      "Sunday is the slow day — by design. Final viewing morning into early afternoon. The People's Choice award is voted by attendees. By dusk, the wave-line has reached the lowest sculptures and the tide does what the tide always does. The teardown crew lets it. Three days of sand returns to sand. The next Sandfest starts as soon as the board meets to plan it.",
+      "Three things make this festival different from every other beach event in Texas: it has been continuously volunteer-run since 1997 (no parent corporation, no event-management company), it remains free to spectators in its 30th year (zero gate fee, only optional GA wristbands and VIP), and a six-figure check goes back into Port Aransas every year — to PAISD scholarships, to the Volunteer Fire Department, to the food pantry, and to the Art Center where Calvert and Schafer cooked it up over coffee.",
+    ],
+    schedule: [
+      {
+        time: "Mon–Thu Apr 12–15 · all week",
+        label: "Master + Semi-Pro setup + early carving (closed to public)",
+        body:
+          "Sculptors arrive throughout the week. Sand piles trucked + watered + compacted on a fixed footprint per competitor. Master and semi-pro tiers begin carving Wednesday/Thursday with a head start the rules require — these pieces take 60+ hours.",
+      },
+      {
+        time: "Fri Apr 16 · 10 AM",
+        label: "Gates open · public welcome",
+        body:
+          "Festival officially opens. Sculpting visible across all tiers. Kids' Corner activated. Live music begins at the main stage by mid-morning. Beach access from Mile Marker 13 (north entry) and Mile Marker 17 (south entry) — both have shuttle drop-off.",
+      },
+      {
+        time: "Fri Apr 16 · noon – 9 PM",
+        label: "Day 1 · the soft open",
+        body:
+          "Friday is usually the quieter day — Saturday gets the bulk of the crowd. Best day to walk the line slowly and talk to sculptors mid-carve. They'll explain technique to anyone who asks. Live music continues into the evening.",
+      },
+      {
+        time: "Sat Apr 17 · 9 AM – 9 PM",
+        label: "Day 2 · the main day",
+        body:
+          "Peak attendance. Judging happens late afternoon — masters carve until the buzzer. Kids' Corner runs all day. Vendor row is fully active. Sponsor village serves the night. Awards ceremony at the main stage Saturday evening (time TBD with the board — typically 6–7 PM).",
+      },
+      {
+        time: "Sun Apr 18 · 10 AM – 5 PM",
+        label: "Day 3 · final viewing + People's Choice",
+        body:
+          "Last chance to see every sculpture before tide and weather take them. People's Choice vote runs through early afternoon — text-to-vote or scan-to-vote at each sculpture. Final award announced mid-afternoon. Festival officially closes at 5 PM. Sculptures stay where they are until the sea takes them.",
+      },
+    ],
+    goodToKnow: [
+      {
+        label: "Watching is free",
+        detail:
+          "There is no gate. Walk on, walk the line, walk off. GA wristbands and VIP exist as optional upgrades — wristbands typically get you reserved viewing, food perks, and a thank-you to the festival's nonprofit budget. Most people don't buy them. Either is fine.",
+      },
+      {
+        label: "Parking + shuttles",
+        detail:
+          "Designated lots feed shuttles to both festival entrances (north MM 13, south MM 17). Beach driving permits work normally — but the festival footprint is closed to vehicles. Park the truck at a shuttle lot, ride in. The shuttle is the move.",
+      },
+      {
+        label: "Service animals only",
+        detail:
+          "Sandfest is service-animals-only on the festival footprint. No exceptions for emotional-support pets. The sculptures + the crowd density make a dog-friendly day a recipe for a destroyed sand horse.",
+      },
+      {
+        label: "Accessibility",
+        detail:
+          "Beach mats laid for ADA paths along the sculpture line. Sand-mobility wheelchairs available at the info tent — request via PAL or the festival contact in advance for guaranteed availability. Wheelchair-accessible shuttles run from designated lots. Service animals welcome on the footprint.",
+      },
+      {
+        label: "Food + drink",
+        detail:
+          "Vendor row covers food, drink, snacks, and the kind of festival staples people show up for. Outside food + drink allowed too — coolers OK except glass. Refill stations for water bottles at each entrance.",
+      },
+      {
+        label: "What to bring",
+        detail:
+          "Sun protection (the beach is the beach — no shade). Closed-toe or sand-friendly footwear. Cash for tipping sculptors who pop their bucket out (most appreciate it). A camera. Patience for Saturday's peak crowd.",
+      },
+      {
+        label: "Sustainability",
+        detail:
+          "Native sand, water-only carving, no plastic giveaways at the festival's own tents. Vendors operate under a no-styrofoam, low-waste policy. The festival publishes its sustainability initiatives at texassandfest.org/sustainablity (yes, the typo is on their URL).",
+      },
+      {
+        label: "Photography",
+        detail:
+          "Personal photos welcome. Commercial drone work and pro-tier video shoots need festival pre-approval through the press kit (contact via PAL or the official site). Tag #TexasSandFest.",
+      },
+    ],
+    faq: [
+      {
+        q: "Is Sandfest free?",
+        a: "Spectators get in free — no gate, no tickets at the door. GA wristbands and VIP wristbands are optional upgrades that fund the nonprofit (see 'Watching is free' above). Most attendees buy nothing.",
+      },
+      {
+        q: "When is it?",
+        a: "Targeting April 16–18, 2027 for the 30th-anniversary edition — typically the third weekend of April. We're confirming exact dates with the SandFest board; once locked, we'll update this page and the Heritage piece together.",
+      },
+      {
+        q: "Where is the festival on the beach?",
+        a: "Mile Markers 13–17 on Port Aransas Beach — the south-of-downtown stretch. North entry at MM 13, south entry at MM 17. Both feed the same sculpture line.",
+      },
+      {
+        q: "Can I bring my dog?",
+        a: "Service animals only on the festival footprint. Standard pet policy. The sculpture line is too dense + too fragile for general pet access. Service animals are welcome and ADA-accommodated.",
+      },
+      {
+        q: "What's the difference between master, semi-pro, and amateur?",
+        a: "Master Solo + Master Duo are the international tier — sculptors who do this professionally and travel year-round to compete. Semi-Pro is the next step down — serious work, often regional sculptors. Advanced Amateur and Amateur are the open-entry tiers for anyone who wants to compete. Non-Competing tier is for sculptors who carve at the festival without entering judging — pure showcase.",
+      },
+      {
+        q: "Can I be a sculptor?",
+        a: "Open-tier amateur slots are available each year through application — reach out via the festival's official site or hello@theportalocal.com and we'll route you. Master and semi-pro tiers are invitation-only based on portfolio + competition history.",
+      },
+      {
+        q: "How do I become a vendor or sponsor?",
+        a: "Vendor + sponsor applications are open annually starting late fall before each festival. Currently the festival routes applications through Eventeny — PAL is exploring hosting these directly going forward. Email hello@theportalocal.com to express interest and we'll connect you to the board.",
+      },
+      {
+        q: "Where does the money go?",
+        a: "Sandfest is a 501(c)(3) volunteer-driven nonprofit. After festival expenses, the proceeds — typically a six-figure annual giveback — go to four Port Aransas community beneficiaries: PAISD scholarships, the Port Aransas Volunteer Fire Department, the local food pantry, and the Port Aransas Art Center where the festival was conceived in 1997.",
+      },
+      {
+        q: "What happens if it rains?",
+        a: "The show goes on. Sand sculptures are surprisingly weather-tolerant — the masters can patch most rain damage in 30 minutes. Lightning closes the line until it passes. Catastrophic weather is the only thing that pauses judging. We'll post live updates here if anything changes day-of.",
+      },
+      {
+        q: "Is there parking on-site?",
+        a: "No. Park-and-ride only. Designated shuttle lots are announced before the festival (typically including the high school + the convention center). Beach driving is normal outside the festival footprint, but the festival itself is pedestrian-only.",
+      },
+      {
+        q: "Can I touch the sculptures?",
+        a: "No — and they will dust at a fingertip. The only thing holding water-only sculptures together is moisture and compaction. A bumped horse becomes a pile. The line is roped where it needs to be; please respect the rope.",
+      },
+    ],
+    hostBlurb: [
+      "Texas SandFest is a 501(c)(3) volunteer-driven festival run by a small board out of Port Aransas. There is no parent company, no event-management corporation, no for-profit operator. The same kind of locals who built it in 1997 still run it — and that's both the charm of it and the constraint of it.",
+      "After festival expenses, the proceeds go back to Port Aransas: PAISD scholarships, the Volunteer Fire Department, the food pantry, and the Art Center where Elleece Calvert and Sharon Schafer first floated the idea over coffee. The 30th-anniversary edition in 2027 ought to write the biggest checks of any year so far.",
+      "PAL is publishing this hub as the de-facto online home for the festival in coordination with the board — schedule, sculptor profiles, sponsor stories, vendor directory, FAQ, parking, and accessibility info live here. Ticketing + applications currently still flow through the festival's existing platforms; we're working with the board to bring them under one PAL roof for 2027 onward.",
+    ],
+    liveLog: [],
+    relatedHistory: {
+      href: "/history/texas-sandfest",
+      title: "The Card Table That Built Texas Sandfest",
+      blurb:
+        "How Elleece Calvert and Sharon Schafer's folding chairs in 1997 became the largest native-sand sculpture festival in the United States — and why the half-million-dollar check still gets cut to PAISD every year.",
+    },
+    photoCTA: {
+      headline: "Saw something at SandFest? Send a photo.",
+      body: "Past years count too. PAL is building the photo archive for the 30th anniversary — sculptures, sculptors mid-carve, the Kids' Corner, sponsor moments, your kid in front of a fish bigger than they are.",
+      secondaryBody:
+        "Email a few JPEGs to hello@theportalocal.com with the year + sculptor name if you know it. We'll caption + credit.",
+      mailSubject: "SandFest photos",
+    },
+    liveCoverage: {
+      heading: "Live from the line",
+      emptyState:
+        "The day-of liveblog goes live here Friday April 16, 2027 — sculptor highlights, judging updates, weather calls, and a running running gallery of the best work on the beach. Subscribe via the photo CTA above to send sightings as they happen.",
+    },
+    sources: [
+      {
+        label: "Texas SandFest — official site",
+        url: "https://www.texassandfest.org/",
+      },
+      {
+        label: "Texas SandFest — at-sandfest umbrella",
+        url: "https://www.texassandfest.org/at-sandfest",
+      },
+      {
+        label: "Texas SandFest — sculptors roster",
+        url: "https://www.texassandfest.org/sculptors",
+      },
+      {
+        label: "Texas SandFest — daily schedule",
+        url: "https://www.texassandfest.org/daily-schedule",
+      },
+      {
+        label: "Texas SandFest — FAQ",
+        url: "https://www.texassandfest.org/faq",
+      },
+      {
+        label: "Texas SandFest — parking + shuttles",
+        url: "https://www.texassandfest.org/parking-shuttles",
+      },
+      {
+        label: "Texas SandFest — accessibility",
+        url: "https://www.texassandfest.org/accessibility",
+      },
+      {
+        label: "Texas SandFest — sponsorship",
+        url: "https://www.texassandfest.org/sponsorship",
+      },
+      {
+        label: "Texas SandFest — vendors",
+        url: "https://www.texassandfest.org/vendors",
+      },
+      {
+        label: "Texas SandFest — about + mission",
+        url: "https://www.texassandfest.org/mission",
+      },
+      {
+        label: "Texas SandFest — board",
+        url: "https://www.texassandfest.org/board",
+      },
+      {
+        label: "Port Aransas CVB — SandFest",
+        url: "https://www.portaransas.org/sandfest/",
+      },
+      {
+        label: "PAL Heritage — The Card Table That Built Texas Sandfest",
+        url: "https://theportalocal.com/history/texas-sandfest",
+      },
+    ],
+  },
 };

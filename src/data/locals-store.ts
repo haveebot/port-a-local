@@ -56,6 +56,12 @@ async function ensureSchema(): Promise<void> {
   await sql`ALTER TABLE locals_offers ADD COLUMN IF NOT EXISTS stripe_account_id TEXT`;
   await sql`ALTER TABLE locals_offers ADD COLUMN IF NOT EXISTS stripe_payouts_enabled BOOLEAN NOT NULL DEFAULT FALSE`;
 
+  // 18+ + content-rules attestation (added 2026-04-28). One combined
+  // checkbox at signup attesting the applicant is 18+ AND that the
+  // listing is legal, family-appropriate, and accurately described
+  // (no explicit content, no controlled or stolen goods).
+  await sql`ALTER TABLE locals_offers ADD COLUMN IF NOT EXISTS terms_acknowledged BOOLEAN NOT NULL DEFAULT FALSE`;
+
   // Sell-mode purchase ledger — one row per Stripe Checkout session
   // for sell-mode buys. Used for email-send idempotency (so a
   // customer refreshing the success page doesn't re-fire vendor
@@ -110,6 +116,9 @@ export interface LocalsOfferRecord {
       account is live for transfers (charges_enabled + payouts_enabled).
       Webhook + refresh route both flip this. */
   stripePayoutsEnabled: boolean;
+  /** Combined 18+ + content-rules attestation captured at submit time.
+      Required across all listing modes. Persisted for audit trail. */
+  termsAcknowledged: boolean;
 }
 
 function rowToOffer(row: Record<string, unknown>): LocalsOfferRecord {
@@ -142,6 +151,7 @@ function rowToOffer(row: Record<string, unknown>): LocalsOfferRecord {
     fulfillmentNote: (row.fulfillment_note as string) ?? null,
     stripeAccountId: (row.stripe_account_id as string) ?? null,
     stripePayoutsEnabled: row.stripe_payouts_enabled === true,
+    termsAcknowledged: row.terms_acknowledged === true,
   };
 }
 
@@ -161,6 +171,8 @@ export interface CreateOfferInput {
   /** Sell-mode only: vendor's fulfillment plan ("ship USPS",
       "pickup at studio", "I'll meet you at the marina", etc.) */
   fulfillmentNote?: string;
+  /** 18+ + content-rules attestation captured at submit time. */
+  termsAcknowledged?: boolean;
 }
 
 function newOfferId(): string {
@@ -176,7 +188,8 @@ export async function createLocalsOffer(
     INSERT INTO locals_offers (
       id, name, phone, email, business_name,
       mode, category, description, pricing, availability,
-      photos_acknowledged, price_cents, fulfillment_note
+      photos_acknowledged, price_cents, fulfillment_note,
+      terms_acknowledged
     ) VALUES (
       ${id},
       ${input.name},
@@ -190,7 +203,8 @@ export async function createLocalsOffer(
       ${input.availability ?? null},
       ${input.photosAcknowledged === true},
       ${input.priceCents ?? null},
-      ${input.fulfillmentNote ?? null}
+      ${input.fulfillmentNote ?? null},
+      ${input.termsAcknowledged === true}
     )
   `;
   const offer = await getLocalsOffer(id);
