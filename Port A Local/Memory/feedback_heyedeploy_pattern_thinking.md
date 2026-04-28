@@ -94,6 +94,7 @@ When a build brief is template-replication (e.g., the Stripe Connect onboarding 
 | Stripe Connect Express onboarding | PAL: `src/app/api/deliver/driver/connect/*` + signup form | TBD — file when sell-mode vendor Connect ships (the second build inside PAL — third copy across projects elevates it) | designed, second copy in flight |
 | Magic-link approval/reject (HMAC) | PAL: `src/app/api/deliver/runner/{approve,reject}/route.ts` + locals offer equivalents | TBD — file when third instance ships | live, two implementations |
 | Email cascade (paid → vendor + customer + admin) | PAL: `src/lib/{deliverEmails,localsBuyEmails,housekeepingEmails}.ts` | TBD — file once 3+ verticals are stable | live, three implementations |
+| **Tenant collaborator workspace (Wheelhouse Glossary)** | PAL design doc: `Port A Local/Features/Wheelhouse Glossary — Collie Workspace.md` | TBD — file once shipped + second tenant lands the same shape | DESIGNED 2026-04-28 (parking-lot, not built) |
 
 ### Why the web-push portal is a HeyeDeploy template (not just a PAL feature)
 
@@ -116,6 +117,20 @@ Every Heye Lab project ships with the same shape of push need: an internal ops d
 - The opt-in copy (lead with brand-appropriate benefit; PAL's "Get the call before everyone else" works for local-marketplace tenants but each vertical has its own framing)
 
 **File the pattern doc when:** the second tenant lands a push system using this shape (likely CrossRef beta or first non-PAL CityDeploy tenant). Doc title: `feedback_web_push_portal_cross_project_pattern.md`. Add to `sync-memory.sh` whitelist.
+
+---
+
+## Candidates surfaced — pending second-implementation threshold
+
+Patterns with one Heye Lab implementation each. Watch-list; file pattern docs at the second build per the rule.
+
+| Candidate | Canonical (current) implementation | Trigger to lock |
+|---|---|---|
+| **Tenant doc generator (markdown → branded PDF)** | Sage Em: `scripts/generate-agency-contract.py`, `generate-agency-brief.py`, `generate-engineer-brief.py`, `generate-monday-comparison-report.py`, `generate-brand-onepager.py` — ReportLab + ImageReader for tenant chrome, deterministic, re-runnable on source-md edit | When PAL or CrossRef ships first equivalent tenant-branded PDF generator. The SHAPE (script structure, ReportLab patterns, brand-asset injection, runnable-from-CLI) carries even though copy/styling/schedules differ |
+| **Principal-review → revision iteration cycle** | Sage Em 2026-04-28: stakeholder annotates PDF (Z's review of contract v1.1) → `pypdf` annotation extraction script → md source updated → PDF regenerated via tenant generator → archived as historical artifact alongside resolution log | When second tenant runs a similar review cycle (any tenant with stakeholder review on legal/business docs — likely PAL Heritage research review or CrossRef supplier intro doc review) |
+| **Pipeline Snapshot bridge doc** | Sage Em 2026-04-28: `Strategy/Pipeline Snapshot 2026-04-28.md` — schema-aligned point-in-time doc that maps current code-based-data state (`agencies.ts`) to future DB-based-data state (HQ Postgres). Direct seed source for `db:push` once Sage HQ Step 2 (Drizzle migrations) ships | When PAL or CrossRef Wheelhouse migrations need an equivalent bridge from `<state>.ts` → DB seed |
+
+These are flagged but NOT yet pattern docs. Filing happens at second implementation.
 
 ---
 

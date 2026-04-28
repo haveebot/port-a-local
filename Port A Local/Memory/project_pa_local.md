@@ -57,6 +57,18 @@ This session was a single focused build: PAL's web push notification system, end
 - Created test thread `thread-moiyjhcx-rzn9bp` ("Push test — disregard"), bounced through `open` → `awaiting:winston`
 - Push delivered + email delivered. Winston confirmed "Received". Thread closed as `done`.
 
+### Addendum — late 2026-04-28: Collie product map + parking docs
+
+After the truck closed, Winston requested a product/feature inventory for Collie to internalize before she builds the marketing plan. Shipped:
+- **Markdown source** at `Port A Local/Marketing/PAL Product + Feature Map — for Collie.md` (368 lines, feature-card style — what it is / where it lives / what's notable)
+- **Word version** at `Port A Local/Marketing/PAL Product + Feature Map — for Collie.docx` (clean Arial body + Georgia headings + proper bullets — generated via docx-js, not pandoc, so the brand-friendly typography survived)
+- **PDF version** at `Port A Local/Marketing/PAL Product + Feature Map — for Collie.pdf` (788KB — generated via `soffice --headless --convert-to pdf`; LibreOffice was newly installed via `brew install --cask libreoffice` and is now the canonical PAL docx→pdf path)
+- **Emailed to Collie** from admin@theportalocal.com with PDF attached — voice/sign-off per PAL rules ("— The Port A Local")
+
+**`pal_mail.py` got `--attach`** (commit `42ee607` in workspace repo). Repeatable flag, defensive on missing files. The send command is now `python3 scripts/pal_mail.py send --to X --subject Y --body Z --attach FILE [--attach FILE2]`. First use was Collie's PDF.
+
+**Parking-lot design filed** at `Port A Local/Features/Wheelhouse Glossary — Collie Workspace.md` — a Wheelhouse-native interactive workspace where Collie (and future non-technical collaborators on every Heye Lab project) can see + reorder + annotate + export the live product/feature inventory. Replaces the static-doc-Claude-regenerates pattern with a tenant-collaborator workspace. **Added as a new HeyeDeploy template (DESIGNED, not built) in `feedback_heyedeploy_pattern_thinking.md`**. Pickup-here checklist included; revisit when there's a build window.
+
 ## Current State (as of 2026-04-27 — full drill: cascades + discoverability)
 
 This was the day-2 continuation of the marathon (this session itself was a continuation already — first chat ran out of context mid-build on the locals-purchase ledger). Closed the automation + findability gaps Winston flagged after Sprint 3 ("is this completely clickable and findable in the site? — have we automated everything we can with at our current status/pre a2p?"). Two new portals (`/housekeeping` + locals sell-mode) were live but lacked the email cascades and discoverability hooks needed to actually function end-to-end.
