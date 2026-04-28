@@ -85,6 +85,36 @@ export default function EnablePushButton({
     };
   }, []);
 
+  async function disable() {
+    setErr(null);
+    setState("busy");
+    try {
+      const reg = await navigator.serviceWorker.getRegistration();
+      const sub = await reg?.pushManager.getSubscription();
+      const endpoint = sub?.endpoint;
+      if (sub) {
+        try {
+          await sub.unsubscribe();
+        } catch {
+          // Browser-side unsubscribe failed — we'll still wipe the
+          // server row so future pushes 404 + auto-prune.
+        }
+      }
+      if (endpoint) {
+        await fetch("/api/push/unsubscribe", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "same-origin",
+          body: JSON.stringify({ endpoint }),
+        }).catch(() => undefined);
+      }
+      setState("idle");
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : String(e));
+      setState("idle");
+    }
+  }
+
   async function enable() {
     setErr(null);
     setState("busy");
@@ -176,15 +206,22 @@ export default function EnablePushButton({
       <span className="inline-flex flex-col items-end gap-1">
         <button
           type="button"
-          onClick={onState ? undefined : enable}
-          disabled={busy || onState}
+          onClick={onState ? disable : enable}
+          disabled={busy}
+          title={onState ? "Tap to turn alerts off" : undefined}
           className={`px-3 py-1.5 rounded-full text-xs font-semibold tracking-wide transition-colors ${
             onState
-              ? "bg-emerald-600/15 text-emerald-700 border border-emerald-500/30 cursor-default"
+              ? "bg-emerald-600/15 text-emerald-200 border border-emerald-500/30 hover:bg-emerald-600/25"
               : "bg-coral-500/15 text-coral-200 border border-coral-400/40 hover:bg-coral-500/25"
           } ${busy ? "opacity-60" : ""}`}
         >
-          {onState ? `🔔 ${onLabel}` : busy ? "Enabling…" : `🔔 ${enableLabel}`}
+          {onState
+            ? busy
+              ? "Disabling…"
+              : `🔔 ${onLabel}`
+            : busy
+              ? "Enabling…"
+              : `🔔 ${enableLabel}`}
         </button>
         {err && (
           <span className="text-[10px] text-coral-300 max-w-[260px] text-right leading-snug">
@@ -201,17 +238,23 @@ export default function EnablePushButton({
     <div>
       <button
         type="button"
-        onClick={onState ? undefined : enable}
-        disabled={busy || onState}
+        onClick={onState ? disable : enable}
+        disabled={busy}
         className={`w-full px-4 py-2.5 rounded-lg text-sm font-semibold transition-colors ${
           onState
-            ? "bg-emerald-600 text-white cursor-default"
+            ? "bg-emerald-600 text-white hover:bg-emerald-500"
             : dark
               ? "bg-coral-500 text-sand-50 hover:bg-coral-400"
               : "bg-navy-900 text-sand-50 hover:bg-coral-600"
         } ${busy ? "opacity-60" : ""}`}
       >
-        {onState ? `🔔 ${onLabel}` : busy ? "Enabling…" : `🔔 ${enableLabel}`}
+        {onState
+          ? busy
+            ? "Disabling…"
+            : `🔔 ${onLabel} · tap to turn off`
+          : busy
+            ? "Enabling…"
+            : `🔔 ${enableLabel}`}
       </button>
       {err && (
         <p
