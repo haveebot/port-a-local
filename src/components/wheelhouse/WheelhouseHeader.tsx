@@ -29,6 +29,10 @@ const TOOLS_LINKS = [
   { href: "/wheelhouse/welcome", label: "Help" },
 ];
 
+const SITE_LINKS = [
+  { href: "/", label: "Back to PAL site" },
+];
+
 export default function WheelhouseHeader({ meId, meName }: Props) {
   const [toolsOpen, setToolsOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -116,6 +120,30 @@ export default function WheelhouseHeader({ meId, meName }: Props) {
                       onClick={() => setToolsOpen(false)}
                       className="block px-4 py-2 text-sm text-sand-200 hover:text-coral-300 hover:bg-navy-800/70 transition-colors"
                     >
+                      {l.label}
+                    </Link>
+                  ))}
+                  <div className="my-1 border-t border-navy-700" />
+                  {SITE_LINKS.map((l) => (
+                    <Link
+                      key={l.href}
+                      href={l.href}
+                      onClick={() => setToolsOpen(false)}
+                      className="flex items-center gap-2 px-4 py-2 text-sm text-sand-200 hover:text-coral-300 hover:bg-navy-800/70 transition-colors"
+                    >
+                      <svg
+                        className="w-3.5 h-3.5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                        />
+                      </svg>
                       {l.label}
                     </Link>
                   ))}
@@ -214,6 +242,37 @@ export default function WheelhouseHeader({ meId, meName }: Props) {
                     onClick={() => setDrawerOpen(false)}
                     className="block px-3 py-2 rounded-lg text-sm text-sand-200 hover:text-coral-300 hover:bg-navy-800/60 transition-colors"
                   >
+                    {l.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            <div className="border-t border-navy-700 pt-4">
+              <p className="text-[10px] tracking-widest uppercase text-navy-500 font-bold mb-2">
+                PAL site
+              </p>
+              <div className="flex flex-col gap-1">
+                {SITE_LINKS.map((l) => (
+                  <Link
+                    key={l.href}
+                    href={l.href}
+                    onClick={() => setDrawerOpen(false)}
+                    className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-sand-200 hover:text-coral-300 hover:bg-navy-800/60 transition-colors"
+                  >
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                      />
+                    </svg>
                     {l.label}
                   </Link>
                 ))}
