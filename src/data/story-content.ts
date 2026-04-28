@@ -2134,14 +2134,14 @@ export const storyContent: Record<string, StoryContent> = {
           "Pastor William Campbell, who had known him for years, summed up the Charles Bujan that the town remembered: \"Charles would do anything for the people of Port Aransas. … He always remained positive.\"",
         ],
         pullQuote: {
-          text: "We love the sea — that's why we live here. … But none of us who have lived through this will ever look at the Gulf of Mexico the same way again. And I'm a fisherman.",
-          attribution: "Charles Bujan, KUT, Aug. 20, 2018",
+          text: "I'd like to have just a normal year. No crises. Seems like I've had crises ever since 2017.",
+          attribution: "Charles Bujan, South Jetty, early 2021",
         },
       },
       {
         heading: "What He Left",
         body: [
-          "Eight and a half years after Harvey, the boy who was born on the ferry came home to a 14,000-square-foot building with his name on the front. He had run for office at 62. Won the mayor's job at 71. Ordered an evacuation that saved everyone in town. Fought the federal government for half a decade. Picked a winning fight with the largest port in Texas. Refused to raise taxes once. Lost three pieces of his health to crises he did not get to choose.",
+          "Eight and a half years after Harvey, the boy who was born on the ferry came home to a 14,000-square-foot building with his name on the front. He had run for council, lost, run again, won — four straight terms. Took the mayor's office at 71. Ordered an evacuation that saved everyone in town. Fought the federal government for half a decade. Picked a winning fight with the largest port in Texas. Refused to raise taxes once. Lost three pieces of his health to crises he did not get to choose.",
           "The Bujan family established the Mayor Bujan Community Scholarship Fund through American Bank in his memory. The Charles R. Bujan Public Safety Building stands downtown, ready for the next call. The ferry he was born on still runs.",
           "So does the town.",
         ],
