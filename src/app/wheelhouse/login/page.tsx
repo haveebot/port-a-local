@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import LighthouseMark from "@/components/brand/LighthouseMark";
 
 export default function WheelhouseLoginPage() {
@@ -13,7 +13,6 @@ export default function WheelhouseLoginPage() {
 }
 
 function LoginInner() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const fromPath = searchParams.get("from") ?? "/wheelhouse";
 
@@ -37,7 +36,11 @@ function LoginInner() {
         setError(data?.error ?? "Login failed.");
         return;
       }
-      router.replace(fromPath);
+      // Full-page navigation (NOT router.replace) — middleware checks
+      // wheelhouse_auth cookie on the fresh request. Soft nav was
+      // intermittently leaving the RSC response cached from the
+      // pre-cookie state, bouncing the user back to /login.
+      window.location.assign(fromPath);
     } catch {
       setError("Network error.");
     } finally {
