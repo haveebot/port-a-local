@@ -324,6 +324,57 @@ This is the single most documented illustration of how the development-stakehold
 
 ---
 
+## Additional examples — Winston-sourced (verify before publishing)
+
+These came from Winston (publisher) during the 2026-04-28 fact-base-extension session. Each is locally observed; each requires public-records corroboration before it lands in the published piece. Tagged inline so future verification is bookkept.
+
+### Mayor Wendy Moore — bank presidency
+
+**Claim:** Mayor Wendy Moore is **president of American Bank** in the area. [WINSTON-SOURCED — verify before publishing.]
+
+**What to verify:**
+- Confirm her exact title at American Bank (President? Regional President? Branch President? Board chair? Officer?) — American Bank is a Corpus Christi-headquartered institution with branches across the Coastal Bend
+- Confirm the bank's footprint relative to Port Aransas — single-branch, regional HQ for the Coastal Bend, statewide?
+- **The angle:** the chief executive of the city's largest jurisdiction is also the chief executive of a major regional lender — every PA mortgage, every commercial loan to a PA business, every line of credit to a PA developer plausibly routes through her bank's underwriting. Material-financial-interest test under Texas Local Gov Code § 171 is loud here.
+- Recommended verification path: American Bank's website officer roster + FDIC institution profile + her LinkedIn (public record) + the city's mayor bio (cityofportaransas.org)
+
+### Council member Kelly Owens — multi-business operator
+
+**Claim:** Council member **Kelly Owens** owns **5+ businesses on the island**. [WINSTON-SOURCED — verify before publishing.]
+
+**What's confirmable from existing PAL data:**
+- Kelly Owens is the captain operating **Deep Sea Headquarters** at 440 W. Cotter Road — a five-vessel charter fleet (Gulf Eagle · Kingfisher · Pelican · Scarlet Lady · Red Dragon). This is independently verified via the PAL Heritage piece *The Red Snapper Fleet* (story #18) and the PA business directory.
+- Multiple vessels is itself "multiple business interests" depending on entity structure (each vessel often owned by a separate LLC for liability isolation). Need TX Secretary of State entity search to confirm whether each is its own LLC.
+
+**What to verify before publishing:**
+- The other 5+ businesses Winston references — pull TX SoS business-entity search for "Kelly Owens" and "Owens" with PA registered addresses
+- His votes on harbor / Cotter Road / commercial-fishing-related ordinances — material-financial-interest exposure if he's voted on items affecting the Cotter Road charter fleet's operating environment
+- His CIQ filings (will be revealed by the pending TPIA to Francisca Nixon)
+
+### Underway Construction — P&Z chair + co-chair as partners
+
+**Claim:** The P&Z Commission **chair and co-chair are partners in the same dev/construction company — Underway Construction in Port Aransas.** [WINSTON-SOURCED — verify before publishing.]
+
+**What to verify:**
+- Names of the current P&Z chair + vice-chair (the prior agent run did NOT confirm these; existing fact base notes "[UNVERIFIED — agent could not pull P&Z meeting minutes" for the chair/vice-chair identities)
+- TX SoS entity search for "Underway Construction" with PA registered office — confirm the named principals
+- Cross-reference principals against city-published P&Z roster
+- If confirmed, this is a structural overlap as documentable as the Crawford-CCMS-STR vote: two officials voting on permits / variances / zoning that affect their own construction company's project pipeline. Material-interest test under § 171 obvious.
+- Recommended FOIA target: every P&Z agenda item 2023–2026 where Underway Construction was the applicant or had a contractual relationship with the applicant
+
+### Nic Lorette — STR-boom architect, P&Z member, spouse-broker [STRONGER OPINION FLAG]
+
+**Claim:** **P&Z member Nic Lorette** (spelling unconfirmed, possibly *Loret* / *Lorett* / *Loretz*) is "credited with creating the crowded STR boom structure," remains seated on P&Z, and his spouse is a real estate broker in town. [WINSTON-SOURCED — verify; Winston flagged this entry as having an opinion component.]
+
+**What's verifiable vs. what's opinion:**
+- **Verifiable (records-based):** is a person matching this name a current P&Z Commissioner; is his spouse a licensed Texas Real Estate Commission (TREC) broker with a PA-area office; what STR-relevant ordinances has the P&Z passed during his tenure
+- **Opinion-territory:** the "credited with creating the STR boom structure" framing — if it's only Winston's claim and not on-record from a third-party source (council minutes, news article, legal filing), it cannot be published as a factual claim. It can be published as **a structural observation** ("during Lorette's P&Z tenure, the commission approved [X] short-term-rental-permitting changes") without the causal-credit framing.
+- **Path:** TREC license search for the spouse + P&Z roster confirmation + STR-ordinance vote history during his tenure; if all three confirm, the structural-observation phrasing replaces the causal-credit phrasing
+
+**Editorial rule reminder (per `feedback_pal_no_interviews.md`):** PAL does not interview Lorette or his spouse to verify intent. Their actions are public-record. Their words off-record are not.
+
+---
+
 ## Comparable-town governance (4 comparables with shape + lessons)
 
 ### South Padre Island, TX
