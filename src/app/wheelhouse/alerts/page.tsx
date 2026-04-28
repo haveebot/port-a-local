@@ -8,7 +8,7 @@ import AlertsAdminClient from "./AlertsAdminClient";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Wheelhouse — Emergency alerts",
+  title: "Wheelhouse — Site banner",
   robots: { index: false, follow: false },
 };
 
@@ -41,16 +41,39 @@ export default async function AlertsAdminPage() {
           className="inline-flex items-center gap-2 text-[10px] tracking-widest uppercase text-coral-300 hover:text-coral-200"
         >
           <LighthouseMark size={14} variant="light" detail="icon" />
-          <span>The Wheelhouse · Emergency alerts</span>
+          <span>The Wheelhouse · Site banner</span>
         </Link>
         <p className="font-display text-2xl font-bold mt-1">
-          Site-wide alert banner
+          Site-wide banner
         </p>
         <p className="text-sm text-sand-300 font-light mt-1 max-w-xl">
-          Triggers a persistent top-of-page banner across every PAL
-          surface. Use for hurricanes, evacuation orders, road closures,
-          ferry status changes, anything where PAL needs to be the first
-          authoritative source visitors see.
+          Pins a persistent strip to the top of every PAL page until
+          dismissed or expired. Dual-use:
+        </p>
+        <ul className="text-sm text-sand-300 font-light mt-2 max-w-xl list-disc pl-5 space-y-1">
+          <li>
+            <span className="text-sand-100 font-semibold">Emergency</span>{" "}
+            (warning / critical) — hurricanes, evacuations, road
+            closures, water advisories, ferry shutdowns.
+          </li>
+          <li>
+            <span className="text-sand-100 font-semibold">Community</span>{" "}
+            (info) — fireworks, school graduations, ferry route
+            changes, parade routes — anything visitors and locals
+            should see at the top of the page.
+          </li>
+        </ul>
+        <p className="text-[11px] text-sand-500 font-light mt-3 max-w-xl">
+          For multi-update emergencies that need a running timeline
+          (hurricane updates over days), use{" "}
+          <Link
+            href="/wheelhouse/emergency"
+            className="underline decoration-coral-500/40 hover:decoration-coral-400 hover:text-coral-200"
+          >
+            Emergency events
+          </Link>{" "}
+          instead — same banner shows, but with a dedicated /emergency
+          page and push to subscribers.
         </p>
       </header>
 

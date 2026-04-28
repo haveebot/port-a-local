@@ -215,10 +215,10 @@ export default function AlertsAdminClient({
                       {chip.label}
                       <span className="block text-[10px] font-light opacity-75 mt-0.5 normal-case">
                         {s === "info"
-                          ? "general / navy"
+                          ? "community / heads-up · navy"
                           : s === "warning"
-                            ? "advisory / coral"
-                            : "evacuation / red"}
+                            ? "advisory / road closure · coral"
+                            : "evacuation / life-safety · red"}
                       </span>
                     </button>
                   );
@@ -235,12 +235,19 @@ export default function AlertsAdminClient({
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               rows={3}
-              placeholder="e.g. Mandatory evacuation in effect for Port Aransas. Leave by 9 PM tonight."
+              placeholder={
+                "e.g. critical → Mandatory evacuation in effect for Port Aransas. Leave by 9 PM tonight.\n\n" +
+                "warning → Boil-water advisory through Friday. Run cold tap 3 minutes before drinking.\n\n" +
+                "info → 4th of July fireworks tonight at 9 PM, Roberts Point Park. Free, family-friendly.\n\n" +
+                "info → PAHS Graduation, Saturday 5/14 at 6 PM, Mustang Stadium."
+              }
               className="w-full px-3 py-2.5 border border-navy-700 bg-navy-900 rounded-lg text-sm text-sand-50 focus:border-coral-400 focus:outline-none resize-y"
               required
             />
             <p className="text-[11px] text-sand-400 font-light mt-1">
-              Plain language. What's happening, what to do. 1–2 sentences.
+              Plain language. What&apos;s happening, what to do (or
+              when / where). 1–2 sentences. The banner pins to the
+              top of every PAL page until dismissed or expired.
             </p>
           </div>
 

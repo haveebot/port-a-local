@@ -23,6 +23,11 @@ interface Props {
   meName: string;
 }
 
+const ALERT_LINKS = [
+  { href: "/wheelhouse/alerts", label: "Site banner" },
+  { href: "/wheelhouse/emergency", label: "Emergency events" },
+];
+
 const TOOLS_LINKS = [
   { href: "/wheelhouse/payouts", label: "Payouts" },
   { href: "/wheelhouse/locals-resend", label: "Locals re-fire" },
@@ -112,7 +117,24 @@ export default function WheelhouseHeader({ meId, meName }: Props) {
                 </svg>
               </button>
               {toolsOpen && (
-                <div className="absolute right-0 mt-2 w-52 bg-navy-900 border border-coral-500/30 rounded-xl shadow-xl shadow-navy-950/50 py-2 z-30">
+                <div className="absolute right-0 mt-2 w-56 bg-navy-900 border border-coral-500/30 rounded-xl shadow-xl shadow-navy-950/50 py-2 z-30">
+                  <p className="px-4 pt-1 pb-2 text-[10px] tracking-widest uppercase text-coral-300 font-bold">
+                    Alerts
+                  </p>
+                  {ALERT_LINKS.map((l) => (
+                    <Link
+                      key={l.href}
+                      href={l.href}
+                      onClick={() => setToolsOpen(false)}
+                      className="block px-4 py-2 text-sm text-sand-200 hover:text-coral-300 hover:bg-navy-800/70 transition-colors"
+                    >
+                      {l.label}
+                    </Link>
+                  ))}
+                  <div className="my-1 border-t border-navy-700" />
+                  <p className="px-4 pt-1 pb-2 text-[10px] tracking-widest uppercase text-coral-300 font-bold">
+                    Tools
+                  </p>
                   {TOOLS_LINKS.map((l) => (
                     <Link
                       key={l.href}
@@ -229,6 +251,24 @@ export default function WheelhouseHeader({ meId, meName }: Props) {
               Signed in as{" "}
               <span className="text-sand-50 font-semibold">{meName}</span>
             </p>
+
+            <div className="border-t border-navy-700 pt-4">
+              <p className="text-[10px] tracking-widest uppercase text-navy-500 font-bold mb-2">
+                Alerts
+              </p>
+              <div className="flex flex-col gap-1">
+                {ALERT_LINKS.map((l) => (
+                  <Link
+                    key={l.href}
+                    href={l.href}
+                    onClick={() => setDrawerOpen(false)}
+                    className="block px-3 py-2 rounded-lg text-sm text-sand-200 hover:text-coral-300 hover:bg-navy-800/60 transition-colors"
+                  >
+                    {l.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
 
             <div className="border-t border-navy-700 pt-4">
               <p className="text-[10px] tracking-widest uppercase text-navy-500 font-bold mb-2">
