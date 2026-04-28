@@ -36,8 +36,10 @@ interface Props {
   enableLabel?: string;
   /** Label rendered when push is ON (default: "Alerts on") */
   onLabel?: string;
-  /** Compact = small inline pill; default = larger card-style button */
+  /** Compact = small inline pill; default = full-width button + helper text */
   compact?: boolean;
+  /** Dark-theme styling for full-width mode (default = light) */
+  dark?: boolean;
 }
 
 function urlBase64ToBufferSource(base64String: string): BufferSource {
@@ -58,6 +60,7 @@ export default function EnablePushButton({
   enableLabel = "Enable alerts",
   onLabel = "Alerts on",
   compact = false,
+  dark = false,
 }: Props) {
   const [state, setState] = useState<"idle" | "busy" | "on">("idle");
   const [err, setErr] = useState<string | null>(null);
@@ -192,33 +195,32 @@ export default function EnablePushButton({
     );
   }
 
+  // Full-width mode: button + error text only. The parent renders any
+  // surrounding card/explanatory copy so this stays theme-flexible.
   return (
-    <div className="rounded-xl border border-sand-300 bg-white p-4">
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <p className="text-sm font-semibold text-navy-900">
-            Push notifications
-          </p>
-          <p className="text-xs text-navy-600 mt-1 leading-relaxed">
-            Get an OS-level alert the second something needs your attention.
-            Works on installed PAL (Add to Home Screen) — instant and offline.
-          </p>
-        </div>
-        <button
-          type="button"
-          onClick={onState ? undefined : enable}
-          disabled={busy || onState}
-          className={`shrink-0 px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${
-            onState
-              ? "bg-emerald-600 text-white cursor-default"
+    <div>
+      <button
+        type="button"
+        onClick={onState ? undefined : enable}
+        disabled={busy || onState}
+        className={`w-full px-4 py-2.5 rounded-lg text-sm font-semibold transition-colors ${
+          onState
+            ? "bg-emerald-600 text-white cursor-default"
+            : dark
+              ? "bg-coral-500 text-sand-50 hover:bg-coral-400"
               : "bg-navy-900 text-sand-50 hover:bg-coral-600"
-          } ${busy ? "opacity-60" : ""}`}
-        >
-          {onState ? `🔔 ${onLabel}` : busy ? "Enabling…" : enableLabel}
-        </button>
-      </div>
+        } ${busy ? "opacity-60" : ""}`}
+      >
+        {onState ? `🔔 ${onLabel}` : busy ? "Enabling…" : `🔔 ${enableLabel}`}
+      </button>
       {err && (
-        <p className="mt-3 text-xs text-coral-700 leading-relaxed">{err}</p>
+        <p
+          className={`mt-3 text-xs leading-relaxed ${
+            dark ? "text-coral-300" : "text-coral-700"
+          }`}
+        >
+          {err}
+        </p>
       )}
     </div>
   );

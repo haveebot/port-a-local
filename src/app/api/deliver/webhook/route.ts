@@ -9,6 +9,8 @@ import {
   dispatchDriversForOrder,
   mirrorToWheelhouse,
 } from "@/lib/deliverDispatch";
+import { getRestaurantById } from "@/data/delivery-restaurants";
+import { pushNewDeliveryOrder } from "@/lib/restaurantPush";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -93,6 +95,19 @@ export async function POST(req: NextRequest) {
     await sendCustomerConfirmationEmail(paid);
     const dispatch = await dispatchDriversForOrder(paid);
     dispatchSentTo = dispatch.sentTo;
+
+    const restaurant = getRestaurantById(paid.restaurantId);
+    if (restaurant) {
+      const itemCount = paid.items.reduce((n, i) => n + i.quantity, 0);
+      const total = `$${(paid.totalCents / 100).toFixed(2)}`;
+      await pushNewDeliveryOrder({
+        restaurantId: paid.restaurantId,
+        restaurantName: restaurant.name,
+        orderId: paid.id,
+        itemSummary: `${itemCount} item${itemCount === 1 ? "" : "s"} · ${total}`,
+        customerName: paid.customer.name,
+      });
+    }
   }
 
   return NextResponse.json({

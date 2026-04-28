@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { emailLayout } from "@/lib/emailLayout";
+import { pushNewCartBooking } from "@/lib/cartVendorPush";
 
 const RESEND_KEY = process.env.RESEND_API_KEY || "";
 const INTERNAL_EMAIL = process.env.INTERNAL_ALERT_EMAIL || "";
@@ -105,6 +106,13 @@ export async function POST(req: NextRequest) {
   await Promise.allSettled([
     sendEmail(INTERNAL_EMAIL, `Golf Cart Request — ${name} — ${pickupDate} to ${returnDate}`, internalHtml),
     sendEmail(email, "Your Golf Cart Reservation Request — Port A Local", customerHtml),
+    pushNewCartBooking({
+      customerName: name,
+      cartLabel,
+      pickupDate: pickupFormatted,
+      returnDate: returnFormatted,
+      numDays,
+    }),
   ]);
 
   return NextResponse.json({ success: true });

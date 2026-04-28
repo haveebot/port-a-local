@@ -14,6 +14,9 @@ import {
   sendAdminSaleEmail,
 } from "@/lib/localsBuyEmails";
 import { mirrorLocalsInquiryToWheelhouse } from "@/lib/localsDispatch";
+import { signLocalsToken } from "@/lib/locals-hmac";
+import { pushNewLocalsSale } from "@/lib/localsSellerPush";
+import { getLocalsOfferByStripeAccount } from "@/data/locals-store";
 
 export const dynamic = "force-dynamic";
 
@@ -135,6 +138,14 @@ async function fireSaleCascadeIfNeeded(
   const claimed = await markLocalsPurchaseEmailsSent(sessionId);
   if (!claimed) return purchase; // already fired, just render
 
+  // Resolve back to the seller's offer record so we can push to their
+  // device subscriptions (keyed on offer.id at /locals/vendor portal).
+  const offer = listing.stripeAccountId
+    ? await getLocalsOfferByStripeAccount(listing.stripeAccountId).catch(
+        () => null,
+      )
+    : null;
+
   // Run sends in parallel — each handler swallows its own errors.
   await Promise.all([
     sendVendorSaleEmail(listing, purchase),
@@ -151,6 +162,18 @@ async function fireSaleCascadeIfNeeded(
       pricing: `$${(purchase.totalCents / 100).toFixed(2)} (vendor: $${(purchase.vendorAmountCents / 100).toFixed(2)} + PAL fee: $${(purchase.palFeeCents / 100).toFixed(2)})`,
       details: `**Sale closed** — ${listing.title}\n${purchase.customerMessage ? `\nCustomer message:\n${purchase.customerMessage}` : ""}`,
     }),
+    (() => {
+      if (!offer) return Promise.resolve();
+      const sig = signLocalsToken("vendor-connect", offer.id);
+      if (!sig) return Promise.resolve();
+      return pushNewLocalsSale({
+        offerId: offer.id,
+        listingTitle: listing.title,
+        vendorAmountCents: purchase.vendorAmountCents,
+        customerName: purchase.customerName,
+        vendorPortalSig: sig,
+      });
+    })(),
   ]);
 
   return purchase;

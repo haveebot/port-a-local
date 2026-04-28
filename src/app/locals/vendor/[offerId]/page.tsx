@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import EnablePushButton from "@/components/push/EnablePushButton";
 import { getLocalsOffer } from "@/data/locals-store";
 import { verifyLocalsToken } from "@/lib/locals-hmac";
 import { CATEGORIES } from "@/data/locals-types";
@@ -86,6 +87,25 @@ export default async function VendorPortalPage({
           initialPayoutsEnabled={offer.stripePayoutsEnabled}
           justReturnedFromStripe={justReturnedFromStripe}
         />
+
+        <section className="bg-navy-800 border border-navy-700 rounded-2xl p-5">
+          <p className="text-[10px] font-bold tracking-widest uppercase text-sand-400 mb-3">
+            Sale alerts
+          </p>
+          <p className="text-xs text-sand-300 font-light leading-relaxed mb-4">
+            Get an instant push the moment a customer pays. Bookmark
+            this portal page on your phone and tap below — install
+            PAL via your browser&apos;s <em>Add to Home Screen</em>{" "}
+            for the most reliable alerts (required on iPhone).
+          </p>
+          <EnablePushButton
+            subscriberKind="locals-seller"
+            subscriberId={offer.id}
+            enableLabel="Enable sale alerts"
+            onLabel="Sale alerts on"
+            dark
+          />
+        </section>
 
         {priceDollars && palFeeDollars && customerTotalDollars && (
           <section className="bg-navy-800/60 border border-navy-700 rounded-2xl p-5">

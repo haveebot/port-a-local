@@ -162,6 +162,30 @@ export async function getSubscriptionsFor(
 }
 
 /**
+ * All live subscriptions across every subscriber of a given kind.
+ * Use for blast-style fan-outs (e.g., new cart booking → every cart
+ * vendor with a subscription). For targeted pushes use getSubscriptionsFor.
+ */
+export async function getSubscriptionsByKind(
+  kind: SubscriberKind,
+): Promise<PushSubscriptionRecord[]> {
+  try {
+    await ensureSchema();
+    const { rows } = await sql`
+      SELECT * FROM push_subscriptions
+      WHERE subscriber_kind = ${kind}
+      ORDER BY created_at DESC
+    `;
+    return rows.map(rowToRec);
+  } catch (err) {
+    if (process.env.NODE_ENV !== "production") {
+      console.warn("[push-subs] getSubscriptionsByKind failed:", err);
+    }
+    return [];
+  }
+}
+
+/**
  * Mark a subscription as pushed-to (advances last_pushed_at). Used
  * for soft observability — see when each device last got a notification.
  */
