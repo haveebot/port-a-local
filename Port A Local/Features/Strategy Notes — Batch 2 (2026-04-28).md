@@ -104,43 +104,32 @@ The dual-purpose insight: prospective vendors land on the page from FB ads we'll
 
 ---
 
-## 4. Restaurant-as-runner closed-loop option
+## 4. Restaurant-as-runner closed-loop option — KILLED 2026-04-28
 
-### The model
-Restaurant signs up to be delivered FROM. Restaurant ALSO opts in to a runner-recruitment flow exclusive to their employees:
+**Status:** abandoned per Winston. Violates PAL's core open-marketplace + agnostic-runner-pool ethos.
 
-- Their employee fills out a runner application like any other PAL runner, but flags "I work at [Restaurant Name]"
-- Their applications get fast-tracked (PAL trusts the restaurant's vetting)
-- Once approved, the runner is **locked to that restaurant** — only sees orders from that restaurant in their queue, can't claim from others
-- Same pay model as a regular PAL runner (50% markup + 50% delivery fee + 100% tip)
-- Same Stripe Connect Express payout to their personal bank
-- Runner can delist themselves from the closed-loop and become a regular runner (or vice versa) by emailing hello@
-- Restaurant gets dedicated capacity, doesn't have to wait for a regular runner during peak hours
+**Why it was killed:**
+- **Two-tier runner queues are gatekeeping.** Locking a runner to a single restaurant means they don't compete in the open queue with everyone else. Regular runners would see fewer orders because closed-loop runners siphon them off. That's exactly the kind of segmented marketplace PAL avoids.
+- **Conflict-of-interest risk.** A restaurant employee acting as the delivery runner is structurally biased on any dispute (food quality, missing items, customer complaints).
+- **Slippery slope to pay-to-play.** "Closed-loop" today is a free favor; tomorrow it becomes a paid tier. We don't want that path open.
+- **PAL doesn't gatekeep** (per `feedback_pal_doesnt_gatekeep.md` — north-star principle): every runner sees every order, every customer gets the same dispatch process. Closed-loop breaks that.
 
-### Why it works for each side
-- **PAL:** more delivery capacity without recruiting; restaurants vet their own employees
-- **Restaurant:** dedicated capacity, no third-party dependency, employees earn during slow shifts
-- **Employee:** side income at the restaurant they already work at — drives their own car, bookmarks their own restaurant, knows the menu
+**What we kept:**
+- The /deliver/restaurant signup page itself — restaurants still apply, still get the open-marketplace runner pool, still pay zero commission.
+- The intent capture + Wheelhouse pipeline thread.
 
-### Schema impact
-Minimal:
-- `delivery_drivers.restaurant_lock_id TEXT` — when set, runner only sees orders from that restaurant
-- `delivery_restaurants.allows_closed_loop BOOLEAN` — opt-in flag the restaurant signs up with
-- Both idempotent ALTERs
+**What was removed:**
+- The closed-loop opt-in checkbox on the form
+- The collapsible explainer block
+- The `closedLoopOptIn` field from the API + dispatch helper interfaces
+- Campaign B3's "closed-loop angle" body copy in the FB brief — replaced with an "open-marketplace" angle that doubles down on the agnostic-pool framing
 
-### API impact
-- `/api/deliver/orders/available` — already filters by runner state. Add: if `restaurant_lock_id` set, additional WHERE on `restaurant_id`.
-- Runner signup: add an optional "restaurant" field. If set, application routes to restaurant owner for first-pass approval before PAL review.
-- New email: when employee signs up flagged for closed-loop, restaurant owner gets the application instead of (or in addition to) admin@.
+**The schema impact this would have had** (preserved here only as a record of what we considered, not a build path):
+- `delivery_drivers.restaurant_lock_id` — DEAD
+- `delivery_restaurants.allows_closed_loop` — DEAD
+- Orders-feed filter changes — DEAD
 
-### Open questions
-1. **Pricing model** — does the restaurant get a cut of the markup for routing the runner, or is it pure cost-recovery? Recommend: keep PAL's existing economics (PAL takes the platform cut), restaurants get the operational benefit, employees get the runner pay. No restaurant cut from runner earnings.
-2. **Compliance** — the IRS treats them as 1099 contractors via Stripe Connect (same as regular PAL runners). The restaurant doesn't W-2 them for delivery work — they're 1099 to PAL. Restaurants should know this; document on signup page.
-3. **Liability** — same umbrella policy + their personal auto. The insurance dispatch flow we just built handles it; their license plate gets added to PAL's policy on approval.
-4. **Cross-shift work** — what if the runner wants to do regular PAL deliveries during off-shifts? v1 says no (restaurant_lock is binary). v2 could allow time-banded locks.
-
-### Build estimate
-4-5 hours: schema (15 min) + restaurant signup form with closed-loop checkbox (90 min) + runner signup conditional restaurant field (45 min) + orders-feed filter (45 min) + restaurant approval email path (60 min) + the restaurant-side admin view of their roster (60 min). Defer until restaurant signup page exists (Section 3).
+If a restaurant later wants their employee to drive: they apply through the standard `/deliver/runner` flow like every other runner. They take the same orders as everyone else. No special treatment.
 
 ---
 

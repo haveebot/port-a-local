@@ -133,7 +133,6 @@ export interface RestaurantSignupMirrorInput {
   hoursSummary?: string;
   menuUrl?: string;
   posSystem?: string;
-  closedLoopOptIn: boolean;
   notes?: string;
 }
 
@@ -152,8 +151,6 @@ export async function mirrorRestaurantSignup(
       ...(i.hoursSummary ? [`**Hours:** ${i.hoursSummary}`] : []),
       ...(i.menuUrl ? [`**Menu:** ${i.menuUrl}`] : []),
       ...(i.posSystem ? [`**POS / order tech:** ${i.posSystem}`] : []),
-      "",
-      `**Closed-loop runner opt-in:** ${i.closedLoopOptIn ? "✓ YES — they want their staff eligible as runners exclusive to this restaurant" : "no"}`,
       ...(i.notes ? ["", `**Notes:** ${i.notes}`] : []),
     ];
     await createMessage({

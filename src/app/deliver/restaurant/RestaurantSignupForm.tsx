@@ -12,8 +12,6 @@ export default function RestaurantSignupForm() {
   const [hoursSummary, setHoursSummary] = useState("");
   const [menuUrl, setMenuUrl] = useState("");
   const [posSystem, setPosSystem] = useState("");
-  const [closedLoopOptIn, setClosedLoopOptIn] = useState(false);
-  const [showClosedLoopExplainer, setShowClosedLoopExplainer] = useState(false);
   const [notes, setNotes] = useState("");
   const [termsAcknowledged, setTermsAcknowledged] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -45,7 +43,6 @@ export default function RestaurantSignupForm() {
           hoursSummary: hoursSummary.trim(),
           menuUrl: menuUrl.trim(),
           posSystem: posSystem.trim(),
-          closedLoopOptIn,
           notes: notes.trim(),
           termsAcknowledged,
         }),
@@ -216,66 +213,6 @@ export default function RestaurantSignupForm() {
             right ticket-routing approach.
           </p>
         </div>
-      </div>
-
-      {/* CLOSED-LOOP RUNNER OPT-IN — collapsible explainer */}
-      <div className="border-t border-sand-200 pt-4">
-        <p className="text-[10px] font-bold tracking-widest uppercase text-coral-600 mb-2">
-          Closed-loop runner option
-        </p>
-        <button
-          type="button"
-          onClick={() => setShowClosedLoopExplainer((v) => !v)}
-          className="text-xs text-coral-600 underline decoration-coral-300 hover:decoration-coral-500 mb-3"
-        >
-          {showClosedLoopExplainer ? "Hide details" : "What's this?"}
-        </button>
-
-        {showClosedLoopExplainer && (
-          <div className="bg-white border border-sand-200 rounded-lg p-4 mb-3 text-xs text-navy-700 leading-relaxed space-y-2">
-            <p>
-              Some restaurants want their <strong>own employees</strong>{" "}
-              to be the runners on their orders — so the same person who
-              cooked the food hands it off to the customer. We support
-              that.
-            </p>
-            <p>
-              How it works: your employee applies as a PAL runner like
-              anyone else. We fast-track the application (we trust your
-              vetting). They&apos;re <strong>locked to your restaurant</strong>{" "}
-              — they only see and claim orders from you, never from
-              other PAL restaurants. Pay structure is identical to a
-              regular PAL runner: 50% of the markup, 100% of the
-              delivery fee, 100% of the tip. Stripe Connect Express
-              payout to their personal bank.
-            </p>
-            <p>
-              Why it works: dedicated capacity (no waiting for an
-              available runner), employees earn during slow shifts, you
-              keep customer-relationship control. They&apos;re still
-              1099 to PAL, not your employees for the delivery work —
-              same tax shape as every other PAL runner.
-            </p>
-            <p className="text-navy-500 italic">
-              Optional. Skip the box if it&apos;s not a fit, opt in
-              later. Either way works.
-            </p>
-          </div>
-        )}
-
-        <label className="flex items-start gap-2.5 cursor-pointer bg-white border border-sand-200 rounded-lg p-4">
-          <input
-            type="checkbox"
-            checked={closedLoopOptIn}
-            onChange={(e) => setClosedLoopOptIn(e.target.checked)}
-            className="mt-0.5 shrink-0 accent-coral-500"
-          />
-          <span className="text-xs text-navy-800 leading-relaxed">
-            I&apos;m interested in the closed-loop option — I&apos;d
-            like my employees to be eligible as PAL runners exclusive
-            to my restaurant.
-          </span>
-        </label>
       </div>
 
       <div className="space-y-3 border-t border-sand-200 pt-4">

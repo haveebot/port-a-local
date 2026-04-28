@@ -109,8 +109,8 @@ B1-body:
 B2-body (DoorDash-comparison framing):
 > "Tired of 25–30% commissions on delivery? PAL handles delivery, our drivers pick up, we never charge your restaurant. The customer pays delivery + service fees on top of your menu price. You keep your full price on every order."
 
-B3-body (closed-loop framing — bottom of funnel):
-> "PAL delivers from your restaurant — local drivers, no commission to you. Want even more control? Opt in and your own employees can run for you exclusively. Same pay structure, same Stripe Connect payout, no platform fee from your side."
+B3-body (open-marketplace framing):
+> "PAL Delivery is run by local runners on an open queue — first to claim wins. No restaurant has favored access; everyone gets the same shot at every order. We never charge your restaurant a commission. Customer-side fees only, your menu price stays your revenue."
 
 ### CTA button
 
@@ -137,7 +137,7 @@ Options:
 Same 3-set structure:
 - **Set 1 (control, math-first):** Headline B1 + Body B1 + Mock-Receipt Static (Option 2)
 - **Set 2 (DoorDash-compare):** Headline B2 + Body B2 + To-Go Bag Static (Option 1)
-- **Set 3 (closed-loop angle):** Headline B3 + Body B3 + Carousel (Option 4)
+- **Set 3 (open-marketplace):** Headline B3 + Body B3 + Carousel (Option 4)
 
 After 7 days, kill the bottom-performer by application-form-completion-rate.
 
@@ -152,7 +152,6 @@ After 7 days, kill the bottom-performer by application-form-completion-rate.
 1. **Application-form completion rate** (restaurant signup on `/deliver/restaurant`)
 2. **Restaurants going live within 21 days of signup** (longer than carts because menu integration takes time)
 3. **PAL Delivery order volume** uplift in the 60 days post-onboarding (the metric that matters)
-4. **Closed-loop opt-in rate** — what % of restaurant signups check the closed-loop box (signal for whether it's a real demand or a curiosity)
 
 ---
 

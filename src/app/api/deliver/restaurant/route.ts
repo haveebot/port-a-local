@@ -14,7 +14,6 @@ interface RestaurantBody {
   hoursSummary?: string;
   menuUrl?: string;
   posSystem?: string;
-  closedLoopOptIn?: boolean;
   termsAcknowledged?: boolean;
   notes?: string;
 }
@@ -22,13 +21,9 @@ interface RestaurantBody {
 /**
  * POST /api/deliver/restaurant — restaurant signup for PAL Delivery
  *
- * Captures restaurant details + the optional closed-loop runner toggle
- * (their employees can be PAL drivers exclusive to their restaurant —
- * full schema for runner.restaurant_lock_id is a future build per
- * Strategy Notes Batch 2; this endpoint just captures the intent).
- *
- * Fires admin email with [RESTAURANT] subject tag, mirrors to Wheelhouse
- * "PAL Delivery — restaurant pipeline" thread. No Stripe, no DB.
+ * Captures restaurant details. Fires admin email with [RESTAURANT]
+ * subject tag, mirrors to Wheelhouse "PAL Delivery — restaurant
+ * pipeline" thread. No Stripe, no DB.
  */
 export async function POST(req: NextRequest) {
   let body: RestaurantBody;
@@ -68,11 +63,9 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const closedLoopOptIn = body.closedLoopOptIn === true;
-
   const apiKey = process.env.RESEND_API_KEY;
   if (apiKey) {
-    const subject = `[RESTAURANT] ${restaurantName} — ${contactName}${closedLoopOptIn ? " · closed-loop runner opt-in" : ""}`;
+    const subject = `[RESTAURANT] ${restaurantName} — ${contactName}`;
     const html = `
       <div style="font-family: Inter, system-ui, sans-serif; color: #1a2433; line-height: 1.5;">
         <p style="text-transform: uppercase; letter-spacing: 0.15em; font-size: 11px; color: #C84A2C; margin: 0 0 4px;">
@@ -86,13 +79,6 @@ export async function POST(req: NextRequest) {
         ${body.hoursSummary ? `<p style="margin: 0 0 4px;"><strong>Hours:</strong> ${escapeHtml(body.hoursSummary.trim())}</p>` : ""}
         ${body.menuUrl ? `<p style="margin: 0 0 4px;"><strong>Menu:</strong> <a href="${escapeHtml(body.menuUrl.trim())}">${escapeHtml(body.menuUrl.trim())}</a></p>` : ""}
         ${body.posSystem ? `<p style="margin: 0 0 4px;"><strong>POS / order tech:</strong> ${escapeHtml(body.posSystem.trim())}</p>` : ""}
-
-        <div style="background:${closedLoopOptIn ? "#f0f7f1" : "#f5f0e8"}; padding:14px; border-radius:8px; margin: 20px 0; border:1px solid ${closedLoopOptIn ? "#1f7a4d40" : "#e5dcc7"};">
-          <p style="margin: 0 0 4px; font-size:11px; text-transform:uppercase; letter-spacing:0.15em; color:${closedLoopOptIn ? "#1f7a4d" : "#7d6e5a"}; font-weight:bold;">Closed-loop runner option</p>
-          <p style="margin: 4px 0; font-size:13px;">
-            ${closedLoopOptIn ? "✓ <strong>YES</strong> — wants their employees eligible as PAL runners exclusive to this restaurant. Same pay structure as regular runners." : "Not opted in this time."}
-          </p>
-        </div>
 
         ${body.notes ? `<h3 style="margin: 20px 0 6px; font-size: 14px;">Notes</h3><p style="margin: 0; white-space: pre-wrap;">${escapeHtml(body.notes.trim())}</p>` : ""}
 
@@ -110,7 +96,6 @@ export async function POST(req: NextRequest) {
       (body.hoursSummary ? `Hours: ${body.hoursSummary.trim()}\n` : "") +
       (body.menuUrl ? `Menu: ${body.menuUrl.trim()}\n` : "") +
       (body.posSystem ? `POS: ${body.posSystem.trim()}\n` : "") +
-      `\nClosed-loop runner opt-in: ${closedLoopOptIn ? "YES" : "no"}\n` +
       (body.notes ? `\nNotes: ${body.notes.trim()}\n` : "") +
       `\n— PAL Restaurant pipeline`;
     try {
@@ -144,7 +129,6 @@ export async function POST(req: NextRequest) {
     hoursSummary: body.hoursSummary?.trim() || undefined,
     menuUrl: body.menuUrl?.trim() || undefined,
     posSystem: body.posSystem?.trim() || undefined,
-    closedLoopOptIn,
     notes: body.notes?.trim() || undefined,
   });
 
