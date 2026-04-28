@@ -14,12 +14,17 @@
  * Participant ID → email mapping is config-driven via env vars so
  * we can extend without code changes:
  *
- *   WHEELHOUSE_NOTIFY_WINSTON     = winstonciv@gmail.com
+ *   WHEELHOUSE_NOTIFY_WINSTON     = admin@theportalocal.com
  *   WHEELHOUSE_NOTIFY_COLLIE      = collie.breah@gmail.com
  *   WHEELHOUSE_NOTIFY_NICK        = nickbmerrill@gmail.com
  *   WHEELHOUSE_NOTIFY_WINSTON_CLAUDE = admin@theportalocal.com
  *   WHEELHOUSE_NOTIFY_COLLIE_CLAUDE  = admin@theportalocal.com
  *   WHEELHOUSE_NOTIFY_NICK_CLAUDE    = admin@theportalocal.com
+ *
+ * Winston's lane routes through admin@theportalocal.com — same inbox
+ * that backs pal_mail.py and admin-side automation. Keeps a personal
+ * inbox out of the loop; anyone with admin@ access sees the pushes
+ * (currently just Winston).
  *
  * Defaults below cover the standard PAL roster; env override wins
  * if set, env-empty disables push for that participant (silent no-op).
@@ -31,7 +36,7 @@ const APP_URL =
   process.env.NEXT_PUBLIC_APP_URL ?? "https://theportalocal.com";
 
 const DEFAULT_NOTIFY: Record<string, string> = {
-  winston: "winstonciv@gmail.com",
+  winston: "admin@theportalocal.com",
   collie: "collie.breah@gmail.com",
   nick: "nickbmerrill@gmail.com",
   "winston-claude": "admin@theportalocal.com",

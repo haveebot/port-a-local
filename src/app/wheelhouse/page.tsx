@@ -55,9 +55,10 @@ export default async function WheelhousePage({
   }
 
   return (
-    <main className="min-h-screen bg-sand-50">
-      {/* Top bar */}
-      <header className="bg-navy-900 text-sand-100 border-b border-coral-500/20">
+    <main className="min-h-screen bg-sand-50 overflow-x-hidden">
+      {/* Top bar — w-full guards against any horizontal overflow on the
+          page making the navy bar visually short of the right edge. */}
+      <header className="w-full bg-navy-900 text-sand-100 border-b border-coral-500/20">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between gap-4">
           <Link
             href="/wheelhouse"
