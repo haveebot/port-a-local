@@ -2018,4 +2018,164 @@ export const storyContent: Record<string, StoryContent> = {
       { place: "Port Aransas Museum", detail: "The PAPHA collection holds the primary visual record of the island's commercial fleet era — photographs, gear, oral histories. The commercial side is less celebrated than the tarpon side, but the archive is there.", slug: "port-aransas-museum" },
     ],
   },
+
+  "charles-bujan": {
+    lede:
+      "In April 2026, eight and a half years after Hurricane Harvey, a small crowd gathered in downtown Port Aransas to cut a ribbon on the new Charles R. Bujan Public Safety Building. Fourteen thousand square feet, hurricane-resistant construction, $12 million, built to house everything that runs the city's emergency response — the police department, the dispatch center, the Emergency Operations Center where the next mandatory evacuation will be called. The man whose name was now on the front of it had died of pancreatic cancer four years earlier. To understand what he did to deserve that name on that building, you have to start with a ferry crossing in 1944.",
+
+    sections: [
+      {
+        heading: "The Ribbon",
+        body: [
+          "City Manager Dave Parsons — one of the four officials who rode out Harvey at the UT Marine Science Institute building five blocks away — spoke at the ribbon-cutting. He had been there with Charles Bujan for the worst week of the storm and every week of the recovery. By April 2026 he was the institutional memory of an eight-and-a-half-year fight that the building itself was the answer to.",
+          "FEMA had funded $7.7 million of the $12 million. Bujan had spent the last four years of his life arguing for that money — testifying to Texas state lawmakers, calling FEMA out on local TV, telling reporters at press conferences in Port Aransas City Hall that the agency \"may have very well set you up to fail.\" He had not lived to see the building open. The town opened it for him.",
+          "To understand the man who got an island a hurricane-resistant building with his name on the front of it, you have to start with the ferry he was born on.",
+        ],
+        pullQuote: {
+          text: "He poured his heart into the recovery. He wore the recovery on his sleeve. He cared. He was a mayor for the little man, little person.",
+          attribution: "City Manager David Parsons, ribbon-cutting, April 2026",
+        },
+      },
+      {
+        heading: "The Boy Born on the Ferry",
+        body: [
+          "On August 9, 1944, Viola Bujan went into labor on the ferry between Port Aransas and Corpus Christi. She was halfway across the Lydia Ann Channel — between the island where her family had lived for 130 years and the mainland hospital she was trying to reach — when her son Charles Robert Bujan was born. He told the story his whole life. He said he was born \"between Port Aransas and Corpus Christi.\"",
+          "The Bujan family had been on Mustang Island for 130 years when Charles Robert was born. His great-great-grandfather Franz Josef Frandolig emigrated from Hungary in 1815 and settled in what would become Rockport, then moved across the channel to the fishing village locals called Tarpon — today Port Aransas — in the late 1800s. His grandfather Matteo Bujan came from Croatia. By the time Charles arrived in 1944, his family had been Mustang Islanders longer than Texas had been a state.",
+          "His father — Charles Clifford \"Charlie\" Bujan — was a school janitor and a pilot boat captain, a man who knew every channel into Aransas Pass from the wheelhouse perspective. In 1945 he founded Beacon RV Park. Viola raised Charles and his older sister Charlotte in a town then small enough that a school-aged boy knew every store, every charter captain, every house. Charles drove a maroon '57 Chevy in high school. He played quarterback at Aransas Pass High School — the island didn't have its own high school then. He answered to \"Charlie\" most of his life.",
+        ],
+        fact: [
+          { label: "Born", value: "August 9, 1944 (on the Port A–Corpus Christi ferry)" },
+          { label: "Family on Mustang Island since", value: "Late 1800s (Frandolig line, Hungarian via Rockport 1815)" },
+          { label: "Parents", value: "Charles Clifford \"Charlie\" Bujan (1906–1970) + Viola Mildred Bujan" },
+          { label: "Grandfather", value: "Matteo Bujan (Croatia)" },
+        ],
+      },
+      {
+        heading: "Going Away, Coming Home",
+        body: [
+          "He went to Wichita first — parts expeditor at the Cessna and Lear aircraft plants where the post-war American middle class was being assembled. Then the Air Force: four-plus years in communications, stationed in Idaho, Turkey, West Germany, and Sicily. Honorably discharged as sergeant. He came back to Texas, earned a bachelor's in economics at what was then Corpus Christi State University (today Texas A&M–Corpus Christi).",
+          "And then he left. Around 1975, Charles Bujan moved to Atlantic City, New Jersey, to work for Prudential Insurance Company in personnel. He stayed twenty-five years. He rose to associate manager. He organized youth sports on weekends. He became — by all accounts — a New Jerseyan. The island stayed where it was, but Charles spent half his adult life in a different state, explaining benefits packages and running youth basketball clinics.",
+          "Then he came home. The exact reasons are family history, not public record, but the timing is documented. He ran for Port Aransas City Council in 2006 and lost to Bubba Jensen. He filed again the next year and won. He told the South Jetty later, when they asked why he'd gone into politics: \"I wanted to be a part of that growth.\"",
+          "He won re-election in 2009, 2011, and 2014. Four straight two-year terms on council. By the time the council seat ran its course, Charles Bujan was 71 years old, had been home almost a decade, and was about to be elected mayor.",
+        ],
+      },
+      {
+        heading: "Mayor at 71",
+        body: [
+          "In May 2016, Charles Bujan was elected mayor of Port Aransas. He had fifteen months as a relatively unknown small-town mayor before Hurricane Harvey would define everything else.",
+          "Friday, August 23, 2017, he was watching weather. A tropical disturbance had spun up in the Bay of Campeche, and the early models had it threading up the Texas coast. Bujan would tell KUT later that he had a premonition about its track from the first model run.",
+          "By Wednesday morning, August 24, the storm had a name. Most of the Coastal Bend was issuing voluntary evacuations. Houston was issuing warnings about flooding, not landfall. Most of the Texas coast was treating Harvey as a wind event. Bujan met with city officials around 10:30 a.m. He told them: we're evacuating. Mandatory. Tonight.",
+          "The order called for all residents — about 4,000 people — to leave Port Aransas by 9 p.m. that night. Twelve hours of warning. Most of those residents had lived through hurricanes before, including Carla in 1961 and Celia in 1970. A lot of them, in any small town, would have decided to ride this one out. Bujan made the call that took the choice away from them. It was not a popular decision. It was also not an obvious one. Port Aransas's mandatory evacuation, ordered with twelve hours of lead time on the personal authority of a fifteen-month-old mayor, was an outlier on the Texas coast.",
+        ],
+        pullQuote: {
+          text: "As I watched it develop over time, I realized that there was no place it could come except right here in Port Aransas.",
+          attribution: "Charles Bujan, KUT, Aug. 20, 2018",
+        },
+      },
+      {
+        heading: "The Most Difficult Call",
+        body: [
+          "Hurricane Harvey made landfall as a Category 4 storm at approximately 10:00 p.m. on August 25, 2017. The eye crossed San Jose Island, then again at Rockport-Fulton. The eyewall — the most violent ring around the eye — passed directly over Port Aransas. Sustained winds reached 130 mph. Aransas County Airport, just across the bay, recorded a gust of 145 mph. The storm surge in Port Aransas reached 5.53 feet on the gauge.",
+          "When morning came, four city and county officials emerged from the brick UT Marine Science Institute building, where they had ridden out the storm together: City Manager Dave Parsons, Building Official Abel Carrillo, Emergency Operations Coordinator Rick Adams, EMS Director Tim McIntosh. Adams later said his emotional state during the night went \"from confident … to fearful.\" Parsons texted the South Jetty editor at 2:53 a.m. Sunday: \"Town very smashed up. Not sure if this text will make it out??? Little to zero cell coverage.\"",
+          "Charles Bujan was not among them. He had stayed in Corpus Christi, knowing he could not be of help to anyone if the only road home was buried under debris. State Highway 361 was buried. He waited.",
+        ],
+        pullQuote: {
+          text: "I'm glad I did, otherwise we would've had a lot of body bags after the hurricane. Because we only had 12 hours to get everybody off here before this thing was a major storm. So that to me was the most difficult call of my life. I'll never forget it.",
+          attribution: "Charles Bujan on the evacuation order, KUT, Aug. 20, 2018",
+        },
+        fact: [
+          { label: "Landfall", value: "Aug. 25, 2017 · ~10:00 p.m. CDT" },
+          { label: "Category", value: "4 (sustained 130 mph)" },
+          { label: "Peak gust at Aransas County Airport", value: "145 mph" },
+          { label: "Storm surge in Port Aransas", value: "5.53 ft (gauge)" },
+          { label: "Port Aransas businesses damaged", value: "100%" },
+          { label: "Port Aransas homes damaged", value: "85%" },
+          { label: "City infrastructure damage", value: "$50–$70 million" },
+          { label: "Property tax base lost", value: "~$300 million" },
+          { label: "Deaths within Port Aransas city limits", value: "0" },
+        ],
+      },
+      {
+        heading: "\"We Are Encouraging Residents Not To Come Back\"",
+        body: [
+          "By Saturday morning, August 26, the road cleared enough for the assessment to begin. Bujan made it back. KIII-TV asked for a statement. He gave them three words: \"It's a mess.\"",
+          "Sunday, August 27, he gave a longer one: \"We are encouraging residents not to come back.\" The trailer park, he said, was a \"100 percent loss.\" The Port Aransas he was looking at had taken damage to 100 percent of its businesses, 85 percent of its homes, and somewhere between $50 million and $70 million in city infrastructure. Total estimated damage approached $1 billion. Property tax base lost: $300 million.",
+          "Zero deaths within the city limits. None. Bujan's mandatory evacuation — the call most other Coastal Bend mayors did not make — had emptied the island.",
+          "When the South Jetty asked him about the residents who had defied his order and stayed anyway, his answer was characteristic.",
+        ],
+        pullQuote: {
+          text: "I would say that was a major miracle… They lucked out, to be honest with you.",
+          attribution: "Charles Bujan on the residents who didn't evacuate, South Jetty",
+        },
+      },
+      {
+        heading: "Nine Years Against the Federal Clock",
+        body: [
+          "The water came back first. Then sewer. Then power. By late September, a month after landfall, the basics had returned. Bujan told Texas Public Radio that the recovery would take \"Years. … A lot of help from the government; state and federal.\"",
+          "He was right about the years. He was wrong about the help.",
+          "By December 2017 he was in front of a Texas House Appropriations Subcommittee saying FEMA \"may have very well set you up to fail.\" By January 2018, at a press conference at Port Aransas City Hall, he was sharper: \"They have been a tremendous failure,\" he said, referring to the FEMA-to-General-Land-Office mobile-home program for displaced residents. \"They rank high on promises and way low on promises kept.\" He pointed at the funding split. \"Just recently our federal government released $54 million in grants. $47 million went to Houston. What does that leave for the rest of the coast?\"",
+          "He refused to raise taxes. The property tax base was down $300 million; the obvious move would have been to make up the gap on the residents who remained. Bujan would not. He laid off 10 percent of city staff to save approximately $700,000. He froze new hires. He went after grants instead. By 2020 he was personally tracking 55 grant and funding projects worth more than $50 million, and the city had clung to its AA+ bond rating with $26 million in reserves — partly because it had spent years saying no to expenses while it waited for federal money that arrived in trickles.",
+          "He also picked the fight nobody else wanted. The Port of Corpus Christi was preparing to build a Very Large Crude Carrier export terminal on Harbor Island, inside Port Aransas city limits, and the Port took the position that the city had no authority to permit or regulate the project. Bujan disagreed. The fight ran for years. It went to court. In 2021 the Port Aransas City Council voted 7–0 to approve a settlement: an interlocal agreement, oversight on city ordinance, $1 million for the Port Aransas Fire Department, and what amounted to a permanent seat at the table for any future Harbor Island development. The largest port in Texas had been forced to sit down with a small barrier-island town and treat it as a co-equal regulator.",
+        ],
+        pullQuote: {
+          text: "FEMA is slow. That's the problem. … It's really frustrating. It's slow as molasses running uphill.",
+          attribution: "Charles Bujan, three years after Harvey, South Jetty",
+        },
+      },
+      {
+        heading: "No Normal Year",
+        body: [
+          "He kept saying he wanted a normal year.",
+          "In 2019 he had cardiac bypass surgery. In 2020 he was treated for colon cancer. He won re-election that May for a third term. By August 2020 — three years after Harvey — he was telling the South Jetty he felt \"way behind the eight ball\" on infrastructure recovery, \"primarily because we have to deal with FEMA.\" Then he caught the deadpan: \"I'm just glad we don't have another Harvey to get through. So far.\"",
+          "In early 2021 he told the South Jetty: \"I'd like to have just a normal year. No crises. Seems like I've had crises ever since 2017.\"",
+          "He did not get one. On October 21, 2021, he announced publicly that he had Stage 4 pancreatic cancer.",
+          "He stayed in office. He kept signing things. He kept showing up to council meetings while he could. He kept fighting FEMA.",
+          "On the morning of February 9, 2022 — a Wednesday — Charles Robert Bujan died at home in Port Aransas, in hospice care. He was 77. The next day, Governor Greg Abbott ordered the Port Aransas city flags to half-staff. A memorial service was held at the Port Aransas Civic Center on March 5. Mayor Pro Tem Joan Holt served the rest of his term until Wendy Moore won the May 7 special election with 901 votes.",
+          "Pastor William Campbell, who had known him for years, summed up the Charles Bujan that the town remembered: \"Charles would do anything for the people of Port Aransas. … He always remained positive.\"",
+        ],
+        pullQuote: {
+          text: "We love the sea — that's why we live here. … But none of us who have lived through this will ever look at the Gulf of Mexico the same way again. And I'm a fisherman.",
+          attribution: "Charles Bujan, KUT, Aug. 20, 2018",
+        },
+      },
+      {
+        heading: "What He Left",
+        body: [
+          "Eight and a half years after Harvey, the boy who was born on the ferry came home to a 14,000-square-foot building with his name on the front. He had run for office at 62. Won the mayor's job at 71. Ordered an evacuation that saved everyone in town. Fought the federal government for half a decade. Picked a winning fight with the largest port in Texas. Refused to raise taxes once. Lost three pieces of his health to crises he did not get to choose.",
+          "The Bujan family established the Mayor Bujan Community Scholarship Fund through American Bank in his memory. The Charles R. Bujan Public Safety Building stands downtown, ready for the next call. The ferry he was born on still runs.",
+          "So does the town.",
+        ],
+      },
+    ],
+
+    sources: [
+      { label: "Port Aransas South Jetty — \"Barefoot boy to three-term mayor\" (definitive bio)", url: "https://www.portasouthjetty.com/articles/barefoot-boy-to-three-term-mayor/" },
+      { label: "Port Aransas South Jetty — \"The surreality of Harvey\"", url: "https://www.portasouthjetty.com/articles/the-surreality-of-harvey/" },
+      { label: "Port Aransas South Jetty — \"Harvey: Hell & high water\"", url: "https://www.portasouthjetty.com/articles/harvey-hell-high-water/" },
+      { label: "Port Aransas South Jetty — \"Leaving Harvey behind\" (one-year)", url: "https://www.portasouthjetty.com/articles/leaving-harvey-behind/" },
+      { label: "Port Aransas South Jetty — \"Three years later\"", url: "https://www.portasouthjetty.com/articles/three-years-later/" },
+      { label: "Port Aransas South Jetty — \"Airing the issues\" (fiscal stewardship)", url: "https://www.portasouthjetty.com/articles/airing-the-issues/" },
+      { label: "Port Aransas South Jetty — \"The path forward\" (early 2021)", url: "https://www.portasouthjetty.com/articles/the-path-forward/" },
+      { label: "Port Aransas South Jetty — \"Governor offers condolences after Port Aransas mayor's death\"", url: "https://www.portasouthjetty.com/articles/governor-offers-condolences-after-port-aransas-mayors-death/" },
+      { label: "KUT (Austin NPR) / Texas Standard — \"Harvey damaged 100 percent of Port Aransas businesses\" (Aug. 20, 2018)", url: "https://www.kut.org/texas/2018-08-20/harvey-damaged-100-percent-of-port-aransas-businesses-but-the-island-town-is-working-its-way-back" },
+      { label: "Texas Standard — \"We're Resilient People, Port Aransas Mayor Says City Is Recovering\" (Jan. 5, 2018)", url: "https://www.texasstandard.org/stories/were-resilient-people-port-aransas-mayor-says-city-is-recovering-despite-receiving-little-help/" },
+      { label: "Texas Public Radio — \"Rebuilding After Harvey\" (Sept. 25, 2017)", url: "https://www.tpr.org/news/2017-09-25/rebuilding-after-harvey-the-road-to-recovery-for-port-aransas" },
+      { label: "Texas Tribune — \"Texans left in limbo as Gov. Abbott, FEMA use Harvey to reinvent disaster response\" (Feb. 27, 2018)", url: "https://www.texastribune.org/2018/02/27/texans-left-limbo-gov-abbott-fema-use-harvey-reinvent-disaster-respons/" },
+      { label: "CBS News — \"We are encouraging residents not to come back\" (Aug. 27, 2017)", url: "https://www.cbsnews.com/news/we-are-encouraging-residents-not-to-come-back-says-port-aransas-mayor/" },
+      { label: "KRIS-TV — \"Port Aransas mayor Bujan dies at 77\"", url: "https://www.kristv.com/news/local-news/port-aransas-mayor-bujan-dies-at-77" },
+      { label: "KRIS-TV — \"Ribbon cutting for new public safety building ends 8-and-a-half-year wait\"", url: "https://www.kristv.com/news/local-news/in-your-neighborhood/nueces-county/port-aransas/ribbon-cutting-for-new-public-safety-building-ends-8-and-a-half-year-wait-in-port-aransas" },
+      { label: "KZTV — Ribbon cutting (with David Parsons quote)", url: "https://www.kztv10.com/news/local-news/ribbon-cutting-for-new-public-safety-building-ends-8-and-a-half-year-wait-in-port-aransas" },
+      { label: "Marine Log — \"Port of Corpus Christi and City of Port Aransas settle Harbor Island spat\"", url: "https://www.marinelog.com/news/port-of-corpus-christi-and-city-of-port-aransas-settle-harbor-island-spat/" },
+      { label: "NWS Corpus Christi — Major Hurricane Harvey, Aug. 25–29, 2017", url: "https://www.weather.gov/crp/hurricane_harvey" },
+      { label: "FEMA — Texas Hurricane Harvey (DR-4332-TX)", url: "https://www.fema.gov/disaster/4332" },
+      { label: "Charlie Marshall Funeral Homes — Charles Bujan obituary", url: "https://www.charliemarshallfuneralhomes.com/obituaries/Charles-Bujan" },
+    ],
+
+    visitToday: [
+      { place: "Charles R. Bujan Public Safety Building", detail: "14,000 sq ft, ribbon-cut April 2026, downtown Port Aransas. Houses the police department, city jail, county constables, county courthouse, emergency dispatch, and Emergency Operations Center. The building Bujan spent the last four years of his life fighting FEMA to fund." },
+      { place: "Port Aransas Civic Center", detail: "Site of his March 5, 2022 memorial service. Public-facing civic hub he used as the staging ground for press conferences during the Harvey recovery years." },
+      { place: "Port Aransas Ferry — Lydia Ann Channel", detail: "He was born on a crossing of this stretch of water in 1944. The ferry still runs. So does the town.", slug: undefined },
+      { place: "Port Aransas Museum", detail: "Holds the long-form record of every storm Port A has survived — Carla, Celia, Harvey, the recoveries that followed each. Bujan's leadership through Harvey is part of the institutional memory now.", slug: "port-aransas-museum" },
+    ],
+  },
 };
