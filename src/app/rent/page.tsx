@@ -429,21 +429,21 @@ export default function RentPage() {
               <p className="text-xs text-coral-600 mt-3">Browse local rentals →</p>
             </Link>
             <Link
-              href="/locals/offer?mode=rent&cat=watercraft"
+              href="/rent/vendor"
               className="block bg-navy-900 text-sand-100 border border-coral-500/30 rounded-xl p-5 hover:border-coral-500/60 transition-all"
             >
               <p className="text-[10px] font-bold tracking-widest uppercase text-coral-300 mb-1">
-                Got a cart to rent?
+                Got a cart fleet?
               </p>
               <p className="font-display text-lg font-bold leading-tight mb-1">
-                List your cart on PAL.
+                We send the bookings.
               </p>
               <p className="text-sm text-sand-300 font-light">
-                We&apos;re building the local cart-rental marketplace.
-                Tell us what you&apos;ve got — we&apos;ll send the
-                renters to you.
+                You set your rate. Free to apply. No subscription, no
+                commission. PAL collects a small reservation fee from
+                the customer — never from you.
               </p>
-              <p className="text-xs text-coral-300 mt-3">Apply to list →</p>
+              <p className="text-xs text-coral-300 mt-3">Apply →</p>
             </Link>
           </div>
         </div>

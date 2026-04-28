@@ -206,6 +206,27 @@ export default async function DeliverIndex() {
             Sign up to drive →
           </Link>
         </div>
+
+        <div className="mt-4 bg-sand-50 border border-sand-200 rounded-xl p-6 flex items-start justify-between gap-4 flex-wrap">
+          <div className="min-w-0 flex-1">
+            <p className="text-[10px] font-bold tracking-widest uppercase text-coral-600 mb-1">
+              Restaurant?
+            </p>
+            <p className="font-display text-lg font-bold leading-tight text-navy-900">
+              Your menu price. Period.
+            </p>
+            <p className="text-sm text-navy-600 font-light mt-1 max-w-xl">
+              We never charge your restaurant a commission. Customer-side
+              fees only. Local runners. Free to apply.
+            </p>
+          </div>
+          <Link
+            href="/deliver/restaurant"
+            className="px-4 py-2.5 rounded-lg text-sm font-bold bg-navy-900 text-sand-50 hover:bg-navy-800 flex-shrink-0"
+          >
+            Apply →
+          </Link>
+        </div>
       </div>
     </main>
   );
