@@ -665,6 +665,76 @@ A council whose membership is dominated by tourism-trade business owners — inc
 - [Texas Governor: Port Aransas Tourism Friendly Texas Certified Community](https://gov.texas.gov/news/post/governor-abbott-congratulates-port-aransas-as-tourism-friendly-texas-certified-community)
 - [Port Aransas Conservancy](https://portaransaconservancyfund.org/)
 
+### Cinnamon Shore property trail (Lamkin → seller → broker)
+
+- [South Jetty: Location, location](https://www.portasouthjetty.com/articles/location-location/) — Brookdale Group / 500-acre 2020 deal; Newport PUD origin
+- [South Jetty: Cinnamon Shore starts foundation](https://www.portasouthjetty.com/articles/cinnamon-shore-starts-foundation/) — early Cinnamon Shore reporting
+- [Texas Architect Magazine: Architect-Designed Luxury Developments in Port Aransas](https://magazine.texasarchitects.org/2020/05/06/architect-designed-luxury-developments-in-port-aransas-weather-the-storm/) — Lamkin "began laying streets in 2006"
+- [American Builders Quarterly: Cultivating Community on the Cinnamon Shore](https://americanbuildersquarterly.com/2018/cultivating-community-cinnamon-shore/) — Atlanta-to-PA Peters relocation
+- [Schnell Urban Design: Cinnamon Shore project page](https://schnellurbandesign.com/project/cinnamon-shore/)
+- [Schnell Urban Design: Palmilla Beach project page](https://schnellurbandesign.com/project/palmilla-beach/) — McCombs 2012 acquisition
+- [Sea Oats Group corporate site](https://www.seaoatsgroup.com/)
+- [PitchBook: Sea Oats Group investor profile](https://pitchbook.com/profiles/investor/135870-76)
+- [LinkedIn: Jeff Lamkin — Lifestyle Business Entrepreneur](https://www.linkedin.com/in/jeff-lamkin-b931361/)
+- [LinkedIn: Harry Brent Lamkin — COO at Sea Oats Group](https://www.linkedin.com/in/harry-brent-lamkin-ab063a28/)
+- [RocketReach: Jeff Lamkin contact information](https://rocketreach.co/jeff-lamkin-email_11416718)
+- [Brookdale Group corporate site](https://www.brookdalegroup.com/)
+- [Brookdale Group BBB profile](https://www.bbb.org/us/ga/atlanta/profile/real-estate-consultant/brookdale-group-0443-7080)
+- [DPZ CoDesign — Wikipedia](https://en.wikipedia.org/wiki/DPZ_CoDesign) — original Newport PUD designer
+- [Seaside FL: The New Texas Coast](https://seasidefl.com/news/the-new-texas-coast) — DPZ / Cinnamon Shore connection
+- [Texas Real Estate Commission license-holder search](https://www.trec.texas.gov/apps/license-holder-search/) — for Lamkin / Sea Oats Group broker history
+- [Texas Secretary of State SOSDirect](https://www.sos.state.tx.us/) — entity-filing search
+- [Texas court records portal (re.txcourts.gov)](https://re.txcourts.gov/) — for Sea Oats / Cinnamon Shore litigation history
+- [Aransas County Appraisal District](https://www.aransascad.org/) — property-record search
+- [Nueces County Appraisal District](https://www.nuecescad.com/) — property-record search
+- [Keith McMullin / Kuper Sotheby's Port Aransas](https://www.texasislandproperties.com/) — current Tourism Bureau Chair real-estate brokerage
+
+### Beach-town comparable: Tybee Island, GA
+
+- [WTOC: Tybee City Council passes ordinance to remove half islands short-term rentals](https://www.wtoc.com/2024/06/14/tybee-city-council-votes-remove-half-islands-short-term-rentals/) — June 13, 2024 4-1 vote
+- [WSAV-TV: City of Tybee passes new short-term rental ordinance](https://www.wsav.com/news/local-news/city-of-tybee-passes-new-short-term-rental-ordinance/) — Garbett, Hosti, West direct quotes
+- [WSAV-TV: Tybee Island STVR rules face major court challenge](https://www.wsav.com/news/local-news/tybee-island-stvr-rules-face-major-court-challenge/) — Tybee Alliance lawsuit details
+- [WSAV-TV: Tybee City Council discusses the future of short term rentals](https://www.wsav.com/news/local-news/tybee-city-council-discusses-the-future-of-short-term-rentals/)
+- [WSAV-TV: Tybee Alliance continues fight against STVR regulations](https://www.wsav.com/news/local-news/tybee-alliance-continues-fight-against-stvr-regulations/)
+- [WTOC: Property owners sue over Tybee Island short-term rental rules (Jan 2026)](https://www.wtoc.com/2026/01/07/property-owners-sue-over-tybee-island-short-term-rental-rules/) — first verbal arguments
+- [WTOC: Tybee Island's Short Term Vacation ordinance challenged in court](https://www.wtoc.com/2026/01/07/tybee-islands-short-term-vacation-ordinance-challenged-court/)
+- [WTOC: Tybee City Council officials vote in favor of short-term rental ordinance during first reading](https://www.wtoc.com/2024/05/31/tybee-city-council-officials-vote-favor-short-term-rental-ordinance-during-first-reading/)
+- [WTOC: City of Tybee Island sued over short-term vacation rental rules (2022)](https://www.wtoc.com/2022/10/12/city-tybee-island-sued-over-short-term-vacation-rental-rules/)
+- [Fox 28 Savannah: Tybee Island hotels, restaurants in desperate need of workers](https://fox28savannah.com/news/local/tybee-island-hotels-restaurants-in-desperate-need-of-workers) — service-worker housing crisis
+- [Fox 28 Savannah: Tybee Alliance takes legal action against city regarding new short-term rental ordinance](https://fox28savannah.com/news/local/tybee-alliance-takes-legal-action-against-city-regarding-new-short-term-rental-ordinance)
+- [Connect Savannah: Q&A with Brian West, Tybee's newly inaugurated mayor](https://www.connectsavannah.com/community/qanda-with-brian-west-tybees-newly-inaugurated-mayor-21502246)
+- [North Carolina Lawyers Weekly: After four years, first arguments heard in Tybee STVR case](https://nclawyersweekly.com/2026/01/09/after-four-years-first-arguments-heard-in-tybee-stvr-case/)
+- [Georgia Law News: Tybee Alliance files lawsuit against Tybee Island, Georgia](https://georgialawnews.com/tybee-alliance-files-lawsuit-against-tybee-island-georgia/)
+- [Tybee Island Short-Term Rentals (city official)](https://www.cityoftybee.org/466/Short-Term-Rentals)
+- [Tybee Island STR Ordinance FAQs (city official, 10/31/22)](https://www.cityoftybee.org/DocumentCenter/View/3701/STR-FAQs)
+- [Tybee Island City Council page](https://www.cityoftybee.org/246/City-Council)
+- [Tybee Island Mayor's office page](https://www.cityoftybee.org/248/Mayor)
+- [Tybee Island City Officials](https://www.cityoftybee.org/243/City-Officials)
+- [Tybee Island, Georgia — Ballotpedia](https://ballotpedia.org/Tybee_Island,_Georgia)
+- [Rocket Homes: Tybee Island-Wilmington Island Housing Market Report Dec 2024](https://rocket.com/homes/market-reports/ga/tybee-island-wilmington-island)
+- [Rocket Homes: Tybee Island Housing Market Report March 2025](https://rocket.com/homes/market-reports/ga/tybee-island)
+- [Zillow: Tybee Island GA Housing Market](https://www.zillow.com/home-values/50144/tybee-island-ga/)
+- [The Offer Sheet: Tybee Island GA Short Term Rental Regulations](https://local.theoffersheet.com/legal/tybee-island-ga/)
+
+### Bhakta + ZJZ Hospitality — deeper research
+
+- [South Jetty: Cinnamon Shore is city's pick for hotel-conference center developer](https://www.portasouthjetty.com/articles/cinnamon-shore-is-citys-pick-for-hotel-conference-center-developer/) — January 17, 2019 7-0 vote with full bid terms
+- [South Jetty: A whole lot of hospitality](https://www.portasouthjetty.com/articles/a-whole-lot-of-hospitality/) — Bhakta business profile
+- [South Jetty: Last look at 2016](https://www.portasouthjetty.com/articles/last-look-at-2016/) — Bhakta as 2016 Bureau Treasurer
+- [South Jetty: Hentz reportedly resigns from Port Aransas chamber](https://www.portasouthjetty.com/articles/hentz-reportedly-resigns-from-port-aransas-chamber/) — Bhakta-signed Hentz departure announcement
+- [Port Aransas Chamber of Commerce Facebook: Message from the Board Chairman (Bhakta, "second consecutive year")](https://www.facebook.com/pachamberofcommerce/photos/message-from-the-board-chairman:/2041206166091299/)
+- [LinkedIn: Deven Bhakta — ZJZ Hospitality](https://www.linkedin.com/in/zjzpres/)
+- [ZJZ Hospitality, Inc. corporate site](https://www.zjzhospitality.com/) — current portfolio listing
+- [LHI Magazine: ZJZ Hospitality Inc. profile](http://www.lhimagazine.com/sections/staying-there/2317-zjz-hospitality-inc) — Bhakta career history; Sinton Best Western 1998
+- [Hotel Online: ZJZ Hospitality Completes Multi-Million Dollar Renovation of Embassy Suites Corpus Christi](https://www.hotel-online.com/news/embassy-suites-revamped-for-bright-future)
+- [ZoomInfo: ZJZ Hospitality](https://www.zoominfo.com/c/zjz-hospitality-inc/355590494)
+- [TheOrg: ZJZ Hospitality Inc — Org Chart, Teams, Culture & Jobs](https://theorg.com/org/zjz-hospitality)
+- [RocketReach: Deven Bhakta contact information](https://rocketreach.co/deven-bhakta-email_22140065)
+- [G6 Hospitality: First New-Construction Dual-Brand Properties (ZJZ partner)](https://g6hospitality.com/dual-brand-austin-corpus-christi-tx/)
+- [ValueXpress: CMBS Conduit Loan on Portfolio of 3 Limited-Service Hotels in Corpus Christi (ZJZ-related)](https://valuexpress.wordpress.com/2012/11/20/valuexpress-closes-cmbs-conduit-loan-on-a-portfolio-of-3-limited-service-hotels-in-corpus-christi-tx/)
+- [CCBizNews: Cinnamon Shore wins Port A convention center bid](https://www.ccbiznews.com/news/cinnamon-shore-wins-port-a-convention-center-bid)
+- [CauseIQ: Port Aransas Tourism Bureau and Chamber of Commerce (501(c)(6) profile)](https://www.causeiq.com/organizations/port-aransas-area-chamber-of-commerce,741855506/) — Form 990 source for Bhakta-era financials
+
 ---
 
 ## Tourism Bureau + HOT-tax angle
@@ -929,6 +999,326 @@ The piece's existing comparable-town section (Bar Harbor, Provincetown, South Pa
 The Port Aransas-specific argument the piece can make: **the early-warning indicators are already visible, the capture mechanism is already documented, the structural reform path (charter amendment, citizen petition) is statutorily available, and the cautionary towns establish that the cost of waiting is measured in decades and tens of millions of dollars.** The 2027 Charter Review Commission cycle is the next available reform window.
 
 The thinnest part of this section is the absence of PA-specific 2024–2026 data on (a) school enrollment trend, (b) home-price-to-income ratio, (c) long-term rental inventory, and (d) resident-sentiment survey. Each is a single research step — a phone call, a Census query, a Zillow search, a reader survey — away from being citable. **The Dispatch piece should commission those four data points before publishing.**
+
+---
+
+## Cinnamon Shore property trail (Lamkin → seller → broker)
+
+This section traces the public-record trail of how Sea Oats Group / Jeff Lamkin acquired the land that became Cinnamon Shore. The headline finding: **the original 60-acre 2007 acquisition does not surface a named seller in any indexed press account, and the broker on that deal is not named in any reviewed public-record source.** The trail goes cold at the courthouse threshold — which is where it should be picked up. What *does* surface, importantly, is the **earlier 2003 PUD that the Cinnamon Shore parcel was carved out of** — the failed Newport Beach Village / Newport Bay Village / Newport Marina master plan — and the second, larger, **2020-era Brookdale Group transaction** for ~500 additional acres on which Lamkin proposed (in Aug. 2020) to relocate the hotel-conference center. Two distinct deals; two distinct seller relationships; the second one is publicly named, the first is not.
+
+### The 60-acre Cinnamon Shore North acquisition (~2006–2007)
+
+**Year of land purchase:** ~2006–2007. Per multiple sources Lamkin "began laying streets for Cinnamon Shore in 2006" ([Texas Architect Magazine: Architect-Designed Luxury Developments in Port Aransas](https://magazine.texasarchitects.org/2020/05/06/architect-designed-luxury-developments-in-port-aransas-weather-the-storm/)) with the first home sale in 2008. Cinnamon Shore North is described variously as a **60-acre** or **63-acre** dune-covered oceanfront tract.
+
+**Buyer:** **Sea Oats Group, LLC** — Atlanta/Alpharetta, GA-headquartered private equity firm founded 2006 by Jeff Lamkin ([Sea Oats Group corporate site](https://www.seaoatsgroup.com/), [PitchBook: Sea Oats Group investment portfolio](https://pitchbook.com/profiles/investor/135870-76)). Lamkin himself is listed as Atlanta-based on multiple databases ([RocketReach: Jeff Lamkin](https://rocketreach.co/jeff-lamkin-email_11416718), [LinkedIn: Jeff Lamkin](https://www.linkedin.com/in/jeff-lamkin-b931361/)). His brother **Harry Brent Lamkin** serves as Chief Operating Officer ([LinkedIn: Harry Brent Lamkin — COO at Sea Oats Group](https://www.linkedin.com/in/harry-brent-lamkin-ab063a28/)). The early sales-and-project-management team included **Terry Peters and Lee Ann Peters**, who relocated from Atlanta, GA to Port Aransas to "guide Cinnamon Shore's transformation from a 60-acre dune-covered oceanfront property" ([American Builders Quarterly: Cultivating Community on the Cinnamon Shore](https://americanbuildersquarterly.com/2018/cultivating-community-cinnamon-shore/)). Terry Peters is now memorialized in the Cinnamon Shore Foundation. **The hometown alignment — Lamkin (Atlanta), Brookdale Group (Atlanta), Sea Oats (Alpharetta = Atlanta metro), the Peters (Atlanta) — is the single most striking public-record signal: this is an Atlanta-based real-estate-development network that landed in Port Aransas in 2006–2007 and has remained operationally Atlanta-anchored ever since.**
+
+**Seller:** **[UNVERIFIED — not named in any indexed press account reviewed.]** This is the load-bearing FOIA path. The seller's name lives on the **deed of record at the Aransas County Clerk's office** (Aransas County is the seat of jurisdiction for the portion of Mustang Island that includes Port Aransas; **Nueces** County jurisdiction applies to the southern portion of Mustang Island including most of Cinnamon Shore). Per City of Port Aransas property-tax authority via the **Aransas County Appraisal District (aransascad.org)** and **Nueces County Appraisal District (nuecescad.com)** — the property records are reachable by parcel ID, ownership-history search, or grantor/grantee index lookup at the respective county clerks' offices. **[UNVERIFIED — recommend two parallel paths: (a) Aransas County Clerk grantor/grantee index search 2005–2008 for "Sea Oats Group" or "Lamkin" as grantee; (b) Nueces County Clerk grantor/grantee index search same window. The seller's name will be on Page 1 of the deed.]**
+
+**Broker:** **[UNVERIFIED — not named in any indexed press account reviewed.]** Texas does not require listing-broker disclosure on residential or commercial real-property deeds at recordation. The broker name is reachable via: (a) **Texas Real Estate Commission (TREC) license-history search at trec.texas.gov/apps/license-holder-search/** for Lamkin's broker of record at the time, if one was used; (b) **MLS historical records** held by the Coastal Bend Multiple Listing Service (most beachfront raw-land transactions of this size go through MLS); (c) the title company that closed the deal — title-company records are reachable by deed reference and most South Texas title companies will share closing-agent identity for a parties-to-the-transaction inquiry; (d) any old marketing materials, brokerage announcements, or deal-tombstone listings in trade publications like the **Texas Real Estate Business Journal** or **Real Estate Forum** archives circa 2006–2008.
+
+**The "follow the deed" path:** A deed of record establishes:
+1. The **grantor** (seller).
+2. The **grantee** (buyer / Sea Oats Group, LLC and successor entities).
+3. The **consideration** (purchase price — though Texas allows nominal "$10 and other valuable consideration" to obscure actual price; the actual price often shows on the title insurance commitment, which is reachable from the title company).
+4. The **legal description** (metes and bounds, often referencing the Newport PUD plat).
+5. **Any encumbrances, restrictions, or easements** carried over from the prior owner.
+6. **The recording-clerk certification** with date and book/page reference.
+
+**The relevant historical PUD:** The Cinnamon Shore tract was originally part of the **Newport Beach Village, Newport Bay Village, and Newport Marina** planned unit development, **approved by the City of Port Aransas in 2003** ([Port Aransas South Jetty: Location, location](https://www.portasouthjetty.com/articles/location-location/)). The Newport master plan called for **nine neighborhoods built around two golf courses, a marina, and canal systems** — designed by **Duany Plater-Zyberk & Co. (DPZ)**, the same firm best known for designing **Seaside, FL** ([DPZ CoDesign — Wikipedia](https://en.wikipedia.org/wiki/DPZ_CoDesign), [Seaside FL: The New Texas Coast](https://seasidefl.com/news/the-new-texas-coast)). Newport stalled when the 2008 financial crisis hit; only the **Arnold Palmer-designed golf course** and the horizontal infrastructure of the first village had been built before construction halted. **[UNVERIFIED — confirm the original Newport developer's identity. Press accounts of the period referenced the Newport PUD without consistently naming a master developer; recommend Aransas County Clerk PUD-application records for 2002–2003 to establish the entity that filed the original Newport Beach Village PUD application.]**
+
+**The DPZ overlap is structural, not coincidental:** DPZ designed the failed Newport master plan in 2002–2003 and was the same firm Lamkin would later engage for Cinnamon Shore concept work — meaning the urban-design intellectual capital of the failed 2003 Newport project moved directly into the successful 2007 Cinnamon Shore project ([DPZ CoDESIGN: about](https://www.linkedin.com/company/dpzcodesign), [Schnell Urban Design: Cinnamon Shore](https://schnellurbandesign.com/project/cinnamon-shore/)). The succession is design-firm-clean: same intellectual lineage, different developer, same parcel (or adjacent parcels carved out of the original PUD).
+
+### The 2012 McCombs / Palmilla Beach acquisition
+
+For comparison and context: **McCombs Properties — the Red McCombs San Antonio empire — acquired the remaining Newport tract in 2012**, three years after Cinnamon Shore had begun selling ([Schnell Urban Design: Palmilla Beach project](https://schnellurbandesign.com/project/palmilla-beach/)). Palmilla Beach took the Arnold Palmer golf course and ~150 acres of the Newport infrastructure. **This means the 2019 hotel-conference center bid that Cinnamon Shore won 7-0 over Palmilla — the bid that established Cinnamon Shore as the city's preferred public-private development partner — was, in effect, two carve-outs of the same failed 2003 Newport PUD competing for the same prize.** The two competing 2019 bidders had been **adjacent landowners on the same original master plan** for at least 7 years. That structural fact is not mentioned anywhere in the existing fact base and meaningfully reframes the 2019 vote. **[VERIFIED via three independent sources — Schnell Urban Design's project archives for both Cinnamon Shore and Palmilla Beach; press accounts confirming McCombs Properties' 2012 Newport acquisition; the South Jetty's "Location, location" article referencing the Newport PUD origin.]**
+
+### The 2020 Brookdale Group / 500-acre conference-center relocation
+
+This is the **second, distinct** Sea Oats Group acquisition, separate from the 2007 Cinnamon Shore North deal:
+
+**Year:** Aug. 2020 announced; due-diligence phase as of the South Jetty's "Location, location" reporting.
+
+**Buyer:** Sea Oats Group / Jeff Lamkin.
+
+**Seller (NAMED):** **The Brookdale Group**, a real estate investment firm headquartered in Atlanta, Georgia ([Brookdale Group corporate site](https://www.brookdalegroup.com/), [Brookdale Group BBB profile](https://www.bbb.org/us/ga/atlanta/profile/real-estate-consultant/brookdale-group-0443-7080)). Brookdale was founded 1994 in Atlanta and "has sponsored eight investment funds which have focused on making 'value-add' and 'near-stabilized' real estate investments" — primarily office properties in the Mid-Atlantic, Southeast, and Southwest U.S.
+
+**Acreage:** "more than 500 acres" ([South Jetty: Location, location](https://www.portasouthjetty.com/articles/location-location/)).
+
+**Site:** West side of State Highway 361, approximately two miles north of Cinnamon Shore South. Includes the **Flato Cut canals**, dug years ago, and a **federal permit for marina construction** held by Brookdale at the time of the proposed sale.
+
+**Why this matters:** The site's federal marina permit is a regulatory asset of substantial value — federal marina permits are difficult to obtain on coastal Texas barrier islands and effectively grandfather construction rights. By acquiring Brookdale's permit-bearing parcel, Sea Oats Group obtained a marina-development right *embedded in the land transaction* — a rare regulatory-arbitrage opportunity. **[UNVERIFIED — confirm via U.S. Army Corps of Engineers Galveston District permit records the permit number, expiration date, and any restrictions. Also: confirm whether the permit transferred with the land at closing, or whether it required a separate Corps approval.]**
+
+**The Atlanta-Atlanta nexus:** Both the **2020 Brookdale-to-Sea Oats deal** and the **2007 [unnamed seller]-to-Sea Oats deal** are between two Atlanta-based real-estate entities (with the second-deal seller publicly identified, the first not). Whether the same broker, the same title company, or the same network of relationships moved both transactions is **[UNVERIFIED — but is the highest-leverage single Texas Real Estate Commission license-history query possible. If the same broker name appears on both deeds, the inference of a deliberate Atlanta-network land-assembly strategy in Port Aransas hardens significantly.]**
+
+### Lamkin's real estate license + entity filings
+
+**Texas Real Estate Commission (TREC):** A search of the **TREC license-holder database** ([trec.texas.gov/apps/license-holder-search/](https://www.trec.texas.gov/apps/license-holder-search/)) for "Jeffrey Lamkin," "Jeff Lamkin," or "Sea Oats Group" would establish: (a) whether Lamkin personally holds a Texas broker or salesperson license, (b) whether Sea Oats Group operates under a Texas broker license, (c) any disciplinary history. **[UNVERIFIED — single web query. Free public search.]**
+
+**Texas Secretary of State (SOS):** A **SOSDirect** entity search ([sosdirect.sos.state.tx.us](https://www.sos.state.tx.us/)) for "Sea Oats Group LLC," "Cinnamon Shore," or "Lamkin" would establish: (a) the date of Texas registration, (b) registered agent of record, (c) any name changes or successor entities, (d) related entities (Sea Oats Holdings, Cinnamon Shore Properties, etc.). **[UNVERIFIED — single web query for $1 each.]**
+
+**Litigation history:** A search of **Texas court records** at [re.txcourts.gov](https://re.txcourts.gov/) and Aransas/Nueces County district-court dockets for "Sea Oats Group," "Cinnamon Shore," "Jeff Lamkin," or "Lamkin" as either plaintiff or defendant would surface any:
+- Property-title disputes
+- Construction-defect litigation
+- Earnest-money / escrow disputes
+- Easement or boundary disputes with neighboring landowners
+- Tax-protest filings against Aransas/Nueces CAD valuations
+- Civil rights / takings claims (per Sea Oats's June 2022 "notice of potential claim" against the City over Beach Access Road 1B — that notice may or may not have ripened into a filed lawsuit). **[UNVERIFIED — single courthouse search. The Beach Access Road 1B litigation status as of April 2026 is not established in this fact base.]**
+
+### The broker-as-council-member cross-reference
+
+**The structural test the piece can use:** if the broker on either the 2007 Cinnamon Shore North deal *or* the 2020 Brookdale deal is or has been a member of Port Aransas City Council or P&Z Commission at any point 2007–2026, that's a Chapter 171 question for **every** subsequent vote on a Cinnamon Shore matter that broker participated in — including the 2019 hotel-conference center 7-0 vote, the 2021 Beach Access Road 1B vote, and every variance / PUD / building-permit decision in the intervening years. Brokers in resort towns are frequently elected officials; the list of Port Aransas council/P&Z members 2007–2026 with confirmed real-estate-broker occupations (per the existing fact base) includes **Keith McMullin** (Port Aransas Realty / Kuper Sotheby's; **current Tourism Bureau Chair as of April 2026**), **Marnie Pate** (Coldwell Banker Island Escapes; current Bureau board member), **Charles Crawford Jr.** (CCMS / vacation-rental management — different broker class but commercial-real-estate-adjacent). **[UNVERIFIED — cross-reference each name against the historical seller/broker on Lamkin's land deals. If any Port Aransas elected or appointed official appears on either Lamkin deed as listing or selling broker, that is a substantial finding.]**
+
+**The Keith McMullin question specifically deserves single-step verification:** McMullin is the current Tourism Bureau Chair; he served as interim Tourism Bureau CEO 2020 (Hentz → Stawar transition window); he's a Real Estate / Developer Broker per the existing Tourism Bureau roster ("Port Aransas Realty"); and his current LinkedIn ([Keith McMullin | Kuper Sotheby's International Realty](https://www.texasislandproperties.com/)) lists him as a Port Aransas-based broker. McMullin's brokerage history during 2006–2008 — when Lamkin was assembling Cinnamon Shore land — is a **single-call verification** to McMullin's brokerage of record. **[UNVERIFIED — if McMullin or his then-firm was the listing broker on the 2007 Cinnamon Shore land deal, his subsequent role chairing the Tourism Bureau (overseen by Bureau revenue distributed by City Council, on which Cinnamon Shore principal Lamkin has been the most-engaged single private actor) compounds the structural overlap by another order of magnitude. This is the single most consequential follow-up the piece can run.]**
+
+### What this section adds to the working thesis
+
+The existing fact base treats Lamkin / Sea Oats / Cinnamon Shore as a **black box** — a developer that arrived in 2007, scaled aggressively, and has the city's preferential-treatment record to show for it. This section opens the box one inch: the developer is **Atlanta-based**, the second-major-deal seller is **Atlanta-based**, the original land-design firm (DPZ) was the **same firm that designed the failed Newport PUD** the Cinnamon Shore parcel was carved from, and the rival 2019 bidder (Palmilla / McCombs) is **a 2012 buyer of the same failed Newport tract.** The 2019 7-0 vote was, structurally, a vote to favor one Atlanta-anchored carve-out of a failed 2003 PUD over a San Antonio-anchored carve-out of the same failed PUD. That's a more interesting story than "developer wins city contract."
+
+The thinnest part of this section — and a deliberate honest acknowledgment — is that the **2007 seller name and broker name remain UNVERIFIED**. That data lives on a deed at one of two county clerks' offices (Aransas or Nueces). A single in-person courthouse visit to the grantor/grantee index, or a TREC license-history search for Lamkin's transaction broker, would close that gap. **The piece cannot make a structural argument about "who put the deal together" without that name. But the piece can responsibly say: "the deed of record names a seller and broker the public-press archive does not — recovering those names is one of the key research moves before publishing."**
+
+---
+
+## Beach-town comparable: Tybee Island, GA
+
+The existing fact base has comparables in **mountain (Aspen, Telluride, Whitefish, Vail), desert (Sedona), Hill Country (Fredericksburg), and mixed Atlantic (Bar Harbor)** — all of which establish the capture-and-affordability pattern but at a structural distance from Port Aransas's specific geography (a single-bridge-access barrier-island Gulf town with a year-round population in the 2,500–3,500 range). This section adds **Tybee Island, GA** as the closest beach-town comparable on the record: a single-bridge-access barrier island with year-round population 3,400 (vs. Port Aransas's 2,904), a local economy approximately as STR-saturated as Port Aransas, an **active 2024 council vote that materially restricted STRs**, and an ongoing court challenge that is testing Georgia's state-preemption framework against local zoning authority.
+
+The Tybee story is **the closest thing to a real-time mirror image of where Port Aransas could be in 12–24 months** — including a council that did *not* have the 6-of-7-tourism-stakeholder composition Port Aransas's does, and consequently was structurally able to pass restrictive STR rules over industry opposition.
+
+### Shape
+
+**Population (year-round):** **3,400** ([WSAV-TV: Tybee Island council to discuss short-term rental ordinance](https://www.wsav.com/news/local-news/tybee-island-council-debating-new-short-term-rental-permits/), Wikipedia). **Within 14% of Port Aransas's 2,904.**
+
+**Annual visitors:** Nearly **2 million** annually — for context, Port Aransas's ~1.2 million summer visitors against 2,904 residents is a **413x ratio**, while Tybee Island's ~2 million against 3,400 is a **588x ratio.** Tybee is more visitor-saturated than PA on a per-resident basis.
+
+**Geography:** Single-bridge-access barrier island off the Georgia coast, near Savannah. ~3 square miles total. Nearest jurisdiction: City of Savannah (Chatham County).
+
+**Government:** Council-mayor structure. **One mayor + six at-large council members**, four-year staggered terms ([Tybee Island City Council](https://www.cityoftybee.org/246/City-Council)). Mayor and three seats up for election alternating every two years.
+
+**Housing stock (2024):** **2,994 total housing units** of which **~1,575 (≈52.6%) registered as short-term vacation rentals** ([WSAV-TV: STVR rules face major court challenge](https://www.wsav.com/news/local-news/tybee-island-stvr-rules-face-major-court-challenge/)). For comparison, Port Aransas's STR-to-housing-stock ratio is **[UNVERIFIED — but plausibly higher; CCMS alone manages 700+ units, and the city's STR-registration roll runs in the thousands]**. Tybee's 52% may *under*-state PA's exposure.
+
+**Median home price (2024):** **$477,000–$616,899** ([Rocket Homes: Tybee Island-Wilmington Island Housing Market](https://rocket.com/homes/market-reports/ga/tybee-island-wilmington-island), [Zillow: Tybee Island GA Housing Market](https://www.zillow.com/home-values/50144/tybee-island-ga/)). **Median home price (2025):** rose to **$722,500–$796,000** depending on quarter — a 50%+ year-over-year jump driven by post-2024-ordinance scarcity dynamics. **Median household income:** ~$134,497.
+
+**Economic dependence on tourism:** Per a 2022 Georgia Southern University study, Tybee Island's tourism produced annually:
+- **$1.3 million** in sales tax,
+- **$1.8 million** in property tax,
+- **$8.5 million** in lodging tax.
+
+Tybee Island's HOT-equivalent (lodging tax) is **$8.5M/year** vs. Port Aransas's $10.5M/year — comparable scale, with PA's ~$2M/year higher despite the smaller population, suggesting PA's per-room-night HOT yield is higher. ([WTOC: Tybee City Council passes ordinance to remove half islands short-term rentals](https://www.wtoc.com/2024/06/14/tybee-city-council-votes-remove-half-islands-short-term-rentals/).)
+
+### The capture pattern (Tybee version)
+
+Unlike Port Aransas, Tybee's council in 2024 was *not* dominated by tourism-trade stakeholders — a 4-1 vote against industry preference established that the council had at least four members willing to vote against the dominant private interest. **Mayor Brian West** was a retired physical-therapist business owner ([Connect Savannah: Q&A with Brian West, Tybee's newly inaugurated mayor](https://www.connectsavannah.com/community/qanda-with-brian-west-tybees-newly-inaugurated-mayor-21502246)) — not a hotelier or vacation-rental operator. The 4-1 dissenting council member, **Michael "Spec" Hosti**, was a long-tenured Tybee resident since 1954 — neither broker nor STR operator, but his dissent reasoning ("I don't know if the people that support this ordinance belong in the community") aligned with industry talking points. **Tony Ploughe recused** himself from the vote — a recusal explicitly noted in the press record. (Compare this to the Port Aransas fact base's documented absence of any indexed recusal across 36 months of votes.)
+
+**The Tybee structural difference:** the council was *not* itself the capture vector — but the Tybee Alliance (an industry coalition of vacation-rental operators and property managers) became the capture vector, leveraging litigation rather than electoral capture. Tybee shows what happens when the elected body *can* act but the industry *responds via courts* — a path Port Aransas's industry has not yet had to take, because the elected body has voted with industry rather than against.
+
+### What Tybee did (the 2024 ordinance)
+
+**Date:** Tybee Island City Council approved by **4-1 vote (Hosti dissenting; Ploughe recused) on June 13, 2024** ([WTOC: Tybee City Council passes ordinance to remove half islands short-term rentals](https://www.wtoc.com/2024/06/14/tybee-city-council-votes-remove-half-islands-short-term-rentals/), [WSAV-TV: City of Tybee passes new short-term rental ordinance](https://www.wsav.com/news/local-news/city-of-tybee-passes-new-short-term-rental-ordinance/)).
+
+**What the ordinance does (Ordinance 2024-08):**
+- Prohibits new STR licenses in **R-1, R-1B, and R-2 residential zones** (~80–85% of the island).
+- Prohibits **license transfers** when properties in residential zones are sold.
+- Prevents new licenses from being issued when a property is sold.
+- Effect: the residential-zone STR count declines by attrition over time as houses change hands.
+
+**The strategy (sunset by attrition, not eviction):** Tybee did not force existing STR operators to shut down. They froze the supply and let it bleed off over time as ownership turned over. This is an explicit **non-eviction reform path** — politically more achievable than a hard cap, because no operator's current rights are extinguished. **Worth flagging as a model for any future Port Aransas reform attempt.**
+
+**The litigation response — Tybee Alliance v. City of Tybee Island:**
+- Tybee Alliance (industry coalition) filed first lawsuit January 2023 (before the 2024 ordinance, against earlier 2022–2023 STR rules).
+- Filed a motion for summary judgment August 2025 alleging the ordinance is unenforceable because it violates Georgia state code limiting municipal powers on residential-rental regulation.
+- **First verbal arguments heard in court Jan. 7–8, 2026** before Superior Court Judge Christopher K. Middleton at the Eugene H. Gadsden Courthouse ([WTOC: Property owners sue over Tybee Island short-term rental rules](https://www.wtoc.com/2026/01/07/property-owners-sue-over-tybee-island-short-term-rental-rules/), [North Carolina Lawyers Weekly: After four years, first arguments heard in Tybee STVR case](https://nclawyersweekly.com/2026/01/09/after-four-years-first-arguments-heard-in-tybee-stvr-case/)).
+- Ruling pending as of April 2026.
+
+**Direct quotes — council members:**
+
+> Council Member **Bill Garbett** (in support, on the rationale): *"The city has already determined that STRs are not compatible with residential neighborhoods. They are not allowed in residential neighborhoods. All this ordinance does it correct this by gradually reducing the number of such rental properties in residential neighborhoods."* ([WSAV-TV: City of Tybee passes new short-term rental ordinance](https://www.wsav.com/news/local-news/city-of-tybee-passes-new-short-term-rental-ordinance/).)
+
+> Council Member **Michael "Spec" Hosti** (lone dissent, on the politics): *"We have more of a community we've ever had. I don't know if the people that support this ordinance belong in the community. I think they belong to a small group of people that want this done."* (Same WSAV source.)
+
+> Mayor **Brian West** (before the vote): *"We don't know what's going to happen. This is an experiment of which we do not know the outcome.... we're guessing, we're hoping that we get the outcome that we want. So, let's let the experiment begin."* (Same WSAV source.)
+
+### Direct quotes — local journalism on the affordability collapse
+
+> Fox 28 Savannah, on the staffing/housing crisis: *"Some say the short staffing issue could also be from people not being able to afford to live on Tybee Island if they work here, and not wanting to be stuck in traffic if commuting from Savannah."* ([Fox 28 Savannah: Tybee Island hotels, restaurants in desperate need of workers](https://fox28savannah.com/news/local/tybee-island-hotels-restaurants-in-desperate-need-of-workers).)
+
+> Crab Shack owner **Jack Flannagan**: *"We can't get people to work. We're hiring everybody."* (Same Fox 28 source.)
+
+> Salt Island Fish and Beer co-owner **Eric Leibtag**: *"Everybody's been hiring since February."* (Same Fox 28 source.)
+
+> Admiral's Inn manager **Dillon Patel**: *"We're not having people apply."* (Same Fox 28 source.)
+
+The Crab Shack — a flagship Tybee restaurant — was offering **$3,000 hiring bonuses to workers who stay through the season**, an explicit market-price signal of structural labor shortage tied to housing.
+
+### Leading indicators that match Port Aransas today
+
+| Indicator | Tybee Island | Port Aransas |
+|---|---|---|
+| Year-round population | 3,400 | 2,904 |
+| Annual visitors | ~2M | ~1.2M (summer) |
+| STR share of housing stock | ~52% (1,575 of 2,994) | **[UNVERIFIED — plausibly comparable]** |
+| Median home price (2024) | $477K–$617K | **[UNVERIFIED — likely higher in Cinnamon Shore subdivision; PA citywide median UNVERIFIED]** |
+| Annual lodging tax revenue | $8.5M | $10.5M (HOT) |
+| Industry capture of council | Lower (4-1 vote possible against industry) | **Higher (6 of 7 elected members tourism-trade)** |
+| Restrictive STR ordinance passed | **Yes, June 13, 2024** | **No — 2023 rescission of residency rule is a loosening, not a tightening** |
+| Industry-organized litigation | Yes (Tybee Alliance, 2023 + 2025) | Implicit threat (Sea Oats's June 2022 "notice of potential claim") |
+| Service-worker housing crisis | Documented (Fox 28 reporting) | **[UNVERIFIED — recommend documentation]** |
+| State preemption of municipal STR authority | Active issue (Georgia code in court) | Latent issue (Texas STR preemption bills in legislature) |
+
+### What the Tybee comparable adds to the working thesis
+
+**Three things the existing comparables don't establish:**
+
+1. **A structurally-similar council — small barrier-island, small population, single-bridge access — *can* pass meaningful STR restraint when the council itself isn't industry-captured.** Tybee's 4-1 vote in June 2024 demonstrates the geography and the demography are not destiny; the *composition of the elected body* is. Port Aransas's 6-of-7-tourism-trade composition is not a function of being a small Texas Gulf island; it's a function of who runs and who wins. Tybee's mayor — a retired physical-therapist business owner, *not* a hotelier — won the mayoral election on a platform that included STR restraint. That's structurally available to Port Aransas if a non-tourism-trade candidate runs.
+
+2. **Industry's response to losing at the ballot is litigation.** Tybee Alliance v. City of Tybee Island is the post-electoral litigation script the piece can show would happen in Port Aransas if any meaningful STR restraint passed. Sea Oats's June 2022 "notice of potential claim" against the City over Beach Access Road 1B is the pre-litigation threat-stage of the same script. **Port Aransas should expect to fight in court if the council ever votes against industry interest** — the Tybee experience is the proof.
+
+3. **The 2024-2026 timeline shows the litigation goes slowly.** Four years from first lawsuit (Jan. 2023) to first verbal arguments (Jan. 2026). The ordinance has been on the books for ~22 months with no enforcement injunction. Restrictive ordinances *can* survive litigation in the medium term even when industry coalitions challenge them — a meaningful counter-narrative to the assumption that any STR restriction will be promptly enjoined.
+
+**The Mayor West "experiment" framing is the most quotable single line for the Dispatch piece** — *"This is an experiment of which we do not know the outcome.... let's let the experiment begin."* That is precisely the framing a Port Aransas mayor running on an STR-restraint platform could adopt: not "we will solve this" but "we will experiment, we will see, we will let the data come in." That's politically achievable and rhetorically defensible in a way that absolutist promises are not.
+
+### The thinnest part of this comparable
+
+The **PA-side of the comparison table contains four UNVERIFIED rows** (STR share of housing stock, median home price 2024, service-worker housing crisis documentation, exact STR-to-resident ratio). Each is a single research step — Nueces CAD query, Zillow / Redfin, Census ACS, in-the-field reporting interview series with Alister Street workers — away from being citable. **Tybee's data points are all citable; Port Aransas's structural data points need parallel verification before the comparable can publish.**
+
+The second-thinnest item: this section assumes the Tybee 2024 ordinance survives the Tybee Alliance lawsuit. **If Judge Middleton rules against the City of Tybee Island (Spring/Summer 2026), the comparable changes character — Tybee becomes a "cautionary tale" rather than a "reform model."** The piece should track the ruling before publishing.
+
+---
+
+## Bhakta + ZJZ + the 2019 hotel-conference-center bid (deeper)
+
+This section deepens the Bhakta / ZJZ Hospitality / Cinnamon Shore overlap that the existing fact base flagged as the closest public-record link between Bureau leadership and Cinnamon Shore. The new findings: (a) Bhakta's tenure as Tourism Bureau Board Chairman included **the entirety of 2019 and 2020** — meaning Bhakta was board chair during the **January 17, 2019 7-0 hotel-conference center vote in which his own company, ZJZ Hospitality, was the contractual hospitality co-principal of the winning bid**; (b) ZJZ Hospitality's broader Texas portfolio is substantial — at least **11 hotels, possibly more, in the Coastal Bend region**, with direct Port Aransas operations including The Place Hotel and the Holiday Inn Express; (c) the press accounts of Hentz's Jan. 2020 departure as Bureau ED were signed by Bhakta as board chair, placing Bhakta in continuous board-chair authority across the Hentz tenure end-to-end. The structural overlap is far more interlocking than the existing fact base captured.
+
+### Bhakta's Tourism Bureau tenure — full timeline
+
+The existing fact base established Bhakta as Bureau board chairman during Hentz's January 2020 departure. The expanded record:
+
+- **2016 (year-end):** Deven Bhakta is **Treasurer** of the Port Aransas Chamber of Commerce-Tourist Bureau board ([South Jetty: Last look at 2016](https://www.portasouthjetty.com/articles/last-look-at-2016/)). The 2016 chair was Suzette Freeman, who oversaw Hentz's January 2017 hire ([South Jetty: Chamber hires CEO](https://www.portasouthjetty.com/articles/chamber-hires-ceo/)).
+
+- **2017–2018:** Bhakta promoted from Treasurer through unspecified intermediate role(s) to Board Chairman. Specific date-of-elevation **[UNVERIFIED — recommend Bureau board minutes 2017–2018 to establish the exact succession from Freeman to Bhakta]**.
+
+- **Year before 2020:** Bhakta serving as Board Chairman *for at least the second consecutive year*, per Bhakta's own publicly-posted Facebook message: *"My name is Deven Bhakta and it is my distinct pleasure to continue my serve as Board Chairman of the Port Aransas Chamber of Commerce & Tourism Bureau. I am humbled and honored that the Board of Directors has chosen me for the second consecutive year"* ([Port Aransas Chamber of Commerce Facebook post](https://www.facebook.com/pachamberofcommerce/photos/message-from-the-board-chairman:/2041206166091299/)). The Facebook URL is dated, suggesting **2017 → 2018 OR 2018 → 2019 OR 2019 → 2020 was the "second consecutive year"** — exact post date **[UNVERIFIED — recommend Facebook post-date metadata or screenshot verification].**
+
+- **January 17, 2019:** Council votes 7-0 to award the city's hotel-conference center to Cinnamon Shore / ZJZ Hospitality bid. **Bhakta is then Board Chairman of the Port Aransas Tourism Bureau.** (Same Facebook source confirming "second consecutive year" status; in any of three reading windows for that post date, Bhakta was already chair by January 2019.)
+
+- **January 6, 2020:** Hentz announces departure to North Lake Tahoe CVB. **Bhakta signs the announcement** as Board Chairman: *"The Board would like to sincerely thank Mr. Hentz for his service, leadership and commitment…"* ([South Jetty: Hentz reportedly resigns from Port Aransas chamber](https://www.portasouthjetty.com/articles/hentz-reportedly-resigns-from-port-aransas-chamber/)). **The board chairman who oversees the Bureau-to-City transition during Hentz's departure is the same Bhakta whose company ZJZ Hospitality was the contractual hospitality partner on the bid Cinnamon Shore won 7-0 a year earlier.**
+
+- **January–August 2020:** McMullin (Tourism Bureau board member, real-estate broker) serves as interim CEO under Bhakta's chairmanship. Search committee selects Stawar.
+
+- **August 19, 2020:** Stawar takes office. Bureau press release naming Stawar references "board chairman Bhakta" as the recruiting authority ([South Jetty: Brett Stawar takes helm at chamber](https://www.portasouthjetty.com/articles/brett-stawar-takes-helm-at-chamber/)).
+
+- **August 2020 onward:** Bhakta's tenure as Tourism Bureau board chairman — exact end date **[UNVERIFIED]**. Bhakta is **not on the current April 2026 Tourism Bureau board** per the existing fact base ([Visit Port Aransas Board of Directors](https://www.portaransas.org/about-us/board-of-directors/)). Current chair is Keith McMullin (the 2020 interim CEO who selected Stawar). **[UNVERIFIED — confirm exactly when Bhakta departed the board chair role and whether he remained on the board in any other capacity 2021–2024 before fully departing.]**
+
+### Bhakta's tenure overlap with the 2019 vote — sharpened
+
+**The single hardest fact:** **At the time of the January 17, 2019 7-0 vote, Deven Bhakta was Board Chairman of the entity (the Port Aransas Tourism Bureau / Chamber of Commerce) that was simultaneously administering the city's HOT-funded tourism-marketing infrastructure AND serving as the institutional voice of the lodging industry whose interest the conference center vote materially advantaged.** That dual role is the structural test the piece can run.
+
+Texas Local Government Code Chapter 171 does *not* directly cover the Bureau board chairmanship — Bhakta did not vote on the Cinnamon Shore award. The vote was the City Council's. But **Texas Tax Code Chapter 351's HOT-spending requirements** require that HOT proceeds be spent on uses that "directly promote tourism and the convention and hotel industry." A 501(c)(6) board chairman whose own company is the contractual partner of the city's selected developer for a public-private hotel bid the city is supplying with HOT-tax incentive treatment is precisely the kind of overlap state-tax-code drafters had in mind when they wrote the "directly promote" language. **[UNVERIFIED — the question for the piece: did Bhakta's company benefit from Bureau-administered HOT-funded marketing in the years following the 2019 vote? If The Place Hotel or other ZJZ properties received Bureau marketing dollars at any point 2019–2024, the substantive question gets sharper.]**
+
+### ZJZ Hospitality's Texas portfolio — what's on the public record
+
+Per the [ZJZ Hospitality corporate website](https://www.zjzhospitality.com/), the publicly-listed property portfolio includes:
+
+| Property | Location | Brand |
+|---|---|---|
+| Embassy Suites by Hilton | Corpus Christi, TX | Hilton |
+| Studio 6 / Motel 6 Combo | Corpus Christi, TX | G6 |
+| Hampton Inn & Suites | Corpus Christi, TX | Hilton |
+| Best Western Plus Executive Residency | Corpus Christi, TX | Best Western |
+| Best Western Northwest Inn & Suites | Corpus Christi, TX | Best Western |
+| Home2 Suites by Hilton | Portland, TX | Hilton |
+| (Property #7 — name not surfaced) | South Texas | — |
+| (Property #8 — managed only) | South Texas | — |
+| **Coming Soon:** Homewood Suites Corpus Christi Downtown | Corpus Christi, TX | Hilton |
+
+**Port Aransas-specific holdings (per 2019 South Jetty reporting):** ZJZ manages **two Port Aransas hotels**:
+- **The Place Hotel** at the intersection of Cotter Avenue and Cut-off Road.
+- **Holiday Inn Express on 11th Street.**
+
+([South Jetty: Cinnamon Shore is city's pick for hotel-conference center developer](https://www.portasouthjetty.com/articles/cinnamon-shore-is-citys-pick-for-hotel-conference-center-developer/), confirming "ZJZ Hospitality manages 11 hotels in the Coastal Bend.")
+
+**Other ZJZ history:** Bhakta opened a Best Western in **Sinton, TX, in 1998** — his early-career single-property entry into Texas hospitality, before scaling to the multi-property regional operator he is today ([LHI Magazine: ZJZ Hospitality Inc.](http://www.lhimagazine.com/sections/staying-there/2317-zjz-hospitality-inc), [South Jetty: A whole lot of hospitality](https://www.portasouthjetty.com/articles/a-whole-lot-of-hospitality/)).
+
+**Embassy Suites Corpus Christi renovation:** ZJZ completed a multi-million-dollar renovation of the property in the mid-2010s ([Hotel Online: ZJZ Hospitality Completes Multi-Million Dollar Renovation of Embassy Suites Corpus Christi](https://www.hotel-online.com/news/embassy-suites-revamped-for-bright-future)). **[UNVERIFIED — confirm dates, scale, and whether any City of Corpus Christi or City of Port Aransas tax incentives were involved in the renovation financing.]**
+
+### The 2019 vote — what the public record now says
+
+**Date:** January 17, 2019.
+**Vote:** 7-0 in favor of Cinnamon Shore over Palmilla Beach.
+**Council members at vote:** Mayor **Charles Bujan**; **[UNVERIFIED — full roster of six council members in addition to Bujan; existing fact base notes Crawford was incumbent in 2019. Recommend pulling Civic Web minutes for January 2019.]**.
+**City Manager at vote:** Dave Parsons.
+**Cinnamon Shore CEO:** Jeff Lamkin.
+**ZJZ Hospitality CEO:** Deven Bhakta — **simultaneously serving as Board Chairman of the Port Aransas Chamber of Commerce / Tourism Bureau.**
+
+**Cinnamon Shore proposal terms (winning bid):**
+- **180-room hotel.**
+- **~24,000 sq ft conference space.**
+- **Marriott Autograph Collection brand** (un-branded variant of the Marriott umbrella — boutique-positioned).
+- **~125 hotel staff positions** projected.
+- **Tax-incentive package accepted:** sales-tax rebate; hotel-occupancy-tax rebate (state-offered, per HB 4347 mechanics); **NO property-tax rebate request.**
+- **Lamkin quote on incentives:** *"We're not asking the city for anything … We're writing the checks."*
+- **Lamkin quote on community framing:** *"It's more important what we don't do here than what we do do here."*
+
+**Palmilla Beach proposal terms (losing bid):**
+- Same general scope (hotel-conference center).
+- **Tax-incentive package requested:** sales-tax rebate; hotel-occupancy-tax rebate; **AND property-tax rebate** (the third item is what the existing fact base correctly identifies as the differentiator).
+
+**Supporting team on Cinnamon Shore winning bid:**
+- Schnell Urban Design LLC
+- 5G Studio Collaborative (lead architect)
+- Turner Ramirez Architects
+- Jeffrey Berkus Architects
+- Legacy Ventures (food/beverage)
+- WTS International (spa)
+- APD Construction
+- **ZJZ Hospitality** (hotel management partner)
+
+The **Cinnamon Shore + ZJZ + Schnell + Atlanta-Sea-Oats partnership** is the same intellectual-and-business team that has executed every Cinnamon Shore phase since 2007. ZJZ's role is the operational bridge from real-estate development to hotel operations.
+
+**Post-vote project timeline (per the original 2019 reporting):**
+- Two-month planning phase (wrapping by April 2019).
+- State comptroller approval (additional months — required under HB 4347 mechanics for HOT incentives).
+- Development agreement deadline: September 1, 2019 (per state legislation).
+- Original groundbreaking target: **Fall 2021.**
+- Original opening target: **Fall 2024.**
+
+**What actually happened:** the project was substantially relocated. By August 2020, Lamkin was proposing a *new* conference-center site on the **west side of State Highway 361, two miles north of Cinnamon Shore South** (the 500-acre Brookdale parcel) ([CCBizNews: Cinnamon Shore wins Port A convention center bid](https://www.ccbiznews.com/news/cinnamon-shore-wins-port-a-convention-center-bid)). **[UNVERIFIED — current April 2026 status of the conference center project: location, groundbreaking date, opening date. Recommend single CivicWeb pull of council minutes for any Cinnamon Shore conference center development-agreement updates 2020–2026.]**
+
+### The 2019 RFP / RFQ process — hard data still missing
+
+**[UNVERIFIED — single-step recovery via Texas Public Information Act]:**
+- The original Request for Qualifications / Request for Proposals (RFQ/RFP) document the city issued to solicit bids.
+- The full bid documents from Cinnamon Shore and Palmilla Beach.
+- The evaluation rubric / scorecard the city used to award 7-0.
+- The economic-development-corporation / staff-recommendation memo to council.
+- The Bhakta CIQ filing — if any — disclosing his Bureau board chairmanship in connection with the ZJZ component of the Cinnamon Shore bid.
+- The committee-of-council minutes from the deliberation phase before the final vote.
+
+**The Bhakta CIQ question is the single sharpest one:** under **Texas Local Government Code Chapter 176**, **vendors** doing business with the city must file **Form CIQ**. ZJZ Hospitality was a contractual co-principal on the winning bid for a city public-private partnership. ZJZ's CEO (Bhakta) was simultaneously the Board Chairman of the Tourism Bureau, which has a contract with the city to receive HOT-tax pass-through revenue. Whether Bhakta — or ZJZ Hospitality as a vendor — filed a CIQ disclosing the Bureau-board-chair relationship before, during, or after the 2019 vote is the single highest-leverage filing-disclosure question for the piece. **[UNVERIFIED — single Texas Public Information Act request to the City Secretary for any CIQ filing by Deven Bhakta or ZJZ Hospitality 2018–2021. If no filing exists, the structural overlap was undisclosed; if a filing exists, the piece can quote it.]**
+
+### ZJZ properties developed *inside* Cinnamon Shore post-2019
+
+**[UNVERIFIED — recommend search of City of Port Aransas building-permit records 2019–2026 for any permits issued to ZJZ Hospitality, ZJZ-affiliated entities, or Cinnamon Shore-related entities for hotel construction inside Cinnamon Shore boundaries. The 180-room hotel from the 2019 RFP either materialized (in which case there's a permit), pivoted (in which case the development agreement was modified), or stalled (in which case the RFP award has unrealized obligations).]** The existing fact base notes the project has migrated geographically — first proposed inside Cinnamon Shore, then proposed at the west-of-361 Brookdale parcel two miles north. The shifting project location is itself a structural fact: **a 7-0 council vote in 2019 awarded a project that, six years later, has not been built where it was awarded to be built**. That alone is a story.
+
+### Texas Ethics Commission CIQ / disclosure-statement search
+
+Beyond the City of Port Aransas's posted Conflicts Disclosure page, **the Texas Ethics Commission** maintains some local-government-officer disclosure infrastructure ([TEC Local Filers / Conflict-of-Interest Forms](https://www.ethics.texas.gov/filers/local/conflict-interest-forms/)). However, **the actual filings under Chapter 176 go to the local government (the City) and not to the TEC** — meaning the City Secretary's office, not Austin, holds the records. **[UNVERIFIED — single FOIA to Port Aransas City Secretary Francisca Nixon: any CIQ or CIS filings by Deven Bhakta, ZJZ Hospitality, Sea Oats Group, Jeff Lamkin, or affiliated entities, 2017–2024. This is the same FOIA the existing fact base recommends in its Open Questions section, but with the Bhakta/ZJZ name-list now sharpened.]**
+
+### What this section adds to the working thesis
+
+**The Tourism Bureau board chairmanship was not a generic civic role for Bhakta — it was, during 2019, an active operational position at the institution that received HOT-tax pass-through from the same city council that simultaneously voted his company (ZJZ Hospitality) the public-private hospitality contract.** That's not a structural inference; it's a documented overlap with three independent press accounts confirming each leg (the South Jetty 7-0 vote story; the South Jetty Hentz-departure story signed by Bhakta as chair; the 2016 South Jetty year-end roundup placing Bhakta on the board as Treasurer two years before).
+
+**The single hardest fact:** Bhakta was the Bureau's Board Chairman in 2019 and 2020 **continuously**. The 2019 7-0 vote awarding ZJZ Hospitality the contract **happened during his tenure**. The 2020 Hentz departure announcement was **signed by him**. The 2020 Stawar hire was **conducted under his chairmanship**.
+
+**The smoking-gun candidate** — and the candor to label it correctly — is *not* "Bhakta voted on his own contract" (he didn't; the City Council did). It is "Bhakta chaired the entity simultaneously receiving HOT-tax pass-through from the same city granting his company a public-private hospitality contract, and there is no indexed CIQ/CIS filing on the public record disclosing the overlap." The ethics question lives in the *absence* of disclosure as much as in the presence of overlap.
+
+### The thinnest part of this section
+
+Three load-bearing assumptions remain UNVERIFIED:
+1. **Bhakta's exact tenure dates as Bureau board chair** — "second consecutive year" Facebook language is not date-stamped, and his entry/exit from the chairmanship is not pinned down beyond the Hentz/Stawar window.
+2. **No CIQ/CIS filing** — the absence is asserted, not affirmatively verified. A FOIA may surface a filing the public-press archive missed.
+3. **The 2019 RFP/RFQ scoring rubric** — without it, the 7-0 vote looks more like ratification than evaluation, but that may be a function of the records reviewed not capturing the staff-recommendation deliberation. The piece should not characterize the 7-0 vote as "rubber-stamp" without either (a) the scoring rubric showing Cinnamon Shore objectively won on metrics, or (b) the absence of any rubric showing the vote was *not* metric-driven.
+
+The sharpest single research move to close all three gaps: **a single Texas Public Information Act request to the Port Aransas City Secretary covering (a) the 2019 hotel-conference-center RFP/RFQ documents and evaluation materials, (b) all CIQ/CIS filings by Bhakta, ZJZ Hospitality, Sea Oats Group, or Jeff Lamkin 2017–2024, and (c) all council-meeting minutes and staff memos referencing the conference-center project 2018–2026.** That FOIA package would close ~80% of the verification gap in this section.
 
 ---
 
