@@ -1,11 +1,10 @@
 import Link from "next/link";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import LighthouseMark from "@/components/brand/LighthouseMark";
-import EnablePushButton from "@/components/push/EnablePushButton";
 import ActivityFeed from "@/components/wheelhouse/ActivityFeed";
 import PalStatsCard from "@/components/wheelhouse/PalStats";
 import ThreadCard from "@/components/wheelhouse/ThreadCard";
+import WheelhouseHeader from "@/components/wheelhouse/WheelhouseHeader";
 import {
   getPalStats,
   getRecentActivity,
@@ -56,65 +55,7 @@ export default async function WheelhousePage({
 
   return (
     <main className="min-h-screen bg-sand-50 overflow-x-hidden">
-      {/* Top bar — w-full guards against any horizontal overflow on the
-          page making the navy bar visually short of the right edge. */}
-      <header className="w-full bg-navy-900 text-sand-100 border-b border-coral-500/20">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between gap-4">
-          <Link
-            href="/wheelhouse"
-            className="flex items-center gap-3 hover:opacity-80 transition-opacity"
-          >
-            <LighthouseMark size={32} variant="light" detail="icon" />
-            <div>
-              <p className="font-display text-lg font-bold text-sand-50 leading-none">
-                The Wheelhouse
-              </p>
-              <p className="text-[10px] tracking-widest uppercase text-coral-300 mt-0.5">
-                Port A Local · Internal
-              </p>
-            </div>
-          </Link>
-          <div className="flex items-center gap-4 text-sm">
-            <EnablePushButton
-              subscriberKind="wheelhouse-participant"
-              subscriberId={me.id}
-              compact
-              enableLabel="Enable alerts"
-              onLabel="Alerts on"
-            />
-            <Link
-              href="/wheelhouse/payouts"
-              className="text-xs text-navy-300 hover:text-coral-300 underline decoration-navy-500 hover:decoration-coral-400"
-            >
-              Payouts
-            </Link>
-            <Link
-              href="/wheelhouse/locals-resend"
-              className="text-xs text-navy-300 hover:text-coral-300 underline decoration-navy-500 hover:decoration-coral-400"
-            >
-              Locals re-fire
-            </Link>
-            <Link
-              href="/wheelhouse/welcome"
-              className="text-xs text-navy-300 hover:text-coral-300 underline decoration-navy-500 hover:decoration-coral-400"
-            >
-              Help
-            </Link>
-            <span className="text-navy-300 hidden sm:inline">
-              Signed in as{" "}
-              <span className="text-sand-50 font-semibold">{me.name}</span>
-            </span>
-            <form action="/api/wheelhouse/logout" method="POST">
-              <button
-                type="submit"
-                className="text-xs text-navy-300 hover:text-coral-300 underline decoration-navy-500 hover:decoration-coral-400"
-              >
-                Sign out
-              </button>
-            </form>
-          </div>
-        </div>
-      </header>
+      <WheelhouseHeader meId={me.id} meName={me.name} />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
         <ActivityFeed activity={activity} />
