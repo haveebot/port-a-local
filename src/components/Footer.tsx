@@ -2,6 +2,7 @@ import Link from "next/link";
 import { categories } from "@/data/categories";
 import LighthouseMark from "@/components/brand/LighthouseMark";
 import PortalIcon, { type PortalIconName } from "@/components/brand/PortalIcon";
+import FooterAlertsSubscribe from "@/components/FooterAlertsSubscribe";
 
 export default function Footer() {
   return (
@@ -211,6 +212,9 @@ export default function Footer() {
             </ul>
           </div>
         </div>
+
+        {/* Alerts subscribe — global opt-in (covers site banner + emergency events) */}
+        <FooterAlertsSubscribe />
 
         {/* Coordinates masthead strip */}
         <div className="pt-8 pb-6 border-t border-navy-800 flex flex-col sm:flex-row items-center justify-between gap-3">

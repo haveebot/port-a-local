@@ -7,6 +7,7 @@ import {
   getAlertHistory,
   type AlertSeverity,
 } from "@/data/alerts-store";
+import { pushSiteBanner } from "@/lib/emergencyPush";
 
 async function getWheelhouseUser(): Promise<string | null> {
   const cookieStore = await cookies();
@@ -81,6 +82,12 @@ export async function POST(req: NextRequest) {
     expiresAt: body.expiresAt?.trim() || undefined,
     createdBy: user,
   });
+  // Fan out push to every emergency-topic subscriber. Severity-gated
+  // inside pushSiteBanner — info-tier announcements skip push.
+  // Fire-and-forget so a push hiccup never rolls back the alert write.
+  pushSiteBanner(alert).catch((err) =>
+    console.error("[wh/alerts] push on create failed:", err),
+  );
   return NextResponse.json({ ok: true, alert });
 }
 

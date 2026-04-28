@@ -24,6 +24,7 @@ import {
   getSubscriptionsByKind,
   markPushed,
 } from "@/data/push-subscriptions-store";
+import type { PALAlert } from "@/data/alerts-store";
 import type {
   EmergencyEvent,
   EmergencyUpdate,
@@ -106,5 +107,26 @@ export async function pushEmergencyUpdate(
     body: update.body.slice(0, 180),
     url,
     tag: `emergency-${event.id}`, // same tag as the event = replaces stale
+  });
+}
+
+/**
+ * Fired when admin creates a site banner via /wheelhouse/alerts.
+ *
+ * Severity-gated: only warning + critical wake the phone. Info-tier
+ * banners (community announcements like 4th of July fireworks or
+ * graduation reminders) show on the site but skip push — community
+ * announcements don't deserve a 9 PM lock-screen ping. The banner
+ * itself still appears on every page either way.
+ */
+export async function pushSiteBanner(alert: PALAlert): Promise<void> {
+  if (alert.severity === "info") return;
+  const url = alert.linkUrl?.trim() || `${APP_URL}/`;
+  const sevPrefix = alert.severity === "critical" ? "🚨 Critical" : "⚠️ Advisory";
+  await fanOut({
+    title: `${sevPrefix} · Port Aransas`,
+    body: alert.message.slice(0, 180),
+    url,
+    tag: `pal-alert-${alert.id}`,
   });
 }
