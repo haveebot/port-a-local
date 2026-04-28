@@ -375,6 +375,24 @@ These came from Winston (publisher) during the 2026-04-28 fact-base-extension se
 
 ---
 
+## Editorial phrases — Winston-locked (use in the draft)
+
+These are exact lines Winston wants the published piece to land on. They sit here so the eventual draft anchors on them rather than re-inventing.
+
+### The thesis line
+
+> **"Leadership decides what happens to a town — not culture or destiny."**
+
+This is the piece's argumentative core. Refinement of Tybee's "Geography isn't destiny; council composition is" — sharper, tighter, broader. Use as: a callout near the top of the piece (post-lede), and again as the closing line that pivots into the recommend-this-fix paragraph (Bar Harbor / Tybee citizen-initiated ballot path). Possible piece subtitle if Collie wants one.
+
+### Companion lines from research worth keeping in the bank
+
+> **"Geography isn't destiny; council composition is."** — paraphrase of the Tybee Island, GA lesson (June 2024 STR-restriction vote, 4-1, Mayor West a retired PT business owner). Cite as Tybee comparable; pair with Winston's tighter "leadership decides" reformulation.
+
+> **"If there are no homes, I can't fill positions."** — Telluride CO (school district / workforce-housing bond context). Use as the workforce-collapse pull quote. Mirror onto PAISD enrollment trajectory.
+
+---
+
 ## Comparable-town governance (4 comparables with shape + lessons)
 
 ### South Padre Island, TX
