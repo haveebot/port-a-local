@@ -25,8 +25,13 @@ export default async function AppleIcon() {
           backgroundColor: "#0b1120",
         }}
       >
+        {/* Lighthouse drawn at 100×100 inside the 180×180 frame —
+            ~22% margin on each side keeps the icon inside iOS's
+            home-screen rounded-rect mask without clipping. The
+            previous 160px size left only ~6% margin and got
+            visually trimmed in some launcher tiles. */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={lighthouseFull} width={160} height={160} alt="" />
+        <img src={lighthouseFull} width={100} height={100} alt="" />
       </div>
     ),
     { ...size }
