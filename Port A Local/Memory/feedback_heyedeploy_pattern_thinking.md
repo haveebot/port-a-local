@@ -90,9 +90,32 @@ When a build brief is template-replication (e.g., the Stripe Connect onboarding 
 | Memory mirror sync | PAL: `scripts/sync-memory.sh` whitelist-based | (in-line in script header) | LOCKED 2026-04-26 (Sprint E) |
 | Context-handoff "truck" | session-end ritual | `feedback_context_handoff.md` | LOCKED 2026-04-27 |
 | Startup-drill "arnold" | session-start ritual | `feedback_arnold_startup_drill.md` | LOCKED 2026-04-27 |
+| **Web push portal — multi-role + alerts unified** | PAL: `src/data/push-subscriptions-store.ts` + `src/lib/{wheelhousePush,cartVendorPush,localsSellerPush,restaurantPush,emergencyPush}.ts` + `src/components/push/EnablePushButton.tsx` + `src/app/api/push/{subscribe,unsubscribe}/route.ts` + generalized `public/sw.js` + manifest icons via `src/lib/pwaLighthouseSvg.ts` | TBD — file once second tenant lands the same shape | LOCKED 2026-04-28 (single-session build) |
 | Stripe Connect Express onboarding | PAL: `src/app/api/deliver/driver/connect/*` + signup form | TBD — file when sell-mode vendor Connect ships (the second build inside PAL — third copy across projects elevates it) | designed, second copy in flight |
 | Magic-link approval/reject (HMAC) | PAL: `src/app/api/deliver/runner/{approve,reject}/route.ts` + locals offer equivalents | TBD — file when third instance ships | live, two implementations |
 | Email cascade (paid → vendor + customer + admin) | PAL: `src/lib/{deliverEmails,localsBuyEmails,housekeepingEmails}.ts` | TBD — file once 3+ verticals are stable | live, three implementations |
+
+### Why the web-push portal is a HeyeDeploy template (not just a PAL feature)
+
+Every Heye Lab project ships with the same shape of push need: an internal ops dashboard, multiple vendor/role surfaces, and (for tenant-types like CityDeploy / future verticals) a citizen-facing alerts stream. PAL's 2026-04-28 push build crystallized the entire pattern in one session — meaning the second tenant doesn't get a custom build, they get a transplant.
+
+**The pattern bits (what carries across projects):**
+- **One generic `push_subscriptions` table** keyed on `(subscriber_kind, subscriber_id)` + `endpoint` UNIQUE. Schema self-bootstraps via `ensureSchema()` on first call — zero migration overhead per tenant.
+- **One reusable `EnablePushButton` client component** with kind+id props. iOS-aware (Add to Home Screen guidance baked in). Reversible toggle (tap to unsubscribe). Light/dark variants for theme flexibility.
+- **One generalized service worker** (`/sw.js`) handling every push role via `payload.url` routing. Tab-reuse logic matches first path segment so notifications open the right existing tab.
+- **Per-role push fan-out files** (`<role>Push.ts`) follow identical shape: try/catch outer, fan-out inner, expired-pruning, mark-pushed, never throws. One file per kind, ~50 lines each — high template fidelity.
+- **VAPID infrastructure** (3 env vars) sets up once per tenant — `npx web-push generate-vapid-keys` → Vercel Sensitive vars → done forever.
+- **Severity-tiered emoji prefix** in lock-screen titles (🚨 / ⚠️ / 📍) — same pattern works for any tenant's alert system.
+- **Unified opt-in pool** — banner + event push share one customer-topic subscription. Visitors tap once, get the full stream. Reframe to lead with community benefit, not just emergencies.
+
+**The project-specific bits (what each tenant customizes):**
+- The list of `SubscriberKind` values (PAL has wheelhouse-participant + cart-vendor + locals-seller + restaurant + housekeeping-vendor + customer-topic; Sage Em would have agency-specific kinds; CrossRef electrical/lighting kinds)
+- The trigger points (which DB writes / route handlers / webhooks fire which push)
+- The lock-screen copy + URLs (deep-link conventions per tenant)
+- The icon assets (each tenant's lighthouse-equivalent — but the SVG-via-Satori pattern carries; remember Satori can't parse `rotate()` transforms, use simple paths)
+- The opt-in copy (lead with brand-appropriate benefit; PAL's "Get the call before everyone else" works for local-marketplace tenants but each vertical has its own framing)
+
+**File the pattern doc when:** the second tenant lands a push system using this shape (likely CrossRef beta or first non-PAL CityDeploy tenant). Doc title: `feedback_web_push_portal_cross_project_pattern.md`. Add to `sync-memory.sh` whitelist.
 
 ---
 

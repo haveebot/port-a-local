@@ -8,6 +8,55 @@ originSessionId: 35a4d1eb-635d-424f-a8eb-a22e66a74d90
 
 **Operating model:** Winston makes product decisions and handles local relationships. Claude builds, maintains, deploys, and organizes everything else. Goal is a lean two-person operation.
 
+## Current State (as of 2026-04-28 PM — push notification portal + alerts unification)
+
+This session was a single focused build: PAL's web push notification system, end-to-end, across every role. Started from "wheelhouse push only fires email" and ended with a complete cross-role push portal — internal ops + every vendor surface + city-wide alerts — plus a unified opt-in pattern that every Heye Lab tenant will inherit. **12 commits in one session** (`6bf95de` through `0c2144e`). All shipped clean on main.
+
+**The push portal — server side:**
+- **Generic `push_subscriptions` table** (`src/data/push-subscriptions-store.ts`) — one Postgres table for every subscriber kind: `wheelhouse-participant`, `cart-vendor`, `locals-seller`, `restaurant`, `housekeeping-vendor`, `customer-topic`. Endpoint-keyed (unique device-channel ID), with helpers `upsertSubscription`, `getSubscriptionsFor` (targeted), `getSubscriptionsByKind` (blast), `markPushed`, `deleteSubscription`, `countSubscriptionsFor`.
+- **Service worker generalized** (`public/sw.js`, version `pal-push-2`) — single SW handles every PAL push role; click-routing by `payload.url` instead of hard-coded `/deliver/driver`. Reuses existing tab when first path segment matches (so a Wheelhouse notification opens the existing wheelhouse tab, not the runner tab).
+- **Per-role push libs** — `src/lib/wheelhousePush.ts` (awaiting:* state transitions), `src/lib/cartVendorPush.ts` (new bookings, blast fan-out), `src/lib/localsSellerPush.ts` (sale closed, targeted to seller's offerId), `src/lib/restaurantPush.ts` (paid order, targeted to restaurantId), `src/lib/emergencyPush.ts` (event + update + site banner, customer-topic fan-out). Same defensive shape every time: try/catch, expired-pruning, mark-pushed, never throws back to caller.
+
+**The push portal — client side:**
+- **Reusable `EnablePushButton`** (`src/components/push/EnablePushButton.tsx`) — drop-in client component. Props: `subscriberKind`, `subscriberId`, `compact?`, `dark?`, `enableLabel?`, `onLabel?`. iOS-aware: detects Safari + standalone-mode and shows "Add to Home Screen" guidance when push isn't yet available. Toggle is reversible: tap green pill or button to unsubscribe (calls `pushManager.unsubscribe()` + `/api/push/unsubscribe` → DB row delete keyed on endpoint).
+- **Subscribe surfaces shipped:**
+  - Wheelhouse header — compact pill, always visible (status indicator, never hides)
+  - `/rent/vendor/[slug]/notify` — cart vendors (per-slug page, public, no auth — slug = network membership)
+  - `/locals/vendor/[offerId]` — locals sellers, inline card on existing magic-link portal
+  - `/deliver/restaurant/[slug]/notify` — restaurants, multi-device kitchen-tablet setup steps
+  - `/emergency` — public alerts (customer-topic / "emergencies")
+  - **Footer (every PAL page)** — global "Get the call before everyone else" — fireworks/parade routes/emergencies all in one tap
+
+**Wheelhouse navigation rebuilt:**
+- New `WheelhouseHeader.tsx` client component replaces inline header. Mirrors site `Navigation.tsx` pattern.
+- md+: logo → push pill → Tools dropdown (Alerts section: Site banner / Emergency events; Tools: Payouts / Locals re-fire / Help; ← Back to PAL site) → identity + sign-out
+- sm: hamburger drawer with full-height right panel (alerts / tools / PAL site sections, sign out at bottom)
+- Both alerts admin surfaces (`/wheelhouse/alerts` + `/wheelhouse/emergency`) were orphaned — now first-class in the nav
+
+**Alerts unified — banner + emergency events share one push pool:**
+- `/wheelhouse/alerts` (single banner, info/warning/critical) AND `/wheelhouse/emergency` (multi-update events) BOTH push to `customer-topic / "emergencies"`. One subscription pool — visitors tap once, get the full stream.
+- Severity drives lock-screen tone: 🚨 Critical / ⚠️ Advisory / 📍 Port Aransas (info)
+- **Pushes ALL severities** (initially gated info out, reframed per Winston's "good stuff too" feedback). Subscribers opted in for the call about fireworks AND evacuations. Alert fatigue resolves via one-tap unsubscribe, not via withholding the push.
+- Reframe across all opt-in copy: lead with community benefit ("Get the call before everyone else"), emergencies as backup. Examples cycle through fireworks, parades, graduations, ferry routes, hurricanes — in that order.
+
+**PWA install icon — finally renders:**
+- Manifest had only SVG references + a maskable PNG with 6% margin. iOS / Android both showed blank-tile placeholders.
+- New `/pwa-icon-512` + `/pwa-icon-192` route handlers + tightened `/apple-icon` — all use a transform-free lighthouse silhouette inlined in `src/lib/pwaLighthouseSvg.ts` (Satori, the next/og renderer, can't parse `rotate(-45)` transforms — first round shipped solid-navy squares because the lighthouse SVG was silently dropped). Solid navy bg + ~22% safe-zone padding for maskable rendering.
+- Verified live: 6353 bytes (blank navy round 1) → 8980 bytes (lighthouse renders, round 2).
+
+**Wheelhouse login bug fix:**
+- `router.replace()` after cookie-set was sometimes serving cached RSC from pre-login state, bouncing user back to /login. Fixed with `window.location.assign(fromPath)` so middleware sees the new cookie on a fresh request.
+
+**Other tightening:**
+- `winstonciv@gmail.com` swapped to `admin@theportalocal.com` in `wheelhousePush.ts` defaults — personal inbox out of automation
+- Defensive `w-full` + `overflow-x-hidden` on Wheelhouse page so any future child overflow doesn't make the navy bar look short of the right edge
+- VAPID keys (`VAPID_PUBLIC_KEY` / `VAPID_PRIVATE_KEY` / `VAPID_SUBJECT` / `NEXT_PUBLIC_VAPID_PUBLIC_KEY`) confirmed already in Vercel from the runner-push setup 3 days ago — push system was deploy-ready
+
+**End-to-end test passed:**
+- Subscribed Winston's device via /wheelhouse "Enable alerts"
+- Created test thread `thread-moiyjhcx-rzn9bp` ("Push test — disregard"), bounced through `open` → `awaiting:winston`
+- Push delivered + email delivered. Winston confirmed "Received". Thread closed as `done`.
+
 ## Current State (as of 2026-04-27 — full drill: cascades + discoverability)
 
 This was the day-2 continuation of the marathon (this session itself was a continuation already — first chat ran out of context mid-build on the locals-purchase ledger). Closed the automation + findability gaps Winston flagged after Sprint 3 ("is this completely clickable and findable in the site? — have we automated everything we can with at our current status/pre a2p?"). Two new portals (`/housekeeping` + locals sell-mode) were live but lacked the email cascades and discoverability hooks needed to actually function end-to-end.
