@@ -3,6 +3,7 @@ import Link from "next/link";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import LighthouseMark from "@/components/brand/LighthouseMark";
+import EnablePushButton from "@/components/push/EnablePushButton";
 import {
   getEventList,
   type EmergencyEvent,
@@ -69,6 +70,38 @@ export default async function EmergencyIndexPage() {
 
       <section className="bg-sand-50">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 py-14 space-y-12">
+          {/* Subscribe — instant push when something hits the page.
+              Persistent regardless of cold/warm state because the
+              moment to subscribe is BEFORE there's an active event,
+              not during one. */}
+          <div className="bg-navy-900 border border-coral-500/30 rounded-2xl p-6 text-sand-50">
+            <div className="flex items-start gap-4 flex-wrap sm:flex-nowrap">
+              <div className="text-3xl shrink-0">🔔</div>
+              <div className="flex-1 min-w-0">
+                <p className="font-display text-lg font-bold mb-1">
+                  Get an alert the moment something lands here.
+                </p>
+                <p className="text-sm text-navy-300 font-light leading-relaxed">
+                  Hurricane warnings, evacuation orders, road closures,
+                  water advisories — pushed straight to your phone. No
+                  account, no spam, just emergencies. Tap below and
+                  accept the prompt; install PAL via{" "}
+                  <em>Add to Home Screen</em> on iPhone for the most
+                  reliable delivery.
+                </p>
+                <div className="mt-4 max-w-xs">
+                  <EnablePushButton
+                    subscriberKind="customer-topic"
+                    subscriberId="emergencies"
+                    enableLabel="Enable emergency alerts"
+                    onLabel="Emergency alerts on"
+                    dark
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
           {active.length === 0 && watching.length === 0 ? (
             <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-8 text-center">
               <p className="font-display text-xl font-bold text-emerald-900 mb-2">

@@ -11,6 +11,10 @@ import {
   type EventStatus,
   type UpdateKind,
 } from "@/data/emergency-store";
+import {
+  pushEmergencyEvent,
+  pushEmergencyUpdate,
+} from "@/lib/emergencyPush";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -87,6 +91,11 @@ export async function POST(req: NextRequest) {
       startedAt,
       createdBy: user,
     });
+    // Fan out push to every emergency-topic subscriber. Fire-and-forget
+    // — a push failure must never roll back the event creation.
+    pushEmergencyEvent(event).catch((err) =>
+      console.error("[wh/emergency] push on create-event failed:", err),
+    );
     return NextResponse.json({ ok: true, event });
   }
 
@@ -137,6 +146,11 @@ export async function POST(req: NextRequest) {
       sourceLabel: ((body.sourceLabel as string) ?? "").trim() || undefined,
       authorId: user,
     });
+    // Fan out push for the new update on this event. Same fire-and-
+    // forget pattern + same swallow-errors discipline as create-event.
+    pushEmergencyUpdate(event, update).catch((err) =>
+      console.error("[wh/emergency] push on post-update failed:", err),
+    );
     return NextResponse.json({ ok: true, update });
   }
 
