@@ -405,6 +405,50 @@ export default function RentPage() {
         </div>
       </section>
 
+      {/* Cross-link to PAL Locals — picks up the kayaks, beach gear, jet
+          skis, fishing rods that locals rent through the other portal.
+          Two-way cross-link: /locals also links here for golf carts. */}
+      <section className="py-12 bg-sand-100 border-t border-sand-200">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Link
+              href="/locals?mode=rent"
+              className="block bg-white border border-sand-300 rounded-xl p-5 hover:border-coral-400 transition-all"
+            >
+              <p className="text-[10px] font-bold tracking-widest uppercase text-coral-600 mb-1">
+                Also from PAL Locals
+              </p>
+              <p className="font-display text-lg font-bold text-navy-900 leading-tight mb-1">
+                Beach gear · Kayaks · Watercraft
+              </p>
+              <p className="text-sm text-navy-600 font-light">
+                Locals renting their own paddleboards, jet skis, fishing
+                rods, beach trailers, and umbrellas. Direct from the
+                neighbor with the gear.
+              </p>
+              <p className="text-xs text-coral-600 mt-3">Browse local rentals →</p>
+            </Link>
+            <Link
+              href="/locals/offer?mode=rent&cat=watercraft"
+              className="block bg-navy-900 text-sand-100 border border-coral-500/30 rounded-xl p-5 hover:border-coral-500/60 transition-all"
+            >
+              <p className="text-[10px] font-bold tracking-widest uppercase text-coral-300 mb-1">
+                Got a cart to rent?
+              </p>
+              <p className="font-display text-lg font-bold leading-tight mb-1">
+                List your cart on PAL.
+              </p>
+              <p className="text-sm text-sand-300 font-light">
+                We&apos;re building the local cart-rental marketplace.
+                Tell us what you&apos;ve got — we&apos;ll send the
+                renters to you.
+              </p>
+              <p className="text-xs text-coral-300 mt-3">Apply to list →</p>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       <Footer />
     </main>
   );

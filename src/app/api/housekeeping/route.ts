@@ -47,6 +47,8 @@ export async function POST(req: NextRequest) {
     notes?: string;
     preferredDate?: string;
     preferredTime?: string;
+    mode?: "pay" | "quote";
+    emergency?: boolean;
   };
   try {
     body = await req.json();
@@ -59,41 +61,80 @@ export async function POST(req: NextRequest) {
   const customerEmail = (body.customerEmail ?? "").trim();
   const propertyAddress = (body.propertyAddress ?? "").trim();
   const propertySqft = Number(body.propertySqft ?? 0);
+  const mode: "pay" | "quote" = body.mode === "quote" ? "quote" : "pay";
+
+  // Quote mode: sqft is optional (the customer might not know it; the
+  // whole point is we'll quote them). Pay mode: sqft is required for
+  // the live estimate -> Stripe Checkout.
+  const sqftRequired = mode === "pay";
+  const sqftValid =
+    Number.isFinite(propertySqft) &&
+    propertySqft >= 200 &&
+    propertySqft <= 20000;
 
   if (
     customerName.length < 2 ||
     customerPhone.replace(/\D/g, "").length < 10 ||
     !customerEmail.includes("@") ||
     propertyAddress.length < 5 ||
-    !Number.isFinite(propertySqft) ||
-    propertySqft < 200 ||
-    propertySqft > 20000
+    (sqftRequired && !sqftValid)
   ) {
     return NextResponse.json(
       {
         error:
-          "Need full name, phone, email, property address, and a realistic square footage (200–20000).",
+          mode === "pay"
+            ? "Need full name, phone, email, property address, and a realistic square footage (200–20000) to give you the live price."
+            : "Need full name, phone, email, and property address. We'll quote scope after we hear from you.",
       },
       { status: 400 },
     );
   }
 
-  const estimatedHours = estimateCleaningHours(propertySqft);
-  const totalCents = calculateHousekeepingTotalCents(estimatedHours);
+  // Emergency fee: $50 flat surcharge for sub-24-hour turnaround.
+  // Pay mode only — quote mode prices everything case-by-case.
+  const EMERGENCY_FEE_CENTS = 5000;
+  const isEmergency = mode === "pay" && body.emergency === true;
+
+  // Hours + base price only computed in pay mode; in quote mode we
+  // store 0/0 placeholders and let PAL fill them in when the quote is
+  // sent.
+  const estimatedHours =
+    mode === "pay" ? estimateCleaningHours(propertySqft) : 0;
+  const baseTotalCents =
+    mode === "pay" ? calculateHousekeepingTotalCents(estimatedHours) : 0;
+  const emergencyFeeCents = isEmergency ? EMERGENCY_FEE_CENTS : 0;
+  const totalCents = baseTotalCents + emergencyFeeCents;
 
   const booking = await createHousekeepingBooking({
     customerName,
     customerPhone,
     customerEmail,
     propertyAddress,
-    propertySqft,
+    propertySqft: sqftValid ? propertySqft : 0,
     estimatedHours,
     serviceTier: body.serviceTier ?? "standard",
     notes: body.notes?.trim() || undefined,
     preferredDate: body.preferredDate?.trim() || undefined,
     preferredTime: body.preferredTime?.trim() || undefined,
     totalCents,
+    mode,
+    emergencyFeeCents,
+    status: mode === "quote" ? "quote-requested" : "placed",
   });
+
+  // Quote mode: no Stripe call. Just record + return — the form
+  // success state handles the "we'll get back to you" UX.
+  // (Email cascade for admin notification could fire here; v1 is the
+  // existing housekeeping-dispatch helper which already mirrors to
+  // Wheelhouse on placed→paid; we can add a quote-requested branch
+  // later if Winston wants louder signal.)
+  if (mode === "quote") {
+    return NextResponse.json({
+      ok: true,
+      mode: "quote",
+      bookingId: booking.id,
+    });
+  }
 
   if (!getStripeKey()) {
     return NextResponse.json(
@@ -116,10 +157,26 @@ export async function POST(req: NextRequest) {
               name: `Housekeeping — ${estimatedHours}-hour cleaning`,
               description: `${propertyAddress} · ~${propertySqft} sqft · Local Girls Cleaning`,
             },
-            unit_amount: totalCents,
+            unit_amount: baseTotalCents,
           },
           quantity: 1,
         },
+        ...(isEmergency
+          ? [
+              {
+                price_data: {
+                  currency: "usd" as const,
+                  product_data: {
+                    name: "Emergency / quick-turnaround fee",
+                    description:
+                      "Flat surcharge for sub-24-hour scheduling on this booking.",
+                  },
+                  unit_amount: emergencyFeeCents,
+                },
+                quantity: 1,
+              },
+            ]
+          : []),
       ],
       success_url: `${APP_URL}/housekeeping/success/${booking.id}?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${APP_URL}/housekeeping?canceled=1`,

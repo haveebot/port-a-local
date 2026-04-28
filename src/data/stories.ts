@@ -450,9 +450,9 @@ export const stories: Story[] = [
   },
   {
     slug: "charles-bujan",
-    title: "The Boy Born on the Ferry",
+    title: "Charles Bujan — The Boy Born on the Ferry",
     subtitle:
-      "Born during a 1944 ferry crossing. Came home to lead Port Aransas through Hurricane Harvey and the nine-year recovery that followed.",
+      "Born during a 1944 ferry crossing. Came home to lead Port Aransas through Hurricane Harvey and the recovery he didn't live to see finished.",
     description:
       "Charles Robert Bujan (1944–2022) was born on the Port Aransas–Corpus Christi ferry, spent 25 years away at Prudential in New Jersey, came home in his sixties, lost his first city council race, won the next four, took office as mayor at 71, and ordered the mandatory evacuation that emptied Port Aransas twelve hours before Hurricane Harvey's Category 4 landfall in 2017. Zero deaths in the city. The Charles R. Bujan Public Safety Building was ribbon-cut in April 2026, eight and a half years after the storm — paid for in part by the FEMA money he spent the last four years of his life arguing for.",
     category: "heritage",

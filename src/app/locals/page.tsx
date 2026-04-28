@@ -214,8 +214,32 @@ export default async function LocalsPage({
           })}
         </div>
 
+        {/* Cross-link to /rent — golf carts have their own pipeline. */}
+        <section className="mt-10 bg-sand-100 border border-sand-200 rounded-xl p-5 sm:p-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div>
+              <p className="text-[10px] font-bold tracking-widest uppercase text-coral-600 mb-1">
+                Looking for a golf cart?
+              </p>
+              <p className="font-display text-lg font-bold text-navy-900 leading-tight">
+                Reserve via PAL Carts.
+              </p>
+              <p className="text-sm text-navy-600 font-light mt-1">
+                Vetted cart vendors, $10/day reservation fee, $20 off the
+                vendor&apos;s daily rate, pickup or delivery.
+              </p>
+            </div>
+            <Link
+              href="/rent"
+              className="px-5 py-3 rounded-lg btn-coral text-sm font-bold tracking-wide whitespace-nowrap"
+            >
+              Reserve a cart →
+            </Link>
+          </div>
+        </section>
+
         {/* Provider CTAs */}
-        <section className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <section className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Link
             href="/locals/offer?mode=rent"
             className="block bg-navy-900 text-sand-100 border border-coral-500/30 rounded-xl p-6 hover:border-coral-500/60 transition-all"
@@ -228,7 +252,8 @@ export default async function LocalsPage({
             </p>
             <p className="text-sm text-sand-300 font-light">
               Beach gear sitting in your garage. A jet ski you use twice a
-              year. A spare paddleboard. List it — we route renters to you.
+              year. A spare paddleboard. A cart fleet. List it — we route
+              renters to you.
             </p>
             <p className="text-xs text-coral-300 mt-3">Get started →</p>
           </Link>

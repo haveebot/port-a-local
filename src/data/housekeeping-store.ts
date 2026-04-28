@@ -42,16 +42,27 @@ async function ensureSchema(): Promise<void> {
       placed_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     )
   `;
+  // Pay-now vs request-a-quote split + emergency-fee surcharge
+  // (added 2026-04-28). 'pay' mode goes through Stripe Checkout
+  // immediately; 'quote' mode records the request and waits for
+  // PAL to email a custom quote (no Stripe call). Emergency fee
+  // is a flat surcharge for sub-24-hour turnaround on pay mode.
+  await sql`ALTER TABLE housekeeping_bookings ADD COLUMN IF NOT EXISTS mode TEXT NOT NULL DEFAULT 'pay'`;
+  await sql`ALTER TABLE housekeeping_bookings ADD COLUMN IF NOT EXISTS emergency_fee_cents INTEGER NOT NULL DEFAULT 0`;
   _schemaReady = true;
 }
 
 export type BookingStatus =
   | "placed"
   | "paid"
+  | "quote-requested"
+  | "quote-sent"
   | "dispatched"
   | "in_progress"
   | "completed"
   | "canceled";
+
+export type BookingMode = "pay" | "quote";
 
 export interface HousekeepingBooking {
   id: string;
@@ -74,6 +85,11 @@ export interface HousekeepingBooking {
   dispatchedAt: string | null;
   completedAt: string | null;
   placedAt: string;
+  /** 'pay' = Stripe Checkout upfront. 'quote' = manual quote workflow. */
+  mode: BookingMode;
+  /** Emergency-fee surcharge (cents) added on pay mode for sub-24-hour
+      turnaround. Zero for quote mode + standard pay. */
+  emergencyFeeCents: number;
 }
 
 function rowToBooking(row: Record<string, unknown>): HousekeepingBooking {
@@ -104,6 +120,8 @@ function rowToBooking(row: Record<string, unknown>): HousekeepingBooking {
       ? new Date(row.completed_at as string).toISOString()
       : null,
     placedAt: new Date(row.placed_at as string).toISOString(),
+    mode: ((row.mode as string) ?? "pay") as BookingMode,
+    emergencyFeeCents: Number(row.emergency_fee_cents ?? 0),
   };
 }
 
@@ -119,6 +137,10 @@ export interface CreateBookingInput {
   preferredDate?: string;
   preferredTime?: string;
   totalCents: number;
+  mode?: BookingMode;
+  emergencyFeeCents?: number;
+  /** Initial status — overrides default 'placed' for quote mode. */
+  status?: BookingStatus;
 }
 
 function newBookingId(): string {
@@ -135,7 +157,7 @@ export async function createHousekeepingBooking(
       id, customer_name, customer_phone, customer_email,
       property_address, property_sqft, estimated_hours,
       service_tier, notes, preferred_date, preferred_time,
-      total_cents
+      total_cents, status, mode, emergency_fee_cents
     ) VALUES (
       ${id},
       ${input.customerName},
@@ -148,7 +170,10 @@ export async function createHousekeepingBooking(
       ${input.notes ?? null},
       ${input.preferredDate ?? null},
       ${input.preferredTime ?? null},
-      ${input.totalCents}
+      ${input.totalCents},
+      ${input.status ?? "placed"},
+      ${input.mode ?? "pay"},
+      ${input.emergencyFeeCents ?? 0}
     )
   `;
   const booking = await getHousekeepingBooking(id);

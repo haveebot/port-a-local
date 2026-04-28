@@ -23,6 +23,43 @@ export default async function RunnersLeaderboardPage() {
     .filter((e) => e.weekCount > 0 || e.totalCount > 0)
     .slice(0, 20);
 
+  // Build the "live ticker" marketing lines — real data dressed up as
+  // social proof. Rotates through whichever real stat is most useful
+  // for the current state. Fabricated-review energy, real numbers.
+  const tickerLines: string[] = [];
+  const topToday = board.entries
+    .filter((e) => e.todayCount > 0)
+    .sort((a, b) => b.todayCents - a.todayCents)[0];
+  const topWeek = board.entries
+    .filter((e) => e.weekCount > 0)
+    .sort((a, b) => b.weekCents - a.weekCents)[0];
+  if (topToday) {
+    tickerLines.push(
+      `Driver #${topToday.signupNumber} · ${topToday.todayCount} run${topToday.todayCount === 1 ? "" : "s"} today · ${fmt(topToday.todayCents)} earned`,
+    );
+  }
+  if (board.activeRunnerCount > 0) {
+    tickerLines.push(
+      `${board.activeRunnerCount} ${board.activeRunnerCount === 1 ? "driver is" : "drivers are"} on the road right now`,
+    );
+  }
+  if (topWeek && topWeek !== topToday) {
+    tickerLines.push(
+      `Driver #${topWeek.signupNumber} · ${topWeek.weekCount} runs this week · ${fmt(topWeek.weekCents)} earned`,
+    );
+  }
+  if (board.weekTotalCents > 0) {
+    tickerLines.push(
+      `${fmt(board.weekTotalCents)} paid out to PAL drivers this week`,
+    );
+  }
+  // Cold-start fallback — never an empty ticker.
+  if (tickerLines.length === 0) {
+    tickerLines.push(
+      "Be the first run today — apply, get on duty, claim the first order that lands.",
+    );
+  }
+
   return (
     <main className="min-h-screen bg-navy-900 text-sand-50">
       <Navigation />
@@ -52,6 +89,28 @@ export default async function RunnersLeaderboardPage() {
             <span className="text-sm sm:text-base text-emerald-100 font-light">
               welcome bonus on your first delivery — auto-paid to your bank
             </span>
+          </div>
+
+          {/* Live ticker — real numbers, marketing-grade copy. Rotates
+              through current top-earner today, active runner count, top
+              earner this week, weekly payout total. Cold-start safe. */}
+          <div className="mt-6 max-w-xl mx-auto">
+            <div className="flex flex-col gap-1.5">
+              {tickerLines.slice(0, 3).map((line, i) => (
+                <div
+                  key={i}
+                  className="flex items-center gap-2.5 px-4 py-2 rounded-lg bg-navy-800/60 border border-navy-700"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+                  <span className="text-xs sm:text-sm text-sand-200 font-mono tabular-nums leading-relaxed text-left">
+                    {line}
+                  </span>
+                </div>
+              ))}
+            </div>
+            <p className="text-[10px] text-sand-500 font-light mt-2 tracking-wider">
+              Live · updates with every delivery
+            </p>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center mt-7">
