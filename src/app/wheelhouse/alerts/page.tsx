@@ -47,8 +47,9 @@ export default async function AlertsAdminPage() {
           Site-wide banner
         </p>
         <p className="text-sm text-sand-300 font-light mt-1 max-w-xl">
-          Pins a persistent strip to the top of every PAL page until
-          dismissed or expired. Dual-use:
+          Pins a persistent strip to the top of every PAL page AND
+          pushes to anyone subscribed (Footer / /emergency opt-in).
+          Dual-use:
         </p>
         <ul className="text-sm text-sand-300 font-light mt-2 max-w-xl list-disc pl-5 space-y-1">
           <li>
@@ -59,8 +60,8 @@ export default async function AlertsAdminPage() {
           <li>
             <span className="text-sand-100 font-semibold">Community</span>{" "}
             (info) — fireworks, school graduations, ferry route
-            changes, parade routes — anything visitors and locals
-            should see at the top of the page.
+            changes, parade routes. Subscribers want this stuff too —
+            it&apos;s why they tapped Enable.
           </li>
         </ul>
         <p className="text-[11px] text-sand-500 font-light mt-3 max-w-xl">
@@ -73,7 +74,7 @@ export default async function AlertsAdminPage() {
             Emergency events
           </Link>{" "}
           instead — same banner shows, but with a dedicated /emergency
-          page and push to subscribers.
+          page that holds the whole timeline.
         </p>
       </header>
 

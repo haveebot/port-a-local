@@ -24,17 +24,17 @@ export default function FooterAlertsSubscribe() {
     <div className="border-t border-navy-800 pt-8 pb-2 mb-2">
       <div className="flex items-start gap-4 max-w-2xl mx-auto sm:mx-0 flex-wrap sm:flex-nowrap">
         <div className="text-2xl shrink-0" aria-hidden>
-          🔔
+          📍
         </div>
         <div className="flex-1 min-w-0">
           <p className="font-display text-base font-bold text-sand-50">
-            Get an alert when it matters.
+            Get the call before everyone else.
           </p>
           <p className="text-xs text-navy-300 font-light leading-relaxed mt-1 max-w-md">
-            Hurricane warnings, evacuation orders, road closures, water
-            advisories — pushed to your phone the moment they land. No
-            account, no spam. Community announcements show on the site
-            but won&apos;t buzz your phone.
+            Fireworks tonight, parade routes, school graduations,
+            ferry route changes — and when it counts, hurricane
+            warnings and evacuation orders too. Pushed straight to
+            your phone. No account, no spam, off in one tap.
           </p>
           <div className="mt-3 max-w-xs">
             <EnablePushButton

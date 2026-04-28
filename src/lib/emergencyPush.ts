@@ -113,18 +113,26 @@ export async function pushEmergencyUpdate(
 /**
  * Fired when admin creates a site banner via /wheelhouse/alerts.
  *
- * Severity-gated: only warning + critical wake the phone. Info-tier
- * banners (community announcements like 4th of July fireworks or
- * graduation reminders) show on the site but skip push — community
- * announcements don't deserve a 9 PM lock-screen ping. The banner
- * itself still appears on every page either way.
+ * Pushes for every severity tier. Subscribers opted in for the full
+ * stream — emergencies AND the community good-stuff (fireworks
+ * tonight, graduation reminders, parade routes, ferry route changes).
+ * Severity controls the lock-screen tone via emoji prefix; the user
+ * opts out via the "tap to turn off" toggle anywhere they see it.
+ *
+ * Earlier version severity-gated info-tier out of "9 PM ping" caution.
+ * The reframe: PAL's brand promise is being your local source. If
+ * fireworks start at 9, the people who opted in WANT to know.
  */
 export async function pushSiteBanner(alert: PALAlert): Promise<void> {
-  if (alert.severity === "info") return;
   const url = alert.linkUrl?.trim() || `${APP_URL}/`;
-  const sevPrefix = alert.severity === "critical" ? "🚨 Critical" : "⚠️ Advisory";
+  const sevPrefix =
+    alert.severity === "critical"
+      ? "🚨 Critical"
+      : alert.severity === "warning"
+        ? "⚠️ Advisory"
+        : "📍 Port Aransas";
   await fanOut({
-    title: `${sevPrefix} · Port Aransas`,
+    title: `${sevPrefix}`,
     body: alert.message.slice(0, 180),
     url,
     tag: `pal-alert-${alert.id}`,
