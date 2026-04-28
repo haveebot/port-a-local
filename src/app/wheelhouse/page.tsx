@@ -2,6 +2,7 @@ import Link from "next/link";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import LighthouseMark from "@/components/brand/LighthouseMark";
+import EnablePushButton from "@/components/push/EnablePushButton";
 import ActivityFeed from "@/components/wheelhouse/ActivityFeed";
 import PalStatsCard from "@/components/wheelhouse/PalStats";
 import ThreadCard from "@/components/wheelhouse/ThreadCard";
@@ -73,6 +74,13 @@ export default async function WheelhousePage({
             </div>
           </Link>
           <div className="flex items-center gap-4 text-sm">
+            <EnablePushButton
+              subscriberKind="wheelhouse-participant"
+              subscriberId={me.id}
+              compact
+              enableLabel="Enable alerts"
+              onLabel="Alerts on"
+            />
             <Link
               href="/wheelhouse/payouts"
               className="text-xs text-navy-300 hover:text-coral-300 underline decoration-navy-500 hover:decoration-coral-400"

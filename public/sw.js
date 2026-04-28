@@ -1,15 +1,22 @@
 /**
- * PAL Delivery service worker — handles push notifications for
- * runners. Registered by the runner hub when notifications are
- * enabled. Receives push events from PAL's server (web-push +
- * VAPID), displays them, opens the relevant order page on tap.
+ * PAL service worker — push notifications for every PAL role:
+ *   - delivery runners (order alerts)
+ *   - Wheelhouse participants (awaiting:<you> alerts)
+ *   - cart-rental vendors (new bookings)
+ *   - locals sellers (new sales)
+ *   - restaurants (new delivery orders)
+ *   - customer topics (event drops, dispatch)
+ *
+ * Push payload is always { title, body, url, tag? } — the click
+ * handler routes by URL, so adding a new subscriber kind is purely
+ * a server-side config change.
  *
  * Kept minimal on purpose — no offline caching, no precaching,
  * just push. Update strategy: bump SW_VERSION below to bust cache.
  */
 
 // eslint-disable-next-line no-unused-vars
-const SW_VERSION = "pal-runner-push-1";
+const SW_VERSION = "pal-push-2";
 
 self.addEventListener("install", (event) => {
   // Activate immediately on install — no skip-waiting dance needed
@@ -27,9 +34,9 @@ self.addEventListener("push", (event) => {
   // Defensive parse — server always sends JSON but some push services
   // strip payloads under odd conditions. Fall back to a generic ping.
   let payload = {
-    title: "PAL Delivery",
-    body: "New order ready to claim",
-    url: "/deliver/driver",
+    title: "Port A Local",
+    body: "New activity in PAL",
+    url: "/",
     tag: undefined,
   };
   if (event.data) {
@@ -60,21 +67,32 @@ self.addEventListener("push", (event) => {
 
 self.addEventListener("notificationclick", (event) => {
   event.notification.close();
-  const targetUrl = event.notification.data?.url || "/deliver/driver";
+  const targetUrl = event.notification.data?.url || "/";
+
+  // Reuse an existing same-origin tab whose URL shares the first path
+  // segment as the target (so a Wheelhouse notification opens in the
+  // existing Wheelhouse tab, not the runner tab). Else open new.
+  const target = new URL(targetUrl, self.location.origin);
+  const targetFirstSeg = target.pathname.split("/")[1] || "";
 
   event.waitUntil(
     self.clients
       .matchAll({ type: "window", includeUncontrolled: true })
       .then((clientList) => {
-        // If a hub tab is already open, focus it + navigate. Else open new.
         for (const client of clientList) {
-          if (
-            client.url.includes("/deliver/driver") &&
-            "focus" in client &&
-            "navigate" in client
-          ) {
-            client.navigate(targetUrl);
-            return client.focus();
+          try {
+            const c = new URL(client.url);
+            const cFirstSeg = c.pathname.split("/")[1] || "";
+            if (
+              cFirstSeg === targetFirstSeg &&
+              "focus" in client &&
+              "navigate" in client
+            ) {
+              client.navigate(targetUrl);
+              return client.focus();
+            }
+          } catch (_) {
+            // ignore parse failures, keep iterating
           }
         }
         if (self.clients.openWindow) {

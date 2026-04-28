@@ -70,28 +70,75 @@ export async function pushOnThreadTransition(
     const participantId = state.slice("awaiting:".length);
     if (!participantId) return;
 
-    // Don't notify a Claude variant of itself — Claude pulls via
-    // orient on the next turn anyway. (Email lands in admin@ but
-    // it's noise in the inbox during active sessions.)
-    // ...actually keep this enabled; Claude reading admin@ is exactly
-    // how this becomes useful. If volume is overwhelming, set
-    // WHEELHOUSE_NOTIFY_<CLAUDE_ID>= (empty) to opt out.
-
+    // 1. Email channel — durable, universal, no install required
     const recipient = emailForParticipant(participantId);
-    if (!recipient) {
+    if (recipient) {
+      await sendAwaitingEmail({ recipient, participantId, thread });
+    } else {
       console.warn(
-        `[wheelhouse push] no email mapping for participant '${participantId}' — skip`,
+        `[wheelhouse push] no email mapping for participant '${participantId}' — skipping email channel`,
       );
-      return;
     }
 
-    await sendAwaitingEmail({
-      recipient,
-      participantId,
-      thread,
-    });
+    // 2. Web push channel — instant, OS-level, requires PWA install +
+    // permission. Failure here doesn't block email above.
+    await sendAwaitingWebPush(participantId, thread);
   } catch (err) {
     console.error("[wheelhouse push] failed:", err);
+  }
+}
+
+/**
+ * Fan out web push to every PAL PWA install registered for this
+ * participant. Stale subscriptions (404/410 from push service) get
+ * pruned automatically.
+ */
+async function sendAwaitingWebPush(
+  participantId: string,
+  thread: Thread,
+): Promise<void> {
+  try {
+    const [subsMod, webPushMod] = await Promise.all([
+      import("@/data/push-subscriptions-store"),
+      import("@/lib/webPush"),
+    ]);
+    const subs = await subsMod.getSubscriptionsFor(
+      "wheelhouse-participant",
+      participantId,
+    );
+    if (subs.length === 0) return;
+
+    const url = `${APP_URL}/wheelhouse/${encodeURIComponent(thread.id)}`;
+    const payload = {
+      title: `Awaiting you · ${thread.title}`,
+      body: "A Wheelhouse thread just flipped action onto you. Tap to open.",
+      url,
+      tag: `wheelhouse-${thread.id}`,
+    };
+
+    await Promise.all(
+      subs.map(async (sub) => {
+        try {
+          const subObj = JSON.parse(sub.subscriptionJson);
+          const result = await webPushMod.sendPushToSubscription(
+            subObj,
+            payload,
+          );
+          if (result.expired) {
+            await subsMod.deleteSubscription(sub.id);
+          } else if (result.ok) {
+            await subsMod.markPushed(sub.id);
+          }
+        } catch (err) {
+          console.error(
+            `[wheelhouse push] web push failed for sub ${sub.id}:`,
+            err,
+          );
+        }
+      }),
+    );
+  } catch (err) {
+    console.error("[wheelhouse push] web push fan-out failed:", err);
   }
 }
 
