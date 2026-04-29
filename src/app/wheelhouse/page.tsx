@@ -5,6 +5,7 @@ import ActivityFeed from "@/components/wheelhouse/ActivityFeed";
 import PalStatsCard from "@/components/wheelhouse/PalStats";
 import ThreadCard from "@/components/wheelhouse/ThreadCard";
 import WheelhouseHeader from "@/components/wheelhouse/WheelhouseHeader";
+import LiveVisitorsCard from "@/components/wheelhouse/LiveVisitorsCard";
 import {
   getPalStats,
   getRecentActivity,
@@ -58,6 +59,7 @@ export default async function WheelhousePage({
       <WheelhouseHeader meId={me.id} meName={me.name} />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
+        <LiveVisitorsCard />
         <ActivityFeed activity={activity} />
         {stats && <PalStatsCard stats={stats} />}
 
