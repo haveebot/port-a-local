@@ -29,6 +29,7 @@ const ALERT_LINKS = [
 ];
 
 const TOOLS_LINKS = [
+  { href: "/wheelhouse/revenue", label: "Revenue" },
   { href: "/wheelhouse/payouts", label: "Runner payouts" },
   { href: "/wheelhouse/beach-payouts", label: "Beach payouts" },
   { href: "/wheelhouse/cart-vendors-sms", label: "Cart vendor SMS" },
