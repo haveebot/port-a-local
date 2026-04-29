@@ -3,6 +3,7 @@ import Link from "next/link";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { getLeaderboard } from "@/data/delivery-store";
+import { getLocalEarnings, fmtUsd } from "@/data/local-earnings";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 60; // public page; cache 60s to soften DB hits
@@ -18,7 +19,10 @@ function fmt(cents: number) {
 }
 
 export default async function RunnersLeaderboardPage() {
-  const board = await getLeaderboard();
+  const [board, earnings] = await Promise.all([
+    getLeaderboard(),
+    getLocalEarnings(),
+  ]);
   const ranked = board.entries
     .filter((e) => e.weekCount > 0 || e.totalCount > 0)
     .slice(0, 20);
@@ -51,6 +55,13 @@ export default async function RunnersLeaderboardPage() {
   if (board.weekTotalCents > 0) {
     tickerLines.push(
       `${fmt(board.weekTotalCents)} paid out to PAL drivers this week`,
+    );
+  }
+  // PAL-wide momentum line — shows the broader local-economy story
+  // when delivery-specific numbers are still thin (cold-start safety).
+  if (earnings.totals.monthCents >= 10000) {
+    tickerLines.push(
+      `${fmtUsd(earnings.totals.monthCents)} paid to local Port A folks across PAL last 30 days`,
     );
   }
   // Cold-start fallback — never an empty ticker.
@@ -180,6 +191,85 @@ export default async function RunnersLeaderboardPage() {
               {board.allTimeTotalCount === 1 ? "delivery" : "deliveries"}
             </p>
           </div>
+        </div>
+      </section>
+
+      {/* PAL-wide local earnings strip — context for prospective drivers
+          showing real $$ flowing to locals across all PAL verticals.
+          Per Winston rule 2026-04-29: real demand-side metrics + real
+          local-earnings totals, never fabricated. Honest framing wins. */}
+      <section className="border-b border-navy-800 bg-navy-900">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10">
+          <div className="text-center mb-6">
+            <p className="text-[10px] tracking-[0.25em] uppercase text-coral-300 font-bold mb-2">
+              The bigger picture
+            </p>
+            <h2 className="font-display text-2xl sm:text-3xl font-bold text-sand-50 mb-2">
+              Real money to local Port A folks via PAL
+            </h2>
+            <p className="text-sm text-sand-300 font-light max-w-xl mx-auto">
+              Delivery is one of {earnings.delivery.allTimeCents > 0 ? "several" : "the"} verticals where
+              PAL routes paid customer orders to local people. Numbers below
+              are real Stripe-settled payouts.
+            </p>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div className="bg-navy-950 border border-navy-700 rounded-xl p-4 text-center">
+              <p className="text-[9px] font-bold tracking-widest uppercase text-coral-300 mb-1">
+                🚐 Delivery
+              </p>
+              <p className="font-display text-xl font-bold tabular-nums text-emerald-300">
+                {fmtUsd(earnings.delivery.allTimeCents)}
+              </p>
+              <p className="text-[10px] text-sand-400 font-mono mt-0.5">
+                {earnings.delivery.deliveriesPaidOutAllTime} deliver
+                {earnings.delivery.deliveriesPaidOutAllTime === 1 ? "y" : "ies"}{" "}
+                paid out
+              </p>
+            </div>
+            <div className="bg-navy-950 border border-navy-700 rounded-xl p-4 text-center">
+              <p className="text-[9px] font-bold tracking-widest uppercase text-coral-300 mb-1">
+                🏖️ Beach setup
+              </p>
+              <p className="font-display text-xl font-bold tabular-nums text-emerald-300">
+                {fmtUsd(earnings.beach.allTimeCents)}
+              </p>
+              <p className="text-[10px] text-sand-400 font-mono mt-0.5">
+                {earnings.beach.bookingsPaidOutAllTime} booking
+                {earnings.beach.bookingsPaidOutAllTime === 1 ? "" : "s"}{" "}
+                paid out
+              </p>
+            </div>
+            <div className="bg-navy-950 border border-navy-700 rounded-xl p-4 text-center">
+              <p className="text-[9px] font-bold tracking-widest uppercase text-coral-300 mb-1">
+                🛒 Locals sales
+              </p>
+              <p className="font-display text-xl font-bold tabular-nums text-emerald-300">
+                {fmtUsd(earnings.locals.allTimeCents)}
+              </p>
+              <p className="text-[10px] text-sand-400 font-mono mt-0.5">
+                {earnings.locals.salesAllTime} sale
+                {earnings.locals.salesAllTime === 1 ? "" : "s"} closed
+              </p>
+            </div>
+            <div className="bg-coral-500/10 border border-coral-500/40 rounded-xl p-4 text-center">
+              <p className="text-[9px] font-bold tracking-widest uppercase text-coral-300 mb-1">
+                Total to locals
+              </p>
+              <p className="font-display text-xl font-bold tabular-nums text-emerald-300">
+                {fmtUsd(earnings.totals.allTimeCents)}
+              </p>
+              <p className="text-[10px] text-sand-400 font-mono mt-0.5">
+                {fmtUsd(earnings.totals.monthCents)} last 30d
+              </p>
+            </div>
+          </div>
+          {earnings.isColdStart && (
+            <p className="text-[11px] text-sand-500 text-center mt-5 font-light">
+              Numbers are small because PAL is brand-new — that&apos;s the
+              opportunity. Be one of the first runners and the leaderboard is yours.
+            </p>
+          )}
         </div>
       </section>
 

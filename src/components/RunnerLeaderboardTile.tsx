@@ -1,33 +1,41 @@
 import Link from "next/link";
 import { getLeaderboard } from "@/data/delivery-store";
+import { getLocalEarnings, fmtUsd } from "@/data/local-earnings";
 
 /**
  * Homepage recruiting tile for PAL Delivery — appears between the
- * FeaturedEventBanner and the Gully section. Public social proof on
- * the runner economy + clear apply CTA.
+ * FeaturedEventBanner and the Gully section.
  *
- * Server component (DB-backed). Returns null if there are no active
- * runners yet — keeps the homepage tight on cold-start days. Once
- * there's at least one runner with deliveries, the tile lights up.
+ * Per Winston rule 2026-04-29: REAL demand-side metrics + REAL
+ * local-earnings totals. Never fabricated leaderboards. Cold-start
+ * uses an honest founder-story hook ("Be Driver #1") rather than fake
+ * activity.
+ *
+ * Three states the tile renders:
+ *   1. Cold-start (no runners + no PAL-wide local earnings yet) →
+ *      "Be the first runner" framing
+ *   2. Cold-start delivery + warm PAL-wide ($$ flowing in adjacent
+ *      verticals) → "$X paid to local folks across PAL — be the
+ *      first delivery runner"
+ *   3. Warm delivery → real top runner + real weekly stats
  */
 export default async function RunnerLeaderboardTile() {
   let board;
+  let earnings;
   try {
-    board = await getLeaderboard();
+    [board, earnings] = await Promise.all([
+      getLeaderboard(),
+      getLocalEarnings(),
+    ]);
   } catch {
-    // DB hiccup — fail closed, don't break the homepage
-    return null;
-  }
-
-  // Don't show a leaderboard with zero activity. The /deliver/runners
-  // page handles the cold-start state; on the homepage we'd rather
-  // hide than show "0 runners, $0 earned."
-  if (board.runnersWithDeliveries === 0 && board.activeRunnerCount === 0) {
-    return null;
+    return null; // DB hiccup — fail closed, don't break the homepage
   }
 
   const top = board.entries.find((e) => e.weekCount > 0) ?? null;
-  const fmt = (cents: number) => `$${(cents / 100).toFixed(2)}`;
+  const palWideMonth = earnings.totals.monthCents;
+  const deliveryAllTime = earnings.delivery.allTimeCents;
+  const showRealLeaderboard = top && top.weekCents > 0;
+  const palWideHasMomentum = palWideMonth >= 10000; // ≥ $100 across PAL last 30d
 
   return (
     <section className="bg-navy-950 border-y border-coral-500/20">
@@ -44,8 +52,10 @@ export default async function RunnerLeaderboardTile() {
               <span className="font-display text-base">+ $5</span> welcome
               bonus on your first delivery.
             </p>
-            <div className="flex flex-wrap items-baseline gap-x-5 gap-y-1 text-sm text-sand-300 font-light">
-              {top && top.weekCents > 0 ? (
+
+            {/* Real leaderboard if there's actual activity */}
+            {showRealLeaderboard ? (
+              <div className="flex flex-wrap items-baseline gap-x-5 gap-y-1 text-sm text-sand-300 font-light">
                 <span>
                   Top runner this week:{" "}
                   <span className="font-mono font-bold text-emerald-300">
@@ -53,28 +63,48 @@ export default async function RunnerLeaderboardTile() {
                   </span>{" "}
                   ·{" "}
                   <span className="font-mono font-bold text-emerald-300">
-                    {fmt(top.weekCents)}
+                    {fmtUsd(top.weekCents)}
                   </span>{" "}
                   over {top.weekCount} run{top.weekCount === 1 ? "" : "s"}
                 </span>
-              ) : (
-                <span>
-                  <span className="font-display font-bold text-sand-50">
-                    {board.activeRunnerCount}
-                  </span>{" "}
-                  {board.activeRunnerCount === 1 ? "runner" : "runners"} on
-                  the road. First deliveries this week.
-                </span>
-              )}
-              {board.weekTotalCents > 0 && (
-                <span className="text-sand-400">
-                  · Paid out this week:{" "}
-                  <span className="font-mono">
-                    {fmt(board.weekTotalCents)}
+                {board.weekTotalCents > 0 && (
+                  <span className="text-sand-400">
+                    · Paid out this week:{" "}
+                    <span className="font-mono">{fmtUsd(board.weekTotalCents)}</span>
                   </span>
-                </span>
-              )}
-            </div>
+                )}
+              </div>
+            ) : (
+              /* Cold-start delivery: lean on PAL-wide local earnings + founder hook */
+              <div className="space-y-2">
+                <p className="text-sm text-sand-300 font-light">
+                  <span className="text-emerald-300 font-display font-bold text-base">
+                    Be Driver #{(board.activeRunnerCount ?? 0) + 1}.
+                  </span>{" "}
+                  First runner to 10 deliveries gets <span className="text-emerald-300 font-bold">$100 + a shirt.</span>
+                </p>
+                {palWideHasMomentum && (
+                  <p className="text-[13px] text-sand-400 font-light">
+                    PAL has paid local Port A folks{" "}
+                    <span className="font-mono font-bold text-emerald-300">
+                      {fmtUsd(palWideMonth)}
+                    </span>{" "}
+                    in the last 30 days across cabana setups, vendor blasts, and locals
+                    sales. Delivery is the open lane.
+                  </p>
+                )}
+                {!palWideHasMomentum && deliveryAllTime > 0 && (
+                  <p className="text-[13px] text-sand-400 font-light">
+                    Local runners have earned{" "}
+                    <span className="font-mono font-bold text-emerald-300">
+                      {fmtUsd(deliveryAllTime)}
+                    </span>{" "}
+                    so far ({earnings.delivery.deliveriesPaidOutAllTime} deliver
+                    {earnings.delivery.deliveriesPaidOutAllTime === 1 ? "y" : "ies"}). Be next.
+                  </p>
+                )}
+              </div>
+            )}
           </div>
 
           <div className="flex flex-col sm:flex-row md:flex-col gap-2.5 md:min-w-[200px]">
