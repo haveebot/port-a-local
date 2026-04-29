@@ -8,15 +8,14 @@ import { getLocalEarnings, fmtUsd } from "@/data/local-earnings";
  *
  * Per Winston rule 2026-04-29: REAL demand-side metrics + REAL
  * local-earnings totals. Never fabricated leaderboards. Cold-start
- * uses an honest founder-story hook ("Be Driver #1") rather than fake
- * activity.
+ * uses honest demand-side framing rather than fake activity.
  *
  * Three states the tile renders:
  *   1. Cold-start (no runners + no PAL-wide local earnings yet) →
- *      "Be the first runner" framing
+ *      "Apply to drive" with $5 welcome bonus call-out
  *   2. Cold-start delivery + warm PAL-wide ($$ flowing in adjacent
- *      verticals) → "$X paid to local folks across PAL — be the
- *      first delivery runner"
+ *      verticals) → "$X paid to local folks across PAL — delivery
+ *      is the open lane"
  *   3. Warm delivery → real top runner + real weekly stats
  */
 export default async function RunnerLeaderboardTile() {
@@ -33,9 +32,18 @@ export default async function RunnerLeaderboardTile() {
 
   const top = board.entries.find((e) => e.weekCount > 0) ?? null;
   const palWideMonth = earnings.totals.monthCents;
-  const deliveryAllTime = earnings.delivery.allTimeCents;
   const showRealLeaderboard = top && top.weekCents > 0;
-  const palWideHasMomentum = palWideMonth >= 10000; // ≥ $100 across PAL last 30d
+
+  // Recruiting number tracks the SQL signup offset (CASE WHEN raw_num <= 1
+  // THEN raw_num ELSE raw_num + 3). After Winston (#1) the next driver lands
+  // at #5; subsequent drivers go #6, #7, etc. Computed dynamically so it
+  // stays correct as the team grows.
+  const nextDriverNumber =
+    board.activeRunnerCount === 0
+      ? 1
+      : board.activeRunnerCount === 1
+        ? 5
+        : board.activeRunnerCount + 4;
 
   return (
     <section className="bg-navy-950 border-y border-coral-500/20">
@@ -75,34 +83,55 @@ export default async function RunnerLeaderboardTile() {
                 )}
               </div>
             ) : (
-              /* Cold-start delivery: lean on PAL-wide local earnings + founder hook */
-              <div className="space-y-2">
+              /* Cold-start delivery: hybrid stack — driver hook + cross-vertical
+                 PAL momentum blurbs (golf cart blasts + beach cabana setups +
+                 locals sales). Real numbers, no fabrication. */
+              <div className="space-y-3">
                 <p className="text-sm text-sand-300 font-light">
                   <span className="text-emerald-300 font-display font-bold text-base">
-                    Be Driver #{(board.activeRunnerCount ?? 0) + 1}.
+                    Be Driver #{nextDriverNumber}.
                   </span>{" "}
-                  First runner to 10 deliveries gets <span className="text-emerald-300 font-bold">$100 + a shirt.</span>
+                  Apply now and catch the first orders that land.
                 </p>
-                {palWideHasMomentum && (
-                  <p className="text-[13px] text-sand-400 font-light">
-                    PAL has paid local Port A folks{" "}
-                    <span className="font-mono font-bold text-emerald-300">
-                      {fmtUsd(palWideMonth)}
-                    </span>{" "}
-                    in the last 30 days across cabana setups, vendor blasts, and locals
-                    sales. Delivery is the open lane.
+                <div className="text-[13px] text-sand-400 font-light space-y-1">
+                  {earnings.beach.allTimeCents > 0 ? (
+                    <p>
+                      🏖️{" "}
+                      <span className="font-mono font-bold text-emerald-300">
+                        {fmtUsd(earnings.beach.allTimeCents)}
+                      </span>{" "}
+                      paid to local cabana setup vendors (
+                      {earnings.beach.bookingsPaidOutAllTime} booking
+                      {earnings.beach.bookingsPaidOutAllTime === 1 ? "" : "s"})
+                    </p>
+                  ) : (
+                    <p>🏖️ Beach cabana setup launches across the season — vendor blasts already routing</p>
+                  )}
+                  <p>
+                    🛺 Golf cart vendor blasts going out to{" "}
+                    <span className="font-bold text-sand-300">14+ local cart cos</span>{" "}
+                    on every booking — first to claim wins
                   </p>
-                )}
-                {!palWideHasMomentum && deliveryAllTime > 0 && (
-                  <p className="text-[13px] text-sand-400 font-light">
-                    Local runners have earned{" "}
-                    <span className="font-mono font-bold text-emerald-300">
-                      {fmtUsd(deliveryAllTime)}
-                    </span>{" "}
-                    so far ({earnings.delivery.deliveriesPaidOutAllTime} deliver
-                    {earnings.delivery.deliveriesPaidOutAllTime === 1 ? "y" : "ies"}). Be next.
-                  </p>
-                )}
+                  {earnings.locals.allTimeCents > 0 && (
+                    <p>
+                      🛒{" "}
+                      <span className="font-mono font-bold text-emerald-300">
+                        {fmtUsd(earnings.locals.allTimeCents)}
+                      </span>{" "}
+                      paid to local sellers via PAL Locals (
+                      {earnings.locals.salesAllTime} sale
+                      {earnings.locals.salesAllTime === 1 ? "" : "s"})
+                    </p>
+                  )}
+                  {palWideMonth >= 10000 && (
+                    <p className="pt-1 border-t border-navy-800">
+                      <span className="font-mono font-bold text-emerald-300">
+                        {fmtUsd(palWideMonth)}
+                      </span>{" "}
+                      total to local Port A folks via PAL in the last 30 days. Delivery is the open lane.
+                    </p>
+                  )}
+                </div>
               </div>
             )}
           </div>

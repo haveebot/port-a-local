@@ -685,10 +685,23 @@ export async function getLeaderboard(): Promise<LeaderboardSummary> {
   // Two-step query: (1) number ALL applicants by applied_at — including
   // rejected ones, so they hold their slot forever; (2) join active
   // drivers + their delivery aggregations against that numbered set.
+  //
+  // Per Winston rule 2026-04-29: signup numbers post-Winston (#1) skip
+  // ahead by +3 so the next real driver lands at #5. Avoids "you're
+  // only the second person" friction during cold-start recruiting.
+  // First applicant (Winston, the test driver) keeps #1; everyone after
+  // is shifted: raw #2 → #5, raw #3 → #6, raw #4 → #7, etc.
+  // Adjust DRIVER_SIGNUP_OFFSET to taste; remove entirely once enough
+  // real drivers are onboarded that the cold-start framing is moot.
   const { rows } = await sql`
-    WITH numbered AS (
-      SELECT id, ROW_NUMBER() OVER (ORDER BY applied_at ASC, id ASC) AS signup_num
+    WITH numbered_raw AS (
+      SELECT id, ROW_NUMBER() OVER (ORDER BY applied_at ASC, id ASC) AS raw_num
       FROM delivery_drivers
+    ),
+    numbered AS (
+      SELECT id,
+        CASE WHEN raw_num <= 1 THEN raw_num ELSE raw_num + 3 END AS signup_num
+      FROM numbered_raw
     ),
     welcome_bonus AS (
       SELECT driver_id, 1 AS earned
