@@ -12,8 +12,11 @@ const getStripe = () => new Stripe(process.env.STRIPE_SECRET_KEY || "", {
 
 const RESEND_KEY = process.env.RESEND_API_KEY || "";
 const INTERNAL_EMAIL = process.env.INTERNAL_ALERT_EMAIL || "";
+const INTERNAL_RECIPIENTS = [INTERNAL_EMAIL, "bookings@theportalocal.com"]
+  .map((r) => r.trim())
+  .filter(Boolean);
 
-async function sendEmail(to: string, subject: string, html: string) {
+async function sendEmail(to: string | string[], subject: string, html: string) {
   if (!RESEND_KEY) {
     console.log("[Email] Resend not configured — would send to", to, subject);
     return;
@@ -161,7 +164,7 @@ export async function POST(req: NextRequest) {
     const returnShort = formatDate(returnDate).replace(/, \d{4}$/, "").replace(/^([A-Za-z]+), /, "$1 ");
 
     await Promise.allSettled([
-      sendEmail(INTERNAL_EMAIL, `✅ Golf Cart PAID — ${name} — ${pickupDate} to ${returnDate}`, internalHtml),
+      sendEmail(INTERNAL_RECIPIENTS, `✅ Golf Cart PAID — ${name} — ${pickupDate} to ${returnDate}`, internalHtml),
       sendEmail(email, "Your Golf Cart is Reserved — Port A Local", customerHtml),
       sendConsumerSms(phone, customerSMS, smsConsent),
       sendLeadBlastSms({

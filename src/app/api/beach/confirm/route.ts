@@ -12,8 +12,14 @@ const getStripe = () => new Stripe(process.env.STRIPE_SECRET_KEY || "", {
 
 const RESEND_KEY = process.env.RESEND_API_KEY || "";
 const INTERNAL_EMAIL = process.env.INTERNAL_ALERT_EMAIL || "";
+// Internal alerts CC bookings@ for transactional record-keeping per
+// Winston rule 2026-04-29 (the same alias that's already the FROM
+// address — receives transactional copies for the booking ledger).
+const INTERNAL_RECIPIENTS = [INTERNAL_EMAIL, "bookings@theportalocal.com"]
+  .map((r) => r.trim())
+  .filter(Boolean);
 
-async function sendEmail(to: string, subject: string, html: string) {
+async function sendEmail(to: string | string[], subject: string, html: string) {
   if (!RESEND_KEY) {
     console.log("[Email] Resend not configured — would send to", to, subject);
     return;
@@ -137,7 +143,7 @@ export async function POST(req: NextRequest) {
       .replace(/^([A-Za-z]+), /, "$1 ");
 
     await Promise.allSettled([
-      sendEmail(INTERNAL_EMAIL, `✅ Beach Rental PAID — ${name} — ${pickupDate} to ${returnDate}`, internalHtml),
+      sendEmail(INTERNAL_RECIPIENTS, `✅ Beach Rental PAID — ${name} — ${pickupDate} to ${returnDate}`, internalHtml),
       sendEmail(email, "Your Beach Setup is Booked — Port A Local", customerHtml),
       sendConsumerSms(phone, customerSMS, smsConsent),
       pingSuperAdmins({
