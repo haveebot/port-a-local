@@ -53,6 +53,7 @@ import { runInsiderAgent } from "@/lib/insiderSmsAgent";
  */
 
 const TWIML_OK = '<?xml version="1.0" encoding="UTF-8"?><Response/>';
+const OPERATOR_PHONE_E164 = "+15125681725"; // Winston — receives all surface pushes
 
 function twimlResponse() {
   return new NextResponse(TWIML_OK, {
@@ -177,9 +178,15 @@ export async function POST(req: NextRequest) {
       return twimlResponse();
     }
     if (beachVendor) {
-      // Unparseable reply from a beach vendor — log so admin can route.
-      console.log(
-        `[twilio/inbound] beach-vendor reply (non-CLAIM) from ${beachVendor.slug}: ${JSON.stringify(body)}`,
+      // Non-CLAIM, non-STOP reply from a beach vendor — push to operator
+      // (Winston) so a human can read the prose and act. Per Winston rule
+      // 2026-04-29: "intake the message and do what we need to with it";
+      // we don't try to parse free-form intent — surface to a human.
+      sendSms(
+        OPERATOR_PHONE_E164,
+        `[${beachVendor.name} → PAL] ${body}`.slice(0, 1500),
+      ).catch((err) =>
+        console.error("[twilio/inbound] beach-vendor surface to operator failed:", err),
       );
       return twimlResponse();
     }
@@ -189,10 +196,16 @@ export async function POST(req: NextRequest) {
     const vendor = cartVendors.find((v) => toE164(v.phone) === fromE164);
 
     if (!vendor) {
-      // Could be a stranger, a customer (e.g. CLAIM from a customer is
-      // out-of-flow), or someone we should follow up with manually.
-      // Log and respond OK; STOP is still honored by Twilio at carrier level.
-      console.log(`[twilio/inbound] no vendor match for ${fromE164}`);
+      // Stranger or unidentified inbound — push to operator (Winston) so a
+      // human can read + decide. Per Winston rule 2026-04-29: intake the
+      // message, surface to a human, don't try to be clever with parsing.
+      // STOP is still honored by Twilio at carrier level regardless.
+      sendSms(
+        OPERATOR_PHONE_E164,
+        `[unknown ${fromE164} → PAL] ${body}`.slice(0, 1500),
+      ).catch((err) =>
+        console.error("[twilio/inbound] stranger surface to operator failed:", err),
+      );
       return twimlResponse();
     }
 
@@ -239,9 +252,14 @@ export async function POST(req: NextRequest) {
       return twimlResponse();
     }
 
-    // Other / unparseable — log for admin review. No auto-response.
-    console.log(
-      `[twilio/inbound] unparseable reply from ${vendor.slug}: ${JSON.stringify(body)}`,
+    // Other / unparseable from a cart vendor — push to operator so a human
+    // can read + act. Per Winston rule 2026-04-29: intake + surface, don't
+    // try to be clever with prose parsing.
+    sendSms(
+      OPERATOR_PHONE_E164,
+      `[${vendor.name} → PAL] ${body}`.slice(0, 1500),
+    ).catch((err) =>
+      console.error("[twilio/inbound] cart-vendor surface to operator failed:", err),
     );
     return twimlResponse();
   } catch (err) {
