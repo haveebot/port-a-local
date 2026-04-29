@@ -4,6 +4,7 @@ import { emailLayout } from "@/lib/emailLayout";
 import { sendConsumerSms } from "@/lib/twilioSms";
 import { sendBeachLeadBlast } from "@/lib/beachVendorBlast";
 import { recordBlast } from "@/data/beach-claim-store";
+import { pingSuperAdmins, formatCustomerDisplay } from "@/lib/superAdminPing";
 
 const getStripe = () => new Stripe(process.env.STRIPE_SECRET_KEY || "", {
   apiVersion: "2026-03-25.dahlia",
@@ -133,6 +134,12 @@ export async function POST(req: NextRequest) {
       sendEmail(INTERNAL_EMAIL, `✅ Beach Rental PAID — ${name} — ${pickupDate} to ${returnDate}`, internalHtml),
       sendEmail(email, "Your Beach Setup is Booked — Port A Local", customerHtml),
       sendConsumerSms(phone, customerSMS, smsConsent),
+      pingSuperAdmins({
+        kind: "beach-rental",
+        amountCents: total * 100,
+        summary: `${productLabel} ×${qty} · ${startFormatted.replace(/, \d{4}$/,"").replace(/^([A-Za-z]+), /,"$1 ")} (${days} ${days === 1 ? "day" : "days"}) · ${deliveryAddress}`,
+        customerDisplay: formatCustomerDisplay(name),
+      }),
       // Record the blast in claim store (idempotent on session ID), then fan
       // out to active beach vendors. Sequential 800ms pacing inside the
       // helper. recordBlast first so a CLAIM reply landing fast still finds

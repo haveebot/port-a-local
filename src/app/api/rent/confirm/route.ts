@@ -4,6 +4,7 @@ import { emailLayout } from "@/lib/emailLayout";
 import { getBlastableVendors, getBlastCount } from "@/data/cart-vendors";
 import { sendConsumerSms } from "@/lib/twilioSms";
 import { sendLeadBlastSms, compactCartLabel } from "@/lib/cartVendorSmsBlast";
+import { pingSuperAdmins, formatCustomerDisplay } from "@/lib/superAdminPing";
 
 const getStripe = () => new Stripe(process.env.STRIPE_SECRET_KEY || "", {
   apiVersion: "2026-03-25.dahlia",
@@ -171,6 +172,12 @@ export async function POST(req: NextRequest) {
       }).then((sent) =>
         console.log(`[Rent/Blast] SMS sent to ${sent} opted-in vendors`),
       ),
+      pingSuperAdmins({
+        kind: "cart-rental",
+        amountCents: fee * 100,
+        summary: `${compactCartLabel(cartLabel)} · ${pickupShort} to ${returnShort} (${days} ${days === 1 ? "day" : "days"})`,
+        customerDisplay: formatCustomerDisplay(name),
+      }),
       ...vendorBlastPromises,
     ]);
 

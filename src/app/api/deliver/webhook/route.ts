@@ -11,6 +11,7 @@ import {
 } from "@/lib/deliverDispatch";
 import { getRestaurantById } from "@/data/delivery-restaurants";
 import { pushNewDeliveryOrder } from "@/lib/restaurantPush";
+import { pingSuperAdmins, formatCustomerDisplay } from "@/lib/superAdminPing";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -108,6 +109,14 @@ export async function POST(req: NextRequest) {
         customerName: paid.customer.name,
       });
     }
+    const itemCount = paid.items.reduce((n, i) => n + i.quantity, 0);
+    const restName = restaurant?.name ?? paid.restaurantId;
+    pingSuperAdmins({
+      kind: "delivery-order",
+      amountCents: paid.totalCents,
+      summary: `${restName} · ${itemCount} item${itemCount === 1 ? "" : "s"}`,
+      customerDisplay: formatCustomerDisplay(paid.customer.name),
+    }).catch((err) => console.error("[deliver/webhook] super-admin ping failed:", err));
   }
 
   return NextResponse.json({

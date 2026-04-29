@@ -17,6 +17,7 @@ import { mirrorLocalsInquiryToWheelhouse } from "@/lib/localsDispatch";
 import { signLocalsToken } from "@/lib/locals-hmac";
 import { pushNewLocalsSale } from "@/lib/localsSellerPush";
 import { getLocalsOfferByStripeAccount } from "@/data/locals-store";
+import { pingSuperAdmins, formatCustomerDisplay } from "@/lib/superAdminPing";
 
 export const dynamic = "force-dynamic";
 
@@ -174,6 +175,12 @@ async function fireSaleCascadeIfNeeded(
         vendorPortalSig: sig,
       });
     })(),
+    pingSuperAdmins({
+      kind: "locals-purchase",
+      amountCents: purchase.totalCents,
+      summary: `${listing.title} · ${listing.provider}`,
+      customerDisplay: formatCustomerDisplay(purchase.customerName),
+    }),
   ]);
 
   return purchase;

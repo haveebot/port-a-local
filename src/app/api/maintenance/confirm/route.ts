@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { emailLayout } from "@/lib/emailLayout";
 import { sendSms, sendConsumerSms } from "@/lib/twilioSms";
+import { pingSuperAdmins, formatCustomerDisplay } from "@/lib/superAdminPing";
 
 const getStripe = () => new Stripe(process.env.STRIPE_SECRET_KEY || "", {
   apiVersion: "2026-03-25.dahlia",
@@ -106,6 +107,12 @@ export async function POST(req: NextRequest) {
       sendConsumerSms(phone, customerSMS, smsConsent),
       INTERNAL_EMAIL ? sendEmail(INTERNAL_EMAIL, `🚨 PRIORITY DISPATCH — ${name} — ${serviceType}`, vendorHtml) : Promise.resolve(),
       sendEmail(email, "Priority Dispatch Confirmed — Port A Local", customerHtml),
+      pingSuperAdmins({
+        kind: "maintenance-priority",
+        amountCents: parseInt(dispatchFee) * 100,
+        summary: `${serviceType} · ${address}`,
+        customerDisplay: formatCustomerDisplay(name),
+      }),
     ]);
 
     return NextResponse.json({ success: true });

@@ -12,6 +12,7 @@ import {
   sendHousekeepingCustomerEmail,
 } from "@/lib/housekeepingEmails";
 import { mirrorHousekeepingBookingToWheelhouse } from "@/lib/housekeepingDispatch";
+import { pingSuperAdmins, formatCustomerDisplay } from "@/lib/superAdminPing";
 
 export const dynamic = "force-dynamic";
 
@@ -63,6 +64,12 @@ async function verifyAndConfirmIfNeeded(
             sendHousekeepingCustomerEmail(updated),
             sendHousekeepingAdminEmail(updated),
             mirrorHousekeepingBookingToWheelhouse(updated),
+            pingSuperAdmins({
+              kind: "housekeeping-booking",
+              amountCents: updated.totalCents,
+              summary: `${updated.estimatedHours}h estimate · ${updated.propertyAddress}`,
+              customerDisplay: formatCustomerDisplay(updated.customerName),
+            }),
           ]);
         }
       }
