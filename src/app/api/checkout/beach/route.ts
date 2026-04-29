@@ -57,7 +57,7 @@ export async function POST(req: NextRequest) {
             unit_amount: totalPrice * 100, // Stripe uses cents
             product_data: {
               name: `Beach Rental — ${productLabel}`,
-              description: `${actualQty} setup${actualQty > 1 ? "s" : ""} · ${numDays} day${numDays !== 1 ? "s" : ""} · ${pickupDate} → ${returnDate} · ${deliveryAddress}`,
+              description: `${actualQty} setup${actualQty > 1 ? "s" : ""} · ${numDays} day${numDays !== 1 ? "s" : ""} · ${pickupDate} → ${returnDate} · ${deliveryAddress} · Free cancellation up to 72 hours before setup date`,
             },
           },
           quantity: 1,

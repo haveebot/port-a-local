@@ -321,6 +321,25 @@ export default function BeachPage() {
                   </p>
                 </div>
               )}
+
+              {/* Cancellation policy — locked 2026-04-29. 72 hours before setup
+                  date is the cut-off (matches industry standard for beach setup
+                  / concierge services on the customer-friendly end). After that
+                  point, vendor has held the slot and PAL releases the vendor
+                  portion of the payment. Late bookings (made within 72 hours
+                  of setup) are non-refundable from the start. */}
+              <div className="bg-white border border-sand-200 rounded-xl p-4 text-sm">
+                <p className="font-semibold text-navy-900 mb-1">Cancellation policy</p>
+                <p className="text-navy-700 leading-relaxed">
+                  Free cancellation up to <strong>72 hours before your setup date</strong>.
+                  After that, the booking is non-refundable — your local vendor has held the slot.
+                  Bookings made within 72 hours of the setup date are non-refundable from the start.
+                </p>
+                <p className="text-[11px] text-navy-400 mt-2">
+                  To cancel: reply to your booking confirmation email or contact
+                  hello@theportalocal.com.
+                </p>
+              </div>
             </div>
 
             {/* Contact Info */}

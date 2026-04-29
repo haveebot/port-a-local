@@ -126,7 +126,10 @@ export async function POST(req: NextRequest) {
           <li><strong>Beach location:</strong> ${deliveryAddress}</li>
           <li><strong>Total paid:</strong> $${total}</li>
         </ul>
-        <p>Questions? Reply to this email.</p>
+        <hr style="border:none; border-top:1px solid #e4dccc; margin:16px 0;"/>
+        <p style="font-size:13px; color:#4a5568;"><strong>Cancellation policy</strong></p>
+        <p style="font-size:12px; color:#4a5568; line-height:1.5;">Free cancellation up to <strong>72 hours before your setup date</strong>. After that, the booking is non-refundable — your local vendor has held the slot. To cancel, reply to this email.</p>
+        <p style="margin-top:20px;">Questions? Reply to this email.</p>
         <p style="margin-top:20px;">— The Port A Local</p>
       `,
     });
