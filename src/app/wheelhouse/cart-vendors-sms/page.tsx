@@ -102,7 +102,7 @@ export default async function CartVendorsSmsPage() {
             )}
           </p>
 
-          {bulkEligible > 0 && (
+          {bulkEligible > 0 ? (
             <div className="mt-5 pt-5 border-t border-sand-200 flex items-center justify-between gap-4">
               <p className="text-sm text-navy-700">
                 <strong>{bulkEligible}</strong> vendor{bulkEligible === 1 ? "" : "s"} eligible
@@ -110,7 +110,23 @@ export default async function CartVendorsSmsPage() {
               </p>
               <BulkInviteButton eligibleCount={bulkEligible} />
             </div>
-          )}
+          ) : counts.invited > 0 ? (
+            <div className="mt-5 pt-5 border-t border-sand-200">
+              <p className="text-sm text-emerald-700 flex items-center gap-2">
+                <span className="text-base">✓</span>
+                All <strong>{counts.invited}</strong> SMS-capable vendor{counts.invited === 1 ? "" : "s"} invited.
+                {counts.optedIn + counts.optedOut < counts.invited && (
+                  <span className="text-navy-600 font-normal">
+                    {" "}Awaiting {counts.invited - counts.optedIn - counts.optedOut} repl{counts.invited - counts.optedIn - counts.optedOut === 1 ? "y" : "ies"}.
+                  </span>
+                )}
+              </p>
+              <p className="text-[11px] text-navy-500 mt-1">
+                For individual re-pokes, use the per-row <strong>Re-invite</strong> button below.
+                The bulk action returns automatically when new SMS-capable vendors are added.
+              </p>
+            </div>
+          ) : null}
         </section>
 
         <section className="bg-white rounded-2xl border border-sand-300 p-6 shadow-sm">

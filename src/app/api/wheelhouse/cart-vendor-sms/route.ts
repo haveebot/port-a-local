@@ -36,8 +36,28 @@ interface BulkResult {
   error?: string;
 }
 
-export async function POST(req: NextRequest) {
+/**
+ * Auth: cookie (wheelhouse_who) for browser sessions, OR Authorization
+ * Bearer matching WHEELHOUSE_TOKEN_WINSTON_CLAUDE for agent CLI operations.
+ * Same pattern wheelhouse.py uses against the activity API.
+ */
+async function authorize(req: NextRequest): Promise<string | null> {
   const who = (await cookies()).get("wheelhouse_who")?.value;
+  if (who) return who;
+
+  const auth = req.headers.get("authorization") || "";
+  const m = auth.match(/^Bearer\s+(.+)$/);
+  if (m) {
+    const expected = (process.env.WHEELHOUSE_TOKEN_WINSTON_CLAUDE || "").trim();
+    if (expected && m[1].trim() === expected) {
+      return "winston-claude";
+    }
+  }
+  return null;
+}
+
+export async function POST(req: NextRequest) {
+  const who = await authorize(req);
   if (!who) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
