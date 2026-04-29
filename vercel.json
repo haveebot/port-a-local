@@ -15,6 +15,10 @@
     {
       "path": "/api/cron/beach-payouts",
       "schedule": "0 * * * *"
+    },
+    {
+      "path": "/api/cron/archive-done-threads",
+      "schedule": "0 14 * * *"
     }
   ]
 }
