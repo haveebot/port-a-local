@@ -5,19 +5,19 @@ export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
 /**
- * Vercel Cron: auto-archive done Wheelhouse threads
+ * Vercel Cron: backstop archive of any 'done' threads
  * Schedule: daily at 9am CT (configured in vercel.json)
  *
- * Per Winston rule 2026-04-29: threads marked `done` and untouched
- * for 7+ days get auto-archived. Reduces noise in the active board
- * without losing history (archived threads still queryable).
+ * Per Winston rule 2026-04-29 (instant-archive model): "done" is no
+ * longer a parking state — the API auto-coerces done→archived on every
+ * PATCH (see /api/wheelhouse/threads/[id]/route.ts). This cron is a
+ * backstop to catch any thread that ends up in 'done' through a code
+ * path that bypasses the API (legacy data, direct SQL, etc.).
  *
- * Logic: SET state='archived', updated_at=NOW() WHERE state='done'
- *        AND updated_at < NOW() - INTERVAL '7 days'.
+ * Logic: SET state='archived' WHERE state='done'. No time threshold
+ * because there's no in-between state anymore.
  *
- * Idempotent: re-runs are no-ops once a thread is already archived.
- *
- * Auth: CRON_SECRET bearer (matches /api/wheelhouse/cron/pulse).
+ * Idempotent. Auth: CRON_SECRET bearer.
  */
 export async function GET(req: Request) {
   const expected = process.env.CRON_SECRET;
@@ -33,11 +33,8 @@ export async function GET(req: Request) {
   }
 
   try {
-    // Pull the soon-to-be-archived list first so we can return what changed.
     const { rows: candidates } = await sql`
-      SELECT id, title FROM wheelhouse_threads
-      WHERE state = 'done'
-        AND updated_at < NOW() - INTERVAL '7 days'
+      SELECT id, title FROM wheelhouse_threads WHERE state = 'done'
     `;
     if (candidates.length === 0) {
       return NextResponse.json({ ok: true, archived: 0 });
@@ -46,7 +43,6 @@ export async function GET(req: Request) {
       UPDATE wheelhouse_threads
       SET state = 'archived', updated_at = NOW()
       WHERE state = 'done'
-        AND updated_at < NOW() - INTERVAL '7 days'
     `;
     return NextResponse.json({
       ok: true,
