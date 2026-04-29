@@ -59,12 +59,12 @@ export const cartVendors: CartVendor[] = [
     slug: "jackfish",
     name: "Jackfish Cart Rentals",
     phone: "(361) 459-2900",
-    phoneMobile: "(361) 339-1089", // Mac Owens — alt phone published as primary on portaransasgolfcarts.com (Twilio Lookup: fixedVoip / Charter Fiberlink — may accept SMS, will retry-and-confirm)
+    phoneMobile: "(361) 339-1089", // Mac Owens — alt phone published as primary on portaransasgolfcarts.com (Twilio Lookup: fixedVoip / Charter Fiberlink — production SMS returned 30006 as expected, fixedVoip didn't accept)
     email: "insideout361@gmail.com",
     address: "3411 S 11th St, Port Aransas, TX",
     cartSizes: ["4", "6"],
     active: true,
-    smsCapable: true, // 459-2900 was landline; phoneMobile 339-1089 is fixedVoip — optimistic, will downgrade if 30006 returns
+    smsCapable: false, // both 459-2900 main and 339-1089 alt return 30006 — needs direct ask for Mac Owens cell
   },
   {
     slug: "texas-red",
@@ -88,12 +88,12 @@ export const cartVendors: CartVendor[] = [
     slug: "tarpon-carts",
     name: "Tarpon Carts & Rentals",
     phone: "(361) 749-2569",
-    phoneMobile: "(361) 988-8161", // Sandcastle satellite contact — Twilio Lookup confirms MOBILE (Worldcall). Lee R. Hoskins Jr. is managing partner.
+    phoneMobile: "(361) 988-8161", // Sandcastle satellite contact — Lookup said mobile (Worldcall) but production SMS came back 30006 too. Worldcall is a small CLEC; Lookup-vs-actual divergence. Manager: Lee R. Hoskins Jr.
     email: "TarponCartsandRentals@gmail.com", // HIGH (own site Reservations section)
     address: "614 N Alister St, Port Aransas, TX",
     cartSizes: ["4", "6", "8"],
     active: true,
-    smsCapable: true, // main 749-2569 is landline; phoneMobile 988-8161 is mobile (Worldcall)
+    smsCapable: false, // both 749-2569 main and 988-8161 alt return 30006 — needs direct ask for owner cell
   },
   {
     slug: "brons-beach-carts",
