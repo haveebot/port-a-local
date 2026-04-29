@@ -25,8 +25,14 @@ import { buildOptInInviteSms } from "@/lib/cartVendorSmsBlast";
 
 interface Body {
   action: "invite" | "opt-in" | "opt-out";
-  slug: string;
+  slug: string; // vendor slug, or "all-active" for bulk invite (action: "invite" only)
   notes?: string;
+}
+
+interface BulkResult {
+  slug: string;
+  ok: boolean;
+  error?: string;
 }
 
 export async function POST(req: NextRequest) {
@@ -45,6 +51,37 @@ export async function POST(req: NextRequest) {
   const { action, slug } = body;
   if (!action || !slug) {
     return NextResponse.json({ error: "missing_action_or_slug" }, { status: 400 });
+  }
+
+  // Bulk: invite every active vendor with a phone, in sequence with 800ms
+  // pacing (under AT&T 1.25 mps for LOW_VOLUME tier). Idempotent — re-running
+  // re-fires the invite SMS but the DB stays consistent.
+  if (slug === "all-active" && action === "invite") {
+    const eligible = cartVendors.filter(
+      (v) => v.active && v.phone.trim().length > 0,
+    );
+    const results: BulkResult[] = [];
+    for (const v of eligible) {
+      const phoneE164 = toE164(v.phone);
+      try {
+        await recordInvite(v.slug, phoneE164);
+        await sendSms(v.phone, buildOptInInviteSms(v.name));
+        results.push({ slug: v.slug, ok: true });
+      } catch (err) {
+        results.push({ slug: v.slug, ok: false, error: String(err) });
+      }
+      if (results.length < eligible.length) {
+        await new Promise((r) => setTimeout(r, 800));
+      }
+    }
+    return NextResponse.json({
+      ok: true,
+      action: "invite-all",
+      total: eligible.length,
+      sent: results.filter((r) => r.ok).length,
+      failed: results.filter((r) => !r.ok).length,
+      results,
+    });
   }
 
   const vendor = cartVendors.find((v) => v.slug === slug);

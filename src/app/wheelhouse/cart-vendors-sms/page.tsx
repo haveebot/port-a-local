@@ -4,6 +4,7 @@ import Link from "next/link";
 import { cartVendors } from "@/data/cart-vendors";
 import { getAllConsents } from "@/data/cart-vendor-sms-store";
 import VendorSmsRow from "./VendorSmsRow";
+import BulkInviteButton from "./BulkInviteButton";
 
 export const dynamic = "force-dynamic";
 
@@ -39,6 +40,13 @@ export default async function CartVendorsSmsPage() {
     optedOut: rows.filter((r) => r.status === "opted_out").length,
     pending: rows.filter((r) => r.status === "pending").length,
   };
+
+  // Eligible-for-bulk = active + has phone + not yet opted-in or opted-out.
+  // Re-running bulk on already-invited vendors re-fires the SMS (idempotent on
+  // the DB side); skip the ones who've already responded to avoid noise.
+  const bulkEligible = rows.filter(
+    (r) => r.active && r.phone && r.status === "pending",
+  ).length;
 
   return (
     <main className="min-h-screen bg-sand-50 text-navy-900">
@@ -82,6 +90,16 @@ export default async function CartVendorsSmsPage() {
           <p className="text-[11px] text-navy-500">
             Pending = not yet invited or no reply. Re-invite is safe (idempotent).
           </p>
+
+          {bulkEligible > 0 && (
+            <div className="mt-5 pt-5 border-t border-sand-200 flex items-center justify-between gap-4">
+              <p className="text-sm text-navy-700">
+                <strong>{bulkEligible}</strong> vendor{bulkEligible === 1 ? "" : "s"} eligible
+                for bulk invite (active + phone + still pending).
+              </p>
+              <BulkInviteButton eligibleCount={bulkEligible} />
+            </div>
+          )}
         </section>
 
         <section className="bg-white rounded-2xl border border-sand-300 p-6 shadow-sm">
