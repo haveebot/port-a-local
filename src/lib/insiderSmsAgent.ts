@@ -21,7 +21,11 @@
 import { sendSms } from "./twilioSms";
 import type { Insider } from "@/data/insiders";
 
-const ANTHROPIC_API_KEY = (process.env.ANTHROPIC_API_KEY || "").trim();
+// Read at invocation time (NOT module load) so env changes pick up
+// without waiting for a function-instance cold-start.
+function getAnthropicKey(): string {
+  return (process.env.ANTHROPIC_API_KEY || "").trim();
+}
 const MODEL = "claude-haiku-4-5-20251001";
 const MAX_ITERATIONS = 3;
 const WINSTON_PHONE_E164 = "+15125681725";
@@ -150,7 +154,11 @@ export async function runInsiderAgent(
   insider: Insider,
   body: string,
 ): Promise<AgentResult> {
-  if (!ANTHROPIC_API_KEY) {
+  const apiKey = getAnthropicKey();
+  console.log(
+    `[insider-agent] entry — keyPresent=${!!apiKey} keyLen=${apiKey.length} insider=${insider.name}`,
+  );
+  if (!apiKey) {
     console.log(
       "[insider-agent] ANTHROPIC_API_KEY not set — skipping inline Claude",
     );
@@ -172,7 +180,7 @@ export async function runInsiderAgent(
       res = await fetch("https://api.anthropic.com/v1/messages", {
         method: "POST",
         headers: {
-          "x-api-key": ANTHROPIC_API_KEY,
+          "x-api-key": apiKey,
           "anthropic-version": "2023-06-01",
           "content-type": "application/json",
         },
