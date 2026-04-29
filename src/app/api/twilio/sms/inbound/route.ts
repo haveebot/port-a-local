@@ -1,16 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cartVendors } from "@/data/cart-vendors";
 import {
-  getConsentByPhone,
   recordOptIn,
   recordOptOut,
   toE164,
 } from "@/data/cart-vendor-sms-store";
+import { findInsider } from "@/data/insiders";
 import { sendSms } from "@/lib/twilioSms";
 import {
   buildOptInConfirmSms,
   buildOptOutAckSms,
 } from "@/lib/cartVendorSmsBlast";
+import { forwardInsiderSmsToAdmin } from "@/lib/insiderSmsForward";
 
 /**
  * Twilio inbound SMS webhook.
@@ -82,6 +83,19 @@ export async function POST(req: NextRequest) {
     console.log(
       `[twilio/inbound] from=${fromE164} intent=${intent} sid=${messageSid} body=${JSON.stringify(body)}`,
     );
+
+    // Insider bridge: if this number is on the allowlist (Winston, Collie,
+    // Nick, etc.), forward the message to admin@theportalocal.com so Claude
+    // reads it on next session via pal_mail.py. Skip vendor matcher entirely.
+    const insider = findInsider(fromE164);
+    if (insider) {
+      // STOP from an insider still flows to opt-out at the carrier level
+      // (Twilio handles automatically), but we don't run the vendor logic.
+      forwardInsiderSmsToAdmin(insider, body, messageSid).catch((err) =>
+        console.error("[twilio/inbound] insider-forward failed:", err),
+      );
+      return twimlResponse();
+    }
 
     // Match the inbound number to a known cart vendor (by phone).
     // cartVendors phones may be in various formats; normalize for compare.

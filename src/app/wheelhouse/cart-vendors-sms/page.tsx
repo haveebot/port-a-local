@@ -22,7 +22,9 @@ export default async function CartVendorsSmsPage() {
       slug: v.slug,
       name: v.name,
       phone: v.phone,
+      phoneMobile: v.phoneMobile ?? null,
       active: v.active,
+      smsCapable: v.smsCapable !== false, // default true unless explicitly false
       status: c?.status ?? "pending",
       invitedAt: c?.invitedAt ?? null,
       optedInAt: c?.optedInAt ?? null,
@@ -41,12 +43,14 @@ export default async function CartVendorsSmsPage() {
     pending: rows.filter((r) => r.status === "pending").length,
   };
 
-  // Eligible-for-bulk = active + has phone + not yet opted-in or opted-out.
+  // Eligible-for-bulk = active + has phone + SMS-capable + not yet opted-in/out.
   // Re-running bulk on already-invited vendors re-fires the SMS (idempotent on
   // the DB side); skip the ones who've already responded to avoid noise.
+  // Also skip landline-only vendors (smsCapable:false) — Twilio refuses them.
   const bulkEligible = rows.filter(
-    (r) => r.active && r.phone && r.status === "pending",
+    (r) => r.active && r.phone && r.smsCapable && r.status === "pending",
   ).length;
+  const landlineOnly = rows.filter((r) => r.active && !r.smsCapable).length;
 
   return (
     <main className="min-h-screen bg-sand-50 text-navy-900">
@@ -89,6 +93,14 @@ export default async function CartVendorsSmsPage() {
           </div>
           <p className="text-[11px] text-navy-500">
             Pending = not yet invited or no reply. Re-invite is safe (idempotent).
+            {landlineOnly > 0 && (
+              <>
+                {" · "}
+                <strong>{landlineOnly}</strong> vendor{landlineOnly === 1 ? "" : "s"} marked
+                landline-only (Twilio error 30006) — they stay email-only until a mobile
+                number is added.
+              </>
+            )}
           </p>
 
           {bulkEligible > 0 && (

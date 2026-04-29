@@ -14,7 +14,7 @@
 
 import { sendSms } from "./twilioSms";
 import { getOptedInSlugs } from "@/data/cart-vendor-sms-store";
-import { cartVendors } from "@/data/cart-vendors";
+import { cartVendors, smsPhoneFor } from "@/data/cart-vendors";
 
 /**
  * The opt-in invitation. One-shot SMS asking a vendor to join the
@@ -66,7 +66,15 @@ export interface CartLeadBlastInput {
 export function buildLeadBlastSms(input: CartLeadBlastInput): string {
   const { cartLabel, pickupFormatted, returnFormatted, numDays } = input;
   const dayWord = numDays === 1 ? "day" : "days";
-  return `Port A Local: 🛺 NEW CART LEAD - ${cartLabel}, ${pickupFormatted} to ${returnFormatted} (${numDays} ${dayWord}). $20 off your standard rate. Reply CLAIM to take it (first vendor wins). STOP to opt out.`;
+  // Block format per Collie 2026-04-29 — line-spacing makes the SMS skim
+  // faster on a vendor's lock screen. Each line carries one fact.
+  return [
+    `Port A Local: 🛺 NEW CART LEAD`,
+    `${cartLabel}, ${pickupFormatted} to ${returnFormatted} (${numDays} ${dayWord}).`,
+    `$20 off your standard rate.`,
+    `Reply CLAIM to take it (first vendor wins).`,
+    `STOP to opt out.`,
+  ].join("\n\n");
 }
 
 /**
@@ -93,7 +101,11 @@ export async function sendLeadBlastSms(
 
   const slugSet = new Set(optedInSlugs);
   const targets = cartVendors.filter(
-    (v) => v.active && slugSet.has(v.slug) && v.phone.trim().length > 0,
+    (v) =>
+      v.active &&
+      slugSet.has(v.slug) &&
+      v.smsCapable !== false &&
+      smsPhoneFor(v).trim().length > 0,
   );
   if (targets.length === 0) return 0;
 
@@ -103,7 +115,7 @@ export async function sendLeadBlastSms(
   let sent = 0;
   for (const vendor of targets) {
     try {
-      await sendSms(vendor.phone, body);
+      await sendSms(smsPhoneFor(vendor), body);
       sent++;
     } catch (err) {
       console.error(`[cart-vendor-blast] send failed for ${vendor.slug}:`, err);

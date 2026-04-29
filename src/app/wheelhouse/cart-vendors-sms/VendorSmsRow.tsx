@@ -7,7 +7,9 @@ interface RowData {
   slug: string;
   name: string;
   phone: string;
+  phoneMobile: string | null;
   active: boolean;
+  smsCapable: boolean;
   status: "pending" | "opted_in" | "opted_out";
   invitedAt: string | null;
   optedInAt: string | null;
@@ -96,8 +98,20 @@ export default function VendorSmsRow({ row }: { row: RowData }) {
                 Inactive
               </span>
             )}
+            {!row.smsCapable && (
+              <span className="text-[10px] uppercase tracking-widest px-2 py-0.5 rounded-full bg-coral-100 text-coral-700 border border-coral-300">
+                Landline only
+              </span>
+            )}
           </div>
-          <p className="text-xs text-navy-500 font-mono mt-1">{row.phone}</p>
+          <p className="text-xs text-navy-500 font-mono mt-1">
+            {row.phoneMobile ?? row.phone}
+            {row.phoneMobile && (
+              <span className="ml-2 text-[10px] text-navy-400">
+                (main: {row.phone})
+              </span>
+            )}
+          </p>
           <div className="text-[11px] text-navy-500 mt-2 flex flex-wrap gap-x-4 gap-y-1">
             <span>Invited: {fmtTime(row.invitedAt)}</span>
             {row.status === "opted_in" && (
@@ -127,8 +141,9 @@ export default function VendorSmsRow({ row }: { row: RowData }) {
             <>
               <button
                 onClick={() => fire("invite")}
-                disabled={pending}
-                className="px-3 py-1.5 text-xs font-bold rounded bg-coral-500 text-white hover:bg-coral-600 disabled:opacity-50"
+                disabled={pending || !row.smsCapable}
+                title={!row.smsCapable ? "Phone is a landline (Twilio 30006) — invite SMS would fail" : undefined}
+                className="px-3 py-1.5 text-xs font-bold rounded bg-coral-500 text-white hover:bg-coral-600 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {row.invitedAt ? "Re-invite" : "Send invite"}
               </button>

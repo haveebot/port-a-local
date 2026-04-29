@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { cartVendors } from "@/data/cart-vendors";
+import { cartVendors, getSmsCapableVendors, smsPhoneFor } from "@/data/cart-vendors";
 import {
   recordInvite,
   recordOptIn,
@@ -57,15 +57,14 @@ export async function POST(req: NextRequest) {
   // pacing (under AT&T 1.25 mps for LOW_VOLUME tier). Idempotent — re-running
   // re-fires the invite SMS but the DB stays consistent.
   if (slug === "all-active" && action === "invite") {
-    const eligible = cartVendors.filter(
-      (v) => v.active && v.phone.trim().length > 0,
-    );
+    const eligible = getSmsCapableVendors();
     const results: BulkResult[] = [];
     for (const v of eligible) {
-      const phoneE164 = toE164(v.phone);
+      const phone = smsPhoneFor(v);
+      const phoneE164 = toE164(phone);
       try {
         await recordInvite(v.slug, phoneE164);
-        await sendSms(v.phone, buildOptInInviteSms(v.name));
+        await sendSms(phone, buildOptInInviteSms(v.name));
         results.push({ slug: v.slug, ok: true });
       } catch (err) {
         results.push({ slug: v.slug, ok: false, error: String(err) });
@@ -88,16 +87,23 @@ export async function POST(req: NextRequest) {
   if (!vendor) {
     return NextResponse.json({ error: "vendor_not_found" }, { status: 404 });
   }
-  if (!vendor.phone || vendor.phone.trim().length === 0) {
+  const phone = smsPhoneFor(vendor);
+  if (!phone || phone.trim().length === 0) {
     return NextResponse.json({ error: "vendor_has_no_phone" }, { status: 400 });
   }
 
-  const phoneE164 = toE164(vendor.phone);
+  const phoneE164 = toE164(phone);
 
   if (action === "invite") {
+    if (vendor.smsCapable === false) {
+      return NextResponse.json(
+        { error: "vendor_landline_only", detail: "Phone marked smsCapable:false (30006 landline)." },
+        { status: 400 },
+      );
+    }
     await recordInvite(slug, phoneE164);
     try {
-      await sendSms(vendor.phone, buildOptInInviteSms(vendor.name));
+      await sendSms(phone, buildOptInInviteSms(vendor.name));
     } catch (err) {
       console.error("[wh/cart-vendor-sms] invite send failed:", err);
       return NextResponse.json(

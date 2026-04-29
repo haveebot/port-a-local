@@ -22,6 +22,16 @@ export interface CartVendor {
   address: string;
   cartSizes: string[]; // "4", "6", "8"
   active: boolean; // false = excluded from blast even if email exists
+  /**
+   * Set to false when Twilio returns error 30006 ("landline / unreachable
+   * carrier") for the phone — landlines can't receive SMS at the carrier
+   * level. The bulk-invite + lead-blast SMS paths skip vendors with
+   * smsCapable === false. Undefined treated as "try SMS." A future
+   * `phoneMobile` alt field could carry an owner cell when scraped.
+   */
+  smsCapable?: boolean;
+  /** Optional alternate mobile number — used by SMS paths when present. */
+  phoneMobile?: string;
 }
 
 export const cartVendors: CartVendor[] = [
@@ -33,6 +43,7 @@ export const cartVendors: CartVendor[] = [
     address: "600 Cut Off Rd, Port Aransas, TX",
     cartSizes: ["4", "6", "8"],
     active: true,
+    smsCapable: false, // 30006 landline confirmed 2026-04-29 bulk invite
   },
   {
     slug: "port-a-beach-buggies",
@@ -42,6 +53,7 @@ export const cartVendors: CartVendor[] = [
     address: "307 W Ave G, Port Aransas, TX",
     cartSizes: ["2", "4", "6", "8"],
     active: true,
+    smsCapable: false, // 30006 landline confirmed 2026-04-29 bulk invite
   },
   {
     slug: "jackfish",
@@ -51,6 +63,7 @@ export const cartVendors: CartVendor[] = [
     address: "3411 S 11th St, Port Aransas, TX",
     cartSizes: ["4", "6"],
     active: true,
+    smsCapable: false, // 30006 landline confirmed 2026-04-29 bulk invite
   },
   {
     slug: "texas-red",
@@ -78,6 +91,7 @@ export const cartVendors: CartVendor[] = [
     address: "614 N Alister St, Port Aransas, TX",
     cartSizes: ["4", "6", "8"],
     active: true,
+    smsCapable: false, // 30006 landline confirmed 2026-04-29 bulk invite
   },
   {
     slug: "brons-beach-carts",
@@ -141,6 +155,7 @@ export const cartVendors: CartVendor[] = [
     address: "130 E Ave G, Port Aransas, TX",
     cartSizes: ["4", "6"],
     active: true,
+    smsCapable: false, // 30006 landline confirmed 2026-04-29 bulk invite
   },
   {
     slug: "ocean-carts",
@@ -150,6 +165,7 @@ export const cartVendors: CartVendor[] = [
     address: "3417 S 11th St, Port Aransas, TX",
     cartSizes: ["6"],
     active: true,
+    smsCapable: false, // 30006 landline confirmed 2026-04-29 bulk invite
   },
   {
     slug: "marlins-beach-carts",
@@ -204,8 +220,33 @@ export const cartVendors: CartVendor[] = [
     address: "2131 State Hwy 361, Port Aransas, TX",
     cartSizes: [],
     active: true,
+    smsCapable: false, // 30006 landline confirmed 2026-04-29 bulk invite
   },
 ];
+
+/**
+ * Effective phone for SMS — prefers phoneMobile if set, falls back to phone.
+ * Used by SMS opt-in invite + lead-blast paths so a vendor with both a
+ * landline (phone) and a mobile (phoneMobile) gets the mobile.
+ */
+export function smsPhoneFor(v: CartVendor): string {
+  if (v.phoneMobile && v.phoneMobile.trim().length > 0) return v.phoneMobile;
+  return v.phone;
+}
+
+/**
+ * Vendors that can actually receive SMS — active, with a phone, and not
+ * marked smsCapable: false (Twilio landline error 30006 confirmed). The
+ * bulk-invite + lead-blast SMS paths use this list.
+ */
+export function getSmsCapableVendors(): CartVendor[] {
+  return cartVendors.filter(
+    (v) =>
+      v.active &&
+      smsPhoneFor(v).trim().length > 0 &&
+      v.smsCapable !== false,
+  );
+}
 
 /** Vendors with email addresses — ready for the blast. */
 export function getBlastableVendors() {
