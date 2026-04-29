@@ -30,6 +30,7 @@ const ALERT_LINKS = [
 
 const TOOLS_LINKS = [
   { href: "/wheelhouse/payouts", label: "Payouts" },
+  { href: "/wheelhouse/cart-vendors-sms", label: "Cart vendor SMS" },
   { href: "/wheelhouse/locals-resend", label: "Locals re-fire" },
   { href: "/wheelhouse/welcome", label: "Help" },
 ];
