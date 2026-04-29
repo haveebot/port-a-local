@@ -59,11 +59,12 @@ export const cartVendors: CartVendor[] = [
     slug: "jackfish",
     name: "Jackfish Cart Rentals",
     phone: "(361) 459-2900",
+    phoneMobile: "(361) 339-1089", // Mac Owens — alt phone published as primary on portaransasgolfcarts.com (Twilio Lookup: fixedVoip / Charter Fiberlink — may accept SMS, will retry-and-confirm)
     email: "insideout361@gmail.com",
     address: "3411 S 11th St, Port Aransas, TX",
     cartSizes: ["4", "6"],
     active: true,
-    smsCapable: false, // 30006 landline confirmed 2026-04-29 bulk invite
+    smsCapable: true, // 459-2900 was landline; phoneMobile 339-1089 is fixedVoip — optimistic, will downgrade if 30006 returns
   },
   {
     slug: "texas-red",
@@ -87,11 +88,12 @@ export const cartVendors: CartVendor[] = [
     slug: "tarpon-carts",
     name: "Tarpon Carts & Rentals",
     phone: "(361) 749-2569",
+    phoneMobile: "(361) 988-8161", // Sandcastle satellite contact — Twilio Lookup confirms MOBILE (Worldcall). Lee R. Hoskins Jr. is managing partner.
     email: "TarponCartsandRentals@gmail.com", // HIGH (own site Reservations section)
     address: "614 N Alister St, Port Aransas, TX",
     cartSizes: ["4", "6", "8"],
     active: true,
-    smsCapable: false, // 30006 landline confirmed 2026-04-29 bulk invite
+    smsCapable: true, // main 749-2569 is landline; phoneMobile 988-8161 is mobile (Worldcall)
   },
   {
     slug: "brons-beach-carts",
@@ -151,21 +153,23 @@ export const cartVendors: CartVendor[] = [
     slug: "island-surf-rentals",
     name: "Island Surf Rentals",
     phone: "(361) 749-0822",
+    phoneMobile: "(210) 315-5718", // Dale Christianson's Tradewinds Vacation Rentals contact — Twilio Lookup confirms MOBILE (AT&T Wireless). 210 = San Antonio area code.
     email: "islandsurfrentals@yahoo.com",
     address: "130 E Ave G, Port Aransas, TX",
     cartSizes: ["4", "6"],
     active: true,
-    smsCapable: false, // 30006 landline confirmed 2026-04-29 bulk invite
+    smsCapable: true, // main 749-0822 is landline; phoneMobile 210-315-5718 is mobile (AT&T)
   },
   {
     slug: "ocean-carts",
     name: "Ocean Carts",
     phone: "(361) 339-1036",
+    phoneMobile: "(361) 217-8490", // BBB profile alt — Twilio Lookup confirms MOBILE (AT&T Wireless). General partner Damian Allan; business mid-ownership-change per BBB.
     email: "info@oceancarts.com",
     address: "3417 S 11th St, Port Aransas, TX",
     cartSizes: ["6"],
     active: true,
-    smsCapable: false, // 30006 landline confirmed 2026-04-29 bulk invite
+    smsCapable: true, // main 339-1036 is landline; phoneMobile 361-217-8490 is mobile (AT&T)
   },
   {
     slug: "marlins-beach-carts",

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { cartVendors, getSmsCapableVendors, smsPhoneFor } from "@/data/cart-vendors";
 import {
+  getAllConsents,
   recordInvite,
   recordOptIn,
   recordOptOut,
@@ -57,7 +58,16 @@ export async function POST(req: NextRequest) {
   // pacing (under AT&T 1.25 mps for LOW_VOLUME tier). Idempotent — re-running
   // re-fires the invite SMS but the DB stays consistent.
   if (slug === "all-active" && action === "invite") {
-    const eligible = getSmsCapableVendors();
+    // Bulk = SMS-capable AND not yet invited. Re-fire is safe but we don't
+    // want to re-poke vendors we already messaged (avoids confusion when a
+    // template change is rolling out). Use per-vendor "Re-invite" button
+    // for that case.
+    const consents = await getAllConsents();
+    const inviterMap = new Map(consents.map((c) => [c.vendorSlug, c]));
+    const eligible = getSmsCapableVendors().filter((v) => {
+      const c = inviterMap.get(v.slug);
+      return !c || !c.invitedAt;
+    });
     const results: BulkResult[] = [];
     for (const v of eligible) {
       const phone = smsPhoneFor(v);

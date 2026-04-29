@@ -43,12 +43,11 @@ export default async function CartVendorsSmsPage() {
     pending: rows.filter((r) => r.status === "pending").length,
   };
 
-  // Eligible-for-bulk = active + has phone + SMS-capable + not yet opted-in/out.
-  // Re-running bulk on already-invited vendors re-fires the SMS (idempotent on
-  // the DB side); skip the ones who've already responded to avoid noise.
-  // Also skip landline-only vendors (smsCapable:false) — Twilio refuses them.
+  // Eligible-for-bulk = active + SMS-capable + not yet invited at all.
+  // Already-invited vendors must be re-poked individually (per-row button)
+  // to avoid spamming the entire roster on every template tweak.
   const bulkEligible = rows.filter(
-    (r) => r.active && r.phone && r.smsCapable && r.status === "pending",
+    (r) => r.active && r.phone && r.smsCapable && !r.invitedAt,
   ).length;
   const landlineOnly = rows.filter((r) => r.active && !r.smsCapable).length;
 
