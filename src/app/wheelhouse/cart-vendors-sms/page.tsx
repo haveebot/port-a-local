@@ -43,9 +43,18 @@ export default async function CartVendorsSmsPage() {
     pending: rows.filter((r) => r.status === "pending").length,
   };
 
-  // Eligible-for-bulk = active + SMS-capable + not yet invited at all.
-  // Already-invited vendors must be re-poked individually (per-row button)
-  // to avoid spamming the entire roster on every template tweak.
+  // Blast roster = active + SMS-capable + NOT opted-out. This is the actual
+  // group that receives lead-blast SMS under the default-opt-in policy.
+  const blastRoster = rows.filter(
+    (r) =>
+      r.active &&
+      r.phone &&
+      r.smsCapable &&
+      r.status !== "opted_out",
+  ).length;
+
+  // Courtesy-invite-eligible = active + SMS-capable + not yet invited.
+  // Used for the optional bulk courtesy intro send.
   const bulkEligible = rows.filter(
     (r) => r.active && r.phone && r.smsCapable && !r.invitedAt,
   ).length;
@@ -73,31 +82,32 @@ export default async function CartVendorsSmsPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-8">
         <section className="bg-white rounded-2xl border border-sand-300 p-6 shadow-sm">
           <h1 className="font-display text-2xl font-bold mb-2">
-            SMS opt-in for cart vendors
+            Cart vendor SMS roster
           </h1>
           <p className="text-sm text-navy-600 mb-4 leading-relaxed">
-            A2P 10DLC clearance (campaign C2KO2MB) means PAL can send vendors
-            SMS reliably. This page lets you invite each cart vendor to opt in.
-            Vendors who reply YES via SMS get added to the lead-blast SMS in
-            addition to email. Vendors who reply NO/STOP stay email-only.
-            Manual override is available for vendors who consent verbally.
+            <strong>Policy (2026-04-29):</strong> all cart vendors in the directory are
+            treated as default opt-in for the lead-blast SMS. Manual opt-out (STOP /
+            NO reply) is the only way they don&apos;t receive alerts. Manual opt-in
+            via courtesy invite is optional — used to flag vendors who explicitly
+            confirmed (audit / tracking only, no behavior change). A2P 10DLC clearance
+            (campaign C2KO2MB) means SMS routes through the verified pipe.
           </p>
 
           <div className="grid grid-cols-3 sm:grid-cols-5 gap-3 text-center mb-2">
-            <Stat label="Total" value={counts.total} />
+            <Stat label="Blast roster" value={blastRoster} tone="emerald" />
             <Stat label="Active" value={counts.active} tone="navy" />
-            <Stat label="Invited" value={counts.invited} tone="navy" />
-            <Stat label="Opted in" value={counts.optedIn} tone="emerald" />
+            <Stat label="Confirmed opt-in" value={counts.optedIn} tone="navy" />
             <Stat label="Opted out" value={counts.optedOut} tone="navy" />
+            <Stat label="Total" value={counts.total} tone="navy" />
           </div>
           <p className="text-[11px] text-navy-500">
-            Pending = not yet invited or no reply. Re-invite is safe (idempotent).
+            <strong>Blast roster</strong> = active + SMS-capable + not opted-out (the actual lead-blast targets).
+            <strong> Confirmed opt-in</strong> = audit-only (vendor explicitly replied YES).
             {landlineOnly > 0 && (
               <>
-                {" · "}
+                {" "}
                 <strong>{landlineOnly}</strong> vendor{landlineOnly === 1 ? "" : "s"} marked
-                landline-only (Twilio error 30006) — they stay email-only until a mobile
-                number is added.
+                landline-only (Twilio error 30006) — collect a mobile cell to add to the roster.
               </>
             )}
           </p>
@@ -105,8 +115,8 @@ export default async function CartVendorsSmsPage() {
           {bulkEligible > 0 ? (
             <div className="mt-5 pt-5 border-t border-sand-200 flex items-center justify-between gap-4">
               <p className="text-sm text-navy-700">
-                <strong>{bulkEligible}</strong> vendor{bulkEligible === 1 ? "" : "s"} eligible
-                for bulk invite (active + phone + still pending).
+                <strong>{bulkEligible}</strong> vendor{bulkEligible === 1 ? "" : "s"} not yet sent the courtesy intro SMS.
+                <span className="text-[11px] text-navy-500 block mt-1">Optional — they&apos;re already in the blast roster by default.</span>
               </p>
               <BulkInviteButton eligibleCount={bulkEligible} />
             </div>
@@ -114,15 +124,10 @@ export default async function CartVendorsSmsPage() {
             <div className="mt-5 pt-5 border-t border-sand-200">
               <p className="text-sm text-emerald-700 flex items-center gap-2">
                 <span className="text-base">✓</span>
-                All <strong>{counts.invited}</strong> SMS-capable vendor{counts.invited === 1 ? "" : "s"} invited.
-                {counts.optedIn + counts.optedOut < counts.invited && (
-                  <span className="text-navy-600 font-normal">
-                    {" "}Awaiting {counts.invited - counts.optedIn - counts.optedOut} repl{counts.invited - counts.optedIn - counts.optedOut === 1 ? "y" : "ies"}.
-                  </span>
-                )}
+                All <strong>{counts.invited}</strong> SMS-capable vendor{counts.invited === 1 ? "" : "s"} have received the courtesy intro.
               </p>
               <p className="text-[11px] text-navy-500 mt-1">
-                For individual re-pokes, use the per-row <strong>Re-invite</strong> button below.
+                Use the per-row <strong>Re-invite</strong> button to re-send the intro to a specific vendor.
                 The bulk action returns automatically when new SMS-capable vendors are added.
               </p>
             </div>

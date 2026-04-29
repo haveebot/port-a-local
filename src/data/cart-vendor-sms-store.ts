@@ -188,8 +188,9 @@ export async function recordOptOut(
 }
 
 /**
- * Slugs of vendors currently opted in to SMS — feeds the rent-confirm
- * blast loop. Cheap query, runs on every cart booking.
+ * Slugs of vendors currently opted in to SMS — useful for audit /
+ * tracking who explicitly confirmed (vs default-included via Winston's
+ * 2026-04-29 rule). Not used by the blast filter anymore.
  */
 export async function getOptedInSlugs(): Promise<string[]> {
   try {
@@ -197,6 +198,27 @@ export async function getOptedInSlugs(): Promise<string[]> {
     const { rows } = await sql`
       SELECT vendor_slug FROM cart_vendor_sms_consents
       WHERE status = 'opted_in'
+    `;
+    return rows.map((r) => r.vendor_slug as string);
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Slugs of vendors who have explicitly OPTED OUT of SMS — feeds the
+ * rent-confirm blast loop's exclusion list. Per Winston's policy
+ * 2026-04-29: cart vendors in the directory are treated as default
+ * opt-in; manual opt-out (STOP / NO reply) is the only way they don't
+ * receive blasts. So the blast targets ALL active SMS-capable vendors
+ * EXCEPT those returned here.
+ */
+export async function getOptedOutSlugs(): Promise<string[]> {
+  try {
+    await ensureSchema();
+    const { rows } = await sql`
+      SELECT vendor_slug FROM cart_vendor_sms_consents
+      WHERE status = 'opted_out'
     `;
     return rows.map((r) => r.vendor_slug as string);
   } catch {

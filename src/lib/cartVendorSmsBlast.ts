@@ -13,7 +13,7 @@
  */
 
 import { sendSms } from "./twilioSms";
-import { getOptedInSlugs } from "@/data/cart-vendor-sms-store";
+import { getOptedOutSlugs } from "@/data/cart-vendor-sms-store";
 import { cartVendors, smsPhoneFor } from "@/data/cart-vendors";
 
 /**
@@ -96,14 +96,16 @@ export function compactCartLabel(cartLabel: string): string {
 export async function sendLeadBlastSms(
   input: CartLeadBlastInput,
 ): Promise<number> {
-  const optedInSlugs = await getOptedInSlugs();
-  if (optedInSlugs.length === 0) return 0;
-
-  const slugSet = new Set(optedInSlugs);
+  // Per Winston's policy 2026-04-29: every cart vendor in the directory
+  // is default opt-in. Blast targets all active + SMS-capable vendors
+  // EXCEPT those who manually opted out (STOP / NO reply tracked in
+  // cart_vendor_sms_consents.status='opted_out').
+  const optedOutSlugs = await getOptedOutSlugs();
+  const excludeSet = new Set(optedOutSlugs);
   const targets = cartVendors.filter(
     (v) =>
       v.active &&
-      slugSet.has(v.slug) &&
+      !excludeSet.has(v.slug) &&
       v.smsCapable !== false &&
       smsPhoneFor(v).trim().length > 0,
   );

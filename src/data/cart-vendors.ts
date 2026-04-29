@@ -184,10 +184,14 @@ export const cartVendors: CartVendor[] = [
     slug: "ash-cart-rental",
     name: "Ash Cart Rental",
     phone: "(361) 244-1020",
+    // 2026-04-29: replied STOP to opt-in invite + Winston rule "if a vendor opts out
+    // of SMS, remove from all listings + directory entirely". active=false hides them
+    // from the cart-vendor blast AND the admin SMS roster (still preserved here for
+    // history / audit; flip back to true if they ever re-engage).
     email: "", // NEED — MEDIUM-confidence guess: ashcartrental@gmail.com (verify before adding)
     address: "2700 S 11th St, Port Aransas, TX",
     cartSizes: ["4", "6", "8"],
-    active: true,
+    active: false,
   },
   {
     slug: "port-a-carts",
