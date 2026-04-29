@@ -382,7 +382,7 @@ export async function sendAdminSaleEmail(
 
   await sendViaResend({
     from: "PAL Locals <orders@theportalocal.com>",
-    to: ["admin@theportalocal.com", "hello@theportalocal.com"],
+    to: ["admin@theportalocal.com", "hello@theportalocal.com", "bookings@theportalocal.com"],
     replyTo: purchase.customerEmail,
     subject,
     html: emailLayout({

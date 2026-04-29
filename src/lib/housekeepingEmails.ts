@@ -96,7 +96,7 @@ export async function sendHousekeepingAdminEmail(
       },
       body: JSON.stringify({
         from: "PAL Housekeeping <bookings@theportalocal.com>",
-        to: ["admin@theportalocal.com", "hello@theportalocal.com"],
+        to: ["admin@theportalocal.com", "hello@theportalocal.com", "bookings@theportalocal.com"],
         reply_to: b.customerEmail,
         subject,
         html,

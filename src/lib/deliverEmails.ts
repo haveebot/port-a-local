@@ -123,7 +123,7 @@ export async function sendAdminPaidEmail(order: Order): Promise<void> {
     `Subtotal: ${formatUSD(order.subtotalCents)} · Tip: ${formatUSD(order.tipCents)} · Total charged: ${formatUSD(order.totalCents)}\n\n` +
     `Economics:\n  Restaurant: ${formatUSD(order.restaurantCostCents)}\n  Driver Venmo: ${formatUSD(order.driverPayoutCents)}\n  PAL net: ${formatUSD(order.palNetCents)}`;
   await sendResendEmail({
-    to: ["admin@theportalocal.com", "hello@theportalocal.com"],
+    to: ["admin@theportalocal.com", "hello@theportalocal.com", "bookings@theportalocal.com"],
     replyTo: order.customer.email ?? undefined,
     subject,
     html,
