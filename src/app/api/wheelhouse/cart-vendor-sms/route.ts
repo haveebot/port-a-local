@@ -37,22 +37,16 @@ interface BulkResult {
 }
 
 /**
- * Auth: cookie (wheelhouse_who) for browser sessions, OR Authorization
- * Bearer matching WHEELHOUSE_TOKEN_WINSTON_CLAUDE for agent CLI operations.
- * Same pattern wheelhouse.py uses against the activity API.
+ * Auth: handled by /src/middleware.ts. Cookie path forwards
+ * `wheelhouse_who` cookie; bearer path forwards x-wheelhouse-agent header.
+ * If neither is present, middleware would have already 401'd — but defend
+ * here anyway so a misconfigured matcher can't silently expose the route.
  */
 async function authorize(req: NextRequest): Promise<string | null> {
   const who = (await cookies()).get("wheelhouse_who")?.value;
   if (who) return who;
-
-  const auth = req.headers.get("authorization") || "";
-  const m = auth.match(/^Bearer\s+(.+)$/);
-  if (m) {
-    const expected = (process.env.WHEELHOUSE_TOKEN_WINSTON_CLAUDE || "").trim();
-    if (expected && m[1].trim() === expected) {
-      return "winston-claude";
-    }
-  }
+  const agent = req.headers.get("x-wheelhouse-agent");
+  if (agent) return agent;
   return null;
 }
 
