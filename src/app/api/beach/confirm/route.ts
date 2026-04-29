@@ -169,6 +169,7 @@ export async function POST(req: NextRequest) {
             qty,
             setupDate: pickupDate,
             numDays: days,
+            vendorAmountCents: vendorTotalCents,
           });
           const sent = await sendBeachLeadBlast({
             product,

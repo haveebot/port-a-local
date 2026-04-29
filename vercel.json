@@ -11,6 +11,10 @@
     {
       "path": "/api/cron/insider-sms-watch",
       "schedule": "* * * * *"
+    },
+    {
+      "path": "/api/cron/beach-payouts",
+      "schedule": "0 * * * *"
     }
   ]
 }
