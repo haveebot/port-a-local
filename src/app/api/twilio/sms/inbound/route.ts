@@ -92,31 +92,33 @@ export async function POST(req: NextRequest) {
     );
 
     // Insider bridge: if this number is on the allowlist (Winston, Collie,
-    // Nick, etc.), fire two parallel handlers and return TwiML immediately.
+    // Nick, etc.), fire the email forward + the inline Claude agent.
     //
     // 1) forwardInsiderSmsToAdmin — email the message (with MMS attachments)
     //    to admin@theportalocal.com for the operator's inbox + Claude's
-    //    next-session arnold drill.
+    //    next-session arnold drill. Fire-and-forget — single HTTP call,
+    //    completes quickly enough that Vercel doesn't kill it.
+    //
     // 2) runInsiderAgent — inline Claude (Haiku 4.5) reads the message,
     //    decides an action, and acts via tools (reply, send to third party,
-    //    or escalate to Winston). Skipped if ANTHROPIC_API_KEY isn't set.
-    //
-    // Both fire-and-forget so the webhook returns quickly within Twilio's
-    // 15s window.
+    //    or escalate to Winston). AWAITED before returning TwiML — the
+    //    multi-step loop (~3-5s typical) needs the function alive to
+    //    complete; Vercel kills background work after response. Twilio's
+    //    15s webhook budget covers it. Skipped instantly if
+    //    ANTHROPIC_API_KEY isn't set.
     const insider = findInsider(fromE164);
     if (insider) {
       forwardInsiderSmsToAdmin(insider, body, messageSid).catch((err) =>
         console.error("[twilio/inbound] insider-forward failed:", err),
       );
-      runInsiderAgent(insider, body)
-        .then((r) =>
-          console.log(
-            `[twilio/inbound] insider-agent: ran=${r.ran} iters=${r.iterations ?? "-"} tools=${(r.toolsCalled ?? []).join(",")} ${r.reason ?? ""}`,
-          ),
-        )
-        .catch((err) =>
-          console.error("[twilio/inbound] insider-agent failed:", err),
+      try {
+        const agentResult = await runInsiderAgent(insider, body);
+        console.log(
+          `[twilio/inbound] insider-agent: ran=${agentResult.ran} iters=${agentResult.iterations ?? "-"} tools=${(agentResult.toolsCalled ?? []).join(",")} ${agentResult.reason ?? ""}`,
         );
+      } catch (err) {
+        console.error("[twilio/inbound] insider-agent threw:", err);
+      }
       return twimlResponse();
     }
 
