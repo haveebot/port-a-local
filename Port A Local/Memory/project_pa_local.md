@@ -8,6 +8,57 @@ originSessionId: 35a4d1eb-635d-424f-a8eb-a22e66a74d90
 
 **Operating model:** Winston makes product decisions and handles local relationships. Claude builds, maintains, deploys, and organizes everything else. Goal is a lean two-person operation.
 
+## Current State (as of 2026-04-29 — Twilio A2P-unlocked SMS arc + inline Claude agent + Havee)
+
+The biggest single PAL session yet. Started with the morning Arnold and a Twilio A2P 10DLC verification, ended with a fully-autonomous Claude agent answering insider SMS in real time. **23 commits today** (`74d5a14` through `1ac50d3`). Everything shipped clean on main. Multiple firsts: first real $$ event through the new beach-vendor system ($300 Stephanie S. cabana for May 9), first end-to-end Claude-via-SMS exchange (Patricia text via Collie's request), first multi-turn live conversation between Winston and the autonomous agent.
+
+**🔥 Twilio A2P 10DLC LIVE (campaign C2KO2MB).** Brand approved (BNd603…) + campaign verified at TCR 2026-04-22 + sender +13614281706 attached to Messaging Service MG197b… by me 2026-04-29. Two carrier-confirmed smoke tests delivered. Customer-side SMS surfaces (maintenance, rent, beach, delivery) all now route via the approved campaign automatically — no code change needed, just better delivery vs the silent-filtering pre-cert period.
+
+**Cart vendor SMS opt-in system — full build.**
+- `cart_vendor_sms_consents` Postgres table tracks per-vendor opt-in state (pending / opted_in / opted_out)
+- `/api/twilio/sms/inbound` webhook parses YES/NO/STOP/CLAIM and flips DB state
+- `/wheelhouse/cart-vendors-sms` admin tool — per-vendor invite buttons, manual override, bulk-invite-all-eligible button, status pills (Pending / Opted-in / Opted-out / Landline-only / Manual)
+- Bearer token auth (matches wheelhouse.py agent pattern) so CLI ops work too
+- Sequential 800ms pacing under AT&T 1.25 mps
+- **Bulk-invited 20 cart vendors → 13 delivered, 7 landline (error 30006)**. Then 4 of the 7 had mobile alternates surfaced via scrape + Twilio Lookup line-type intel (Tarpon 988-8161, Island Surf 210-315-5718 ✅, Ocean Carts 217-8490 ✅, Jackfish 339-1089). Production retry showed 2 of 4 actually mobile (Island Surf, Ocean Carts), the other 2 (Tarpon's Worldcall + Jackfish's fixedVoip) bounced 30006 too. **Net: 15 of 20 cart vendors SMS-reachable.** Remaining 5 (Coastal Ed's, Port A Beach Buggies, Tarpon, Jackfish, PA Golf Cart Rental) need owner cell collected via verbal/email ask.
+- One inbound STOP processed correctly (Ash Cart Rental → opted_out)
+- Lead-blast format chunked into 5 line-spaced blocks per Collie's revisions
+
+**Beach vendor SMS + atomic CLAIM flow — full build.**
+- `src/data/beach-vendors.ts`: John Brown (env), Tyler 361-813-6958, Danny Peterson 808-463-5544. All Twilio-Lookup-confirmed mobile.
+- `beach_booking_claims` Postgres table; atomic UPDATE WHERE claimed_at IS NULL ensures first-CLAIM-wins under SMS race
+- `/api/beach/confirm` fires the blast on every paid booking
+- Inbound webhook handles CLAIM intent: matches phone → finds most-recent-unclaimed → atomic claim → notifies all parties (winner gets customer phone, losers get "next one's up", customer gets vendor name)
+- **First REAL booking processed end-to-end 2026-04-29 16:32 UTC**: Stephanie S. paid $300 for cabana on May 9. Vendor blast delivered to John+Tyler+Danny ✓. Awaiting CLAIM as of truck.
+- v1 deferred: Stripe Connect for vendor payouts (manual for now), stale-booking cron, Wheelhouse admin tool listing recent claims
+
+**Insider SMS bridge — three-layer system.**
+- Layer 1: `src/data/insiders.ts` allowlist (Winston/Collie/Nick) + `/api/twilio/sms/inbound` matches insiders FIRST (before vendor matchers) → forwards full message + MMS attachments to admin@theportalocal.com via Resend (`[SMS from <name>]` subject, branded HTML body, base64-encoded media). MMS bug fixed mid-session — Winston's earlier voicemail-screenshot revealed the v1 bridge was dropping attachments.
+- Layer 2: `/api/cron/insider-sms-watch` 1-min Vercel cron — polls Twilio for new inbound from insiders, dedupes via `insider_sms_seen` table, fires push SMS to **operator only (Winston)** when Nick/Collie text. **Per Winston's no-cross-coms rule: insiders don't see each other's PAL conversations** — only the operator does. Sender's own messages are tracked but no self-notify.
+- Layer 3 (the BIG one): `runInsiderAgent` inline Claude agent (Haiku 4.5). Webhook fires this AWAITED for any insider message. Agent reads message, decides action via tools (reply_to_sender / send_sms_to_third_party / escalate_to_winston), responds in ~3 seconds end-to-end. Multi-turn conversations work (verified live with Winston during shipping).
+
+**Super-admin revenue pings — wired into 6 surfaces.** Cart, beach, delivery, locals-purchase, housekeeping, maintenance-Priority. Format: `PAL 🛺 $135 - Cart rental \n\n 4-pass cart · May 12-16 (5 days) \n\n J. Smith`. All 3 super-admins (Winston, Nick, Collie) get every revenue event. Per-kind opt-out structure ready (currently empty — everyone all-on). **First real fire 2026-04-29 16:32 UTC** on Stephanie's $300 booking — all 3 phones got the $300 ping concurrently with the vendor blast.
+
+**The "Havee" naming convention.** When Collie texted "Claude — I'm going to call you Havee from now on", Winston explained: Havee is what he and Nick have called each other since high school (meaningless catch-all that became their default "you" word), adopted as the cross-Heye-Lab agent name across the family of products (PAL, CrossRef, Sage Em). Agent's system prompt now identifies as Havee and signs as `- Havee` for insider replies. Customer-facing remains entity-only ("— The Port A Local"). Memory captured at `feedback_havee_naming.md`.
+
+**Anthropic API account.** Created today at console.anthropic.com under (Winston's choice of email). Single API key issued (`sk-ant-api03-…2j2fHwAA`), added to Vercel production as `ANTHROPIC_API_KEY` Sensitive. Migration to a dedicated Heye Lab Anthropic account later is a one-line `vercel env add` away — zero code change. Cost ballpark at current insider-SMS volume (~5/day, plus growing): trivial (~$0.05/day, well under the $25/mo cap discussed).
+
+**Cron infrastructure unstuck.** `CRON_SECRET` was missing in Vercel — meaning the existing daily PAL Pulse cron + the council-scrape weekly cron had been silently failing. Generated + added today (with the `--value` flag fix to avoid the trailing-newline bug from the WHEELHOUSE_TOKEN rotation). Daily Pulse fires 8am CT tomorrow (first time in production).
+
+**Live external action items closed today:**
+- City Secretary PIA: courtesy replies sent to Faye Nixon on both threads + consolidated PIA resubmission to `parecords@cityofportaransas.org` per § 552.234. Clock starts 2026-04-29; response due ~2026-05-13. Fed straight into the P&Z Capture piece's "wait the 10 days before publishing" gate.
+- Mother's Day weekend customer (210-428-1205): texted back from PAL pointing to /beach for cabana booking. Source customer was an MMS voicemail screenshot Winston forwarded — first end-to-end Claude-bridge → action loop.
+- Patricia text on Collie's behalf (Collie's request): "Have a good trip, Tricia! - see you back on the island - Port Aransas Local Co." → 361-332-9410, delivered, Collie acked "Great thank you".
+- Collie FB post draft (her ask, agent was down at the time): SMS draft + email with primary + 2 alt versions for Mother's Day weekend splash. Sent via Havee voice but pre-agent.
+
+**HeyeDeploy templates locked today (added to feedback_heyedeploy_pattern_thinking.md):**
+1. **Vendor SMS opt-in flow + bulk-invite admin tool** (cart-vendor pattern; reusable for any vertical with B2B vendors that need an SMS opt-in record)
+2. **Beach-vendor-style atomic CLAIM flow** (one-call-wins race resolution via UPDATE WHERE claimed_at IS NULL)
+3. **Insider SMS bridge** (allowlist + email forward + MMS attachment + operator-only cron broadcast)
+4. **Super-admin revenue pings** (multi-vertical fan-out with per-recipient per-kind opt-out scaffold)
+5. **Inline Claude SMS agent (Havee)** (Haiku 4.5 + tool-use, AWAITED inside webhook to survive Vercel's serverless-background-kill)
+6. **Twilio Lookup line-type verification** (always Lookup before adding a number; Worldcall/Charter Fiberlink/etc. classify as mobile/voip but bounce 30006 in production — Lookup is a starting filter not the final word)
+
 ## Current State (as of 2026-04-28 PM — push notification portal + alerts unification)
 
 This session was a single focused build: PAL's web push notification system, end-to-end, across every role. Started from "wheelhouse push only fires email" and ended with a complete cross-role push portal — internal ops + every vendor surface + city-wide alerts — plus a unified opt-in pattern that every Heye Lab tenant will inherit. **12 commits in one session** (`6bf95de` through `0c2144e`). All shipped clean on main.
