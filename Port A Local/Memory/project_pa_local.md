@@ -283,8 +283,8 @@ Revenue features are portals, not directory listings. Portals keep transactions 
 - **Stripe:** ✅ LIVE — `acct_1TLv2G…`, under admin@theportalocal.com, charges enabled, **manual platform payouts** (PAL → PAL bank fires when Winston says so), live keys in Vercel. **Stripe Connect Express ALSO live** for runner payouts (separate flow, defaults to daily auto-payouts on connected accounts). **2FA:** enabled with Google Authenticator, recovery code stored in iCloud Keychain (Stripe entry, 2026-04-26 — saved after a panic recovery this session). **Stripe Issuing:** deferred 30+ days, reapply after Connect volume history accumulates (~Q3 2026)
 - **Resend:** ✅ live, bookings@theportalocal.com sender, also wired to Know This Place tag suggestions
 - **Twilio:** ✅ account active, $44 USD balance, +1 (361) 428-1706 SMS+Voice
-- **A2P 10DLC Brand:** ✅ APPROVED (BNd603…)
-- **A2P 10DLC Campaign:** ⏳ IN_PROGRESS at TCR (low-volume mixed). Maintenance routes already use MessagingServiceSid when env var is set — flips automatically on approval.
+- **A2P 10DLC Brand:** ✅ APPROVED (BNd6030f9f0baf17902003652df158da0d)
+- **A2P 10DLC Campaign:** ✅ **LIVE 2026-04-29** (campaign `C2KO2MB`, status VERIFIED, registered at TCR 2026-04-22, attached to Messaging Service `MG197b…`). Use case: LOW_VOLUME mixed. Rate: AT&T 1.25 mps T-class, T-Mobile brand tier LOW. Sender +13614281706 attached to Messaging Service same day (was missing — that gap caused first smoke test to fail with error 21703 before number was attached). Two delivery-confirmed smoke tests landed on +15125681725. **Customer-side SMS surfaces (maintenance, rent, beach, delivery) all now route via approved campaign automatically — no code change required, just better delivery.**
 - **GSC:** ✅ verified via TXT record on apex, sitemap submitted
 - **GitHub:** ✅ stays on `haveebot/port-a-local` — no org migration planned (decided 2026-04-13)
 - **Vercel:** ✅ stays on `haveebots-projects` team — no team migration planned. Project name is `port-a-local`, deploys to theportalocal.com.
@@ -319,7 +319,7 @@ STRIPE_SECRET_KEY, NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY, RESEND_API_KEY, TWILIO_AC
 ### Cart Portal Marketplace (revenue)
 1. **Collect 12 missing vendor emails** — Winston task. Call or web-scrape: Coastal Ed's, Port A Beach Buggies, Texas Red, First Stop, Tarpon Carts, Bron's, Kacie's, Island Outfitters, Gulf Carts, Ash Cart, Port A Carts, PA Golf Cart Rental. Drop email into `src/data/cart-vendors.ts` next to slug → live on next deploy.
 2. **Click-to-claim mechanism** — needs Vercel KV (free tier). Unique claim links per vendor per lead. First click wins. Replaces manual reply-based claiming.
-3. **SMS blast channel** — code ready, flips on when A2P 10DLC campaign clears TCR. All 20 vendor phone numbers already in data file.
+3. **SMS blast channel** — A2P now live (2026-04-29). Phone numbers exist in `cart-vendors.ts` but the blast loop in `/api/rent/confirm/route.ts` still calls only `sendEmail`, not `sendSms`. Memory previously over-stated readiness. Build needed: (a) add `smsConsent` field to CartVendor (B2B opt-in is separate from registered customer use case in campaign C2KO2MB), (b) admin opt-in tool in Wheelhouse, (c) wire SMS into the blast for opted-in vendors, (d) Twilio inbound webhook to parse YES/NO.
 4. **Automated pre-arrival notification** — email + SMS to customer 24-48hrs before pickup with vendor name + pickup address + hours.
 5. **Automated return reminder** — email + SMS to customer day before return date.
 6. **Auto-refund for unclaimed leads** — cron or manual check: if lead unclaimed 3-4 days before pickup → Stripe refund + customer notification.
@@ -333,7 +333,7 @@ STRIPE_SECRET_KEY, NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY, RESEND_API_KEY, TWILIO_AC
 10. **Dispatch #2 — "The Landlord Nobody Voted For"** (planned follow-up) — shopping center acquisition + rent-doubling pattern. NOTE: Tim Parke (2026 Sandfest president, Lone Star Taste owner) is a potential source — he's both a cart-portal vendor relationship and a possible Dispatch #2 tenant. Handle carefully.
 
 ### Infrastructure
-11. **A2P campaign approval** (waiting on TCR — passive). Flips maintenance SMS + cart vendor SMS blast + **PAL Delivery customer SMS** automatically.
+11. ~~A2P campaign approval~~ ✅ **LIVE 2026-04-29** (C2KO2MB VERIFIED). Maintenance SMS + delivery customer SMS automatically route via approved campaign. Cart vendor SMS blast still needs a build (data was ready, code was not — see #3 under Cart Portal section).
 11b. **Stripe Issuing reapply** (passive — wait for ~30 days of Connect volume to accumulate, ~Q3 2026). Issuing would let runners get virtual cards instead of needing personal credit for restaurant pickups.
 12. **Classifieds/Want Board** — needs Supabase (still deferred)
 13. **Per-business OG images** (eventual) — 130+ business detail pages currently fall back to root OG.
