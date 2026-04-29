@@ -6,11 +6,17 @@ import {
   toE164,
 } from "@/data/cart-vendor-sms-store";
 import { findInsider } from "@/data/insiders";
+import { findBeachVendorByPhone } from "@/data/beach-vendors";
+import {
+  attemptClaim,
+  getMostRecentUnclaimed,
+} from "@/data/beach-claim-store";
 import { sendSms } from "@/lib/twilioSms";
 import {
   buildOptInConfirmSms,
   buildOptOutAckSms,
 } from "@/lib/cartVendorSmsBlast";
+import { notifyClaimResolution } from "@/lib/beachVendorBlast";
 import { forwardInsiderSmsToAdmin } from "@/lib/insiderSmsForward";
 
 /**
@@ -93,6 +99,68 @@ export async function POST(req: NextRequest) {
       // (Twilio handles automatically), but we don't run the vendor logic.
       forwardInsiderSmsToAdmin(insider, body, messageSid).catch((err) =>
         console.error("[twilio/inbound] insider-forward failed:", err),
+      );
+      return twimlResponse();
+    }
+
+    // Beach vendor CLAIM matcher — check before cart-vendor matcher because
+    // beach vendors (John, Tyler, Danny) may also receive non-CLAIM replies.
+    // CLAIM intent + beach-vendor phone match → atomic claim attempt.
+    const beachVendor = findBeachVendorByPhone(fromE164);
+    if (beachVendor && intent === "claim") {
+      const unclaimed = await getMostRecentUnclaimed();
+      if (!unclaimed) {
+        sendSms(
+          fromRaw,
+          `Port A Local: Thanks ${beachVendor.name} - no unclaimed beach booking right now. Next blast comes through automatically.`,
+        ).catch((err) =>
+          console.error("[twilio/inbound] beach no-lead reply failed:", err),
+        );
+        return twimlResponse();
+      }
+      const won = await attemptClaim(unclaimed.stripeSessionId, beachVendor.slug);
+      if (!won) {
+        // Lost the race — another vendor's CLAIM landed first.
+        sendSms(
+          fromRaw,
+          `Port A Local: ${beachVendor.name} - sorry, that booking was just claimed by another vendor. Watch for the next one.`,
+        ).catch((err) =>
+          console.error("[twilio/inbound] beach lost-race reply failed:", err),
+        );
+        return twimlResponse();
+      }
+      // Won the claim — fan out confirmations to all parties.
+      notifyClaimResolution({
+        winner: beachVendor,
+        customerName: unclaimed.customerName ?? "Customer",
+        customerPhone: unclaimed.customerPhone ?? "",
+        product: unclaimed.product ?? "setup",
+        qty: unclaimed.qty ?? 1,
+        setupDateFormatted: unclaimed.setupDate
+          ? new Date(unclaimed.setupDate + "T00:00:00").toLocaleDateString("en-US", {
+              weekday: "short",
+              month: "short",
+              day: "numeric",
+            })
+          : "your scheduled date",
+      }).catch((err) =>
+        console.error("[twilio/inbound] notifyClaimResolution failed:", err),
+      );
+      return twimlResponse();
+    }
+    if (beachVendor && intent === "stop") {
+      // STOP from a beach vendor — log; we can't easily un-stop without
+      // them re-opting in, but Twilio handles delivery suppression. They
+      // may want to be removed from beach vendor list manually.
+      console.log(
+        `[twilio/inbound] STOP from beach vendor ${beachVendor.slug} - flag for manual removal from beach vendor roster`,
+      );
+      return twimlResponse();
+    }
+    if (beachVendor) {
+      // Unparseable reply from a beach vendor — log so admin can route.
+      console.log(
+        `[twilio/inbound] beach-vendor reply (non-CLAIM) from ${beachVendor.slug}: ${JSON.stringify(body)}`,
       );
       return twimlResponse();
     }

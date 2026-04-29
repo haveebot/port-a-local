@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { emailLayout } from "@/lib/emailLayout";
 import { sendConsumerSms } from "@/lib/twilioSms";
+import { sendBeachLeadBlast } from "@/lib/beachVendorBlast";
+import { recordBlast } from "@/data/beach-claim-store";
 
 const getStripe = () => new Stripe(process.env.STRIPE_SECRET_KEY || "", {
   apiVersion: "2026-03-25.dahlia",
@@ -120,10 +122,45 @@ export async function POST(req: NextRequest) {
 
     const customerSMS = `Port A Local: Your ${productLabel} (${days} day${days !== 1 ? "s" : ""}) is booked for ${startFormatted}. Delivered to: ${deliveryAddress}. Reply STOP to opt out.`;
 
+    // Beach vendor blast — short ID is the last 6 chars of session ID,
+    // friendly to vendors who reply CLAIM. Format compact for SMS.
+    const shortId = session.id.slice(-6).toUpperCase();
+    const startCompact = startFormatted
+      .replace(/, \d{4}$/, "")
+      .replace(/^([A-Za-z]+), /, "$1 ");
+
     await Promise.allSettled([
       sendEmail(INTERNAL_EMAIL, `✅ Beach Rental PAID — ${name} — ${pickupDate} to ${returnDate}`, internalHtml),
       sendEmail(email, "Your Beach Setup is Booked — Port A Local", customerHtml),
       sendConsumerSms(phone, customerSMS, smsConsent),
+      // Record the blast in claim store (idempotent on session ID), then fan
+      // out to active beach vendors. Sequential 800ms pacing inside the
+      // helper. recordBlast first so a CLAIM reply landing fast still finds
+      // the row.
+      (async () => {
+        try {
+          await recordBlast({
+            stripeSessionId: session.id,
+            customerPhone: phone,
+            customerName: name,
+            product,
+            qty,
+            setupDate: pickupDate,
+            numDays: days,
+          });
+          const sent = await sendBeachLeadBlast({
+            product,
+            qty,
+            setupDateFormatted: startCompact,
+            numDays: days,
+            customerName: name,
+            shortId,
+          });
+          console.log(`[Beach/Blast] SMS sent to ${sent} active beach vendors (ref ${shortId})`);
+        } catch (err) {
+          console.error("[Beach/Blast] failed:", err);
+        }
+      })(),
     ]);
 
     return NextResponse.json({ success: true });
