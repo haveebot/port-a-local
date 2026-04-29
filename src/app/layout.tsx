@@ -4,7 +4,7 @@ import GullyPalette from "@/components/GullyPalette";
 import { WebsiteSchema, OrganizationSchema } from "@/components/StructuredData";
 import EmergencyBanner from "@/components/EmergencyBanner";
 import VisitorHeartbeat from "@/components/VisitorHeartbeat";
-import { Analytics } from "@vercel/analytics/next";
+import AnalyticsWrapper from "@/components/AnalyticsWrapper";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata: Metadata = {
@@ -85,7 +85,7 @@ export default function RootLayout({
         {children}
         <GullyPalette />
         <VisitorHeartbeat />
-        <Analytics />
+        <AnalyticsWrapper />
         <SpeedInsights />
       </body>
     </html>

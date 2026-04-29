@@ -30,6 +30,29 @@ function getOrCreateSessionId(): string {
   }
 }
 
+/**
+ * Per Winston rule 2026-04-29: clear usable analytics — always exclude
+ * admin/operator traffic. Two signals indicate "this is admin, not a
+ * customer":
+ *   1. wheelhouse_who cookie is set (operator is signed in)
+ *   2. Pathname starts with /wheelhouse (admin surface)
+ *
+ * Either trips the skip — heartbeat never fires for admin sessions.
+ */
+function isAdminTraffic(): boolean {
+  try {
+    if (typeof window !== "undefined" && window.location.pathname.startsWith("/wheelhouse")) {
+      return true;
+    }
+    if (typeof document !== "undefined" && document.cookie.includes("wheelhouse_who=")) {
+      return true;
+    }
+  } catch {
+    // ignore
+  }
+  return false;
+}
+
 export default function VisitorHeartbeat() {
   useEffect(() => {
     const sessionId = getOrCreateSessionId();
@@ -37,6 +60,7 @@ export default function VisitorHeartbeat() {
 
     function ping() {
       if (typeof document !== "undefined" && document.hidden) return;
+      if (isAdminTraffic()) return; // Skip admin/operator traffic — see isAdminTraffic note
       const path =
         typeof window !== "undefined" ? window.location.pathname : "/";
       // Use sendBeacon if possible — survives page unloads better
