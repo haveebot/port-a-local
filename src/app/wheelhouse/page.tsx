@@ -38,10 +38,16 @@ export default async function WheelhousePage({
     getPalStats().catch(() => null),
   ]);
 
-  let visible: Thread[] = allThreads;
+  // "All" excludes archived by default — they live in their own filter so the
+  // active board stays uncluttered. Per Winston rule 2026-04-29: instant-archive
+  // mental model, archived threads are filed-away but findable.
+  const activeThreads = allThreads.filter((t) => t.state !== "archived");
+  const archivedThreads = allThreads.filter((t) => t.state === "archived");
+
+  let visible: Thread[] = activeThreads;
   let title = "All threads";
   if (filter === "awaiting-me") {
-    visible = awaitingMe;
+    visible = awaitingMe.filter((t) => t.state !== "archived");
     title = `Awaiting ${me.name}`;
   } else if (filter === "open") {
     visible = allThreads.filter((t) => t.state === "open");
@@ -52,6 +58,9 @@ export default async function WheelhousePage({
   } else if (filter === "done") {
     visible = allThreads.filter((t) => t.state === "done");
     title = "Done";
+  } else if (filter === "archived") {
+    visible = archivedThreads;
+    title = "Archived";
   }
 
   return (
@@ -67,12 +76,12 @@ export default async function WheelhousePage({
         <div className="flex items-center justify-between gap-4 mb-6 flex-wrap">
           <div className="flex items-center gap-2 flex-wrap">
             <FilterChip
-              label={`All (${allThreads.length})`}
+              label={`All (${activeThreads.length})`}
               href="/wheelhouse"
               active={!filter}
             />
             <FilterChip
-              label={`Awaiting ${me.name} (${awaitingMe.length})`}
+              label={`Awaiting ${me.name} (${awaitingMe.filter((t) => t.state !== "archived").length})`}
               href="/wheelhouse?filter=awaiting-me"
               active={filter === "awaiting-me"}
               accent="coral"
@@ -88,9 +97,9 @@ export default async function WheelhousePage({
               active={filter === "blocked"}
             />
             <FilterChip
-              label="Done"
-              href="/wheelhouse?filter=done"
-              active={filter === "done"}
+              label={`Archived (${archivedThreads.length})`}
+              href="/wheelhouse?filter=archived"
+              active={filter === "archived"}
             />
           </div>
           <Link
