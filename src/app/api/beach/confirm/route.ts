@@ -68,6 +68,10 @@ export async function POST(req: NextRequest) {
 
     const m = session.metadata || {};
     const { name, phone, email, product, quantity, pickupDate, returnDate, deliveryAddress, numDays, totalPrice, smsConsent } = m;
+    const vendorTotalCents = parseInt(m.vendor_total_cents || "0") || 0;
+    const palFeeTotalCents = parseInt(m.pal_fee_total_cents || "0") || 0;
+    const vendorTotalUsd = vendorTotalCents > 0 ? `$${(vendorTotalCents / 100).toFixed(2)}` : "(not split)";
+    const palFeeTotalUsd = palFeeTotalCents > 0 ? `$${(palFeeTotalCents / 100).toFixed(2)}` : "(not split)";
 
     const startFormatted = formatDate(pickupDate);
     const endFormatted = formatDate(returnDate);
@@ -94,6 +98,8 @@ export async function POST(req: NextRequest) {
         <p><strong>Beach location:</strong> ${deliveryAddress}</p>
         <hr style="border:none; border-top:1px solid #e4dccc; margin:16px 0;"/>
         <p style="font-size:16px;"><strong>Total collected:</strong> $${total}</p>
+        <p style="margin:4px 0; font-size:13px;"><strong>Vendor payout (owed):</strong> ${vendorTotalUsd}</p>
+        <p style="margin:4px 0; font-size:13px;"><strong>PAL booking fee (retained):</strong> ${palFeeTotalUsd}</p>
         <p style="font-size:11px; color:#8896ab; font-family:monospace; margin-top:12px;">Stripe session: ${session.id}</p>
       `,
     });
@@ -137,7 +143,7 @@ export async function POST(req: NextRequest) {
       pingSuperAdmins({
         kind: "beach-rental",
         amountCents: total * 100,
-        summary: `${productLabel} ×${qty} · ${startFormatted.replace(/, \d{4}$/,"").replace(/^([A-Za-z]+), /,"$1 ")} (${days} ${days === 1 ? "day" : "days"}) · ${deliveryAddress}`,
+        summary: `${productLabel} ×${qty} · ${startFormatted.replace(/, \d{4}$/,"").replace(/^([A-Za-z]+), /,"$1 ")} (${days} ${days === 1 ? "day" : "days"}) · ${deliveryAddress}\n\nVendor: ${vendorTotalUsd} · PAL fee: ${palFeeTotalUsd}`,
         customerDisplay: formatCustomerDisplay(name),
       }),
       // Record the blast in claim store (idempotent on session ID), then fan

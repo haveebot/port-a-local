@@ -27,6 +27,8 @@ export async function POST(req: NextRequest) {
     totalPrice,
     qty,
     smsConsent,
+    vendorBaseCentsPerDay,
+    palFeeCentsPerDay,
   } = body;
 
   if (!name || !phone || !email || !product || !pickupDate || !returnDate || !deliveryAddress || !numDays || !totalPrice) {
@@ -35,6 +37,13 @@ export async function POST(req: NextRequest) {
 
   const productLabel = PRODUCT_LABELS[product] || product;
   const actualQty = qty || quantity || 1;
+  // Vendor / PAL split — pass both to Stripe metadata so /confirm can record
+  // the vendor payout obligation and the PAL booking-fee retention without
+  // having to re-derive from product config (which may drift over time).
+  const vendorTotalCents =
+    Number(vendorBaseCentsPerDay || 0) * Number(numDays) * actualQty;
+  const palFeeTotalCents =
+    Number(palFeeCentsPerDay || 0) * Number(numDays) * actualQty;
 
   try {
     const session = await getStripe().checkout.sessions.create({
@@ -67,6 +76,8 @@ export async function POST(req: NextRequest) {
         numDays: String(numDays),
         totalPrice: String(totalPrice),
         smsConsent: smsConsent ? "true" : "false",
+        vendor_total_cents: String(vendorTotalCents),
+        pal_fee_total_cents: String(palFeeTotalCents),
       },
       success_url: `${APP_URL}/beach/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${APP_URL}/beach`,
