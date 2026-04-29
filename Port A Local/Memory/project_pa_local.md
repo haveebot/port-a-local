@@ -8,6 +8,50 @@ originSessionId: 35a4d1eb-635d-424f-a8eb-a22e66a74d90
 
 **Operating model:** Winston makes product decisions and handles local relationships. Claude builds, maintains, deploys, and organizes everything else. Goal is a lean two-person operation.
 
+## Current State (as of 2026-04-29 PM — Wheelhouse organization sprint + analytics hygiene)
+
+Continuation of the morning's A2P-unlocked SMS arc. **17 more commits this afternoon** (`2693da5` → `5265754`) on top of the morning's 23. Now 40 commits total in one day — the largest single-day shipping sprint in PAL history. Theme: organize the Wheelhouse into a real operating dashboard, lock the cross-project patterns, codify principles into memory.
+
+**Cart vendor policy reversal (2693da5).** Per Winston rule: cart vendors in the directory are default opted-in for SMS lead-blast — manual opt-out is the only exclusion. Helper `getOptedOutSlugs` replaces the gating model. Ash Cart Rental flipped `active:false` (replied STOP earlier; per "remove from listings + directory entirely" rule). Net: 14 vendors now in active blast roster (vs 0 confirmed-opt-in under the old gating).
+
+**Intake-and-surface webhook (bdbbad9).** Per Winston rule: don't try to be clever parsing prose intent — just route messages to a human. Beach vendor non-CLAIM/STOP, cart vendor non-strict reply, and stranger inbound all push to operator (Winston) with `[Sender → PAL] body` format. Killed silent-log paths that swallowed John Brown's "out of town this weekend" earlier in the morning.
+
+**Beach pricing reworked (eb166f1).** Vendor-model split: cabana $275 vendor + $25 PAL booking fee = $300 customer; chairs $75 + $10 = $85. Customer total unchanged (no buyer-facing price change). Stripe metadata records `vendor_total_cents` + `pal_fee_total_cents`. Internal admin email + super-admin ping show vendor/PAL split. Customer-facing footnote: "Includes $25/day PAL booking fee. Vendor receives $275/day."
+
+**Beach Stripe Connect onboarding rails (129d692).** Mirrors the runner Connect Express pattern. New `beach_vendor_status` Postgres table; endpoints `/api/beach/vendor/connect/{start,refresh}`; vendor-facing onboarding page `/beach/vendor/[slug]/connect` with "Hi {first name}" greeting + button → Stripe-hosted form → status syncs back. Personal links per vendor (john-brown / tyler / danny-peterson).
+
+**bookings@ as transactional ledger (74bd61d + 3dee7a3).** All 6 paid-event verticals (cart / beach / maintenance / delivery / locals / housekeeping) now CC bookings@theportalocal.com on internal alerts. Originally exposed by Stephanie's $300 cabana — admin@ got the email but bookings@ didn't.
+
+**Cancellation policy + payout-release coupling (ed17ac4 + f9b8fde).** 72hr-before-setup is the cancellation cutoff — also the natural payout-release trigger. Customer-facing copy on /beach + email + Stripe receipt. Hourly cron at `/api/cron/beach-payouts` sweeps eligible claims past 72hr-before-setup mark; fires Stripe transfer to vendor's Connect account. Idempotent (Stripe key + DB UPDATE WHERE clause). Pings Winston if a vendor is past the window but Connect not onboarded.
+
+**Beach payouts admin (cde3193).** New `/wheelhouse/beach-payouts` — vendor onboarding status pills, "Text onboarding link" button (Havee voice via SMS), Stripe dashboard login link, manual "Pay now" button per claim. Cookie + bearer auth.
+
+**Revenue stats (0e26d37).** New `/wheelhouse/revenue` — today / 7d / 30d gross, per-vertical breakdown. Sourced from Stripe Charges API (refunded excluded). CT day boundaries.
+
+**Live visitors counter (8f7f204 → 5265754).** Pulsing emerald-dot card on `/wheelhouse` showing real-time count of distinct sessions seen in last 3 min, per-path breakdown. Custom-built session-heartbeat tracking (privacy-clean, sessionStorage tokens, no PII, no 3rd-party). Polls every 15s. **2026-04-29 PM update:** filtered to exclude admin/operator self-traffic — `isAdminTraffic()` checks both wheelhouse_who cookie and /wheelhouse path; either trips skip.
+
+**Marketing Glossary — Collie's workspace (a2b84d9).** Tier 2 build of the parking doc design. Live at `/wheelhouse/glossary` with 17-entry hand-curated seed (transact / editorial / browse / civic / internal). Marketing status pills (active / queued / parked / do-not-surface), free-form annotations Collie can add, accessible up/down reorder arrows. **Collaborator-protected:** the SQL `ON CONFLICT` clause intentionally omits `marketing_status`, `collaborator_notes`, and `display_order` — Claude can never overwrite Collie's work. This is the canonical PAL implementation of the HeyeDeploy "Tenant Collaborator Workspace" template.
+
+**Instant-archive thread model (34a32df + cdfc73d + 2629db8).** Per Winston "cleanest mental model" rule: collapsed "Done → wait 7 days → Archived" to "Done = instant Archive". API auto-coerces `state==='done'` to `'archived'` on PATCH. "Done" button removed from user-clickable transitions; "Archive" is the finishing motion. New "Archived (N)" filter chip with count badge replaces the "Done" chip. Auto-archive cron now backstop only (drops 7-day threshold, fires on any 'done' state). One-shot sweep endpoint migrated 3 legacy 'done' threads.
+
+**Admin analytics filter (5265754).** Per Winston "clear usable analytics — always" rule: 3-layer filter so admin/operator self-traffic never pollutes customer metrics. Client-side (VisitorHeartbeat skip), source (Vercel Analytics beforeSend drops /wheelhouse pageviews), backstop (wheelhouse_analytics_events SQL queries `WHERE path NOT LIKE '/wheelhouse%'`). Real customer pageview count is now visible (was inflated ~20% by /wheelhouse browsing).
+
+**TWO new cross-project principles locked into memory** (`feedback_havee_naming.md` addendums):
+1. **Cleanest-mental-model rule** — collapse intermediate states when there's no user value in the middle (e.g., Done → Archived = one motion, not two)
+2. **Clear-usable-analytics rule** — admin traffic NEVER pollutes customer metrics; filter at multiple layers (client + source + backstop)
+
+**HeyeDeploy templates locked this PM session** (added to `feedback_heyedeploy_pattern_thinking.md`):
+- Tenant Collaborator Workspace (Glossary) — flipped from DESIGNED to LOCKED
+- Stripe Connect Express for vendor payouts (mirrors runner pattern, second build inside PAL)
+- Auto-payout cron at refund-window-close (couples cancellation policy + payout)
+- Admin payouts tool with onboarding-link delivery via SMS
+- Revenue stats display per Stripe Charges API
+- Live visitors heartbeat (privacy-clean session tracking)
+- Instant-archive UX (cleanest-mental-model applied to thread lifecycle)
+- Admin traffic 3-layer filter (analytics hygiene)
+- Intake-and-surface webhook fallback (route prose to human)
+- bookings@ transactional ledger CC pattern
+
 ## Current State (as of 2026-04-29 — Twilio A2P-unlocked SMS arc + inline Claude agent + Havee)
 
 The biggest single PAL session yet. Started with the morning Arnold and a Twilio A2P 10DLC verification, ended with a fully-autonomous Claude agent answering insider SMS in real time. **23 commits today** (`74d5a14` through `1ac50d3`). Everything shipped clean on main. Multiple firsts: first real $$ event through the new beach-vendor system ($300 Stephanie S. cabana for May 9), first end-to-end Claude-via-SMS exchange (Patricia text via Collie's request), first multi-turn live conversation between Winston and the autonomous agent.
