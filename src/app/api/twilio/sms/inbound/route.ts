@@ -18,6 +18,7 @@ import {
 } from "@/lib/cartVendorSmsBlast";
 import { notifyClaimResolution } from "@/lib/beachVendorBlast";
 import { forwardInsiderSmsToAdmin } from "@/lib/insiderSmsForward";
+import { runInsiderAgent } from "@/lib/insiderSmsAgent";
 
 /**
  * Twilio inbound SMS webhook.
@@ -91,15 +92,31 @@ export async function POST(req: NextRequest) {
     );
 
     // Insider bridge: if this number is on the allowlist (Winston, Collie,
-    // Nick, etc.), forward the message to admin@theportalocal.com so Claude
-    // reads it on next session via pal_mail.py. Skip vendor matcher entirely.
+    // Nick, etc.), fire two parallel handlers and return TwiML immediately.
+    //
+    // 1) forwardInsiderSmsToAdmin — email the message (with MMS attachments)
+    //    to admin@theportalocal.com for the operator's inbox + Claude's
+    //    next-session arnold drill.
+    // 2) runInsiderAgent — inline Claude (Haiku 4.5) reads the message,
+    //    decides an action, and acts via tools (reply, send to third party,
+    //    or escalate to Winston). Skipped if ANTHROPIC_API_KEY isn't set.
+    //
+    // Both fire-and-forget so the webhook returns quickly within Twilio's
+    // 15s window.
     const insider = findInsider(fromE164);
     if (insider) {
-      // STOP from an insider still flows to opt-out at the carrier level
-      // (Twilio handles automatically), but we don't run the vendor logic.
       forwardInsiderSmsToAdmin(insider, body, messageSid).catch((err) =>
         console.error("[twilio/inbound] insider-forward failed:", err),
       );
+      runInsiderAgent(insider, body)
+        .then((r) =>
+          console.log(
+            `[twilio/inbound] insider-agent: ran=${r.ran} iters=${r.iterations ?? "-"} tools=${(r.toolsCalled ?? []).join(",")} ${r.reason ?? ""}`,
+          ),
+        )
+        .catch((err) =>
+          console.error("[twilio/inbound] insider-agent failed:", err),
+        );
       return twimlResponse();
     }
 
