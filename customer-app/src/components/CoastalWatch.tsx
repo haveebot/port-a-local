@@ -11,7 +11,7 @@ import Svg, {
   Text as SvgText,
 } from "react-native-svg";
 import { colors } from "../lib/theme";
-import { useCoastalConditions } from "../lib/coastalConditions";
+import type { CoastalConditions } from "../lib/coastalConditions";
 import { useReducedMotion } from "../lib/useReducedMotion";
 
 const LOG_ENTRIES = [
@@ -98,8 +98,11 @@ function fmtTide(level: number | null, dir: "rising" | "falling" | null, fallbac
   };
 }
 
-export default function CoastalWatch() {
-  const conditions = useCoastalConditions();
+interface Props {
+  conditions: CoastalConditions | null;
+}
+
+export default function CoastalWatch({ conditions }: Props) {
   const reduceMotion = useReducedMotion();
   const tide = fmtTide(conditions?.tideLevelFt ?? null, conditions?.tideDirection ?? null, "2.4 ft");
 

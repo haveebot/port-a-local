@@ -18,6 +18,7 @@ import { BrowseStackParamList, SERVICES } from "../lib/navigation";
 import CoastalWatch from "../components/CoastalWatch";
 import CrashingWaves from "../components/CrashingWaves";
 import LighthouseBeacon from "../components/LighthouseBeacon";
+import { useCoastalConditions } from "../lib/coastalConditions";
 
 type Nav = NativeStackScreenProps<BrowseStackParamList, "Home">["navigation"];
 type Props = NativeStackScreenProps<BrowseStackParamList, "Home">;
@@ -25,6 +26,7 @@ type Props = NativeStackScreenProps<BrowseStackParamList, "Home">;
 export default function HomeScreen({ navigation }: Props) {
   const featured = businesses.filter((b) => b.featured).slice(0, 6);
   const insets = useSafeAreaInsets();
+  const conditions = useCoastalConditions();
 
   const accentToColor = (
     accent: "coral" | "gold" | "ocean" | "seafoam" | "sunset"
@@ -59,11 +61,11 @@ export default function HomeScreen({ navigation }: Props) {
         <Text style={styles.heroSubtitle}>
           Order food, book rentals, request maintenance, and discover places vetted by locals — all in one app.
         </Text>
-        <CrashingWaves />
+        <CrashingWaves conditions={conditions} />
       </View>
 
       {/* Coastal Watch — live island instrument panel */}
-      <CoastalWatch />
+      <CoastalWatch conditions={conditions} />
 
       {/* Quick services */}
       <View style={styles.section}>

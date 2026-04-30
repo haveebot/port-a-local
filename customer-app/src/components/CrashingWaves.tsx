@@ -1,11 +1,10 @@
 import React, { useEffect, useRef } from "react";
-import { View, Text, Animated, Dimensions, StyleSheet, Easing } from "react-native";
+import { View, Text, Animated, useWindowDimensions, StyleSheet, Easing } from "react-native";
 import Svg, { Path, G } from "react-native-svg";
-import { useCoastalConditions } from "../lib/coastalConditions";
+import type { CoastalConditions } from "../lib/coastalConditions";
 import { useReducedMotion } from "../lib/useReducedMotion";
 import { colors } from "../lib/theme";
 
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const STAGE_HEIGHT = 150;
 
 // Same wave silhouettes as the web hero, single screen-width tile (1440 viewBox).
@@ -17,6 +16,7 @@ const PATHS = {
 };
 
 interface WaveLayerProps {
+  width: number;
   duration: number;
   reverse?: boolean;
   path: string;
@@ -27,7 +27,7 @@ interface WaveLayerProps {
   reduceMotion: boolean;
 }
 
-function WaveLayer({ duration, reverse, path, color, opacity, bottomOffset, zIndex, reduceMotion }: WaveLayerProps) {
+function WaveLayer({ width, duration, reverse, path, color, opacity, bottomOffset, zIndex, reduceMotion }: WaveLayerProps) {
   const anim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -46,7 +46,7 @@ function WaveLayer({ duration, reverse, path, color, opacity, bottomOffset, zInd
 
   const translateX = anim.interpolate({
     inputRange: [0, 1],
-    outputRange: reverse ? [-SCREEN_WIDTH, 0] : [0, -SCREEN_WIDTH],
+    outputRange: reverse ? [-width, 0] : [0, -width],
   });
 
   return (
@@ -56,13 +56,13 @@ function WaveLayer({ duration, reverse, path, color, opacity, bottomOffset, zInd
         position: "absolute",
         left: 0,
         bottom: bottomOffset,
-        width: SCREEN_WIDTH * 2,
+        width: width * 2,
         height: STAGE_HEIGHT,
         transform: [{ translateX }],
         zIndex,
       }}
     >
-      <Svg width={SCREEN_WIDTH * 2} height={STAGE_HEIGHT} viewBox="0 0 2880 180" preserveAspectRatio="none">
+      <Svg width={width * 2} height={STAGE_HEIGHT} viewBox="0 0 2880 180" preserveAspectRatio="none">
         <G>
           <Path d={path} fill={color} fillOpacity={opacity} />
           <Path d={path} fill={color} fillOpacity={opacity} transform="translate(1440, 0)" />
@@ -72,9 +72,13 @@ function WaveLayer({ duration, reverse, path, color, opacity, bottomOffset, zInd
   );
 }
 
-export default function CrashingWaves() {
-  const conditions = useCoastalConditions();
+interface Props {
+  conditions: CoastalConditions | null;
+}
+
+export default function CrashingWaves({ conditions }: Props) {
   const reduceMotion = useReducedMotion();
+  const { width: screenWidth } = useWindowDimensions();
 
   // Port Aransas tides typically swing 0–2.5 ft (MLLW).
   // Map tide level to a vertical wave shift around a 1.0 ft "neutral" baseline.
@@ -95,18 +99,25 @@ export default function CrashingWaves() {
       accessibilityElementsHidden
       importantForAccessibility="no-hide-descendants"
     >
-      {/* Big translucent tide number sitting in the wave field */}
-      <View style={styles.numberLayer} pointerEvents="none">
-        <View style={styles.numberRow}>
-          <Text style={styles.tideNumber}>{tideValue}</Text>
-          <Text style={styles.tideUnit}>ft</Text>
-        </View>
-        <Text style={styles.tideLabel}>{dirLabel}</Text>
-      </View>
+      <WaveLayer width={screenWidth} duration={22000}            path={PATHS.back}  color={colors.navy[700]} opacity={0.45} bottomOffset={tideOffset - 4}  zIndex={1} reduceMotion={reduceMotion} />
+      <WaveLayer width={screenWidth} duration={14000} reverse    path={PATHS.mid}   color={colors.navy[600]} opacity={0.65} bottomOffset={tideOffset - 8}  zIndex={2} reduceMotion={reduceMotion} />
+      <WaveLayer width={screenWidth} duration={9000}             path={PATHS.front} color={colors.navy[500]} opacity={0.92} bottomOffset={tideOffset - 12} zIndex={3} reduceMotion={reduceMotion} />
 
-      <WaveLayer duration={22000}            path={PATHS.back}  color={colors.navy[700]} opacity={0.45} bottomOffset={tideOffset - 4}  zIndex={1} reduceMotion={reduceMotion} />
-      <WaveLayer duration={14000} reverse    path={PATHS.mid}   color={colors.navy[600]} opacity={0.65} bottomOffset={tideOffset - 8}  zIndex={2} reduceMotion={reduceMotion} />
-      <WaveLayer duration={9000}             path={PATHS.front} color={colors.navy[500]} opacity={0.92} bottomOffset={tideOffset - 12} zIndex={3} reduceMotion={reduceMotion} />
+      {/* Tide readout — sits above wave layers with a soft scrim for legibility */}
+      <View style={styles.numberLayer} pointerEvents="none">
+        <View style={styles.scrim} />
+        <View style={styles.numberRow}>
+          <Text style={styles.tideNumber} maxFontSizeMultiplier={1.2} allowFontScaling>
+            {tideValue}
+          </Text>
+          <Text style={styles.tideUnit} maxFontSizeMultiplier={1.2}>
+            ft
+          </Text>
+        </View>
+        <Text style={styles.tideLabel} maxFontSizeMultiplier={1.3}>
+          {dirLabel}
+        </Text>
+      </View>
     </View>
   );
 }
@@ -122,10 +133,23 @@ const styles = StyleSheet.create({
   },
   numberLayer: {
     position: "absolute",
-    right: 24,
-    bottom: 14,
+    right: 18,
+    bottom: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
     alignItems: "flex-end",
     zIndex: 4,
+  },
+  // Soft dark scrim behind the readout so translucent text always meets WCAG
+  // regardless of which wave layer is currently below it.
+  scrim: {
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: "rgba(11, 17, 32, 0.55)",
+    borderRadius: 12,
   },
   numberRow: {
     flexDirection: "row",
@@ -135,7 +159,7 @@ const styles = StyleSheet.create({
     fontFamily: "Georgia",
     fontSize: 68,
     fontWeight: "300",
-    color: "rgba(245, 240, 230, 0.85)",
+    color: "#f5f0e6",
     lineHeight: 70,
     includeFontPadding: false,
   },
@@ -143,7 +167,7 @@ const styles = StyleSheet.create({
     fontFamily: "Georgia",
     fontSize: 22,
     fontWeight: "400",
-    color: "rgba(245, 240, 230, 0.55)",
+    color: "rgba(245, 240, 230, 0.95)",
     marginLeft: 6,
     marginBottom: 8,
   },
@@ -151,7 +175,7 @@ const styles = StyleSheet.create({
     fontFamily: "Menlo",
     fontSize: 9,
     letterSpacing: 2.2,
-    color: "rgba(224, 190, 106, 0.85)",
+    color: "#ebd492",
     marginTop: 4,
   },
 });

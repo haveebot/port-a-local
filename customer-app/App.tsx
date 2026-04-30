@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react";
+import { LogBox } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import {
   NavigationContainer,
@@ -9,7 +10,15 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Ionicons } from "@expo/vector-icons";
 import * as Notifications from "expo-notifications";
+import * as Device from "expo-device";
 import * as Linking from "expo-linking";
+
+// expo-notifications logs a Keychain-entitlement error on the iOS simulator
+// (real devices have the entitlement, simulators don't). Silence the known
+// LogBox noise so the dev surface stays clean.
+LogBox.ignoreLogs([
+  "[expo-notifications] Error reading persisted server registration info",
+]);
 
 import HomeScreen from "./src/screens/HomeScreen";
 import CategoryScreen from "./src/screens/CategoryScreen";
@@ -293,6 +302,11 @@ export default function App() {
   };
 
   useEffect(() => {
+    // Push notifications need entitlements only physical devices have. Skip
+    // on the simulator entirely — saves the Keychain error and unnecessary
+    // listener wiring.
+    if (!Device.isDevice) return;
+
     (async () => {
       await registerForPushNotificationsAsync().catch(() => null);
       // Cold-start: app was launched by tapping a notification.
