@@ -30,9 +30,7 @@ export default async function RunnerLeaderboardTile() {
     return null; // DB hiccup — fail closed, don't break the homepage
   }
 
-  const top = board.entries.find((e) => e.weekCount > 0) ?? null;
   const palWideMonth = earnings.totals.monthCents;
-  const showRealLeaderboard = top && top.weekCents > 0;
 
   // Recruiting number tracks the SQL signup offset (CASE WHEN raw_num <= 1
   // THEN raw_num ELSE raw_num + 3). After Winston (#1) the next driver lands
@@ -44,6 +42,12 @@ export default async function RunnerLeaderboardTile() {
       : board.activeRunnerCount === 1
         ? 5
         : board.activeRunnerCount + 4;
+
+  // Note: per Winston 2026-04-29 — homepage tile intentionally OMITS the
+  // "Top runner this week: Driver #N · $X" line. With small early numbers
+  // it reads as underwhelming social proof. The /deliver/runners page is
+  // the right home for the actual leaderboard. Homepage gets the hybrid
+  // stack: driver-hook headline + cross-vertical PAL momentum blurbs.
 
   return (
     <section className="bg-navy-950 border-y border-coral-500/20">
@@ -61,32 +65,11 @@ export default async function RunnerLeaderboardTile() {
               bonus on your first delivery.
             </p>
 
-            {/* Hybrid stack — ALWAYS renders. Driver-hook headline +
-                cross-vertical PAL momentum blurbs (cart blasts + beach
-                cabana setups + locals sales). When there's a real top
-                runner with weekly activity, that line surfaces above
-                the hook as honest social proof. Real numbers throughout. */}
+            {/* Hybrid stack: driver-hook headline + cross-vertical PAL
+                momentum blurbs (cart blasts + beach cabana setups +
+                locals sales). The actual leaderboard lives at
+                /deliver/runners — homepage stays uncluttered. */}
             <div className="space-y-3">
-              {showRealLeaderboard && (
-                <p className="text-sm text-sand-200 font-light">
-                  Top runner this week:{" "}
-                  <span className="font-mono font-bold text-emerald-300">
-                    Driver #{top.signupNumber}
-                  </span>{" "}
-                  ·{" "}
-                  <span className="font-mono font-bold text-emerald-300">
-                    {fmtUsd(top.weekCents)}
-                  </span>{" "}
-                  over {top.weekCount} run{top.weekCount === 1 ? "" : "s"}
-                  {board.weekTotalCents > 0 && (
-                    <span className="text-sand-400">
-                      {" · "}
-                      <span className="font-mono">{fmtUsd(board.weekTotalCents)}</span>{" "}
-                      paid out this week
-                    </span>
-                  )}
-                </p>
-              )}
               <p className="text-sm text-sand-300 font-light">
                 <span className="text-emerald-300 font-display font-bold text-base">
                   Be Driver #{nextDriverNumber}.
