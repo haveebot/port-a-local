@@ -96,7 +96,8 @@ export interface GullyItem {
     | "dispatch"
     | "archive"
     | "portal"
-    | "delivery-vendor";
+    | "delivery-vendor"
+    | "essentials";
   slug: string;
   name: string;
   tagline: string;
@@ -340,6 +341,130 @@ const portalItems: GullyItem[] = [
 ];
 
 /**
+ * Island Essentials sections — practical info that already lives on
+ * /essentials but wasn't surfaced to Gully. Indexing each section as
+ * a separate item with deep-link href closes a class of cited=0
+ * questions ("do I need a beach permit", "how does the ferry work",
+ * "wildlife rules", etc.) without writing new content.
+ *
+ * Anchor IDs match what /essentials/page.tsx generates:
+ * `section.title.toLowerCase().replace(/[^a-z0-9]+/g, "-")`
+ *
+ * Per memory feedback_pal_no_manufactured_dispatch.md: this is
+ * surfacing existing content, not inventing new angles.
+ */
+const essentialsItems: GullyItem[] = [
+  {
+    type: "essentials" as const,
+    slug: "essentials-ferry",
+    name: "Ferry — Getting to Port Aransas",
+    tagline: "Free, 24/7, no reservation. Crossing takes ~10 minutes from Aransas Pass.",
+    description:
+      "The Port Aransas ferry is free, 24/7, 365 days a year. No reservation needed. Board from Port Street stacking lanes in Aransas Pass. Crossing takes ~10 minutes. Peak waits during Spring Break and summer weekends can mean 30-60+ minute waits — arrive early or use the alternate route via SH 361 from Corpus Christi through Padre Island. Real-time ferry info: tune to AM 530 radio or check @PortA_Ferry on X. Watch for dolphins riding the ferry wake.",
+    tags: ["ferry", "txdot", "aransas pass", "crossing", "free", "24 hours", "wait time", "getting here", "how to get to port aransas"],
+    category: "essentials",
+    icon: "⛴️",
+    href: "/essentials#getting-here-the-ferry",
+  },
+  {
+    type: "essentials" as const,
+    slug: "essentials-cart-rules",
+    name: "Golf Cart Rules",
+    tagline: "Street-legal on most roads. Driver's license required. Stay off SH 361.",
+    description:
+      "Golf carts are the main way to get around Port Aransas — street-legal on most roads. Must have a valid driver's license. Headlights and taillights required after dark. Stay off SH 361 (the highway) — carts are not allowed on state highways. Speed limit in town is typically 20-30 mph (carts max around 25). Seatbelts required if the cart has them. No driving on the beach — carts are for roads only.",
+    tags: ["golf cart", "cart rules", "street legal", "drivers license", "speed limit", "rules", "regulations", "where to drive cart"],
+    category: "essentials",
+    icon: "🛺",
+    href: "/essentials#golf-cart-rules",
+  },
+  {
+    type: "essentials" as const,
+    slug: "essentials-beach-rules",
+    name: "Beach Rules — Permits, Driving, Pets",
+    tagline: "Beach driving allowed with a $12 Nueces County beach parking permit. No glass. Leashed dogs welcome.",
+    description:
+      "Beach driving is allowed on most Port Aransas beaches with a valid Nueces County beach parking permit ($12/year for residents, $12/day for visitors). 4WD recommended — 2WD vehicles get stuck regularly. If you get stuck, call a tow service, not 911. No glass on the beach — ever. Cans and plastic only. Build fires only in designated areas and fully extinguish before leaving. Leashed dogs are welcome on the beach. Clean up everything you bring — pack it in, pack it out. Rip currents are real — swim near lifeguard stations when possible. If caught, swim parallel to shore.",
+    tags: ["beach permit", "beach sticker", "beach parking", "do I need a permit", "drive on the beach", "beach driving", "dogs on beach", "pet friendly beach", "rip currents", "beach rules", "nueces county", "12 dollar"],
+    category: "essentials",
+    icon: "🏖️",
+    href: "/essentials#beach-rules-tips",
+  },
+  {
+    type: "essentials" as const,
+    slug: "essentials-parking",
+    name: "Parking in Port Aransas",
+    tagline: "Free downtown street parking — no meters. Beach parking needs the Nueces County permit.",
+    description:
+      "Downtown Port Aransas has free street parking — no meters. Beach parking requires a Nueces County beach parking permit if you drive onto the sand. During peak season (Spring Break, summer), downtown fills up fast — walk or cart if possible. The ferry stacking lanes can back up — don't park in them thinking they're regular parking.",
+    tags: ["parking", "where to park", "downtown parking", "beach parking", "ferry parking", "free parking"],
+    category: "essentials",
+    icon: "🅿️",
+    href: "/essentials#parking",
+  },
+  {
+    type: "essentials" as const,
+    slug: "essentials-weather-water",
+    name: "Weather & Water Safety",
+    tagline: "Gulf temps 60–85°F. Rip currents real. Sunscreen mandatory. Watch for jellyfish May–October.",
+    description:
+      "Gulf water temps range from ~60°F in winter to ~85°F in summer. Jellyfish are common May through October — shuffle your feet when entering the water to avoid stingrays. Afternoon thunderstorms are frequent in summer — they build fast and hit hard. Get off the beach if you see lightning. Sunscreen is mandatory — the Gulf sun is stronger than you think, especially with water reflection. Mosquitoes can be intense at dawn and dusk, especially after rain — bring repellent.",
+    tags: ["weather", "water temp", "jellyfish", "stingrays", "thunderstorms", "lightning", "sunscreen", "mosquitoes", "is the water cold", "rip currents"],
+    category: "essentials",
+    icon: "🌊",
+    href: "/essentials#weather-water-safety",
+  },
+  {
+    type: "essentials" as const,
+    slug: "essentials-wildlife",
+    name: "Wildlife — Dolphins, Turtles, Whooping Cranes",
+    tagline: "Dolphins year-round. Sea turtle nests April–August. Whooping cranes winter Nov–March.",
+    description:
+      "Dolphins are everywhere — in the ship channel, around the ferry, and in the bay. Watch from shore or take a dolphin tour. Sea turtles nest on Port Aransas beaches from April through August. If you see a nest (marked with stakes and tape), keep your distance. The Amos Rehabilitation Keep (ARK) at UTMSI rehabilitates injured sea turtles and birds — free to visit. Don't feed the wildlife — including pelicans, seagulls, and feral cats. Whooping cranes winter at the Aransas National Wildlife Refuge across the bay (November–March) — world's rarest crane.",
+    tags: ["dolphins", "sea turtles", "whooping cranes", "wildlife", "ARK", "amos rehabilitation", "birds", "nature", "what wildlife"],
+    category: "essentials",
+    icon: "🐬",
+    href: "/essentials#wildlife",
+  },
+  {
+    type: "essentials" as const,
+    slug: "essentials-fishing-basics",
+    name: "Fishing Basics — License, Stamps, Spots",
+    tagline: "Texas fishing license + saltwater stamp required for 17+. Pier and jetty fishing accessible to all.",
+    description:
+      "Texas fishing license required for anyone 17+. Buy online at TPWD.gov or at Island Tackle. Saltwater stamp required in addition to the fishing license. Popular catches: redfish, speckled trout, flounder, sheepshead, black drum, tarpon (catch & release only). Pier fishing: Horace Caldwell Pier ($5 entry) and Ancel Brundrett Pier (free). Jetty fishing: walk out on the north jetty via the Jetty Boat from Fisherman's Wharf. Charter fishing: book a half-day or full-day trip through Deep Sea Headquarters, Woody's Last Stand, or Fisherman's Wharf.",
+    tags: ["fishing license", "saltwater stamp", "tpwd", "redfish", "speckled trout", "flounder", "tarpon", "pier fishing", "jetty fishing", "shore fishing", "where to fish", "fishing rules"],
+    category: "essentials",
+    icon: "🎣",
+    href: "/essentials#fishing-basics",
+  },
+  {
+    type: "essentials" as const,
+    slug: "essentials-emergency",
+    name: "Emergency & Medical",
+    tagline: "911 for emergencies. PA Police: (361) 749-4545. Nearest hospital: Corpus Christi (~45 min).",
+    description:
+      "Emergency: call 911. Port Aransas Police: (361) 749-4545. Nueces County EMS serves Port Aransas — ambulance response from on-island station. Nearest hospital: Corpus Christi Medical Center (~45 min via SH 361 or ferry + I-37). Urgent care is limited on Port Aransas — for serious injuries, go to Corpus Christi. Hurricane evacuation: follow SH 361 south to Corpus Christi — do not wait for the ferry, use the highway route.",
+    tags: ["emergency", "911", "police", "hospital", "urgent care", "hurricane", "evacuation", "medical", "ems", "ambulance"],
+    category: "essentials",
+    icon: "🏥",
+    href: "/essentials#emergency-medical",
+  },
+  {
+    type: "essentials" as const,
+    slug: "essentials-connectivity",
+    name: "Connectivity, WiFi, Groceries, Gas",
+    tagline: "Cell service good island-wide. IGA on island, HEB across the ferry. Fill up gas before crossing.",
+    description:
+      "Cell service is generally good on the island (AT&T, Verizon, T-Mobile all have coverage). WiFi is available at most hotels, restaurants, and coffee shops — Coffee Waves is a popular work spot. Grocery: closest full grocery store is the IGA in Port Aransas or HEB in Aransas Pass (across the ferry). Gas: fill up before you get on the island — there are a few stations in town but prices are higher. ATMs: available at most gas stations and some restaurants. Many places are card-only.",
+    tags: ["wifi", "cell service", "internet", "grocery", "iga", "heb", "gas station", "atm", "card only", "remote work"],
+    category: "essentials",
+    icon: "📱",
+    href: "/essentials#connectivity-essentials",
+  },
+];
+
+/**
  * Restaurants + stores in the PAL Delivery catalog. Lets customers
  * Gully-search "Crazy Cajun" or "Lowe's Market" and land directly on
  * the menu page (not just the parent /deliver index).
@@ -366,6 +491,7 @@ const deliveryVendorItems: GullyItem[] = RESTAURANTS.filter(
 
 export const gullyItems: GullyItem[] = [
   ...portalItems,
+  ...essentialsItems,
   ...deliveryVendorItems,
   ...businessItems,
   ...storyItems,

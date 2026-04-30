@@ -410,6 +410,36 @@ export default function GullyContent({ trendingSlot }: GullyContentProps) {
                   );
                 }
 
+                // Island Essentials section — practical info card,
+                // navy accent. Distinguished from portals/businesses
+                // because the click goes to /essentials#anchor, not a
+                // standalone listing page.
+                if (item.type === "essentials") {
+                  return (
+                    <Link
+                      key={`essentials-${item.slug}`}
+                      href={item.href ?? "/essentials"}
+                      className="group relative rounded-2xl bg-white border border-navy-200 overflow-hidden card-hover"
+                    >
+                      <div className="h-1 bg-gradient-to-r from-navy-700 via-navy-500 to-coral-300" />
+                      <div className="p-6 sm:p-8">
+                        <div className="flex items-center justify-between mb-4">
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-navy-50 text-navy-700">
+                            <EmojiIcon emoji={item.icon ?? ""} className="w-3.5 h-3.5" />{" "}
+                            Essentials
+                          </span>
+                        </div>
+                        <h3 className="font-display text-lg font-bold text-navy-900 group-hover:text-coral-600 transition-colors mb-2">
+                          {item.name}
+                        </h3>
+                        <p className="text-sm text-navy-500 leading-relaxed font-light line-clamp-3">
+                          {item.tagline}
+                        </p>
+                      </div>
+                    </Link>
+                  );
+                }
+
                 const isDispatch = item.type === "dispatch";
                 const href = isDispatch
                   ? `/dispatch/${item.slug}`
