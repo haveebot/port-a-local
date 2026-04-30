@@ -28,7 +28,7 @@ function inferCategoryFromQuestion(q: string): string | null {
   if (/\bdo\b|with kids|for kids|family|rainy|indoor|activity|fun|play/.test(t)) return "do";
   if (/\bstay|hotel|room|rental|condo|vrbo|airbnb|accommodation/.test(t)) return "stay";
   if (/\bshop|store|buy|boutique|gift|souvenir/.test(t)) return "shop";
-  if (/\bbeach|sand|umbrella|cabana|chair/.test(t)) return "beach";
+  if (/\bbeach\b|\bsand\b|umbrella|cabana|beach chair/.test(t)) return "beach";
   if (/\bcart|golf cart/.test(t)) return "rent";
   return null;
 }
