@@ -81,10 +81,22 @@ function GullyContent() {
     if (initialQ.trim().length >= 2) saveRecentSearch(initialQ);
   }, [initialQ]);
 
-  // Search across unified index
+  // Search across unified index. For question-form queries, strip the
+  // prefix words ("what is", "where can I") and trailing "?" before
+  // feeding Fuse so noise words don't dilute keyword matches. Mirrors
+  // the same logic in /api/gully/ask. Without this, typing "What is
+  // Sandfest?" returned 0 Fuse results even though the Heritage piece
+  // is in the index.
+  const fuseQuery = query
+    .replace(
+      /^(what|who|where|when|why|how|can|could|should|would|is|are|do|does|will|which|whose|tell me|find me|recommend|suggest|show me)\s+(is|are|does|do|can|should|would|to|me)?\s*/i,
+      "",
+    )
+    .replace(/\?+$/, "")
+    .trim();
   const fuseResults: GullyItem[] =
     query.trim().length >= 2
-      ? gullyFuse.search(query).map((r) => r.item)
+      ? gullyFuse.search(fuseQuery || query).map((r) => r.item)
       : [...gullyItems];
 
   // Open Now filter — only applies to businesses
@@ -255,10 +267,13 @@ function GullyContent() {
         </div>
       </section>
 
-      {/* Recent + Popular chips — shown only when query is empty */}
+      {/* Recent + Popular chips — shown only when query is empty.
+          Navy bg continues the hero treatment so chip styles
+          (designed for dark backgrounds) maintain contrast. */}
       {query.trim().length === 0 && (
-        <section className="pb-0">
-          <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
+        <section className="bg-navy-900 pb-12 relative">
+          <div className="absolute inset-0 palm-pattern opacity-10" />
+          <div className="relative max-w-3xl mx-auto px-4 sm:px-6 text-center">
             {recentSearches.length > 0 && (
               <div className="mt-8 mb-6">
                 <p className="text-sm font-semibold text-navy-300 uppercase tracking-wide mb-3">
