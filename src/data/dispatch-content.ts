@@ -66,18 +66,30 @@ export const dispatchContent: Record<string, DispatchContent> = {
         },
       },
       {
-        heading: "The desalination plant that wasn't",
+        heading: "Why Harbor Island matters here",
         body: [
-          "The Harbor Island desalination plant has been the long-term play for years. The proposed siting is consequential to anyone who lives on the island: directly on the ship channel, next to the ferry landing, and across the water from Roberts Point Park. The plant's permit application contemplated discharging up to 95.6 million gallons per day of hypersaline effluent into the channel — water that, on the wrong tides, moves into the surrounding wetlands. Those wetlands are spawning grounds for shrimp, crabs, and the species that make the local fishing industry possible.",
+          "The Harbor Island desalination plant has been the long-term play for years. The proposed siting is the single most consequential thing about it for anyone who lives on the island: directly on the ship channel, next to the ferry landing, across the water from Roberts Point Park. The original application contemplated discharging up to 95.6 million gallons per day of hypersaline effluent into the channel — water that, on the wrong tides, moves into the surrounding wetlands. Those wetlands are spawning grounds for shrimp, crabs, and the species that make the local fishing industry possible. The proposed seawater intake — 150 million gallons a day — would also pull through one of the most ecologically important larval-fish corridors on the Texas coast.",
           "The project hit another setback this spring when the Nueces River Authority's $140 million low-interest loan application to the Texas Water Development Board was denied. The TWDB had more qualifying projects than money; the Harbor Island request ranked thirteenth, and only the top nine to ten projects received funding. A separate $1.2 billion Inner Harbor desal project was voted down 6-3 by the Corpus Christi City Council in September 2025 after public opposition over cost and brine-discharge concerns. The council reversed in November and began moving forward with a different vendor. Governor Abbott, for his part, has publicly accused Corpus Christi of \"squandering\" some $750 million in state water funds.",
         ],
+        callout: {
+          label: "The five plants Corpus Christi has weighed",
+          items: [
+            { label: "Harbor Island (Port A's door)", value: "$802M · 95.6 MGD brine" },
+            { label: "Inner Harbor", value: "$236M · 45 MGD brine" },
+            { label: "La Quinta", value: "$457M" },
+            { label: "Five-plant total", value: "~$2.6B" },
+            { label: "Industrial share of CC water", value: "60–80%" },
+          ],
+        },
       },
       {
-        heading: "What the locals already won",
+        heading: "The names already on record",
         body: [
-          "The Port Aransas Conservancy has been the local muscle in the desal fight from the start. Mayor Charles Bujan formally requested that the Texas Commission on Environmental Quality hold a public meeting on the Port of Corpus Christi Authority's permit application. After the agency received hundreds of complaints, TCEQ referred the discharge permit to the State Office of Administrative Hearings — a contested case before two administrative law judges.",
-          "On February 5, 2021, the SOAH judges recommended that TCEQ deny the permit. Their finding, in the language of the ruling: the Port Authority \"has not met its burden to prove that the proposed discharge will not adversely impact the marine environment, aquatic life, and wildlife, including spawning eggs and larval migration.\" PAC president James King called it \"a huge victory for the city of Port Aransas, our coastal ecosystem, and the folks who love this part of Texas.\"",
-          "The fight didn't end there. PAC filed a Petition for Judicial Review. Closing arguments on remand ran into 2022. The plant's future has remained unsettled through every twist of the larger Corpus Christi desal saga.",
+          "Port Aransas has not been quiet about Harbor Island. The opposition has been on record — at council meetings, in TCEQ filings, in contested-case testimony — for the better part of a decade.",
+          "Mayor Charles Bujan filed the formal TCEQ request that triggered the 2018 public meeting on the Port of Corpus Christi Authority's permit. After hundreds of complaints, TCEQ referred the discharge permit to the State Office of Administrative Hearings — a contested case before two administrative law judges. On February 5, 2021, the SOAH judges recommended that TCEQ deny the permit. Their finding, in the language of the ruling: the Port Authority \"has not met its burden to prove that the proposed discharge will not adversely impact the marine environment, aquatic life, and wildlife, including spawning eggs and larval migration.\"",
+          "The Port Aransas Conservancy was the local muscle behind the contested case. PAC president James King called the SOAH ruling \"a huge victory for the city of Port Aransas, our coastal ecosystem, and the folks who love this part of Texas.\" PAC spokesperson Dan Pecore had warned earlier that \"even assuming that tidal action could dissipate much of the excess salinity, the effect on Port Aransas' thriving fishing industry could still be catastrophic.\" PAC filed a Petition for Judicial Review after the contested case concluded; closing arguments on remand ran into 2022.",
+          "At the July 19, 2018 city council hearing, the room was already loaded with locals on the record. Scott Holt, a retired fisheries biologist, called the seawater intake \"a serious potential problem\" and warned about larval fish being drawn into the lines. Joan Holt, a marine biologist who served on city council, said of the channel: \"This channel is a really important avenue\" for the species the local economy depends on. Resident Cathy Fulton spoke against the proposal. Council member Beverly Bolner relayed constituent concerns. Councilman Bruce Clark suggested that if the discharge had to go somewhere, it should go offshore into the Gulf — not into the bay.",
+          "Port Aransas homeowner Tammy King reminded the room of something older: the 1970s opposition to Deeport, an earlier proposal to make this same channel an industrial deepwater port. Port A had fought a siting fight on this water before. She wasn't quoting it as nostalgia. She was quoting it as precedent.",
         ],
         pullQuote: {
           text: "The facts are the facts. You can't go around those. It's the wrong place.",
@@ -85,9 +97,22 @@ export const dispatchContent: Record<string, DispatchContent> = {
         },
       },
       {
+        heading: "The bay has been here before",
+        body: [
+          "The deepest local memory in this fight belongs to a man who's been dead for decades. Barney Farley — the tarpon guide who took FDR fishing in 1937 and ran charters out of Port Aransas for more than half a century — wrote it down before he died. The book, \"Fishing Yesterday's Gulf Coast,\" published posthumously by Texas A&M, opens with a line every Port A regular eventually meets:",
+          "\"A blindfolded angler could push-pole a rowboat into the bay near Port Aransas in 1910 and catch a hundred pounds or more of trout and redfish within a few hours, using a 20-foot cane pole.\"",
+          "Farley arrived in 1910. By the early 1910s he was watching shrimp trawlers move into the Gulf in numbers that would, within a generation, deplete shrimp populations in the bays. By the mid-1960s he was no longer just lamenting the loss — he was on record about the need for conservation, the kind of voice the era didn't yet have a vocabulary for.",
+          "The point is not that the bay is the same now as it was in 1910. The point is that the people who fish it, work on it, and live next to it have a hundred-year case file on what happens when industrial decisions get made about this water without their voices in the room. That's the file the Conservancy has been adding to since 2018. It's the file Tammy King invoked when she brought up Deeport. It's the file that will sit underneath every conversation about water on this island as the reservoirs run lower.",
+        ],
+        pullQuote: {
+          text: "A blindfolded angler could push-pole a rowboat into the bay near Port Aransas in 1910 and catch a hundred pounds or more of trout and redfish within a few hours, using a 20-foot cane pole.",
+          attribution: "Barney Farley, Fishing Yesterday's Gulf Coast (Texas A&M Press)",
+        },
+      },
+      {
         heading: "What it means for the island",
         body: [
-          "Port Aransas is in Nueces County, on the Corpus Christi water system, and inside this declaration. Stage 3 restrictions apply here: limits on landscape irrigation, vehicle washing, pool refills, and a list of commercial water uses. Hotels, vacation rentals, restaurants, golf cart rental washdowns — all on the inside of those rules.",
+          "Port Aransas is in Nueces County, on the Corpus Christi water system, and inside today's declaration. Stage 3 restrictions apply here: limits on landscape irrigation, vehicle washing, pool refills, and a list of commercial water uses. Hotels, vacation rentals, restaurants, golf cart rental washdowns — all on the inside of those rules.",
           "This is not a tap shutoff. It is a tightening. Visitors arriving for Mother's Day weekend or any time over the coming months should expect drought signage, conservation reminders at properties, and — if September comes without significant rain — the possibility of mandatory 25 percent cuts across all uses.",
           "Port A has been on the dry end of these cycles before. The difference this time is the depth of the reservoirs, the timeline to the next emergency level, and how few of the alternatives — desalination first among them — are anywhere close to ready. The locals who have spent the last several years fighting the wrong-place version of that answer were never wrong about the water needing somewhere to go. They were arguing about where.",
         ],
@@ -156,8 +181,16 @@ export const dispatchContent: Record<string, DispatchContent> = {
         url: "https://www.ccbiznews.com/news/harbor-island-desal-plant-now-contested-case",
       },
       {
-        label: "Port Aransas South Jetty — Council hears desalination plant proposal",
+        label: "Port Aransas South Jetty — Council hears desalination plant proposal (July 19, 2018 hearing)",
         url: "https://www.portasouthjetty.com/articles/council-hears-desalination-plant-proposal/",
+      },
+      {
+        label: "Texas A&M University Press — Fishing Yesterday's Gulf Coast (Barney Farley)",
+        url: "https://www.tamupress.com/book/9781603440462/fishing-yesterdays-gulf-coast/",
+      },
+      {
+        label: "Port Aransas Preservation and Historical Association — Fishing Yesterday's Gulf Coast",
+        url: "https://portaransasmuseum.org/product/fishing-yesterdays-gulf-coast/",
       },
     ],
   },
