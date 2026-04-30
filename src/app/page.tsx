@@ -4,6 +4,7 @@ import CategoryCard from "@/components/CategoryCard";
 import FeaturedSpots from "@/components/FeaturedSpots";
 import FeaturedEventBanner from "@/components/FeaturedEventBanner";
 import RunnerLeaderboardTile from "@/components/RunnerLeaderboardTile";
+import CoastalWatch from "@/components/CoastalWatch";
 import Footer from "@/components/Footer";
 import { WebsiteSchema } from "@/components/StructuredData";
 import { categories } from "@/data/categories";
@@ -15,6 +16,7 @@ export default function Home() {
       <WebsiteSchema />
       <Navigation />
       <Hero />
+      <CoastalWatch />
       <FeaturedEventBanner />
       <RunnerLeaderboardTile />
 

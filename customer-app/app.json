@@ -27,13 +27,18 @@
       "supportsTablet": true,
       "bundleIdentifier": "co.portalocal.app",
       "infoPlist": {
-        "UIBackgroundModes": ["remote-notification"],
+        "UIBackgroundModes": [
+          "remote-notification"
+        ],
         "ITSAppUsesNonExemptEncryption": false,
         "NSLocationWhenInUseUsageDescription": "Port A Local uses your location to suggest nearby restaurants, rentals, and services.",
         "NSCameraUsageDescription": "Port A Local can attach photos to maintenance requests so vendors know what to expect.",
         "NSPhotoLibraryUsageDescription": "Port A Local can attach photos to maintenance requests so vendors know what to expect."
       },
-      "associatedDomains": ["applinks:port-a-local.vercel.app", "applinks:theportalocal.com"],
+      "associatedDomains": [
+        "applinks:port-a-local.vercel.app",
+        "applinks:theportalocal.com"
+      ],
       "usesAppleSignIn": true
     },
     "android": {
@@ -47,6 +52,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "f49f59b2-0280-4a11-9d18-cb45c0ee5c30"
+      }
+    },
+    "owner": "heyelab"
   }
 }

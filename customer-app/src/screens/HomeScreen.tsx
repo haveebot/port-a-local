@@ -7,6 +7,7 @@ import {
   StyleSheet,
   ImageBackground,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
@@ -14,12 +15,15 @@ import { colors } from "../lib/theme";
 import { categories } from "@palocal/data/categories";
 import { businesses } from "@palocal/data/businesses";
 import { BrowseStackParamList, SERVICES } from "../lib/navigation";
+import CoastalWatch from "../components/CoastalWatch";
+import CrashingWaves from "../components/CrashingWaves";
 
 type Nav = NativeStackScreenProps<BrowseStackParamList, "Home">["navigation"];
 type Props = NativeStackScreenProps<BrowseStackParamList, "Home">;
 
 export default function HomeScreen({ navigation }: Props) {
   const featured = businesses.filter((b) => b.featured).slice(0, 6);
+  const insets = useSafeAreaInsets();
 
   const accentToColor = (
     accent: "coral" | "gold" | "ocean" | "seafoam" | "sunset"
@@ -45,7 +49,7 @@ export default function HomeScreen({ navigation }: Props) {
       showsVerticalScrollIndicator={false}
     >
       {/* Hero */}
-      <View style={styles.hero}>
+      <View style={[styles.hero, { paddingTop: insets.top + 44, paddingBottom: 170 }]}>
         <View style={styles.heroAccent} />
         <Text style={styles.heroEyebrow}>WELCOME TO PORT A</Text>
         <Text style={styles.heroTitle}>Everything the island{"\n"}has to offer.</Text>
@@ -53,7 +57,11 @@ export default function HomeScreen({ navigation }: Props) {
         <Text style={styles.heroSubtitle}>
           Order food, book rentals, request maintenance, and discover places vetted by locals — all in one app.
         </Text>
+        <CrashingWaves />
       </View>
+
+      {/* Coastal Watch — live island instrument panel */}
+      <CoastalWatch />
 
       {/* Quick services */}
       <View style={styles.section}>

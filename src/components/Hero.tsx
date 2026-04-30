@@ -1,5 +1,7 @@
 import Link from "next/link";
 import LighthouseMark from "@/components/brand/LighthouseMark";
+import CrashingWaves from "@/components/CrashingWaves";
+import LighthouseBeacon from "@/components/LighthouseBeacon";
 
 export default function Hero() {
   return (
@@ -12,8 +14,14 @@ export default function Hero() {
         <LighthouseMark size={620} variant="light" detail="full" />
       </div>
 
+      {/* Working lighthouse — rotating beacon + glowing lamp */}
+      <LighthouseBeacon />
+
+      {/* Animated waves crashing along the bottom */}
+      <CrashingWaves />
+
       {/* Coral accent line at bottom */}
-      <div className="absolute bottom-0 left-0 right-0 coral-line" />
+      <div className="absolute bottom-0 left-0 right-0 coral-line z-10" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 pt-28 pb-20 w-full">
         <div className="max-w-3xl animate-fade-in-up">
