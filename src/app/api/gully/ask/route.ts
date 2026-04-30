@@ -68,11 +68,7 @@ export async function POST(req: NextRequest) {
   const result = await askGully(query, fuseResults);
   if (!result.ok) {
     return NextResponse.json(
-      {
-        ok: false,
-        reason: result.reason,
-        debug: { fuseQuery, fuseResultCount: fuseResults.length, firstResult: fuseResults[0]?.name },
-      },
+      { ok: false, reason: result.reason },
       { status: 200 },
     );
   }
@@ -82,6 +78,5 @@ export async function POST(req: NextRequest) {
     answer: result.answer,
     citedSlugs: fuseResults.map((r) => ({ slug: r.slug, name: r.name, type: r.type, category: r.category })),
     usage: result.usage,
-    debug: { fuseQuery, fuseResultCount: fuseResults.length, firstResult: fuseResults[0]?.name },
   });
 }
