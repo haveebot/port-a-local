@@ -8,6 +8,7 @@ import Footer from "@/components/Footer";
 import { WebsiteSchema } from "@/components/StructuredData";
 import { categories } from "@/data/categories";
 import PortalIcon from "@/components/brand/PortalIcon";
+import AskGullyTrending from "@/components/AskGullyTrending";
 
 export default function Home() {
   return (
@@ -83,6 +84,11 @@ export default function Home() {
               </a>
             ))}
           </div>
+
+          {/* Trending row — server-rendered from ask_gully_log. Shows
+              what tourists are actually asking right now (last 24h).
+              Renders null until 2+ unique questions accumulate. */}
+          <AskGullyTrending variant="homepage" />
         </div>
       </section>
 
