@@ -2,9 +2,12 @@ import React, {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
+import * as SecureStore from "expo-secure-store";
 import { priceCart, type PricedCart } from "@palocal/data/delivery-pricing";
 import { getMenuItem } from "@palocal/data/delivery-restaurants";
 
@@ -12,6 +15,40 @@ export interface CartLine {
   itemId: string;
   quantity: number;
   notes?: string;
+}
+
+const CART_STORAGE_KEY = "pal-cart-v1";
+
+async function loadStoredCart(): Promise<CartLine[]> {
+  try {
+    const raw = await SecureStore.getItemAsync(CART_STORAGE_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw) as unknown;
+    if (!Array.isArray(parsed)) return [];
+    return parsed.filter((l): l is CartLine => {
+      if (!l || typeof l !== "object") return false;
+      const line = l as Partial<CartLine>;
+      if (typeof line.itemId !== "string") return false;
+      if (typeof line.quantity !== "number" || line.quantity <= 0) return false;
+      // Drop lines whose menu entries are gone — restaurants may have
+      // changed between the save and load (deploy ships new menu).
+      return getMenuItem(line.itemId) != null;
+    });
+  } catch {
+    return [];
+  }
+}
+
+async function persistCart(lines: CartLine[]): Promise<void> {
+  try {
+    if (lines.length === 0) {
+      await SecureStore.deleteItemAsync(CART_STORAGE_KEY);
+    } else {
+      await SecureStore.setItemAsync(CART_STORAGE_KEY, JSON.stringify(lines));
+    }
+  } catch {
+    // Best effort — failing to persist shouldn't crash the app.
+  }
 }
 
 interface CartContextValue {
@@ -39,6 +76,28 @@ export class CartConflictError extends Error {}
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [lines, setLines] = useState<CartLine[]>([]);
+  const hydratedRef = useRef(false);
+
+  // Hydrate the cart from SecureStore on mount so an app restart doesn't
+  // wipe the user's in-progress order.
+  useEffect(() => {
+    let cancelled = false;
+    loadStoredCart().then((stored) => {
+      if (cancelled) return;
+      if (stored.length > 0) setLines(stored);
+      hydratedRef.current = true;
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // Persist on every change AFTER hydration completes — otherwise the
+  // initial empty state would clobber the saved cart before we read it.
+  useEffect(() => {
+    if (!hydratedRef.current) return;
+    persistCart(lines);
+  }, [lines]);
 
   const restaurantId = useMemo<string | null>(() => {
     if (lines.length === 0) return null;
