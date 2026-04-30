@@ -1,9 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
 import { askGully, looksLikeQuestion } from "@/lib/gullyAsk";
 import { gullyFuse, gullyItems, type GullyItem } from "@/lib/gullySearch";
+import { logAskGully } from "@/data/ask-gully-log-store";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
+
+/**
+ * Best-effort answer-text scan for slugs Claude actually cited. The
+ * response answer uses [Name](slug) markdown — we extract the slugs
+ * from there rather than logging every result we passed to Claude.
+ * Gives the analytics page accurate "what got linked" data.
+ */
+function extractCitedSlugs(answer: string): string[] {
+  const slugs = new Set<string>();
+  const re = /\[[^\]]+\]\(([a-z0-9][a-z0-9-]*)\)/gi;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(answer)) !== null) {
+    slugs.add(m[1]);
+  }
+  return Array.from(slugs);
+}
 
 /**
  * Category fallback — when Fuse can't find strong matches for the
@@ -148,11 +165,36 @@ export async function POST(req: NextRequest) {
 
   const result = await askGully(query, combinedResults);
   if (!result.ok) {
+    // Log the miss too — failures inform reliability and budget.
+    void logAskGully({
+      query,
+      citedCount: 0,
+      citedSlugs: [],
+      fuseTopScore: topScore,
+      fallbackReason,
+      inferredCategory,
+      answerChars: null,
+    });
     return NextResponse.json(
       { ok: false, reason: result.reason },
       { status: 200 },
     );
   }
+
+  const answer = result.answer ?? "";
+  const actuallyCitedSlugs = extractCitedSlugs(answer);
+
+  // Log analytics. Fire-and-forget — the user-facing response does
+  // not wait on the insert.
+  void logAskGully({
+    query,
+    citedCount: actuallyCitedSlugs.length,
+    citedSlugs: actuallyCitedSlugs,
+    fuseTopScore: topScore,
+    fallbackReason,
+    inferredCategory,
+    answerChars: answer.length,
+  });
 
   return NextResponse.json({
     ok: true,
@@ -168,6 +210,7 @@ export async function POST(req: NextRequest) {
       fuseTopScore: topScore,
       inferredCategory,
       fallbackReason,
+      actuallyCited: actuallyCitedSlugs,
     },
   });
 }
