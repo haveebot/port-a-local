@@ -202,15 +202,17 @@ export default async function Image({
               }}
             />
 
-            {/* Title column — flex-grow takes remaining ~570px after
-                stat column + gap + divider, plenty for 3-line wrap */}
+            {/* Title column — explicit width so next/og wraps the
+                title text instead of overflowing the canvas. Total
+                row: 1200 - 128 padding - 420 stat - 48 gap - 1
+                divider - 48 gap = 555 → safe round-down to 540. */}
             <div
               style={{
                 display: "flex",
                 flexDirection: "column",
                 gap: 14,
-                flexGrow: 1,
-                minWidth: 0,
+                width: 540,
+                flexShrink: 0,
               }}
             >
               <div
@@ -219,6 +221,7 @@ export default async function Image({
                   fontWeight: 800,
                   color: "#f5f0e8",
                   lineHeight: 1.08,
+                  width: 540,
                 }}
               >
                 {dispatch.title}
@@ -230,6 +233,7 @@ export default async function Image({
                     color: "#8896ab",
                     lineHeight: 1.4,
                     fontWeight: 300,
+                    width: 540,
                   }}
                 >
                   {dispatch.subtitle.length > 130
