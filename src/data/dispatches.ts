@@ -28,6 +28,18 @@ export interface Dispatch {
   relatedDispatches?: string[];
   /** Related heritage story slugs — cross-link into /history */
   relatedStories?: string[];
+  /**
+   * Optional attention-getting OG visual hook. When present, the
+   * dispatch OG renders a high-impact layout instead of the standard
+   * branded one — big stat or pull quote on coral, designed to stop
+   * the scroll on FB / IG / X feeds.
+   *
+   *   stat:   { type: "stat", text: "8.7%", label: "..." }
+   *   quote:  { type: "quote", text: "...", attribution: "..." }
+   */
+  ogHighlight?:
+    | { type: "stat"; text: string; label: string }
+    | { type: "quote"; text: string; attribution: string };
 }
 
 export const dispatches: Dispatch[] = [
@@ -73,6 +85,11 @@ export const dispatches: Dispatch[] = [
     ],
     relatedDispatches: ["the-two-port-aransases"],
     relatedStories: ["fdr-tarpon-port-aransas", "farley-boat-works"],
+    ogHighlight: {
+      type: "stat",
+      text: "8.7%",
+      label: "Combined reservoir capacity · April 2026",
+    },
   },
   {
     slug: "the-two-port-aransases",
