@@ -70,7 +70,7 @@ export default function Home() {
               { label: "Where can I see dolphins?", q: "Where can I see dolphins?" },
               { label: "Where can I rent a golf cart?", q: "Where can I rent a golf cart?" },
               { label: "What is the Tarpon Inn?", q: "What is the Tarpon Inn?" },
-              { label: "What's the deal with Farley?", q: "What's the deal with Farley Boat Works?" },
+              { label: "What is a Farley Boat?", q: "What is a Farley Boat?" },
             ].map((prompt) => (
               <a
                 key={prompt.q}

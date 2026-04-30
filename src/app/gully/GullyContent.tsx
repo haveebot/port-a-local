@@ -61,7 +61,7 @@ const askGullyChips: Array<{ label: string; query: string }> = [
   { label: "Where can I see dolphins?", query: "Where can I see dolphins?" },
   { label: "Where can I rent a golf cart?", query: "Where can I rent a golf cart?" },
   { label: "What is the Tarpon Inn?", query: "What is the Tarpon Inn?" },
-  { label: "What's the deal with Farley?", query: "What's the deal with Farley Boat Works?" },
+  { label: "What is a Farley Boat?", query: "What is a Farley Boat?" },
 ];
 
 interface GullyContentProps {
