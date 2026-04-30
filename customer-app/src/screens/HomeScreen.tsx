@@ -17,6 +17,7 @@ import { businesses } from "@palocal/data/businesses";
 import { BrowseStackParamList, SERVICES } from "../lib/navigation";
 import CoastalWatch from "../components/CoastalWatch";
 import CrashingWaves from "../components/CrashingWaves";
+import LighthouseBeacon from "../components/LighthouseBeacon";
 
 type Nav = NativeStackScreenProps<BrowseStackParamList, "Home">["navigation"];
 type Props = NativeStackScreenProps<BrowseStackParamList, "Home">;
@@ -50,6 +51,7 @@ export default function HomeScreen({ navigation }: Props) {
     >
       {/* Hero */}
       <View style={[styles.hero, { paddingTop: insets.top + 44, paddingBottom: 170 }]}>
+        <LighthouseBeacon />
         <View style={styles.heroAccent} />
         <Text style={styles.heroEyebrow}>WELCOME TO PORT A</Text>
         <Text style={styles.heroTitle}>Everything the island{"\n"}has to offer.</Text>
