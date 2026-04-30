@@ -3,6 +3,7 @@ import { View, Text, Animated, useWindowDimensions, StyleSheet, Easing } from "r
 import Svg, { Path, G } from "react-native-svg";
 import type { CoastalConditions } from "../lib/coastalConditions";
 import { useReducedMotion } from "../lib/useReducedMotion";
+import { getGoldenHourIntensity } from "../lib/solarTimes";
 import { colors } from "../lib/theme";
 
 const STAGE_HEIGHT = 150;
@@ -79,6 +80,9 @@ interface Props {
 export default function CrashingWaves({ conditions }: Props) {
   const reduceMotion = useReducedMotion();
   const { width: screenWidth } = useWindowDimensions();
+  // Golden-hour wash: opacity ramps up to ~0.28 at sunset, fades through twilight.
+  const goldenIntensity = getGoldenHourIntensity();
+  const goldenOpacity = goldenIntensity * 0.28;
 
   // Port Aransas tides typically swing 0–2.5 ft (MLLW).
   // Map tide level to a vertical wave shift around a 1.0 ft "neutral" baseline.
@@ -102,6 +106,17 @@ export default function CrashingWaves({ conditions }: Props) {
       <WaveLayer width={screenWidth} duration={22000}            path={PATHS.back}  color={colors.navy[700]} opacity={0.45} bottomOffset={tideOffset - 4}  zIndex={1} reduceMotion={reduceMotion} />
       <WaveLayer width={screenWidth} duration={14000} reverse    path={PATHS.mid}   color={colors.navy[600]} opacity={0.65} bottomOffset={tideOffset - 8}  zIndex={2} reduceMotion={reduceMotion} />
       <WaveLayer width={screenWidth} duration={9000}             path={PATHS.front} color={colors.navy[500]} opacity={0.92} bottomOffset={tideOffset - 12} zIndex={3} reduceMotion={reduceMotion} />
+
+      {/* Golden-hour wash — coral/gold tint that strengthens as sunset approaches */}
+      {goldenOpacity > 0 && (
+        <View
+          pointerEvents="none"
+          style={[
+            styles.goldenWash,
+            { backgroundColor: `rgba(232, 101, 111, ${goldenOpacity.toFixed(3)})` },
+          ]}
+        />
+      )}
 
       {/* Tide readout — sits above wave layers with a soft scrim for legibility */}
       <View style={styles.numberLayer} pointerEvents="none">
@@ -150,6 +165,15 @@ const styles = StyleSheet.create({
     right: 0,
     backgroundColor: "rgba(11, 17, 32, 0.55)",
     borderRadius: 12,
+  },
+  // Golden-hour wash: blended coral over the wave area for that sunset glow.
+  goldenWash: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    top: 0,
+    zIndex: 3,
   },
   numberRow: {
     flexDirection: "row",
