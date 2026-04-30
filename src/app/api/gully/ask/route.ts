@@ -121,7 +121,7 @@ export async function POST(req: NextRequest) {
   // to Claude though — it needs the question phrasing to answer well.
   const fuseQuery = query
     .replace(
-      /^(what|who|where|when|why|how|can|could|should|would|is|are|do|does|will|which|whose|tell me|find me|recommend|suggest|show me)\s+(is|are|does|do|can|should|would|to|me)?\s*/i,
+      /^(what|who|where|when|why|how|can|could|should|would|is|are|do|does|will|which|whose|tell me|find me|recommend|suggest|show me)\s+(is|are|does|do|can|should|would|to|me|there|any|some|the)?\s*/i,
       "",
     )
     .replace(/\?+$/, "")
