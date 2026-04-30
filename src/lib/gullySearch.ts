@@ -1,9 +1,93 @@
 import Fuse from "fuse.js";
-import { businesses } from "@/data/businesses";
+import { businesses, type Business } from "@/data/businesses";
 import { stories } from "@/data/stories";
 import { dispatches } from "@/data/dispatches";
 import { archivePhotos } from "@/data/archives";
 import { RESTAURANTS } from "@/data/delivery-restaurants";
+
+/**
+ * Derive synthetic tag signals from existing business data so Fuse can
+ * surface businesses for tourist-flavored queries without us hand-tagging
+ * every entry. Reads tagline + description + amenities + menu names +
+ * hoursOfOperation and emits canonical signal tags.
+ *
+ * Why: pre-Lever-B, "best happy hour", "where to eat with kids", "what's
+ * open late", "pet friendly", "breakfast", "sunset spot" all returned
+ * cited=0 because the relevant info exists in the entries but isn't
+ * tagged. This pulls it through.
+ *
+ * Conservative — signal must be explicit in source text/hours, not
+ * inferred. If a business doesn't actually serve breakfast, we won't
+ * tag it just because it opens early.
+ */
+function deriveTagSignals(b: Business): string[] {
+  const signals: string[] = [];
+  const menuText =
+    b.menu?.flatMap((s) => [
+      s.section,
+      ...s.items.map((i) => `${i.name} ${i.description ?? ""}`),
+    ]) ?? [];
+  const haystack = [
+    b.tagline,
+    b.description,
+    ...(b.amenities ?? []),
+    ...menuText,
+  ]
+    .join(" ")
+    .toLowerCase();
+  const hoursValues = b.hoursOfOperation
+    ? Object.values(b.hoursOfOperation)
+    : [];
+
+  // Kid / family friendly — explicit mention only
+  if (/\bkid|\bfamily-?friendly|all ages|kids? menu|kid's menu|for kids|with kids/.test(haystack)) {
+    signals.push("kid friendly", "kids", "family friendly", "with kids", "for kids");
+  }
+  // Pet / dog friendly
+  if (/\bpet[- ]?friendly|\bdog[- ]?friendly|dogs welcome|dogs allowed|pups? welcome/.test(haystack)) {
+    signals.push("pet friendly", "dog friendly", "pets", "dogs");
+  }
+  // Happy hour
+  if (/happy hour|drink special|2[-\s]for[-\s]1|two[-\s]for[-\s]one/.test(haystack)) {
+    signals.push("happy hour", "drink specials");
+  }
+  // Breakfast — must say so explicitly OR open before 9am
+  const opensEarly = hoursValues.some((h) =>
+    /^\s*(6|7|8):\d{2}\s*AM/i.test(h),
+  );
+  if (/breakfast|brunch|pancake|biscuit|omelet|breakfast taco|kolache/.test(haystack) || opensEarly) {
+    signals.push("breakfast", "morning", "early");
+  }
+  // Late night — open past 10pm OR explicit
+  const opensLate = hoursValues.some((h) =>
+    /\b(10|11):\d{2}\s*PM\b|midnight|12:00\s*AM/i.test(h),
+  );
+  if (opensLate || /late[- ]night|after hours|open late/.test(haystack)) {
+    signals.push("late night", "open late", "after hours");
+  }
+  // Sunset / waterfront views
+  if (/sunset|waterfront|harbor view|bay view|beach view|water view/.test(haystack)) {
+    signals.push("sunset", "view", "waterfront");
+  }
+  // Outdoor seating / patio
+  if (/\bpatio\b|\bdeck\b|terrace|outdoor seat|outside seat|al fresco/.test(haystack)) {
+    signals.push("outdoor seating", "patio", "outside");
+  }
+  // Live music
+  if (/live music|live band|acoustic|karaoke|open mic/.test(haystack)) {
+    signals.push("live music", "music");
+  }
+  // Coffee
+  if (/\bcoffee|espresso|latte|cappuccino|cold brew/.test(haystack)) {
+    signals.push("coffee", "cafe");
+  }
+  // Beer / brewery
+  if (/\bbeer\b|brewery|craft beer|tap room|on tap|ipa\b|lager|pilsner/.test(haystack)) {
+    signals.push("beer", "brewery");
+  }
+
+  return signals;
+}
 
 export interface GullyItem {
   type:
@@ -38,7 +122,10 @@ const businessItems: GullyItem[] = businesses.map((b) => ({
   name: b.name,
   tagline: b.tagline,
   description: b.description,
-  tags: b.tags,
+  // Author-provided tags + synthetic signals derived from entry text
+  // (see deriveTagSignals above). De-duped so a business that already
+  // carries "happy hour" doesn't get it twice.
+  tags: Array.from(new Set([...b.tags, ...deriveTagSignals(b)])),
   category: b.category,
   featured: b.featured,
   hoursOfOperation: b.hoursOfOperation,
