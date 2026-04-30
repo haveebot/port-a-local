@@ -52,10 +52,22 @@ async function customerQuery(): Promise<URLSearchParams | null> {
   return params;
 }
 
+const ORDER_FETCH_TIMEOUT_MS = 8000;
+
+async function fetchWithTimeout(url: string): Promise<Response> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), ORDER_FETCH_TIMEOUT_MS);
+  try {
+    return await fetch(url, { signal: controller.signal });
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 export async function fetchMyOrders(): Promise<CustomerOrder[]> {
   const params = await customerQuery();
   if (!params) return [];
-  const res = await fetch(apiUrl(`/api/customer/orders?${params.toString()}`));
+  const res = await fetchWithTimeout(apiUrl(`/api/customer/orders?${params.toString()}`));
   if (!res.ok) throw new Error("Failed to load orders");
   const json = (await res.json()) as { orders: CustomerOrder[] };
   return json.orders ?? [];
@@ -64,7 +76,7 @@ export async function fetchMyOrders(): Promise<CustomerOrder[]> {
 export async function fetchMyOrder(id: string): Promise<CustomerOrder | null> {
   const params = await customerQuery();
   if (!params) return null;
-  const res = await fetch(
+  const res = await fetchWithTimeout(
     apiUrl(`/api/customer/orders/${id}?${params.toString()}`)
   );
   if (res.status === 404) return null;

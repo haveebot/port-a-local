@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   StyleSheet,
   RefreshControl,
-  ActivityIndicator,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -31,6 +30,23 @@ function statusColor(s: OrderStatus): string {
   return colors.coral[500];
 }
 
+/** Bone-colored placeholder card shown while orders are loading. */
+function SkeletonCard() {
+  return (
+    <View style={[styles.card, styles.skeletonCard]}>
+      <View style={styles.row}>
+        <View style={[styles.skeletonBar, { width: "55%", height: 16 }]} />
+        <View style={[styles.skeletonBar, { width: 60, height: 16 }]} />
+      </View>
+      <View style={[styles.skeletonBar, { width: "40%", height: 11, marginTop: 8 }]} />
+      <View style={styles.statusRow}>
+        <View style={[styles.skeletonBar, { width: 8, height: 8, borderRadius: 4 }]} />
+        <View style={[styles.skeletonBar, { width: "35%", height: 12 }]} />
+      </View>
+    </View>
+  );
+}
+
 function formatRelative(iso: string): string {
   const then = new Date(iso).getTime();
   const now = Date.now();
@@ -52,8 +68,10 @@ export default function OrdersScreen({ navigation }: Props) {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [signedIn, setSignedIn] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const load = useCallback(async () => {
+    setError(null);
     const session = await loadSession();
     if (!session?.email) {
       setSignedIn(false);
@@ -65,8 +83,11 @@ export default function OrdersScreen({ navigation }: Props) {
     try {
       const data = await fetchMyOrders();
       setOrders(data);
-    } catch {
-      // silent — leave previous state
+    } catch (e) {
+      // Surface the error so the user can retry instead of staring at
+      // a stale list with no signal that the refresh failed.
+      const isAbort = e instanceof Error && e.name === "AbortError";
+      setError(isAbort ? "Couldn't reach Port A Local. Check your connection." : "Couldn't refresh your orders.");
     } finally {
       setLoading(false);
     }
@@ -90,8 +111,14 @@ export default function OrdersScreen({ navigation }: Props) {
 
   if (loading) {
     return (
-      <View style={styles.empty}>
-        <ActivityIndicator color={colors.coral[500]} />
+      <View style={styles.list}>
+        <View style={styles.listContent}>
+          <SkeletonCard />
+          <View style={{ height: 10 }} />
+          <SkeletonCard />
+          <View style={{ height: 10 }} />
+          <SkeletonCard />
+        </View>
       </View>
     );
   }
@@ -126,6 +153,17 @@ export default function OrdersScreen({ navigation }: Props) {
         />
       }
       ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+      ListHeaderComponent={
+        error ? (
+          <View style={styles.errorBanner}>
+            <Ionicons name="cloud-offline-outline" size={18} color={colors.coral[600]} />
+            <Text style={styles.errorText}>{error}</Text>
+            <TouchableOpacity onPress={onRefresh} style={styles.errorRetry} accessibilityRole="button">
+              <Text style={styles.errorRetryText}>Retry</Text>
+            </TouchableOpacity>
+          </View>
+        ) : null
+      }
       ListEmptyComponent={
         <View style={styles.empty}>
           <Ionicons name="receipt-outline" size={48} color={colors.navy[300]} />
@@ -133,6 +171,13 @@ export default function OrdersScreen({ navigation }: Props) {
           <Text style={styles.emptyText}>
             When you order something through Port A Local, it shows up here.
           </Text>
+          <TouchableOpacity
+            style={styles.emptyCta}
+            onPress={() => navigation.getParent()?.navigate("Browse")}
+            accessibilityRole="button"
+          >
+            <Text style={styles.emptyCtaText}>Browse Port A</Text>
+          </TouchableOpacity>
         </View>
       }
       renderItem={({ item }) => (
@@ -214,5 +259,37 @@ const styles = StyleSheet.create({
     color: colors.navy[400],
     textAlign: "center",
     lineHeight: 20,
+  },
+  emptyCta: {
+    marginTop: 12,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 999,
+    backgroundColor: colors.coral[500],
+  },
+  emptyCtaText: { color: "#fff", fontWeight: "700", fontSize: 14 },
+  errorBanner: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    backgroundColor: colors.coral[100],
+    borderColor: colors.coral[300],
+    borderWidth: 1,
+    borderRadius: 12,
+    padding: 12,
+    marginBottom: 14,
+  },
+  errorText: { flex: 1, color: colors.coral[700], fontSize: 13 },
+  errorRetry: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    backgroundColor: colors.coral[600],
+    borderRadius: 999,
+  },
+  errorRetryText: { color: "#fff", fontWeight: "700", fontSize: 13 },
+  skeletonCard: { borderColor: colors.sand[200] },
+  skeletonBar: {
+    backgroundColor: colors.sand[200],
+    borderRadius: 4,
   },
 });
