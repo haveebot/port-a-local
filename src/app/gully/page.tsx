@@ -280,12 +280,15 @@ function GullyContent() {
             {/* Ask Gully prompts — questions trigger the Claude-augmented
                 answer panel above results. Coral pill styling distinguishes
                 these from keyword chips below. */}
-            <p className="text-sm font-semibold text-coral-300 uppercase tracking-wide mb-3 mt-8 inline-flex items-center justify-center gap-2 w-full">
+            <p className="text-sm font-semibold text-coral-300 uppercase tracking-wide mb-3 mt-8 inline-flex items-center justify-center gap-2 w-full flex-wrap">
               <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                 <path d="M12 2l1.8 5.4L19 9l-5.2 1.6L12 16l-1.8-5.4L5 9l5.2-1.6L12 2z" />
                 <path d="M19 14l.9 2.7L22 17.5l-2.1.8L19 21l-.9-2.7L16 17.5l2.1-.8L19 14z" opacity="0.7" />
               </svg>
               Ask Gully
+              <span className="text-[10px] text-navy-400 font-mono normal-case tracking-normal">
+                · powered by Heye Lab
+              </span>
             </p>
             <div className="flex flex-wrap justify-center gap-2 mb-2">
               {askGullyChips.map((chip) => (
