@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { LogBox } from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import {
   NavigationContainer,
@@ -44,6 +45,7 @@ import LocalsScreen from "./src/screens/LocalsScreen";
 
 import { registerForPushNotificationsAsync } from "./src/lib/notifications";
 import { CartProvider } from "./src/lib/cart";
+import OfflineBanner from "./src/components/OfflineBanner";
 import { colors } from "./src/lib/theme";
 import {
   BrowseStackParamList,
@@ -331,9 +333,11 @@ export default function App() {
   }, []);
 
   return (
-    <CartProvider>
-      <StatusBar style="light" />
-      <NavigationContainer ref={navigationRef} theme={navTheme} linking={linking}>
+    <SafeAreaProvider>
+      <CartProvider>
+        <StatusBar style="light" />
+        <OfflineBanner />
+        <NavigationContainer ref={navigationRef} theme={navTheme} linking={linking}>
         <Tab.Navigator
           screenOptions={{
             headerShown: false,
@@ -389,6 +393,7 @@ export default function App() {
           />
         </Tab.Navigator>
       </NavigationContainer>
-    </CartProvider>
+      </CartProvider>
+    </SafeAreaProvider>
   );
 }
