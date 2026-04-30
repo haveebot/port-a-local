@@ -959,58 +959,10 @@ export const businesses: Business[] = [
       },
     ],
   },
-  {
-    slug: "port-a-beach-buggies",
-    name: "Port A Beach Buggies",
-    category: "do",
-    tagline: "Rent a golf cart and cruise the island like a local",
-    description:
-      "The best way to get around Port Aransas is on a golf cart, and Port A Beach Buggies has a fleet of custom carts in all sizes — 4-passenger, 6-passenger, and 8-passenger rigs. Every cart comes with underseat beverage coolers, Bluetooth speakers, full-length tops, extra-long seat belts, and comfy padded seats. They deliver to your rental, hotel, or campsite. Stop by in person to check out the gift shop featuring beach décor and gifts just footsteps from the beach.",
-    address: "Port Aransas, TX 78373",
-    coordinates: [27.829811, -97.069323],
-    phone: "(361) 749-2066",
-    website: "https://portabeachbuggies.com",
-    hours: "Daily 8AM-6PM",
-    featured: false,
-    tags: ["golf cart", "rentals", "transportation", "island cruising", "outdoor", "locally owned"],
-    rentals: [
-      {
-        name: "3-Hour Rental",
-        duration: "3 hours",
-        price: "$58 (cash price)",
-      },
-      {
-        name: "4-Hour Rental",
-        duration: "4 hours",
-        price: "$75 (cash price)",
-      },
-      {
-        name: "6-Hour Rental",
-        duration: "6 hours",
-        price: "$85 (cash price)",
-      },
-      {
-        name: "24-Hour Overnight Rental",
-        duration: "24 hours",
-        price: "$119 (cash price)",
-      },
-      {
-        name: "Shibumi Shade Shelter — 1 Day",
-        duration: "1 day",
-        price: "$25",
-      },
-      {
-        name: "Shibumi Shade Shelter — 2 Days",
-        duration: "2 days",
-        price: "$45",
-      },
-      {
-        name: "Shibumi Shade Shelter — 3+ Days",
-        duration: "3+ days",
-        price: "$55",
-      },
-    ],
-  },
+  // Port A Beach Buggies removed 2026-04-30 — cart-rental shops are
+  // bookable only via /rent (PAL marketplace) per Winston: eliminate
+  // any reason to call cart vendors directly. Slug redirected to /rent
+  // in next.config.ts. Vendor remains in cart-vendors.ts blast pool.
 
   {
     slug: "scarlet-lady-dolphin-cruises",
@@ -1158,21 +1110,9 @@ export const businesses: Business[] = [
     tags: ["pirate ship", "cruise", "family", "kids", "fun", "gulf", "sunset views"],
     priceRange: "$$",
   },
-  {
-    slug: "island-surf-rentals",
-    name: "Island Surf Rentals",
-    category: "do",
-    tagline: "Surfboards, golf carts, bikes & beach gear — South Texas's premier rental shop since 2009",
-    description: "Island Surf Rentals has been Port Aransas's premier choice for surf rentals and golf carts since 2009. Surfboards, boogie boards, paddleboards, kayaks, bikes, and beach gear for rent. Also offers golf cart rentals. Located on E Ave G.",
-    address: "130 E Ave G, Port Aransas, TX 78373",
-    coordinates: [27.8274337, -97.0664881],
-    phone: "(361) 749-0822",
-    website: "https://islandsurfrentals.com",
-    hours: "Daily 9AM-5PM",
-    featured: false,
-    tags: ["surfboards", "rentals", "paddleboard", "surf lessons", "beach gear", "outdoor", "locally owned"],
-    priceRange: "$",
-  },
+  // Island Surf Rentals removed 2026-04-30 — multi-rental shop where
+  // cart was a featured product. Same logic as the dedicated cart shops:
+  // bookable only via /rent (PAL marketplace). Slug redirected.
   {
     slug: "parasailing-port-a",
     name: "Parasailing Port Aransas",
@@ -1187,48 +1127,9 @@ export const businesses: Business[] = [
     tags: ["parasailing", "adventure", "aerial", "gulf views", "thrill"],
     priceRange: "$$",
   },
-  {
-    slug: "island-outfitters",
-    name: "Island Outfitters",
-    category: "do",
-    tagline: "Premier golf cart rentals & beach gear — book online, delivered to your door",
-    description:
-      "Island Outfitters is Port Aransas's premier golf cart rental and beach gear provider. Skip the pickup line — book online and they'll deliver a six-passenger golf cart with unlimited fuel right to your accommodation. They also rent electric bikes, beach chairs, and Yeti coolers. All renters must be 21+ with a valid license, proof of insurance, and credit card. Golf carts cannot be driven on Highway 361.",
-    address: "525 Cut Off Rd, Port Aransas, TX 78373",
-    coordinates: [27.8334903, -97.0711928],
-    phone: "(361) 336-3866",
-    website: "https://www.islandoutfitterstx.com",
-    hours: "Daily 9AM-7PM",
-    hoursOfOperation: {
-      Monday: "9:00 AM – 7:00 PM",
-      Tuesday: "9:00 AM – 7:00 PM",
-      Wednesday: "9:00 AM – 7:00 PM",
-      Thursday: "9:00 AM – 7:00 PM",
-      Friday: "9:00 AM – 7:00 PM",
-      Saturday: "9:00 AM – 7:00 PM",
-      Sunday: "9:00 AM – 7:00 PM",
-    },
-    featured: false,
-    tags: ["golf carts", "beach gear", "e-bikes", "rentals", "delivery"],
-    rentals: [
-      {
-        name: "6-Passenger Golf Cart",
-        duration: "Daily & multi-day",
-        price: "Book online for rates",
-        description: "2022 model with unlimited fuel, delivered to you",
-      },
-      {
-        name: "Electric Bikes",
-        duration: "Daily",
-        price: "Book online for rates",
-      },
-      {
-        name: "Beach Chairs & Yeti Coolers",
-        duration: "Daily",
-        price: "Book online for rates",
-      },
-    ],
-  },
+  // Island Outfitters removed 2026-04-30 — cart-led multi-rental shop
+  // (golf cart + e-bikes + beach gear). Bookable only via /rent
+  // (PAL marketplace). Slug redirected.
 
   // SHOP
   // Island Surf Rentals removed from Shop — it's a rental/Do business, not retail
@@ -1642,42 +1543,9 @@ export const businesses: Business[] = [
     featured: false,
     tags: ["plumbing", "repairs", "remodels", "gas lines", "residential", "commercial"],
   },
-  {
-    slug: "joy-cart-rentals",
-    name: "JOY Cart Rentals",
-    category: "services",
-    tagline: "Cruise Port A in comfort — free delivery, pickup & 24-hour maintenance",
-    description:
-      "JOY Cart Rentals offers four and six-seater golf carts equipped with extended roofs and windshields for comfortable island cruising. With free delivery and pickup, guaranteed 24-hour maintenance, and some of the most competitive rates in town, JOY makes it easy to explore Port Aransas's beaches, restaurants, and shops by cart. Formerly Silver Sands Golf Carts, JOY has deep roots on the island and partners with local vacation rental properties to provide seamless cart service for guests.",
-    address: "307 Sea Isle Dr, Port Aransas, TX 78373",
-    coordinates: [27.8150067, -97.0756697],
-    phone: "(361) 749-2278",
-    website: "https://www.joycartrentals.com",
-    hours: "Daily — call for current hours",
-    featured: false,
-    tags: ["golf carts", "rentals", "delivery", "island transportation"],
-    verifiedPartner: true,
-    rentals: [
-      {
-        name: "4-Seater Golf Cart",
-        duration: "Daily & multi-day rates available",
-        price: "Call for current rates",
-        description: "Extended roof, windshield, comfortable seating",
-      },
-      {
-        name: "6-Seater Golf Cart",
-        duration: "Daily & multi-day rates available",
-        price: "Call for current rates",
-        description: "Extended roof, windshield, seats the whole family",
-      },
-    ],
-    amenities: [
-      "Free delivery & pickup",
-      "24-hour maintenance guarantee",
-      "Extended roofs & windshields",
-      "4-seater and 6-seater options",
-    ],
-  },
+  // JOY Cart Rentals removed 2026-04-30 — pure cart-rental shop.
+  // Bookable only via /rent (PAL marketplace) per Winston: eliminate
+  // any reason to call cart vendors directly. Slug redirected.
   {
     slug: "portable-detail-service",
     name: "Portable Detail Service",
@@ -2394,12 +2262,11 @@ export const businesses: Business[] = [
     slug: "drink-brons-backyard",
     name: "Bron's Backyard",
     category: "drink",
-    tagline: "Outdoor bar, live music, yard games & golf cart rentals — Port A's most unique hangout",
-    description: "Bron's Backyard is one of Port Aransas's most original spots. Owned by Bron Doyle, this outdoor bar and event venue on Ave G serves cold beer, wine, frozen cocktails, and food, with yard games (cornhole, giant Jenga, ping pong), live music, and movie nights. Also home to Bron's Beach Carts (golf cart and beach chair rentals) and a shaved ice stand — all under the same ownership. The kind of place you stumble into and stay all afternoon.",
+    tagline: "Outdoor bar, live music, yard games & shaved ice — Port A's most unique hangout",
+    description: "Bron's Backyard is one of Port Aransas's most original spots. Owned by Bron Doyle, this outdoor bar and event venue on Ave G serves cold beer, wine, frozen cocktails, and food, with yard games (cornhole, giant Jenga, ping pong), live music, and movie nights. Also home to a shaved ice stand. The kind of place you stumble into and stay all afternoon.",
     address: "314 E Ave G, Port Aransas, TX 78373",
     coordinates: [27.8268637, -97.0652665],
     phone: "(361) 290-7143",
-    website: "https://bronsbeachcarts.com",
     hours: "Mon-Thu 10AM-11PM, Fri-Sat 10AM-midnight, Sun 10AM-11PM",
     hoursOfOperation: {
       Monday: "10:00 AM – 11:00 PM",
@@ -2412,7 +2279,10 @@ export const businesses: Business[] = [
     },
     featured: true,
     categories: ["do", "eat"],
-    tags: ["bar", "live music", "yard games", "golf cart rentals", "beach chairs", "shaved ice", "outdoor", "events", "outdoor seating"],
+    // Cart-rental positioning stripped 2026-04-30 — Bron's still rents
+    // carts on the side, but the public listing leads on the bar/music
+    // identity. Booking goes through /rent (PAL marketplace).
+    tags: ["bar", "live music", "yard games", "shaved ice", "outdoor", "events", "outdoor seating"],
     menu: [
       {
         section: "Drinks & Offerings",
@@ -2421,8 +2291,6 @@ export const businesses: Business[] = [
           { name: "Draft Beer" },
           { name: "Shaved Ice" },
           { name: "Yard Games" },
-          { name: "Golf Cart Rentals" },
-          { name: "Beach Chair Rentals" },
         ],
       },
     ],
@@ -2841,8 +2709,8 @@ export const businesses: Business[] = [
     slug: "jackfish",
     name: "Jackfish",
     category: "eat",
-    tagline: "Brick oven pizza, local retail & golf cart rentals — Port A's multi-stop shop",
-    description: "Jackfish is a uniquely Port Aransas combo — brick oven pizza, a retail shop with coastal goods, and golf cart rentals all in one. A fun, casual spot that captures the island's laid-back spirit.",
+    tagline: "Brick oven pizza & local retail — Port A's multi-stop shop",
+    description: "Jackfish is a uniquely Port Aransas combo — brick oven pizza and a retail shop with coastal goods, all in one. A fun, casual spot that captures the island's laid-back spirit.",
     address: "3411 S 11th St, Port Aransas, TX 78373",
     coordinates: [27.806268, -97.079874],
     phone: "(361) 459-2900",
@@ -2857,7 +2725,10 @@ export const businesses: Business[] = [
       Saturday: "9:00 AM – 7:00 PM",
     },
     featured: false,
-    tags: ["pizza", "brick oven", "golf carts", "retail", "casual", "locally owned"],
+    // Cart-rental positioning stripped 2026-04-30 — Jackfish still
+    // offers carts on the side, but the public listing leads on
+    // pizza/retail. Booking goes through /rent (PAL marketplace).
+    tags: ["pizza", "brick oven", "retail", "casual", "locally owned"],
     menu: [
       {
         section: "Signatures",
