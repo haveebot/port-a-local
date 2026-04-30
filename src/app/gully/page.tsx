@@ -26,6 +26,7 @@ function saveRecentSearch(q: string) {
 }
 import { isOpenNow } from "@/lib/isOpenNow";
 import BusinessCard from "@/components/BusinessCard";
+import AskGullyAnswer from "@/components/AskGullyAnswer";
 import { businesses } from "@/data/businesses";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
@@ -280,6 +281,11 @@ function GullyContent() {
       {/* Results */}
       <section className="py-14">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          {/* Ask Gully — Claude-augmented answer when query is a question.
+              Renders nothing for non-question queries. Debounced fetch
+              to /api/gully/ask. Powered by Havee. */}
+          <AskGullyAnswer query={query} />
+
           <p className="text-sm text-navy-400 mb-6">{resultLabel}</p>
 
           {sorted.length > 0 ? (
