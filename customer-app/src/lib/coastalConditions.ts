@@ -39,10 +39,18 @@ const directionFromSeries = (json: unknown): TideDirection | null => {
   return last > first ? "rising" : "falling";
 };
 
+const FETCH_TIMEOUT_MS = 8000;
+
 async function getJson(url: string): Promise<unknown> {
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`NOAA ${res.status}`);
-  return res.json();
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+  try {
+    const res = await fetch(url, { signal: controller.signal });
+    if (!res.ok) throw new Error(`NOAA ${res.status}`);
+    return await res.json();
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 export async function fetchCoastalConditions(force = false): Promise<CoastalConditions> {
@@ -67,8 +75,15 @@ export async function fetchCoastalConditions(force = false): Promise<CoastalCond
         fetchedAt: Date.now(),
       };
 
-      cache = { data, expiresAt: Date.now() + CACHE_MS };
-      return data;
+      // Only cache when we have at least one real value — keeps stale cache
+      // available on transient errors and lets a fresh attempt happen sooner
+      // than the full 10-min window.
+      const hasAnyValue =
+        data.airTempF != null || data.waterTempF != null || data.tideLevelFt != null;
+      if (hasAnyValue) {
+        cache = { data, expiresAt: Date.now() + CACHE_MS };
+      }
+      return cache?.data ?? data;
     } finally {
       pending = null;
     }

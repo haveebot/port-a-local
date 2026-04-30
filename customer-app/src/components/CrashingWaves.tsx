@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { View, Text, Animated, Dimensions, StyleSheet, Easing } from "react-native";
 import Svg, { Path, G } from "react-native-svg";
 import { useCoastalConditions } from "../lib/coastalConditions";
+import { useReducedMotion } from "../lib/useReducedMotion";
 import { colors } from "../lib/theme";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
@@ -23,12 +24,14 @@ interface WaveLayerProps {
   opacity: number;
   bottomOffset: number;
   zIndex: number;
+  reduceMotion: boolean;
 }
 
-function WaveLayer({ duration, reverse, path, color, opacity, bottomOffset, zIndex }: WaveLayerProps) {
+function WaveLayer({ duration, reverse, path, color, opacity, bottomOffset, zIndex, reduceMotion }: WaveLayerProps) {
   const anim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
+    if (reduceMotion) return;
     const loop = Animated.loop(
       Animated.timing(anim, {
         toValue: 1,
@@ -39,7 +42,7 @@ function WaveLayer({ duration, reverse, path, color, opacity, bottomOffset, zInd
     );
     loop.start();
     return () => loop.stop();
-  }, [anim, duration]);
+  }, [anim, duration, reduceMotion]);
 
   const translateX = anim.interpolate({
     inputRange: [0, 1],
@@ -71,6 +74,7 @@ function WaveLayer({ duration, reverse, path, color, opacity, bottomOffset, zInd
 
 export default function CrashingWaves() {
   const conditions = useCoastalConditions();
+  const reduceMotion = useReducedMotion();
 
   // Port Aransas tides typically swing 0–2.5 ft (MLLW).
   // Map tide level to a vertical wave shift around a 1.0 ft "neutral" baseline.
@@ -85,7 +89,12 @@ export default function CrashingWaves() {
     : "TIDE";
 
   return (
-    <View style={styles.stage} pointerEvents="none">
+    <View
+      style={styles.stage}
+      pointerEvents="none"
+      accessibilityElementsHidden
+      importantForAccessibility="no-hide-descendants"
+    >
       {/* Big translucent tide number sitting in the wave field */}
       <View style={styles.numberLayer} pointerEvents="none">
         <View style={styles.numberRow}>
@@ -95,9 +104,9 @@ export default function CrashingWaves() {
         <Text style={styles.tideLabel}>{dirLabel}</Text>
       </View>
 
-      <WaveLayer duration={22000}            path={PATHS.back}  color={colors.navy[700]} opacity={0.45} bottomOffset={tideOffset - 4}  zIndex={1} />
-      <WaveLayer duration={14000} reverse    path={PATHS.mid}   color={colors.navy[600]} opacity={0.65} bottomOffset={tideOffset - 8}  zIndex={2} />
-      <WaveLayer duration={9000}             path={PATHS.front} color={colors.navy[500]} opacity={0.92} bottomOffset={tideOffset - 12} zIndex={3} />
+      <WaveLayer duration={22000}            path={PATHS.back}  color={colors.navy[700]} opacity={0.45} bottomOffset={tideOffset - 4}  zIndex={1} reduceMotion={reduceMotion} />
+      <WaveLayer duration={14000} reverse    path={PATHS.mid}   color={colors.navy[600]} opacity={0.65} bottomOffset={tideOffset - 8}  zIndex={2} reduceMotion={reduceMotion} />
+      <WaveLayer duration={9000}             path={PATHS.front} color={colors.navy[500]} opacity={0.92} bottomOffset={tideOffset - 12} zIndex={3} reduceMotion={reduceMotion} />
     </View>
   );
 }

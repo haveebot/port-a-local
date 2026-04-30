@@ -1,17 +1,20 @@
 import React, { useEffect, useRef } from "react";
 import { View, Animated, StyleSheet, Easing } from "react-native";
 import Svg, { Defs, LinearGradient, Stop, Polygon, Path, G } from "react-native-svg";
+import { useReducedMotion } from "../lib/useReducedMotion";
 
 const STAGE_SIZE = 220;
-const BEAM_SIZE = 720;
+const BEAM_SIZE = 540; // tuned to cover hero while limiting off-screen overdraw
 const LAMP_OFFSET_X = STAGE_SIZE * 0.46;
 const LAMP_OFFSET_Y = STAGE_SIZE * 0.18;
 
 export default function LighthouseBeacon() {
   const rotation = useRef(new Animated.Value(0)).current;
   const pulse = useRef(new Animated.Value(0)).current;
+  const reduceMotion = useReducedMotion();
 
   useEffect(() => {
+    if (reduceMotion) return;
     const r = Animated.loop(
       Animated.timing(rotation, {
         toValue: 1,
@@ -32,14 +35,19 @@ export default function LighthouseBeacon() {
       r.stop();
       p.stop();
     };
-  }, [rotation, pulse]);
+  }, [rotation, pulse, reduceMotion]);
 
   const rotate = rotation.interpolate({ inputRange: [0, 1], outputRange: ["0deg", "360deg"] });
   const lampOpacity = pulse.interpolate({ inputRange: [0, 1], outputRange: [0.6, 1] });
   const lampScale = pulse.interpolate({ inputRange: [0, 1], outputRange: [1, 1.2] });
 
   return (
-    <View style={styles.stage} pointerEvents="none">
+    <View
+      style={styles.stage}
+      pointerEvents="none"
+      accessibilityElementsHidden
+      importantForAccessibility="no-hide-descendants"
+    >
       {/* Rotating beam — Animated.View centered on the lamp, rotates 360° per loop */}
       <Animated.View style={[styles.beamWrap, { transform: [{ rotate }] }]}>
         <Svg width={BEAM_SIZE} height={BEAM_SIZE} viewBox={`0 0 ${BEAM_SIZE} ${BEAM_SIZE}`}>

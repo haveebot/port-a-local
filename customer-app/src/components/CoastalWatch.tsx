@@ -12,6 +12,7 @@ import Svg, {
 } from "react-native-svg";
 import { colors } from "../lib/theme";
 import { useCoastalConditions } from "../lib/coastalConditions";
+import { useReducedMotion } from "../lib/useReducedMotion";
 
 const LOG_ENTRIES = [
   { time: "07:22", note: "Fog rolling in early. Can't see the breakwater from the tower balcony." },
@@ -21,10 +22,11 @@ const LOG_ENTRIES = [
   { time: "16:51", note: "Pelicans pushing south of the jetty. Bait pod working the tide line." },
 ];
 
-function PulsingMarker() {
+function PulsingMarker({ reduceMotion }: { reduceMotion: boolean }) {
   const pulse = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
+    if (reduceMotion) return;
     const loop = Animated.loop(
       Animated.timing(pulse, {
         toValue: 1,
@@ -35,7 +37,7 @@ function PulsingMarker() {
     );
     loop.start();
     return () => loop.stop();
-  }, [pulse]);
+  }, [pulse, reduceMotion]);
 
   const scale = pulse.interpolate({ inputRange: [0, 1], outputRange: [0.6, 2.4] });
   const opacity = pulse.interpolate({ inputRange: [0, 0.7, 1], outputRange: [0.85, 0, 0] });
@@ -51,9 +53,10 @@ function PulsingMarker() {
   );
 }
 
-function LiveDot() {
+function LiveDot({ reduceMotion }: { reduceMotion: boolean }) {
   const blink = useRef(new Animated.Value(1)).current;
   useEffect(() => {
+    if (reduceMotion) return;
     const loop = Animated.loop(
       Animated.sequence([
         Animated.timing(blink, { toValue: 1, duration: 800, useNativeDriver: true }),
@@ -62,19 +65,20 @@ function LiveDot() {
     );
     loop.start();
     return () => loop.stop();
-  }, [blink]);
+  }, [blink, reduceMotion]);
   return <Animated.View style={[styles.liveDot, { opacity: blink }]} />;
 }
 
-function LogEntry({ time, note, delay }: { time: string; note: string; delay: number }) {
-  const fade = useRef(new Animated.Value(0)).current;
-  const slide = useRef(new Animated.Value(8)).current;
+function LogEntry({ time, note, delay, reduceMotion }: { time: string; note: string; delay: number; reduceMotion: boolean }) {
+  const fade = useRef(new Animated.Value(reduceMotion ? 1 : 0)).current;
+  const slide = useRef(new Animated.Value(reduceMotion ? 0 : 8)).current;
   useEffect(() => {
+    if (reduceMotion) return;
     Animated.parallel([
       Animated.timing(fade, { toValue: 1, duration: 600, delay, useNativeDriver: true }),
       Animated.timing(slide, { toValue: 0, duration: 600, delay, useNativeDriver: true }),
     ]).start();
-  }, [fade, slide, delay]);
+  }, [fade, slide, delay, reduceMotion]);
   return (
     <Animated.View style={[styles.logRow, { opacity: fade, transform: [{ translateY: slide }] }]}>
       <Text style={styles.logTime}>{time}</Text>
@@ -96,13 +100,14 @@ function fmtTide(level: number | null, dir: "rising" | "falling" | null, fallbac
 
 export default function CoastalWatch() {
   const conditions = useCoastalConditions();
+  const reduceMotion = useReducedMotion();
   const tide = fmtTide(conditions?.tideLevelFt ?? null, conditions?.tideDirection ?? null, "2.4 ft");
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.headerLeft}>
-          <LiveDot />
+          <LiveDot reduceMotion={reduceMotion} />
           <Text style={styles.headerLabel} numberOfLines={1}>COASTAL WATCH · STATION 04</Text>
         </View>
         <Text style={styles.coords} numberOfLines={1}>27°50′N · 97°03′W</Text>
@@ -174,7 +179,7 @@ export default function CoastalWatch() {
           </Svg>
           {/* Animated CSS-style pulse overlay positioned over the SVG marker */}
           <View style={styles.markerOverlay} pointerEvents="none">
-            <PulsingMarker />
+            <PulsingMarker reduceMotion={reduceMotion} />
           </View>
         </View>
       </View>
@@ -186,7 +191,7 @@ export default function CoastalWatch() {
           <Text style={styles.liveLabel}>LIVE</Text>
         </View>
         {LOG_ENTRIES.map((e, i) => (
-          <LogEntry key={e.time} time={e.time} note={e.note} delay={i * 500} />
+          <LogEntry key={e.time} time={e.time} note={e.note} delay={i * 500} reduceMotion={reduceMotion} />
         ))}
         <View style={styles.instrumentRow}>
           <View style={styles.instrumentCol}>
