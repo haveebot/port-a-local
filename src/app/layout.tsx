@@ -49,9 +49,14 @@ export const metadata: Metadata = {
     description:
       "The local guide. Heritage. Dispatch. Find what is on the island.",
   },
-  alternates: {
-    canonical: "https://theportalocal.com",
-  },
+  // NOTE: do NOT set alternates.canonical at the root layout — that
+  // would cascade a homepage-canonical to every page on the site,
+  // which is what just blew up FB OG previews for every Dispatch +
+  // Heritage piece (FB followed the canonical to homepage and used
+  // that page's OG instead of the actual page's). Per-page metadata
+  // should set its own canonical when explicit canonicalization is
+  // needed; otherwise the request URL is used (which is correct for
+  // dispatch/heritage/event/business detail pages).
   category: "travel",
 };
 
