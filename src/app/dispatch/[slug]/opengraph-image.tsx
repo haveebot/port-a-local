@@ -70,16 +70,19 @@ export default async function Image({
   }
 
   const lighthouse = loadLighthouse("standard");
+  // Title sized to fit comfortably in the right column (~520px wide
+  // after the stat column + divider + gap). 38px fits ~3 lines for
+  // long titles; longer titles auto-shrink further.
   const titleFontSize =
-    dispatch.title.length > 50 ? 44 : dispatch.title.length > 32 ? 52 : 60;
+    dispatch.title.length > 50 ? 38 : dispatch.title.length > 32 ? 44 : 54;
 
   // STAT layout — big coral number anchors the left, title + meta right
   if (dispatch.ogHighlight.type === "stat") {
     const { text, label } = dispatch.ogHighlight;
-    // Stat font sized inversely to length so 1-char ("$") ≈ 280, 4-char
-    // ("8.7%") ≈ 220, 6-char ("$1.3B") ≈ 180. Keeps it always huge but
-    // never wraps the number.
-    const statFontSize = text.length <= 2 ? 280 : text.length <= 5 ? 220 : 180;
+    // Stat font sized inversely to length so 1-char ("$") ≈ 240, 4-char
+    // ("8.7%") ≈ 200, 6-char ("$1.3B") ≈ 160. Keeps it always huge but
+    // never crowds out the title.
+    const statFontSize = text.length <= 2 ? 240 : text.length <= 5 ? 200 : 160;
     return new ImageResponse(
       (
         <div
@@ -142,14 +145,15 @@ export default async function Image({
               marginTop: 16,
             }}
           >
-            {/* Stat column */}
+            {/* Stat column — fixed width so the title column gets a
+                predictable ~520px to wrap into without clipping */}
             <div
               style={{
                 display: "flex",
                 flexDirection: "column",
                 gap: 12,
                 flexShrink: 0,
-                maxWidth: 540,
+                width: 420,
               }}
             >
               <div
@@ -198,13 +202,15 @@ export default async function Image({
               }}
             />
 
-            {/* Title column */}
+            {/* Title column — flex-grow takes remaining ~570px after
+                stat column + gap + divider, plenty for 3-line wrap */}
             <div
               style={{
                 display: "flex",
                 flexDirection: "column",
                 gap: 14,
                 flexGrow: 1,
+                minWidth: 0,
               }}
             >
               <div
@@ -212,7 +218,7 @@ export default async function Image({
                   fontSize: titleFontSize,
                   fontWeight: 800,
                   color: "#f5f0e8",
-                  lineHeight: 1.05,
+                  lineHeight: 1.08,
                 }}
               >
                 {dispatch.title}
@@ -220,15 +226,14 @@ export default async function Image({
               {dispatch.subtitle && (
                 <div
                   style={{
-                    fontSize: 19,
+                    fontSize: 18,
                     color: "#8896ab",
                     lineHeight: 1.4,
                     fontWeight: 300,
-                    maxWidth: 480,
                   }}
                 >
-                  {dispatch.subtitle.length > 140
-                    ? dispatch.subtitle.slice(0, 140) + "…"
+                  {dispatch.subtitle.length > 130
+                    ? dispatch.subtitle.slice(0, 130) + "…"
                     : dispatch.subtitle}
                 </div>
               )}
