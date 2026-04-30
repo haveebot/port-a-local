@@ -153,7 +153,7 @@ export default function AskGullyAnswer({ query }: { query: string }) {
           Ask Gully
         </span>
         <span className="text-[10px] text-navy-400 font-mono">
-          · powered by Havee
+          · powered by Heye Lab
         </span>
         {loading && (
           <span className="text-[10px] text-coral-600 italic ml-auto">
