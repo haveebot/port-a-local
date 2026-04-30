@@ -1,9 +1,56 @@
 import { NextRequest, NextResponse } from "next/server";
 import { askGully, looksLikeQuestion } from "@/lib/gullyAsk";
-import { gullyFuse, type GullyItem } from "@/lib/gullySearch";
+import { gullyFuse, gullyItems, type GullyItem } from "@/lib/gullySearch";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
+
+/**
+ * Category fallback — when Fuse can't find strong matches for the
+ * question, we infer the most likely category from the question text
+ * and supplement the result pool with featured items from that
+ * category. Without this, Claude punts to "browse Eat / Do" even
+ * when concrete recommendations exist.
+ *
+ * Returns the category slug to draw from, or null if no clear signal.
+ */
+function inferCategoryFromQuestion(q: string): string | null {
+  const t = q.toLowerCase();
+  // Order matters — check more specific signals first.
+  if (/\bbreakfast|brunch|coffee|cafe|morning/.test(t)) return "eat";
+  if (/\bhappy hour|drink|beer|wine|cocktail|bar\b|brewery/.test(t)) return "drink";
+  if (/\beat|food|restaurant|menu|tacos?|seafood|burger|pizza|lunch|dinner|kid[- ]?friendly/.test(t)) return "eat";
+  if (/\bfish|charter|captain|offshore|tarpon|bay fish/.test(t)) return "fish";
+  if (/\bsunset|view|waterfront|patio|outside seating/.test(t)) return "drink";
+  if (/\bdolphin|kayak|paddleboard|surf|tour|boat ride|excursion/.test(t)) return "do";
+  if (/\bdo\b|with kids|for kids|family|rainy|indoor|activity|fun|play/.test(t)) return "do";
+  if (/\bstay|hotel|room|rental|condo|vrbo|airbnb|accommodation/.test(t)) return "stay";
+  if (/\bshop|store|buy|boutique|gift|souvenir/.test(t)) return "shop";
+  if (/\bbeach|sand|umbrella|cabana|chair/.test(t)) return "beach";
+  if (/\bcart|golf cart/.test(t)) return "rent";
+  return null;
+}
+
+/**
+ * Pull top items from a category as a fallback pool — featured first,
+ * then alphabetical. Caps at `n`.
+ */
+function topInCategory(category: string, n: number): GullyItem[] {
+  return gullyItems
+    .filter(
+      (i) =>
+        (i.type === "business" ||
+          i.type === "portal" ||
+          i.type === "delivery-vendor") &&
+        i.category === category,
+    )
+    .sort((a, b) => {
+      if (a.featured && !b.featured) return -1;
+      if (!a.featured && b.featured) return 1;
+      return a.name.localeCompare(b.name);
+    })
+    .slice(0, n);
+}
 
 /**
  * POST /api/gully/ask
@@ -60,12 +107,29 @@ export async function POST(req: NextRequest) {
     )
     .replace(/\?+$/, "")
     .trim();
-  const fuseResults: GullyItem[] = gullyFuse
-    .search(fuseQuery || query)
-    .slice(0, 8)
-    .map((r) => r.item);
+  const rawFuseResults = gullyFuse.search(fuseQuery || query).slice(0, 8);
+  const fuseResults: GullyItem[] = rawFuseResults.map((r) => r.item);
 
-  const result = await askGully(query, fuseResults);
+  // Lever C — category fallback. If Fuse's top score is weak (>0.55, on
+  // a scale where 0 = perfect, 1 = miss) OR returns nothing, infer the
+  // most likely category from the question and supplement with featured
+  // items from that category. Without this, Claude lacks anything
+  // specific to ground in and falls back to "browse Eat / Do" even
+  // when concrete recommendations exist.
+  const topScore = rawFuseResults[0]?.score ?? 1;
+  const isWeak = topScore > 0.55 || rawFuseResults.length === 0;
+  let combinedResults: GullyItem[] = fuseResults;
+  if (isWeak) {
+    const inferredCategory = inferCategoryFromQuestion(query);
+    if (inferredCategory) {
+      const fallback = topInCategory(inferredCategory, 5).filter(
+        (it) => !fuseResults.some((f) => f.slug === it.slug),
+      );
+      combinedResults = [...fuseResults, ...fallback].slice(0, 8);
+    }
+  }
+
+  const result = await askGully(query, combinedResults);
   if (!result.ok) {
     return NextResponse.json(
       { ok: false, reason: result.reason },
@@ -76,7 +140,16 @@ export async function POST(req: NextRequest) {
   return NextResponse.json({
     ok: true,
     answer: result.answer,
-    citedSlugs: fuseResults.map((r) => ({ slug: r.slug, name: r.name, type: r.type, category: r.category })),
+    citedSlugs: combinedResults.map((r) => ({
+      slug: r.slug,
+      name: r.name,
+      type: r.type,
+      category: r.category,
+    })),
     usage: result.usage,
+    debug: {
+      fuseTopScore: topScore,
+      usedCategoryFallback: isWeak && combinedResults.length > fuseResults.length,
+    },
   });
 }
