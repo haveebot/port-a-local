@@ -85,10 +85,13 @@ export default function RentFormScreen({ navigation }: Props) {
       return;
     }
     setSubmitting(true);
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 15000);
     try {
       const res = await fetch(apiUrl("/api/checkout/rent"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        signal: controller.signal,
         body: JSON.stringify({
           name: name.trim(),
           phone: phone.trim(),
@@ -123,12 +126,17 @@ export default function RentFormScreen({ navigation }: Props) {
         url,
         orderId: sessionId ?? `rent-${Date.now()}`,
       });
-    } catch {
+    } catch (e) {
+      const isAbort = e instanceof Error && e.name === "AbortError";
       Alert.alert(
-        "Connection problem",
-        "We couldn't reach the server. Try again."
+        isAbort ? "Took too long" : "Connection problem",
+        isAbort
+          ? "The request is taking longer than expected. Check your connection and try again."
+          : "We couldn't reach the server. Try again."
       );
       setSubmitting(false);
+    } finally {
+      clearTimeout(timer);
     }
   };
 

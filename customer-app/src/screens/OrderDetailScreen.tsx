@@ -68,14 +68,17 @@ export default function OrderDetailScreen({ route, navigation }: Props) {
   const [order, setOrder] = useState<CustomerOrder | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [fetchError, setFetchError] = useState<string | null>(null);
   const pollTimer = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const load = useCallback(async () => {
+    setFetchError(null);
     try {
       const o = await fetchMyOrder(orderId);
       setOrder(o);
-    } catch {
-      // leave previous state
+    } catch (e) {
+      const isAbort = e instanceof Error && e.name === "AbortError";
+      setFetchError(isAbort ? "Connection issue. Pulling status when we're back online." : "Couldn't refresh status.");
     } finally {
       setLoading(false);
     }
@@ -167,6 +170,13 @@ export default function OrderDetailScreen({ route, navigation }: Props) {
           Order #{order.id.slice(0, 8)} · {formatUSD(order.totalCents)}
         </Text>
       </View>
+
+      {fetchError ? (
+        <View style={styles.fetchErrorBanner}>
+          <Ionicons name="cloud-offline-outline" size={16} color={colors.coral[700]} />
+          <Text style={styles.fetchErrorText}>{fetchError}</Text>
+        </View>
+      ) : null}
 
       <View style={styles.section}>
         <Text style={styles.sectionLabel}>STATUS</Text>
@@ -285,6 +295,19 @@ const styles = StyleSheet.create({
     textAlign: "center",
     lineHeight: 20,
   },
+  fetchErrorBanner: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    backgroundColor: colors.coral[100],
+    borderColor: colors.coral[300],
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 10,
+    marginHorizontal: 16,
+    marginTop: 14,
+  },
+  fetchErrorText: { flex: 1, color: colors.coral[700], fontSize: 12 },
   hero: {
     backgroundColor: colors.navy[950],
     paddingHorizontal: 24,

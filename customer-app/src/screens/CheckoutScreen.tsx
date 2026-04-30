@@ -76,10 +76,13 @@ export default function CheckoutScreen({ navigation }: Props) {
     }
 
     setSubmitting(true);
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 15000); // 15s — payment endpoint can be slow
     try {
       const res = await fetch(apiUrl("/api/deliver/order"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        signal: controller.signal,
         body: JSON.stringify({
           restaurantSlug: restaurant.slug,
           items: cart.lines,
@@ -126,12 +129,17 @@ export default function CheckoutScreen({ navigation }: Props) {
         setSubmitting(false);
         return;
       }
-    } catch {
+    } catch (e) {
+      const isAbort = e instanceof Error && e.name === "AbortError";
       Alert.alert(
-        "Connection problem",
-        "We couldn't reach the server. Check your connection and try again."
+        isAbort ? "Took too long" : "Connection problem",
+        isAbort
+          ? "The order is taking longer than expected. Check your connection and try again — your cart is still saved."
+          : "We couldn't reach the server. Check your connection and try again."
       );
       setSubmitting(false);
+    } finally {
+      clearTimeout(timer);
     }
   };
 
