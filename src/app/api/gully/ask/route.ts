@@ -17,8 +17,10 @@ export const runtime = "nodejs";
 function inferCategoryFromQuestion(q: string): string | null {
   const t = q.toLowerCase();
   // Order matters — check more specific signals first.
+  if (/locals? eat|where do locals|locals' food|local spot/.test(t)) return "eat";
   if (/\bbreakfast|brunch|coffee|cafe|morning/.test(t)) return "eat";
   if (/\bhappy hour|drink|beer|wine|cocktail|bar\b|brewery/.test(t)) return "drink";
+  if (/open late|late night|after midnight|past 10|after 10/.test(t)) return "eat";
   if (/\beat|food|restaurant|menu|tacos?|seafood|burger|pizza|lunch|dinner|kid[- ]?friendly/.test(t)) return "eat";
   if (/\bfish|charter|captain|offshore|tarpon|bay fish/.test(t)) return "fish";
   if (/\bsunset|view|waterfront|patio|outside seating/.test(t)) return "drink";
@@ -110,22 +112,37 @@ export async function POST(req: NextRequest) {
   const rawFuseResults = gullyFuse.search(fuseQuery || query).slice(0, 8);
   const fuseResults: GullyItem[] = rawFuseResults.map((r) => r.item);
 
-  // Lever C — category fallback. If Fuse's top score is weak (>0.55, on
-  // a scale where 0 = perfect, 1 = miss) OR returns nothing, infer the
-  // most likely category from the question and supplement with featured
-  // items from that category. Without this, Claude lacks anything
-  // specific to ground in and falls back to "browse Eat / Do" even
-  // when concrete recommendations exist.
+  // Lever C — category fallback. Two trigger conditions:
+  //   1. Fuse top score is weak (>0.55) or pool is empty
+  //   2. Inferred category exists but Fuse's top 3 are all wrong-category
+  //      (e.g. "where do locals eat" scores 0.2 on the locals portal but
+  //       none of the top results are restaurants)
+  // When either fires, supplement the pool with featured items from the
+  // inferred category. Without this, Claude lacks anything specific to
+  // ground in and falls back to "browse Eat / Do" even when concrete
+  // recommendations exist in the catalog.
   const topScore = rawFuseResults[0]?.score ?? 1;
+  const inferredCategory = inferCategoryFromQuestion(query);
   const isWeak = topScore > 0.55 || rawFuseResults.length === 0;
+  const isWrongCategory =
+    !!inferredCategory &&
+    rawFuseResults.length > 0 &&
+    !rawFuseResults
+      .slice(0, 3)
+      .some((r) => r.item.category === inferredCategory);
   let combinedResults: GullyItem[] = fuseResults;
-  if (isWeak) {
-    const inferredCategory = inferCategoryFromQuestion(query);
-    if (inferredCategory) {
-      const fallback = topInCategory(inferredCategory, 5).filter(
-        (it) => !fuseResults.some((f) => f.slug === it.slug),
-      );
-      combinedResults = [...fuseResults, ...fallback].slice(0, 8);
+  let fallbackReason: "weak" | "wrong_category" | null = null;
+  if ((isWeak || isWrongCategory) && inferredCategory) {
+    const fallback = topInCategory(inferredCategory, 5).filter(
+      (it) => !fuseResults.some((f) => f.slug === it.slug),
+    );
+    if (fallback.length > 0) {
+      // For wrong-category, prepend fallback so Claude sees the right
+      // type first. For weak, append since Fuse pool may still be useful.
+      combinedResults = isWrongCategory
+        ? [...fallback, ...fuseResults].slice(0, 8)
+        : [...fuseResults, ...fallback].slice(0, 8);
+      fallbackReason = isWrongCategory ? "wrong_category" : "weak";
     }
   }
 
@@ -149,7 +166,8 @@ export async function POST(req: NextRequest) {
     usage: result.usage,
     debug: {
       fuseTopScore: topScore,
-      usedCategoryFallback: isWeak && combinedResults.length > fuseResults.length,
+      inferredCategory,
+      fallbackReason,
     },
   });
 }
