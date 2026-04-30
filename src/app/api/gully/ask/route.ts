@@ -49,10 +49,19 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  // Re-run Fuse on the server (same index the client uses) so we have
-  // canonical results to feed Claude.
+  // Strip question-prefix words + trailing "?" before Fuse so noise
+  // words don't dilute keyword matches. "what is sandfest?" → "sandfest"
+  // matches the Heritage piece tag cleanly. We pass the ORIGINAL query
+  // to Claude though — it needs the question phrasing to answer well.
+  const fuseQuery = query
+    .replace(
+      /^(what|who|where|when|why|how|can|could|should|would|is|are|do|does|will|which|whose|tell me|find me|recommend|suggest|show me)\s+(is|are|does|do|can|should|would|to|me)?\s*/i,
+      "",
+    )
+    .replace(/\?+$/, "")
+    .trim();
   const fuseResults: GullyItem[] = gullyFuse
-    .search(query)
+    .search(fuseQuery || query)
     .slice(0, 8)
     .map((r) => r.item);
 
