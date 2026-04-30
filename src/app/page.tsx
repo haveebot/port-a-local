@@ -50,9 +50,36 @@ export default function Home() {
             </div>
           </form>
 
-          <p className="text-sm text-navy-400">
-            Try &ldquo;fish tacos&rdquo; &middot; &ldquo;happy hour&rdquo; &middot; &ldquo;Farley&rdquo; &middot; &ldquo;sunset&rdquo; &middot; &ldquo;pet friendly&rdquo;
+          {/* Ask Gully prompts — questions land on /gully?q=... which then
+              trips the question heuristic and surfaces the Claude-augmented
+              answer panel. Each prompt vetted to return cited answers. */}
+          <p className="text-xs text-coral-300 uppercase tracking-[0.2em] mb-3 inline-flex items-center justify-center gap-2 w-full">
+            <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 2l1.8 5.4L19 9l-5.2 1.6L12 16l-1.8-5.4L5 9l5.2-1.6L12 2z" />
+              <path d="M19 14l.9 2.7L22 17.5l-2.1.8L19 21l-.9-2.7L16 17.5l2.1-.8L19 14z" opacity="0.7" />
+            </svg>
+            Or just ask Gully
           </p>
+          <div className="flex flex-wrap justify-center gap-2">
+            {[
+              { label: "What is Sandfest?", q: "What is Sandfest?" },
+              { label: "Where can I see dolphins?", q: "Where can I see dolphins?" },
+              { label: "Where can I rent a golf cart?", q: "Where can I rent a golf cart?" },
+              { label: "What is the Tarpon Inn?", q: "What is the Tarpon Inn?" },
+              { label: "What's the deal with Farley?", q: "What's the deal with Farley Boat Works?" },
+            ].map((prompt) => (
+              <a
+                key={prompt.q}
+                href={`/gully?q=${encodeURIComponent(prompt.q)}`}
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs sm:text-sm bg-coral-500/15 text-coral-100 hover:bg-coral-500/25 hover:text-white border border-coral-400/40 transition-colors"
+              >
+                <svg className="w-3 h-3 shrink-0 text-coral-300" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M12 2l1.8 5.4L19 9l-5.2 1.6L12 16l-1.8-5.4L5 9l5.2-1.6L12 2z" />
+                </svg>
+                {prompt.label}
+              </a>
+            ))}
+          </div>
         </div>
       </section>
 

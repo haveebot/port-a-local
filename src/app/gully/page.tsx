@@ -46,6 +46,24 @@ const popularChips: Array<{ icon: PortalIconName; label: string; query: string }
   { icon: "sailing", label: "Farley Boats", query: "Farley" },
 ];
 
+/**
+ * Question prompts for Ask Gully — each one verified to return cited
+ * answers from the Claude Haiku synthesis (`/api/gully/ask`). Tapping
+ * fills the input which trips the question heuristic and surfaces the
+ * coral Ask Gully panel.
+ *
+ * Vetted 2026-04-29 against prod. Only add chips here after confirming
+ * they cite ≥1 listing — otherwise tourists see "I don't have specifics"
+ * which undersells the surface.
+ */
+const askGullyChips: Array<{ label: string; query: string }> = [
+  { label: "What is Sandfest?", query: "What is Sandfest?" },
+  { label: "Where can I see dolphins?", query: "Where can I see dolphins?" },
+  { label: "Where can I rent a golf cart?", query: "Where can I rent a golf cart?" },
+  { label: "What is the Tarpon Inn?", query: "What is the Tarpon Inn?" },
+  { label: "What's the deal with Farley?", query: "What's the deal with Farley Boat Works?" },
+];
+
 function GullyContent() {
   const searchParams = useSearchParams();
   const initialQ = searchParams.get("q") ?? "";
@@ -259,8 +277,33 @@ function GullyContent() {
                 </div>
               </div>
             )}
+            {/* Ask Gully prompts — questions trigger the Claude-augmented
+                answer panel above results. Coral pill styling distinguishes
+                these from keyword chips below. */}
+            <p className="text-sm font-semibold text-coral-300 uppercase tracking-wide mb-3 mt-8 inline-flex items-center justify-center gap-2 w-full">
+              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 2l1.8 5.4L19 9l-5.2 1.6L12 16l-1.8-5.4L5 9l5.2-1.6L12 2z" />
+                <path d="M19 14l.9 2.7L22 17.5l-2.1.8L19 21l-.9-2.7L16 17.5l2.1-.8L19 14z" opacity="0.7" />
+              </svg>
+              Ask Gully
+            </p>
+            <div className="flex flex-wrap justify-center gap-2 mb-2">
+              {askGullyChips.map((chip) => (
+                <button
+                  key={chip.query}
+                  onClick={() => setQuery(chip.query)}
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm bg-coral-500/15 text-coral-100 hover:bg-coral-500/25 hover:text-white border border-coral-400/40 transition-colors cursor-pointer"
+                >
+                  <svg className="w-3.5 h-3.5 shrink-0 text-coral-300" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M12 2l1.8 5.4L19 9l-5.2 1.6L12 16l-1.8-5.4L5 9l5.2-1.6L12 2z" />
+                  </svg>
+                  {chip.label}
+                </button>
+              ))}
+            </div>
+
             <p className="text-sm font-semibold text-navy-300 uppercase tracking-wide mb-3 mt-8">
-              Just Gully It
+              Or browse popular
             </p>
             <div className="flex flex-wrap justify-center gap-2">
               {popularChips.map((chip) => (
