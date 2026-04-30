@@ -1,49 +1,30 @@
-import React, { useEffect, useRef } from "react";
-import { View, Text, StyleSheet, Animated, Easing } from "react-native";
+import React from "react";
+import { View, Text, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useOnlineStatus } from "../lib/useOnlineStatus";
-import { useReducedMotion } from "../lib/useReducedMotion";
 import { colors } from "../lib/theme";
 
 /**
- * Persistent banner that slides in from the top when the device drops off the
- * network. Hidden when online so it stays out of the way during normal use.
+ * Persistent coral banner shown above all screens when the device has no
+ * network. Renders nothing while online to stay out of the way.
  */
 export default function OfflineBanner() {
   const online = useOnlineStatus();
   const insets = useSafeAreaInsets();
-  const reduceMotion = useReducedMotion();
-  const slide = useRef(new Animated.Value(-80)).current;
 
-  useEffect(() => {
-    if (reduceMotion) {
-      slide.setValue(online ? -80 : 0);
-      return;
-    }
-    Animated.timing(slide, {
-      toValue: online ? -80 : 0,
-      duration: 220,
-      easing: Easing.out(Easing.cubic),
-      useNativeDriver: true,
-    }).start();
-  }, [online, reduceMotion, slide]);
-
-  if (online && reduceMotion) return null;
+  if (online) return null;
 
   return (
-    <Animated.View
+    <View
       pointerEvents="none"
-      style={[
-        styles.banner,
-        { paddingTop: insets.top + 6, transform: [{ translateY: slide }] },
-      ]}
+      style={[styles.banner, { paddingTop: insets.top + 6 }]}
       accessibilityLiveRegion="polite"
       accessibilityRole="alert"
     >
       <Ionicons name="cloud-offline" size={14} color={colors.coral[100]} />
       <Text style={styles.text}>You&apos;re offline — some things may not work</Text>
-    </Animated.View>
+    </View>
   );
 }
 
