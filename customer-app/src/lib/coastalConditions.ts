@@ -2,7 +2,7 @@
 // Source: NOAA CO-OPS Station 8775237 (Port Aransas, TX).
 // Free, no auth, ~10-min cache + in-flight dedupe to stay polite.
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 const STATION = "8775237";
 const BASE = "https://api.tidesandcurrents.noaa.gov/api/prod/datagetter";
@@ -92,8 +92,9 @@ export async function fetchCoastalConditions(force = false): Promise<CoastalCond
   return pending;
 }
 
-export function useCoastalConditions(): CoastalConditions | null {
+export function useCoastalConditions(): { conditions: CoastalConditions | null; refresh: () => Promise<void> } {
   const [conditions, setConditions] = useState<CoastalConditions | null>(cache?.data ?? null);
+
   useEffect(() => {
     let cancelled = false;
     fetchCoastalConditions()
@@ -101,5 +102,15 @@ export function useCoastalConditions(): CoastalConditions | null {
       .catch(() => { /* keep prior or null on error */ });
     return () => { cancelled = true; };
   }, []);
-  return conditions;
+
+  const refresh = useCallback(async () => {
+    try {
+      const data = await fetchCoastalConditions(true);
+      setConditions(data);
+    } catch {
+      /* keep last good state */
+    }
+  }, []);
+
+  return { conditions, refresh };
 }

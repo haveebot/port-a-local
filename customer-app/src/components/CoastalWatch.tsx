@@ -13,6 +13,7 @@ import Svg, {
 import { colors } from "../lib/theme";
 import type { CoastalConditions } from "../lib/coastalConditions";
 import { useReducedMotion } from "../lib/useReducedMotion";
+import { getSolarTimes, formatSolarTime, timeUntil } from "../lib/solarTimes";
 
 const LOG_ENTRIES = [
   { time: "07:22", note: "Fog rolling in early. Can't see the breakwater from the tower balcony." },
@@ -105,6 +106,23 @@ interface Props {
 export default function CoastalWatch({ conditions }: Props) {
   const reduceMotion = useReducedMotion();
   const tide = fmtTide(conditions?.tideLevelFt ?? null, conditions?.tideDirection ?? null, "2.4 ft");
+
+  const solar = getSolarTimes();
+  const now = new Date();
+  // Show whichever event is upcoming next: morning sunrise or evening sunset.
+  const nextEvent = solar.sunset && solar.sunset > now
+    ? { label: "SUNSET", time: solar.sunset }
+    : solar.sunrise && solar.sunrise > now
+    ? { label: "SUNRISE", time: solar.sunrise }
+    : null;
+  // If we already had today's sunset, show tomorrow's sunrise.
+  // Compact label so the 4th instrument cell doesn't wrap on phone width.
+  const sunDisplay = nextEvent
+    ? {
+        value: formatSolarTime(nextEvent.time),
+        label: `${nextEvent.label} · ${timeUntil(nextEvent.time, now).replace("in ", "").toUpperCase()}`,
+      }
+    : { value: "—", label: "SUN" };
 
   return (
     <View style={styles.container}>
@@ -208,6 +226,10 @@ export default function CoastalWatch({ conditions }: Props) {
           <View style={styles.instrumentCol}>
             <Text style={styles.instrumentValue}>{tide.value}</Text>
             <Text style={styles.instrumentLabel}>{tide.label}</Text>
+          </View>
+          <View style={styles.instrumentCol}>
+            <Text style={styles.instrumentValue}>{sunDisplay.value}</Text>
+            <Text style={styles.instrumentLabel}>{sunDisplay.label}</Text>
           </View>
         </View>
       </View>

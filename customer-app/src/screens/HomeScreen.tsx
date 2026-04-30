@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import {
   View,
   Text,
@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   ImageBackground,
+  RefreshControl,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
@@ -26,7 +27,17 @@ type Props = NativeStackScreenProps<BrowseStackParamList, "Home">;
 export default function HomeScreen({ navigation }: Props) {
   const featured = businesses.filter((b) => b.featured).slice(0, 6);
   const insets = useSafeAreaInsets();
-  const conditions = useCoastalConditions();
+  const { conditions, refresh } = useCoastalConditions();
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    try {
+      await refresh();
+    } finally {
+      setRefreshing(false);
+    }
+  }, [refresh]);
 
   const accentToColor = (
     accent: "coral" | "gold" | "ocean" | "seafoam" | "sunset"
@@ -50,6 +61,15 @@ export default function HomeScreen({ navigation }: Props) {
       style={styles.container}
       contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={false}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          tintColor={colors.coral[400]}
+          title="Pulling latest tide..."
+          titleColor={colors.coral[400]}
+        />
+      }
     >
       {/* Hero */}
       <View style={[styles.hero, { paddingTop: insets.top + 44, paddingBottom: 170 }]}>
