@@ -24,6 +24,143 @@ export interface DispatchContent {
 }
 
 export const dispatchContent: Record<string, DispatchContent> = {
+  "nueces-drought-disaster-2026": {
+    lede:
+      "On Thursday, April 30, 2026, Nueces County Commissioners Court declared a local disaster over the deepening drought and water shortage. The order is effective immediately and remains in place until the county judge formally lifts it. Port Aransas — on the same water system as Corpus Christi — is on the inside of that declaration.",
+
+    sections: [
+      {
+        heading: "What the declaration does",
+        body: [
+          "A local disaster declaration is a procedural unlock. It lets the county activate emergency plans, coordinate response across cities and water utilities, and access state and federal aid more quickly. By itself, it does not change what comes out of your tap. The City of Corpus Christi — Nueces County's main water provider, and the source for Port Aransas — is already operating under Stage 3 water restrictions.",
+          "The State of Texas had already issued a drought-related disaster proclamation that includes Nueces County. Governor Abbott amended and renewed that proclamation in April 2026. The county's local declaration accelerates the response on the ground.",
+        ],
+      },
+      {
+        heading: "The numbers",
+        body: [
+          "As of April 2026, combined storage at Choke Canyon Reservoir and Lake Corpus Christi — the two reservoirs that supply the city's water system — sits at roughly 8.7 percent of capacity. That is among the lowest readings ever recorded.",
+          "Choke Canyon alone is below 8 percent. The reservoir fell from 47 percent capacity to 11 percent between October 2021 and October 2025 — a four-year decline driven by a five-year drought. The trajectory has not turned.",
+          "Corpus Christi Water serves roughly 500,000 people across seven counties, plus one of the largest petrochemical corridors in the country. Industrial demand accounts for more than half of the region's water use.",
+        ],
+        callout: {
+          label: "By the numbers · April 2026",
+          items: [
+            { label: "Combined reservoir storage", value: "8.7%" },
+            { label: "Choke Canyon alone", value: "<8%" },
+            { label: "Decline since Oct 2021", value: "47% → 11%" },
+            { label: "People on the system", value: "~500,000" },
+            { label: "Industrial share of demand", value: ">50%" },
+          ],
+        },
+      },
+      {
+        heading: "What's coming",
+        body: [
+          "The city's own water models project a Level 1 Water Emergency by September 2026. At Level 1, all customers — residential, commercial, industrial — would be required to reduce water use by 25 percent. The Corpus Christi City Council was scheduled to consider that plan in late April and delayed the vote.",
+          "In parallel, the city is drilling a new wellfield, pursuing groundwater purchases from outside utilities, and bringing reclaimed-water reuse online — the latter beginning December 2026 at the earliest. None of those measures, individually, replace the missing reservoir storage. They buy time.",
+        ],
+        pullQuote: {
+          text: "September unless significant rain falls.",
+          attribution: "City of Corpus Christi water emergency projection",
+        },
+      },
+      {
+        heading: "The desalination plant that wasn't",
+        body: [
+          "The Harbor Island desalination plant has been the long-term play for years. The proposed siting is consequential to anyone who lives on the island: directly on the ship channel, next to the ferry landing, and across the water from Roberts Point Park. The plant's permit application contemplated discharging up to 95.6 million gallons per day of hypersaline effluent into the channel — water that, on the wrong tides, moves into the surrounding wetlands. Those wetlands are spawning grounds for shrimp, crabs, and the species that make the local fishing industry possible.",
+          "The project hit another setback this spring when the Nueces River Authority's $140 million low-interest loan application to the Texas Water Development Board was denied. The TWDB had more qualifying projects than money; the Harbor Island request ranked thirteenth, and only the top nine to ten projects received funding. A separate $1.2 billion Inner Harbor desal project was voted down 6-3 by the Corpus Christi City Council in September 2025 after public opposition over cost and brine-discharge concerns. The council reversed in November and began moving forward with a different vendor. Governor Abbott, for his part, has publicly accused Corpus Christi of \"squandering\" some $750 million in state water funds.",
+        ],
+      },
+      {
+        heading: "What the locals already won",
+        body: [
+          "The Port Aransas Conservancy has been the local muscle in the desal fight from the start. Mayor Charles Bujan formally requested that the Texas Commission on Environmental Quality hold a public meeting on the Port of Corpus Christi Authority's permit application. After the agency received hundreds of complaints, TCEQ referred the discharge permit to the State Office of Administrative Hearings — a contested case before two administrative law judges.",
+          "On February 5, 2021, the SOAH judges recommended that TCEQ deny the permit. Their finding, in the language of the ruling: the Port Authority \"has not met its burden to prove that the proposed discharge will not adversely impact the marine environment, aquatic life, and wildlife, including spawning eggs and larval migration.\" PAC president James King called it \"a huge victory for the city of Port Aransas, our coastal ecosystem, and the folks who love this part of Texas.\"",
+          "The fight didn't end there. PAC filed a Petition for Judicial Review. Closing arguments on remand ran into 2022. The plant's future has remained unsettled through every twist of the larger Corpus Christi desal saga.",
+        ],
+        pullQuote: {
+          text: "The facts are the facts. You can't go around those. It's the wrong place.",
+          attribution: "James King, Port Aransas Conservancy president",
+        },
+      },
+      {
+        heading: "What it means for the island",
+        body: [
+          "Port Aransas is in Nueces County, on the Corpus Christi water system, and inside this declaration. Stage 3 restrictions apply here: limits on landscape irrigation, vehicle washing, pool refills, and a list of commercial water uses. Hotels, vacation rentals, restaurants, golf cart rental washdowns — all on the inside of those rules.",
+          "This is not a tap shutoff. It is a tightening. Visitors arriving for Mother's Day weekend or any time over the coming months should expect drought signage, conservation reminders at properties, and — if September comes without significant rain — the possibility of mandatory 25 percent cuts across all uses.",
+          "Port A has been on the dry end of these cycles before. The difference this time is the depth of the reservoirs, the timeline to the next emergency level, and how few of the alternatives — desalination first among them — are anywhere close to ready. The locals who have spent the last several years fighting the wrong-place version of that answer were never wrong about the water needing somewhere to go. They were arguing about where.",
+        ],
+      },
+    ],
+
+    sources: [
+      {
+        label: "KIII-TV — Nueces County declares local disaster over severe drought and water shortage",
+        url: "https://www.kiiitv.com/article/news/local/nueces-county-disaster-declaration-drought-water-shortage-2026/503-ed975d22-72bf-4e3b-a667-7cc95a9d104e",
+      },
+      {
+        label: "Texas Tribune — Corpus Christi delays action on plan to cut water use by 25% if emergency is declared",
+        url: "https://www.texastribune.org/2026/04/28/texas-corpus-christi-emergency-water-restrictions/",
+      },
+      {
+        label: "City of Corpus Christi — Water Supply Dashboard",
+        url: "https://www.corpuschristitx.gov/department-directory/corpus-christi-water/water-supply-dashboard/",
+      },
+      {
+        label: "KRIS 6 News — Draft presentation projects Corpus Christi water emergency by September",
+        url: "https://www.kristv.com/running-dry/draft-presentation-obtained-by-kris-6-projects-corpus-christi-water-emergency-by-september",
+      },
+      {
+        label: "Texas Observer — The Corpus Christi Water Crisis Isn't Exceptional. It's Early",
+        url: "https://www.texasobserver.org/corpus-christi-water-crisis-climate-projections/",
+      },
+      {
+        label: "KIII-TV — Corpus Christi Harbor Island water project faces setback after $140M loan denial",
+        url: "https://www.kiiitv.com/article/life/local-life/corpus-christi-harbor-island-water-project-faces-setback-after-140m-loan-denial/503-af351e1c-f4bf-4167-9cd0-7f537b22bab0",
+      },
+      {
+        label: "Inside Climate News — Corpus Christi Folds on Its Desalination Gamble",
+        url: "https://insideclimatenews.org/news/03092025/corpus-christi-folds-on-its-desalination-gamble/",
+      },
+      {
+        label: "Texas Tribune — Corpus Christi's water supply is uncertain after City Council ends water treatment plans",
+        url: "https://www.texastribune.org/2025/09/03/corpus-christi-desalination-water-plans-canceled/",
+      },
+      {
+        label: "KRIS 6 News — Abbott says Corpus Christi 'squandered' $750 million in state water funds",
+        url: "https://www.kristv.com/news/local-news/in-your-neighborhood/corpus-christi/abbott-says-corpus-christi-squandered-750-million-in-state-water-funds-heres-what-the-money-actually-is",
+      },
+      {
+        label: "Office of the Governor — Governor Abbott Amends, Renews Drought Disaster Proclamation In April 2026",
+        url: "https://gov.texas.gov/news/post/governor-abbott-amends-renews-drought-disaster-proclamation-in-april-2026",
+      },
+      {
+        label: "Port Aransas Conservancy — Desalination Plant",
+        url: "https://portaransasconservancy.com/desalination-plant",
+      },
+      {
+        label: "PR Newswire — Port Aransas Conservancy Wins Contested Case Hearing (Feb 5, 2021)",
+        url: "https://www.prnewswire.com/news-releases/port-aransas-conservancy-wins-contested-case-hearing-301223355.html",
+      },
+      {
+        label: "KRIS 6 News — Port Aransas Conservancy fighting to block Port of Corpus Christi desalination plant",
+        url: "https://www.kristv.com/news/local-news/port-aransas-conservancy-fighting-to-block-port-of-corpus-christi-desalination-plant",
+      },
+      {
+        label: "Sierra Club — In Corpus Christi, Texas, Environmentalists Are Fighting a Slate of Proposed Desalination Plants",
+        url: "https://www.sierraclub.org/sierra/2023-2-summer/feature/corpus-christi-texas-environmentalists-are-fighting-desalination",
+      },
+      {
+        label: "Coastal Bend Business News — Harbor Island Desal Plant Now Contested Case",
+        url: "https://www.ccbiznews.com/news/harbor-island-desal-plant-now-contested-case",
+      },
+      {
+        label: "Port Aransas South Jetty — Council hears desalination plant proposal",
+        url: "https://www.portasouthjetty.com/articles/council-hears-desalination-plant-proposal/",
+      },
+    ],
+  },
   "the-two-port-aransases": {
     lede:
       "On December 30, 2025, the Sonic Drive-In at 1735 State Highway 361 closed for good. The Barnett Group, the franchisee that had opened the location in September 2022, declined to elaborate on the decision. The manager, Christal Pena, put it plainly to the Port Aransas South Jetty: sales weren't strong enough during non-summer months. Ten people lost their jobs.",

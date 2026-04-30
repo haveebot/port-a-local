@@ -1,0 +1,294 @@
+/**
+ * Social post queue — every auto-triggered post lands here in PENDING
+ * status. Wheelhouse /social review queue lets the operator
+ * Send / Edit / Skip before it fires to Meta. Once approved + sent,
+ * stores the FB/IG post ID for delete-after capability.
+ *
+ * Per Winston 2026-04-30: full FB automation, review queue first
+ * (auto-fire later once template trust earned). FB primary, IG
+ * secondary, X later. "Posts per day plus all available features
+ * = steady stream of content."
+ *
+ * Trigger types:
+ *   - event_published       New event added to events.ts (manual)
+ *   - event_milestone_30d   30 days before event start
+ *   - event_milestone_14d   14 days
+ *   - event_milestone_7d    7 days
+ *   - event_milestone_1d    Day before
+ *   - event_today           Day of
+ *   - event_wrap            Day after end
+ *   - heritage_published    New Heritage piece
+ *   - dispatch_published    New Dispatch piece
+ *   - business_added        New directory listing (curated subset)
+ *   - manual                Hand-queued from Wheelhouse
+ *
+ * Channels: facebook (always), instagram (if linked), twitter (later).
+ * One queue row = one (channel × post). A trigger usually creates 1-2
+ * rows (FB + IG) so each can be approved/edited independently.
+ */
+
+import { sql } from "@vercel/postgres";
+
+let _schemaReady = false;
+
+async function ensureSchema(): Promise<void> {
+  if (_schemaReady) return;
+  await sql`
+    CREATE TABLE IF NOT EXISTS social_post_queue (
+      id BIGSERIAL PRIMARY KEY,
+      trigger_type TEXT NOT NULL,
+      trigger_ref TEXT,
+      channel TEXT NOT NULL,
+      status TEXT NOT NULL DEFAULT 'pending',
+      caption TEXT NOT NULL,
+      link_url TEXT,
+      image_url TEXT,
+      scheduled_for TIMESTAMPTZ,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      sent_at TIMESTAMPTZ,
+      sent_by TEXT,
+      external_post_id TEXT,
+      external_post_url TEXT,
+      error_msg TEXT,
+      metadata JSONB
+    )
+  `;
+  await sql`CREATE INDEX IF NOT EXISTS social_post_status_idx ON social_post_queue(status, created_at DESC)`;
+  await sql`CREATE INDEX IF NOT EXISTS social_post_trigger_idx ON social_post_queue(trigger_type, trigger_ref, channel)`;
+  _schemaReady = true;
+}
+
+export type PostChannel = "facebook" | "instagram" | "twitter";
+export type PostStatus = "pending" | "sent" | "skipped" | "failed";
+export type TriggerType =
+  | "event_published"
+  | "event_milestone_30d"
+  | "event_milestone_14d"
+  | "event_milestone_7d"
+  | "event_milestone_1d"
+  | "event_today"
+  | "event_wrap"
+  | "heritage_published"
+  | "dispatch_published"
+  | "business_added"
+  | "manual";
+
+export interface SocialPost {
+  id: number;
+  triggerType: TriggerType;
+  triggerRef: string | null;
+  channel: PostChannel;
+  status: PostStatus;
+  caption: string;
+  linkUrl: string | null;
+  imageUrl: string | null;
+  scheduledFor: string | null;
+  createdAt: string;
+  updatedAt: string;
+  sentAt: string | null;
+  sentBy: string | null;
+  externalPostId: string | null;
+  externalPostUrl: string | null;
+  errorMsg: string | null;
+  metadata: Record<string, unknown> | null;
+}
+
+function rowToPost(row: Record<string, unknown>): SocialPost {
+  return {
+    id: Number(row.id),
+    triggerType: row.trigger_type as TriggerType,
+    triggerRef: (row.trigger_ref as string) ?? null,
+    channel: row.channel as PostChannel,
+    status: row.status as PostStatus,
+    caption: row.caption as string,
+    linkUrl: (row.link_url as string) ?? null,
+    imageUrl: (row.image_url as string) ?? null,
+    scheduledFor: row.scheduled_for
+      ? new Date(row.scheduled_for as string).toISOString()
+      : null,
+    createdAt: new Date(row.created_at as string).toISOString(),
+    updatedAt: new Date(row.updated_at as string).toISOString(),
+    sentAt: row.sent_at
+      ? new Date(row.sent_at as string).toISOString()
+      : null,
+    sentBy: (row.sent_by as string) ?? null,
+    externalPostId: (row.external_post_id as string) ?? null,
+    externalPostUrl: (row.external_post_url as string) ?? null,
+    errorMsg: (row.error_msg as string) ?? null,
+    metadata: (row.metadata as Record<string, unknown>) ?? null,
+  };
+}
+
+export interface QueueParams {
+  triggerType: TriggerType;
+  triggerRef?: string | null;
+  channel: PostChannel;
+  caption: string;
+  linkUrl?: string | null;
+  imageUrl?: string | null;
+  scheduledFor?: Date | null;
+  metadata?: Record<string, unknown> | null;
+}
+
+/**
+ * Idempotency: if a row already exists for the same
+ * (trigger_type, trigger_ref, channel) tuple in PENDING or SENT
+ * status, return that row instead of inserting a new one. Prevents
+ * the milestone cron from queuing duplicate "7 days out" posts on
+ * subsequent runs.
+ */
+export async function queuePost(p: QueueParams): Promise<SocialPost> {
+  await ensureSchema();
+  if (p.triggerRef) {
+    const existing = await sql`
+      SELECT * FROM social_post_queue
+      WHERE trigger_type = ${p.triggerType}
+        AND trigger_ref = ${p.triggerRef}
+        AND channel = ${p.channel}
+        AND status IN ('pending', 'sent')
+      ORDER BY created_at DESC
+      LIMIT 1
+    `;
+    if (existing.rows.length > 0) {
+      return rowToPost(existing.rows[0]);
+    }
+  }
+  const result = await sql`
+    INSERT INTO social_post_queue
+      (trigger_type, trigger_ref, channel, caption, link_url, image_url, scheduled_for, metadata)
+    VALUES
+      (${p.triggerType}, ${p.triggerRef ?? null}, ${p.channel}, ${p.caption},
+       ${p.linkUrl ?? null}, ${p.imageUrl ?? null},
+       ${p.scheduledFor ? p.scheduledFor.toISOString() : null},
+       ${p.metadata ? JSON.stringify(p.metadata) : null}::jsonb)
+    RETURNING *
+  `;
+  return rowToPost(result.rows[0]);
+}
+
+export async function getPending(limit = 50): Promise<SocialPost[]> {
+  await ensureSchema();
+  const result = await sql`
+    SELECT * FROM social_post_queue
+    WHERE status = 'pending'
+    ORDER BY
+      COALESCE(scheduled_for, created_at) ASC
+    LIMIT ${limit}
+  `;
+  return result.rows.map(rowToPost);
+}
+
+export async function getRecent(
+  limit = 30,
+  status?: PostStatus,
+): Promise<SocialPost[]> {
+  await ensureSchema();
+  if (status) {
+    const result = await sql`
+      SELECT * FROM social_post_queue
+      WHERE status = ${status}
+      ORDER BY created_at DESC
+      LIMIT ${limit}
+    `;
+    return result.rows.map(rowToPost);
+  }
+  const result = await sql`
+    SELECT * FROM social_post_queue
+    ORDER BY created_at DESC
+    LIMIT ${limit}
+  `;
+  return result.rows.map(rowToPost);
+}
+
+export async function getById(id: number): Promise<SocialPost | null> {
+  await ensureSchema();
+  const result = await sql`
+    SELECT * FROM social_post_queue WHERE id = ${id}
+  `;
+  return result.rows.length > 0 ? rowToPost(result.rows[0]) : null;
+}
+
+export interface UpdateCaptionParams {
+  id: number;
+  caption: string;
+}
+
+export async function updateCaption(p: UpdateCaptionParams): Promise<void> {
+  await ensureSchema();
+  await sql`
+    UPDATE social_post_queue
+    SET caption = ${p.caption}, updated_at = NOW()
+    WHERE id = ${p.id} AND status = 'pending'
+  `;
+}
+
+export interface MarkSentParams {
+  id: number;
+  sentBy: string;
+  externalPostId: string;
+  externalPostUrl?: string | null;
+}
+
+export async function markSent(p: MarkSentParams): Promise<void> {
+  await ensureSchema();
+  await sql`
+    UPDATE social_post_queue
+    SET status = 'sent',
+        sent_at = NOW(),
+        sent_by = ${p.sentBy},
+        external_post_id = ${p.externalPostId},
+        external_post_url = ${p.externalPostUrl ?? null},
+        error_msg = NULL,
+        updated_at = NOW()
+    WHERE id = ${p.id}
+  `;
+}
+
+export async function markSkipped(id: number, sentBy: string): Promise<void> {
+  await ensureSchema();
+  await sql`
+    UPDATE social_post_queue
+    SET status = 'skipped',
+        sent_by = ${sentBy},
+        updated_at = NOW()
+    WHERE id = ${id}
+  `;
+}
+
+export async function markFailed(id: number, errorMsg: string): Promise<void> {
+  await ensureSchema();
+  await sql`
+    UPDATE social_post_queue
+    SET status = 'failed',
+        error_msg = ${errorMsg.slice(0, 500)},
+        updated_at = NOW()
+    WHERE id = ${id}
+  `;
+}
+
+export interface QueueStats {
+  pending: number;
+  sent24h: number;
+  failed7d: number;
+  totalSent: number;
+}
+
+export async function getStats(): Promise<QueueStats> {
+  await ensureSchema();
+  const result = await sql`
+    SELECT
+      COUNT(*) FILTER (WHERE status = 'pending')::int AS pending,
+      COUNT(*) FILTER (WHERE status = 'sent' AND sent_at >= NOW() - INTERVAL '24 hours')::int AS sent_24h,
+      COUNT(*) FILTER (WHERE status = 'failed' AND updated_at >= NOW() - INTERVAL '7 days')::int AS failed_7d,
+      COUNT(*) FILTER (WHERE status = 'sent')::int AS total_sent
+    FROM social_post_queue
+  `;
+  const row = result.rows[0] ?? {};
+  return {
+    pending: Number(row.pending ?? 0),
+    sent24h: Number(row.sent_24h ?? 0),
+    failed7d: Number(row.failed_7d ?? 0),
+    totalSent: Number(row.total_sent ?? 0),
+  };
+}

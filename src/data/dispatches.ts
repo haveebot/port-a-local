@@ -32,6 +32,40 @@ export interface Dispatch {
 
 export const dispatches: Dispatch[] = [
   {
+    slug: "nueces-drought-disaster-2026",
+    title: "Nueces County Declares Local Drought Disaster",
+    subtitle:
+      "Reservoirs at 8.7 percent combined capacity. Stage 3 restrictions in force. Level 1 emergency projected for September. What today's declaration changes, and what it means for the island.",
+    description:
+      "On April 30, 2026, Nueces County declared a local disaster over the deepening drought and water shortage. Port Aransas — on the same water system as Corpus Christi — is inside the declaration. The numbers behind it, the desalination plant that wasn't, and what visitors should expect.",
+    category: "news",
+    icon: "💧",
+    readTime: "6 min",
+    featured: true,
+    published: true,
+    date: "2026-04-30",
+    tags: [
+      "drought",
+      "Nueces County",
+      "Corpus Christi water",
+      "Choke Canyon",
+      "Lake Corpus Christi",
+      "Harbor Island desal",
+      "water restrictions",
+      "Stage 3",
+      "Texas Water Development Board",
+      "Port Aransas Conservancy",
+      "James King",
+      "Charles Bujan",
+      "TCEQ",
+      "SOAH",
+      "Greg Abbott",
+      "disaster declaration",
+    ],
+    relatedDispatches: ["the-two-port-aransases"],
+    relatedStories: [],
+  },
+  {
     slug: "the-two-port-aransases",
     title: "Port Aransas — A Tale of Two Islands",
     subtitle:
