@@ -18,6 +18,15 @@ interface RunnerSignup {
   vehicle?: string;
   availability?: string;
   why?: string;
+  // v2 intake — license + insurance attestation
+  insuranceCarrier?: string;
+  licenseAcknowledged?: boolean;
+  insuranceAcknowledged?: boolean;
+  // v3 intake — vehicle plate + tag-state for PAL umbrella liability
+  licensePlate?: string;
+  licensePlateState?: string;
+  // v4 intake — combined 18+ + delivery-conduct attestation
+  termsAcknowledged?: boolean;
 }
 
 /**
@@ -41,9 +50,48 @@ export async function POST(req: NextRequest) {
   }
   const name = (body.name ?? "").trim();
   const phone = (body.phone ?? "").trim();
+  const insuranceCarrier = (body.insuranceCarrier ?? "").trim();
   if (name.length < 2 || phone.replace(/\D/g, "").length < 10) {
     return NextResponse.json(
       { error: "Name and a real phone number are required." },
+      { status: 400 },
+    );
+  }
+  if (
+    !body.licenseAcknowledged ||
+    !body.insuranceAcknowledged ||
+    insuranceCarrier.length < 2
+  ) {
+    return NextResponse.json(
+      {
+        error:
+          "We need the license + insurance acknowledgements + your carrier name before we can review your application.",
+      },
+      { status: 400 },
+    );
+  }
+  if (!body.termsAcknowledged) {
+    return NextResponse.json(
+      {
+        error:
+          "Please confirm you're 18 or older and that you'll only handle legal deliveries.",
+      },
+      { status: 400 },
+    );
+  }
+  // Plate + state required for PAL's umbrella liability insurance.
+  // Insurance agent advisory 2026-04-27 — every active runner needs a
+  // plate on file. Light validation; uppercase normalize.
+  const licensePlate = (body.licensePlate ?? "").trim().toUpperCase();
+  const licensePlateState = (body.licensePlateState ?? "")
+    .trim()
+    .toUpperCase();
+  if (licensePlate.length < 2 || licensePlateState.length !== 2) {
+    return NextResponse.json(
+      {
+        error:
+          "License plate + state of registration are required for our liability coverage.",
+      },
       { status: 400 },
     );
   }
@@ -78,20 +126,40 @@ export async function POST(req: NextRequest) {
     vehicle: body.vehicle?.trim() || undefined,
     availability: body.availability?.trim() || undefined,
     why: body.why?.trim() || undefined,
+    licenseAcknowledged: body.licenseAcknowledged === true,
+    insuranceAcknowledged: body.insuranceAcknowledged === true,
+    insuranceCarrier: insuranceCarrier || undefined,
+    licensePlate,
+    licensePlateState,
+    termsAcknowledged: body.termsAcknowledged === true,
   });
 
-  // HMAC-signed magic link Winston (or anyone with admin secret) can click
-  // to approve without needing to log in to a dashboard.
+  // HMAC-signed magic links Winston (or anyone with admin secret) can click
+  // to approve / reject / verify without needing to log in to a dashboard.
+  // Verify links use a distinct sig (`${id}:verify-${kind}`) so the approve
+  // link can't be replayed as a verify link if it leaks.
   const adminSecret = process.env.ADMIN_APPROVAL_SECRET;
   let approveUrl: string | null = null;
   let rejectUrl: string | null = null;
+  let verifyLicenseUrl: string | null = null;
+  let verifyInsuranceUrl: string | null = null;
   if (adminSecret) {
     const sig = crypto
       .createHmac("sha256", adminSecret)
       .update(driver.id)
       .digest("hex");
+    const sigVerifyLicense = crypto
+      .createHmac("sha256", adminSecret)
+      .update(`${driver.id}:verify-license`)
+      .digest("hex");
+    const sigVerifyInsurance = crypto
+      .createHmac("sha256", adminSecret)
+      .update(`${driver.id}:verify-insurance`)
+      .digest("hex");
     approveUrl = `${APP_URL}/api/deliver/runner/approve?d=${driver.id}&s=${sig}`;
     rejectUrl = `${APP_URL}/api/deliver/runner/reject?d=${driver.id}&s=${sig}`;
+    verifyLicenseUrl = `${APP_URL}/api/deliver/runner/verify?d=${driver.id}&kind=license&s=${sigVerifyLicense}`;
+    verifyInsuranceUrl = `${APP_URL}/api/deliver/runner/verify?d=${driver.id}&kind=insurance&s=${sigVerifyInsurance}`;
   }
 
   await sendAdminApplicationEmail({
@@ -102,8 +170,16 @@ export async function POST(req: NextRequest) {
     vehicle: driver.vehicle ?? undefined,
     availability: driver.availability ?? undefined,
     why: driver.why ?? undefined,
+    insuranceCarrier: driver.insuranceCarrier ?? undefined,
+    licenseAcknowledged: driver.licenseAcknowledged,
+    insuranceAcknowledged: driver.insuranceAcknowledged,
+    licensePlate: driver.licensePlate ?? undefined,
+    licensePlateState: driver.licensePlateState ?? undefined,
+    termsAcknowledged: driver.termsAcknowledged,
     approveUrl,
     rejectUrl,
+    verifyLicenseUrl,
+    verifyInsuranceUrl,
   });
 
   // Confirmation email to the applicant — only if they gave us an email.
@@ -188,8 +264,16 @@ interface AdminEmailInput {
   vehicle?: string;
   availability?: string;
   why?: string;
+  insuranceCarrier?: string;
+  licenseAcknowledged: boolean;
+  insuranceAcknowledged: boolean;
+  licensePlate?: string;
+  licensePlateState?: string;
+  termsAcknowledged: boolean;
   approveUrl: string | null;
   rejectUrl: string | null;
+  verifyLicenseUrl: string | null;
+  verifyInsuranceUrl: string | null;
 }
 
 async function sendAdminApplicationEmail(i: AdminEmailInput): Promise<void> {
@@ -234,6 +318,31 @@ async function sendAdminApplicationEmail(i: AdminEmailInput): Promise<void> {
       ${i.why ? `<p style="margin: 12px 0 0;"><strong>Why PAL:</strong><br/>${escapeHtml(i.why).replace(/\n/g, "<br/>")}</p>` : ""}
 
       <hr style="border: none; border-top: 1px solid #e5dcc7; margin: 24px 0;" />
+
+      <div style="background:#f5f0e8; padding:14px; border-radius:8px; margin-bottom:24px; border:1px solid #e5dcc7;">
+        <p style="margin: 0 0 6px; font-size:11px; text-transform:uppercase; letter-spacing:0.15em; color:#7d6e5a; font-weight:bold;">License + insurance attestation</p>
+        <p style="margin: 4px 0;"><strong>License:</strong> ${i.licenseAcknowledged ? "✓ Attested" : "✗ Not attested"}</p>
+        <p style="margin: 4px 0;"><strong>Insurance:</strong> ${i.insuranceAcknowledged ? "✓ Attested" : "✗ Not attested"} ${i.insuranceCarrier ? `· <em>${escapeHtml(i.insuranceCarrier)}</em>` : ""}</p>
+        ${i.licensePlate ? `<p style="margin: 4px 0;"><strong>Plate:</strong> <code>${escapeHtml(i.licensePlate)}</code> · ${escapeHtml(i.licensePlateState ?? "")}<span style="color:#7d6e5a; font-size:11px;"> &nbsp;(for umbrella liability)</span></p>` : `<p style="margin: 4px 0; color:#c83a3a;"><strong>Plate:</strong> ✗ Missing — should not be possible from the form</p>`}
+        <p style="margin: 4px 0;"><strong>18+ &amp; conduct:</strong> ${i.termsAcknowledged ? "✓ Attested (18+, legal-deliveries-only)" : "✗ Not attested"}</p>
+        <p style="margin: 8px 0 0; font-size:12px; color:#666;">
+          Applicant said they&apos;d email license + insurance card photos to hello@. Mark verified after they land.
+        </p>
+        ${
+          i.verifyLicenseUrl && i.verifyInsuranceUrl
+            ? `
+        <div style="margin-top: 12px;">
+          <a href="${i.verifyLicenseUrl}" style="display:inline-block; padding:8px 14px; margin-right:6px; background:#fff; color:#1f7a4d; text-decoration:none; border-radius:6px; font-weight:bold; font-size:12px; border:1px solid #1f7a4d;">
+            ✓ Verify license
+          </a>
+          <a href="${i.verifyInsuranceUrl}" style="display:inline-block; padding:8px 14px; background:#fff; color:#1f7a4d; text-decoration:none; border-radius:6px; font-weight:bold; font-size:12px; border:1px solid #1f7a4d;">
+            ✓ Verify insurance
+          </a>
+        </div>
+        `
+            : ""
+        }
+      </div>
 
       ${approveBlock}
 

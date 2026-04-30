@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { emailLayout } from "@/lib/emailLayout";
 import { sendSms, sendConsumerSms } from "@/lib/twilioSms";
+import { pingSuperAdmins, formatCustomerDisplay } from "@/lib/superAdminPing";
 
 const getStripe = () => new Stripe(process.env.STRIPE_SECRET_KEY || "", {
   apiVersion: "2026-03-25.dahlia",
@@ -11,11 +12,14 @@ const JOHN_PHONE = process.env.JOHN_BROWN_PHONE || "(361) 455-8606";
 const ADMIN_PHONE = process.env.ADMIN_PHONE || "";
 const INTERNAL_EMAIL = process.env.INTERNAL_ALERT_EMAIL || "";
 const RESEND_KEY = process.env.RESEND_API_KEY || "";
+const INTERNAL_RECIPIENTS = [INTERNAL_EMAIL, "bookings@theportalocal.com"]
+  .map((r) => r.trim())
+  .filter(Boolean);
 
 // Maintenance vendor is SMS-only by design — doesn't take email.
-// All maintenance internal emails go to INTERNAL_ALERT_EMAIL for records.
+// All maintenance internal emails go to INTERNAL_RECIPIENTS for records.
 
-async function sendEmail(to: string, subject: string, html: string) {
+async function sendEmail(to: string | string[], subject: string, html: string) {
   if (!RESEND_KEY) {
     console.log("[Email] Resend not configured — would send to", to, subject);
     return;
@@ -104,8 +108,14 @@ export async function POST(req: NextRequest) {
       sendSms(JOHN_PHONE, smsPriority),
       ADMIN_PHONE ? sendSms(ADMIN_PHONE, smsPriority) : Promise.resolve(),
       sendConsumerSms(phone, customerSMS, smsConsent),
-      INTERNAL_EMAIL ? sendEmail(INTERNAL_EMAIL, `🚨 PRIORITY DISPATCH — ${name} — ${serviceType}`, vendorHtml) : Promise.resolve(),
+      INTERNAL_RECIPIENTS.length > 0 ? sendEmail(INTERNAL_RECIPIENTS, `🚨 PRIORITY DISPATCH — ${name} — ${serviceType}`, vendorHtml) : Promise.resolve(),
       sendEmail(email, "Priority Dispatch Confirmed — Port A Local", customerHtml),
+      pingSuperAdmins({
+        kind: "maintenance-priority",
+        amountCents: parseInt(dispatchFee) * 100,
+        summary: `${serviceType} · ${address}`,
+        customerDisplay: formatCustomerDisplay(name),
+      }),
     ]);
 
     return NextResponse.json({ success: true });

@@ -40,3 +40,36 @@ export function isDeliverStripeInTestMode(): boolean {
   const key = getDeliverStripeKey();
   return !!key && key.startsWith("sk_test_");
 }
+
+/**
+ * Resolve a Stripe PaymentIntent ID (pi_...) to its latest_charge ID
+ * (ch_...) — required because Stripe's `source_transaction` parameter
+ * on transfers.create expects a charge, not a payment intent.
+ *
+ * Returns null if:
+ *   - PI doesn't exist (No such payment_intent)
+ *   - PI has no successful charge yet
+ *   - Any retrieval failure (we log + return null so the caller can
+ *     fall back to balance-funded)
+ */
+export async function resolveChargeFromPaymentIntent(
+  stripe: Stripe,
+  paymentIntentId: string,
+): Promise<string | null> {
+  if (!paymentIntentId || !paymentIntentId.startsWith("pi_")) {
+    // Already a charge ID, or empty — pass through.
+    return paymentIntentId || null;
+  }
+  try {
+    const pi = await stripe.paymentIntents.retrieve(paymentIntentId);
+    const latest = pi.latest_charge;
+    if (!latest) return null;
+    return typeof latest === "string" ? latest : (latest.id ?? null);
+  } catch (err) {
+    console.warn(
+      `[stripe] resolveCharge from ${paymentIntentId} failed:`,
+      err instanceof Error ? err.message : err,
+    );
+    return null;
+  }
+}

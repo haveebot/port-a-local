@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import LighthouseMark from "@/components/brand/LighthouseMark";
 import ActivityFeed from "@/components/wheelhouse/ActivityFeed";
 import PalStatsCard from "@/components/wheelhouse/PalStats";
 import ThreadCard from "@/components/wheelhouse/ThreadCard";
+import WheelhouseHeader from "@/components/wheelhouse/WheelhouseHeader";
+import LiveVisitorsCard from "@/components/wheelhouse/LiveVisitorsCard";
 import {
   getPalStats,
   getRecentActivity,
@@ -37,10 +38,16 @@ export default async function WheelhousePage({
     getPalStats().catch(() => null),
   ]);
 
-  let visible: Thread[] = allThreads;
+  // "All" excludes archived by default — they live in their own filter so the
+  // active board stays uncluttered. Per Winston rule 2026-04-29: instant-archive
+  // mental model, archived threads are filed-away but findable.
+  const activeThreads = allThreads.filter((t) => t.state !== "archived");
+  const archivedThreads = allThreads.filter((t) => t.state === "archived");
+
+  let visible: Thread[] = activeThreads;
   let title = "All threads";
   if (filter === "awaiting-me") {
-    visible = awaitingMe;
+    visible = awaitingMe.filter((t) => t.state !== "archived");
     title = `Awaiting ${me.name}`;
   } else if (filter === "open") {
     visible = allThreads.filter((t) => t.state === "open");
@@ -51,57 +58,17 @@ export default async function WheelhousePage({
   } else if (filter === "done") {
     visible = allThreads.filter((t) => t.state === "done");
     title = "Done";
+  } else if (filter === "archived") {
+    visible = archivedThreads;
+    title = "Archived";
   }
 
   return (
-    <main className="min-h-screen bg-sand-50">
-      {/* Top bar */}
-      <header className="bg-navy-900 text-sand-100 border-b border-coral-500/20">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between gap-4">
-          <Link
-            href="/wheelhouse"
-            className="flex items-center gap-3 hover:opacity-80 transition-opacity"
-          >
-            <LighthouseMark size={32} variant="light" detail="icon" />
-            <div>
-              <p className="font-display text-lg font-bold text-sand-50 leading-none">
-                The Wheelhouse
-              </p>
-              <p className="text-[10px] tracking-widest uppercase text-coral-300 mt-0.5">
-                Port A Local · Internal
-              </p>
-            </div>
-          </Link>
-          <div className="flex items-center gap-4 text-sm">
-            <Link
-              href="/wheelhouse/payouts"
-              className="text-xs text-navy-300 hover:text-coral-300 underline decoration-navy-500 hover:decoration-coral-400"
-            >
-              Payouts
-            </Link>
-            <Link
-              href="/wheelhouse/welcome"
-              className="text-xs text-navy-300 hover:text-coral-300 underline decoration-navy-500 hover:decoration-coral-400"
-            >
-              Help
-            </Link>
-            <span className="text-navy-300 hidden sm:inline">
-              Signed in as{" "}
-              <span className="text-sand-50 font-semibold">{me.name}</span>
-            </span>
-            <form action="/api/wheelhouse/logout" method="POST">
-              <button
-                type="submit"
-                className="text-xs text-navy-300 hover:text-coral-300 underline decoration-navy-500 hover:decoration-coral-400"
-              >
-                Sign out
-              </button>
-            </form>
-          </div>
-        </div>
-      </header>
+    <main className="min-h-screen bg-sand-50 overflow-x-hidden">
+      <WheelhouseHeader meId={me.id} meName={me.name} />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
+        <LiveVisitorsCard />
         <ActivityFeed activity={activity} />
         {stats && <PalStatsCard stats={stats} />}
 
@@ -109,12 +76,12 @@ export default async function WheelhousePage({
         <div className="flex items-center justify-between gap-4 mb-6 flex-wrap">
           <div className="flex items-center gap-2 flex-wrap">
             <FilterChip
-              label={`All (${allThreads.length})`}
+              label={`All (${activeThreads.length})`}
               href="/wheelhouse"
               active={!filter}
             />
             <FilterChip
-              label={`Awaiting ${me.name} (${awaitingMe.length})`}
+              label={`Awaiting ${me.name} (${awaitingMe.filter((t) => t.state !== "archived").length})`}
               href="/wheelhouse?filter=awaiting-me"
               active={filter === "awaiting-me"}
               accent="coral"
@@ -130,9 +97,9 @@ export default async function WheelhousePage({
               active={filter === "blocked"}
             />
             <FilterChip
-              label="Done"
-              href="/wheelhouse?filter=done"
-              active={filter === "done"}
+              label={`Archived (${archivedThreads.length})`}
+              href="/wheelhouse?filter=archived"
+              active={filter === "archived"}
             />
           </div>
           <Link

@@ -1,9 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { getDeliverStripe, getDeliverStripeKey } from "@/lib/deliverStripe";
+import {
+  getDeliverStripe,
+  getDeliverStripeKey,
+  resolveChargeFromPaymentIntent,
+} from "@/lib/deliverStripe";
 import {
   getDriverById,
   getDriverStatus,
+  hasDriverTransfer as hasDriverTransferRow,
   recordDriverTransfer,
 } from "@/data/delivery-store";
 
@@ -39,13 +44,19 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  let body: { driverId?: string; amountCents?: number; memo?: string };
+  let body: {
+    driverId?: string;
+    amountCents?: number;
+    memo?: string;
+    sourceTransaction?: string;
+    customId?: string;
+  };
   try {
     body = await req.json();
   } catch {
     return NextResponse.json({ error: "bad json" }, { status: 400 });
   }
-  const { driverId, amountCents, memo } = body;
+  const { driverId, amountCents, memo, sourceTransaction, customId: customIdInput } = body;
 
   if (!driverId || typeof driverId !== "string") {
     return NextResponse.json(
@@ -91,16 +102,42 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const customId = `custom-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+  // Allow caller to supply an existing custom_id (e.g. "backfill-{orderId}")
+  // so backfills are also idempotent in the transfers ledger — second click
+  // on the Backfill button hits the unique-PK and no-ops at the DB layer.
+  const customId =
+    customIdInput && customIdInput.length > 0
+      ? customIdInput
+      : `custom-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
   const trimmedMemo = (memo ?? "").trim().slice(0, 140);
+  const trimmedSource = (sourceTransaction ?? "").trim();
+
+  // Idempotency check using the existing transfer ledger
+  if (await hasDriverTransferRow(customId)) {
+    return NextResponse.json(
+      { error: "Already paid out under this id." },
+      { status: 409 },
+    );
+  }
 
   const stripe = getDeliverStripe();
+  // Resolve PaymentIntent → latest charge ID if a PI was provided.
+  // Stripe's source_transaction expects a charge (ch_...) not a PI
+  // (pi_...). Pass-through unchanged if it's already a ch_ id.
+  const sourceChargeId = trimmedSource
+    ? await resolveChargeFromPaymentIntent(stripe, trimmedSource)
+    : null;
   try {
     const transfer = await stripe.transfers.create({
       amount: amountCents,
       currency: "usd",
       destination: status.stripeAccountId,
       transfer_group: customId,
+      // Optional source_transaction — when present, ties the transfer
+      // to a specific charge so Stripe can fund from THAT charge even
+      // if available balance is $0. Backfill flow uses this to bypass
+      // the pending-charge waiting period.
+      ...(sourceChargeId ? { source_transaction: sourceChargeId } : {}),
       metadata: {
         custom_id: customId,
         driver_id: driverId,
@@ -108,11 +145,13 @@ export async function POST(req: NextRequest) {
         memo: trimmedMemo,
         source: "pal-delivery-custom-payout",
         initiated_by: who,
+        funding_mode: sourceChargeId ? "source-transaction" : "balance",
+        ...(trimmedSource ? { payment_intent_id: trimmedSource } : {}),
       },
     });
     await recordDriverTransfer(customId, driverId, transfer.id, amountCents);
     console.log(
-      `[wheelhouse/payouts] custom payout ${customId} → ${driver.name} ($${(amountCents / 100).toFixed(2)}) by ${who} — transfer ${transfer.id}${trimmedMemo ? ` — memo: ${trimmedMemo}` : ""}`,
+      `[wheelhouse/payouts] custom payout ${customId} → ${driver.name} ($${(amountCents / 100).toFixed(2)}) by ${who} — transfer ${transfer.id} — funded via ${sourceChargeId ? `source_transaction (${sourceChargeId})` : "balance"}${trimmedMemo ? ` — memo: ${trimmedMemo}` : ""}`,
     );
     return NextResponse.json({
       ok: true,

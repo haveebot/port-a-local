@@ -6,20 +6,42 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import PortalIcon from "@/components/brand/PortalIcon";
 
+/**
+ * Beach product pricing (2026-04-29 — vendor-model rebuild).
+ *
+ * Customer pays the total. Internally split:
+ *   - vendorBaseCents: paid out to the beach vendor who claims the booking
+ *     (John, Tyler, Danny — see src/data/beach-vendors.ts)
+ *   - palFeeCents: PAL's booking fee, retained on the platform side
+ *
+ * Customer-facing display shows the total prominently with a small note
+ * about the PAL booking fee — same transparent-fee pattern as /rent's
+ * reservation fee and /locals's 10% platform fee.
+ */
 const PRODUCTS = [
   {
     value: "cabana",
     label: "Cabana Setup",
     description: "Full beach cabana — shade, comfort, the works.",
-    price: 300,
+    vendorBaseCents: 27500, // $275 vendor take
+    palFeeCents: 2500, // $25 PAL booking fee
   },
   {
     value: "chairs",
     label: "Chair & Umbrella Setup",
     description: "Two chairs and a beach umbrella, set up and ready to go.",
-    price: 85,
+    vendorBaseCents: 7500, // $75 vendor take
+    palFeeCents: 1000, // $10 PAL booking fee
   },
 ];
+
+type BeachProduct = (typeof PRODUCTS)[number];
+function totalDailyPrice(p: BeachProduct): number {
+  return (p.vendorBaseCents + p.palFeeCents) / 100;
+}
+function dailyFeeUsd(p: BeachProduct): number {
+  return p.palFeeCents / 100;
+}
 
 function getTodayStr() {
   return new Date().toISOString().split("T")[0];
@@ -64,7 +86,9 @@ export default function BeachPage() {
         )
       : null;
 
-  const totalPrice = numDays ? numDays * qty * selectedProduct.price : null;
+  const dailyPrice = totalDailyPrice(selectedProduct);
+  const totalPrice = numDays ? numDays * qty * dailyPrice : null;
+  const totalFeeUsd = numDays ? numDays * qty * dailyFeeUsd(selectedProduct) : 0;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -88,7 +112,14 @@ export default function BeachPage() {
       const res = await fetch("/api/checkout/beach", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, numDays, totalPrice, qty }),
+        body: JSON.stringify({
+          ...form,
+          numDays,
+          totalPrice,
+          qty,
+          vendorBaseCentsPerDay: selectedProduct.vendorBaseCents,
+          palFeeCentsPerDay: selectedProduct.palFeeCents,
+        }),
       });
       if (!res.ok) throw new Error("Checkout failed");
       const { url } = await res.json();
@@ -202,7 +233,7 @@ export default function BeachPage() {
                     />
                     <span className="font-semibold text-navy-900">{p.label}</span>
                     <span className="text-sm text-navy-500">{p.description}</span>
-                    <span className="text-lg font-bold text-coral-500 mt-1">${p.price}<span className="text-sm font-normal text-navy-400"> / day</span></span>
+                    <span className="text-lg font-bold text-coral-500 mt-1">${totalDailyPrice(p)}<span className="text-sm font-normal text-navy-400"> / day</span></span>
                   </label>
                 ))}
               </div>
@@ -279,14 +310,36 @@ export default function BeachPage() {
               {totalPrice && numDays && (
                 <div className="bg-sand-50 border border-sand-200 rounded-xl p-4">
                   <div className="flex flex-wrap justify-between items-baseline gap-x-4 gap-y-1 text-sm text-navy-700 mb-1">
-                    <span className="text-navy-500">{qty} {selectedProduct.label}{qty > 1 ? "s" : ""} × {numDays} day{numDays !== 1 ? "s" : ""} × ${selectedProduct.price}</span>
+                    <span className="text-navy-500">{qty} {selectedProduct.label}{qty > 1 ? "s" : ""} × {numDays} day{numDays !== 1 ? "s" : ""} × ${dailyPrice}</span>
                     <span className="font-semibold whitespace-nowrap">${totalPrice} total</span>
                   </div>
+                  <p className="text-[11px] text-navy-400 mt-1">
+                    Includes ${dailyFeeUsd(selectedProduct)}/day PAL booking fee (${totalFeeUsd} total). Vendor receives ${(selectedProduct.vendorBaseCents / 100)}/day.
+                  </p>
                   <p className="text-xs text-navy-400 mt-2">
-                    Total due at confirmation. Our team will follow up to collect payment before your first day.
+                    Charged at checkout via Stripe. Vendor confirms setup details ahead of your arrival date.
                   </p>
                 </div>
               )}
+
+              {/* Cancellation policy — locked 2026-04-29. 72 hours before setup
+                  date is the cut-off (matches industry standard for beach setup
+                  / concierge services on the customer-friendly end). After that
+                  point, vendor has held the slot and PAL releases the vendor
+                  portion of the payment. Late bookings (made within 72 hours
+                  of setup) are non-refundable from the start. */}
+              <div className="bg-white border border-sand-200 rounded-xl p-4 text-sm">
+                <p className="font-semibold text-navy-900 mb-1">Cancellation policy</p>
+                <p className="text-navy-700 leading-relaxed">
+                  Free cancellation up to <strong>72 hours before your setup date</strong>.
+                  After that, the booking is non-refundable — your local vendor has held the slot.
+                  Bookings made within 72 hours of the setup date are non-refundable from the start.
+                </p>
+                <p className="text-[11px] text-navy-400 mt-2">
+                  To cancel: reply to your booking confirmation email or contact
+                  hello@theportalocal.com.
+                </p>
+              </div>
             </div>
 
             {/* Contact Info */}

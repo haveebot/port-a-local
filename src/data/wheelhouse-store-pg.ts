@@ -252,13 +252,28 @@ export async function transitionThread(
   id: string,
   newState: ThreadState,
 ): Promise<Thread | null> {
+  // Capture prior state so push notifications only fire on real changes
+  const priorThread = await getThread(id);
+  const oldState = priorThread?.state;
   const now = new Date().toISOString();
   await sql`
     UPDATE wheelhouse_threads
     SET state = ${newState}, updated_at = ${now}
     WHERE id = ${id}
   `;
-  return getThread(id);
+  const updated = await getThread(id);
+  // Fire-and-forget push notification when a thread becomes
+  // awaiting:<participant>. Helper is defensive (errors logged + swallowed)
+  // so a push failure never blocks the actual transition.
+  if (updated) {
+    try {
+      const { pushOnThreadTransition } = await import("@/lib/wheelhousePush");
+      await pushOnThreadTransition(updated, oldState);
+    } catch (err) {
+      console.error("[wheelhouse-store-pg] push hook failed:", err);
+    }
+  }
+  return updated;
 }
 
 /* -------------------- Activity -------------------- */
@@ -551,20 +566,29 @@ export async function getPalStats(): Promise<PalStats> {
       { rows: countries },
       { rows: latest },
     ] = await Promise.all([
+      // Per Winston rule 2026-04-29: clear usable analytics — always
+      // filter out admin (/wheelhouse) traffic so the numbers reflect
+      // real customer activity. Backstop in case beforeSend at the
+      // Vercel Analytics layer ever fails to drop a wheelhouse event.
       sql`SELECT COUNT(*)::int AS n FROM wheelhouse_analytics_events
-          WHERE event_type = 'pageview' AND ts > ${t24}`,
+          WHERE event_type = 'pageview' AND ts > ${t24}
+            AND (path IS NULL OR path NOT LIKE '/wheelhouse%')`,
       sql`SELECT COUNT(*)::int AS n FROM wheelhouse_analytics_events
-          WHERE event_type = 'pageview' AND ts > ${t48} AND ts <= ${t24}`,
+          WHERE event_type = 'pageview' AND ts > ${t48} AND ts <= ${t24}
+            AND (path IS NULL OR path NOT LIKE '/wheelhouse%')`,
       sql`SELECT COUNT(*)::int AS n FROM wheelhouse_analytics_events
-          WHERE event_type = 'pageview' AND ts > ${t7d}`,
+          WHERE event_type = 'pageview' AND ts > ${t7d}
+            AND (path IS NULL OR path NOT LIKE '/wheelhouse%')`,
       sql`SELECT path, COUNT(*)::int AS views FROM wheelhouse_analytics_events
           WHERE event_type = 'pageview' AND ts > ${t24} AND path IS NOT NULL
+            AND path NOT LIKE '/wheelhouse%'
           GROUP BY path ORDER BY views DESC LIMIT 5`,
       sql`SELECT event_name, COUNT(*)::int AS count FROM wheelhouse_analytics_events
           WHERE event_type = 'event' AND event_name IS NOT NULL AND ts > ${t24}
           GROUP BY event_name ORDER BY count DESC LIMIT 5`,
       sql`SELECT country, COUNT(*)::int AS views FROM wheelhouse_analytics_events
           WHERE event_type = 'pageview' AND country IS NOT NULL AND ts > ${t24}
+            AND (path IS NULL OR path NOT LIKE '/wheelhouse%')
           GROUP BY country ORDER BY views DESC LIMIT 5`,
       sql`SELECT MAX(ts) AS latest FROM wheelhouse_analytics_events`,
     ]);

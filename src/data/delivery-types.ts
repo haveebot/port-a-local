@@ -41,6 +41,14 @@ export interface DeliveryRestaurant {
   id: string;
   slug: string;
   name: string;
+  /**
+   * "restaurant" = food spot (default). "store" = convenience store /
+   * grocery / pharmacy / etc. — same Stripe + dispatch + runner pipeline,
+   * just framed differently in the UI and (typically) carries a smaller
+   * markup as a runner-keep-busy loss-leader.
+   * If absent, treat as "restaurant" for backward compat with seed data.
+   */
+  kind?: "restaurant" | "store";
   /** Pickup address (as a driver would type into Maps) */
   pickupAddress: string;
   /** Optional pickup notes for the driver — "ask for online order at the bar" */

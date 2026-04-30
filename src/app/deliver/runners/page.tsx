@@ -1,0 +1,444 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
+import { getLeaderboard } from "@/data/delivery-store";
+import { getLocalEarnings, fmtUsd } from "@/data/local-earnings";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 60; // public page; cache 60s to soften DB hits
+
+export const metadata: Metadata = {
+  title: "Drive for PAL — Runner Leaderboard",
+  description:
+    "PAL Delivery is run by locals making real money on their own schedule. See what runners are earning this week — and apply to drive.",
+};
+
+function fmt(cents: number) {
+  return `$${(cents / 100).toFixed(2)}`;
+}
+
+export default async function RunnersLeaderboardPage() {
+  const [board, earnings] = await Promise.all([
+    getLeaderboard(),
+    getLocalEarnings(),
+  ]);
+  const ranked = board.entries
+    .filter((e) => e.weekCount > 0 || e.totalCount > 0)
+    .slice(0, 20);
+
+  // Build the "live ticker" marketing lines — real data dressed up as
+  // social proof. Rotates through whichever real stat is most useful
+  // for the current state. Fabricated-review energy, real numbers.
+  const tickerLines: string[] = [];
+  const topToday = board.entries
+    .filter((e) => e.todayCount > 0)
+    .sort((a, b) => b.todayCents - a.todayCents)[0];
+  const topWeek = board.entries
+    .filter((e) => e.weekCount > 0)
+    .sort((a, b) => b.weekCents - a.weekCents)[0];
+  if (topToday) {
+    tickerLines.push(
+      `Driver #${topToday.signupNumber} · ${topToday.todayCount} run${topToday.todayCount === 1 ? "" : "s"} today · ${fmt(topToday.todayCents)} earned`,
+    );
+  }
+  if (board.activeRunnerCount > 0) {
+    tickerLines.push(
+      `${board.activeRunnerCount} ${board.activeRunnerCount === 1 ? "driver is" : "drivers are"} on the road right now`,
+    );
+  }
+  if (topWeek && topWeek !== topToday) {
+    tickerLines.push(
+      `Driver #${topWeek.signupNumber} · ${topWeek.weekCount} runs this week · ${fmt(topWeek.weekCents)} earned`,
+    );
+  }
+  if (board.weekTotalCents > 0) {
+    tickerLines.push(
+      `${fmt(board.weekTotalCents)} paid out to PAL drivers this week`,
+    );
+  }
+  // PAL-wide momentum line — shows the broader local-economy story
+  // when delivery-specific numbers are still thin (cold-start safety).
+  if (earnings.totals.monthCents >= 10000) {
+    tickerLines.push(
+      `${fmtUsd(earnings.totals.monthCents)} paid to local Port A folks across PAL last 30 days`,
+    );
+  }
+  // Cold-start fallback — never an empty ticker.
+  if (tickerLines.length === 0) {
+    tickerLines.push(
+      "Be the first run today — apply, get on duty, claim the first order that lands.",
+    );
+  }
+
+  return (
+    <main className="min-h-screen bg-navy-900 text-sand-50">
+      <Navigation />
+
+      {/* Hero */}
+      <section className="border-b border-coral-500/20 bg-gradient-to-b from-navy-950 to-navy-900">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-16 sm:py-20 text-center">
+          <p className="text-[11px] tracking-[0.25em] uppercase text-coral-300 mb-4">
+            PAL Delivery · Runners
+          </p>
+          <h1 className="font-display text-4xl sm:text-5xl font-bold text-sand-50 mb-5">
+            The runners powering Port A.
+          </h1>
+          <p className="text-lg text-sand-300 font-light max-w-2xl mx-auto leading-relaxed">
+            PAL Delivery runs on locals. Real cash, on your schedule, paid to
+            your bank by Stripe. No app downloads, no quotas, no algorithm
+            screwing you on a bad week.
+          </p>
+
+          {/* $5 first-delivery welcome bonus — auto-fires via Stripe
+              Connect on a runner's first delivered order. Marketing
+              callout up top so it's the first thing prospects see. */}
+          <div className="mt-7 inline-flex flex-col sm:flex-row items-center gap-2 sm:gap-3 px-5 py-3 rounded-2xl bg-emerald-500/15 border border-emerald-500/40">
+            <span className="font-display text-2xl font-bold text-emerald-300">
+              + $5
+            </span>
+            <span className="text-sm sm:text-base text-emerald-100 font-light">
+              welcome bonus on your first delivery — auto-paid to your bank
+            </span>
+          </div>
+
+          {/* Live ticker — real numbers, marketing-grade copy. Rotates
+              through current top-earner today, active runner count, top
+              earner this week, weekly payout total. Cold-start safe. */}
+          <div className="mt-6 max-w-xl mx-auto">
+            <div className="flex flex-col gap-1.5">
+              {tickerLines.slice(0, 3).map((line, i) => (
+                <div
+                  key={i}
+                  className="flex items-center gap-2.5 px-4 py-2 rounded-lg bg-navy-800/60 border border-navy-700"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+                  <span className="text-xs sm:text-sm text-sand-200 font-mono tabular-nums leading-relaxed text-left">
+                    {line}
+                  </span>
+                </div>
+              ))}
+            </div>
+            <p className="text-[10px] text-sand-500 font-light mt-2 tracking-wider">
+              Live · updates with every delivery
+            </p>
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-3 justify-center mt-7">
+            <Link
+              href="/deliver/runner"
+              className="px-7 py-4 rounded-xl text-base font-bold bg-coral-500 hover:bg-coral-600 text-white"
+            >
+              Apply to drive →
+            </Link>
+            <Link
+              href="/deliver"
+              className="px-7 py-4 rounded-xl text-base font-bold bg-navy-800 border border-navy-700 hover:border-coral-500/50 hover:bg-navy-700 text-sand-50"
+            >
+              Place an order
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Stats strip */}
+      <section className="border-b border-navy-800 bg-navy-950">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div className="bg-navy-900 border border-navy-800 rounded-xl p-4 text-center">
+            <p className="text-[9px] font-bold tracking-widest uppercase text-coral-300 mb-1">
+              On the road
+            </p>
+            <p className="font-display text-2xl font-bold tabular-nums text-sand-50">
+              {board.activeRunnerCount}
+            </p>
+            <p className="text-[10px] text-sand-400 font-mono">
+              {board.activeRunnerCount === 1 ? "runner" : "runners"}
+            </p>
+          </div>
+          <div className="bg-navy-900 border border-navy-800 rounded-xl p-4 text-center">
+            <p className="text-[9px] font-bold tracking-widest uppercase text-coral-300 mb-1">
+              Today
+            </p>
+            <p className="font-display text-2xl font-bold tabular-nums text-emerald-300">
+              {fmt(board.todayTotalCents)}
+            </p>
+            <p className="text-[10px] text-sand-400 font-mono">
+              {board.todayTotalCount}{" "}
+              {board.todayTotalCount === 1 ? "delivery" : "deliveries"}
+            </p>
+          </div>
+          <div className="bg-navy-900 border border-navy-800 rounded-xl p-4 text-center">
+            <p className="text-[9px] font-bold tracking-widest uppercase text-coral-300 mb-1">
+              7 days
+            </p>
+            <p className="font-display text-2xl font-bold tabular-nums text-emerald-300">
+              {fmt(board.weekTotalCents)}
+            </p>
+            <p className="text-[10px] text-sand-400 font-mono">
+              {board.weekTotalCount}{" "}
+              {board.weekTotalCount === 1 ? "delivery" : "deliveries"}
+            </p>
+          </div>
+          <div className="bg-navy-900 border border-navy-800 rounded-xl p-4 text-center">
+            <p className="text-[9px] font-bold tracking-widest uppercase text-coral-300 mb-1">
+              All time
+            </p>
+            <p className="font-display text-2xl font-bold tabular-nums text-emerald-300">
+              {fmt(board.allTimeTotalCents)}
+            </p>
+            <p className="text-[10px] text-sand-400 font-mono">
+              {board.allTimeTotalCount}{" "}
+              {board.allTimeTotalCount === 1 ? "delivery" : "deliveries"}
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* PAL-wide local earnings strip — context for prospective drivers
+          showing real $$ flowing to locals across all PAL verticals.
+          Per Winston rule 2026-04-29: real demand-side metrics + real
+          local-earnings totals, never fabricated. Honest framing wins. */}
+      <section className="border-b border-navy-800 bg-navy-900">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10">
+          <div className="text-center mb-6">
+            <p className="text-[10px] tracking-[0.25em] uppercase text-coral-300 font-bold mb-2">
+              The bigger picture
+            </p>
+            <h2 className="font-display text-2xl sm:text-3xl font-bold text-sand-50 mb-2">
+              Real money to local Port A folks via PAL
+            </h2>
+            <p className="text-sm text-sand-300 font-light max-w-xl mx-auto">
+              Delivery is one of {earnings.delivery.allTimeCents > 0 ? "several" : "the"} verticals where
+              PAL routes paid customer orders to local people. Numbers below
+              are real Stripe-settled payouts.
+            </p>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div className="bg-navy-950 border border-navy-700 rounded-xl p-4 text-center">
+              <p className="text-[9px] font-bold tracking-widest uppercase text-coral-300 mb-1">
+                🚐 Delivery
+              </p>
+              <p className="font-display text-xl font-bold tabular-nums text-emerald-300">
+                {fmtUsd(earnings.delivery.allTimeCents)}
+              </p>
+              <p className="text-[10px] text-sand-400 font-mono mt-0.5">
+                {earnings.delivery.deliveriesPaidOutAllTime} deliver
+                {earnings.delivery.deliveriesPaidOutAllTime === 1 ? "y" : "ies"}{" "}
+                paid out
+              </p>
+            </div>
+            <div className="bg-navy-950 border border-navy-700 rounded-xl p-4 text-center">
+              <p className="text-[9px] font-bold tracking-widest uppercase text-coral-300 mb-1">
+                🏖️ Beach setup
+              </p>
+              <p className="font-display text-xl font-bold tabular-nums text-emerald-300">
+                {fmtUsd(earnings.beach.allTimeCents)}
+              </p>
+              <p className="text-[10px] text-sand-400 font-mono mt-0.5">
+                {earnings.beach.bookingsPaidOutAllTime} booking
+                {earnings.beach.bookingsPaidOutAllTime === 1 ? "" : "s"}{" "}
+                paid out
+              </p>
+            </div>
+            <div className="bg-navy-950 border border-navy-700 rounded-xl p-4 text-center">
+              <p className="text-[9px] font-bold tracking-widest uppercase text-coral-300 mb-1">
+                🛒 Locals sales
+              </p>
+              <p className="font-display text-xl font-bold tabular-nums text-emerald-300">
+                {fmtUsd(earnings.locals.allTimeCents)}
+              </p>
+              <p className="text-[10px] text-sand-400 font-mono mt-0.5">
+                {earnings.locals.salesAllTime} sale
+                {earnings.locals.salesAllTime === 1 ? "" : "s"} closed
+              </p>
+            </div>
+            <div className="bg-coral-500/10 border border-coral-500/40 rounded-xl p-4 text-center">
+              <p className="text-[9px] font-bold tracking-widest uppercase text-coral-300 mb-1">
+                Total to locals
+              </p>
+              <p className="font-display text-xl font-bold tabular-nums text-emerald-300">
+                {fmtUsd(earnings.totals.allTimeCents)}
+              </p>
+              <p className="text-[10px] text-sand-400 font-mono mt-0.5">
+                {fmtUsd(earnings.totals.monthCents)} last 30d
+              </p>
+            </div>
+          </div>
+          {earnings.isColdStart && (
+            <p className="text-[11px] text-sand-500 text-center mt-5 font-light">
+              Numbers are small because PAL is brand-new — that&apos;s the
+              opportunity. Be one of the first runners and the leaderboard is yours.
+            </p>
+          )}
+        </div>
+      </section>
+
+      {/* Leaderboard */}
+      <section className="py-14">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6">
+          <div className="flex items-baseline justify-between mb-5">
+            <h2 className="font-display text-2xl sm:text-3xl font-bold text-sand-50">
+              This week&apos;s leaderboard
+            </h2>
+            <p className="text-[10px] tracking-widest uppercase text-coral-300 font-mono">
+              Anonymous · numbered by signup
+            </p>
+          </div>
+
+          {ranked.length === 0 ? (
+            <div className="bg-navy-800 border border-navy-700 rounded-2xl p-8 text-center">
+              <p className="font-display text-xl font-bold text-sand-50 mb-2">
+                The board is fresh.
+              </p>
+              <p className="text-sm text-sand-300 max-w-md mx-auto leading-relaxed">
+                PAL Delivery is brand-new. The first runners on the road are
+                charting these numbers. Want your name up here?
+              </p>
+              <Link
+                href="/deliver/runner"
+                className="inline-block mt-5 px-5 py-3 rounded-xl text-sm font-bold bg-coral-500 hover:bg-coral-600 text-white"
+              >
+                Apply to drive →
+              </Link>
+            </div>
+          ) : (
+            <div className="bg-navy-800 border border-navy-700 rounded-2xl overflow-hidden">
+              <div className="grid grid-cols-[40px_1fr_repeat(2,minmax(0,1fr))] sm:grid-cols-[60px_1fr_repeat(3,minmax(0,1fr))] gap-3 px-4 sm:px-6 py-3 bg-navy-900 border-b border-navy-700 text-[10px] tracking-widest uppercase font-bold text-coral-300">
+                <div>#</div>
+                <div>Runner</div>
+                <div className="text-right">7d</div>
+                <div className="text-right">Today</div>
+                <div className="hidden sm:block text-right">All time</div>
+              </div>
+              {ranked.map((e, i) => {
+                const isLeader = i === 0 && e.weekCents > 0;
+                return (
+                  <div
+                    key={e.driverId}
+                    className={
+                      isLeader
+                        ? "grid grid-cols-[40px_1fr_repeat(2,minmax(0,1fr))] sm:grid-cols-[60px_1fr_repeat(3,minmax(0,1fr))] gap-3 px-4 sm:px-6 py-4 border-b border-navy-700 bg-coral-500/10"
+                        : "grid grid-cols-[40px_1fr_repeat(2,minmax(0,1fr))] sm:grid-cols-[60px_1fr_repeat(3,minmax(0,1fr))] gap-3 px-4 sm:px-6 py-4 border-b border-navy-700 last:border-b-0"
+                    }
+                  >
+                    <div
+                      className={
+                        isLeader
+                          ? "font-display font-bold text-coral-300"
+                          : "font-display font-bold text-sand-300"
+                      }
+                    >
+                      {i + 1}
+                    </div>
+                    <div className="font-display font-bold text-base text-sand-50 truncate">
+                      <span className="font-mono">Driver #{e.signupNumber}</span>
+                      {e.welcomeBonusEarned && (
+                        <span
+                          className="ml-2 inline-flex items-center px-1.5 py-0.5 rounded text-[9px] tracking-widest uppercase font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/40"
+                          title="Earned the $5 welcome bonus"
+                        >
+                          + $5
+                        </span>
+                      )}
+                      {isLeader && (
+                        <span className="ml-2 text-[10px] tracking-widest uppercase text-coral-300 font-mono">
+                          ← leader
+                        </span>
+                      )}
+                    </div>
+                    <div className="text-right">
+                      <p className="font-mono font-bold tabular-nums text-emerald-300">
+                        {fmt(e.weekCents)}
+                      </p>
+                      <p className="text-[10px] text-sand-400 font-mono">
+                        {e.weekCount} run{e.weekCount === 1 ? "" : "s"}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-mono tabular-nums text-sand-200">
+                        {fmt(e.todayCents)}
+                      </p>
+                      <p className="text-[10px] text-sand-400 font-mono">
+                        {e.todayCount} run{e.todayCount === 1 ? "" : "s"}
+                      </p>
+                    </div>
+                    <div className="hidden sm:block text-right">
+                      <p className="font-mono tabular-nums text-sand-200">
+                        {fmt(e.totalCents)}
+                      </p>
+                      <p className="text-[10px] text-sand-400 font-mono">
+                        {e.totalCount} run{e.totalCount === 1 ? "" : "s"}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+          <p className="text-[11px] text-sand-500 text-center mt-4 font-light">
+            Updated continuously. Earnings = runner take-home (50% markup +
+            50% delivery + 100% tips). Excludes tax + service fee.
+          </p>
+        </div>
+      </section>
+
+      {/* How it works */}
+      <section className="border-t border-navy-800 bg-navy-950 py-14">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6">
+          <h2 className="font-display text-2xl sm:text-3xl font-bold text-sand-50 text-center mb-10">
+            How driving for PAL works
+          </h2>
+          <div className="grid sm:grid-cols-3 gap-4">
+            <div className="bg-navy-900 border border-navy-800 rounded-xl p-5">
+              <p className="text-[10px] font-bold tracking-widest uppercase text-coral-300 mb-2">
+                01
+              </p>
+              <p className="font-display font-bold text-base text-sand-50 mb-2">
+                Apply
+              </p>
+              <p className="text-sm text-sand-300 font-light leading-relaxed">
+                Quick form — name, phone, vehicle. We approve fast (often
+                same day) and email a sign-in link.
+              </p>
+            </div>
+            <div className="bg-navy-900 border border-navy-800 rounded-xl p-5">
+              <p className="text-[10px] font-bold tracking-widest uppercase text-coral-300 mb-2">
+                02
+              </p>
+              <p className="font-display font-bold text-base text-sand-50 mb-2">
+                Set up payouts
+              </p>
+              <p className="text-sm text-sand-300 font-light leading-relaxed">
+                Stripe Connect Express — same flow Lyft + DoorDash use. Bank
+                account in five minutes. We never see your numbers.
+              </p>
+            </div>
+            <div className="bg-navy-900 border border-navy-800 rounded-xl p-5">
+              <p className="text-[10px] font-bold tracking-widest uppercase text-coral-300 mb-2">
+                03
+              </p>
+              <p className="font-display font-bold text-base text-sand-50 mb-2">
+                Toggle on. Drive.
+              </p>
+              <p className="text-sm text-sand-300 font-light leading-relaxed">
+                Order pings hit your phone via SMS + email. First to claim
+                wins. Auto-payout the moment you mark delivered.
+              </p>
+            </div>
+          </div>
+
+          <div className="text-center mt-10">
+            <Link
+              href="/deliver/runner"
+              className="inline-block px-8 py-4 rounded-xl text-base font-bold bg-coral-500 hover:bg-coral-600 text-white"
+            >
+              Apply to drive PAL →
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <Footer />
+    </main>
+  );
+}

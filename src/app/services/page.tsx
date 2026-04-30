@@ -43,6 +43,14 @@ const PORTALS: Array<{
       "Need something fixed? Submit a request and our trusted local crew gets on it — Priority Dispatch available.",
     cta: "Submit a Request",
   },
+  {
+    href: "/housekeeping",
+    iconName: "services",
+    title: "Housekeeping",
+    description:
+      "Book a vacation-rental cleaning by square footage. $100/hr, one-hour minimum — pay up front, we coordinate timing.",
+    cta: "Book a Clean",
+  },
 ];
 
 export default function ServicesPage() {
@@ -85,7 +93,7 @@ export default function ServicesPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {PORTALS.map((portal) => (
               <a
                 key={portal.href}

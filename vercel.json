@@ -3,6 +3,22 @@
     {
       "path": "/api/wheelhouse/cron/pulse",
       "schedule": "0 13 * * *"
+    },
+    {
+      "path": "/api/cron/council-scrape",
+      "schedule": "0 13 * * 1"
+    },
+    {
+      "path": "/api/cron/insider-sms-watch",
+      "schedule": "* * * * *"
+    },
+    {
+      "path": "/api/cron/beach-payouts",
+      "schedule": "0 * * * *"
+    },
+    {
+      "path": "/api/cron/archive-done-threads",
+      "schedule": "0 14 * * *"
     }
   ]
 }

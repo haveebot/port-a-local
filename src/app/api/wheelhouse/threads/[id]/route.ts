@@ -27,7 +27,11 @@ export async function PATCH(
       { error: "Missing 'state' field." },
       { status: 400 },
     );
-  const updated = await transitionThread(id, body.state);
+  // Per Winston rule 2026-04-29: instant-archive mental model. "Done" is
+  // a momentary transition that immediately collapses to "archived".
+  // Active board stays clean; the Archived filter holds the history.
+  const targetState: ThreadState = body.state === "done" ? "archived" : body.state;
+  const updated = await transitionThread(id, targetState);
   if (!updated)
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   return NextResponse.json({ thread: updated });

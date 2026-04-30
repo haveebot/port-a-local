@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import LookupForm from "./LookupForm";
+import InstallAsAppBanner from "@/components/deliver/InstallAsAppBanner";
 
 export const dynamic = "force-dynamic";
 
@@ -32,6 +33,7 @@ export default async function SignInPage({
 
       <div className="flex-1 flex items-start justify-center px-4 sm:px-6 py-8">
         <div className="max-w-md w-full">
+          <InstallAsAppBanner context="sign-in" />
           <p className="text-sm text-sand-300 font-light mb-6">{message}</p>
           <LookupForm />
         </div>

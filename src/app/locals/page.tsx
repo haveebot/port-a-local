@@ -10,13 +10,14 @@ import {
   getListingsByCategory,
 } from "@/data/locals-listings";
 import LocalsBetaBanner from "@/components/locals/LocalsBetaBanner";
+import BuyNowButton from "./BuyNowButton";
 
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Locals — rent gear, hire services in Port Aransas",
+  title: "Locals — rent, hire, and buy from Port Aransas locals",
   description:
-    "Rent or hire from people who actually live here. Beach gear, watercraft, photographers, captains, cleaning, errand running — Port Aransas locals offering what they have and what they do.",
+    "Rent gear, hire skills, or buy goods from people who actually live here. Beach gear, watercraft, photographers, captains, crafts, art, baked goods — Port Aransas locals offering what they have, what they do, and what they make.",
 };
 
 export default async function LocalsPage({
@@ -26,7 +27,9 @@ export default async function LocalsPage({
 }) {
   const sp = await searchParams;
   const mode: ListingMode | "all" =
-    sp.mode === "rent" || sp.mode === "hire" ? sp.mode : "all";
+    sp.mode === "rent" || sp.mode === "hire" || sp.mode === "sell"
+      ? sp.mode
+      : "all";
   const filterCat = sp.cat;
 
   const allListings = getActiveListings();
@@ -50,12 +53,12 @@ export default async function LocalsPage({
             </span>
           </Link>
           <h1 className="font-display text-3xl sm:text-4xl font-bold">
-            Rent it. Hire them. From locals.
+            Rent it. Hire them. Buy local.
           </h1>
           <p className="text-sand-300 font-light mt-2 max-w-2xl">
-            Real people in Port Aransas with stuff they&apos;ll rent and skills
-            they&apos;ll bring to your trip. Not an app. Not a contractor pool.
-            Locals.
+            Real people in Port Aransas with stuff they&apos;ll rent, skills
+            they&apos;ll bring to your trip, and goods they make and sell.
+            Not an app. Not a contractor pool. Locals.
           </p>
         </div>
       </header>
@@ -78,6 +81,11 @@ export default async function LocalsPage({
             href="/locals?mode=hire"
             active={mode === "hire"}
           />
+          <ModeChip
+            label="Buy"
+            href="/locals?mode=sell"
+            active={mode === "sell"}
+          />
         </div>
 
         {/* Categories grid */}
@@ -97,7 +105,11 @@ export default async function LocalsPage({
                 <div className="flex items-start justify-between gap-3 mb-2">
                   <div className="min-w-0 flex-1">
                     <p className="text-[10px] font-bold tracking-widest uppercase text-coral-600 mb-0.5">
-                      {c.mode === "rent" ? "Rent" : "Hire"}
+                      {c.mode === "rent"
+                        ? "Rent"
+                        : c.mode === "hire"
+                          ? "Hire"
+                          : "Buy"}
                     </p>
                     <h3 className="font-display font-bold text-navy-900 text-lg leading-tight">
                       {c.label}
@@ -120,34 +132,81 @@ export default async function LocalsPage({
                     Looking for this? Tell us →
                   </Link>
                 ) : (
-                  <ul className="space-y-2 mt-3">
-                    {items.map((l) => (
-                      <li
-                        key={l.id}
-                        className="border-t border-sand-100 pt-2"
-                      >
-                        <p className="font-display font-bold text-sm text-navy-900">
-                          {l.title}{" "}
-                          <span className="text-navy-400 font-light text-xs">
-                            · {l.provider}
-                          </span>
-                        </p>
-                        <p className="text-xs text-navy-600 font-light mt-1">
-                          {l.description}
-                        </p>
-                        {l.pricingNote && (
-                          <p className="text-[11px] font-mono text-navy-500 mt-1">
-                            {l.pricingNote}
-                          </p>
-                        )}
-                        <Link
-                          href={`/locals/inquiry?listing=${l.id}`}
-                          className="inline-block mt-2 text-xs text-coral-600 underline decoration-coral-300"
+                  <ul className="space-y-2 mt-3" id={c.id}>
+                    {items.map((l) => {
+                      const isSellMode = l.mode === "sell";
+                      const sellPrice = l.priceCents;
+                      const palFee = sellPrice
+                        ? Math.round(sellPrice * 0.10)
+                        : 0;
+                      const totalPrice = sellPrice
+                        ? sellPrice + palFee
+                        : 0;
+                      return (
+                        <li
+                          key={l.id}
+                          id={l.id}
+                          className="border-t border-sand-100 pt-2"
                         >
-                          Request a quote →
-                        </Link>
-                      </li>
-                    ))}
+                          <p className="font-display font-bold text-sm text-navy-900">
+                            {l.title}{" "}
+                            <span className="text-navy-400 font-light text-xs">
+                              · {l.provider}
+                            </span>
+                            {isSellMode && l.soldOut && (
+                              <span className="ml-2 px-1.5 py-0.5 rounded text-[9px] tracking-widest uppercase font-mono bg-sand-200 text-navy-500 border border-sand-300">
+                                Sold out
+                              </span>
+                            )}
+                          </p>
+                          <p className="text-xs text-navy-600 font-light mt-1">
+                            {l.description}
+                          </p>
+                          {/* Sell-mode: clean price breakdown.
+                              Rent/Hire: free-form pricing note. */}
+                          {isSellMode && sellPrice ? (
+                            <div className="mt-2 inline-flex items-baseline gap-2 font-mono tabular-nums text-navy-700">
+                              <span className="text-base font-bold text-emerald-700">
+                                ${(sellPrice / 100).toFixed(2)}
+                              </span>
+                              <span className="text-[10px] text-navy-500">
+                                + ${(palFee / 100).toFixed(2)} PAL fee = $
+                                {(totalPrice / 100).toFixed(2)} total
+                              </span>
+                            </div>
+                          ) : (
+                            l.pricingNote && (
+                              <p className="text-[11px] font-mono text-navy-500 mt-1">
+                                {l.pricingNote}
+                              </p>
+                            )
+                          )}
+                          {isSellMode && l.fulfillmentNote && (
+                            <p className="text-[11px] text-navy-500 mt-1 italic">
+                              {l.fulfillmentNote}
+                            </p>
+                          )}
+                          {isSellMode && !l.soldOut && sellPrice ? (
+                            <BuyNowButton
+                              listingId={l.id}
+                              title={l.title}
+                              provider={l.provider}
+                              priceCents={sellPrice}
+                              palFeeCents={palFee}
+                              totalCents={totalPrice}
+                              fulfillmentNote={l.fulfillmentNote}
+                            />
+                          ) : !isSellMode ? (
+                            <Link
+                              href={`/locals/inquiry?listing=${l.id}`}
+                              className="inline-block mt-2 text-xs text-coral-600 underline decoration-coral-300"
+                            >
+                              Request a quote →
+                            </Link>
+                          ) : null}
+                        </li>
+                      );
+                    })}
                   </ul>
                 )}
               </div>
@@ -155,8 +214,32 @@ export default async function LocalsPage({
           })}
         </div>
 
+        {/* Cross-link to /rent — golf carts have their own pipeline. */}
+        <section className="mt-10 bg-sand-100 border border-sand-200 rounded-xl p-5 sm:p-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div>
+              <p className="text-[10px] font-bold tracking-widest uppercase text-coral-600 mb-1">
+                Looking for a golf cart?
+              </p>
+              <p className="font-display text-lg font-bold text-navy-900 leading-tight">
+                Reserve via PAL Carts.
+              </p>
+              <p className="text-sm text-navy-600 font-light mt-1">
+                Vetted cart vendors, $10/day reservation fee, $20 off the
+                vendor&apos;s daily rate, pickup or delivery.
+              </p>
+            </div>
+            <Link
+              href="/rent"
+              className="px-5 py-3 rounded-lg btn-coral text-sm font-bold tracking-wide whitespace-nowrap"
+            >
+              Reserve a cart →
+            </Link>
+          </div>
+        </section>
+
         {/* Provider CTAs */}
-        <section className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <section className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Link
             href="/locals/offer?mode=rent"
             className="block bg-navy-900 text-sand-100 border border-coral-500/30 rounded-xl p-6 hover:border-coral-500/60 transition-all"
@@ -169,7 +252,8 @@ export default async function LocalsPage({
             </p>
             <p className="text-sm text-sand-300 font-light">
               Beach gear sitting in your garage. A jet ski you use twice a
-              year. A spare paddleboard. List it — we route renters to you.
+              year. A spare paddleboard. A cart fleet. List it — we route
+              renters to you.
             </p>
             <p className="text-xs text-coral-300 mt-3">Get started →</p>
           </Link>
@@ -200,8 +284,15 @@ export default async function LocalsPage({
             className="underline decoration-sand-300 hover:text-coral-600"
           >
             /maintenance
+          </Link>
+          . For vacation-rental cleaning, book direct through{" "}
+          <Link
+            href="/housekeeping"
+            className="underline decoration-sand-300 hover:text-coral-600"
+          >
+            /housekeeping
           </Link>{" "}
-          where John handles them, not /locals.
+          ($100/hr, online).
         </p>
       </div>
     </main>

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { categories } from "@/data/categories";
 import LighthouseMark from "@/components/brand/LighthouseMark";
 import PortalIcon, { type PortalIconName } from "@/components/brand/PortalIcon";
+import FooterAlertsSubscribe from "@/components/FooterAlertsSubscribe";
 
 export default function Footer() {
   return (
@@ -102,7 +103,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/deliver/runner"
+                  href="/deliver/runners"
                   className="inline-flex items-center gap-2 text-navy-300 hover:text-coral-300 transition-colors text-sm"
                 >
                   <PortalIcon name="services" className="w-3.5 h-3.5 text-coral-400 shrink-0" /> Drive for PAL
@@ -146,6 +147,14 @@ export default function Footer() {
                   className="inline-flex items-center gap-2 text-navy-300 hover:text-coral-300 transition-colors text-sm"
                 >
                   <PortalIcon name="maintenance" className="w-3.5 h-3.5 text-coral-400 shrink-0" /> Maintenance
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/housekeeping"
+                  className="inline-flex items-center gap-2 text-navy-300 hover:text-coral-300 transition-colors text-sm"
+                >
+                  <PortalIcon name="services" className="w-3.5 h-3.5 text-coral-400 shrink-0" /> Housekeeping
                 </Link>
               </li>
             </ul>
@@ -204,6 +213,9 @@ export default function Footer() {
           </div>
         </div>
 
+        {/* Alerts subscribe — global opt-in (covers site banner + emergency events) */}
+        <FooterAlertsSubscribe />
+
         {/* Coordinates masthead strip */}
         <div className="pt-8 pb-6 border-t border-navy-800 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-3 text-[10px] font-mono tracking-[0.15em] text-navy-500">
@@ -244,6 +256,18 @@ export default function Footer() {
               Terms &amp; Conditions
             </Link>
           </div>
+        </div>
+
+        {/* Heye Lab platform attribution — same footer rail pattern
+            as CrossRef (sibling Heye Lab tenant). PAL is the proof of
+            concept; CityDeploy is the templated engine sold to other
+            towns. See `Port A Local/Memory/CityDeploy — Platform
+            Vision.md` for full framing. */}
+        <div className="pt-4 flex justify-center">
+          <p className="text-[10px] font-mono tracking-[0.15em] uppercase text-navy-600">
+            Powered by Heye Lab{" "}
+            <span className="text-coral-500/70">·</span> Built on CityDeploy
+          </p>
         </div>
       </div>
     </footer>

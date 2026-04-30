@@ -2,12 +2,15 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import InstallAsAppBanner from "@/components/deliver/InstallAsAppBanner";
 
 interface InitialStatus {
   isOnline: boolean;
   onlineUntil: string | null;
   payoutsEnabled: boolean;
   hasStripeAccount: boolean;
+  firstDeliveryBonusEarned?: boolean;
+  pushEnabled?: boolean;
 }
 
 interface FeedOrder {
@@ -44,6 +47,7 @@ interface Feed {
     todayCount: number;
     weekCents: number;
     weekCount: number;
+    allTimeCount: number;
   };
 }
 
@@ -156,6 +160,147 @@ export default function RunnerHub({
     }
   }
 
+  // Convert URL-safe base64 VAPID public key to BufferSource for the
+  // browser pushManager.subscribe() call. We allocate a fresh
+  // ArrayBuffer (not SharedArrayBuffer) because the browser API's
+  // applicationServerKey type is strict about that distinction.
+  function urlBase64ToBufferSource(base64String: string): BufferSource {
+    const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+    const base64 = (base64String + padding)
+      .replace(/-/g, "+")
+      .replace(/_/g, "/");
+    const rawData = window.atob(base64);
+    const buffer = new ArrayBuffer(rawData.length);
+    const view = new Uint8Array(buffer);
+    for (let i = 0; i < rawData.length; i++) view[i] = rawData.charCodeAt(i);
+    return buffer;
+  }
+
+  async function enablePush() {
+    setBusy("push");
+    setErr(null);
+    try {
+      if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
+        // Diagnose the unsupported case — iOS has a particularly
+        // confusing setup (every browser is a Safari shell; only
+        // Safari + PWA install gets push). Give specific guidance
+        // instead of generic "try Chrome" that ends up wrong on iOS.
+        const ua = navigator.userAgent || "";
+        const isIOS = /iPhone|iPad|iPod/.test(ua);
+        const isIOSSafari =
+          isIOS &&
+          /Safari/.test(ua) &&
+          !/CriOS|FxiOS|OPiOS|EdgiOS|YaBrowser|DuckDuckGo/.test(ua);
+        const isStandalone =
+          window.matchMedia?.("(display-mode: standalone)").matches ||
+          // legacy iOS Safari API
+          (window.navigator as unknown as { standalone?: boolean })
+            .standalone === true;
+
+        if (isIOS && !isIOSSafari) {
+          setErr(
+            "iOS Chrome / Firefox / etc. don't support push (Apple rule — they're all Safari under the hood). Open this page in Safari, tap the Share button → Add to Home Screen, then open PAL from your home screen and try again.",
+          );
+        } else if (isIOSSafari && !isStandalone) {
+          setErr(
+            "On iPhone, push works once PAL is installed as an app. Tap the Share button (square with arrow at the bottom) → Add to Home Screen. Open PAL from the new home-screen icon and try again.",
+          );
+        } else if (isIOS) {
+          setErr(
+            "iOS push needs version 16.4 or newer. Update iOS in Settings → General → Software Update, then try again.",
+          );
+        } else {
+          setErr(
+            "This browser doesn't support push notifications. Try Chrome (Android/desktop), Firefox, or Edge.",
+          );
+        }
+        return;
+      }
+      const vapidPublic = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
+      if (!vapidPublic) {
+        setErr(
+          "Push notifications aren't configured server-side yet. Email hello@theportalocal.com.",
+        );
+        return;
+      }
+      const permission = await Notification.requestPermission();
+      if (permission !== "granted") {
+        setErr(
+          "You denied notifications. Re-enable in your browser settings (lock icon → Notifications → Allow), then try again.",
+        );
+        return;
+      }
+      // Register the service worker (idempotent — returns existing
+      // registration if already registered).
+      const reg = await navigator.serviceWorker.register("/sw.js");
+      // Re-use existing subscription if present + matches our VAPID key,
+      // otherwise create a new one.
+      let sub = await reg.pushManager.getSubscription();
+      if (!sub) {
+        sub = await reg.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: urlBase64ToBufferSource(vapidPublic),
+        });
+      }
+      const res = await fetch("/api/deliver/driver/push/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "same-origin",
+        body: JSON.stringify({ subscription: sub.toJSON() }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setErr(data.error ?? "Couldn't enable notifications.");
+      } else {
+        setFeed((f) =>
+          f
+            ? { ...f, driver: { ...f.driver, pushEnabled: true } }
+            : f,
+        );
+      }
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : String(e));
+    } finally {
+      setBusy(null);
+    }
+  }
+
+  async function disablePush() {
+    setBusy("push");
+    setErr(null);
+    try {
+      if ("serviceWorker" in navigator) {
+        const reg = await navigator.serviceWorker.getRegistration();
+        const sub = await reg?.pushManager.getSubscription();
+        if (sub) {
+          try {
+            await sub.unsubscribe();
+          } catch {
+            // Browser-side unsubscribe failed — server-side clear still happens
+          }
+        }
+      }
+      const res = await fetch("/api/deliver/driver/push/unsubscribe", {
+        method: "POST",
+        credentials: "same-origin",
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setErr(data.error ?? "Couldn't turn off notifications.");
+      } else {
+        setFeed((f) =>
+          f
+            ? { ...f, driver: { ...f.driver, pushEnabled: false } }
+            : f,
+        );
+      }
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : String(e));
+    } finally {
+      setBusy(null);
+    }
+  }
+
   async function openStripeDashboard() {
     setBusy("stripe-dashboard");
     setErr(null);
@@ -219,6 +364,7 @@ export default function RunnerHub({
     todayCount: 0,
     weekCents: 0,
     weekCount: 0,
+    allTimeCount: 0,
   };
   const available = feed?.available ?? [];
   const active = feed?.active ?? [];
@@ -246,6 +392,7 @@ export default function RunnerHub({
       </header>
 
       <div className="max-w-md mx-auto px-4 sm:px-6 py-6 space-y-5">
+        <InstallAsAppBanner context="hub" />
         {/* On-duty toggle card */}
         <section
           className={
@@ -291,15 +438,193 @@ export default function RunnerHub({
           </button>
         </section>
 
-        {/* Payouts setup nudge if not done */}
+        {/* Push notifications toggle. Off-state = subtle nudge; on-state =
+            confirmation. Browser-permission gated — tapping triggers
+            native browser permission prompt the first time. */}
+        <section
+          className={
+            driver.pushEnabled
+              ? "bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-4 flex items-center justify-between gap-3"
+              : "bg-navy-800 border border-navy-700 rounded-xl p-4 flex items-center justify-between gap-3"
+          }
+        >
+          <div className="flex items-center gap-3 min-w-0">
+            <span className="text-2xl flex-shrink-0">
+              {driver.pushEnabled ? "🔔" : "🔕"}
+            </span>
+            <div className="min-w-0">
+              <p className="text-sm font-display font-bold text-sand-50">
+                {driver.pushEnabled
+                  ? "Notifications on"
+                  : "Get pinged on new orders"}
+              </p>
+              <p className="text-[11px] text-sand-400 font-light">
+                {driver.pushEnabled
+                  ? "Your phone buzzes the second a new order dispatches."
+                  : "Faster than SMS or email — direct to your phone."}
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={driver.pushEnabled ? disablePush : enablePush}
+            disabled={busy === "push"}
+            className={
+              driver.pushEnabled
+                ? "px-3 py-2 rounded-lg text-xs font-bold bg-navy-800 border border-navy-700 hover:border-coral-500/50 hover:bg-navy-700 text-sand-200 disabled:opacity-50 flex-shrink-0"
+                : "px-3 py-2 rounded-lg text-xs font-bold bg-coral-500 hover:bg-coral-600 text-white disabled:opacity-50 flex-shrink-0"
+            }
+          >
+            {busy === "push"
+              ? "…"
+              : driver.pushEnabled
+                ? "Turn off"
+                : "Enable"}
+          </button>
+        </section>
+
+        {/* Rewards ladder — Tier 1 is live (auto-fires via Stripe);
+            Tiers 2-4 are tracked but rewards deferred (per
+            "Runner Rewards Program — Design.md" in vault). Showing
+            the future tiers gives runners aspirational visibility
+            without committing to deliver them tonight. */}
+        <section className="bg-navy-800 border border-navy-700 rounded-2xl p-5">
+          <div className="flex items-baseline justify-between mb-4">
+            <p className="text-[10px] font-bold tracking-widest uppercase text-coral-300">
+              Rewards
+            </p>
+            <p className="text-[10px] text-sand-500 font-mono">
+              {earnings.allTimeCount} delivered
+            </p>
+          </div>
+          {(() => {
+            const tiers = [
+              {
+                threshold: 1,
+                label: "Welcome bonus",
+                reward: "$5 cash",
+                live: true,
+                earned:
+                  driver.firstDeliveryBonusEarned === true ||
+                  earnings.allTimeCount >= 1,
+              },
+              {
+                threshold: 10,
+                label: "Brand ambassador",
+                reward: "$25 + PAL shirt",
+                live: false,
+                earned: false,
+              },
+              {
+                threshold: 50,
+                label: "Loyalty tier",
+                reward: "$100 cash",
+                live: false,
+                earned: false,
+              },
+              {
+                threshold: 250,
+                label: "Apex tier",
+                reward: "Apple Watch",
+                live: false,
+                earned: false,
+              },
+            ];
+            return (
+              <div className="space-y-2.5">
+                {tiers.map((t) => {
+                  const progress = Math.min(
+                    earnings.allTimeCount / t.threshold,
+                    1,
+                  );
+                  const isCurrent =
+                    !t.earned && earnings.allTimeCount < t.threshold;
+                  return (
+                    <div key={t.threshold}>
+                      <div className="flex items-baseline justify-between gap-2 mb-1">
+                        <p className="text-sm">
+                          <span
+                            className={
+                              t.earned
+                                ? "font-display font-bold text-emerald-300"
+                                : "font-display font-bold text-sand-50"
+                            }
+                          >
+                            {t.earned ? "✓ " : ""}
+                            {t.threshold === 1
+                              ? "1st delivery"
+                              : `${t.threshold} deliveries`}
+                          </span>{" "}
+                          <span className="text-sand-400 font-light">
+                            · {t.reward}
+                          </span>
+                        </p>
+                        <p
+                          className={
+                            t.earned
+                              ? "text-[10px] font-bold tracking-widest uppercase text-emerald-300 font-mono"
+                              : t.live
+                                ? "text-[10px] font-bold tracking-widest uppercase text-coral-300 font-mono"
+                                : "text-[10px] font-bold tracking-widest uppercase text-sand-500 font-mono"
+                          }
+                        >
+                          {t.earned
+                            ? "Earned"
+                            : t.live
+                              ? "Live"
+                              : "Coming soon"}
+                        </p>
+                      </div>
+                      <div className="h-1.5 bg-navy-900 rounded-full overflow-hidden">
+                        <div
+                          className={
+                            t.earned
+                              ? "h-full bg-emerald-400"
+                              : isCurrent
+                                ? "h-full bg-coral-400"
+                                : "h-full bg-sand-700"
+                          }
+                          style={{ width: `${progress * 100}%` }}
+                        />
+                      </div>
+                      {isCurrent && (
+                        <p className="text-[11px] text-sand-400 font-mono mt-1">
+                          {earnings.allTimeCount} / {t.threshold}
+                        </p>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          })()}
+          <p className="text-[11px] text-sand-500 font-light italic mt-3">
+            Welcome bonus auto-paid to your bank on your first delivery.
+            Higher tiers tracked — we&apos;ll send rewards when the program
+            opens up.
+          </p>
+        </section>
+
+        {/* Payouts setup nudge if not done. Comforting language —
+            we don't punish runners who go on duty first; we just
+            backfill manually. But best to finish Stripe first so the
+            auto-deposit kicks in from delivery #1. */}
         {!driver.payoutsEnabled && (
           <section className="bg-amber-500/15 border border-amber-500/40 rounded-2xl p-5">
             <p className="text-[10px] font-bold tracking-widest uppercase text-amber-300 mb-2">
-              Set up your bank
+              Set up your bank — best to do this first
             </p>
-            <p className="text-sm text-amber-100 mb-3">
-              Finish the Stripe payout setup so we can deposit your earnings
-              automatically. Takes ~5 minutes, one time.
+            <p className="text-sm text-amber-100 mb-2 leading-relaxed">
+              Finish Stripe payout setup{" "}
+              <strong className="text-amber-50">
+                before your first run
+              </strong>{" "}
+              so your earnings auto-deposit the second you tap Delivered.
+              Takes ~5 minutes, one time. Stripe holds the bank info — we
+              never see it.
+            </p>
+            <p className="text-xs text-amber-200/80 mb-4 leading-relaxed font-light italic">
+              If you run before finishing, no big deal — we&apos;ll backfill
+              your earnings manually once you&apos;re set up.
             </p>
             <a
               href="/deliver/driver/payouts"

@@ -127,6 +127,36 @@ async function ensureSchema(): Promise<void> {
   await sql`CREATE INDEX IF NOT EXISTS delivery_drivers_token_idx ON delivery_drivers(token)`;
   await sql`CREATE INDEX IF NOT EXISTS delivery_drivers_is_active_idx ON delivery_drivers(is_active)`;
 
+  // License + insurance verification fields (added 2026-04-26).
+  // Two-stage model: applicant ACKNOWLEDGES (checkbox at signup) → admin
+  // VERIFIES after seeing photos (separate magic-link). Acknowledged but
+  // not verified is the normal interim state. Carrier name is collected
+  // for record-keeping; not validated against the actual carrier.
+  await sql`ALTER TABLE delivery_drivers ADD COLUMN IF NOT EXISTS license_acknowledged BOOLEAN NOT NULL DEFAULT FALSE`;
+  await sql`ALTER TABLE delivery_drivers ADD COLUMN IF NOT EXISTS insurance_acknowledged BOOLEAN NOT NULL DEFAULT FALSE`;
+  await sql`ALTER TABLE delivery_drivers ADD COLUMN IF NOT EXISTS insurance_carrier TEXT`;
+  await sql`ALTER TABLE delivery_drivers ADD COLUMN IF NOT EXISTS license_verified_at TIMESTAMPTZ`;
+  await sql`ALTER TABLE delivery_drivers ADD COLUMN IF NOT EXISTS insurance_verified_at TIMESTAMPTZ`;
+  await sql`ALTER TABLE delivery_drivers ADD COLUMN IF NOT EXISTS verified_by TEXT`;
+
+  // License plate + state of registration (added 2026-04-27 per
+  // insurance-agent advisory for PAL's umbrella liability coverage —
+  // need plate + tag-state on file for every active runner).
+  await sql`ALTER TABLE delivery_drivers ADD COLUMN IF NOT EXISTS license_plate TEXT`;
+  await sql`ALTER TABLE delivery_drivers ADD COLUMN IF NOT EXISTS license_plate_state TEXT`;
+
+  // Web push subscription (added 2026-04-26). One subscription per runner
+  // for v1 — re-enabling on a new device overwrites the old. Stored as
+  // raw JSON since the shape is opaque to us (browser-controlled blob
+  // containing endpoint + p256dh + auth keys).
+  await sql`ALTER TABLE delivery_drivers ADD COLUMN IF NOT EXISTS push_subscription_json TEXT`;
+
+  // 18+ + delivery-conduct attestation (added 2026-04-28). One combined
+  // checkbox at signup attesting the applicant is 18+ AND will only
+  // handle legal deliveries (no controlled substances, no alcohol to
+  // minors). Stored for audit trail / dispute defense.
+  await sql`ALTER TABLE delivery_drivers ADD COLUMN IF NOT EXISTS terms_acknowledged BOOLEAN NOT NULL DEFAULT FALSE`;
+
   _schemaReady = true;
 }
 
@@ -149,6 +179,22 @@ export interface DriverRecord {
   approvedBy: string | null;
   rejectedAt: string | null;
   rejectedReason: string | null;
+  // License + insurance verification (v2 intake, 2026-04-26).
+  // Acknowledged = applicant attested at signup. Verified = admin confirmed
+  // after seeing photos via email. Both required for "fully verified" state.
+  licenseAcknowledged: boolean;
+  insuranceAcknowledged: boolean;
+  insuranceCarrier: string | null;
+  licenseVerifiedAt: string | null;
+  insuranceVerifiedAt: string | null;
+  verifiedBy: string | null;
+  // Vehicle plate + state of registration (insurance-umbrella-coverage
+  // requirement, added 2026-04-27).
+  licensePlate: string | null;
+  licensePlateState: string | null;
+  // 18+ + delivery-conduct attestation (added 2026-04-28). Combined
+  // attestation: applicant is 18+ AND will only handle legal deliveries.
+  termsAcknowledged: boolean;
 }
 
 function rowToDriver(row: Record<string, unknown>): DriverRecord {
@@ -173,6 +219,19 @@ function rowToDriver(row: Record<string, unknown>): DriverRecord {
       ? new Date(row.rejected_at as string).toISOString()
       : null,
     rejectedReason: (row.rejected_reason as string) ?? null,
+    licenseAcknowledged: row.license_acknowledged === true,
+    insuranceAcknowledged: row.insurance_acknowledged === true,
+    insuranceCarrier: (row.insurance_carrier as string) ?? null,
+    licenseVerifiedAt: row.license_verified_at
+      ? new Date(row.license_verified_at as string).toISOString()
+      : null,
+    insuranceVerifiedAt: row.insurance_verified_at
+      ? new Date(row.insurance_verified_at as string).toISOString()
+      : null,
+    verifiedBy: (row.verified_by as string) ?? null,
+    licensePlate: (row.license_plate as string) ?? null,
+    licensePlateState: (row.license_plate_state as string) ?? null,
+    termsAcknowledged: row.terms_acknowledged === true,
   };
 }
 
@@ -183,6 +242,14 @@ export interface CreateDriverInput {
   vehicle?: string;
   availability?: string;
   why?: string;
+  // Verification intake (v2). Optional for backward-compat with any
+  // older callers; required at the API boundary on /api/deliver/runner.
+  licenseAcknowledged?: boolean;
+  insuranceAcknowledged?: boolean;
+  insuranceCarrier?: string;
+  licensePlate?: string;
+  licensePlateState?: string;
+  termsAcknowledged?: boolean;
 }
 
 function newDriverId(): string {
@@ -208,7 +275,10 @@ export async function createDriverApplication(
   await sql`
     INSERT INTO delivery_drivers (
       id, name, phone, email, token, is_active,
-      vehicle, availability, why
+      vehicle, availability, why,
+      license_acknowledged, insurance_acknowledged, insurance_carrier,
+      license_plate, license_plate_state,
+      terms_acknowledged
     ) VALUES (
       ${id},
       ${input.name},
@@ -218,7 +288,13 @@ export async function createDriverApplication(
       FALSE,
       ${input.vehicle ?? null},
       ${input.availability ?? null},
-      ${input.why ?? null}
+      ${input.why ?? null},
+      ${input.licenseAcknowledged === true},
+      ${input.insuranceAcknowledged === true},
+      ${input.insuranceCarrier ?? null},
+      ${input.licensePlate ?? null},
+      ${input.licensePlateState ?? null},
+      ${input.termsAcknowledged === true}
     )
   `;
   const driver = await getDriverById(id);
@@ -289,6 +365,68 @@ export async function approveDriver(
         rejected_reason = NULL
     WHERE id = ${id}
   `;
+  return getDriverById(id);
+}
+
+/**
+ * Web push subscription helpers. One subscription per runner for v1.
+ */
+export async function setDriverPushSubscription(
+  driverId: string,
+  subscription: object | null,
+): Promise<void> {
+  await ensureSchema();
+  const json = subscription === null ? null : JSON.stringify(subscription);
+  await sql`
+    UPDATE delivery_drivers
+    SET push_subscription_json = ${json}
+    WHERE id = ${driverId}
+  `;
+}
+
+export async function getDriverPushSubscription(
+  driverId: string,
+): Promise<object | null> {
+  await ensureSchema();
+  const { rows } = await sql`
+    SELECT push_subscription_json
+    FROM delivery_drivers
+    WHERE id = ${driverId}
+    LIMIT 1
+  `;
+  const raw = rows[0]?.push_subscription_json as string | undefined;
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw) as object;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Mark license OR insurance verified by admin. Idempotent — re-marking
+ * just refreshes the timestamp + verified_by trail.
+ */
+export async function markDriverVerified(
+  id: string,
+  kind: "license" | "insurance",
+  verifiedBy: string,
+): Promise<DriverRecord | null> {
+  await ensureSchema();
+  const now = new Date().toISOString();
+  if (kind === "license") {
+    await sql`
+      UPDATE delivery_drivers
+      SET license_verified_at = ${now}, verified_by = ${verifiedBy}
+      WHERE id = ${id}
+    `;
+  } else {
+    await sql`
+      UPDATE delivery_drivers
+      SET insurance_verified_at = ${now}, verified_by = ${verifiedBy}
+      WHERE id = ${id}
+    `;
+  }
   return getDriverById(id);
 }
 
@@ -444,6 +582,26 @@ export async function hasDriverTransfer(orderId: string): Promise<boolean> {
 }
 
 /**
+ * Count of completed deliveries by a runner. Used to detect first-
+ * delivery milestone for the welcome bonus, and could power further
+ * tiered rewards (10/50/250 milestones — currently deferred).
+ *
+ * Counts AFTER the current transition is recorded, so first delivery
+ * returns 1 not 0.
+ */
+export async function getDeliveredCountForDriver(
+  driverId: string,
+): Promise<number> {
+  await ensureSchema();
+  const { rows } = await sql`
+    SELECT COUNT(*) AS n
+    FROM delivery_orders
+    WHERE driver_id = ${driverId} AND status = 'delivered'
+  `;
+  return Number(rows[0]?.n ?? 0);
+}
+
+/**
  * One-off custom payouts (bonuses, profit-share, etc.) reuse the same
  * transfers table — distinguished by an order_id with the `custom-` prefix
  * vs. real orders which use `ord-`. Lets us share the idempotency table +
@@ -455,6 +613,226 @@ export interface CustomPayoutRecord {
   transferId: string;
   amountCents: number;
   createdAt: string;
+}
+
+/**
+ * Public leaderboard data. Aggregates per-runner delivery totals across
+ * today / last 7 days / all time. Identifies runners by stable signup
+ * number ("Driver #1", "Driver #5") rather than name — preserves privacy
+ * at the customer-facing surface AND gives us a clean internal-reference
+ * shorthand when discussing specific runners.
+ *
+ * Signup numbers are computed at query time via ROW_NUMBER() OVER (ORDER
+ * BY applied_at) across ALL drivers — including rejected/inactive ones —
+ * so a rejected driver between two active ones reserves their slot
+ * forever. No reuse, ever. Stable for as long as applied_at doesn't
+ * change, which it doesn't.
+ *
+ * Returns ALL active runners — the page filters to those with deliveries
+ * for the leaderboard row but keeps the active count for the header
+ * ("X runners on the road").
+ */
+export interface LeaderboardEntry {
+  driverId: string;
+  signupNumber: number;
+  todayCents: number;
+  todayCount: number;
+  weekCents: number;
+  weekCount: number;
+  totalCents: number;
+  totalCount: number;
+  /** Has this runner earned the $5 first-delivery welcome bonus?
+      Drives the small badge on the public leaderboard. */
+  welcomeBonusEarned: boolean;
+}
+
+export interface LeaderboardSummary {
+  activeRunnerCount: number;
+  runnersWithDeliveries: number;
+  todayTotalCents: number;
+  todayTotalCount: number;
+  weekTotalCents: number;
+  weekTotalCount: number;
+  allTimeTotalCents: number;
+  allTimeTotalCount: number;
+  entries: LeaderboardEntry[];
+}
+
+export async function getLeaderboard(): Promise<LeaderboardSummary> {
+  await ensureSchema();
+
+  // Same midnight-Central-time logic as the runner feed — keeps "today"
+  // consistent across runner-private and public-leaderboard surfaces.
+  const startOfTodayCt = (() => {
+    const now = new Date();
+    const ct = new Date(
+      now.toLocaleString("en-US", { timeZone: "America/Chicago" }),
+    );
+    const local = new Date(
+      ct.getFullYear(),
+      ct.getMonth(),
+      ct.getDate(),
+      0,
+      0,
+      0,
+    );
+    return local.toISOString();
+  })();
+  const sevenDaysAgo = new Date(
+    Date.now() - 7 * 24 * 60 * 60 * 1000,
+  ).toISOString();
+
+  // Two-step query: (1) number ALL applicants by applied_at — including
+  // rejected ones, so they hold their slot forever; (2) join active
+  // drivers + their delivery aggregations against that numbered set.
+  //
+  // Per Winston rule 2026-04-29: signup numbers post-Winston (#1) skip
+  // ahead by +3 so the next real driver lands at #5. Avoids "you're
+  // only the second person" friction during cold-start recruiting.
+  // First applicant (Winston, the test driver) keeps #1; everyone after
+  // is shifted: raw #2 → #5, raw #3 → #6, raw #4 → #7, etc.
+  // Adjust DRIVER_SIGNUP_OFFSET to taste; remove entirely once enough
+  // real drivers are onboarded that the cold-start framing is moot.
+  const { rows } = await sql`
+    WITH numbered_raw AS (
+      SELECT id, ROW_NUMBER() OVER (ORDER BY applied_at ASC, id ASC) AS raw_num
+      FROM delivery_drivers
+    ),
+    numbered AS (
+      SELECT id,
+        CASE WHEN raw_num <= 1 THEN raw_num ELSE raw_num + 3 END AS signup_num
+      FROM numbered_raw
+    ),
+    welcome_bonus AS (
+      SELECT driver_id, 1 AS earned
+      FROM delivery_driver_transfers
+      WHERE order_id LIKE 'bonus-first-%'
+    )
+    SELECT
+      d.id, n.signup_num,
+      COALESCE(SUM(o.driver_payout_cents) FILTER (
+        WHERE o.status = 'delivered' AND o.delivered_at >= ${startOfTodayCt}
+      ), 0) AS today_cents,
+      COUNT(*) FILTER (
+        WHERE o.status = 'delivered' AND o.delivered_at >= ${startOfTodayCt}
+      ) AS today_count,
+      COALESCE(SUM(o.driver_payout_cents) FILTER (
+        WHERE o.status = 'delivered' AND o.delivered_at >= ${sevenDaysAgo}
+      ), 0) AS week_cents,
+      COUNT(*) FILTER (
+        WHERE o.status = 'delivered' AND o.delivered_at >= ${sevenDaysAgo}
+      ) AS week_count,
+      COALESCE(SUM(o.driver_payout_cents) FILTER (
+        WHERE o.status = 'delivered'
+      ), 0) AS total_cents,
+      COUNT(*) FILTER (WHERE o.status = 'delivered') AS total_count,
+      MAX(wb.earned) AS welcome_bonus_earned
+    FROM delivery_drivers d
+    JOIN numbered n ON n.id = d.id
+    LEFT JOIN delivery_orders o ON o.driver_id = d.id
+    LEFT JOIN welcome_bonus wb ON wb.driver_id = d.id
+    WHERE d.is_active = TRUE
+    GROUP BY d.id, n.signup_num
+    ORDER BY week_cents DESC, total_cents DESC, n.signup_num ASC
+  `;
+
+  const entries: LeaderboardEntry[] = rows.map((r) => {
+    return {
+      driverId: r.id as string,
+      signupNumber: Number(r.signup_num ?? 0),
+      todayCents: Number(r.today_cents ?? 0),
+      todayCount: Number(r.today_count ?? 0),
+      weekCents: Number(r.week_cents ?? 0),
+      weekCount: Number(r.week_count ?? 0),
+      totalCents: Number(r.total_cents ?? 0),
+      totalCount: Number(r.total_count ?? 0),
+      welcomeBonusEarned: Number(r.welcome_bonus_earned ?? 0) === 1,
+    };
+  });
+
+  return {
+    activeRunnerCount: entries.length,
+    runnersWithDeliveries: entries.filter((e) => e.totalCount > 0).length,
+    todayTotalCents: entries.reduce((s, e) => s + e.todayCents, 0),
+    todayTotalCount: entries.reduce((s, e) => s + e.todayCount, 0),
+    weekTotalCents: entries.reduce((s, e) => s + e.weekCents, 0),
+    weekTotalCount: entries.reduce((s, e) => s + e.weekCount, 0),
+    allTimeTotalCents: entries.reduce((s, e) => s + e.totalCents, 0),
+    allTimeTotalCount: entries.reduce((s, e) => s + e.totalCount, 0),
+    entries,
+  };
+}
+
+/**
+ * Delivered orders that DIDN'T fire a Stripe Connect transfer.
+ *
+ * Common cause: runner was payouts_enabled=false at the time of
+ * delivery (Stripe Express account not yet fully verified). Our
+ * `triggerDriverPayout` skips silently in that case, so the funds
+ * never moved from PAL → runner Connect balance.
+ *
+ * Use the custom-payouts admin tool to backfill — same Stripe machinery,
+ * just driven by Winston instead of the auto-trigger.
+ */
+export interface MissedPayoutRecord {
+  orderId: string;
+  driverId: string;
+  driverName: string;
+  signupNumber: number;
+  driverPayoutCents: number;
+  deliveredAt: string;
+  restaurantId: string;
+  /** PaymentIntent that funded the original order. Used as
+      `source_transaction` on the backfill transfer so Stripe can
+      fund from THAT charge even if available balance is $0. */
+  paymentIntentId: string | null;
+}
+
+export async function getMissedPayouts(): Promise<MissedPayoutRecord[]> {
+  await ensureSchema();
+  // NOT EXISTS handles BOTH ledger-key patterns:
+  //   - new (canonical): t.order_id = o.id
+  //   - legacy backfill: t.order_id = 'backfill-' || o.id
+  // The legacy keys exist because an earlier MissedPayoutsList build
+  // wrote backfill rows under `backfill-{orderId}`, and there are real
+  // transfers behind those rows. Treating both as "this order has been
+  // paid" prevents double-pay and clears them from the UI immediately.
+  const { rows } = await sql`
+    WITH numbered AS (
+      SELECT id, ROW_NUMBER() OVER (ORDER BY applied_at ASC, id ASC) AS signup_num
+      FROM delivery_drivers
+    )
+    SELECT
+      o.id AS order_id,
+      o.driver_id,
+      d.name AS driver_name,
+      n.signup_num,
+      o.driver_payout_cents,
+      o.delivered_at,
+      o.restaurant_id,
+      o.payment_intent_id
+    FROM delivery_orders o
+    JOIN delivery_drivers d ON d.id = o.driver_id
+    JOIN numbered n ON n.id = o.driver_id
+    WHERE o.status = 'delivered'
+      AND o.driver_payout_cents > 0
+      AND NOT EXISTS (
+        SELECT 1 FROM delivery_driver_transfers t
+        WHERE t.order_id = o.id
+           OR t.order_id = 'backfill-' || o.id
+      )
+    ORDER BY o.delivered_at DESC
+  `;
+  return rows.map((r) => ({
+    orderId: r.order_id as string,
+    driverId: r.driver_id as string,
+    driverName: r.driver_name as string,
+    signupNumber: Number(r.signup_num),
+    driverPayoutCents: Number(r.driver_payout_cents),
+    deliveredAt: new Date(r.delivered_at as string).toISOString(),
+    restaurantId: r.restaurant_id as string,
+    paymentIntentId: (r.payment_intent_id as string) ?? null,
+  }));
 }
 
 export async function listCustomPayouts(

@@ -2,6 +2,14 @@
 
 import { useState } from "react";
 
+// Standard 50 + DC + territories, alphabetical with TX defaulted in form.
+const US_STATE_CODES = [
+  "AL","AK","AZ","AR","CA","CO","CT","DE","DC","FL","GA","HI","ID","IL",
+  "IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE",
+  "NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD",
+  "TN","TX","UT","VT","VA","WA","WV","WI","WY","PR","VI","GU","AS","MP",
+];
+
 export default function RunnerSignupForm() {
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
@@ -15,6 +23,13 @@ export default function RunnerSignupForm() {
   const [vehicle, setVehicle] = useState("");
   const [availability, setAvailability] = useState("");
   const [why, setWhy] = useState("");
+  const [insuranceCarrier, setInsuranceCarrier] = useState("");
+  const [licensePlate, setLicensePlate] = useState("");
+  const [licensePlateState, setLicensePlateState] = useState("TX");
+  const [licenseAcknowledged, setLicenseAcknowledged] = useState(false);
+  const [insuranceAcknowledged, setInsuranceAcknowledged] = useState(false);
+  const [photosAcknowledged, setPhotosAcknowledged] = useState(false);
+  const [termsAcknowledged, setTermsAcknowledged] = useState(false);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -31,6 +46,12 @@ export default function RunnerSignupForm() {
           vehicle: vehicle.trim(),
           availability: availability.trim(),
           why: why.trim(),
+          insuranceCarrier: insuranceCarrier.trim(),
+          licensePlate: licensePlate.trim().toUpperCase(),
+          licensePlateState: licensePlateState.trim().toUpperCase(),
+          licenseAcknowledged,
+          insuranceAcknowledged,
+          termsAcknowledged,
         }),
       });
       const data = await res.json();
@@ -137,7 +158,14 @@ export default function RunnerSignupForm() {
 
   const valid =
     name.trim().length > 1 &&
-    phone.trim().replace(/\D/g, "").length >= 10;
+    phone.trim().replace(/\D/g, "").length >= 10 &&
+    insuranceCarrier.trim().length > 1 &&
+    licensePlate.trim().length >= 2 &&
+    licensePlateState.trim().length === 2 &&
+    licenseAcknowledged &&
+    insuranceAcknowledged &&
+    photosAcknowledged &&
+    termsAcknowledged;
 
   return (
     <form
@@ -221,6 +249,135 @@ export default function RunnerSignupForm() {
           className="w-full px-3 py-2 border border-sand-300 rounded-lg text-sm focus:border-coral-400 focus:outline-none resize-y"
           placeholder="Local for X years · already drive for Y · trying to make beach money..."
         />
+      </div>
+
+      {/* License + insurance attestation block. We ASK runners to keep
+          a current license + active insurance — language stays
+          "we ask"/"we encourage" to keep the gig-worker boundary clean
+          (saying "you must" reads as employer-employee). Verification
+          happens via emailed photos after submit, not file upload. */}
+      <div className="border-t border-sand-200 pt-4 mt-2">
+        <p className="text-[10px] font-bold tracking-widest uppercase text-coral-600 mb-1">
+          License + insurance
+        </p>
+        <p className="text-xs text-navy-600 mb-3 leading-relaxed">
+          We ask all runners to keep a current driver&apos;s license and
+          active auto insurance. We&apos;ll verify with a quick photo email
+          once before you take orders.
+        </p>
+
+        <label className="block text-xs font-bold tracking-widest uppercase text-navy-700 mb-1">
+          Insurance carrier
+        </label>
+        <input
+          value={insuranceCarrier}
+          onChange={(e) => setInsuranceCarrier(e.target.value)}
+          placeholder="State Farm · Geico · USAA · Progressive..."
+          className="w-full px-3 py-2 border border-sand-300 rounded-lg text-sm focus:border-coral-400 focus:outline-none mb-3"
+          required
+        />
+
+        {/* License plate + state — required for PAL's umbrella liability
+            insurance. We pass these to our carrier; they don't appear on
+            any customer-facing surface. */}
+        <div className="grid grid-cols-[2fr_1fr] gap-2 mb-3">
+          <div>
+            <label className="block text-xs font-bold tracking-widest uppercase text-navy-700 mb-1">
+              License plate
+            </label>
+            <input
+              value={licensePlate}
+              onChange={(e) =>
+                setLicensePlate(e.target.value.toUpperCase().slice(0, 10))
+              }
+              placeholder="ABC-1234"
+              autoCapitalize="characters"
+              maxLength={10}
+              className="w-full px-3 py-2 border border-sand-300 rounded-lg text-sm font-mono uppercase tracking-wider focus:border-coral-400 focus:outline-none"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-bold tracking-widest uppercase text-navy-700 mb-1">
+              State
+            </label>
+            <select
+              value={licensePlateState}
+              onChange={(e) => setLicensePlateState(e.target.value)}
+              className="w-full px-3 py-2 border border-sand-300 rounded-lg text-sm bg-white focus:border-coral-400 focus:outline-none"
+              required
+            >
+              {US_STATE_CODES.map((s) => (
+                <option key={s} value={s}>
+                  {s}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+        <p className="text-[11px] text-navy-500 font-light mb-3 -mt-1">
+          Required for our umbrella liability coverage. Never shown to
+          customers.
+        </p>
+
+        <label className="flex items-start gap-2.5 cursor-pointer mb-2">
+          <input
+            type="checkbox"
+            checked={licenseAcknowledged}
+            onChange={(e) => setLicenseAcknowledged(e.target.checked)}
+            className="mt-0.5 shrink-0 accent-coral-500"
+          />
+          <span className="text-xs text-navy-700 leading-relaxed">
+            I have a current driver&apos;s license valid for driving in
+            Texas.
+          </span>
+        </label>
+
+        <label className="flex items-start gap-2.5 cursor-pointer mb-2">
+          <input
+            type="checkbox"
+            checked={insuranceAcknowledged}
+            onChange={(e) => setInsuranceAcknowledged(e.target.checked)}
+            className="mt-0.5 shrink-0 accent-coral-500"
+          />
+          <span className="text-xs text-navy-700 leading-relaxed">
+            My delivery vehicle has active auto insurance.
+          </span>
+        </label>
+
+        <label className="flex items-start gap-2.5 cursor-pointer mb-2">
+          <input
+            type="checkbox"
+            checked={photosAcknowledged}
+            onChange={(e) => setPhotosAcknowledged(e.target.checked)}
+            className="mt-0.5 shrink-0 accent-coral-500"
+          />
+          <span className="text-xs text-navy-700 leading-relaxed">
+            After submitting, I&apos;ll email a photo of my license + my
+            insurance card to{" "}
+            <a
+              href="mailto:hello@theportalocal.com?subject=Runner%20verification"
+              className="font-bold text-coral-600 underline decoration-coral-300"
+            >
+              hello@theportalocal.com
+            </a>{" "}
+            so PAL can verify before my first run.
+          </span>
+        </label>
+
+        <label className="flex items-start gap-2.5 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={termsAcknowledged}
+            onChange={(e) => setTermsAcknowledged(e.target.checked)}
+            className="mt-0.5 shrink-0 accent-coral-500"
+          />
+          <span className="text-xs text-navy-700 leading-relaxed">
+            I&apos;m 18 or older and will only handle legal deliveries — no
+            controlled substances, no alcohol to minors, nothing PAL or the
+            law wouldn&apos;t green-light.
+          </span>
+        </label>
       </div>
 
       {error && (

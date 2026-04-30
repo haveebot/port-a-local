@@ -2,7 +2,9 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import GullyPalette from "@/components/GullyPalette";
 import { WebsiteSchema, OrganizationSchema } from "@/components/StructuredData";
-import { Analytics } from "@vercel/analytics/next";
+import EmergencyBanner from "@/components/EmergencyBanner";
+import VisitorHeartbeat from "@/components/VisitorHeartbeat";
+import AnalyticsWrapper from "@/components/AnalyticsWrapper";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata: Metadata = {
@@ -75,9 +77,15 @@ export default function RootLayout({
         <OrganizationSchema />
       </head>
       <body className="font-sans antialiased">
+        {/* Site-wide emergency banner. Renders nothing when no
+            active alert (dormant baseline). Triggered from
+            /wheelhouse/alerts. Phase 1 manual; Phase 2 auto-feeds
+            from CivicPlus + NWS. */}
+        <EmergencyBanner />
         {children}
         <GullyPalette />
-        <Analytics />
+        <VisitorHeartbeat />
+        <AnalyticsWrapper />
         <SpeedInsights />
       </body>
     </html>

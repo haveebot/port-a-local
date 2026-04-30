@@ -10,9 +10,14 @@ import {
   // Deliveries thread message; threads are auto-created if missing.
 } from "@/data/wheelhouse-store";
 import { sendSms, sendConsumerSms } from "./twilioSms";
+import { sendPushToSubscription } from "./webPush";
 import { getActiveDrivers, getDriver } from "@/data/delivery-drivers";
 import { getRestaurant } from "@/data/delivery-restaurants";
-import { getOnlineDriverIds } from "@/data/delivery-store";
+import {
+  getDriverPushSubscription,
+  getOnlineDriverIds,
+  setDriverPushSubscription,
+} from "@/data/delivery-store";
 import type { Order } from "@/data/delivery-types";
 import { formatUSD } from "@/data/delivery-pricing";
 import { createMessage as createWheelhouseMessage } from "@/data/wheelhouse-store";
@@ -79,6 +84,32 @@ export async function dispatchDriversForOrder(order: Order): Promise<{
         payoutLabel: formatUSD(driverPayout),
         claimUrl: url,
       });
+    }
+    // Push notification — instant ping to runner's phone if they've
+    // enabled it. Faster than SMS (no carrier filtering, no A2P
+    // dependency) and the user-favorite UX surface. Click → order
+    // detail page (cookie session means no token-in-URL needed).
+    try {
+      const sub = await getDriverPushSubscription(d.id);
+      if (sub) {
+        const result = await sendPushToSubscription(sub, {
+          title: `+${formatUSD(driverPayout)} · ${restaurant?.name ?? order.restaurantId}`,
+          body: `${itemSummary} → ${order.customer.deliveryAddress}`,
+          url: `/deliver/driver/${order.id}`,
+          tag: `dispatch-${order.id}`,
+          dollarBadge: formatUSD(driverPayout),
+        });
+        if (result.expired) {
+          // Subscription is dead (uninstalled PWA, blocked
+          // notifications, etc) — clear it so we don't keep trying.
+          await setDriverPushSubscription(d.id, null);
+          console.log(
+            `[deliver] push subscription expired for ${d.id} — cleared`,
+          );
+        }
+      }
+    } catch (err) {
+      console.error(`[deliver] dispatch push to ${d.id} failed:`, err);
     }
     sentTo.push(d.id);
   }

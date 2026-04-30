@@ -7,6 +7,10 @@ import {
   type ThreadState,
 } from "@/data/wheelhouse-types";
 
+// Per Winston rule 2026-04-29: instant-archive. "Done" removed from the
+// user-clickable transitions — clicking "Archive" finishes + files in one
+// motion. The "done" state stays in the type system for legacy data + the
+// API endpoint auto-converts done→archived just in case.
 const TRANSITION_ORDER: ThreadState[] = [
   "open",
   "awaiting:winston",
@@ -16,7 +20,6 @@ const TRANSITION_ORDER: ThreadState[] = [
   "awaiting:collie-claude",
   "awaiting:nick-claude",
   "blocked",
-  "done",
   "archived",
 ];
 

@@ -121,7 +121,7 @@ export const seasonMembers: SeasonMember[] = [
     detailHref: "/events/texas-women-anglers-tournament-2026",
     icon: "🎣",
     positioning:
-      "The matriarch of the women-only fishing tournament — charity-engine, family-run, no online merch store.",
+      "One of the originals of the women-only fishing tournament — charity-engine, quietly run, no online merch store.",
     founded: 1984,
     sanctioning: "Fox family (Pete Fox founded; Chris Fox + Fox family today)",
     dates2026: "Late August (tentative Aug 21–23)",

@@ -395,6 +395,26 @@ export default function MaintenancePage() {
             </p>
 
           </form>
+
+          {/* Cross-link: cleaning isn't maintenance, route those over */}
+          <div className="max-w-2xl mx-auto mt-10 px-4 sm:px-6">
+            <div className="bg-sand-100 border border-sand-200 rounded-xl p-5 text-sm text-navy-700">
+              <p className="text-[10px] tracking-widest uppercase text-coral-600 font-bold mb-1">
+                Looking to book a cleaning?
+              </p>
+              <p className="font-light leading-relaxed">
+                Maintenance handles repairs (plumbing, AC, electrical, locks).
+                For turnover cleans, deep cleans, and move-out cleans, head to{" "}
+                <Link
+                  href="/housekeeping"
+                  className="text-coral-600 underline decoration-coral-300 hover:decoration-coral-500 font-semibold"
+                >
+                  /housekeeping
+                </Link>
+                {" "}— $100/hr, one-hour minimum, book online in two minutes.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 

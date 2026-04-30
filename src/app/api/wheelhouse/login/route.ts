@@ -12,10 +12,16 @@ import { NextRequest, NextResponse } from "next/server";
  */
 export async function POST(req: NextRequest) {
   const body = await req.json().catch(() => ({}));
-  const password = (body.password ?? "").toString();
+  // Defensive trim on both sides — same Vercel-env-var-with-trailing-
+  // newline failure mode that burned us on STRIPE_SECRET_KEY (commit
+  // 4923918). Vercel doesn't auto-strip whitespace on env var saves;
+  // a stray paste of "password\n" would silently 401 every login.
+  // Trimming here doesn't materially weaken the password — passwords
+  // with leading/trailing whitespace are vanishingly rare in practice.
+  const password = (body.password ?? "").toString().trim();
   const who = (body.who ?? "").toString();
 
-  const expected = process.env.WHEELHOUSE_PASSWORD;
+  const expected = (process.env.WHEELHOUSE_PASSWORD ?? "").trim();
   if (!expected) {
     return NextResponse.json(
       {
@@ -26,6 +32,12 @@ export async function POST(req: NextRequest) {
     );
   }
   if (password !== expected) {
+    // Log lengths only (not values) — helps diagnose mismatches without
+    // leaking the password. If lengths differ, it's a typo or pasted
+    // junk; if lengths match but compare fails, it's a content issue.
+    console.warn(
+      `[wheelhouse/login] password mismatch — submitted len=${password.length}, expected len=${expected.length}`,
+    );
     return NextResponse.json(
       { error: "Wrong password." },
       { status: 401 },

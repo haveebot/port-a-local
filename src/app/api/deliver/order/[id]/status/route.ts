@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import {
+  getDeliveredCountForDriver,
   getDriverStatus,
   getOrder,
   hasDriverTransfer,
@@ -12,7 +13,11 @@ import {
   notifyCustomerDelivered,
   notifyCustomerPickedUp,
 } from "@/lib/deliverDispatch";
-import { getDeliverStripe, getDeliverStripeKey } from "@/lib/deliverStripe";
+import {
+  getDeliverStripe,
+  getDeliverStripeKey,
+  resolveChargeFromPaymentIntent,
+} from "@/lib/deliverStripe";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -78,9 +83,26 @@ export async function POST(
       notifyCustomerDelivered(order, true),
       sendCustomerDeliveredEmail(order),
     ]);
-    // Auto-transfer driver payout via Stripe Connect (best-effort, idempotent)
-    void triggerDriverPayout(order.id, driver.id, order.driverPayoutCents).catch(
-      (err) => console.error("[deliver] driver payout transfer failed:", err),
+    // Auto-transfer driver payout via Stripe Connect (best-effort, idempotent).
+    // Passing source_transaction (the PaymentIntent that funded this order)
+    // ties the transfer directly to the original charge — Stripe will fund
+    // the transfer from THAT charge as soon as it clears, even if PAL's
+    // general available balance is $0. Avoids the "Insufficient funds"
+    // failure mode at cold-start / new-platform / surge-after-slow.
+    void triggerDriverPayout(
+      order.id,
+      driver.id,
+      order.driverPayoutCents,
+      order.paymentIntentId,
+    ).catch((err) =>
+      console.error("[deliver] driver payout transfer failed:", err),
+    );
+    // First-delivery welcome bonus ($5). Idempotent — uses a custom
+    // ledger row keyed on driver-id so it can never fire twice for the
+    // same runner. Fires AFTER the order payout so the runner sees the
+    // bonus as a separate Stripe transfer line.
+    void triggerFirstDeliveryBonus(driver.id).catch((err) =>
+      console.error("[deliver] first-delivery bonus failed:", err),
     );
   }
 
@@ -93,13 +115,23 @@ export async function POST(
  *   - Already paid for this order
  *   - Order paid amount is 0
  *
+ * Pass `paymentIntentId` (the charge that funded this order) and we
+ * include `source_transaction` on the transfer — tying the transfer
+ * directly to that specific charge so Stripe funds it from THAT
+ * charge as soon as it clears, even if PAL's available balance is $0.
+ *
+ * If `paymentIntentId` is absent (older orders, manual data, etc.)
+ * we fall back to a regular balance-funded transfer, which requires
+ * available funds. Sane fallback for any edge case.
+ *
  * Logs and returns; never throws (keeps the delivery transition succeeding
- * even if payout fails — Winston can retry manually).
+ * even if payout fails — Winston can retry manually via /wheelhouse/payouts).
  */
 async function triggerDriverPayout(
   orderId: string,
   driverId: string,
   amountCents: number,
+  paymentIntentId?: string,
 ): Promise<void> {
   if (amountCents <= 0) return;
   if (await hasDriverTransfer(orderId)) {
@@ -118,25 +150,107 @@ async function triggerDriverPayout(
     return;
   }
   const stripe = getDeliverStripe();
+  // Resolve PaymentIntent → latest charge ID. Stripe's source_transaction
+  // expects a CHARGE (ch_...), not a PaymentIntent (pi_...). One extra
+  // API call per transfer; cheap and only fires on actual deliveries.
+  const chargeId = paymentIntentId
+    ? await resolveChargeFromPaymentIntent(stripe, paymentIntentId)
+    : null;
   try {
     const transfer = await stripe.transfers.create({
       amount: amountCents,
       currency: "usd",
       destination: status.stripeAccountId,
       transfer_group: orderId,
+      // Tie transfer to the specific charge so Stripe funds from THAT
+      // charge as it clears — sidesteps the "available balance must be
+      // ≥ amount" requirement that bites cold-start + surge gaps.
+      ...(chargeId ? { source_transaction: chargeId } : {}),
       metadata: {
         order_id: orderId,
         driver_id: driverId,
         source: "pal-delivery-auto-payout",
+        funding_mode: chargeId ? "source-transaction" : "balance",
+        ...(paymentIntentId ? { payment_intent_id: paymentIntentId } : {}),
       },
     });
     await recordDriverTransfer(orderId, driverId, transfer.id, amountCents);
     console.log(
-      `[payout] order ${orderId} → driver ${driverId} ($${(amountCents / 100).toFixed(2)}) transfer ${transfer.id}`,
+      `[payout] order ${orderId} → driver ${driverId} ($${(amountCents / 100).toFixed(2)}) transfer ${transfer.id} — funded via ${chargeId ? `source_transaction (${chargeId})` : "balance"}`,
     );
   } catch (err) {
     console.error(
       `[payout] Stripe transfer failed for order ${orderId}:`,
+      err instanceof Error ? err.message : err,
+    );
+  }
+}
+
+/**
+ * First-delivery welcome bonus — $5 to the runner's Stripe Connect
+ * balance after their first ever delivered order. Idempotent via a
+ * synthetic order_id ('bonus-first-{driverId}') in the existing
+ * transfer ledger; same row will only ever insert once.
+ *
+ * Skips if:
+ *   - Runner has already completed prior deliveries (we only count 1)
+ *   - Bonus already fired (synthetic id already in ledger)
+ *   - Stripe Connect not yet onboarded (will need manual backfill —
+ *     same as the regular payout case)
+ *
+ * Logs + swallows errors. Never throws — won't block the delivery.
+ */
+const FIRST_DELIVERY_BONUS_CENTS = 500;
+
+async function triggerFirstDeliveryBonus(driverId: string): Promise<void> {
+  const bonusOrderId = `bonus-first-${driverId}`;
+  if (await hasDriverTransfer(bonusOrderId)) {
+    // Already fired for this runner. No-op.
+    return;
+  }
+  const deliveredCount = await getDeliveredCountForDriver(driverId);
+  if (deliveredCount !== 1) {
+    // Either zero (somehow we got here too early) or 2+ (not their
+    // first). Either way: don't fire.
+    return;
+  }
+  const status = await getDriverStatus(driverId);
+  if (!status.stripeAccountId || !status.payoutsEnabled) {
+    console.log(
+      `[bonus] driver ${driverId} not Connect-onboarded — first-delivery bonus deferred`,
+    );
+    return;
+  }
+  if (!getDeliverStripeKey()) {
+    console.error("[bonus] STRIPE key missing for /deliver");
+    return;
+  }
+  const stripe = getDeliverStripe();
+  try {
+    const transfer = await stripe.transfers.create({
+      amount: FIRST_DELIVERY_BONUS_CENTS,
+      currency: "usd",
+      destination: status.stripeAccountId,
+      transfer_group: bonusOrderId,
+      metadata: {
+        bonus_kind: "first-delivery",
+        driver_id: driverId,
+        source: "pal-delivery-first-delivery-bonus",
+      },
+      description: "Welcome to PAL — first-delivery bonus 🎉",
+    });
+    await recordDriverTransfer(
+      bonusOrderId,
+      driverId,
+      transfer.id,
+      FIRST_DELIVERY_BONUS_CENTS,
+    );
+    console.log(
+      `[bonus] driver ${driverId} first-delivery $5 bonus → transfer ${transfer.id}`,
+    );
+  } catch (err) {
+    console.error(
+      `[bonus] Stripe transfer failed for driver ${driverId} first-delivery bonus:`,
       err instanceof Error ? err.message : err,
     );
   }
@@ -151,5 +265,33 @@ export async function GET(
   if (!order) {
     return NextResponse.json({ error: "Order not found" }, { status: 404 });
   }
-  return NextResponse.json({ order });
+
+  // Customer-facing tracker needs anonymous runner info — Driver #N
+  // (signup-number) + vehicle. Never the runner's real name.
+  let runner: {
+    signupNumber: number;
+    vehicle: string | null;
+  } | null = null;
+  if (order.driverId) {
+    const { sql } = await import("@vercel/postgres");
+    const { rows } = await sql`
+      WITH numbered AS (
+        SELECT id, ROW_NUMBER() OVER (ORDER BY applied_at ASC, id ASC) AS signup_num
+        FROM delivery_drivers
+      )
+      SELECT n.signup_num, d.vehicle
+      FROM delivery_drivers d
+      JOIN numbered n ON n.id = d.id
+      WHERE d.id = ${order.driverId}
+      LIMIT 1
+    `;
+    if (rows[0]) {
+      runner = {
+        signupNumber: Number(rows[0].signup_num),
+        vehicle: (rows[0].vehicle as string) ?? null,
+      };
+    }
+  }
+
+  return NextResponse.json({ order, runner });
 }

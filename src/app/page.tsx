@@ -3,6 +3,7 @@ import Hero from "@/components/Hero";
 import CategoryCard from "@/components/CategoryCard";
 import FeaturedSpots from "@/components/FeaturedSpots";
 import FeaturedEventBanner from "@/components/FeaturedEventBanner";
+import RunnerLeaderboardTile from "@/components/RunnerLeaderboardTile";
 import Footer from "@/components/Footer";
 import { WebsiteSchema } from "@/components/StructuredData";
 import { categories } from "@/data/categories";
@@ -15,6 +16,7 @@ export default function Home() {
       <Navigation />
       <Hero />
       <FeaturedEventBanner />
+      <RunnerLeaderboardTile />
 
       {/* Gully — Just Gully It */}
       <section className="py-20 bg-navy-900 relative">
@@ -324,7 +326,7 @@ export default function Home() {
               </div>
               <div className="p-8 rounded-2xl bg-white border border-sand-200 card-hover">
                 <div className="w-12 h-12 rounded-full bg-coral-50 flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl">🤝</span>
+                  <PortalIcon name="handshake" className="w-7 h-7 text-coral-600" />
                 </div>
                 <h3 className="font-display font-bold text-navy-900 mb-2">Community First</h3>
                 <p className="text-sm text-navy-400 font-light">

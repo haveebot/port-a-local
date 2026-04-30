@@ -3,6 +3,8 @@ import Stripe from "stripe";
 import { emailLayout } from "@/lib/emailLayout";
 import { getBlastableVendors, getBlastCount } from "@/data/cart-vendors";
 import { sendConsumerSms } from "@/lib/twilioSms";
+import { sendLeadBlastSms, compactCartLabel } from "@/lib/cartVendorSmsBlast";
+import { pingSuperAdmins, formatCustomerDisplay } from "@/lib/superAdminPing";
 
 const getStripe = () => new Stripe(process.env.STRIPE_SECRET_KEY || "", {
   apiVersion: "2026-03-25.dahlia",
@@ -10,8 +12,11 @@ const getStripe = () => new Stripe(process.env.STRIPE_SECRET_KEY || "", {
 
 const RESEND_KEY = process.env.RESEND_API_KEY || "";
 const INTERNAL_EMAIL = process.env.INTERNAL_ALERT_EMAIL || "";
+const INTERNAL_RECIPIENTS = [INTERNAL_EMAIL, "bookings@theportalocal.com"]
+  .map((r) => r.trim())
+  .filter(Boolean);
 
-async function sendEmail(to: string, subject: string, html: string) {
+async function sendEmail(to: string | string[], subject: string, html: string) {
   if (!RESEND_KEY) {
     console.log("[Email] Resend not configured — would send to", to, subject);
     return;
@@ -154,10 +159,28 @@ export async function POST(req: NextRequest) {
 
     const customerSMS = `Port A Local: Your ${cartLabel} is reserved for ${pickupFormatted}. Cart logistics (pickup or delivery, vendor's call) arrive 24-48 hours before your trip. Reply STOP to opt out.`;
 
+    // Compact pickup/return labels for SMS — drops year + comma noise.
+    const pickupShort = formatDate(pickupDate).replace(/, \d{4}$/, "").replace(/^([A-Za-z]+), /, "$1 ");
+    const returnShort = formatDate(returnDate).replace(/, \d{4}$/, "").replace(/^([A-Za-z]+), /, "$1 ");
+
     await Promise.allSettled([
-      sendEmail(INTERNAL_EMAIL, `✅ Golf Cart PAID — ${name} — ${pickupDate} to ${returnDate}`, internalHtml),
+      sendEmail(INTERNAL_RECIPIENTS, `✅ Golf Cart PAID — ${name} — ${pickupDate} to ${returnDate}`, internalHtml),
       sendEmail(email, "Your Golf Cart is Reserved — Port A Local", customerHtml),
       sendConsumerSms(phone, customerSMS, smsConsent),
+      sendLeadBlastSms({
+        cartLabel: compactCartLabel(cartLabel),
+        pickupFormatted: pickupShort,
+        returnFormatted: returnShort,
+        numDays: days,
+      }).then((sent) =>
+        console.log(`[Rent/Blast] SMS sent to ${sent} opted-in vendors`),
+      ),
+      pingSuperAdmins({
+        kind: "cart-rental",
+        amountCents: fee * 100,
+        summary: `${compactCartLabel(cartLabel)} · ${pickupShort} to ${returnShort} (${days} ${days === 1 ? "day" : "days"})`,
+        customerDisplay: formatCustomerDisplay(name),
+      }),
       ...vendorBlastPromises,
     ]);
 

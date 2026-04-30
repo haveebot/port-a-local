@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { emailLayout } from "@/lib/emailLayout";
 import { sendConsumerSms } from "@/lib/twilioSms";
+import { sendBeachLeadBlast } from "@/lib/beachVendorBlast";
+import { recordBlast } from "@/data/beach-claim-store";
+import { pingSuperAdmins, formatCustomerDisplay } from "@/lib/superAdminPing";
 
 const getStripe = () => new Stripe(process.env.STRIPE_SECRET_KEY || "", {
   apiVersion: "2026-03-25.dahlia",
@@ -9,8 +12,14 @@ const getStripe = () => new Stripe(process.env.STRIPE_SECRET_KEY || "", {
 
 const RESEND_KEY = process.env.RESEND_API_KEY || "";
 const INTERNAL_EMAIL = process.env.INTERNAL_ALERT_EMAIL || "";
+// Internal alerts CC bookings@ for transactional record-keeping per
+// Winston rule 2026-04-29 (the same alias that's already the FROM
+// address — receives transactional copies for the booking ledger).
+const INTERNAL_RECIPIENTS = [INTERNAL_EMAIL, "bookings@theportalocal.com"]
+  .map((r) => r.trim())
+  .filter(Boolean);
 
-async function sendEmail(to: string, subject: string, html: string) {
+async function sendEmail(to: string | string[], subject: string, html: string) {
   if (!RESEND_KEY) {
     console.log("[Email] Resend not configured — would send to", to, subject);
     return;
@@ -65,6 +74,10 @@ export async function POST(req: NextRequest) {
 
     const m = session.metadata || {};
     const { name, phone, email, product, quantity, pickupDate, returnDate, deliveryAddress, numDays, totalPrice, smsConsent } = m;
+    const vendorTotalCents = parseInt(m.vendor_total_cents || "0") || 0;
+    const palFeeTotalCents = parseInt(m.pal_fee_total_cents || "0") || 0;
+    const vendorTotalUsd = vendorTotalCents > 0 ? `$${(vendorTotalCents / 100).toFixed(2)}` : "(not split)";
+    const palFeeTotalUsd = palFeeTotalCents > 0 ? `$${(palFeeTotalCents / 100).toFixed(2)}` : "(not split)";
 
     const startFormatted = formatDate(pickupDate);
     const endFormatted = formatDate(returnDate);
@@ -91,6 +104,8 @@ export async function POST(req: NextRequest) {
         <p><strong>Beach location:</strong> ${deliveryAddress}</p>
         <hr style="border:none; border-top:1px solid #e4dccc; margin:16px 0;"/>
         <p style="font-size:16px;"><strong>Total collected:</strong> $${total}</p>
+        <p style="margin:4px 0; font-size:13px;"><strong>Vendor payout (owed):</strong> ${vendorTotalUsd}</p>
+        <p style="margin:4px 0; font-size:13px;"><strong>PAL booking fee (retained):</strong> ${palFeeTotalUsd}</p>
         <p style="font-size:11px; color:#8896ab; font-family:monospace; margin-top:12px;">Stripe session: ${session.id}</p>
       `,
     });
@@ -111,7 +126,10 @@ export async function POST(req: NextRequest) {
           <li><strong>Beach location:</strong> ${deliveryAddress}</li>
           <li><strong>Total paid:</strong> $${total}</li>
         </ul>
-        <p>Questions? Reply to this email.</p>
+        <hr style="border:none; border-top:1px solid #e4dccc; margin:16px 0;"/>
+        <p style="font-size:13px; color:#4a5568;"><strong>Cancellation policy</strong></p>
+        <p style="font-size:12px; color:#4a5568; line-height:1.5;">Free cancellation up to <strong>72 hours before your setup date</strong>. After that, the booking is non-refundable — your local vendor has held the slot. To cancel, reply to this email.</p>
+        <p style="margin-top:20px;">Questions? Reply to this email.</p>
         <p style="margin-top:20px;">— The Port A Local</p>
       `,
     });
@@ -120,10 +138,52 @@ export async function POST(req: NextRequest) {
 
     const customerSMS = `Port A Local: Your ${productLabel} (${days} day${days !== 1 ? "s" : ""}) is booked for ${startFormatted}. Delivered to: ${deliveryAddress}. Reply STOP to opt out.`;
 
+    // Beach vendor blast — short ID is the last 6 chars of session ID,
+    // friendly to vendors who reply CLAIM. Format compact for SMS.
+    const shortId = session.id.slice(-6).toUpperCase();
+    const startCompact = startFormatted
+      .replace(/, \d{4}$/, "")
+      .replace(/^([A-Za-z]+), /, "$1 ");
+
     await Promise.allSettled([
-      sendEmail(INTERNAL_EMAIL, `✅ Beach Rental PAID — ${name} — ${pickupDate} to ${returnDate}`, internalHtml),
+      sendEmail(INTERNAL_RECIPIENTS, `✅ Beach Rental PAID — ${name} — ${pickupDate} to ${returnDate}`, internalHtml),
       sendEmail(email, "Your Beach Setup is Booked — Port A Local", customerHtml),
       sendConsumerSms(phone, customerSMS, smsConsent),
+      pingSuperAdmins({
+        kind: "beach-rental",
+        amountCents: total * 100,
+        summary: `${productLabel} ×${qty} · ${startFormatted.replace(/, \d{4}$/,"").replace(/^([A-Za-z]+), /,"$1 ")} (${days} ${days === 1 ? "day" : "days"}) · ${deliveryAddress}\n\nVendor: ${vendorTotalUsd} · PAL fee: ${palFeeTotalUsd}`,
+        customerDisplay: formatCustomerDisplay(name),
+      }),
+      // Record the blast in claim store (idempotent on session ID), then fan
+      // out to active beach vendors. Sequential 800ms pacing inside the
+      // helper. recordBlast first so a CLAIM reply landing fast still finds
+      // the row.
+      (async () => {
+        try {
+          await recordBlast({
+            stripeSessionId: session.id,
+            customerPhone: phone,
+            customerName: name,
+            product,
+            qty,
+            setupDate: pickupDate,
+            numDays: days,
+            vendorAmountCents: vendorTotalCents,
+          });
+          const sent = await sendBeachLeadBlast({
+            product,
+            qty,
+            setupDateFormatted: startCompact,
+            numDays: days,
+            customerName: name,
+            shortId,
+          });
+          console.log(`[Beach/Blast] SMS sent to ${sent} active beach vendors (ref ${shortId})`);
+        } catch (err) {
+          console.error("[Beach/Blast] failed:", err);
+        }
+      })(),
     ]);
 
     return NextResponse.json({ success: true });
