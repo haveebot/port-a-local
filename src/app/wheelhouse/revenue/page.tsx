@@ -157,7 +157,14 @@ async function buildReport(): Promise<ReportData> {
 }
 
 function fmtUsd(cents: number): string {
-  return `$${(cents / 100).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  // Drop trailing .00 when whole-dollar so tiles read tighter (PAL totals
+  // are usually whole dollars or rounded amounts; pennies appear only on
+  // delivery orders with tip splits). Significant width savings on mobile.
+  const isWhole = cents % 100 === 0;
+  return `$${(cents / 100).toLocaleString("en-US", {
+    minimumFractionDigits: isWhole ? 0 : 2,
+    maximumFractionDigits: 2,
+  })}`;
 }
 
 export default async function RevenuePage() {
@@ -194,7 +201,7 @@ export default async function RevenuePage() {
               Couldn&apos;t fetch from Stripe: {r.errorMsg}
             </div>
           )}
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
             <BigStat label="Today" gross={r.today.gross} count={r.today.count} tone="emerald" />
             <BigStat label="Last 7 days" gross={r.last7.gross} count={r.last7.count} />
             <BigStat label="Last 30 days" gross={r.last30.gross} count={r.last30.count} />
@@ -206,10 +213,19 @@ export default async function RevenuePage() {
             <h2 className="font-display text-xl font-bold mb-4">By vertical (last 30 days)</h2>
             <div className="space-y-2">
               {r.byVertical.map((v) => (
-                <div key={v.label} className="flex items-center justify-between gap-4 text-sm">
-                  <span className="text-navy-700">{v.label}</span>
-                  <span className="text-navy-500 text-xs">{v.count} charge{v.count === 1 ? "" : "s"}</span>
-                  <span className="font-semibold text-navy-900 font-mono">{fmtUsd(v.gross)}</span>
+                <div
+                  key={v.label}
+                  className="flex items-center justify-between gap-3 text-sm"
+                >
+                  <span className="text-navy-700 truncate min-w-0 flex-1">
+                    {v.label}
+                  </span>
+                  <span className="text-navy-500 text-xs whitespace-nowrap shrink-0">
+                    {v.count} charge{v.count === 1 ? "" : "s"}
+                  </span>
+                  <span className="font-semibold text-navy-900 font-mono tabular-nums whitespace-nowrap shrink-0 text-right min-w-[72px]">
+                    {fmtUsd(v.gross)}
+                  </span>
                 </div>
               ))}
             </div>
@@ -239,8 +255,13 @@ function BigStat({
 }) {
   const valueClass = tone === "emerald" ? "text-emerald-700" : "text-navy-900";
   return (
-    <div className="bg-sand-100 rounded-lg p-4">
-      <p className={`font-display text-3xl font-bold ${valueClass}`}>{fmtUsd(gross)}</p>
+    <div className="bg-sand-100 rounded-lg p-4 min-w-0 overflow-hidden">
+      <p
+        className={`font-display text-2xl sm:text-3xl font-bold tabular-nums ${valueClass} truncate`}
+        title={fmtUsd(gross)}
+      >
+        {fmtUsd(gross)}
+      </p>
       <p className="text-[11px] uppercase tracking-widest text-navy-500 mt-1">{label}</p>
       <p className="text-[10px] text-navy-500 mt-1">
         {count} charge{count === 1 ? "" : "s"}
