@@ -6,6 +6,7 @@ import {
   markSkipped,
   markFailed,
   updateCaption,
+  setAutoSendAt,
   type SocialPost,
 } from "@/data/social-post-store";
 import { postToFacebook, postToInstagram } from "@/lib/metaGraph";
@@ -14,16 +15,20 @@ export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
 /**
- * Per-post actions. PATCH with { action: "send" | "skip" | "edit" }.
+ * Per-post actions. PATCH with { action }.
  *
  * action=send: fires to Meta Graph API. Stub mode if no token.
  * action=skip: marks as skipped (kept for audit, not sent).
  * action=edit: { action: "edit", caption: "..." } updates draft.
+ * action=schedule: { action: "schedule", autoSendAt: ISO | null } sets
+ *   the auto-send time. Cron at /api/cron/social-auto-send fires it.
+ *   Pass null to revert to manual-only.
  */
 
 interface PatchBody {
-  action?: "send" | "skip" | "edit";
+  action?: "send" | "skip" | "edit" | "schedule";
   caption?: string;
+  autoSendAt?: string | null;
 }
 
 async function getCurrentUser(req: NextRequest): Promise<string> {
@@ -109,6 +114,29 @@ export async function PATCH(
 
   if (body.action === "skip") {
     await markSkipped(id, who);
+    const updated = await getById(id);
+    return NextResponse.json({ post: updated });
+  }
+
+  if (body.action === "schedule") {
+    if (body.autoSendAt !== null && typeof body.autoSendAt !== "string") {
+      return NextResponse.json(
+        { error: "invalid_autoSendAt", expected: "ISO string or null" },
+        { status: 400 },
+      );
+    }
+    if (body.autoSendAt) {
+      const t = Date.parse(body.autoSendAt);
+      if (Number.isNaN(t)) {
+        return NextResponse.json(
+          { error: "unparseable_autoSendAt" },
+          { status: 400 },
+        );
+      }
+      await setAutoSendAt(id, new Date(t).toISOString());
+    } else {
+      await setAutoSendAt(id, null);
+    }
     const updated = await getById(id);
     return NextResponse.json({ post: updated });
   }

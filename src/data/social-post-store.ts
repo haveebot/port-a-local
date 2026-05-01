@@ -54,8 +54,10 @@ async function ensureSchema(): Promise<void> {
       metadata JSONB
     )
   `;
+  await sql`ALTER TABLE social_post_queue ADD COLUMN IF NOT EXISTS auto_send_at TIMESTAMPTZ`;
   await sql`CREATE INDEX IF NOT EXISTS social_post_status_idx ON social_post_queue(status, created_at DESC)`;
   await sql`CREATE INDEX IF NOT EXISTS social_post_trigger_idx ON social_post_queue(trigger_type, trigger_ref, channel)`;
+  await sql`CREATE INDEX IF NOT EXISTS social_post_auto_send_idx ON social_post_queue(status, auto_send_at) WHERE auto_send_at IS NOT NULL`;
   _schemaReady = true;
 }
 
@@ -85,6 +87,11 @@ export interface SocialPost {
   linkUrl: string | null;
   imageUrl: string | null;
   scheduledFor: string | null;
+  /**
+   * If set, the social-auto-send cron will fire this post when NOW >= autoSendAt.
+   * Operator-set in /wheelhouse/social. NULL = manual-only.
+   */
+  autoSendAt: string | null;
   createdAt: string;
   updatedAt: string;
   sentAt: string | null;
@@ -107,6 +114,9 @@ function rowToPost(row: Record<string, unknown>): SocialPost {
     imageUrl: (row.image_url as string) ?? null,
     scheduledFor: row.scheduled_for
       ? new Date(row.scheduled_for as string).toISOString()
+      : null,
+    autoSendAt: row.auto_send_at
+      ? new Date(row.auto_send_at as string).toISOString()
       : null,
     createdAt: new Date(row.created_at as string).toISOString(),
     updatedAt: new Date(row.updated_at as string).toISOString(),
@@ -266,6 +276,49 @@ export async function markFailed(id: number, errorMsg: string): Promise<void> {
         updated_at = NOW()
     WHERE id = ${id}
   `;
+}
+
+/**
+ * Set or clear the auto-send time on a pending post. Pass null to revert
+ * to manual-only. No-ops on non-pending posts (status check).
+ */
+export async function setAutoSendAt(
+  id: number,
+  isoOrNull: string | null,
+): Promise<void> {
+  await ensureSchema();
+  if (isoOrNull === null) {
+    await sql`
+      UPDATE social_post_queue
+      SET auto_send_at = NULL, updated_at = NOW()
+      WHERE id = ${id} AND status = 'pending'
+    `;
+    return;
+  }
+  await sql`
+    UPDATE social_post_queue
+    SET auto_send_at = ${isoOrNull}::timestamptz, updated_at = NOW()
+    WHERE id = ${id} AND status = 'pending'
+  `;
+}
+
+/**
+ * Pick up pending posts whose auto_send_at is in the past — the
+ * /api/cron/social-auto-send cron loops over these and fires them.
+ * Limit prevents a single cron run from overwhelming Meta if a
+ * batch of scheduled times all came due at once.
+ */
+export async function getDueForAutoSend(limit = 25): Promise<SocialPost[]> {
+  await ensureSchema();
+  const result = await sql`
+    SELECT * FROM social_post_queue
+    WHERE status = 'pending'
+      AND auto_send_at IS NOT NULL
+      AND auto_send_at <= NOW()
+    ORDER BY auto_send_at ASC
+    LIMIT ${limit}
+  `;
+  return result.rows.map(rowToPost);
 }
 
 export interface QueueStats {

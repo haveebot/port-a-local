@@ -23,14 +23,54 @@ const TRIGGER_LABEL: Record<string, string> = {
   manual: "Manual",
 };
 
+/**
+ * Convert ISO timestamp → "YYYY-MM-DDTHH:MM" in operator's local TZ
+ * for use as <input type="datetime-local"> value (which is naive).
+ */
+function isoToLocalInput(iso: string | null): string {
+  if (!iso) return "";
+  const d = new Date(iso);
+  const off = d.getTimezoneOffset() * 60_000;
+  return new Date(d.getTime() - off).toISOString().slice(0, 16);
+}
+
+/** Reverse of isoToLocalInput — naive local input → ISO. */
+function localInputToIso(local: string): string | null {
+  if (!local) return null;
+  const t = new Date(local).getTime();
+  return Number.isNaN(t) ? null : new Date(t).toISOString();
+}
+
+function relativeTime(iso: string): string {
+  const ms = new Date(iso).getTime() - Date.now();
+  const future = ms >= 0;
+  const min = Math.round(Math.abs(ms) / 60_000);
+  const fmt = (n: number, unit: string) =>
+    future ? `in ${n}${unit}` : `${n}${unit} ago`;
+  if (min < 1) return future ? "imminent" : "just now";
+  if (min < 60) return fmt(min, "m");
+  const hr = Math.round(min / 60);
+  if (hr < 24) return fmt(hr, "h");
+  return fmt(Math.round(hr / 24), "d");
+}
+
 export default function SocialPostCard({ post }: Props) {
   const router = useRouter();
   const [editing, setEditing] = useState(false);
   const [caption, setCaption] = useState(post.caption);
-  const [busy, setBusy] = useState<null | "send" | "skip" | "save">(null);
+  const [scheduling, setScheduling] = useState(false);
+  const [scheduleAt, setScheduleAt] = useState(() =>
+    isoToLocalInput(post.autoSendAt),
+  );
+  const [busy, setBusy] = useState<
+    null | "send" | "skip" | "save" | "schedule" | "unschedule"
+  >(null);
   const [error, setError] = useState<string | null>(null);
 
-  async function callApi(action: "send" | "skip" | "edit", body?: object) {
+  async function callApi(
+    action: "send" | "skip" | "edit" | "schedule",
+    body?: object,
+  ) {
     const res = await fetch(`/api/wheelhouse/social/${post.id}`, {
       method: "PATCH",
       headers: { "content-type": "application/json" },
@@ -91,6 +131,42 @@ export default function SocialPostCard({ post }: Props) {
     }
   }
 
+  async function onSaveSchedule() {
+    const iso = localInputToIso(scheduleAt);
+    if (!iso) {
+      setError("Pick a date/time");
+      return;
+    }
+    if (new Date(iso).getTime() < Date.now() - 60_000) {
+      setError("Time is in the past");
+      return;
+    }
+    setBusy("schedule");
+    setError(null);
+    try {
+      await callApi("schedule", { autoSendAt: iso });
+      setScheduling(false);
+      router.refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setBusy(null);
+    }
+  }
+
+  async function onUnschedule() {
+    setBusy("unschedule");
+    setError(null);
+    try {
+      await callApi("schedule", { autoSendAt: null });
+      router.refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setBusy(null);
+    }
+  }
+
   const channelLabel =
     post.channel === "facebook"
       ? "Facebook"
@@ -116,6 +192,14 @@ export default function SocialPostCard({ post }: Props) {
         {post.scheduledFor && (
           <span className="text-[11px] text-navy-500 ml-auto">
             scheduled · {new Date(post.scheduledFor).toLocaleString()}
+          </span>
+        )}
+        {post.autoSendAt && (
+          <span
+            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide bg-emerald-50 text-emerald-700 border border-emerald-200 ml-auto"
+            title={new Date(post.autoSendAt).toLocaleString()}
+          >
+            ⏱ auto-fire {relativeTime(post.autoSendAt)}
           </span>
         )}
       </div>
@@ -147,6 +231,38 @@ export default function SocialPostCard({ post }: Props) {
       {error && (
         <div className="text-xs text-coral-700 bg-coral-50 border border-coral-200 rounded-lg px-3 py-2 mt-3">
           {error}
+        </div>
+      )}
+
+      {scheduling && (
+        <div className="flex items-center gap-2 mt-3 flex-wrap p-3 rounded-lg bg-emerald-50 border border-emerald-200">
+          <label className="text-[11px] uppercase tracking-wider font-semibold text-emerald-800 shrink-0">
+            Auto-fire at
+          </label>
+          <input
+            type="datetime-local"
+            value={scheduleAt}
+            onChange={(e) => setScheduleAt(e.target.value)}
+            className="flex-1 min-w-[12rem] text-xs bg-white border border-emerald-300 rounded-md px-2 py-1.5 font-mono text-navy-800 focus:outline-none focus:ring-2 focus:ring-emerald-300"
+          />
+          <button
+            onClick={onSaveSchedule}
+            disabled={busy !== null || !scheduleAt}
+            className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 text-white hover:bg-emerald-700 disabled:opacity-50"
+          >
+            {busy === "schedule" ? "Saving…" : "Save"}
+          </button>
+          <button
+            onClick={() => {
+              setScheduling(false);
+              setScheduleAt(isoToLocalInput(post.autoSendAt));
+              setError(null);
+            }}
+            disabled={busy !== null}
+            className="px-3 py-1.5 rounded-lg text-xs font-semibold border border-emerald-300 text-emerald-700 hover:bg-white disabled:opacity-50"
+          >
+            Cancel
+          </button>
         </div>
       )}
 
@@ -188,6 +304,24 @@ export default function SocialPostCard({ post }: Props) {
             >
               Edit
             </button>
+            {post.autoSendAt ? (
+              <button
+                onClick={onUnschedule}
+                disabled={busy !== null}
+                className="px-3 py-1.5 rounded-lg text-xs font-semibold border border-emerald-300 text-emerald-700 hover:bg-emerald-50 disabled:opacity-50"
+                title={`Cancel auto-fire (${new Date(post.autoSendAt).toLocaleString()})`}
+              >
+                {busy === "unschedule" ? "Cancelling…" : "Unschedule"}
+              </button>
+            ) : (
+              <button
+                onClick={() => setScheduling(true)}
+                disabled={busy !== null || scheduling}
+                className="px-3 py-1.5 rounded-lg text-xs font-semibold border border-sand-300 text-navy-700 hover:bg-emerald-50 hover:border-emerald-300 hover:text-emerald-700 disabled:opacity-50"
+              >
+                ⏱ Schedule
+              </button>
+            )}
             <button
               onClick={onSkip}
               disabled={busy !== null}
