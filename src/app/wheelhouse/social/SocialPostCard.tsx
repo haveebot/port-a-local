@@ -83,11 +83,13 @@ export default function SocialPostCard({ post, position, total }: Props) {
     | "unschedule"
     | "upload"
     | "removeImage"
+    | "moveUp"
+    | "moveDown"
   >(null);
   const [error, setError] = useState<string | null>(null);
 
   async function callApi(
-    action: "send" | "skip" | "edit" | "schedule" | "image",
+    action: "send" | "skip" | "edit" | "schedule" | "image" | "move",
     body?: object,
   ) {
     const res = await fetch(`/api/wheelhouse/social/${post.id}`, {
@@ -100,6 +102,19 @@ export default function SocialPostCard({ post, position, total }: Props) {
       throw new Error(data.error ?? `HTTP ${res.status}`);
     }
     return data;
+  }
+
+  async function onMove(direction: "up" | "down") {
+    setBusy(direction === "up" ? "moveUp" : "moveDown");
+    setError(null);
+    try {
+      await callApi("move", { direction });
+      router.refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setBusy(null);
+    }
   }
 
   async function onUploadFile(file: File) {
@@ -253,9 +268,31 @@ export default function SocialPostCard({ post, position, total }: Props) {
             {isUpNext ? "🔥 " : ""}
             {ordinal(position)}
           </span>
-          <span className="text-[11px] text-navy-500 font-mono">
-            {position} of {total} · #{post.id}
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="text-[11px] text-navy-500 font-mono">
+              {position} of {total} · #{post.id}
+            </span>
+            <div className="flex items-center gap-1">
+              <button
+                onClick={() => onMove("up")}
+                disabled={position === 1 || busy !== null}
+                title="Move up"
+                aria-label="Move up"
+                className="px-2 py-1 text-xs rounded border border-sand-300 hover:border-navy-400 hover:bg-white disabled:opacity-30 disabled:cursor-not-allowed"
+              >
+                {busy === "moveUp" ? "…" : "↑"}
+              </button>
+              <button
+                onClick={() => onMove("down")}
+                disabled={position === total || busy !== null}
+                title="Move down"
+                aria-label="Move down"
+                className="px-2 py-1 text-xs rounded border border-sand-300 hover:border-navy-400 hover:bg-white disabled:opacity-30 disabled:cursor-not-allowed"
+              >
+                {busy === "moveDown" ? "…" : "↓"}
+              </button>
+            </div>
+          </div>
         </div>
       )}
       <div className="flex items-center gap-2 mb-3 flex-wrap">

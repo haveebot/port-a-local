@@ -9,6 +9,7 @@ import {
   setAutoSendAt,
   setImageUrl,
   duplicatePost,
+  moveQueueEntry,
   type SocialPost,
 } from "@/data/social-post-store";
 import { postToFacebook, postToInstagram } from "@/lib/metaGraph";
@@ -28,10 +29,11 @@ export const runtime = "nodejs";
  */
 
 interface PatchBody {
-  action?: "send" | "skip" | "edit" | "schedule" | "image" | "resend";
+  action?: "send" | "skip" | "edit" | "schedule" | "image" | "resend" | "move";
   caption?: string;
   autoSendAt?: string | null;
   imageUrl?: string | null;
+  direction?: "up" | "down";
 }
 
 async function getCurrentUser(req: NextRequest): Promise<string> {
@@ -118,6 +120,18 @@ export async function PATCH(
       { error: "not_pending", currentStatus: post.status },
       { status: 409 },
     );
+  }
+
+  if (body.action === "move") {
+    if (body.direction !== "up" && body.direction !== "down") {
+      return NextResponse.json(
+        { error: "invalid_direction", expected: "up | down" },
+        { status: 400 },
+      );
+    }
+    await moveQueueEntry(id, body.direction);
+    const updated = await getById(id);
+    return NextResponse.json({ post: updated, moved: body.direction });
   }
 
   const who = await getCurrentUser(req);

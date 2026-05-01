@@ -55,9 +55,15 @@ async function ensureSchema(): Promise<void> {
     )
   `;
   await sql`ALTER TABLE social_post_queue ADD COLUMN IF NOT EXISTS auto_send_at TIMESTAMPTZ`;
+  await sql`ALTER TABLE social_post_queue ADD COLUMN IF NOT EXISTS display_order INTEGER NOT NULL DEFAULT 0`;
   await sql`CREATE INDEX IF NOT EXISTS social_post_status_idx ON social_post_queue(status, created_at DESC)`;
   await sql`CREATE INDEX IF NOT EXISTS social_post_trigger_idx ON social_post_queue(trigger_type, trigger_ref, channel)`;
   await sql`CREATE INDEX IF NOT EXISTS social_post_auto_send_idx ON social_post_queue(status, auto_send_at) WHERE auto_send_at IS NOT NULL`;
+  await sql`CREATE INDEX IF NOT EXISTS social_post_pending_order_idx ON social_post_queue(status, display_order) WHERE status = 'pending'`;
+  // Backfill display_order for existing rows that have it at default 0 —
+  // idempotent (no-op once set). Mirrors the row id so the natural sort
+  // preserves existing order without disturbing already-reordered rows.
+  await sql`UPDATE social_post_queue SET display_order = id WHERE display_order = 0`;
   _schemaReady = true;
 }
 
@@ -92,6 +98,12 @@ export interface SocialPost {
    * Operator-set in /wheelhouse/social. NULL = manual-only.
    */
   autoSendAt: string | null;
+  /**
+   * Operator-controlled order within the pending list. Lower = earlier.
+   * Defaults to row id; ↑/↓ buttons in the UI swap this with the
+   * adjacent pending row.
+   */
+  displayOrder: number;
   createdAt: string;
   updatedAt: string;
   sentAt: string | null;
@@ -118,6 +130,7 @@ function rowToPost(row: Record<string, unknown>): SocialPost {
     autoSendAt: row.auto_send_at
       ? new Date(row.auto_send_at as string).toISOString()
       : null,
+    displayOrder: Number(row.display_order ?? 0),
     createdAt: new Date(row.created_at as string).toISOString(),
     updatedAt: new Date(row.updated_at as string).toISOString(),
     sentAt: row.sent_at
@@ -184,10 +197,53 @@ export async function getPending(limit = 50): Promise<SocialPost[]> {
     SELECT * FROM social_post_queue
     WHERE status = 'pending'
     ORDER BY
-      COALESCE(scheduled_for, created_at) ASC
+      display_order ASC,
+      id ASC
     LIMIT ${limit}
   `;
   return result.rows.map(rowToPost);
+}
+
+/**
+ * Swap a pending post with the adjacent pending row (up or down) by
+ * display_order. Mirrors moveGlossaryEntry's two-step swap pattern.
+ * Operator clicks ↑/↓ on a SocialPostCard.
+ *
+ * If there's no neighbor in that direction (already first / last),
+ * no-op silently. Status filter restricts to pending so a sent row
+ * doesn't intervene in the swap chain.
+ */
+export async function moveQueueEntry(
+  id: number,
+  direction: "up" | "down",
+): Promise<void> {
+  await ensureSchema();
+  const entry = await getById(id);
+  if (!entry) return;
+  if (entry.status !== "pending") return;
+  const cmp = direction === "up" ? "<" : ">";
+  const orderDir = direction === "up" ? "DESC" : "ASC";
+  const { rows } = await sql.query(
+    `SELECT id, display_order FROM social_post_queue
+     WHERE status = 'pending' AND display_order ${cmp} $1
+     ORDER BY display_order ${orderDir} LIMIT 1`,
+    [entry.displayOrder],
+  );
+  const neighbor = rows[0] as
+    | { id: string | number; display_order: number }
+    | undefined;
+  if (!neighbor) return;
+  const neighborId = Number(neighbor.id);
+  await sql`
+    UPDATE social_post_queue
+    SET display_order = ${neighbor.display_order}, updated_at = NOW()
+    WHERE id = ${id}
+  `;
+  await sql`
+    UPDATE social_post_queue
+    SET display_order = ${entry.displayOrder}, updated_at = NOW()
+    WHERE id = ${neighborId}
+  `;
 }
 
 export async function getRecent(
