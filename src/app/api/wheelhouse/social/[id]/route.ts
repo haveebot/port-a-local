@@ -8,6 +8,7 @@ import {
   updateCaption,
   setAutoSendAt,
   setImageUrl,
+  duplicatePost,
   type SocialPost,
 } from "@/data/social-post-store";
 import { postToFacebook, postToInstagram } from "@/lib/metaGraph";
@@ -27,7 +28,7 @@ export const runtime = "nodejs";
  */
 
 interface PatchBody {
-  action?: "send" | "skip" | "edit" | "schedule" | "image";
+  action?: "send" | "skip" | "edit" | "schedule" | "image" | "resend";
   caption?: string;
   autoSendAt?: string | null;
   imageUrl?: string | null;
@@ -94,6 +95,24 @@ export async function PATCH(
   if (!post) {
     return NextResponse.json({ error: "not_found" }, { status: 404 });
   }
+
+  // Resend works on non-pending posts — operator-side fix for sent rows
+  // that need to be redone (broken FB OG cache, deleted on FB, etc.).
+  // Other actions require pending status.
+  if (body.action === "resend") {
+    if (post.status === "pending") {
+      return NextResponse.json(
+        { error: "source_already_pending", detail: "Just send/edit it directly." },
+        { status: 409 },
+      );
+    }
+    const dup = await duplicatePost(id);
+    if (!dup) {
+      return NextResponse.json({ error: "duplicate_failed" }, { status: 500 });
+    }
+    return NextResponse.json({ post: dup, sourceId: id }, { status: 201 });
+  }
+
   if (post.status !== "pending") {
     return NextResponse.json(
       { error: "not_pending", currentStatus: post.status },

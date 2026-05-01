@@ -279,6 +279,33 @@ export async function markFailed(id: number, errorMsg: string): Promise<void> {
 }
 
 /**
+ * Duplicate a sent/skipped/failed post back into pending. Used by the
+ * Resend button on the Recent list — operator-side fix when a post was
+ * sent but needs to be redone (e.g. broken FB OG cache, deleted on FB,
+ * caption typo caught after send). Always creates a new row (never
+ * idempotent against the source) so resend-after-resend works.
+ */
+export async function duplicatePost(sourceId: number): Promise<SocialPost | null> {
+  await ensureSchema();
+  const src = await getById(sourceId);
+  if (!src) return null;
+  const stamp = Date.now().toString(36);
+  const newRef = src.triggerRef
+    ? `${src.triggerRef}:resend-${stamp}`
+    : `resend-${stamp}`;
+  const result = await sql`
+    INSERT INTO social_post_queue
+      (trigger_type, trigger_ref, channel, caption, link_url, image_url, metadata)
+    VALUES
+      ('manual', ${newRef}, ${src.channel}, ${src.caption},
+       ${src.linkUrl}, ${src.imageUrl},
+       ${JSON.stringify({ resend_of: sourceId })}::jsonb)
+    RETURNING *
+  `;
+  return rowToPost(result.rows[0]);
+}
+
+/**
  * Set or clear the custom image URL on a pending post. When set, the
  * Send path uses Facebook PHOTO mode (POST /photos with url+caption)
  * instead of LINK mode (POST /feed with message+link). Operator picks

@@ -8,6 +8,7 @@ import {
 } from "@/data/social-post-store";
 import { isMetaConfigured } from "@/lib/metaGraph";
 import SocialPostCard from "./SocialPostCard";
+import ResendButton from "./ResendButton";
 
 export const dynamic = "force-dynamic";
 
@@ -141,8 +142,13 @@ export default async function SocialQueuePage() {
             </p>
           ) : (
             <div className="space-y-3">
-              {pending.map((p) => (
-                <SocialPostCard key={p.id} post={p} />
+              {pending.map((p, i) => (
+                <SocialPostCard
+                  key={p.id}
+                  post={p}
+                  position={i + 1}
+                  total={pending.length}
+                />
               ))}
             </div>
           )}
@@ -164,18 +170,22 @@ export default async function SocialQueuePage() {
                   className="py-3 flex items-center gap-3 text-sm"
                 >
                   <StatusPill status={p.status} />
-                  <span className="text-xs text-navy-500 font-mono w-16 shrink-0">
+                  <span className="text-xs text-navy-500 font-mono w-12 shrink-0">
                     {p.channel === "facebook" ? "FB" : p.channel === "instagram" ? "IG" : "X"}
                   </span>
+                  <span className="text-[11px] text-navy-400 font-mono shrink-0">
+                    #{p.id}
+                  </span>
                   <span className="text-navy-800 truncate min-w-0 flex-1">
-                    {p.caption.slice(0, 100)}
-                    {p.caption.length > 100 ? "…" : ""}
+                    {p.caption.slice(0, 90)}
+                    {p.caption.length > 90 ? "…" : ""}
                   </span>
                   <span className="text-xs text-navy-500 whitespace-nowrap shrink-0">
                     {p.sentAt
                       ? `sent ${relativeTime(p.sentAt)}`
                       : relativeTime(p.createdAt)}
                   </span>
+                  {p.status !== "pending" && <ResendButton postId={p.id} />}
                 </div>
               ))}
             </div>

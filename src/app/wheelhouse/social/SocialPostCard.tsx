@@ -6,6 +6,17 @@ import type { SocialPost } from "@/data/social-post-store";
 
 interface Props {
   post: SocialPost;
+  /** 1-based position in the pending list. Renders a "Up next" / "2 of 10" pill. */
+  position?: number;
+  /** Total in the pending list — paired with position for the "X of Y" label. */
+  total?: number;
+}
+
+function ordinal(n: number): string {
+  if (n === 1) return "Up next";
+  if (n === 2) return "On deck";
+  if (n === 3) return "After that";
+  return `${n}th up`;
 }
 
 const TRIGGER_LABEL: Record<string, string> = {
@@ -54,7 +65,7 @@ function relativeTime(iso: string): string {
   return fmt(Math.round(hr / 24), "d");
 }
 
-export default function SocialPostCard({ post }: Props) {
+export default function SocialPostCard({ post, position, total }: Props) {
   const router = useRouter();
   const [editing, setEditing] = useState(false);
   const [caption, setCaption] = useState(post.caption);
@@ -221,8 +232,32 @@ export default function SocialPostCard({ post }: Props) {
         : "X";
   const triggerLabel = TRIGGER_LABEL[post.triggerType] ?? post.triggerType;
 
+  const isUpNext = position === 1;
   return (
-    <div className="border border-sand-300 rounded-xl p-4 bg-sand-50/50">
+    <div
+      className={`border rounded-xl p-4 ${
+        isUpNext
+          ? "border-coral-400 bg-coral-50/40 ring-1 ring-coral-200"
+          : "border-sand-300 bg-sand-50/50"
+      }`}
+    >
+      {position !== undefined && total !== undefined && (
+        <div className="flex items-center justify-between gap-2 mb-2">
+          <span
+            className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide ${
+              isUpNext
+                ? "bg-coral-500 text-white"
+                : "bg-navy-100 text-navy-700"
+            }`}
+          >
+            {isUpNext ? "🔥 " : ""}
+            {ordinal(position)}
+          </span>
+          <span className="text-[11px] text-navy-500 font-mono">
+            {position} of {total} · #{post.id}
+          </span>
+        </div>
+      )}
       <div className="flex items-center gap-2 mb-3 flex-wrap">
         <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide bg-coral-50 text-coral-700 border border-coral-200">
           {triggerLabel}
