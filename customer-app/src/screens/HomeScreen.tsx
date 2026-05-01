@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useMemo } from "react";
 import {
   View,
   Text,
@@ -24,8 +24,28 @@ import { useCoastalConditions } from "../lib/coastalConditions";
 type Nav = NativeStackScreenProps<BrowseStackParamList, "Home">["navigation"];
 type Props = NativeStackScreenProps<BrowseStackParamList, "Home">;
 
+// Hoisted helper function (Fix 2)
+const accentToColor = (
+  accent: "coral" | "gold" | "ocean" | "seafoam" | "sunset"
+) => {
+  switch (accent) {
+    case "coral":
+      return colors.coral[500];
+    case "gold":
+      return colors.gold[500];
+    case "ocean":
+      return colors.ocean[500];
+    case "seafoam":
+      return colors.seafoam[500];
+    case "sunset":
+      return colors.sunset[500];
+  }
+};
+
 export default function HomeScreen({ navigation }: Props) {
-  const featured = businesses.filter((b) => b.featured).slice(0, 6);
+  // Memoize featured calculation (Fix 1)
+  const featured = useMemo(() => businesses.filter((b) => b.featured).slice(0, 6), []);
+  
   const insets = useSafeAreaInsets();
   const { conditions, refresh } = useCoastalConditions();
   const [refreshing, setRefreshing] = useState(false);
@@ -38,23 +58,6 @@ export default function HomeScreen({ navigation }: Props) {
       setRefreshing(false);
     }
   }, [refresh]);
-
-  const accentToColor = (
-    accent: "coral" | "gold" | "ocean" | "seafoam" | "sunset"
-  ) => {
-    switch (accent) {
-      case "coral":
-        return colors.coral[500];
-      case "gold":
-        return colors.gold[500];
-      case "ocean":
-        return colors.ocean[500];
-      case "seafoam":
-        return colors.seafoam[500];
-      case "sunset":
-        return colors.sunset[500];
-    }
-  };
 
   return (
     <ScrollView
@@ -115,6 +118,8 @@ export default function HomeScreen({ navigation }: Props) {
                   });
                 }
               }}
+              accessibilityRole="button"
+              accessibilityLabel={`${s.title}: ${s.tagline}`}
             >
               <View
                 style={[
@@ -150,6 +155,8 @@ export default function HomeScreen({ navigation }: Props) {
               onPress={() =>
                 navigation.navigate("Category", { slug: cat.slug })
               }
+              accessibilityRole="button"
+              accessibilityLabel={cat.name}
             >
               <View style={styles.catChipIconWrap}>
                 <Text style={styles.catChipIcon}>{cat.icon}</Text>
@@ -176,6 +183,8 @@ export default function HomeScreen({ navigation }: Props) {
                 preview: featured[0],
               })
             }
+            accessibilityRole="button"
+            accessibilityLabel={`View details for ${featured[0].name}, a featured local business`}
           >
             <View style={styles.heroFeaturedImage}>
               <Text style={styles.heroFeaturedEmoji}>
@@ -215,6 +224,8 @@ export default function HomeScreen({ navigation }: Props) {
                       preview: b,
                     })
                   }
+                  accessibilityRole="button"
+                  accessibilityLabel={`View details for ${b.name}, a local business`}
                 >
                   <View style={styles.featuredAccent} />
                   <View style={styles.featuredBody}>

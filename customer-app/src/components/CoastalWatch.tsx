@@ -131,7 +131,7 @@ export default function CoastalWatch({ conditions }: Props) {
           <LiveDot reduceMotion={reduceMotion} />
           <Text style={styles.headerLabel} numberOfLines={1}>COASTAL WATCH · STATION 04</Text>
         </View>
-        <Text style={styles.coords} numberOfLines={1}>27°50′N · 97°03′W</Text>
+        <Text style={styles.coords} numberOfLines={1} accessibilityLabel="Coordinates: 27 degrees 50 minutes North, 97 degrees 3 minutes West">27°50′N · 97°03′W</Text>
       </View>
 
       {/* Topographic chart of Mustang Island */}
@@ -216,19 +216,19 @@ export default function CoastalWatch({ conditions }: Props) {
         ))}
         <View style={styles.instrumentRow}>
           <View style={styles.instrumentCol}>
-            <Text style={styles.instrumentValue}>{fmtTemp(conditions?.airTempF ?? null, "76°F")}</Text>
+            <Text style={styles.instrumentValue} accessibilityLabel={`Air temperature: ${fmtTemp(conditions?.airTempF ?? null, "76°F")}`}>{fmtTemp(conditions?.airTempF ?? null, "76°F")}</Text>
             <Text style={styles.instrumentLabel}>AIR</Text>
           </View>
           <View style={styles.instrumentCol}>
-            <Text style={styles.instrumentValue}>{fmtTemp(conditions?.waterTempF ?? null, "71°F")}</Text>
+            <Text style={styles.instrumentValue} accessibilityLabel={`Water temperature: ${fmtTemp(conditions?.waterTempF ?? null, "71°F")}`}>{fmtTemp(conditions?.waterTempF ?? null, "71°F")}</Text>
             <Text style={styles.instrumentLabel}>WATER</Text>
           </View>
           <View style={styles.instrumentCol}>
-            <Text style={styles.instrumentValue}>{tide.value}</Text>
+            <Text style={styles.instrumentValue} accessibilityLabel={`Tide level: ${tide.value}, ${tide.label}`}>{tide.value}</Text>
             <Text style={styles.instrumentLabel}>{tide.label}</Text>
           </View>
           <View style={styles.instrumentCol}>
-            <Text style={styles.instrumentValue}>{sunDisplay.value}</Text>
+            <Text style={styles.instrumentValue} accessibilityLabel={`Next sun event: ${sunDisplay.value}, ${sunDisplay.label}`}>{sunDisplay.value}</Text>
             <Text style={styles.instrumentLabel}>{sunDisplay.label}</Text>
           </View>
         </View>

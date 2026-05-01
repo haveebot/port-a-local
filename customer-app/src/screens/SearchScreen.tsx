@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
@@ -8,11 +8,14 @@ import {
   ScrollView,
   Keyboard,
 } from "react-native";
+import * as SecureStore from "expo-secure-store";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { colors } from "../lib/theme";
 import { businesses, Business } from "@palocal/data/businesses";
 import { categories } from "@palocal/data/categories";
+
+const RECENT_SEARCHES_KEY = "pal-recent-searches-v1";
 
 const SUGGESTIONS = [
   "fish tacos",
@@ -26,7 +29,8 @@ const SUGGESTIONS = [
 
 export default function SearchScreen() {
   const navigation = useNavigation<any>();
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(""); // Current search input
+  const [recentSearches, setRecentSearches] = useState<string[]>([]);
 
   const q = query.trim().toLowerCase();
   const results: Business[] = q
@@ -41,6 +45,39 @@ export default function SearchScreen() {
         )
         .slice(0, 25)
     : [];
+
+  // --- Persistence Logic ---
+  const updateRecentSearches = useCallback(async (newQuery: string) => {
+    if (!newQuery) return;
+
+    let currentSearches: string[] = [];
+    try {
+      const raw = await SecureStore.getItemAsync(RECENT_SEARCHES_KEY);
+      if (raw) {
+        currentSearches = JSON.parse(raw) as string[];
+      }
+    } catch (e) {
+      console.error("Failed to load recent searches:", e);
+    }
+
+    // 1. Filter out the current query if it already exists
+    const filteredSearches = currentSearches.filter(s => s !== newQuery);
+
+    // 2. Build the new list: [newQuery, ...filteredSearches]
+    const updatedSearches = [newQuery, ...filteredSearches];
+
+    // 3. Ensure uniqueness and limit to 5
+    const uniqueSearches = Array.from(new Set(updatedSearches)).slice(0, 5);
+
+    // 4. Persist and update state
+    await SecureStore.setItemAsync(RECENT_SEARCHES_KEY, JSON.stringify(uniqueSearches));
+    setRecentSearches(uniqueSearches);
+  }, []);
+
+  // Load recent searches on mount (Improvement)
+  useEffect(() => {
+    updateRecentSearches("");
+  }, [updateRecentSearches]);
 
   const showSuggestions = q.length === 0;
 
@@ -60,13 +97,16 @@ export default function SearchScreen() {
           />
           <TextInput
             value={query}
-            onChangeText={setQuery}
+            onChangeText={(text) => {
+              setQuery(text);
+            }}
             placeholder="Gully it..."
             placeholderTextColor={colors.navy[300]}
             style={styles.input}
             autoCorrect={false}
             autoCapitalize="none"
             returnKeyType="search"
+            onSubmitEditing={() => updateRecentSearches(query)} // Bug 2 fix: Update on submit
           />
           {query.length > 0 && (
             <TouchableOpacity
@@ -87,7 +127,8 @@ export default function SearchScreen() {
           <>
             <Text style={styles.sectionLabel}>Try</Text>
             <View style={styles.chips}>
-              {SUGGESTIONS.map((s) => (
+              {/* Use recent searches if available, otherwise use static suggestions */}
+              {(recentSearches.length > 0 ? recentSearches : SUGGESTIONS).map((s) => (
                 <TouchableOpacity
                   key={s}
                   style={styles.chip}
@@ -143,6 +184,8 @@ export default function SearchScreen() {
                 key={b.slug}
                 style={styles.resultRow}
                 onPress={() => {
+                  // Bug 2 fix: Update recent searches on navigation
+                  updateRecentSearches(query);
                   Keyboard.dismiss();
                   navigation
                     .getParent()
@@ -167,10 +210,18 @@ export default function SearchScreen() {
             ))}
             {results.length === 0 && (
               <View style={styles.empty}>
+                <Ionicons name="search-outline" size={50} color={colors.navy[300]} />
+                <Text style={styles.emptyTitle}>No results found for "{q}"</Text>
                 <Text style={styles.emptyText}>
-                  Nothing matched. Try a category or one of the suggestions
-                  above.
+                  We couldn't find any businesses matching "{q}".
+                  Try broadening your search, checking spelling, or browsing a category above.
                 </Text>
+                <TouchableOpacity 
+                  onPress={() => setQuery("")} 
+                  style={{ marginTop: 15 }}
+                >
+                  <Text style={styles.emptyLink}>Clear search</Text>
+                </TouchableOpacity>
               </View>
             )}
           </>
@@ -268,5 +319,11 @@ const styles = StyleSheet.create({
   resultName: { fontSize: 15, fontWeight: "700", color: colors.navy[900] },
   resultMeta: { fontSize: 12, color: colors.navy[500], marginTop: 2 },
   empty: { padding: 30, alignItems: "center" },
-  emptyText: { color: colors.navy[400], textAlign: "center", lineHeight: 20 },
+  emptyTitle: { fontSize: 20, fontWeight: "700", color: colors.navy[700], marginBottom: 8 },
+  emptyText: { color: colors.navy[400], textAlign: "center", lineHeight: 22, fontSize: 14 },
+  emptyLink: { 
+    color: colors.coral[500], 
+    fontWeight: "600", 
+    marginTop: 5 
+  }
 });

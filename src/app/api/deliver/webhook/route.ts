@@ -6,6 +6,10 @@ import {
   markOrderPaid,
 } from "@/data/delivery-store";
 import {
+  isEventProcessed,
+  markEventProcessed,
+} from "@/data/stripe-events-store";
+import {
   dispatchDriversForOrder,
   mirrorToWheelhouse,
 } from "@/lib/deliverDispatch";
@@ -52,6 +56,13 @@ export async function POST(req: NextRequest) {
 
   if (event.type !== "checkout.session.completed") {
     return NextResponse.json({ ok: true, ignored: event.type });
+  }
+
+  // --- Idempotency Check ---
+  const eventId = event.id;
+  if (await isEventProcessed(eventId)) {
+    console.warn(`[deliver webhook] Event ${eventId} already processed. Skipping.`);
+    return NextResponse.json({ ok: true, message: "already processed" });
   }
 
   const session = event.data.object as Stripe.Checkout.Session;
@@ -116,8 +127,14 @@ export async function POST(req: NextRequest) {
       amountCents: paid.totalCents,
       summary: `${restName} · ${itemCount} item${itemCount === 1 ? "" : "s"}`,
       customerDisplay: formatCustomerDisplay(paid.customer.name),
-    }).catch((err) => console.error("[deliver/webhook] super-admin ping failed:", err));
+    }).catch((err) => {
+      console.error("[deliver/webhook] super-admin ping failed:", err);
+      // Do not fail the webhook due to ping failure
+    });
   }
+
+  // Mark the event as processed ONLY after successful execution of all business logic
+  await markEventProcessed(eventId);
 
   return NextResponse.json({
     ok: true,
