@@ -9,9 +9,15 @@ import {
 } from "@/data/alerts-store";
 import { pushSiteBanner } from "@/lib/emergencyPush";
 
-async function getWheelhouseUser(): Promise<string | null> {
+async function getWheelhouseUser(req?: NextRequest): Promise<string | null> {
   const cookieStore = await cookies();
-  return cookieStore.get("wheelhouse_who")?.value ?? null;
+  const cookie = cookieStore.get("wheelhouse_who")?.value;
+  if (cookie) return cookie;
+  // Bearer-auth fallback — middleware injects x-wheelhouse-agent on valid
+  // tokens, lets cross-project agents (Havee, etc.) activate alerts too.
+  const agent = req?.headers.get("x-wheelhouse-agent");
+  if (agent) return agent;
+  return null;
 }
 
 export const dynamic = "force-dynamic";
@@ -31,8 +37,8 @@ export const runtime = "nodejs";
  * Dismisses the named alert.
  */
 
-export async function GET() {
-  const user = await getWheelhouseUser();
+export async function GET(req: NextRequest) {
+  const user = await getWheelhouseUser(req);
   if (!user) {
     return NextResponse.json({ error: "Not signed in" }, { status: 403 });
   }
@@ -44,7 +50,7 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
-  const user = await getWheelhouseUser();
+  const user = await getWheelhouseUser(req);
   if (!user) {
     return NextResponse.json({ error: "Not signed in" }, { status: 403 });
   }
@@ -92,7 +98,7 @@ export async function POST(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
-  const user = await getWheelhouseUser();
+  const user = await getWheelhouseUser(req);
   if (!user) {
     return NextResponse.json({ error: "Not signed in" }, { status: 403 });
   }
