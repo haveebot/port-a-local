@@ -59,12 +59,25 @@ export function isMetaConfigured(): {
 interface PostToFacebookParams {
   message: string;
   link?: string;
+  /**
+   * If set, post as a PHOTO (with caption) instead of a link card.
+   * Photo mode: caption is the message, image_url uploaded to FB,
+   * link goes in caption text only (no OG card preview).
+   * Link mode (default): FB scrapes OG image from the link URL.
+   */
+  imageUrl?: string;
 }
 
 /**
- * Post a text + link update to the FB Page feed. FB will scrape the
- * link's OG metadata for the preview card (so our /events/[slug]
- * highlight OG ships through automatically).
+ * Post to the FB Page feed. Two modes:
+ *
+ * - **Link mode** (default): POST /{page_id}/feed with message + link.
+ *   FB scrapes the link's OG metadata for the preview card.
+ *
+ * - **Photo mode** (when imageUrl is set): POST /{page_id}/photos with
+ *   url + caption. Higher organic reach historically; no link preview
+ *   card (link still goes in caption text). Used when operator uploads
+ *   a custom image.
  */
 export async function postToFacebook(
   p: PostToFacebookParams,
@@ -74,8 +87,10 @@ export async function postToFacebook(
 
   if (!token || !pageId) {
     console.log("[metaGraph] FB stub mode — would post:", {
-      message: p.message,
+      mode: p.imageUrl ? "photo" : "link",
+      message: p.message.slice(0, 80) + "…",
       link: p.link,
+      imageUrl: p.imageUrl,
     });
     return {
       ok: true,
@@ -85,6 +100,46 @@ export async function postToFacebook(
     };
   }
 
+  // PHOTO MODE — POST /{page_id}/photos with url + caption
+  if (p.imageUrl) {
+    const params = new URLSearchParams();
+    params.set("url", p.imageUrl);
+    params.set("caption", p.message);
+    params.set("published", "true");
+    params.set("access_token", token);
+    try {
+      const res = await fetch(`${GRAPH_BASE}/${pageId}/photos`, {
+        method: "POST",
+        body: params,
+      });
+      const data = (await res.json()) as {
+        id?: string;
+        post_id?: string;
+        error?: { message?: string };
+      };
+      if (!res.ok || !data.post_id) {
+        return {
+          ok: false,
+          error:
+            data.error?.message ?? `FB photo post failed (HTTP ${res.status})`,
+        };
+      }
+      const postId = data.post_id;
+      const postPath = postId.includes("_") ? postId.split("_")[1] : postId;
+      return {
+        ok: true,
+        externalPostId: postId,
+        externalPostUrl: `https://www.facebook.com/${pageId}/posts/${postPath}`,
+      };
+    } catch (err) {
+      return {
+        ok: false,
+        error: `fetch error: ${err instanceof Error ? err.message : String(err)}`,
+      };
+    }
+  }
+
+  // LINK MODE — original behavior
   const params = new URLSearchParams();
   params.set("message", p.message);
   if (p.link) params.set("link", p.link);
@@ -110,6 +165,56 @@ export async function postToFacebook(
       externalPostId: postId,
       externalPostUrl: `https://www.facebook.com/${pageId}/posts/${postPath}`,
     };
+  } catch (err) {
+    return {
+      ok: false,
+      error: `fetch error: ${err instanceof Error ? err.message : String(err)}`,
+    };
+  }
+}
+
+/**
+ * Inspect a previously-published FB post — returns its current visibility,
+ * privacy, targeting, and engagement metrics. Used by the Wheelhouse
+ * diagnostic endpoint when an operator wants to know why a post isn't
+ * visible to a specific viewer.
+ */
+export async function inspectFacebookPost(externalPostId: string): Promise<{
+  ok: boolean;
+  data?: Record<string, unknown>;
+  error?: string;
+}> {
+  const token = getToken();
+  if (!token) return { ok: false, error: "META_PAGE_ACCESS_TOKEN not set" };
+  const fields = [
+    "id",
+    "is_published",
+    "is_hidden",
+    "is_expired",
+    "privacy",
+    "targeting",
+    "feed_targeting",
+    "permalink_url",
+    "created_time",
+    "shares",
+    "reactions.summary(true)",
+    "comments.summary(true)",
+  ].join(",");
+  try {
+    const res = await fetch(
+      `${GRAPH_BASE}/${externalPostId}?fields=${encodeURIComponent(fields)}&access_token=${encodeURIComponent(token)}`,
+    );
+    const data = (await res.json()) as Record<string, unknown> & {
+      error?: { message?: string };
+    };
+    if (!res.ok) {
+      return {
+        ok: false,
+        error:
+          (data.error?.message as string | undefined) ?? `HTTP ${res.status}`,
+      };
+    }
+    return { ok: true, data };
   } catch (err) {
     return {
       ok: false,

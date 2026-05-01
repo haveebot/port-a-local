@@ -7,6 +7,7 @@ import {
   markFailed,
   updateCaption,
   setAutoSendAt,
+  setImageUrl,
   type SocialPost,
 } from "@/data/social-post-store";
 import { postToFacebook, postToInstagram } from "@/lib/metaGraph";
@@ -26,9 +27,10 @@ export const runtime = "nodejs";
  */
 
 interface PatchBody {
-  action?: "send" | "skip" | "edit" | "schedule";
+  action?: "send" | "skip" | "edit" | "schedule" | "image";
   caption?: string;
   autoSendAt?: string | null;
+  imageUrl?: string | null;
 }
 
 async function getCurrentUser(req: NextRequest): Promise<string> {
@@ -52,6 +54,7 @@ async function sendPost(post: SocialPost): Promise<{
     return postToFacebook({
       message: post.caption,
       link: post.linkUrl ?? undefined,
+      imageUrl: post.imageUrl ?? undefined,
     });
   }
   if (post.channel === "instagram") {
@@ -114,6 +117,28 @@ export async function PATCH(
 
   if (body.action === "skip") {
     await markSkipped(id, who);
+    const updated = await getById(id);
+    return NextResponse.json({ post: updated });
+  }
+
+  if (body.action === "image") {
+    if (body.imageUrl !== null && typeof body.imageUrl !== "string") {
+      return NextResponse.json(
+        { error: "invalid_imageUrl" },
+        { status: 400 },
+      );
+    }
+    if (typeof body.imageUrl === "string") {
+      try {
+        new URL(body.imageUrl);
+      } catch {
+        return NextResponse.json(
+          { error: "imageUrl_not_a_url" },
+          { status: 400 },
+        );
+      }
+    }
+    await setImageUrl(id, body.imageUrl);
     const updated = await getById(id);
     return NextResponse.json({ post: updated });
   }

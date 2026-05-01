@@ -279,6 +279,24 @@ export async function markFailed(id: number, errorMsg: string): Promise<void> {
 }
 
 /**
+ * Set or clear the custom image URL on a pending post. When set, the
+ * Send path uses Facebook PHOTO mode (POST /photos with url+caption)
+ * instead of LINK mode (POST /feed with message+link). Operator picks
+ * via the /wheelhouse/social UI's image-mode toggle.
+ */
+export async function setImageUrl(
+  id: number,
+  urlOrNull: string | null,
+): Promise<void> {
+  await ensureSchema();
+  await sql`
+    UPDATE social_post_queue
+    SET image_url = ${urlOrNull}, updated_at = NOW()
+    WHERE id = ${id} AND status = 'pending'
+  `;
+}
+
+/**
  * Set or clear the auto-send time on a pending post. Pass null to revert
  * to manual-only. No-ops on non-pending posts (status check).
  */
