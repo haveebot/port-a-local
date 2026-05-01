@@ -3,6 +3,7 @@ import "./globals.css";
 import GullyPalette from "@/components/GullyPalette";
 import { WebsiteSchema, OrganizationSchema } from "@/components/StructuredData";
 import EmergencyBanner from "@/components/EmergencyBanner";
+import PalBannerHeightSync from "@/components/PalBannerHeightSync";
 import VisitorHeartbeat from "@/components/VisitorHeartbeat";
 import AnalyticsWrapper from "@/components/AnalyticsWrapper";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -94,10 +95,13 @@ export default async function RootLayout({
       >
         {/* Site-wide emergency banner. Renders nothing when no
             active alert (dormant baseline). Fixed at top-0 z-[55],
-            above Navigation (z-50). When active, layout sets
-            --pal-banner-h CSS var which Navigation reads to shift
-            its fixed top down. */}
+            above Navigation (z-50). When active, body has the
+            .pal-has-banner class which sets a CSS-only fallback
+            for --pal-banner-h; PalBannerHeightSync (client) then
+            measures and writes the EXACT pixel height post-hydration
+            so the nav offset matches the banner perfectly. */}
         <EmergencyBanner />
+        {activeAlert && <PalBannerHeightSync />}
         {children}
         <GullyPalette />
         <VisitorHeartbeat />
