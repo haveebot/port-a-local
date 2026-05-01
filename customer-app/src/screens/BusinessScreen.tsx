@@ -8,6 +8,7 @@ import {
   Linking,
   Alert,
 } from "react-native";
+import * as Clipboard from "expo-clipboard";
 import { Ionicons } from "@expo/vector-icons";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { colors } from "../lib/theme";
@@ -34,23 +35,61 @@ export default function BusinessScreen({ route, navigation }: Props) {
 
   const callPhone = () => {
     const tel = business.phone.replace(/[^0-9+]/g, "");
-    Linking.openURL(`tel:${tel}`).catch(() =>
-      Alert.alert("Could not place call")
-    );
+    try {
+      Linking.openURL(`tel:${tel}`);
+    } catch (e) {
+      console.error("Failed to open phone URL:", e);
+      Alert.alert(
+        "Error",
+        "Couldn't open your phone app"
+      );
+    }
   };
 
   const openMap = () => {
     const q = encodeURIComponent(business.address);
-    Linking.openURL(`http://maps.apple.com/?q=${q}`).catch(() =>
-      Alert.alert("Could not open Maps")
-    );
+    const mapUrl = `http://maps.apple.com/?q=${q}`;
+
+    try {
+      Linking.openURL(mapUrl);
+    } catch (e) {
+      console.error("Failed to open map URL:", e);
+      Alert.alert(
+        "Couldn't open Maps",
+        `Try the address: ${business.address}`,
+        [
+          {
+            text: "Copy Address",
+            onPress: async () => {
+              await Clipboard.setStringAsync(business.address);
+              Alert.alert("Copied", "The address is now in your clipboard.");
+            },
+          },
+        ]
+      );
+    }
   };
 
   const openSite = () => {
     if (!business.website) return;
-    Linking.openURL(business.website).catch(() =>
-      Alert.alert("Could not open website")
-    );
+    try {
+      Linking.openURL(business.website);
+    } catch (e) {
+      console.error("Failed to open website URL:", e);
+      Alert.alert(
+        "Couldn't open the website",
+        "Open in a browser?",
+        [
+          {
+            text: "OK",
+            onPress: () => {
+              // Fallback action
+              Alert.alert("Fallback", "Please open this link manually in your browser.");
+            },
+          },
+        ]
+      );
+    }
   };
 
   return (
