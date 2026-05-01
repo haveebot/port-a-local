@@ -8,7 +8,7 @@ import {
 } from "@/data/social-post-store";
 import { isMetaConfigured } from "@/lib/metaGraph";
 import SocialPostCard from "./SocialPostCard";
-import ResendButton from "./ResendButton";
+import RecentSent from "./RecentSent";
 import MarketingBreadcrumb from "@/components/wheelhouse/MarketingBreadcrumb";
 import AskHavee from "./AskHavee";
 
@@ -27,24 +27,6 @@ export const dynamic = "force-dynamic";
  * each post before it fires to FB/IG. PAL brand voice is the surface
  * we cannot vibe-code, so human-in-the-loop is mandatory for v1.
  */
-
-function relativeTime(iso: string): string {
-  const ms = Date.now() - new Date(iso).getTime();
-  if (ms < 0) {
-    const future = -ms;
-    const min = Math.round(future / 60_000);
-    if (min < 60) return `in ${min}m`;
-    const hr = Math.round(min / 60);
-    if (hr < 24) return `in ${hr}h`;
-    return `in ${Math.round(hr / 24)}d`;
-  }
-  const min = Math.round(ms / 60_000);
-  if (min < 1) return "just now";
-  if (min < 60) return `${min}m ago`;
-  const hr = Math.round(min / 60);
-  if (hr < 24) return `${hr}h ago`;
-  return `${Math.round(hr / 24)}d ago`;
-}
 
 export default async function SocialQueuePage() {
   const cookieStore = await cookies();
@@ -160,44 +142,8 @@ export default async function SocialQueuePage() {
           )}
         </section>
 
-        {/* RECENT HISTORY */}
-        <section className="bg-white rounded-2xl border border-sand-300 p-6 shadow-sm">
-          <h2 className="font-display text-xl font-bold mb-1">Recently sent</h2>
-          <p className="text-xs text-navy-500 mb-4">
-            Last 30 — what shipped, what was skipped. Hit ↻ Resend on
-            anything you need to redo.
-          </p>
-          {recent.length === 0 ? (
-            <p className="text-sm text-navy-500 italic">No posts yet.</p>
-          ) : (
-            <div className="divide-y divide-sand-200">
-              {recent.map((p) => (
-                <div
-                  key={p.id}
-                  className="py-3 flex items-center gap-3 text-sm"
-                >
-                  <StatusPill status={p.status} />
-                  <span className="text-xs text-navy-500 font-mono w-12 shrink-0">
-                    {p.channel === "facebook" ? "FB" : p.channel === "instagram" ? "IG" : "X"}
-                  </span>
-                  <span className="text-[11px] text-navy-400 font-mono shrink-0">
-                    #{p.id}
-                  </span>
-                  <span className="text-navy-800 truncate min-w-0 flex-1">
-                    {p.caption.slice(0, 90)}
-                    {p.caption.length > 90 ? "…" : ""}
-                  </span>
-                  <span className="text-xs text-navy-500 whitespace-nowrap shrink-0">
-                    {p.sentAt
-                      ? `sent ${relativeTime(p.sentAt)}`
-                      : relativeTime(p.createdAt)}
-                  </span>
-                  {p.status !== "pending" && <ResendButton postId={p.id} />}
-                </div>
-              ))}
-            </div>
-          )}
-        </section>
+        {/* RECENT HISTORY — with FB click-through traffic per post */}
+        <RecentSent recent={recent} />
 
         <p className="text-[11px] text-navy-400 text-center pt-2">
           Stockpile the pond — fire what hits. Skip what doesn&apos;t.
@@ -236,20 +182,3 @@ function Stat({
   );
 }
 
-function StatusPill({ status }: { status: string }) {
-  const cls =
-    status === "pending"
-      ? "bg-coral-50 text-coral-700 border-coral-200"
-      : status === "sent"
-        ? "bg-emerald-50 text-emerald-700 border-emerald-200"
-        : status === "skipped"
-          ? "bg-navy-100 text-navy-500 border-navy-200"
-          : "bg-coral-100 text-coral-800 border-coral-300";
-  return (
-    <span
-      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide border ${cls} shrink-0`}
-    >
-      {status}
-    </span>
-  );
-}
