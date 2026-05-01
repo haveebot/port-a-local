@@ -13,7 +13,10 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://theportalocal.com"),
   title: {
     default: "Port A Local — Your Local Guide to Port Aransas, TX",
-    template: "%s | Port A Local",
+    // Template is "%s" (no suffix) because every page already manually
+    // appends "| Port A Local" in its own title string. Adding it here
+    // too would double-suffix everywhere ("...| Port A Local | Port A Local").
+    template: "%s",
   },
   description:
     "Discover vetted restaurants, lodging, activities, shops, services, and island heritage in Port Aransas, Texas. Every listing approved by locals. No paid placements.",
