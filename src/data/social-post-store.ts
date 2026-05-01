@@ -72,6 +72,7 @@ export type TriggerType =
   | "heritage_published"
   | "dispatch_published"
   | "business_added"
+  | "glossary_active"
   | "manual";
 
 export interface SocialPost {

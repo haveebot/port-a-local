@@ -27,6 +27,7 @@
  */
 
 import type { EventDetails } from "@/data/events";
+import type { GlossaryEntry } from "@/data/glossary-store";
 
 type Event = EventDetails;
 import type { Story } from "@/data/stories";
@@ -180,6 +181,57 @@ export function heritagePublishedDraft(story: Story): DraftPair {
     `Link in bio · /history/${story.slug}`,
   ].join("\n");
   return { facebook: fb, instagram: ig };
+}
+
+// ─────────────────────────────────────────────────────────────────────
+// GLOSSARY TRIGGER — Collie flips status to "active"
+// ─────────────────────────────────────────────────────────────────────
+
+/**
+ * Generate a feature-spotlight caption when a glossary entry's
+ * marketingStatus flips to "active." Draws on featureName, oneLiner,
+ * notableBullets, and livesAt to draft a launch-style announcement.
+ *
+ * Caption shape — feature spotlight:
+ *   PAL — {featureName}.
+ *   {oneLiner}
+ *   • {first notable bullet}
+ *   {livesAt link}
+ */
+export function glossaryActiveDraft(entry: GlossaryEntry): DraftPair {
+  const url = entry.livesAt
+    ? entry.livesAt.startsWith("http")
+      ? entry.livesAt
+      : `${SITE}${entry.livesAt.startsWith("/") ? "" : "/"}${entry.livesAt}`
+    : SITE;
+  const lines: string[] = [
+    `PAL — ${entry.featureName}.`,
+    "",
+  ];
+  if (entry.oneLiner) {
+    lines.push(entry.oneLiner);
+    lines.push("");
+  }
+  if (entry.notableBullets.length > 0) {
+    // Lead with the strongest bullet — operator can rewrite in queue if
+    // a different one fits better.
+    lines.push(entry.notableBullets[0]);
+    lines.push("");
+  }
+  const fbLines = [...lines, url];
+  const igLines = [
+    `PAL — ${entry.featureName}.`,
+    "",
+    entry.oneLiner ?? "",
+    "",
+    entry.notableBullets[0] ?? "",
+    "",
+    `Link in bio · ${entry.livesAt ?? "/"}`,
+  ].filter((l) => l !== "" || true); // preserve blank lines for paragraphing
+  return {
+    facebook: fbLines.join("\n").replace(/\n{3,}/g, "\n\n"),
+    instagram: igLines.join("\n").replace(/\n{3,}/g, "\n\n"),
+  };
 }
 
 export function dispatchPublishedDraft(d: Dispatch): DraftPair {

@@ -1,10 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import {
+  getGlossaryEntry,
   type MarketingStatus,
   moveGlossaryEntry,
   updateGlossaryCollaboratorFields,
 } from "@/data/glossary-store";
+import { queuePost } from "@/data/social-post-store";
+import { glossaryActiveDraft } from "@/lib/socialPostTemplates";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -73,6 +76,57 @@ export async function PATCH(
   if (Object.keys(fields).length === 0) {
     return NextResponse.json({ error: "no_updatable_fields" }, { status: 400 });
   }
+
+  // Capture pre-update state so we can detect status transitions.
+  const before = await getGlossaryEntry(id);
+
   await updateGlossaryCollaboratorFields(id, fields, who);
-  return NextResponse.json({ ok: true, action: "updated", fields });
+
+  // Glossary → Social trigger: when an entry flips to "active" from
+  // anything else, auto-queue a feature-spotlight draft to /wheelhouse/social.
+  // Idempotent via (trigger_type, trigger_ref, channel) on queuePost —
+  // same entry won't be re-queued if it bounces active → queued → active.
+  let queuedSocialPostId: number | null = null;
+  if (
+    fields.marketingStatus === "active" &&
+    before?.marketingStatus !== "active"
+  ) {
+    const after = await getGlossaryEntry(id);
+    if (after) {
+      try {
+        const draft = glossaryActiveDraft(after);
+        const linkUrl = after.livesAt
+          ? after.livesAt.startsWith("http")
+            ? after.livesAt
+            : `https://theportalocal.com${after.livesAt.startsWith("/") ? "" : "/"}${after.livesAt}`
+          : "https://theportalocal.com";
+        const queued = await queuePost({
+          triggerType: "glossary_active",
+          triggerRef: after.id,
+          channel: "facebook",
+          caption: draft.facebook,
+          linkUrl,
+          metadata: {
+            featureName: after.featureName,
+            oneLiner: after.oneLiner,
+            triggeredBy: who,
+          },
+        });
+        queuedSocialPostId = queued.id;
+      } catch (err) {
+        // Trigger failure shouldn't block the glossary update —
+        // operator can manually queue if this drops.
+        console.error("[glossary→social] queue failed:", err);
+      }
+    }
+  }
+
+  return NextResponse.json({
+    ok: true,
+    action: "updated",
+    fields,
+    ...(queuedSocialPostId !== null
+      ? { queuedSocialPostId }
+      : {}),
+  });
 }

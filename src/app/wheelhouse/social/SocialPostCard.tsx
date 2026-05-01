@@ -19,6 +19,7 @@ const TRIGGER_LABEL: Record<string, string> = {
   heritage_published: "Heritage",
   dispatch_published: "Dispatch",
   business_added: "New listing",
+  glossary_active: "Feature spotlight",
   manual: "Manual",
 };
 
