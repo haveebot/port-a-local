@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { listImages } from "@/data/image-library-store";
 import {
   uploadAndCatalog,
   validateUploadEnv,
@@ -9,22 +10,23 @@ export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
 /**
- * POST /api/wheelhouse/social/upload
- *
- * Upload-from-post-card path. Writes to Vercel Blob + inserts into the
- * image library catalog (so it becomes available for any future post).
- * Returns the library row, of which `.url` is what the post's image_url
- * field gets set to.
+ * GET  /api/wheelhouse/library — list images (visible by default)
+ * POST /api/wheelhouse/library — upload new image to library
  *
  * Auth: wheelhouse middleware (cookie or bearer).
- *
- * Constraints (shared with /api/wheelhouse/library):
- *   - PNG, JPG, WEBP only
- *   - 8MB max
- *
- * Vercel Blob requires BLOB_READ_WRITE_TOKEN env var (auto-injected
- * when a Blob store is created on the project in the Vercel dashboard).
  */
+
+export async function GET(req: NextRequest) {
+  const url = new URL(req.url);
+  const includeHidden = url.searchParams.get("hidden") === "true";
+  const limit = Number(url.searchParams.get("limit") ?? 200);
+  const images = await listImages({
+    limit: Number.isFinite(limit) ? limit : 200,
+    includeHidden,
+  });
+  return NextResponse.json({ images });
+}
+
 export async function POST(req: NextRequest) {
   const envCheck = validateUploadEnv();
   if (!envCheck.ok) {
@@ -56,10 +58,5 @@ export async function POST(req: NextRequest) {
       { status: result.status ?? 500 },
     );
   }
-  // Backwards-compatible response shape: include `.url` at top level
-  // (existing post-card upload code reads `data.url`)
-  return NextResponse.json({
-    url: result.image.url,
-    image: result.image,
-  }, { status: 201 });
+  return NextResponse.json({ image: result.image }, { status: 201 });
 }

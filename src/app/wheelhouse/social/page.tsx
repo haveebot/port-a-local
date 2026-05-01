@@ -69,9 +69,12 @@ export default async function SocialQueuePage() {
           <p className="font-display font-bold text-sand-50">
             Social review queue
           </p>
-          <span className="text-[11px] text-coral-300 hidden sm:inline">
-            FB · IG
-          </span>
+          <Link
+            href="/wheelhouse/social/bank"
+            className="text-[11px] text-coral-300 hover:text-coral-100 font-semibold"
+          >
+            📚 Bank →
+          </Link>
         </div>
       </header>
 

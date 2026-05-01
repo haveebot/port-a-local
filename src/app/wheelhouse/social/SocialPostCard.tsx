@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import type { SocialPost } from "@/data/social-post-store";
+import BankPicker from "./BankPicker";
 
 interface Props {
   post: SocialPost;
@@ -74,6 +75,7 @@ export default function SocialPostCard({ post, position, total }: Props) {
     isoToLocalInput(post.autoSendAt),
   );
   const [uploading, setUploading] = useState(false);
+  const [pickerOpen, setPickerOpen] = useState(false);
   const [busy, setBusy] = useState<
     | null
     | "send"
@@ -150,6 +152,19 @@ export default function SocialPostCard({ post, position, total }: Props) {
     setError(null);
     try {
       await callApi("image", { imageUrl: null });
+      router.refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setBusy(null);
+    }
+  }
+
+  async function onPickFromBank(imageUrl: string) {
+    setBusy("upload");
+    setError(null);
+    try {
+      await callApi("image", { imageUrl });
       router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
@@ -390,35 +405,54 @@ export default function SocialPostCard({ post, position, total }: Props) {
               </p>
               <p className="text-[11px] text-navy-500 leading-relaxed">
                 FB will show the link card from {post.linkUrl ? "the URL above" : "the post caption"}.
-                Upload a custom image to switch to photo mode.
+                Pick from the Bank or upload a new image to switch to photo mode.
               </p>
             </div>
-            <label
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold border cursor-pointer shrink-0 ${
-                busy !== null
-                  ? "border-sand-300 text-navy-400 cursor-not-allowed"
-                  : "border-emerald-300 text-emerald-700 hover:bg-emerald-50"
-              }`}
-            >
-              {uploading ? "Uploading…" : "📤 Upload image"}
-              <input
-                type="file"
-                accept="image/png,image/jpeg,image/webp"
+            <div className="flex items-center gap-2 shrink-0">
+              <button
+                onClick={() => setPickerOpen(true)}
                 disabled={busy !== null}
-                className="hidden"
-                onChange={(e) => {
-                  const f = e.target.files?.[0];
-                  if (f) onUploadFile(f);
-                  e.target.value = ""; // allow re-select of same filename
-                }}
-              />
-            </label>
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold border ${
+                  busy !== null
+                    ? "border-sand-300 text-navy-400 cursor-not-allowed"
+                    : "border-coral-300 text-coral-700 hover:bg-coral-50"
+                }`}
+              >
+                📚 Pick from Bank
+              </button>
+              <label
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold border cursor-pointer ${
+                  busy !== null
+                    ? "border-sand-300 text-navy-400 cursor-not-allowed"
+                    : "border-emerald-300 text-emerald-700 hover:bg-emerald-50"
+                }`}
+              >
+                {uploading ? "Uploading…" : "📤 Upload"}
+                <input
+                  type="file"
+                  accept="image/png,image/jpeg,image/webp"
+                  disabled={busy !== null}
+                  className="hidden"
+                  onChange={(e) => {
+                    const f = e.target.files?.[0];
+                    if (f) onUploadFile(f);
+                    e.target.value = ""; // allow re-select of same filename
+                  }}
+                />
+              </label>
+            </div>
           </div>
         )}
         <p className="text-[10px] text-navy-400 mt-2">
           PNG / JPG / WEBP · ≤8MB · 1200×630 best for FB · 1080×1080 best for IG
         </p>
       </div>
+
+      <BankPicker
+        open={pickerOpen}
+        onClose={() => setPickerOpen(false)}
+        onPick={onPickFromBank}
+      />
 
       {error && (
         <div className="text-xs text-coral-700 bg-coral-50 border border-coral-200 rounded-lg px-3 py-2 mt-3">
