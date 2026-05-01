@@ -16,6 +16,22 @@ function urgencyLabel(u: string) {
   return "📋 Routine — Within a week";
 }
 
+/**
+ * Escape user-controlled strings before interpolating into HTML email bodies.
+ * Without this, a request body like description: "<script>..." would render
+ * as actual script tags in the vendor's email client (or as broken markup
+ * if the client strips them). This route is unauthenticated by design, so
+ * any request body field could be hostile.
+ */
+function escapeHtml(s: unknown): string {
+  return String(s ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 async function sendEmail(to: string, subject: string, html: string) {
   if (!RESEND_KEY) {
     console.log("[Email] Resend not configured — would send to", to, subject);
@@ -104,15 +120,15 @@ export async function POST(req: NextRequest) {
     bodyHtml: `
       <h2 style="margin:0 0 8px 0; font-size:20px; color:#0b1120;">New Maintenance Request</h2>
       <p style="margin:0 0 16px 0; color:#4a5568; font-size:13px;"><strong>Urgency:</strong> ${urgencyText}</p>
-      <p><strong>Customer:</strong> ${name}</p>
-      <p><strong>Phone:</strong> <a href="tel:${phone}" style="color:#e8656f;">${phone}</a></p>
-      <p><strong>Email:</strong> <a href="mailto:${email}" style="color:#e8656f;">${email}</a></p>
-      <p><strong>Preferred contact:</strong> ${contactPref}</p>
+      <p><strong>Customer:</strong> ${escapeHtml(name)}</p>
+      <p><strong>Phone:</strong> <a href="tel:${encodeURIComponent(phone)}" style="color:#e8656f;">${escapeHtml(phone)}</a></p>
+      <p><strong>Email:</strong> <a href="mailto:${encodeURIComponent(email)}" style="color:#e8656f;">${escapeHtml(email)}</a></p>
+      <p><strong>Preferred contact:</strong> ${escapeHtml(contactPref)}</p>
       <hr style="border:none; border-top:1px solid #e4dccc; margin:16px 0;"/>
-      <p><strong>Property:</strong> ${address}</p>
-      <p><strong>Service:</strong> ${serviceType}</p>
+      <p><strong>Property:</strong> ${escapeHtml(address)}</p>
+      <p><strong>Service:</strong> ${escapeHtml(serviceType)}</p>
       <p><strong>Description:</strong></p>
-      <p style="background:#f5f0e8; padding:12px; border-radius:8px; border:1px solid #e4dccc;">${description}</p>
+      <p style="background:#f5f0e8; padding:12px; border-radius:8px; border:1px solid #e4dccc; white-space:pre-wrap;">${escapeHtml(description)}</p>
       ${photosHtml}
     `,
   });
@@ -122,11 +138,11 @@ export async function POST(req: NextRequest) {
     bodyHtml: `
       <h2 style="margin:0 0 8px 0; font-size:22px; color:#0b1120;">We received your maintenance request</h2>
       <p style="margin:0 0 16px 0; color:#4a5568; font-size:14px;">Our local service team is reviewing the details. Someone will be in touch shortly to confirm availability and schedule the work.</p>
-      <p>Hi ${name},</p>
+      <p>Hi ${escapeHtml(name)},</p>
       <p><strong>Your request:</strong></p>
       <ul>
-        <li><strong>Service:</strong> ${serviceType}</li>
-        <li><strong>Property:</strong> ${address}</li>
+        <li><strong>Service:</strong> ${escapeHtml(serviceType)}</li>
+        <li><strong>Property:</strong> ${escapeHtml(address)}</li>
         <li><strong>Urgency:</strong> ${urgencyText}</li>
       </ul>
       <p>Questions? Reply to this email.</p>
