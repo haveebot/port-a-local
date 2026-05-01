@@ -4,6 +4,7 @@ import Link from "next/link";
 import { listImages } from "@/data/image-library-store";
 import BankUploadZone from "./BankUploadZone";
 import BankImageCard from "./BankImageCard";
+import MarketingBreadcrumb from "@/components/wheelhouse/MarketingBreadcrumb";
 
 export const dynamic = "force-dynamic";
 
@@ -26,20 +27,14 @@ export default async function BankPage() {
 
   return (
     <main className="min-h-screen bg-sand-50 text-navy-900">
-      <header className="bg-navy-900 text-sand-100 border-b border-coral-500/20">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between gap-4">
-          <Link
-            href="/wheelhouse/social"
-            className="text-xs text-navy-300 hover:text-coral-300"
-          >
-            ← Social
-          </Link>
-          <p className="font-display font-bold text-sand-50">Bank</p>
-          <span className="text-[11px] text-coral-300 hidden sm:inline">
-            image collateral
-          </span>
-        </div>
-      </header>
+      <MarketingBreadcrumb
+        crumbs={[
+          { label: "🏠 Wheelhouse", href: "/wheelhouse" },
+          { label: "📊 Marketing", href: "/wheelhouse/marketing" },
+          { label: "📱 Social", href: "/wheelhouse/social" },
+        ]}
+        current="📚 Bank"
+      />
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 space-y-8">
         <section className="bg-white rounded-2xl border border-sand-300 p-6 shadow-sm">

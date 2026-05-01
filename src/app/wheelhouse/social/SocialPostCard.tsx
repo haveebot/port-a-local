@@ -76,6 +76,7 @@ export default function SocialPostCard({ post, position, total }: Props) {
   );
   const [uploading, setUploading] = useState(false);
   const [pickerOpen, setPickerOpen] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
   const [busy, setBusy] = useState<
     | null
     | "send"
@@ -288,7 +289,8 @@ export default function SocialPostCard({ post, position, total }: Props) {
           </span>
           <div className="flex items-center gap-2">
             <span className="text-[11px] text-navy-500 font-mono">
-              {position} of {total} · #{post.id}
+              {position} of {total}
+              {showDetails && ` · #${post.id}`}
             </span>
             <div className="flex items-center gap-1">
               <button
@@ -323,16 +325,20 @@ export default function SocialPostCard({ post, position, total }: Props) {
         </div>
       )}
       <div className="flex items-center gap-2 mb-3 flex-wrap">
-        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide bg-coral-50 text-coral-700 border border-coral-200">
-          {triggerLabel}
-        </span>
         <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide bg-navy-50 text-navy-700 border border-navy-200">
           {channelLabel}
         </span>
-        {post.triggerRef && (
-          <span className="text-[11px] text-navy-500 font-mono truncate">
-            ref: {post.triggerRef}
-          </span>
+        {showDetails && (
+          <>
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide bg-coral-50 text-coral-700 border border-coral-200">
+              {triggerLabel}
+            </span>
+            {post.triggerRef && (
+              <span className="text-[11px] text-navy-500 font-mono truncate">
+                ref: {post.triggerRef}
+              </span>
+            )}
+          </>
         )}
         {post.scheduledFor && (
           <span className="text-[11px] text-navy-500 ml-auto">
@@ -453,6 +459,13 @@ export default function SocialPostCard({ post, position, total }: Props) {
         onClose={() => setPickerOpen(false)}
         onPick={onPickFromBank}
       />
+
+      <button
+        onClick={() => setShowDetails(!showDetails)}
+        className="mt-3 text-[10px] text-navy-400 hover:text-navy-600 font-mono"
+      >
+        {showDetails ? "▾ Hide details" : "▸ Show details"}
+      </button>
 
       {error && (
         <div className="text-xs text-coral-700 bg-coral-50 border border-coral-200 rounded-lg px-3 py-2 mt-3">

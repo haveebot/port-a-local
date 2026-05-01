@@ -9,6 +9,7 @@ import {
 } from "@/data/glossary-store";
 import { INITIAL_GLOSSARY_ENTRIES } from "@/data/glossary-seed";
 import EntryRow from "./EntryRow";
+import MarketingBreadcrumb from "@/components/wheelhouse/MarketingBreadcrumb";
 
 export const dynamic = "force-dynamic";
 
@@ -55,17 +56,18 @@ export default async function GlossaryPage() {
 
   return (
     <main className="min-h-screen bg-sand-50 text-navy-900">
-      <header className="bg-navy-900 text-sand-100 border-b border-coral-500/20">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between gap-4">
-          <Link href="/wheelhouse" className="text-xs text-navy-300 hover:text-coral-300">
-            ← Wheelhouse
-          </Link>
-          <p className="font-display font-bold text-sand-50">Glossary</p>
+      <MarketingBreadcrumb
+        crumbs={[
+          { label: "🏠 Wheelhouse", href: "/wheelhouse" },
+          { label: "📊 Marketing", href: "/wheelhouse/marketing" },
+        ]}
+        current="📖 Glossary"
+        right={
           <span className="text-[11px] text-coral-300 hidden sm:inline">
             Signed in as {who}
           </span>
-        </div>
-      </header>
+        }
+      />
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 space-y-8">
         <section className="bg-white rounded-2xl border border-sand-300 p-6 shadow-sm">

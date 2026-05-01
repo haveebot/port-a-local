@@ -9,6 +9,7 @@ import {
 import { isMetaConfigured } from "@/lib/metaGraph";
 import SocialPostCard from "./SocialPostCard";
 import ResendButton from "./ResendButton";
+import MarketingBreadcrumb from "@/components/wheelhouse/MarketingBreadcrumb";
 
 export const dynamic = "force-dynamic";
 
@@ -58,25 +59,21 @@ export default async function SocialQueuePage() {
 
   return (
     <main className="min-h-screen bg-sand-50 text-navy-900">
-      <header className="bg-navy-900 text-sand-100 border-b border-coral-500/20">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between gap-4">
-          <Link
-            href="/wheelhouse"
-            className="text-xs text-navy-300 hover:text-coral-300"
-          >
-            ← Wheelhouse
-          </Link>
-          <p className="font-display font-bold text-sand-50">
-            Social review queue
-          </p>
+      <MarketingBreadcrumb
+        crumbs={[
+          { label: "🏠 Wheelhouse", href: "/wheelhouse" },
+          { label: "📊 Marketing", href: "/wheelhouse/marketing" },
+        ]}
+        current="📱 Social"
+        right={
           <Link
             href="/wheelhouse/social/bank"
-            className="text-[11px] text-coral-300 hover:text-coral-100 font-semibold"
+            className="text-[11px] text-coral-300 hover:text-coral-100 font-semibold whitespace-nowrap"
           >
             📚 Bank →
           </Link>
-        </div>
-      </header>
+        }
+      />
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 space-y-8">
         {/* META STATUS */}
@@ -133,10 +130,12 @@ export default async function SocialQueuePage() {
         {/* PENDING REVIEW */}
         <section className="bg-white rounded-2xl border border-coral-300 p-6 shadow-sm">
           <h2 className="font-display text-xl font-bold mb-1">
-            Pending review
+            What&apos;s queued up
           </h2>
           <p className="text-xs text-navy-500 mb-4">
-            Auto-triggered drafts. Edit caption if needed → Send / Skip.
+            Look these over and fire when ready. Edit anything that
+            doesn&apos;t sound like you. Pick a custom image from the Bank
+            or upload one — or just send with the link card.
           </p>
           {pending.length === 0 ? (
             <p className="text-sm text-navy-500 italic">
@@ -159,9 +158,10 @@ export default async function SocialQueuePage() {
 
         {/* RECENT HISTORY */}
         <section className="bg-white rounded-2xl border border-sand-300 p-6 shadow-sm">
-          <h2 className="font-display text-xl font-bold mb-1">Recent</h2>
+          <h2 className="font-display text-xl font-bold mb-1">Recently sent</h2>
           <p className="text-xs text-navy-500 mb-4">
-            Last 30 across all statuses.
+            Last 30 — what shipped, what was skipped. Hit ↻ Resend on
+            anything you need to redo.
           </p>
           {recent.length === 0 ? (
             <p className="text-sm text-navy-500 italic">No posts yet.</p>
@@ -196,8 +196,7 @@ export default async function SocialQueuePage() {
         </section>
 
         <p className="text-[11px] text-navy-400 text-center pt-2">
-          Per Winston: review queue first, auto-fire flips on after 30 days
-          of clean output. Brand voice is the surface we cannot vibe-code.
+          Stockpile the pond — fire what hits. Skip what doesn&apos;t.
         </p>
       </div>
     </main>
