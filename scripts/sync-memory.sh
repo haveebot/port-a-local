@@ -63,6 +63,7 @@ INCLUDE=(
   "feedback_arnold_startup_drill.md"
   "feedback_wheelhouse_cross_project_pattern.md"
   "feedback_heyedeploy_pattern_thinking.md"
+  "feedback_consumer_ux_for_non_tech_operators.md"
   "feedback_heye_lab_framing.md"
   "feedback_coverage_vs_goal.md"
   "feedback_systemic_gaps_check.md"

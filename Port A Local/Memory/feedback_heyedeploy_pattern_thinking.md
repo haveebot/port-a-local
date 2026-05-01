@@ -110,6 +110,22 @@ When a build brief is template-replication (e.g., the Stripe Connect onboarding 
 | **Admin traffic 3-layer analytics filter** | PAL: VisitorHeartbeat client-side skip (cookie + path) + Vercel Analytics beforeSend drops /wheelhouse pageviews + wheelhouse_analytics_events SQL queries WHERE path NOT LIKE '/wheelhouse%' | inline pattern, baked into the clear-usable-analytics rule | LOCKED 2026-04-29 PM |
 | **Intake-and-surface webhook fallback** | PAL `/api/twilio/sms/inbound`: any inbound that doesn't match a strict intent (CLAIM/YES/NO/STOP) pushes to operator with `[Sender → PAL] body` format. Beach vendor non-CLAIM, cart vendor non-strict, stranger inbound — all routed to a human (Winston) instead of silent-logged | inline pattern | LOCKED 2026-04-29 PM (lesson: don't try to be clever parsing prose intent) |
 | **bookings@ transactional ledger CC** | PAL: all 6 paid-event verticals (cart/beach/maintenance/delivery/locals/housekeeping) CC bookings@theportalocal.com on internal alerts. Same alias as the Resend FROM, gives audit-trail visibility | inline | LOCKED 2026-04-29 PM |
+| **Workspace SSO + DrizzleAdapter (Internal-only OAuth pattern)** | Sage HQ: `auth.ts` Internal-audience Google OAuth with `hd=domain` enforcement + server-side allowlist (defense-in-depth) + DrizzleAdapter writing user/session/account rows to Neon Postgres. Internal-only audience means no Google verification gauntlet for sensitive scopes (Gmail/Drive/Calendar) — Workspace-only apps can request anything @domain users would consent to. | TBD — file when CrossRef or PAL ships an equivalent Workspace-scoped tool (Likely candidate: any project that needs operator-only SSO instead of magic-link auth) | LOCKED 2026-04-29 (Sage HQ Step 1 ship) |
+| **NextAuth stale-tokens-on-re-sign-in fix (signIn callback upsert)** | Sage HQ: `auth.ts` signIn callback that manually upserts the accounts row's access_token / refresh_token / scope on every successful OAuth sign-in. Default DrizzleAdapter only writes on first link; re-consent flows leave stale tokens in DB. Without the fix, scope expansion silently breaks: consent screen shows new permissions, user accepts, but API calls 403 because DB still has OLD token | inline in any auth.ts that uses DrizzleAdapter + plans to ever expand OAuth scopes | LOCKED 2026-04-29 (Sage HQ — every Heye Lab project using DrizzleAdapter needs this) |
+| **Drizzle 0.45+ for Neon serverless 1.x compatibility** | Sage HQ: bumped `drizzle-orm@0.36` → `0.45.2` to fix `@neondatabase/serverless@1.x` rejection of the deprecated non-tagged-template `sql()` syntax. Surfaces as runtime crash on first DB query. Every Heye Lab project on the Vercel + Neon + Drizzle stack must be on 0.45+ minimum | inline; pin minimum version in package.json | LOCKED 2026-04-29 (every Drizzle+Neon Heye Lab project) |
+| **Vercel author verification — global git user.email = haveebot@gmail.com** | Set on Winston's Mac globally so all commits to Heye Lab repos (haveebot/*) author with a GitHub-verified email and pass Vercel's "Deployment Protection" author check. Local default `winstoncaraker@Winstons-MacBook-Air.local` fails on new Vercel projects with the protection enabled. Force-push amend pattern to fix existing scaffolding commits: `git commit --amend --no-edit --reset-author && git push --force-with-lease` | inline; one-time-per-Mac setup | LOCKED 2026-04-29 (any new Heye Lab repo initialization) |
+| **OAuth scope expansion playbook (Gmail + Drive + Calendar via Workspace Internal)** | Sage HQ: scopes-as-array in `authorization.params.scope`, `access_type=offline` + `prompt=consent` for refresh_token, **least-privilege within use case** (gmail.compose not gmail.send; drive.readonly not drive.file; calendar.readonly not calendar.events), Internal-only audience skips Google verification, per-project API enables (Gmail / Drive / Calendar) in GCP project + Data Access page declaration in OAuth consent screen | TBD — file when second Heye Lab project ships scope expansion (likely PAL Wheelhouse if it ever needs Drive/Gmail integration) | LOCKED 2026-04-29 (canonical Sage HQ implementation) |
+| **Idempotent CRM ingest from seed JSON + canonical TS source** | Sage HQ: `scripts/ingest-agencies.ts` reads vault seed JSON (full-roster scrape) + dashboard `agencies.ts` (canonical agency list), merges with explicit precedence rule (seed wins for overlap, dashboard wins for unique-to-canonical), preserves user-curated state on re-run (excludedAt / excludedBy / exclusionReason on contacts survive re-ingest of fresh roster scrapes). Idempotent — every re-run lands the same shape | TBD — file when PAL or CrossRef ships an equivalent Postgres-backed pipeline ingest from local TS source | LOCKED 2026-04-29 (Sage HQ canonical) |
+| **Inline Claude content composer (Ask Havee pattern)** | PAL 2026-05-01: `src/lib/socialComposerAgent.ts` (Haiku 4.5, tool-use, 4-iter cap) + `/api/wheelhouse/social/compose` POST endpoint + `AskHavee.tsx` UI card on `/wheelhouse/social`. System prompt seeds: brand voice rules + live URL inventory (events/dispatches/heritage built from data files at request time) + today's date in CT. Tools: queue_post / clarify_question / decline. queue_post enforces linkUrl must start with project domain. Two-iteration test produced perfect on-brand caption with correct URL pick. | TBD — file when CrossRef or Sage Em ships a NL composer | LOCKED 2026-05-01 (canonical PAL — extends the SMS Havee agent pattern from 2026-04-29 to a different surface) |
+| **Image Bank — single asset library with multi-entry upload** | PAL 2026-05-01: `pal_image_library` Postgres + `src/data/image-library-store.ts` (insert / list / get / soft-delete via `hidden`) + `src/lib/imageUpload.ts` (shared put-to-Blob + insert helper) + `/api/wheelhouse/library` (GET list + POST upload) + `/api/wheelhouse/library/[id]` (PATCH / DELETE) + `/wheelhouse/social/bank` page (drag-drop upload + grid + per-image edit). Two entry points: direct browse + per-card "📚 Pick from Bank" picker on social posts. Both write to same catalog. Soft delete keeps URL live for already-shipped posts. | TBD — file when second tenant ships an image catalog (likely Sage Em brand assets or CrossRef product images) | LOCKED 2026-05-01 |
+| **Marketing tile-based hub + breadcrumb (consumer-app UX for non-tech operators)** | PAL 2026-05-01: `/wheelhouse/marketing` page (time-aware greeting using wheelhouse_who cookie + at-a-glance badge row + 3 quick-action tiles + 4 main tool tiles + Coming up + Lately panels) + `MarketingBreadcrumb` component (sticky, one-tap home from any nested page) + Hide-dev-metadata Details toggle on data cards. Validated: Winston "wow this is insane - she is absolutely blown away" — biggest perceived-value jump in PAL operator tooling came from UX polish not features. See `feedback_consumer_ux_for_non_tech_operators.md` for the full playbook. | TBD — file when second tenant ships a collaborator dashboard with this pattern | LOCKED 2026-05-01 |
+| **Per-post auto-send cron + Schedule UI** | PAL 2026-05-01: `auto_send_at TIMESTAMPTZ` column on `social_post_queue` + `setAutoSendAt(id, iso)` helper + PATCH `action="schedule"` + `/api/cron/social-auto-send` (every 15 min) picks up due+pending and fires + ⏱ Schedule button on each card with datetime input. Operator can leave any pending row scheduled, cron fires, marks sent. Default stays manual (Send button) — schedule is opt-in per item. | TBD — file when second queued-content system ships this | LOCKED 2026-05-01 |
+| **Calendar-based milestone auto-queue cron** | PAL 2026-05-01: `/api/cron/social-milestones` (daily 8am CDT) scans events.ts for any 30/14/7/1d/today/wrap fire that lands inside today's CT day, drafts caption via socialPostTemplates, queues to FB. Loose dedup catches legacy "manual" tags (`<kind>:<slug>` pattern) so hand-stocked posts don't double. `getUpcomingMilestones` helper shares the same logic for the marketing-hub preview. Floor uses `startOfTodayCTMs()` (DST-robust via Intl) so today's already-fired milestones stay in the preview through end-of-day CT. | TBD — file when second tenant runs cron-driven content scheduling | LOCKED 2026-05-01 |
+| **Position labels + reorder arrows + jump-to-top (operator queue ergonomics)** | PAL 2026-05-01: `display_order INTEGER` column on `social_post_queue` (backfills to id on first ensureSchema; preserves insert order until reordered) + `moveQueueEntry(id, dir)` two-step swap helper + `moveQueueEntryToTop(id)` (sets to current_min - 10) + PATCH `action="move"` with direction up/down/top + ↑↓⤒ buttons on each pending card with first/last auto-disable + position pill ("🔥 Up next · 1 of 9", "On deck · 2 of 9", etc.). Mirrors Glossary reorder pattern. | TBD — file when second tenant has an operator queue with prioritization | LOCKED 2026-05-01 |
+| **Resend pattern (duplicate sent rows back to pending)** | PAL 2026-05-01: `duplicatePost(sourceId)` helper + PATCH `action="resend"` (works on non-pending posts, errors on already-pending) + ↻ Resend button on Recent list rows. Uses trigger_ref `<original>:resend-<timestamp>` so trace lineage preserved + idempotency doesn't block resend-after-resend. Used when an OG was broken on first send, caption typo caught after, etc. | TBD — file when second queued-content system ships | LOCKED 2026-05-01 |
+| **FB photo mode + library-cataloged upload** | PAL 2026-05-01: `postToFacebook` branches on imageUrl param — with → POST `/photos` (photo post, no link card, link in caption text); without → POST `/feed` (link card with OG, default behavior). Per-post UI toggle: 🔗 Link mode vs 📷 Upload via custom image. Custom image flows through `uploadAndCatalog` → Vercel Blob + library row, returned URL stored as `image_url` on the post. Operator picks per post via 📚 Pick from Bank / 📤 Upload. | TBD — file when second tenant integrates with FB Graph posting | LOCKED 2026-05-01 |
+| **Hide-dev-metadata + Details toggle on data cards** | PAL 2026-05-01: `SocialPostCard.tsx` shows position pill + channel + caption + actions by default; `▸ Show details` toggle reveals trigger_type label, ref string, internal #ID. Pattern for any data card a non-tech operator interacts with: dev affordances are visual noise to them but useful for debugging. Default = hidden, opt-in = shown. | inline pattern | LOCKED 2026-05-01 (per `feedback_consumer_ux_for_non_tech_operators.md` playbook) |
+| **FB inspector diagnostic endpoint** | PAL 2026-05-01: `/api/wheelhouse/social/inspect-fb-post?id=N\|extId=FBID` calls Graph API `/{post_id}?fields=is_published,is_hidden,privacy,targeting,feed_targeting,reactions,comments,shares,permalink_url` and returns interpreted summary. Used to definitively diagnose "why can't X see this post" cases. Code never sets targeting, so any restriction visible here is unintentional or page-level. (Note: requires `pages_read_engagement` token scope to fully use; without it returns clear error.) | TBD — file when second tenant integrates with FB Graph | LOCKED 2026-05-01 |
 
 ---
 
@@ -193,6 +209,116 @@ Sometimes a flow is genuinely project-specific and shouldn't be replicated acros
 Without explicit HeyeDeploy thinking, every new Heye Lab project + every new CityDeploy tenant + every new vertical-Deploy is a custom job. With it: every build investment compounds across all projects, all verticals, all tenants. Same engineer time, exponential platform value.
 
 It's also how Nick's platform-extraction work stays cheap: he reads HeyeDeploy pattern docs in any project's memory mirror, doesn't have to reverse-engineer each codebase from scratch.
+
+---
+
+## Patterns crystallized 2026-04-30 — generator discipline + customer-pull signal
+
+A full day of cascading bugs revealed a class of failure that applies to every Heye Lab project producing PDFs/HTML/dashboards. Each pattern below is locked in code (in Sage's generators) and now part of the HeyeDeploy template set.
+
+### Verify-on-render lock (mandatory for every generator)
+
+| | What | Where it shipped first | Apply when |
+|--|---|---|---|
+| **Verify-on-render** | Every generator that produces a deliverable must read back the rendered output and assert spec-marker presence + predecessor-marker absence. Refuse to leave the file on disk if any assertion fails. Use whitespace-normalized regex matching (PDF text extraction splits phrases across line breaks). | Sage Em 2026-04-30: `scripts/generate-agency-contract.py` `verify_v12()`, `scripts/generate-agency-brief.py` `verify_v11()` (24 v1.1 must-haves, 14 v1.0 must-not-haves, plus orphan-page check). Both raise RuntimeError + unlink the bad file on failure. | Any generator producing PDF/HTML/markdown that has a "current version" worth distinguishing from "stale version." Brief generators, contract generators, report generators, brand-pack generators, spec-sheet generators — every one. |
+| **Auto-archive predecessor** | Before writing a new canonical PDF, move the existing one to `<dir>/Archive/<stem>-superseded-<YYYY-MM-DD-HHMM>.<ext>`. Prevents stale-file-side-by-side that caused the L&EA v1.1 mis-attach. | Sage Em 2026-04-30: same generators above, `auto_archive_predecessor()` function. Idempotent — no-op if no predecessor exists. | Every generator. Pair with verify-on-render. |
+| **Orphan-page detection** | Every page <400 chars (excluding cover) is a layout failure (orphaned callout, too-small section). Verify-on-render catches it. | Sage Em 2026-04-30: brief generator. Loops through `r.pages`, asserts each page's body text length. | PDF generators specifically. |
+| **PDF annotation extraction with highlights+strikethroughs** | When extracting reviewer comments from an annotated PDF, include `/Highlight`, `/StrikeOut`, `/Underline`, `/Squiggly` subtypes — not just `/FreeText`. Silent markup is review feedback too. | Sage Em 2026-04-30: discovered the hard way after missing 10 of Z's 34 annotations on the Brief because they were silent strikethroughs. | Any reviewer-feedback ingestion workflow. |
+
+**Why this matters meta-level:** when source-of-truth is split between markdown + Python (or any two layers), drift will silently happen. Verify-on-render with spec-marker assertions is the only durable defense. Sage's contract generator silently produced v1.1 for several days while metadata claimed v1.2 and the markdown source was correctly v1.2. Two real signed agreements went out on the wrong version. **The discipline now: a "ready to send" declaration requires a passing verify check, automated, non-skippable.**
+
+### Sign-once stamp template
+
+| | What | Where it shipped first | Apply when |
+|--|---|---|---|
+| **Sign-once** | Extract a signatory's pen-stroke once via image-diff against the unsigned source PDF; store as private PNG asset in `<vault>/Brand/internal-signatures/`; programmatically overlay on every future render under standing consent. README in the folder documents consent + audit chain. | Sage Em 2026-04-30: `Brand/internal-signatures/taylor-mccollum-signature.png` extracted from the L&EA v1.1 Taylor-signed PDF. `stamp_taylor_signature()` in contract generator overlays automatically on every render. | Any internal sign-off workflow where the same signatory signs many similar docs (rep agreements, NDAs, vendor MSAs, partner intros). DocuSign-clone-light. Pair with explicit consent capture in memory. |
+
+### Customer-pulls-the-platform signal
+
+When a customer asks for a portal/dashboard/login/feature that doesn't yet exist as if it does — **that IS the product-market-fit signal.** Build against it immediately as the next priority, ahead of internal-only features.
+
+Filed as standalone memory file: [`feedback_customer_pulls_platform.md`](feedback_customer_pulls_platform.md). Origin: Travis L&EA, 2026-04-30, asking for the agency portal Winston had mentioned in passing. Cross-project applications: PAL resident/contributor portal, CrossRef user dashboard, future tenant customer-facing surfaces.
+
+### Recovery-email-as-intro pattern
+
+When a process error has to be communicated, the composition that works (acknowledge → corrected version + new context → make it about THEM → operate-as-partners) becomes the strongest standard intro pattern. Test against a real recovery before generalizing.
+
+Filed as standalone memory file: [`feedback_sage_intro_email_pattern.md`](feedback_sage_intro_email_pattern.md). Vault template at `Strategy/Standard Agency Intro Email Template.md`. Origin: L&EA recovery 2026-04-30 13:16 → Travis acceptance 18:50.
+
+## Patterns crystallized 2026-05-01 — diagnostics + UX-as-feature-jump
+
+A massive PAL session shipped the entire marketing toolchain end-to-end (Live FB posting, queue with all ergonomics, image Bank, NL composer, consumer-app UX redesign for Collie). Key meta-learnings, all cross-project applicable.
+
+### Meta App "dev mode reach throttle" diagnostic class
+
+When a Meta App (Facebook / Instagram Graph API) is in **Development Mode**, posts published via the API are throttled to be visible only to: app admins, app developers, and explicitly-added test users. Reach to the actual Page audience is severely restricted (PAL saw Reach 2 on a post from the Page where Page admins + their personal accounts both saw it but a non-admin co-marketer did not).
+
+The diagnostic chain:
+1. Two viewers see a post (admin + their personal-FB) but a third (non-admin) doesn't → that's the dev-mode signature
+2. Meta Insights "Reach" column < 5 on a post that should reach hundreds → that's the dev-mode signature
+3. The popup in Meta Business Suite saying "Ads creative post was created by an app that is in development mode" → the smoking-gun confirmation
+
+**The fix:** flip the Meta App from Development → Live in Meta Developer Console. Requirements: Privacy Policy URL, Terms of Service URL, App icon (1024×1024), Category, Data deletion URL. For first-party Page management with `pages_manage_posts` scope, no Business Verification required (don't click "Become a Tech Provider" — that's for accessing OTHER businesses' data, not your own). Use Cases must each show "Ready to test" before publish; pre-publish state should include `pages_read_engagement` if you want post-inspect ability post-Live.
+
+**Crucial caveat:** existing posts published in dev mode are stuck with their reach — they don't retroactively gain visibility post-Live. Only future posts benefit. So any "we're testing the API" posts published in dev mode should be expected to flop, not used as success/failure signal.
+
+**Cross-project rule:** every Heye Lab project that publishes via Meta Graph API must check Live mode status before treating any reach number as signal. Add this to onboarding playbook for any tenant integrating with FB/IG.
+
+### Root-layout `openGraph` overrides child-page metadata bug
+
+In Next.js App Router, fields nested inside the root `layout.tsx`'s `openGraph` block are **authoritative** — they override any child-page metadata that doesn't ALSO nest its own `openGraph`. Setting `openGraph.title`, `openGraph.description`, `openGraph.url` at the root means every page on the site scrapes those values regardless of what the page's own `title` and `description` say.
+
+Symptom: child page sets `title` + `description` correctly, browser tab shows the right title, but FB / Twitter / LinkedIn previews show the homepage title + description + URL. Image often correct (because `og:image` is per-page via `opengraph-image.tsx`).
+
+**The fix:** keep ONLY global fields in root `openGraph` — `siteName`, `locale`, `type`. Strip `title`, `description`, `url`. Each page's top-level `title` and `description` then auto-derive into `og:title` and `og:description`; `og:url` defaults to the request URL.
+
+**Same root cause as the canonical bug** PAL fixed 2026-04-30 (where `alternates.canonical: "https://theportalocal.com"` at root made every URL canonicalize to homepage). The pattern: **root layout sets only TRULY GLOBAL fields**; per-page metadata handles per-page values; never override at root with values that should vary by page.
+
+**Cross-project rule:** when initializing a Next.js App Router project, audit the root `layout.tsx` for any field nested inside an object whose name ends in `-graph` or `alternates` — those tend to be merged-not-replaced and cascade silently. PAL had two of these bite us in two days.
+
+### Vercel Blob "store-level access" + token auto-injection
+
+Two learnings from setting up the PAL image Bank:
+
+1. **`BLOB_READ_WRITE_TOKEN` auto-injects** when you create a Blob store in the Vercel dashboard. No input field; the dashboard generates and injects to project env vars (Production + Preview + Development). If the modal didn't ask you for it, that's correct behavior, not a bug.
+
+2. **Store-level "private" vs "public" access setting** affects whether blob URLs are publicly fetchable. For any blob URL that needs to be FB-scrapable (or scraped by any third-party), the store must be public. Per-blob `access: "public"` in code is necessary but may not be sufficient — store-level setting can override. Test by fetching the URL anonymously (incognito) immediately after upload; if 401/auth required, the store is private and needs recreation.
+
+3. **Recreating a Blob store** generates a new `BLOB_READ_WRITE_TOKEN`. The OLD deployment captured the OLD token at build/deploy time, so a redeploy is required for env to refresh. Push an empty commit to trigger.
+
+**Cross-project rule:** any Heye Lab project using Vercel Blob for FB-scraped content needs (a) public store + (b) verify-public-fetch in setup smoke test + (c) understand redeploy cycle on token rotation.
+
+### "Two systems, similar names" gotcha (upcoming-triggers preview vs auto-send cron)
+
+PAL had a moment where Winston saw a milestone disappear from the marketing hub's "Upcoming triggers" list and thought it had auto-fired a post. It hadn't. The list was a **calendar preview** — pure display logic that filters out past fire dates. The actual auto-fire cron didn't yet exist (was on the build list).
+
+The lesson: **when shipping read-only previews of "what would happen if X were running", visually mark them differently from active state.** A preview list and an action list should look distinct. Without the visual distinction, operators can't tell whether something happened or not.
+
+**Cross-project rule:** any operator surface that shows "future state" or "would-be-triggered" content needs explicit framing (sub-header, badge, color) so it's never confused with "did happen." Canonical PAL fix: marketing hub's Upcoming Triggers panel says "Posts that auto-queue on these dates" + has a "Note: Meta in stub mode" footnote when the cron isn't actually wired.
+
+### UX-as-feature-jump validation
+
+The single biggest "wow" reaction Collie had in the entire PAL build came from the marketing hub redesign — tile launcher + breadcrumb + Details toggle + friendly copy. Not new features. **Existing features rebuilt with consumer-app polish unlocked Collie's confidence in operating independently.**
+
+This validates the broader principle: **for non-engineer collaborators, UX polish is a feature.** A new tool with dev-console design will be used hesitantly; an old tool with consumer-app design will be used confidently. The right ratio of investment is closer to 50/50 (features/UX) than the engineering default of 90/10.
+
+Filed as standalone memory file: [`feedback_consumer_ux_for_non_tech_operators.md`](feedback_consumer_ux_for_non_tech_operators.md). Default for any Heye Lab tenant tool a non-engineer touches.
+
+---
+
+### Generator-vs-spec drift bug class
+
+When source-of-truth lives in TWO places (e.g., markdown + Python that hardcodes the same content), drift will silently accumulate. **Always:**
+
+1. Make the markdown the canonical source if practical (Python reads markdown at render time)
+2. OR: lock both layers behind a verify-on-render assertion that compares rendered output to spec markers
+3. NEVER rely on metadata (DOC_VERSION = "v1.2") as evidence of what's in the body
+
+Sage Em 2026-04-30 had this bug on BOTH the contract generator AND the brief generator. Both got the verify-on-render lock as the durable fix. Same pattern likely applies to:
+- Sage Engineer Brief generator (not yet audited)
+- Sage Brand Onepager generator (likely the same drift risk)
+- Sage Dashboard-vs-Monday CRM Report generator
+- Future PAL/CrossRef equivalent generators
 
 ---
 

@@ -116,8 +116,10 @@ deploy. After any rotation: `vercel deploy --prod --yes`.
 |---------|-----------|------------------------|--------|
 | PAL | LIVE at /wheelhouse | ✅ (winston-claude) | canonical |
 | CrossRef | not yet built | n/a | pending — replicate the PAL pattern |
-| Sage Em | not yet built | n/a | pending — replicate |
+| Sage Em (Sage HQ) | LIVE at sage-em-wheelhouse-ppgn.vercel.app (binds hq.sageem.co at cutover) | ✅ (claude-default, hex token) | LIVE 2026-04-29 — uses bearer token for `/api/agent/me` endpoint specifically (NOT yet the full PAL Wheelhouse routes/middleware shape; Sage HQ is more CRM than ops board) |
 | Heye Lab | not yet built | n/a | pending — replicate |
+
+**Sage HQ note:** Sage HQ ships the bearer-token pattern (single agent token in Postgres `agent_tokens` table, hashed at rest, raw value in `WHEELHOUSE_AGENT_TOKEN`-equivalent env var) but DOESN'T (yet) ship the full PAL Wheelhouse routes/threads/messages/activity-ticker shape. They're sibling tools, not identical replicas. When Sage HQ adds an internal-ops-board surface or CrossRef ships its own, the per-agent token mapping pattern (PAL's `WHEELHOUSE_TOKEN_<AGENT>_CLAUDE` resolving to participant ID) applies. For now, Sage HQ's agent CLI integration is single-token at `/api/agent/me`.
 
 When adding a new project's Wheelhouse:
 1. Build the routes + middleware following the PAL implementation

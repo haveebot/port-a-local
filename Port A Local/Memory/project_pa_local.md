@@ -572,5 +572,40 @@ STRIPE_SECRET_KEY, NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY, RESEND_API_KEY, TWILIO_AC
 - **Archival source photos: `public/archives/causeway-sign-1939.jpg`** (1939 Russell Lee FSA, LOC, PD — first archival image downloaded locally for asset composition; add more here as needed)
 - **Draft archive: `workspace/drafts/pal-editorial-two-port-aransases.md`** — original Dispatch #1 draft with notes
 
+## 2026-04-30 mega session highlights (read this for current state)
+
+**One-paragraph summary:** Drought disaster declared in Nueces County. Shipped a 9-min sourced Dispatch with 9 named PA locals + Barney Farley historical voice. Custom 8.7%-stat highlight OG. First auto-post LIVE on PAL FB Page via newly-built review queue. Site-wide canonical bug found and killed (was suppressing every share's OG). Marketing hub at `/wheelhouse/marketing` consolidating Glossary + Social. Glossary→Social auto-trigger wired. Emergency banner system end-to-end (bearer auth + revalidatePath + JS-measured nav offset). Drought banner LIVE site-wide. Live music weekend updated from Collie's calendar. Nav transparency killed (always-solid now). 30+ commits. Worktree clean, Vercel green.
+
+**Detailed handoff:** `Session Notes/handoff-2026-04-30.md` in PAL repo
+**HeyeDeploy patterns extracted:** `Session Notes/heyedeploy-patterns-2026-04-30.md`
+
+**Tomorrow's mega-session pending list (priority order):**
+1. Stripe Issuing application — apply at https://dashboard.stripe.com/issuing/overview, ~3-7 day review. Once enabled: runner virtual cards + dedicated FB Ads card.
+2. Google Search Console + Bing Webmaster — submit sitemap + request re-crawl. Biggest near-term ranking lift now that canonical is fixed.
+3. FB milestone cron — auto-queue posts at 30/14/7/1 days out / day-of / wrap. `src/lib/eventMilestones.ts` helper already exists.
+4. Schema audit — verify the 10 schema components in `src/components/StructuredData.tsx` are actually rendered on detail pages.
+5. Internal linking — surface Related sections on Heritage + Dispatch using existing `relatedDispatches` / `relatedStories` fields.
+
+**Key new files this session worth knowing:**
+- `src/data/social-post-store.ts` — Postgres-backed social review queue with idempotency on (trigger_type, trigger_ref, channel)
+- `src/lib/metaGraph.ts` — FB + IG Graph API wrapper with stub-mode fallback
+- `src/lib/socialPostTemplates.ts` — caption templates per trigger type (event, milestone, heritage, dispatch, glossary_active, manual)
+- `src/lib/eventMilestones.ts` — pure helper computing upcoming-milestone preview data
+- `src/data/ask-gully-log-store.ts` — analytics log for Ask Gully questions
+- `src/components/PalBannerHeightSync.tsx` — JS-measured nav offset for the alert banner
+- `src/app/wheelhouse/marketing/page.tsx` — the consolidated marketing hub
+- `src/app/api/wheelhouse/social/route.ts` + `[id]/route.ts` + `test/route.ts` — social queue API (cookie + bearer auth)
+
+**Status of operator surfaces (live in prod as of session end):**
+- `/wheelhouse/marketing` — aggregated marketing hub
+- `/wheelhouse/social` — review queue, FB confirmed working end-to-end
+- `/wheelhouse/glossary` — status flip auto-queues social drafts
+- `/wheelhouse/ask-gully` — analytics + content gaps
+- `/wheelhouse/alerts` — bearer-auth + revalidate live
+- Drought banner — LIVE site-wide
+- FB automation — LIVE (1 post sent successfully today)
+- IG automation — stub mode (no `META_INSTAGRAM_ACCOUNT_ID` yet)
+- Stripe Issuing — NOT enabled (application is the unblock)
+
 ## Related memory files
 - `feedback_pal_dispatch_workflow.md` — the validated 6-step pattern for writing Dispatch pieces
