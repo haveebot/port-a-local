@@ -44,41 +44,43 @@ export interface CustomerOrder {
   items: OrderLine[];
 }
 
-async function customerQuery(): Promise<URLSearchParams | null> {
-  const session = await loadSession();
-  if (!session?.email) return null;
-  const params = new URLSearchParams();
-  params.set("email", session.email);
-  return params;
-}
-
 const ORDER_FETCH_TIMEOUT_MS = 8000;
 
-async function fetchWithTimeout(url: string): Promise<Response> {
+/** Returns auth headers for a logged-in customer, or null if not signed in. */
+async function authHeaders(): Promise<Record<string, string> | null> {
+  const session = await loadSession();
+  if (!session?.sessionToken) return null;
+  return { Authorization: `Bearer ${session.sessionToken}` };
+}
+
+async function fetchWithTimeout(
+  url: string,
+  init: RequestInit = {}
+): Promise<Response> {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), ORDER_FETCH_TIMEOUT_MS);
   try {
-    return await fetch(url, { signal: controller.signal });
+    return await fetch(url, { ...init, signal: controller.signal });
   } finally {
     clearTimeout(timer);
   }
 }
 
 export async function fetchMyOrders(): Promise<CustomerOrder[]> {
-  const params = await customerQuery();
-  if (!params) return [];
-  const res = await fetchWithTimeout(apiUrl(`/api/customer/orders?${params.toString()}`));
+  const headers = await authHeaders();
+  if (!headers) return [];
+  const res = await fetchWithTimeout(apiUrl(`/api/customer/orders`), { headers });
   if (!res.ok) throw new Error("Failed to load orders");
   const json = (await res.json()) as { orders: CustomerOrder[] };
   return json.orders ?? [];
 }
 
 export async function fetchMyOrder(id: string): Promise<CustomerOrder | null> {
-  const params = await customerQuery();
-  if (!params) return null;
-  const res = await fetchWithTimeout(
-    apiUrl(`/api/customer/orders/${id}?${params.toString()}`)
-  );
+  const headers = await authHeaders();
+  if (!headers) return null;
+  const res = await fetchWithTimeout(apiUrl(`/api/customer/orders/${id}`), {
+    headers,
+  });
   if (res.status === 404) return null;
   if (!res.ok) throw new Error("Failed to load order");
   const json = (await res.json()) as { order: CustomerOrder };

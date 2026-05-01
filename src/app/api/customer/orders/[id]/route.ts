@@ -1,35 +1,34 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getOrder } from "@/data/delivery-store";
 import { toCustomerOrderSummary } from "@/lib/customerOrderView";
+import { readBearerToken, verifyCustomerSession } from "@/lib/customerSession";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
 /**
- * GET /api/customer/orders/[id]?email=...
+ * GET /api/customer/orders/[id]
  *
- * Returns a single customer-safe order summary. The caller must include
- * the email (or phone) used at checkout — we use it as a lightweight
- * authorization check so a guessed order id doesn't leak details.
+ * Authorization: Bearer <session token from /api/customer/apple-signin>
  *
- * Once the customer session token from /api/customer/apple-signin is
- * propagated, switch to validating the bearer instead of trusting the
- * query string.
+ * Returns a single customer-safe order summary if the authenticated user
+ * actually owns the order (matched by email on the order record).
+ *
+ * Closes the v1 IDOR where this endpoint accepted ?email=... from the
+ * client. The verified-session email is the only ownership signal.
  */
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  const { searchParams } = new URL(req.url);
-  const email = searchParams.get("email")?.trim().toLowerCase() || undefined;
-  const phone = searchParams.get("phone")?.trim() || undefined;
 
-  if (!email && !phone) {
-    return NextResponse.json(
-      { error: "email or phone is required for ownership check" },
-      { status: 400 }
-    );
+  const session = verifyCustomerSession(readBearerToken(req));
+  if (!session) {
+    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  }
+  if (!session.email) {
+    return NextResponse.json({ error: "session has no email" }, { status: 403 });
   }
 
   const order = await getOrder(id);
@@ -38,10 +37,11 @@ export async function GET(
   }
 
   const ownsByEmail =
-    !!email && order.customer.email?.toLowerCase() === email;
-  const ownsByPhone = !!phone && order.customer.phone === phone;
-  if (!ownsByEmail && !ownsByPhone) {
-    // Don't disclose existence — use the same shape as 404.
+    order.customer.email?.toLowerCase() === session.email.toLowerCase();
+  if (!ownsByEmail) {
+    // Don't disclose existence — return the same shape as 404 so an
+    // attacker probing order ids can't distinguish "exists, not yours"
+    // from "doesn't exist".
     return NextResponse.json({ error: "order not found" }, { status: 404 });
   }
 
