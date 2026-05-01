@@ -60,58 +60,50 @@ export const VENUES: Record<string, LiveMusicVenue> = {
   "brons": { slug: "brons", name: "Bron's Backyard", directoryHref: "/drink/drink-brons-backyard" },
   "salty-dog": { slug: "salty-dog", name: "Salty Dog", directoryHref: "/drink/drink-salty-dog" },
   "sip-yard": { slug: "sip-yard", name: "Sip Yard" },
+  "bierhaus": { slug: "bierhaus", name: "BierHaus" },
+  "beach-bums": { slug: "beach-bums", name: "Beach Bums" },
+  "art-center": { slug: "art-center", name: "Port Aransas Art Center" },
+  "marker-25": { slug: "marker-25", name: "Marker 25 (beach)" },
+  "fred-rhodes": { slug: "fred-rhodes", name: "Fred Rhodes Pavilion" },
 };
 
 export const CURRENT_WEEK: LiveMusicWeek = {
-  weekOf: "2026-04-23",
-  sourcedFrom: "South Jetty — Live Music Tonight, week of Apr 23, 2026",
-  sourceReceivedAt: "2026-04-23",
+  weekOf: "2026-04-30",
+  sourcedFrom: "Collie — Port A Local calendar (week of Apr 30, 2026)",
+  sourceReceivedAt: "2026-04-30",
   acts: [
-    { date: "2026-04-23", venue: "shortys", artist: "Johnson All Starz", notes: "Recurring every Thursday" },
-    { date: "2026-04-23", venue: "the-gaff", artist: "Boudreaux & Pousson" },
-
-    { date: "2026-04-24", venue: "the-gaff", artist: "Boudreaux & Pousson" },
-    { date: "2026-04-24", venue: "shortys", artist: "Mantle Jennings" },
-    { date: "2026-04-24", venue: "sip-yard", artist: "Young Klassics" },
-    { date: "2026-04-24", venue: "brons", artist: "Brandon Michael" },
-    { date: "2026-04-24", venue: "treasure-island", artist: "Carson Miller" },
-    { date: "2026-04-24", venue: "vfw", artist: "Garry Mitcham" },
-    { date: "2026-04-24", venue: "salty-dog", artist: "Dickie Delight" },
-
-    { date: "2026-04-25", venue: "the-gaff", artist: "Jim Dugan" },
-    { date: "2026-04-25", venue: "shortys", artist: "John Cortez" },
-    { date: "2026-04-25", venue: "brons", artist: "Timothy Noel & Smokin' Guns" },
-    { date: "2026-04-25", venue: "sip-yard", artist: "Isaac Jacob" },
-    { date: "2026-04-25", venue: "vfw", artist: "Lucky Dogz" },
-
-    { date: "2026-04-26", venue: "shortys", artist: "Boone Holding" },
-    { date: "2026-04-26", venue: "shortys", artist: "Jim Dugan & Ty Dietz", notes: "Recurring every Sunday" },
-    { date: "2026-04-26", venue: "treasure-island", artist: "Back Pew Revival" },
-    { date: "2026-04-26", venue: "brons", artist: "Harmonk" },
-    { date: "2026-04-26", venue: "brons", artist: "Groove 2.0" },
-
-    { date: "2026-04-27", venue: "shortys", artist: "John Elijah Band", notes: "Recurring every Monday" },
-    { date: "2026-04-27", venue: "brons", artist: "Palacios Bros" },
-
-    { date: "2026-04-28", venue: "vfw", artist: "Brad Ethridge" },
-    { date: "2026-04-28", venue: "vfw", artist: "Coastal Benders" },
-
-    { date: "2026-04-29", venue: "the-gaff", artist: "Open Mic with Brad E.", notes: "Recurring every Wednesday" },
-  ],
-  upcoming: [
+    // Thursday (carried from prior week's preview)
     { date: "2026-04-30", venue: "the-gaff", artist: "Jim Dugan" },
     { date: "2026-04-30", venue: "the-gaff", artist: "Jim Bush" },
-    { date: "2026-04-30", venue: "the-gaff", artist: "Joe Martyn Rickie" },
-    { date: "2026-05-01", venue: "treasure-island", artist: "Raul Ayala" },
-    { date: "2026-05-01", venue: "treasure-island", artist: "Jam Band" },
-    { date: "2026-05-01", venue: "sip-yard", artist: "Casey Chesnutt" },
-    { date: "2026-05-02", venue: "treasure-island", artist: "Palacios Bros" },
-    { date: "2026-05-02", venue: "treasure-island", artist: "Cathouse" },
-    { date: "2026-05-02", venue: "shortys", artist: "Lucky Dogz" },
-    { date: "2026-05-02", venue: "sip-yard", artist: "Case Hardin" },
-    { date: "2026-05-02", venue: "sip-yard", artist: "Los Locals" },
-    { date: "2026-05-02", venue: "sip-yard", artist: "Logan Samford" },
+    { date: "2026-04-30", venue: "the-gaff", artist: "Joe Martyn Ricke" },
+
+    // Friday — May 1
+    { date: "2026-05-01", venue: "art-center", artist: "First Friday", time: "5:30 PM" },
+    { date: "2026-05-01", venue: "the-gaff", artist: "Aaron Boultinghouse", time: "7 PM" },
+    { date: "2026-05-01", venue: "brons", artist: "Harmonx", time: "7 PM" },
+    { date: "2026-05-01", venue: "vfw", artist: "Chris Lancaster", time: "7 PM" },
+    { date: "2026-05-01", venue: "sip-yard", artist: "Casey Chesnutt", time: "7:30 PM" },
+    { date: "2026-05-01", venue: "marker-25", artist: "Moonfire party", time: "7:30 PM" },
+    { date: "2026-05-01", venue: "shortys", artist: "Boone Holding", time: "9 PM" },
+    { date: "2026-05-01", venue: "treasure-island", artist: "Raul Ayala", time: "9 PM" },
+
+    // Saturday — May 2
+    { date: "2026-05-02", venue: "bierhaus", artist: "Big Time Jukebox", time: "6 PM" },
+    { date: "2026-05-02", venue: "vfw", artist: "Groove 2.0", time: "7 PM" },
+    { date: "2026-05-02", venue: "the-gaff", artist: "Joe Martyn Ricke", time: "7 PM" },
+    { date: "2026-05-02", venue: "brons", artist: "Ruben V", time: "7 PM" },
+    { date: "2026-05-02", venue: "sip-yard", artist: "Mykel Martin", time: "7:30 PM" },
+    { date: "2026-05-02", venue: "sip-yard", artist: "Case Hardin", time: "9 PM" },
+    { date: "2026-05-02", venue: "shortys", artist: "Lucky Dogz", time: "9 PM" },
+    { date: "2026-05-02", venue: "treasure-island", artist: "Jam Band", time: "9 PM" },
+    { date: "2026-05-02", venue: "beach-bums", artist: "SA Lights — Journey Tribute", time: "9 PM" },
+
+    // Sunday — May 3
+    { date: "2026-05-03", venue: "fred-rhodes", artist: "Farmers Market", time: "10 AM" },
+    { date: "2026-05-03", venue: "bierhaus", artist: "Mykel Martin", time: "2 PM" },
+    { date: "2026-05-03", venue: "shortys", artist: "Jim Dugan", time: "3 PM" },
   ],
+  upcoming: [],
 };
 
 export function todayInCentral(): string {
