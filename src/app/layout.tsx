@@ -92,7 +92,16 @@ export default async function RootLayout({
       </head>
       <body
         className="font-sans antialiased"
-        style={{ "--pal-banner-h": bannerHeight } as React.CSSProperties}
+        style={
+          {
+            "--pal-banner-h": bannerHeight,
+            // Push normal-flow page content down by the banner height
+            // so hero pills + section eyebrows don't collide with the
+            // shifted-down fixed Navigation. Banner + Nav are both
+            // fixed (out of flow) — this padding only affects {children}.
+            paddingTop: "var(--pal-banner-h)",
+          } as React.CSSProperties
+        }
       >
         {/* Site-wide emergency banner. Renders nothing when no
             active alert (dormant baseline). Fixed at top-0 z-[55],
