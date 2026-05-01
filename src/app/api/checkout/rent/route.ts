@@ -17,13 +17,21 @@ export async function POST(req: NextRequest) {
     pickupDate,
     returnDate,
     numDays,
-    reservationFee,
     smsConsent,
   } = body;
 
-  if (!name || !phone || !email || !cartSize || !pickupDate || !returnDate || !numDays || !reservationFee) {
+  // Note: any reservationFee in the body is INTENTIONALLY ignored. The fee is
+  // computed server-side ($10/day) so a manipulated client can't underpay.
+  if (!name || !phone || !email || !cartSize || !pickupDate || !returnDate || !numDays) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
   }
+
+  const days = Number(numDays);
+  if (!Number.isFinite(days) || days < 1 || days > 60) {
+    return NextResponse.json({ error: "Invalid numDays" }, { status: 400 });
+  }
+  const RESERVATION_FEE_CENTS_PER_DAY = 1000; // $10/day, source of truth
+  const reservationFeeCents = days * RESERVATION_FEE_CENTS_PER_DAY;
 
   try {
     const session = await getStripe().checkout.sessions.create({
@@ -34,10 +42,10 @@ export async function POST(req: NextRequest) {
         {
           price_data: {
             currency: "usd",
-            unit_amount: reservationFee * 100, // Stripe uses cents
+            unit_amount: reservationFeeCents,
             product_data: {
               name: `Golf Cart Reservation — ${cartSize}-Passenger`,
-              description: `${numDays} day${numDays !== 1 ? "s" : ""} · ${pickupDate} → ${returnDate} · Pickup in Port Aransas`,
+              description: `${days} day${days !== 1 ? "s" : ""} · ${pickupDate} → ${returnDate} · Pickup in Port Aransas`,
             },
           },
           quantity: 1,
@@ -51,8 +59,8 @@ export async function POST(req: NextRequest) {
         cartSize,
         pickupDate,
         returnDate,
-        numDays: String(numDays),
-        reservationFee: String(reservationFee),
+        numDays: String(days),
+        reservationFee: String(reservationFeeCents / 100),
         smsConsent: smsConsent ? "true" : "false",
       },
       success_url: `${APP_URL}/rent/success?session_id={CHECKOUT_SESSION_ID}`,
