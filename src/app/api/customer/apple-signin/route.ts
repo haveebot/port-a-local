@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { createRemoteJWKSet, jwtVerify, type JWTPayload } from "jose";
+import { upsertCustomerOnSignIn } from "@/data/customers-store";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -91,10 +92,6 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // TODO: persist a customer record here. For now we mint a session
-  // token bound to the apple user id. The customer-app keeps this and
-  // sends it as Authorization: Bearer for future calls. Switch to a
-  // real session table when /api/customer/orders ships.
   const sessionSecret = process.env.CUSTOMER_SESSION_SECRET;
   if (!sessionSecret) {
     return NextResponse.json(
@@ -106,13 +103,33 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  // Persist the customer. Apple only sends email + displayName on the
+  // first sign-in; the store COALESCEs so we keep what we previously
+  // captured on returning sign-ins. Best-effort — falls back to a
+  // synthetic record if Postgres isn't configured (returns null).
+  const emailVerified =
+    payload.email_verified === true || payload.email_verified === "true";
+  const customer = await upsertCustomerOnSignIn({
+    appleSub: subject,
+    email: body.email ?? payload.email ?? null,
+    displayName: body.displayName ?? null,
+    emailVerified,
+  });
+
+  // Authoritative identity: prefer the persisted record (which carries
+  // forward email/name from the FIRST sign-in if Apple omitted them
+  // this time). Fall back to whatever the client / Apple gave us.
+  const sessionEmail =
+    customer?.email ?? body.email ?? payload.email ?? null;
+  const sessionName = customer?.displayName ?? body.displayName ?? null;
+
   const issuedAt = Math.floor(Date.now() / 1000);
   const expiresAt = issuedAt + 60 * 60 * 24 * 30; // 30 days
   const sessionPayload = JSON.stringify({
     sub: subject,
     iat: issuedAt,
     exp: expiresAt,
-    email: body.email ?? payload.email,
+    email: sessionEmail,
   });
   const sig = crypto
     .createHmac("sha256", sessionSecret)
@@ -124,8 +141,9 @@ export async function POST(req: NextRequest) {
   return NextResponse.json({
     customerId: subject,
     sessionToken,
-    email: body.email ?? payload.email,
-    displayName: body.displayName,
+    email: sessionEmail,
+    displayName: sessionName,
     expiresAt,
+    signInCount: customer?.signInCount ?? null,
   });
 }
