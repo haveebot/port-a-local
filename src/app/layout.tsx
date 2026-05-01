@@ -36,20 +36,21 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
+  // ROOT openGraph — only GLOBAL fields. Do NOT set title/description/url
+  // here: Next.js treats fields nested inside openGraph as authoritative
+  // and overrides per-page metadata that doesn't ALSO nest its own
+  // openGraph block. Setting title/description/url at root caused every
+  // page on the site to scrape with homepage OG values (FB preview cards
+  // showed correct OG image but homepage title + description + URL).
+  // Per-page title + description auto-derive into og:title + og:description
+  // when this block has only the global keys. og:url uses the request URL.
   openGraph: {
-    title: "Port A Local — Your Local Guide to Port Aransas, TX",
-    description:
-      "The local guide. Heritage. Dispatch. Find what is on the island.",
-    url: "https://theportalocal.com",
     siteName: "Port A Local",
     locale: "en_US",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Port A Local — Your Local Guide to Port Aransas, TX",
-    description:
-      "The local guide. Heritage. Dispatch. Find what is on the island.",
   },
   // NOTE: do NOT set alternates.canonical at the root layout — that
   // would cascade a homepage-canonical to every page on the site,
