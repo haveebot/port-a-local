@@ -10,6 +10,7 @@ import { isMetaConfigured } from "@/lib/metaGraph";
 import SocialPostCard from "./SocialPostCard";
 import ResendButton from "./ResendButton";
 import MarketingBreadcrumb from "@/components/wheelhouse/MarketingBreadcrumb";
+import AskHavee from "./AskHavee";
 
 export const dynamic = "force-dynamic";
 
@@ -126,6 +127,9 @@ export default async function SocialQueuePage() {
             </p>
           )}
         </section>
+
+        {/* ASK HAVEE — NL composer */}
+        <AskHavee />
 
         {/* PENDING REVIEW */}
         <section className="bg-white rounded-2xl border border-coral-300 p-6 shadow-sm">
