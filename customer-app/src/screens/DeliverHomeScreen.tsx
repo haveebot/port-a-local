@@ -38,15 +38,24 @@ export default function DeliverHomeScreen({ navigation }: Props) {
 
         <Text style={styles.sectionLabel}>RESTAURANTS</Text>
 
-        {restaurants.map((r) => (
-          <RestaurantCard
-            key={r.id}
-            restaurant={r}
-            onPress={() =>
-              navigation.navigate("Restaurant", { slug: r.slug })
-            }
-          />
-        ))}
+        {restaurants.length === 0 ? (
+          <View style={styles.emptyRestaurants}>
+            <Ionicons name="moon-outline" size={28} color={colors.navy[300]} />
+            <Text style={styles.emptyRestaurantsText}>
+              No restaurants are taking orders right now. Check back this evening.
+            </Text>
+          </View>
+        ) : (
+          restaurants.map((r) => (
+            <RestaurantCard
+              key={r.id}
+              restaurant={r}
+              onPress={() =>
+                navigation.navigate("Restaurant", { slug: r.slug })
+              }
+            />
+          ))
+        )}
 
         <View style={{ height: 60 }} />
       </ScrollView>
@@ -81,6 +90,8 @@ function RestaurantCard({
       style={styles.card}
       activeOpacity={0.85}
       onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel={`${restaurant.name}${open ? ", open now" : ", closed"}`}
     >
       <View
         style={[
@@ -126,6 +137,23 @@ function RestaurantCard({
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.sand[50] },
   content: { paddingBottom: 24 },
+  emptyRestaurants: {
+    marginHorizontal: 16,
+    marginTop: 8,
+    padding: 24,
+    borderRadius: 14,
+    backgroundColor: "#fff",
+    borderWidth: 1,
+    borderColor: colors.sand[200],
+    alignItems: "center",
+    gap: 10,
+  },
+  emptyRestaurantsText: {
+    color: colors.navy[400],
+    fontSize: 14,
+    textAlign: "center",
+    lineHeight: 20,
+  },
   hero: {
     backgroundColor: colors.navy[950],
     paddingHorizontal: 24,

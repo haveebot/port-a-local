@@ -51,6 +51,8 @@ export default function ServicesHubScreen({ navigation }: Props) {
             key={s.slug}
             style={styles.card}
             activeOpacity={0.85}
+            accessibilityRole="button"
+            accessibilityLabel={`${s.title}: ${s.tagline}`}
             onPress={() => {
               if (s.slug === "deliver") {
                 navigation.navigate("DeliverHome");
