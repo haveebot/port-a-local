@@ -7,18 +7,11 @@ import LighthouseMark from "@/components/brand/LighthouseMark";
 import PortalIcon, { type PortalIconName } from "@/components/brand/PortalIcon";
 
 export default function Navigation() {
-  const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [exploreOpen, setExploreOpen] = useState(false);
   const [discoverOpen, setDiscoverOpen] = useState(false);
   const exploreRef = useRef<HTMLDivElement>(null);
   const discoverRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   // Close dropdowns when clicking outside
   useEffect(() => {
@@ -51,11 +44,13 @@ export default function Navigation() {
       // top sits at var(--pal-banner-h, 0px) — pushed down by the
       // EmergencyBanner height when an alert is active. Defaults to
       // 0 when no banner. Set in src/app/layout.tsx server-side.
-      className={`fixed top-[var(--pal-banner-h,0px)] left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled
-          ? "bg-navy-950/95 backdrop-blur-md shadow-lg shadow-navy-950/20"
-          : "bg-transparent"
-      }`}
+      //
+      // Always solid (was: transparent at scroll-top, navy on scroll).
+      // Removed 2026-04-30 — the transparent-on-scroll-top reveal was
+      // a 2010s pattern that fought with the alert banner stacking,
+      // mobile readability, and brand simplicity. Solid coral banner
+      // → solid navy nav → page content reads as three crisp layers.
+      className="fixed top-[var(--pal-banner-h,0px)] left-0 right-0 z-50 bg-navy-950/95 backdrop-blur-md shadow-lg shadow-navy-950/20"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-18">
