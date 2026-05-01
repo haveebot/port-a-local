@@ -48,7 +48,10 @@ export default function Navigation() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+      // top sits at var(--pal-banner-h, 0px) — pushed down by the
+      // EmergencyBanner height when an alert is active. Defaults to
+      // 0 when no banner. Set in src/app/layout.tsx server-side.
+      className={`fixed top-[var(--pal-banner-h,0px)] left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
           ? "bg-navy-950/95 backdrop-blur-md shadow-lg shadow-navy-950/20"
           : "bg-transparent"

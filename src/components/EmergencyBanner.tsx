@@ -27,7 +27,7 @@ export default async function EmergencyBanner() {
     <aside
       role="alert"
       aria-live="assertive"
-      className={`relative w-full ${styles.bg} ${styles.text} border-b ${styles.border}`}
+      className={`fixed top-0 left-0 right-0 z-[55] w-full ${styles.bg} ${styles.text} border-b ${styles.border}`}
     >
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4">
         <div className="flex items-start gap-2.5 flex-1 min-w-0">

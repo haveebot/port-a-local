@@ -6,6 +6,7 @@ import EmergencyBanner from "@/components/EmergencyBanner";
 import VisitorHeartbeat from "@/components/VisitorHeartbeat";
 import AnalyticsWrapper from "@/components/AnalyticsWrapper";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { getActiveAlert } from "@/data/alerts-store";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://theportalocal.com"),
@@ -70,22 +71,34 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  // Fetch active alert at the layout level so we can set a CSS
+  // variable that pushes the fixed Navigation down by the banner's
+  // approximate height. ~76px covers the warning/critical heights;
+  // mobile may add a line for long messages — overestimate slightly
+  // to avoid the nav cutting into the banner text.
+  const activeAlert = await getActiveAlert().catch(() => null);
+  const bannerHeight = activeAlert ? "76px" : "0px";
+
   return (
     <html lang="en">
       <head>
         <WebsiteSchema />
         <OrganizationSchema />
       </head>
-      <body className="font-sans antialiased">
+      <body
+        className="font-sans antialiased"
+        style={{ "--pal-banner-h": bannerHeight } as React.CSSProperties}
+      >
         {/* Site-wide emergency banner. Renders nothing when no
-            active alert (dormant baseline). Triggered from
-            /wheelhouse/alerts. Phase 1 manual; Phase 2 auto-feeds
-            from CivicPlus + NWS. */}
+            active alert (dormant baseline). Fixed at top-0 z-[55],
+            above Navigation (z-50). When active, layout sets
+            --pal-banner-h CSS var which Navigation reads to shift
+            its fixed top down. */}
         <EmergencyBanner />
         {children}
         <GullyPalette />
