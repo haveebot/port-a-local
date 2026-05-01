@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
+import { revalidatePath } from "next/cache";
 import {
   createAlert,
   dismissAlert,
@@ -94,6 +95,10 @@ export async function POST(req: NextRequest) {
   pushSiteBanner(alert).catch((err) =>
     console.error("[wh/alerts] push on create failed:", err),
   );
+  // Flush Vercel's edge cache so the banner appears immediately
+  // across every page using the root layout. Without this, the
+  // banner would only appear on next deploy / cache TTL.
+  revalidatePath("/", "layout");
   return NextResponse.json({ ok: true, alert });
 }
 
@@ -108,5 +113,8 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ error: "Missing id" }, { status: 400 });
   }
   const alert = await dismissAlert(id, user);
+  // Flush Vercel's edge cache so the banner disappears immediately
+  // when dismissed, mirroring the create path.
+  revalidatePath("/", "layout");
   return NextResponse.json({ ok: true, alert });
 }
