@@ -5,6 +5,7 @@ import {
   ScrollView,
   TouchableOpacity,
   StyleSheet,
+  Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -82,7 +83,29 @@ export default function CartScreen({ navigation }: Props) {
                   <View style={styles.qtyControl}>
                     <TouchableOpacity
                       style={styles.qtyButton}
-                      onPress={() => cart.setQty(line.itemId, line.quantity - 1)}
+                      onPress={() => {
+                        // At qty 1, the minus button removes the line
+                        // entirely — confirm so it doesn't feel like an
+                        // accident.
+                        if (line.quantity <= 1) {
+                          Alert.alert(
+                            "Remove this item?",
+                            `${item?.name ?? "Item"} will be removed from your cart.`,
+                            [
+                              { text: "Cancel", style: "cancel" },
+                              {
+                                text: "Remove",
+                                style: "destructive",
+                                onPress: () => cart.setQty(line.itemId, 0),
+                              },
+                            ]
+                          );
+                          return;
+                        }
+                        cart.setQty(line.itemId, line.quantity - 1);
+                      }}
+                      accessibilityRole="button"
+                      accessibilityLabel={`Decrease quantity of ${item?.name ?? "item"}`}
                     >
                       <Ionicons name="remove" size={16} color="#fff" />
                     </TouchableOpacity>
@@ -90,6 +113,8 @@ export default function CartScreen({ navigation }: Props) {
                     <TouchableOpacity
                       style={styles.qtyButton}
                       onPress={() => cart.setQty(line.itemId, line.quantity + 1)}
+                      accessibilityRole="button"
+                      accessibilityLabel={`Increase quantity of ${item?.name ?? "item"}`}
                     >
                       <Ionicons name="add" size={16} color="#fff" />
                     </TouchableOpacity>
@@ -140,7 +165,21 @@ export default function CartScreen({ navigation }: Props) {
 
         <TouchableOpacity
           style={styles.clearButton}
-          onPress={() => cart.clear()}
+          onPress={() =>
+            Alert.alert(
+              "Empty your cart?",
+              "This removes everything in your cart. You'll need to add items again to check out.",
+              [
+                { text: "Keep cart", style: "cancel" },
+                {
+                  text: "Empty cart",
+                  style: "destructive",
+                  onPress: () => cart.clear(),
+                },
+              ]
+            )
+          }
+          accessibilityRole="button"
         >
           <Text style={styles.clearButtonText}>Empty cart</Text>
         </TouchableOpacity>

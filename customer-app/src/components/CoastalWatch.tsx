@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { View, Text, StyleSheet, Animated, Easing } from "react-native";
 import Svg, {
   Defs,
@@ -107,7 +107,9 @@ export default function CoastalWatch({ conditions }: Props) {
   const reduceMotion = useReducedMotion();
   const tide = fmtTide(conditions?.tideLevelFt ?? null, conditions?.tideDirection ?? null, "2.4 ft");
 
-  const solar = getSolarTimes();
+  // Solar math only changes once per calendar day — memoize so re-renders
+  // (e.g. NOAA refresh, parent state) don't recompute the trig.
+  const solar = useMemo(() => getSolarTimes(), []);
   const now = new Date();
   // Show whichever event is upcoming next: morning sunrise or evening sunset.
   const nextEvent = solar.sunset && solar.sunset > now

@@ -29,8 +29,19 @@ export const runtime = "nodejs";
  *   https://developer.apple.com/documentation/sign_in_with_apple/sign_in_with_apple_rest_api/verifying_a_user
  */
 
+// Bundle id MUST come from the environment in production. Falling back to
+// a hardcoded value would silently accept identity tokens minted for a
+// differently-bundled deploy (e.g. a staging clone of the app). Dev /
+// preview can still use the well-known default for convenience.
 const APPLE_BUNDLE_ID =
-  process.env.APPLE_APP_BUNDLE_ID ?? "co.portalocal.app";
+  process.env.APPLE_APP_BUNDLE_ID ??
+  (process.env.NODE_ENV === "production"
+    ? (() => {
+        throw new Error(
+          "APPLE_APP_BUNDLE_ID env var is required in production"
+        );
+      })()
+    : "co.portalocal.app");
 
 // jose's createRemoteJWKSet handles caching, retries, and key rotation.
 const APPLE_JWKS = createRemoteJWKSet(
