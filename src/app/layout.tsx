@@ -76,13 +76,12 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // Fetch active alert at the layout level so we can set a CSS
-  // variable that pushes the fixed Navigation down by the banner's
-  // approximate height. ~76px covers the warning/critical heights;
-  // mobile may add a line for long messages — overestimate slightly
-  // to avoid the nav cutting into the banner text.
+  // Fetch active alert at the layout level so the body can opt-in
+  // to a CSS class that drives the responsive banner-height var.
+  // The banner wraps to multiple lines on mobile (where messages
+  // run 2-3 lines tall) so we set --pal-banner-h via media query
+  // in globals.css instead of a fixed inline px value.
   const activeAlert = await getActiveAlert().catch(() => null);
-  const bannerHeight = activeAlert ? "76px" : "0px";
 
   return (
     <html lang="en">
@@ -91,17 +90,7 @@ export default async function RootLayout({
         <OrganizationSchema />
       </head>
       <body
-        className="font-sans antialiased"
-        style={
-          {
-            "--pal-banner-h": bannerHeight,
-            // Push normal-flow page content down by the banner height
-            // so hero pills + section eyebrows don't collide with the
-            // shifted-down fixed Navigation. Banner + Nav are both
-            // fixed (out of flow) — this padding only affects {children}.
-            paddingTop: "var(--pal-banner-h)",
-          } as React.CSSProperties
-        }
+        className={`font-sans antialiased ${activeAlert ? "pal-has-banner" : ""}`}
       >
         {/* Site-wide emergency banner. Renders nothing when no
             active alert (dormant baseline). Fixed at top-0 z-[55],

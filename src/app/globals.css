@@ -183,3 +183,26 @@ body {
   background: linear-gradient(135deg, #f08589 0%, #f5a8aa 50%, #f08589 100%);
   box-shadow: 0 4px 16px rgba(232, 101, 111, 0.35);
 }
+
+/*
+ * Emergency banner spacing — sets --pal-banner-h responsively when
+ * an active alert is showing. Layout (src/app/layout.tsx) adds the
+ * .pal-has-banner class to <body> when there's an active alert.
+ *
+ * The banner wraps to multiple lines on mobile where the message
+ * runs longer than the available width. Desktop fits one line
+ * (~76px tall), mobile typically wraps to 2-3 lines (~130-150px).
+ *
+ * This CSS variable drives:
+ *   - body padding-top (pushes hero content below the fixed banner)
+ *   - Navigation top offset (reads var(--pal-banner-h, 0px))
+ */
+body.pal-has-banner {
+  --pal-banner-h: 144px; /* mobile: 3 lines + CTA wrap, generous overshoot */
+  padding-top: var(--pal-banner-h);
+}
+@media (min-width: 640px) {
+  body.pal-has-banner {
+    --pal-banner-h: 76px; /* sm+: single-line desktop */
+  }
+}
