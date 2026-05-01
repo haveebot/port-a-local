@@ -40,6 +40,35 @@ function daysFromNow(iso: string): number {
   return Math.round(ms / MS_PER_DAY);
 }
 
+/**
+ * UTC-ms of "today's" midnight in Central Time. Used as the floor
+ * for the upcoming-milestones list so a milestone that fires earlier
+ * today (e.g. Kite Fest 7d-out at 10am CT) stays visible through
+ * end-of-day CT instead of vanishing the moment its fire time passes.
+ *
+ * Robust to DST via Intl — formats now in Chicago to extract the
+ * elapsed-since-midnight clock time, then subtracts that from now.
+ */
+export function startOfTodayCTMs(): number {
+  const now = Date.now();
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/Chicago",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,
+  }).formatToParts(now);
+  let h = 0,
+    m = 0,
+    s = 0;
+  for (const p of parts) {
+    if (p.type === "hour") h = Number(p.value) % 24;
+    else if (p.type === "minute") m = Number(p.value);
+    else if (p.type === "second") s = Number(p.value);
+  }
+  return now - (h * 3600 + m * 60 + s) * 1000;
+}
+
 function labelFor(kind: MilestoneKind): string {
   switch (kind) {
     case "milestone_30d":
@@ -69,6 +98,7 @@ export function getUpcomingMilestones(
   lookAheadDays = 90,
 ): UpcomingMilestone[] {
   const now = Date.now();
+  const floor = startOfTodayCTMs(); // include milestones that already fired earlier today CT
   const cutoff = now + lookAheadDays * MS_PER_DAY;
   const out: UpcomingMilestone[] = [];
 
@@ -86,7 +116,7 @@ export function getUpcomingMilestones(
     ];
     for (const [kind, daysBefore] of preDays) {
       const fire = start - daysBefore * MS_PER_DAY;
-      if (fire <= now) continue; // already passed
+      if (fire < floor) continue; // before today CT — drop
       if (fire > cutoff) continue; // beyond look-ahead
       out.push({
         event,
@@ -97,8 +127,8 @@ export function getUpcomingMilestones(
       });
     }
 
-    // Day-of — fire on startISO morning if event is upcoming
-    if (start > now && start <= cutoff) {
+    // Day-of — fire on startISO morning if event hasn't ended
+    if (start >= floor && start <= cutoff) {
       out.push({
         event,
         kind: "today",
@@ -110,7 +140,7 @@ export function getUpcomingMilestones(
 
     // Wrap — fire day after endISO
     const wrapFire = end + MS_PER_DAY;
-    if (wrapFire > now && wrapFire <= cutoff) {
+    if (wrapFire >= floor && wrapFire <= cutoff) {
       out.push({
         event,
         kind: "wrap",
