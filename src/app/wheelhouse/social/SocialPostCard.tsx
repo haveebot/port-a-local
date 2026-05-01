@@ -85,6 +85,7 @@ export default function SocialPostCard({ post, position, total }: Props) {
     | "removeImage"
     | "moveUp"
     | "moveDown"
+    | "moveTop"
   >(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -104,8 +105,10 @@ export default function SocialPostCard({ post, position, total }: Props) {
     return data;
   }
 
-  async function onMove(direction: "up" | "down") {
-    setBusy(direction === "up" ? "moveUp" : "moveDown");
+  async function onMove(direction: "up" | "down" | "top") {
+    setBusy(
+      direction === "up" ? "moveUp" : direction === "down" ? "moveDown" : "moveTop",
+    );
     setError(null);
     try {
       await callApi("move", { direction });
@@ -274,9 +277,18 @@ export default function SocialPostCard({ post, position, total }: Props) {
             </span>
             <div className="flex items-center gap-1">
               <button
+                onClick={() => onMove("top")}
+                disabled={position === 1 || busy !== null}
+                title="Jump to top of queue"
+                aria-label="Jump to top"
+                className="px-2 py-1 text-xs rounded border border-coral-300 text-coral-700 hover:border-coral-500 hover:bg-coral-50 disabled:opacity-30 disabled:cursor-not-allowed font-bold"
+              >
+                {busy === "moveTop" ? "…" : "⤒"}
+              </button>
+              <button
                 onClick={() => onMove("up")}
                 disabled={position === 1 || busy !== null}
-                title="Move up"
+                title="Move up one"
                 aria-label="Move up"
                 className="px-2 py-1 text-xs rounded border border-sand-300 hover:border-navy-400 hover:bg-white disabled:opacity-30 disabled:cursor-not-allowed"
               >
@@ -285,7 +297,7 @@ export default function SocialPostCard({ post, position, total }: Props) {
               <button
                 onClick={() => onMove("down")}
                 disabled={position === total || busy !== null}
-                title="Move down"
+                title="Move down one"
                 aria-label="Move down"
                 className="px-2 py-1 text-xs rounded border border-sand-300 hover:border-navy-400 hover:bg-white disabled:opacity-30 disabled:cursor-not-allowed"
               >

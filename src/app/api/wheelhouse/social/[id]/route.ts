@@ -10,6 +10,7 @@ import {
   setImageUrl,
   duplicatePost,
   moveQueueEntry,
+  moveQueueEntryToTop,
   type SocialPost,
 } from "@/data/social-post-store";
 import { postToFacebook, postToInstagram } from "@/lib/metaGraph";
@@ -33,7 +34,7 @@ interface PatchBody {
   caption?: string;
   autoSendAt?: string | null;
   imageUrl?: string | null;
-  direction?: "up" | "down";
+  direction?: "up" | "down" | "top";
 }
 
 async function getCurrentUser(req: NextRequest): Promise<string> {
@@ -123,13 +124,21 @@ export async function PATCH(
   }
 
   if (body.action === "move") {
-    if (body.direction !== "up" && body.direction !== "down") {
+    if (
+      body.direction !== "up" &&
+      body.direction !== "down" &&
+      body.direction !== "top"
+    ) {
       return NextResponse.json(
-        { error: "invalid_direction", expected: "up | down" },
+        { error: "invalid_direction", expected: "up | down | top" },
         { status: 400 },
       );
     }
-    await moveQueueEntry(id, body.direction);
+    if (body.direction === "top") {
+      await moveQueueEntryToTop(id);
+    } else {
+      await moveQueueEntry(id, body.direction);
+    }
     const updated = await getById(id);
     return NextResponse.json({ post: updated, moved: body.direction });
   }

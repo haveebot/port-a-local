@@ -205,6 +205,31 @@ export async function getPending(limit = 50): Promise<SocialPost[]> {
 }
 
 /**
+ * Jump a pending post to the top of the queue (display_order =
+ * current_min - 10). Different from moveQueueEntry("up") — that
+ * swaps with the immediate neighbor; this skips everything.
+ * No-op if the post isn't pending or is already at the top.
+ */
+export async function moveQueueEntryToTop(id: number): Promise<void> {
+  await ensureSchema();
+  const entry = await getById(id);
+  if (!entry || entry.status !== "pending") return;
+  const { rows } = await sql`
+    SELECT MIN(display_order) AS min_order
+    FROM social_post_queue
+    WHERE status = 'pending' AND id != ${id}
+  `;
+  const minOrder = rows[0]?.min_order;
+  if (minOrder === null || minOrder === undefined) return; // only post in queue
+  const newOrder = Number(minOrder) - 10;
+  await sql`
+    UPDATE social_post_queue
+    SET display_order = ${newOrder}, updated_at = NOW()
+    WHERE id = ${id} AND status = 'pending'
+  `;
+}
+
+/**
  * Swap a pending post with the adjacent pending row (up or down) by
  * display_order. Mirrors moveGlossaryEntry's two-step swap pattern.
  * Operator clicks ↑/↓ on a SocialPostCard.
