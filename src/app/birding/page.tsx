@@ -337,7 +337,7 @@ export default async function BirdingPage() {
             <p className="text-navy-700 leading-relaxed">
               Port A birder Beryl Armstrong is at the nature preserve this
               morning watching the migration come through. We&apos;ll add
-              her sighting list as it comes in — bookmark this section.
+              his sighting list as it comes in — bookmark this section.
             </p>
             <p className="text-xs text-navy-500 italic mt-3">
               Spotting something interesting? Email{" "}

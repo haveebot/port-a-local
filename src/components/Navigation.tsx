@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { categories } from "@/data/categories";
 import LighthouseMark from "@/components/brand/LighthouseMark";
-import PortalIcon, { type PortalIconName } from "@/components/brand/PortalIcon";
+import PortalIcon, { EmojiIcon, type PortalIconName } from "@/components/brand/PortalIcon";
 
 export default function Navigation() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -109,6 +109,10 @@ export default function Navigation() {
                     <Link href="/fishing-report" onClick={() => setExploreOpen(false)} className={dropdownLinkClass}>
                       <PortalIcon name="fish" className="w-4 h-4 text-coral-400 shrink-0" />
                       Fishing Report
+                    </Link>
+                    <Link href="/birding" onClick={() => setExploreOpen(false)} className={dropdownLinkClass}>
+                      <EmojiIcon emoji="🐦" className="w-4 h-4 text-coral-400 shrink-0" />
+                      Birding
                     </Link>
                   </div>
                 </div>
@@ -278,6 +282,7 @@ export default function Navigation() {
             <Link href="/events" onClick={() => setMobileOpen(false)} className={`${mobileLinkClass} flex items-center gap-2`}><PortalIcon name="events" className="w-4 h-4 text-coral-400 shrink-0" /> Events</Link>
             <Link href="/live-music" onClick={() => setMobileOpen(false)} className={`${mobileLinkClass} flex items-center gap-2`}><PortalIcon name="art" className="w-4 h-4 text-coral-400 shrink-0" /> Live Music</Link>
             <Link href="/fishing-report" onClick={() => setMobileOpen(false)} className={`${mobileLinkClass} flex items-center gap-2`}><PortalIcon name="fish" className="w-4 h-4 text-coral-400 shrink-0" /> Fishing Report</Link>
+            <Link href="/birding" onClick={() => setMobileOpen(false)} className={`${mobileLinkClass} flex items-center gap-2`}><EmojiIcon emoji="🐦" className="w-4 h-4 text-coral-400 shrink-0" /> Birding</Link>
 
             {/* Discover */}
             <p className={sectionHeaderClass}>Discover</p>
