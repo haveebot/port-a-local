@@ -71,6 +71,7 @@ INCLUDE=(
   "feedback_project_boundaries.md"
   "feedback_meta_api_organic_deprecation.md"
   "feedback_oauth_scope_layers.md"
+  "feedback_meta_api_error_diagnostics.md"
   "parking_pal_token_symbol.md"
 )
 
