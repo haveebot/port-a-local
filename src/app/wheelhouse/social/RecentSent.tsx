@@ -621,24 +621,32 @@ export default function RecentSent({ recent }: Props) {
                   <BoostBadge post={p} />
                   {canShowTraffic &&
                     !isRemoved &&
-                    p.boostStatus === "none" &&
+                    (p.boostStatus === "none" || p.boostStatus === "failed") &&
                     p.externalPostId &&
                     !p.externalPostId.startsWith("stub:") && (
                       <button
                         onClick={() => onBoost(p.id)}
                         disabled={boostingId === p.id || !boostConfig?.ok}
                         title={
-                          boostConfig?.ok
-                            ? "Boost this post — default $1/24h"
-                            : `Boost not configured: ${boostConfig?.reason ?? "checking…"}`
+                          p.boostStatus === "failed"
+                            ? `Retry boost (last error: ${p.boostError ?? "unknown"})`
+                            : boostConfig?.ok
+                              ? "Boost this post — default $1/24h"
+                              : `Boost not configured: ${boostConfig?.reason ?? "checking…"}`
                         }
                         className={`text-[10px] font-mono px-1.5 py-0.5 rounded ${
                           boostConfig?.ok
-                            ? "text-coral-700 hover:bg-coral-50 border border-coral-200"
+                            ? p.boostStatus === "failed"
+                              ? "text-coral-700 hover:bg-coral-50 border border-coral-300 bg-coral-50"
+                              : "text-coral-700 hover:bg-coral-50 border border-coral-200"
                             : "text-navy-300 border border-sand-200 cursor-not-allowed"
                         } disabled:opacity-50`}
                       >
-                        {boostingId === p.id ? "🚀 …" : "🚀 boost"}
+                        {boostingId === p.id
+                          ? "🚀 …"
+                          : p.boostStatus === "failed"
+                            ? "🚀 retry"
+                            : "🚀 boost"}
                       </button>
                     )}
                   {p.status !== "pending" && !isRemoved && (

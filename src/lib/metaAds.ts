@@ -191,6 +191,12 @@ export async function createBoost(
   campaignBody.set("objective", "OUTCOME_TRAFFIC");
   campaignBody.set("status", "ACTIVE");
   campaignBody.set("special_ad_categories", "[]");
+  // Required by FB Marketing API as of late 2024: must explicitly opt
+  // out of campaign-level budget sharing when using ad-set-level budgets.
+  // Without this we get error_subcode 4834011 "Must specify True or False
+  // in is_adset_budget_sharing_enabled". We set budget on the AdSet (not
+  // the campaign), so opting out is correct.
+  campaignBody.set("is_adset_budget_sharing_enabled", "false");
   campaignBody.set("access_token", token);
   const campaignRes = await postForm<{ id: string }>(
     `/act_${adAccount}/campaigns`,
