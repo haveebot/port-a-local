@@ -221,10 +221,38 @@ export default function BirdingPage() {
             >
               Port Aransas IBA
             </a>{" "}
-            page. We don&apos;t have eyewitness fallout sightings to publish —
-            just the verifiable conditions and the species birders should
-            expect.
+            page.
           </p>
+        </div>
+      </section>
+
+      {/* Active right now — eyewitness from local birders */}
+      <section className="py-12">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+          <div className="bg-emerald-50 border-2 border-emerald-300 rounded-2xl p-6 sm:p-8">
+            <p className="text-emerald-700 text-xs font-bold tracking-[0.2em] uppercase mb-3">
+              ✨ From the field · this morning
+            </p>
+            <h2 className="font-display text-xl sm:text-2xl font-bold text-navy-900 mb-3">
+              Local birders are out at the preserve
+            </h2>
+            <p className="text-navy-700 leading-relaxed">
+              Port A birder Beryl Armstrong is at the nature preserve this
+              morning watching the migration come through. We&apos;ll add
+              her sighting list as it comes in — bookmark this section.
+            </p>
+            <p className="text-xs text-navy-500 italic mt-3">
+              Spotting something interesting? Email{" "}
+              <a
+                href="mailto:hello@theportalocal.com"
+                className="text-coral-600 hover:underline"
+              >
+                hello@theportalocal.com
+              </a>{" "}
+              with the species + location and we&apos;ll add it here. This
+              is what local birding looks like.
+            </p>
+          </div>
         </div>
       </section>
 
