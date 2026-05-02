@@ -118,7 +118,8 @@ export type TriggerType =
   | "dispatch_published"
   | "business_added"
   | "glossary_active"
-  | "manual";
+  | "manual"
+  | "manual_external";
 
 export interface SocialPost {
   id: number;
@@ -616,6 +617,59 @@ export async function disableBoost(id: number): Promise<void> {
     SET boost_status = 'disabled', updated_at = NOW()
     WHERE id = ${id} AND boost_status = 'none'
   `;
+}
+
+/**
+ * Find a row by its FB externalPostId. Used by the FB-import flow to dedupe:
+ * if a Page-feed scan returns a post we already track, skip it.
+ */
+export async function getByExternalPostId(
+  externalPostId: string,
+): Promise<SocialPost | null> {
+  await ensureSchema();
+  const result = await sql`
+    SELECT * FROM social_post_queue
+    WHERE external_post_id = ${externalPostId}
+    LIMIT 1
+  `;
+  return result.rows.length > 0 ? rowToPost(result.rows[0]) : null;
+}
+
+/**
+ * Insert a row representing a manually-published FB post (one that was
+ * created outside our queue — typed directly into FB by Collie/Winston).
+ * Used by the /api/wheelhouse/social/import-fb endpoint to back-fill our
+ * ledger. Status defaults to 'sent' since the post is already live on FB.
+ */
+export async function importExternalPost(p: {
+  channel: PostChannel;
+  caption: string;
+  linkUrl: string | null;
+  externalPostId: string;
+  externalPostUrl: string | null;
+  sentAt: Date;
+  sentBy: string;
+}): Promise<SocialPost> {
+  await ensureSchema();
+  const result = await sql`
+    INSERT INTO social_post_queue (
+      trigger_type, trigger_ref, channel, status, caption, link_url,
+      sent_at, sent_by, external_post_id, external_post_url
+    ) VALUES (
+      'manual_external',
+      ${"fb-import:" + p.externalPostId},
+      ${p.channel},
+      'sent',
+      ${p.caption},
+      ${p.linkUrl},
+      ${p.sentAt.toISOString()},
+      ${p.sentBy},
+      ${p.externalPostId},
+      ${p.externalPostUrl}
+    )
+    RETURNING *
+  `;
+  return rowToPost(result.rows[0]);
 }
 
 /**

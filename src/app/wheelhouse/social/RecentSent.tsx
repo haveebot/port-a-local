@@ -321,6 +321,7 @@ export default function RecentSent({ recent }: Props) {
   );
   const [boostingId, setBoostingId] = useState<number | null>(null);
   const [sweeping, setSweeping] = useState(false);
+  const [importing, setImporting] = useState(false);
   const [showRemoved, setShowRemoved] = useState(false);
 
   async function loadTraffic() {
@@ -349,6 +350,32 @@ export default function RecentSent({ recent }: Props) {
       .then(setBoostConfig)
       .catch(() => setBoostConfig({ ok: false, reason: "fetch failed" }));
   }, []);
+
+  async function onImportFb() {
+    if (!confirm("Import manually-posted FB content from the last 24 hours? Any post on the Page that isn't already tracked will be added to the queue with status='sent'.")) return;
+    setImporting(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/wheelhouse/social/import-fb", {
+        method: "POST",
+      });
+      const data = (await res.json()) as {
+        fbPostsScanned?: number;
+        imported?: number;
+        skipped?: number;
+        error?: string;
+      };
+      if (!res.ok) throw new Error(data.error ?? `HTTP ${res.status}`);
+      alert(
+        `Scanned ${data.fbPostsScanned} FB posts: ${data.imported} imported, ${data.skipped} skipped (already tracked).`,
+      );
+      router.refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setImporting(false);
+    }
+  }
 
   async function onSweepRemoved() {
     if (!confirm("Check FB for deleted posts? This polls Graph API for each sent post and marks anything that's been deleted on FB.")) return;
@@ -475,6 +502,14 @@ export default function RecentSent({ recent }: Props) {
             title="Reload traffic data"
           >
             {refreshing ? "↻ …" : "↻ refresh"}
+          </button>
+          <button
+            onClick={onImportFb}
+            disabled={importing}
+            className="text-[11px] text-navy-500 hover:text-coral-700 font-mono disabled:opacity-50"
+            title="Import manually-posted FB content from the last 24h"
+          >
+            {importing ? "📥 …" : "📥 import"}
           </button>
           <button
             onClick={onSweepRemoved}
