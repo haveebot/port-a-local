@@ -152,20 +152,36 @@ function TrafficBadge({
   const fb = traffic.fbClicks;
   const total = traffic.totalClicks;
   const baseline = traffic.baselineDailyAvg ?? 0;
-  // Bumped above baseline = green; same as baseline = neutral; missing data = gray
-  const tone =
-    total === 0
-      ? "text-navy-300"
-      : total > Math.max(2, baseline * 2)
-        ? "text-emerald-700"
-        : "text-navy-600";
+  const isStandout = total > 0 && total > Math.max(2, baseline * 2);
   return (
-    <span
-      className={`text-[11px] font-mono whitespace-nowrap shrink-0 ${tone}`}
-      title={`${fb} from FB / ${total} total clicks · baseline ${baseline}/day pre-post`}
-    >
-      📊 {fb}fb · {total}all
-    </span>
+    <div className="inline-flex gap-1 items-center flex-wrap shrink-0">
+      <span
+        className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-semibold whitespace-nowrap border ${
+          fb > 0
+            ? "bg-coral-50 text-coral-700 border-coral-200"
+            : "bg-sand-100 text-navy-400 border-sand-200"
+        }`}
+        title="Visitors who clicked through from a Facebook referrer in the 7-day window after this post"
+      >
+        📊 {fb} FB
+      </span>
+      <span
+        className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-semibold whitespace-nowrap border ${
+          isStandout
+            ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+            : "bg-sand-100 text-navy-600 border-sand-200"
+        }`}
+        title="Total visitors to this post's link in the 7-day window — any source"
+      >
+        {total} total
+      </span>
+      <span
+        className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-semibold whitespace-nowrap border bg-navy-50 text-navy-500 border-navy-200"
+        title="Baseline daily traffic to this post's link BEFORE the post — gives you a yardstick for whether the post moved the needle"
+      >
+        ~{baseline}/day base
+      </span>
+    </div>
   );
 }
 
@@ -465,9 +481,12 @@ export default function RecentSent({ recent }: Props) {
   }, [visible, sortMode, trafficMap]);
 
   return (
-    <section className="bg-white rounded-2xl border border-sand-300 p-6 shadow-sm">
+    <section
+      id="recent"
+      className="bg-white rounded-2xl border border-sand-300 p-6 shadow-sm scroll-mt-20"
+    >
       <div className="flex items-baseline justify-between mb-1 flex-wrap gap-2">
-        <h2 className="font-display text-xl font-bold">Recently sent</h2>
+        <h2 className="font-display text-xl font-bold">📊 Post performance</h2>
         <div className="flex items-center gap-3">
           <div className="inline-flex rounded-md border border-sand-300 overflow-hidden text-[11px] font-semibold">
             <button

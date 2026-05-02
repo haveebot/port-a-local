@@ -144,7 +144,7 @@ export default async function MarketingHubPage() {
         </section>
 
         {/* MAIN TILES */}
-        <section className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <section className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
           <Tile
             href="/wheelhouse/social"
             icon="📱"
@@ -152,6 +152,14 @@ export default async function MarketingHubPage() {
             stat={`${socialStats.pending} queued`}
             statTone={socialStats.pending > 0 ? "coral" : "muted"}
             sub={`${socialStats.sent24h} sent today`}
+          />
+          <Tile
+            href="/wheelhouse/social#recent"
+            icon="📊"
+            title="Post performance"
+            stat={`${socialStats.totalSent} sent`}
+            statTone="muted"
+            sub="click-through analytics"
           />
           <Tile
             href="/wheelhouse/social/bank"
