@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
-import type { SocialPost } from "@/data/social-post-store";
+import { useRouter } from "next/navigation";
+import type { SocialPost, BoostStatus } from "@/data/social-post-store";
 import ResendButton from "./ResendButton";
 
 interface PostTraffic {
@@ -22,6 +23,11 @@ interface PostTrafficDetail extends PostTraffic {
 
 interface Props {
   recent: SocialPost[];
+}
+
+interface BoostStatusResponse {
+  ok: boolean;
+  reason?: string;
 }
 
 type SortMode = "newest" | "performance";
@@ -75,6 +81,55 @@ function StatusPill({ status }: { status: string }) {
       {status}
     </span>
   );
+}
+
+function BoostBadge({ post }: { post: SocialPost }) {
+  const status: BoostStatus = post.boostStatus;
+  if (status === "none" || status === "disabled") return null;
+  const insights = post.boostInsights as
+    | {
+        reach?: number;
+        impressions?: number;
+        clicks?: number;
+        spendCents?: number;
+      }
+    | null;
+
+  if (status === "stub") {
+    return (
+      <span
+        className="text-[10px] font-mono text-navy-400 italic"
+        title="Boost requested in stub mode (META_AD_ACCOUNT_ID unset)"
+      >
+        🚀 stub
+      </span>
+    );
+  }
+  if (status === "failed") {
+    return (
+      <span
+        className="text-[10px] font-mono text-coral-700"
+        title={post.boostError ?? "boost failed"}
+      >
+        🚀 failed
+      </span>
+    );
+  }
+  if (status === "active" || status === "complete") {
+    const reach = insights?.reach ?? 0;
+    const clicks = insights?.clicks ?? 0;
+    const spend = ((insights?.spendCents ?? 0) / 100).toFixed(2);
+    const tone = status === "complete" ? "text-emerald-700" : "text-navy-700";
+    return (
+      <span
+        className={`text-[10px] font-mono ${tone}`}
+        title={`Boost ${status} — reach ${reach}, clicks ${clicks}, $${spend} spent`}
+      >
+        🚀 {reach}r·{clicks}c·${spend}
+      </span>
+    );
+  }
+  return null;
 }
 
 function TrafficBadge({
@@ -248,6 +303,7 @@ function DetailPanel({
 }
 
 export default function RecentSent({ recent }: Props) {
+  const router = useRouter();
   const [trafficMap, setTrafficMap] = useState<Map<number, PostTraffic>>(
     new Map(),
   );
@@ -260,6 +316,10 @@ export default function RecentSent({ recent }: Props) {
     new Map(),
   );
   const [detailLoading, setDetailLoading] = useState(false);
+  const [boostConfig, setBoostConfig] = useState<BoostStatusResponse | null>(
+    null,
+  );
+  const [boostingId, setBoostingId] = useState<number | null>(null);
 
   async function loadTraffic() {
     setError(null);
@@ -282,7 +342,31 @@ export default function RecentSent({ recent }: Props) {
 
   useEffect(() => {
     loadTraffic();
+    fetch("/api/wheelhouse/social/boost?status=true", { cache: "no-store" })
+      .then((r) => r.json() as Promise<BoostStatusResponse>)
+      .then(setBoostConfig)
+      .catch(() => setBoostConfig({ ok: false, reason: "fetch failed" }));
   }, []);
+
+  async function onBoost(postId: number) {
+    if (!confirm("Boost this post? Default: $1/24h. Spend will be billed to your FB ad account.")) return;
+    setBoostingId(postId);
+    setError(null);
+    try {
+      const res = await fetch("/api/wheelhouse/social/boost", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ id: postId }),
+      });
+      const data = (await res.json()) as { error?: string; detail?: string; stubbed?: boolean };
+      if (!res.ok) throw new Error(data.detail ?? data.error ?? `HTTP ${res.status}`);
+      router.refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setBoostingId(null);
+    }
+  }
 
   async function onToggleDetail(id: number) {
     if (openDetailId === id) {
@@ -409,6 +493,28 @@ export default function RecentSent({ recent }: Props) {
                       <TrafficBadge traffic={traffic} loading={loading} />
                     </button>
                   )}
+                  <BoostBadge post={p} />
+                  {canShowTraffic &&
+                    p.boostStatus === "none" &&
+                    p.externalPostId &&
+                    !p.externalPostId.startsWith("stub:") && (
+                      <button
+                        onClick={() => onBoost(p.id)}
+                        disabled={boostingId === p.id || !boostConfig?.ok}
+                        title={
+                          boostConfig?.ok
+                            ? "Boost this post — default $1/24h"
+                            : `Boost not configured: ${boostConfig?.reason ?? "checking…"}`
+                        }
+                        className={`text-[10px] font-mono px-1.5 py-0.5 rounded ${
+                          boostConfig?.ok
+                            ? "text-coral-700 hover:bg-coral-50 border border-coral-200"
+                            : "text-navy-300 border border-sand-200 cursor-not-allowed"
+                        } disabled:opacity-50`}
+                      >
+                        {boostingId === p.id ? "🚀 …" : "🚀 boost"}
+                      </button>
+                    )}
                   {p.status !== "pending" && <ResendButton postId={p.id} />}
                 </div>
                 {isOpen && (
