@@ -21,6 +21,7 @@ import {
   type OrderStatus,
 } from "../lib/orders";
 import { AccountStackParamList } from "../lib/navigation";
+import ErrorBanner from "../components/ErrorBanner"; // Assuming path to ErrorBanner
 
 type Props = NativeStackScreenProps<AccountStackParamList, "Orders">;
 
@@ -155,13 +156,7 @@ export default function OrdersScreen({ navigation }: Props) {
       ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
       ListHeaderComponent={
         error ? (
-          <View style={styles.errorBanner}>
-            <Ionicons name="cloud-offline-outline" size={18} color={colors.coral[600]} />
-            <Text style={styles.errorText}>{error}</Text>
-            <TouchableOpacity onPress={onRefresh} style={styles.errorRetry} accessibilityRole="button">
-              <Text style={styles.errorRetryText}>Retry</Text>
-            </TouchableOpacity>
-          </View>
+          <ErrorBanner message={error} onRetry={onRefresh} variant='inline' />
         ) : null
       }
       ListEmptyComponent={
@@ -268,25 +263,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.coral[500],
   },
   emptyCtaText: { color: "#fff", fontWeight: "700", fontSize: 14 },
-  errorBanner: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-    backgroundColor: colors.coral[100],
-    borderColor: colors.coral[300],
-    borderWidth: 1,
-    borderRadius: 12,
-    padding: 12,
-    marginBottom: 14,
-  },
-  errorText: { flex: 1, color: colors.coral[700], fontSize: 13 },
-  errorRetry: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    backgroundColor: colors.coral[600],
-    borderRadius: 999,
-  },
-  errorRetryText: { color: "#fff", fontWeight: "700", fontSize: 13 },
   skeletonCard: { borderColor: colors.sand[200] },
   skeletonBar: {
     backgroundColor: colors.sand[200],

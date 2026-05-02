@@ -11,6 +11,7 @@ import { Ionicons } from "@expo/vector-icons";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useFocusEffect } from "@react-navigation/native";
 import { colors } from "../lib/theme";
+import ErrorBanner from "../components/ErrorBanner"; // Assuming ErrorBanner path
 import {
   fetchMyOrder,
   formatUSD,
@@ -172,10 +173,7 @@ export default function OrderDetailScreen({ route, navigation }: Props) {
       </View>
 
       {fetchError ? (
-        <View style={styles.fetchErrorBanner}>
-          <Ionicons name="cloud-offline-outline" size={16} color={colors.coral[700]} />
-          <Text style={styles.fetchErrorText}>{fetchError}</Text>
-        </View>
+        <ErrorBanner message={fetchError} variant='inline' />
       ) : null}
 
       <View style={styles.section}>
@@ -295,19 +293,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     lineHeight: 20,
   },
-  fetchErrorBanner: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-    backgroundColor: colors.coral[100],
-    borderColor: colors.coral[300],
-    borderWidth: 1,
-    borderRadius: 10,
-    padding: 10,
-    marginHorizontal: 16,
-    marginTop: 14,
-  },
-  fetchErrorText: { flex: 1, color: colors.coral[700], fontSize: 12 },
   hero: {
     backgroundColor: colors.navy[950],
     paddingHorizontal: 24,

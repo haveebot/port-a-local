@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useMemo, memo } from "react";
 import { View, Text, Animated, useWindowDimensions, StyleSheet, Easing } from "react-native";
 import Svg, { Path, G } from "react-native-svg";
 import type { CoastalConditions } from "../lib/coastalConditions";
@@ -43,7 +43,7 @@ function WaveLayer({ width, duration, reverse, path, color, opacity, bottomOffse
     );
     loop.start();
     return () => loop.stop();
-  }, [anim, duration, reduceMotion]);
+  }, [duration, reduceMotion]); // Removed 'anim' from dependencies
 
   const translateX = anim.interpolate({
     inputRange: [0, 1],
@@ -73,6 +73,9 @@ function WaveLayer({ width, duration, reverse, path, color, opacity, bottomOffse
   );
 }
 
+// Apply React.memo to prevent unnecessary re-renders of the wave layer
+const MemoizedWaveLayer = memo(WaveLayer);
+
 interface Props {
   conditions: CoastalConditions | null;
 }
@@ -80,16 +83,19 @@ interface Props {
 export default function CrashingWaves({ conditions }: Props) {
   const reduceMotion = useReducedMotion();
   const { width: screenWidth } = useWindowDimensions();
-  // Golden-hour wash: opacity ramps up to ~0.28 at sunset, fades through twilight.
-  const goldenIntensity = getGoldenHourIntensity();
-  const goldenOpacity = goldenIntensity * 0.28;
 
-  // Port Aransas tides typically swing 0–2.5 ft (MLLW).
-  // Map tide level to a vertical wave shift around a 1.0 ft "neutral" baseline.
-  const tideOffset =
-    conditions?.tideLevelFt != null
+  // Memoize golden intensity calculation
+  const goldenIntensity = useMemo(() => getGoldenHourIntensity(), []);
+  const goldenOpacity = useMemo(() => goldenIntensity * 0.28, [goldenIntensity]);
+
+  // Memoize tide offset calculation based on conditions
+  const tideOffset = useMemo(() => {
+    // Port Aransas tides typically swing 0–2.5 ft (MLLW).
+    // Map tide level to a vertical wave shift around a 1.0 ft "neutral" baseline.
+    return conditions?.tideLevelFt != null
       ? Math.round(Math.max(-1, Math.min(2, conditions.tideLevelFt - 1.0)) * 12)
       : 0;
+  }, [conditions]);
 
   const tideValue = conditions?.tideLevelFt != null ? conditions.tideLevelFt.toFixed(1) : "— —";
   const dirLabel = conditions?.tideDirection
@@ -103,9 +109,37 @@ export default function CrashingWaves({ conditions }: Props) {
       accessibilityElementsHidden
       importantForAccessibility="no-hide-descendants"
     >
-      <WaveLayer width={screenWidth} duration={22000}            path={PATHS.back}  color={colors.navy[700]} opacity={0.45} bottomOffset={tideOffset - 4}  zIndex={1} reduceMotion={reduceMotion} />
-      <WaveLayer width={screenWidth} duration={14000} reverse    path={PATHS.mid}   color={colors.navy[600]} opacity={0.65} bottomOffset={tideOffset - 8}  zIndex={2} reduceMotion={reduceMotion} />
-      <WaveLayer width={screenWidth} duration={9000}             path={PATHS.front} color={colors.navy[500]} opacity={0.92} bottomOffset={tideOffset - 12} zIndex={3} reduceMotion={reduceMotion} />
+      <MemoizedWaveLayer 
+        width={screenWidth} 
+        duration={22000}            
+        path={PATHS.back}  
+        color={colors.navy[700]} 
+        opacity={0.45} 
+        bottomOffset={tideOffset - 4}  
+        zIndex={1} 
+        reduceMotion={reduceMotion} 
+      />
+      <MemoizedWaveLayer 
+        width={screenWidth} 
+        duration={14000} 
+        reverse    
+        path={PATHS.mid}   
+        color={colors.navy[600]} 
+        opacity={0.65} 
+        bottomOffset={tideOffset - 8}  
+        zIndex={2} 
+        reduceMotion={reduceMotion} 
+      />
+      <MemoizedWaveLayer 
+        width={screenWidth} 
+        duration={9000}             
+        path={PATHS.front} 
+        color={colors.navy[500]} 
+        opacity={0.92} 
+        bottomOffset={tideOffset - 12} 
+        zIndex={3} 
+        reduceMotion={reduceMotion} 
+      />
 
       {/* Golden-hour wash — coral/gold tint that strengthens as sunset approaches */}
       {goldenOpacity > 0 && (
