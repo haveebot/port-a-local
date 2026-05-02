@@ -69,6 +69,8 @@ INCLUDE=(
   "feedback_systemic_gaps_check.md"
   "feedback_style.md"
   "feedback_project_boundaries.md"
+  "feedback_meta_api_organic_deprecation.md"
+  "feedback_oauth_scope_layers.md"
   "parking_pal_token_symbol.md"
 )
 
