@@ -208,10 +208,22 @@ export async function createBoost(
   const campaignId = campaignRes.data.id;
 
   // Step 2: Ad Set
+  // Use lifetime_budget (not daily_budget) for two reasons:
+  //   1. daily_budget requires the schedule to be >= 24 hours (FB error
+  //      subcode 1487793 — "Campaign Schedule Is Too Short" — when we
+  //      schedule exactly 24h with daily_budget). lifetime_budget has no
+  //      such restriction.
+  //   2. lifetime_budget gives us absolute spend predictability. A $1
+  //      lifetime budget over 24h means we spend at most $1, full stop.
+  //      With daily_budget, multi-day campaigns multiply.
+  // For PAL's $1/24h boost use case, the math is identical to daily_budget
+  // anyway. Total cap remains the env-configured cents value (default 100).
+  const lifetimeBudgetCents =
+    c.dailyBudgetCents * Math.max(1, c.durationHours / 24);
   const adsetBody = new URLSearchParams();
   adsetBody.set("name", `AdSet · ${c.campaignName}`);
   adsetBody.set("campaign_id", campaignId);
-  adsetBody.set("daily_budget", String(c.dailyBudgetCents));
+  adsetBody.set("lifetime_budget", String(Math.round(lifetimeBudgetCents)));
   adsetBody.set("billing_event", "IMPRESSIONS");
   adsetBody.set("optimization_goal", "LINK_CLICKS");
   adsetBody.set("bid_strategy", "LOWEST_COST_WITHOUT_CAP");
