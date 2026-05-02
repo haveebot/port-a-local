@@ -98,7 +98,7 @@ function BoostBadge({ post }: { post: SocialPost }) {
   if (status === "stub") {
     return (
       <span
-        className="text-[10px] font-mono text-navy-400 italic"
+        className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-semibold whitespace-nowrap border bg-navy-50 text-navy-500 border-navy-200"
         title="Boost requested in stub mode (META_AD_ACCOUNT_ID unset)"
       >
         🚀 stub
@@ -108,24 +108,47 @@ function BoostBadge({ post }: { post: SocialPost }) {
   if (status === "failed") {
     return (
       <span
-        className="text-[10px] font-mono text-coral-700"
-        title={post.boostError ?? "boost failed"}
+        className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-semibold whitespace-nowrap border bg-coral-50 text-coral-700 border-coral-300"
+        title={`Boost failed: ${post.boostError ?? "unknown error"}`}
       >
         🚀 failed
       </span>
     );
   }
   if (status === "active" || status === "complete") {
+    const isActive = status === "active";
     const reach = insights?.reach ?? 0;
     const clicks = insights?.clicks ?? 0;
     const spend = ((insights?.spendCents ?? 0) / 100).toFixed(2);
-    const tone = status === "complete" ? "text-emerald-700" : "text-navy-700";
+    const hasInsights = !!(insights && (insights.reach || insights.impressions));
+
     return (
       <span
-        className={`text-[10px] font-mono ${tone}`}
-        title={`Boost ${status} — reach ${reach}, clicks ${clicks}, $${spend} spent`}
+        className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-semibold whitespace-nowrap border ${
+          isActive
+            ? "bg-blue-50 text-blue-700 border-blue-300"
+            : "bg-emerald-50 text-emerald-700 border-emerald-300"
+        }`}
+        title={
+          isActive
+            ? `Boost ACTIVE — campaign ${post.boostCampaignId ?? "?"} currently spending`
+            : `Boost complete — final reach ${reach}, ${clicks} clicks, $${spend} spent`
+        }
       >
-        🚀 {reach}r·{clicks}c·${spend}
+        {isActive && (
+          <span
+            className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"
+            aria-hidden
+          />
+        )}
+        🚀 {isActive ? "active" : "done"}
+        {hasInsights ? (
+          <span className="font-mono">
+            · {reach}r · {clicks}c · ${spend}
+          </span>
+        ) : isActive ? (
+          <span className="italic opacity-70">· syncing…</span>
+        ) : null}
       </span>
     );
   }
