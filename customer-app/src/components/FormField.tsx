@@ -24,6 +24,10 @@ export default function FormField({
       <Text style={styles.label}>{label}</Text>
       <TextInput
         placeholderTextColor={colors.navy[300]}
+        // Default the screen-reader label to the visible label so VoiceOver
+        // announces "<label>, text field". Per-call accessibilityLabel
+        // overrides via the spread.
+        accessibilityLabel={label}
         style={[
           styles.input,
           inputProps.multiline && styles.inputMulti,

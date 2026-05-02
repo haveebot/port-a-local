@@ -220,6 +220,9 @@ export default function CheckoutScreen({ navigation }: Props) {
                   tipPct === p && styles.tipChipActive,
                 ]}
                 onPress={() => setTipPct(p)}
+                accessibilityRole="button"
+                accessibilityLabel={`${p} percent tip`}
+                accessibilityState={{ selected: tipPct === p }}
               >
                 <Text
                   style={[
@@ -245,6 +248,9 @@ export default function CheckoutScreen({ navigation }: Props) {
                 tipPct === "custom" && styles.tipChipActive,
               ]}
               onPress={() => setTipPct("custom")}
+              accessibilityRole="button"
+              accessibilityLabel="Custom tip amount"
+              accessibilityState={{ selected: tipPct === "custom" }}
             >
               <Text
                 style={[
@@ -338,6 +344,7 @@ function Field({
         onChangeText={onChangeText}
         placeholder={placeholder}
         placeholderTextColor={colors.navy[300]}
+        accessibilityLabel={label}
         style={[fieldStyles.input, multiline && fieldStyles.inputMulti]}
         keyboardType={keyboardType}
         autoCapitalize={autoCapitalize}

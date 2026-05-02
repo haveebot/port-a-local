@@ -198,6 +198,9 @@ export default function BeachFormScreen({ navigation }: Props) {
                   product === p.value && styles.productRowActive,
                 ]}
                 onPress={() => setProduct(p.value)}
+                accessibilityRole="button"
+                accessibilityLabel={`${p.label} — ${p.description}`}
+                accessibilityState={{ selected: product === p.value }}
               >
                 <View
                   style={[
