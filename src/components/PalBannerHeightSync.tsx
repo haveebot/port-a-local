@@ -21,9 +21,11 @@ import { useEffect } from "react";
  */
 export default function PalBannerHeightSync() {
   useEffect(() => {
-    const banner = document.querySelector<HTMLElement>(
-      'aside[role="alert"][aria-live="assertive"]',
-    );
+    // Stable data-attribute selector — works across severities (alert vs
+    // status, assertive vs polite). The role/aria-live combo varies by
+    // severity (spotlight is role=status/polite; warning+critical are
+    // role=alert/assertive) so we can't query by those.
+    const banner = document.querySelector<HTMLElement>("aside[data-pal-banner]");
     if (!banner) return;
 
     const setVar = () => {
