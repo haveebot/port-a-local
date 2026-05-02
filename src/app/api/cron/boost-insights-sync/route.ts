@@ -56,7 +56,11 @@ export async function GET(req: NextRequest) {
   for (const post of boosts) {
     if (!post.boostAdId) continue;
 
-    const result = await fetchBoostInsights(post.boostAdId);
+    // date_preset=today is required — Meta's default returns data:[] for
+    // fresh ads. For 24h boosts that span midnight CT, today won't include
+    // yesterday's portion, but cron also flips status='complete' soon after
+    // duration ends, so the gap is at most one cron tick.
+    const result = await fetchBoostInsights(post.boostAdId, "today");
     if (!result.ok || !result.insights) {
       await markBoostFailed(
         post.id,
