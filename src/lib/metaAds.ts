@@ -382,6 +382,15 @@ export async function fetchBoostInsights(
 export async function boostPost(
   externalPostId: string,
   campaignName: string,
+  options?: {
+    /**
+     * Per-call budget override in cents. Capped at the same hard $5/day
+     * ceiling regardless of what's passed. Used for "high-value push"
+     * posts that should spend more than the env-default. Leave undefined
+     * to use META_BOOST_DAILY_CENTS env (default 100 cents = $1/day).
+     */
+    budgetCents?: number;
+  },
 ): Promise<BoostResult> {
   const config = isBoostConfigured();
   if (!config.ok) {
@@ -389,6 +398,7 @@ export async function boostPost(
       reason: config.reason,
       externalPostId,
       campaignName,
+      budgetCents: options?.budgetCents,
     });
     return {
       ok: true,
@@ -400,12 +410,20 @@ export async function boostPost(
     };
   }
 
+  // Apply per-call override if supplied; still capped by getDailyBudgetCents
+  // hard cap (500 cents = $5/day max).
+  const override = options?.budgetCents;
+  const dailyBudgetCents =
+    override && Number.isFinite(override) && override > 0
+      ? Math.min(override, 500)
+      : getDailyBudgetCents();
+
   return createBoost({
     adAccountId: getAdAccountId()!,
     pageId: getPageId()!,
     externalPostId,
     campaignName,
-    dailyBudgetCents: getDailyBudgetCents(),
+    dailyBudgetCents,
     durationHours: getDurationHours(),
     audienceId: getAudienceId(),
   });

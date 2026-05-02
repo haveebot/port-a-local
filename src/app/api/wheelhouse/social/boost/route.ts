@@ -35,6 +35,12 @@ export const runtime = "nodejs";
 
 interface BoostBody {
   id?: number;
+  /**
+   * Per-call budget override in cents (e.g. 500 for $5 high-value push).
+   * Capped at the hard $5/day ceiling in metaAds.boostPost regardless of
+   * what's passed. Default 100 ($1/day baseline).
+   */
+  budgetCents?: number;
 }
 
 export async function GET(req: NextRequest) {
@@ -107,7 +113,9 @@ export async function POST(req: NextRequest) {
   const cleanCaption = post.caption.replace(/\s+/g, " ").trim().slice(0, 50);
   const campaignName = `${cleanCaption}… (post#${post.id})`;
 
-  const result = await boostPost(post.externalPostId, campaignName);
+  const result = await boostPost(post.externalPostId, campaignName, {
+    budgetCents: body.budgetCents,
+  });
 
   if (!result.ok) {
     await markBoostFailed(post.id, result.error ?? "unknown error");
