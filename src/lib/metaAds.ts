@@ -321,6 +321,7 @@ export interface BoostInsights {
 
 export async function fetchBoostInsights(
   adId: string,
+  datePreset?: InsightsDatePreset,
 ): Promise<{ ok: boolean; insights?: BoostInsights; error?: string }> {
   const token = getToken();
   if (!token) return { ok: false, error: "META_PAGE_ACCESS_TOKEN not set" };
@@ -337,7 +338,10 @@ export async function fetchBoostInsights(
   ].join(",");
 
   try {
-    const url = `${GRAPH_BASE}/${adId}/insights?fields=${encodeURIComponent(fields)}&access_token=${encodeURIComponent(token)}`;
+    const presetParam = datePreset
+      ? `&date_preset=${encodeURIComponent(datePreset)}`
+      : "";
+    const url = `${GRAPH_BASE}/${adId}/insights?fields=${encodeURIComponent(fields)}${presetParam}&access_token=${encodeURIComponent(token)}`;
     const res = await fetch(url);
     const data = (await res.json()) as Record<string, unknown> & {
       data?: Record<string, unknown>[];
@@ -365,6 +369,165 @@ export async function fetchBoostInsights(
       raw: row,
     };
     return { ok: true, insights };
+  } catch (err) {
+    return {
+      ok: false,
+      error: `fetch error: ${err instanceof Error ? err.message : String(err)}`,
+    };
+  }
+}
+
+export type InsightsDatePreset =
+  | "today"
+  | "yesterday"
+  | "last_24h"
+  | "last_3d"
+  | "last_7d"
+  | "last_14d"
+  | "last_30d"
+  | "maximum";
+
+export interface AdStatus {
+  id: string;
+  name: string | null;
+  status: string | null;
+  effectiveStatus: string | null;
+  configuredStatus: string | null;
+  issuesInfo: unknown[] | null;
+  createdTime: string | null;
+  updatedTime: string | null;
+  /** Full raw response */
+  raw: Record<string, unknown>;
+}
+
+/**
+ * Pull an ad's review/delivery state from Meta Marketing API. Used by the
+ * diagnose endpoint to distinguish "Meta hasn't approved yet" vs "approved
+ * but not serving" vs "rejected" when our insights pull comes back empty.
+ *
+ * effective_status enums of interest:
+ *   ACTIVE              — running normally
+ *   IN_PROCESS          — being processed (review or learning)
+ *   PENDING_REVIEW      — under Meta's ad review
+ *   DISAPPROVED         — rejected; check issues_info
+ *   PENDING_BILLING_INFO— payment method missing/declined
+ *   CAMPAIGN_PAUSED     — parent campaign off
+ *   ADSET_PAUSED        — parent adset off
+ *   PAUSED              — this ad off
+ */
+export async function fetchAdStatus(
+  adId: string,
+): Promise<{ ok: boolean; status?: AdStatus; error?: string }> {
+  const token = getToken();
+  if (!token) return { ok: false, error: "META_PAGE_ACCESS_TOKEN not set" };
+
+  const fields = [
+    "id",
+    "name",
+    "status",
+    "effective_status",
+    "configured_status",
+    "issues_info",
+    "created_time",
+    "updated_time",
+  ].join(",");
+
+  try {
+    const url = `${GRAPH_BASE}/${adId}?fields=${encodeURIComponent(fields)}&access_token=${encodeURIComponent(token)}`;
+    const res = await fetch(url);
+    const data = (await res.json()) as Record<string, unknown> & {
+      error?: { message?: string };
+    };
+    if (!res.ok) {
+      return {
+        ok: false,
+        error:
+          (data.error as { message?: string })?.message ??
+          `HTTP ${res.status}`,
+      };
+    }
+    return {
+      ok: true,
+      status: {
+        id: String(data.id ?? adId),
+        name: (data.name as string) ?? null,
+        status: (data.status as string) ?? null,
+        effectiveStatus: (data.effective_status as string) ?? null,
+        configuredStatus: (data.configured_status as string) ?? null,
+        issuesInfo: (data.issues_info as unknown[]) ?? null,
+        createdTime: (data.created_time as string) ?? null,
+        updatedTime: (data.updated_time as string) ?? null,
+        raw: data,
+      },
+    };
+  } catch (err) {
+    return {
+      ok: false,
+      error: `fetch error: ${err instanceof Error ? err.message : String(err)}`,
+    };
+  }
+}
+
+/**
+ * Pull an ad account's spend summary across all ads, all time. Sanity check
+ * for "is this account actually spending anything?" — if every per-ad pull
+ * returns 0 but account-level shows $X, we know per-ad insights are lagged
+ * or wrongly scoped.
+ */
+export async function fetchAccountInsights(
+  datePreset: InsightsDatePreset = "today",
+): Promise<{
+  ok: boolean;
+  insights?: BoostInsights;
+  error?: string;
+}> {
+  const token = getToken();
+  if (!token) return { ok: false, error: "META_PAGE_ACCESS_TOKEN not set" };
+  const adAccountId = getAdAccountId();
+  if (!adAccountId) return { ok: false, error: "META_AD_ACCOUNT_ID not set" };
+
+  const fields = [
+    "reach",
+    "impressions",
+    "clicks",
+    "unique_clicks",
+    "ctr",
+    "spend",
+    "date_start",
+    "date_stop",
+  ].join(",");
+
+  try {
+    const url = `${GRAPH_BASE}/act_${adAccountId}/insights?fields=${encodeURIComponent(fields)}&date_preset=${encodeURIComponent(datePreset)}&level=account&access_token=${encodeURIComponent(token)}`;
+    const res = await fetch(url);
+    const data = (await res.json()) as Record<string, unknown> & {
+      data?: Record<string, unknown>[];
+      error?: { message?: string };
+    };
+    if (!res.ok) {
+      return {
+        ok: false,
+        error:
+          (data.error as { message?: string })?.message ??
+          `HTTP ${res.status}`,
+      };
+    }
+    const row = (data.data ?? [])[0] ?? {};
+    const spendDollars = Number((row.spend as string) ?? "0");
+    return {
+      ok: true,
+      insights: {
+        reach: Number((row.reach as string) ?? "0"),
+        impressions: Number((row.impressions as string) ?? "0"),
+        clicks: Number((row.clicks as string) ?? "0"),
+        uniqueClicks: Number((row.unique_clicks as string) ?? "0"),
+        ctr: Number((row.ctr as string) ?? "0"),
+        spendCents: Math.round(spendDollars * 100),
+        startTime: (row.date_start as string) ?? null,
+        stopTime: (row.date_stop as string) ?? null,
+        raw: row,
+      },
+    };
   } catch (err) {
     return {
       ok: false,
