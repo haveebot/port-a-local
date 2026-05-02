@@ -377,6 +377,89 @@ export async function fetchBoostInsights(
   }
 }
 
+/**
+ * Top up an existing boost adset's lifetime_budget — used when an operator
+ * wants a hot post to keep serving past its original cap. Reads the current
+ * budget first, adds the new cents, PATCHes the adset.
+ *
+ * Returns the new lifetime budget so the UI can confirm the cap moved.
+ *
+ * Caveats:
+ *   - Meta enforces a minimum gap above already-spent amount (~$1 above
+ *     current spend). Trying to set a cap below current spend silently
+ *     fails or returns a #100 error.
+ *   - Adset must be in a state that accepts budget changes (ACTIVE works;
+ *     PAUSED/COMPLETED is iffy depending on completion timing).
+ */
+export async function topUpBoost(
+  adsetId: string,
+  additionalCents: number,
+): Promise<{
+  ok: boolean;
+  previousCents?: number;
+  newCents?: number;
+  error?: string;
+}> {
+  const token = getToken();
+  if (!token) return { ok: false, error: "META_PAGE_ACCESS_TOKEN not set" };
+  if (!Number.isFinite(additionalCents) || additionalCents <= 0) {
+    return { ok: false, error: "additionalCents must be > 0" };
+  }
+
+  try {
+    // Step 1: read current budget
+    const getUrl = `${GRAPH_BASE}/${adsetId}?fields=lifetime_budget&access_token=${encodeURIComponent(token)}`;
+    const getRes = await fetch(getUrl);
+    const getData = (await getRes.json()) as Record<string, unknown> & {
+      error?: { message?: string };
+    };
+    if (!getRes.ok) {
+      return {
+        ok: false,
+        error:
+          (getData.error as { message?: string })?.message ??
+          `read HTTP ${getRes.status}`,
+      };
+    }
+    const currentCents = Number(getData.lifetime_budget ?? 0);
+    if (!Number.isFinite(currentCents) || currentCents <= 0) {
+      return { ok: false, error: "no current lifetime_budget on adset" };
+    }
+    const newCents = currentCents + Math.round(additionalCents);
+
+    // Step 2: PATCH new budget
+    const body = new URLSearchParams();
+    body.set("lifetime_budget", String(newCents));
+    body.set("access_token", token);
+    const patchRes = await fetch(`${GRAPH_BASE}/${adsetId}`, {
+      method: "POST",
+      body,
+    });
+    const patchData = (await patchRes.json()) as Record<string, unknown> & {
+      error?: { message?: string };
+    };
+    if (!patchRes.ok) {
+      return {
+        ok: false,
+        previousCents: currentCents,
+        error:
+          (patchData.error as { message?: string })?.message ??
+          `patch HTTP ${patchRes.status}`,
+      };
+    }
+    return {
+      ok: true,
+      previousCents: currentCents,
+      newCents,
+    };
+  } catch (err) {
+    return {
+      ok: false,
+      error: `fetch error: ${err instanceof Error ? err.message : String(err)}`,
+    };
+  }
+}
+
 export type InsightsDatePreset =
   | "today"
   | "yesterday"

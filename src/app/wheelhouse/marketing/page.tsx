@@ -14,6 +14,7 @@ import { getUpcomingMilestones } from "@/lib/eventMilestones";
 import { isMetaConfigured } from "@/lib/metaGraph";
 import MarketingBreadcrumb from "@/components/wheelhouse/MarketingBreadcrumb";
 import SyncBoostsButton from "@/components/wheelhouse/SyncBoostsButton";
+import TopUpBoostButton from "@/components/wheelhouse/TopUpBoostButton";
 
 export const dynamic = "force-dynamic";
 
@@ -296,6 +297,7 @@ export default async function MarketingHubPage() {
                         <span className="italic opacity-70">syncing…</span>
                       )}
                     </span>
+                    <TopUpBoostButton postId={p.id} />
                     {fbUrl && (
                       <a
                         href={fbUrl}
