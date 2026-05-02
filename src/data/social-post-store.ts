@@ -70,6 +70,12 @@ async function ensureSchema(): Promise<void> {
   await sql`ALTER TABLE social_post_queue ADD COLUMN IF NOT EXISTS boost_insights_synced_at TIMESTAMPTZ`;
   await sql`ALTER TABLE social_post_queue ADD COLUMN IF NOT EXISTS boost_insights JSONB`;
   await sql`ALTER TABLE social_post_queue ADD COLUMN IF NOT EXISTS boost_error TEXT`;
+  // FB deletion tracking. When a post is deleted on FB (manual cleanup, OG-bug
+  // refire cycle, etc.), our DB still has it as 'sent' until we notice. The
+  // /api/cron/social-removed-sweep cron polls FB and stamps this when the
+  // Graph API returns "Object does not exist" for an externalPostId. UI fades
+  // these rows + hides the 🚀 boost button.
+  await sql`ALTER TABLE social_post_queue ADD COLUMN IF NOT EXISTS removed_from_fb_at TIMESTAMPTZ`;
   await sql`CREATE INDEX IF NOT EXISTS social_post_status_idx ON social_post_queue(status, created_at DESC)`;
   await sql`CREATE INDEX IF NOT EXISTS social_post_trigger_idx ON social_post_queue(trigger_type, trigger_ref, channel)`;
   await sql`CREATE INDEX IF NOT EXISTS social_post_auto_send_idx ON social_post_queue(status, auto_send_at) WHERE auto_send_at IS NOT NULL`;
@@ -155,6 +161,8 @@ export interface SocialPost {
   boostInsightsSyncedAt: string | null;
   boostInsights: Record<string, unknown> | null;
   boostError: string | null;
+  /** ISO timestamp set by sweep cron when FB Graph API returns "doesn't exist" for the externalPostId */
+  removedFromFbAt: string | null;
 }
 
 function rowToPost(row: Record<string, unknown>): SocialPost {
@@ -201,6 +209,9 @@ function rowToPost(row: Record<string, unknown>): SocialPost {
       : null,
     boostInsights: (row.boost_insights as Record<string, unknown>) ?? null,
     boostError: (row.boost_error as string) ?? null,
+    removedFromFbAt: row.removed_from_fb_at
+      ? new Date(row.removed_from_fb_at as string).toISOString()
+      : null,
   };
 }
 
@@ -605,6 +616,38 @@ export async function disableBoost(id: number): Promise<void> {
     SET boost_status = 'disabled', updated_at = NOW()
     WHERE id = ${id} AND boost_status = 'none'
   `;
+}
+
+/**
+ * Mark a post as deleted on FB (Graph API returned "Object does not exist"
+ * for its externalPostId). Idempotent — sets removed_from_fb_at to NOW only
+ * if it's currently NULL.
+ */
+export async function markRemovedFromFb(id: number): Promise<void> {
+  await ensureSchema();
+  await sql`
+    UPDATE social_post_queue
+    SET removed_from_fb_at = NOW(), updated_at = NOW()
+    WHERE id = ${id} AND removed_from_fb_at IS NULL
+  `;
+}
+
+/**
+ * All sent posts with an externalPostId that haven't been marked as removed
+ * yet. Used by the sweep cron + manual cleanup endpoint to check FB existence.
+ */
+export async function getSentPostsToCheck(): Promise<SocialPost[]> {
+  await ensureSchema();
+  const result = await sql`
+    SELECT * FROM social_post_queue
+    WHERE status = 'sent'
+      AND external_post_id IS NOT NULL
+      AND external_post_id NOT LIKE 'stub:%'
+      AND removed_from_fb_at IS NULL
+    ORDER BY sent_at DESC
+    LIMIT 100
+  `;
+  return result.rows.map(rowToPost);
 }
 
 /**

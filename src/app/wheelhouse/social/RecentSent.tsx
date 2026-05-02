@@ -320,6 +320,8 @@ export default function RecentSent({ recent }: Props) {
     null,
   );
   const [boostingId, setBoostingId] = useState<number | null>(null);
+  const [sweeping, setSweeping] = useState(false);
+  const [showRemoved, setShowRemoved] = useState(false);
 
   async function loadTraffic() {
     setError(null);
@@ -347,6 +349,33 @@ export default function RecentSent({ recent }: Props) {
       .then(setBoostConfig)
       .catch(() => setBoostConfig({ ok: false, reason: "fetch failed" }));
   }, []);
+
+  async function onSweepRemoved() {
+    if (!confirm("Check FB for deleted posts? This polls Graph API for each sent post and marks anything that's been deleted on FB.")) return;
+    setSweeping(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/wheelhouse/social/sweep-removed", {
+        method: "POST",
+      });
+      const data = (await res.json()) as {
+        checked?: number;
+        alive?: number;
+        removed?: number;
+        errored?: number;
+        error?: string;
+      };
+      if (!res.ok) throw new Error(data.error ?? `HTTP ${res.status}`);
+      alert(
+        `Swept ${data.checked} sent posts: ${data.alive} alive, ${data.removed} marked removed, ${data.errored} errored.`,
+      );
+      router.refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setSweeping(false);
+    }
+  }
 
   async function onBoost(postId: number) {
     if (!confirm("Boost this post? Default: $1/24h. Spend will be billed to your FB ad account.")) return;
@@ -390,14 +419,23 @@ export default function RecentSent({ recent }: Props) {
     }
   }
 
+  const visible = useMemo(() => {
+    return showRemoved ? recent : recent.filter((p) => !p.removedFromFbAt);
+  }, [recent, showRemoved]);
+
+  const removedCount = useMemo(
+    () => recent.filter((p) => p.removedFromFbAt).length,
+    [recent],
+  );
+
   const sorted = useMemo(() => {
-    if (sortMode === "newest") return recent;
-    return [...recent].sort((a, b) => {
+    if (sortMode === "newest") return visible;
+    return [...visible].sort((a, b) => {
       const ta = trafficMap.get(a.id)?.fbClicks ?? -1;
       const tb = trafficMap.get(b.id)?.fbClicks ?? -1;
       return tb - ta;
     });
-  }, [recent, sortMode, trafficMap]);
+  }, [visible, sortMode, trafficMap]);
 
   return (
     <section className="bg-white rounded-2xl border border-sand-300 p-6 shadow-sm">
@@ -438,6 +476,25 @@ export default function RecentSent({ recent }: Props) {
           >
             {refreshing ? "↻ …" : "↻ refresh"}
           </button>
+          <button
+            onClick={onSweepRemoved}
+            disabled={sweeping}
+            className="text-[11px] text-navy-500 hover:text-coral-700 font-mono disabled:opacity-50"
+            title="Check FB for deleted posts and mark them"
+          >
+            {sweeping ? "🧹 …" : "🧹 sweep"}
+          </button>
+          {removedCount > 0 && (
+            <button
+              onClick={() => setShowRemoved((v) => !v)}
+              className="text-[11px] text-navy-500 hover:text-coral-700 font-mono"
+              title={showRemoved ? "Hide removed posts" : "Show removed posts"}
+            >
+              {showRemoved
+                ? `🫥 hide removed (${removedCount})`
+                : `🫥 show removed (${removedCount})`}
+            </button>
+          )}
         </div>
       </div>
       <p className="text-xs text-navy-500 mb-4">
@@ -460,11 +517,23 @@ export default function RecentSent({ recent }: Props) {
             const isOpen = openDetailId === p.id;
             const traffic = trafficMap.get(p.id) ?? null;
             const detail = detailMap.get(p.id) ?? null;
+            const isRemoved = !!p.removedFromFbAt;
             const canShowTraffic = p.status === "sent";
             return (
-              <div key={p.id} className="py-3">
+              <div
+                key={p.id}
+                className={`py-3 ${isRemoved ? "opacity-50" : ""}`}
+              >
                 <div className="flex items-center gap-3 text-sm flex-wrap">
                   <StatusPill status={p.status} />
+                  {isRemoved && (
+                    <span
+                      className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide border bg-navy-50 text-navy-500 border-navy-200 shrink-0"
+                      title={`Removed from FB ${p.removedFromFbAt ? relativeTime(p.removedFromFbAt) : ""} — post no longer exists on FB`}
+                    >
+                      🫥 removed
+                    </span>
+                  )}
                   <span className="text-xs text-navy-500 font-mono w-12 shrink-0">
                     {p.channel === "facebook"
                       ? "FB"
@@ -475,7 +544,9 @@ export default function RecentSent({ recent }: Props) {
                   <span className="text-[11px] text-navy-400 font-mono shrink-0">
                     #{p.id}
                   </span>
-                  <span className="text-navy-800 truncate min-w-0 flex-1">
+                  <span
+                    className={`truncate min-w-0 flex-1 ${isRemoved ? "text-navy-400 line-through" : "text-navy-800"}`}
+                  >
                     {p.caption.slice(0, 90)}
                     {p.caption.length > 90 ? "…" : ""}
                   </span>
@@ -495,6 +566,7 @@ export default function RecentSent({ recent }: Props) {
                   )}
                   <BoostBadge post={p} />
                   {canShowTraffic &&
+                    !isRemoved &&
                     p.boostStatus === "none" &&
                     p.externalPostId &&
                     !p.externalPostId.startsWith("stub:") && (
@@ -515,7 +587,9 @@ export default function RecentSent({ recent }: Props) {
                         {boostingId === p.id ? "🚀 …" : "🚀 boost"}
                       </button>
                     )}
-                  {p.status !== "pending" && <ResendButton postId={p.id} />}
+                  {p.status !== "pending" && !isRemoved && (
+                    <ResendButton postId={p.id} />
+                  )}
                 </div>
                 {isOpen && (
                   <>
