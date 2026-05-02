@@ -147,3 +147,126 @@ export function formatDateShort(isoDate: string): string {
   const d = new Date(isoDate + "T12:00:00-05:00");
   return d.toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "America/Chicago" });
 }
+
+/**
+ * Convert a printed-roundup time string ("9 PM", "7:30 PM", "10 AM") into a
+ * fractional hour 0-23.999 for sort purposes. Missing time → 0 (sorts first
+ * when DESC, last when ASC). Used by liveMusicHeadline to pick "headliner-ish"
+ * acts (later start time = more headline-ish for the FB-share OG card).
+ */
+function parseActTime(time: string | undefined): number {
+  if (!time) return 0;
+  const m = time.match(/(\d+)(?::(\d+))?\s*(AM|PM)/i);
+  if (!m) return 0;
+  let hr = parseInt(m[1], 10);
+  const min = m[2] ? parseInt(m[2], 10) : 0;
+  const isPm = m[3].toUpperCase() === "PM";
+  if (isPm && hr !== 12) hr += 12;
+  if (!isPm && hr === 12) hr = 0;
+  return hr + min / 60;
+}
+
+/**
+ * Sort score for "headline-iness." Late-start = more headline-ish; tributes
+ * /featured/headliner-tagged acts get a half-hour boost so they surface above
+ * regulars in the same time tier (e.g., a 9 PM tribute beats a 9 PM regular)
+ * but don't leapfrog a later-start act (a 7 PM tribute does NOT beat a 9 PM
+ * regular). Stable sort preserves data-file order within ties.
+ */
+function actHeadlineScore(act: LiveMusicAct): number {
+  let score = parseActTime(act.time);
+  const haystack = `${act.artist} ${act.notes ?? ""}`;
+  if (/tribute|featur|headlin/i.test(haystack)) score += 0.5;
+  return score;
+}
+
+export interface LiveMusicHeadline {
+  /** "Tonight" if today has shows; else the day-name (Saturday, Sunday); else "This Week" */
+  framing: string;
+  /** ISO date the framing refers to — undefined for the no-shows-anywhere fallback */
+  iso?: string;
+  /** Number of acts on the framing day */
+  count: number;
+  /** Top 4 acts on the framing day, sorted by start time DESC ("headliner-ish" first) */
+  topActs: LiveMusicAct[];
+  /** ~50ch — for <title>, OG title, FB share-card headline */
+  title: string;
+  /** ~140ch — for <meta description> + OG description */
+  description: string;
+  /** ~80ch — for the OG image's subtitle line under the headline */
+  ogSubtitle: string;
+}
+
+/**
+ * Produce dynamic, day-of-week-aware copy for /live-music's metadata + OG card.
+ *
+ * Logic:
+ *   - If today has shows  → frame as "Tonight"
+ *   - Else next day with shows → frame as that weekday name
+ *   - Else fallback → "Live Music This Week" generic copy
+ *
+ * Picks "top 3" by latest-start-time as a proxy for headline-iness — 9 PM
+ * shows feature before 7 PM. Not perfect (no actual headliner flag in source
+ * data) but matches the caption style Collie + Winston naturally write.
+ *
+ * Pure (no DB / no API calls) so it's safe to call from generateMetadata,
+ * the OG image route, AND the page render. Same input → same output.
+ */
+export function liveMusicHeadline(
+  week: LiveMusicWeek = CURRENT_WEEK,
+  today: string = todayInCentral(),
+): LiveMusicHeadline {
+  const days = actsThisWeek(week, today);
+  const targetDay = days.find((d) => d.acts.length > 0);
+
+  if (!targetDay) {
+    return {
+      framing: "This Week",
+      count: 0,
+      topActs: [],
+      title: "Live Music in Port Aransas",
+      description:
+        "Who's playing where across Port Aransas venues. Updated weekly from the printed roundup.",
+      ogSubtitle:
+        "The Gaff · Shorty's · Bron's · Treasure Island · Sip Yard · VFW",
+    };
+  }
+
+  const sortedActs = [...targetDay.acts].sort(
+    (a, b) => actHeadlineScore(b) - actHeadlineScore(a),
+  );
+  const topActs = sortedActs.slice(0, 4);
+  const top3 = sortedActs.slice(0, 3);
+
+  const framing = targetDay.iso === today ? "Tonight" : formatWeekday(targetDay.iso);
+  const count = targetDay.acts.length;
+  const word = count === 1 ? "act" : "acts";
+
+  const title = `${framing}: ${count} live ${word} across Port Aransas`;
+
+  const headlinerStrs = top3.map((a) => {
+    const venueName = VENUES[a.venue]?.name ?? a.venue;
+    return `${a.artist} at ${venueName}`;
+  });
+  const remaining = count - top3.length;
+  const description =
+    remaining > 0
+      ? `${headlinerStrs.join(", ")}. Plus ${remaining} more across the island.`
+      : `${headlinerStrs.join(", ")}.`;
+
+  const subtitleArtists = topActs.map((a) => a.artist).join(" · ");
+  const ogSubtitle =
+    sortedActs.length > 4
+      ? `${subtitleArtists} + ${sortedActs.length - 4} more`
+      : subtitleArtists;
+
+  return {
+    framing,
+    iso: targetDay.iso,
+    count,
+    topActs,
+    title,
+    description,
+    ogSubtitle,
+  };
+}

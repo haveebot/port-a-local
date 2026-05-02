@@ -12,17 +12,20 @@ import {
   formatWeekday,
   formatDateLong,
   formatDateShort,
+  liveMusicHeadline,
   type LiveMusicAct,
 } from "@/data/live-music";
 
 export const revalidate = 3600;
 
-export const metadata: Metadata = {
-  title: "Live Music Tonight — Port Aransas, TX | Port A Local",
-  description:
-    "Who's playing where tonight and this week in Port Aransas. The Gaff, Shorty's, Bron's, Treasure Island, Sip Yard, VFW, Salty Dog — all in one place.",
-  alternates: { canonical: "https://theportalocal.com/live-music" },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const h = liveMusicHeadline();
+  return {
+    title: `${h.title} | Port A Local`,
+    description: h.description,
+    alternates: { canonical: "https://theportalocal.com/live-music" },
+  };
+}
 
 function ActCard({ act, emphasize = false }: { act: LiveMusicAct; emphasize?: boolean }) {
   const venue = VENUES[act.venue];
