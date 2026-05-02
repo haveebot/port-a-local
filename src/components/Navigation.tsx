@@ -87,12 +87,18 @@ export default function Navigation() {
 
               {exploreOpen && (
                 <div className="absolute top-full left-0 mt-2 w-52 rounded-xl bg-navy-900/98 backdrop-blur-md border border-white/10 shadow-xl overflow-hidden">
-                  {categories.map((cat) => (
-                    <Link key={cat.slug} href={`/${cat.slug}`} onClick={() => setExploreOpen(false)} className={dropdownLinkClass}>
-                      <PortalIcon name={cat.slug as PortalIconName} className="w-4 h-4 text-coral-400 shrink-0" />
-                      {cat.name}
-                    </Link>
-                  ))}
+                  {categories.map((cat) => {
+                    // "Eat" goes to /deliver (the food encyclopedia + order
+                    // surface) instead of the legacy CategoryPage. /eat
+                    // redirects too, but skip the bounce when we can.
+                    const href = cat.slug === "eat" ? "/deliver" : `/${cat.slug}`;
+                    return (
+                      <Link key={cat.slug} href={href} onClick={() => setExploreOpen(false)} className={dropdownLinkClass}>
+                        <PortalIcon name={cat.slug as PortalIconName} className="w-4 h-4 text-coral-400 shrink-0" />
+                        {cat.name}
+                      </Link>
+                    );
+                  })}
                   <div className="border-t border-white/10">
                     <Link href="/services" onClick={() => setExploreOpen(false)} className={dropdownLinkClass}>
                       <PortalIcon name="services" className="w-4 h-4 text-coral-400 shrink-0" />
@@ -207,10 +213,10 @@ export default function Navigation() {
             <Link
               href="/deliver"
               className={`${portalLinkClass} inline-flex items-center gap-1.5`}
-              title="PAL Delivery — local food to your beach house"
+              title="Eat — every restaurant on the island, order through PAL where we deliver"
             >
               <PortalIcon name="eat" className="w-3.5 h-3.5" />
-              Delivery
+              Eat
             </Link>
             <Link
               href="/rent"
@@ -273,11 +279,14 @@ export default function Navigation() {
 
             {/* Explore */}
             <p className={sectionHeaderClass}>Explore</p>
-            {categories.map((cat) => (
-              <Link key={cat.slug} href={`/${cat.slug}`} onClick={() => setMobileOpen(false)} className={`${mobileLinkClass} flex items-center gap-2`}>
-                <PortalIcon name={cat.slug as PortalIconName} className="w-4 h-4 text-coral-400 shrink-0" />{cat.name}
-              </Link>
-            ))}
+            {categories.map((cat) => {
+              const href = cat.slug === "eat" ? "/deliver" : `/${cat.slug}`;
+              return (
+                <Link key={cat.slug} href={href} onClick={() => setMobileOpen(false)} className={`${mobileLinkClass} flex items-center gap-2`}>
+                  <PortalIcon name={cat.slug as PortalIconName} className="w-4 h-4 text-coral-400 shrink-0" />{cat.name}
+                </Link>
+              );
+            })}
             <Link href="/services" onClick={() => setMobileOpen(false)} className={`${mobileLinkClass} flex items-center gap-2`}><PortalIcon name="services" className="w-4 h-4 text-coral-400 shrink-0" /> Services</Link>
             <Link href="/events" onClick={() => setMobileOpen(false)} className={`${mobileLinkClass} flex items-center gap-2`}><PortalIcon name="events" className="w-4 h-4 text-coral-400 shrink-0" /> Events</Link>
             <Link href="/live-music" onClick={() => setMobileOpen(false)} className={`${mobileLinkClass} flex items-center gap-2`}><PortalIcon name="art" className="w-4 h-4 text-coral-400 shrink-0" /> Live Music</Link>

@@ -98,7 +98,7 @@ export default function Footer() {
                   href="/deliver"
                   className="inline-flex items-center gap-2 text-navy-300 hover:text-coral-300 transition-colors text-sm"
                 >
-                  <PortalIcon name="eat" className="w-3.5 h-3.5 text-coral-400 shrink-0" /> Delivery
+                  <PortalIcon name="eat" className="w-3.5 h-3.5 text-coral-400 shrink-0" /> Eat
                 </Link>
               </li>
               <li>

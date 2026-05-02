@@ -1,16 +1,15 @@
-import type { Metadata } from "next";
-import CategoryPage from "@/components/CategoryPage";
-import { getCategoryBySlug } from "@/data/categories";
-import { getBusinessesByCategory } from "@/data/businesses";
+import { redirect } from "next/navigation";
 
-export const metadata: Metadata = {
-  title: "Best Restaurants in Port Aransas, TX — Port A Local",
-  description:
-    "Discover the best places to eat in Port Aransas, Texas. Local-vetted restaurants, seafood shacks, cafes, and diners — no paid placements, just honest picks from people who live here.",
-};
-
+/**
+ * /eat now redirects to /deliver — the new unified food encyclopedia
+ * (every restaurant on the island, with state-based affordances:
+ * 🚀 Order through PAL · 📞 Call direct · 🪑 Reservations).
+ *
+ * Old /eat URL is preserved as a 308 (permanent) redirect so SEO
+ * authority + bookmarks + back-links still land on the right page.
+ * The original CategoryPage view of editorial-curated restaurants is
+ * superseded by /deliver's denser encyclopedia layout.
+ */
 export default function EatPage() {
-  const category = getCategoryBySlug("eat")!;
-  const businesses = getBusinessesByCategory("eat");
-  return <CategoryPage category={category} businesses={businesses} />;
+  redirect("/deliver");
 }

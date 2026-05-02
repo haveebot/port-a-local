@@ -71,6 +71,42 @@ export default async function DeliverIndex() {
         </div>
       </header>
 
+      {/* PROVE IT — marketing salvo on the food encyclopedia launch */}
+      <section className="bg-coral-500 text-white border-b-4 border-coral-700">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
+          <p className="text-[11px] sm:text-xs font-bold tracking-[0.25em] uppercase text-coral-100 mb-3">
+            📣 Locals · Restaurants
+          </p>
+          <h2 className="font-display text-2xl sm:text-4xl font-extrabold leading-[1.05] max-w-3xl mb-4">
+            You said you wanted more local jobs.
+            <br className="hidden sm:inline" />
+            <span className="text-coral-100">You said you wanted more orders.</span>
+            <br />
+            Prove it.
+          </h2>
+          <p className="text-coral-50 text-sm sm:text-base font-light leading-relaxed max-w-2xl mb-5">
+            PAL just opened delivery from{" "}
+            <span className="font-bold">every restaurant on the island</span>{" "}
+            — the menus are live, the platform&apos;s here, the demand is
+            ours to drive. Your move.
+          </p>
+          <div className="flex flex-wrap gap-3">
+            <Link
+              href="/deliver/runner"
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-lg text-sm font-bold uppercase tracking-wide bg-white text-coral-700 hover:bg-coral-50 shadow-sm"
+            >
+              🚗 Drivers — sign up →
+            </Link>
+            <Link
+              href="/deliver/restaurant"
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-lg text-sm font-bold uppercase tracking-wide bg-navy-900 text-white hover:bg-navy-800"
+            >
+              🍳 Restaurants — claim your listing →
+            </Link>
+          </div>
+        </div>
+      </section>
+
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10">
         {/* SECTION 1 — PAL Delivery (restaurants) */}
         {palRestaurants.length > 0 && (
