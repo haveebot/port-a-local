@@ -13,6 +13,7 @@ import { getTopCitations } from "@/data/ask-gully-log-store";
 import { getUpcomingMilestones } from "@/lib/eventMilestones";
 import { isMetaConfigured } from "@/lib/metaGraph";
 import MarketingBreadcrumb from "@/components/wheelhouse/MarketingBreadcrumb";
+import SyncBoostsButton from "@/components/wheelhouse/SyncBoostsButton";
 
 export const dynamic = "force-dynamic";
 
@@ -247,11 +248,12 @@ export default async function MarketingHubPage() {
                   ({currentlyBoosting.length})
                 </span>
               </h2>
-              <p className="text-[11px] text-navy-500 italic">
-                Paid promotions in flight — Meta is showing these to people
-                beyond your followers
-              </p>
+              <SyncBoostsButton />
             </div>
+            <p className="text-[11px] text-navy-500 italic mb-3">
+              Paid promotions in flight — Meta is showing these to people
+              beyond your followers
+            </p>
             <div className="divide-y divide-sand-200">
               {currentlyBoosting.map((p) => {
                 const insights = p.boostInsights as
