@@ -9,6 +9,10 @@ import {
   msToMph,
   mToFt,
 } from "@/lib/birdcast";
+import {
+  getLatestSighting,
+  groupSpecies,
+} from "@/data/bird-sightings";
 
 export const metadata: Metadata = {
   title: "Birding in Port Aransas — Peak Spring Migration | Port A Local",
@@ -105,7 +109,11 @@ const RIGHT_NOW_SPECIES: SpeciesRow[] = [
 ];
 
 export default async function BirdingPage() {
-  const radar = await fetchBirdCastSnapshot();
+  const [radar, sighting] = await Promise.all([
+    fetchBirdCastSnapshot(),
+    getLatestSighting().catch(() => null),
+  ]);
+  const sightingGroups = sighting ? groupSpecies(sighting.species) : [];
 
   return (
     <main className="min-h-screen">
@@ -345,35 +353,106 @@ export default async function BirdingPage() {
         </div>
       </section>
 
-      {/* Active right now — eyewitness from local birders */}
-      <section className="py-12">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6">
-          <div className="bg-emerald-50 border-2 border-emerald-300 rounded-2xl p-6 sm:p-8">
-            <p className="text-emerald-700 text-xs font-bold tracking-[0.2em] uppercase mb-3">
-              ✨ From the field · this morning
-            </p>
-            <h2 className="font-display text-xl sm:text-2xl font-bold text-navy-900 mb-3">
-              Local birders are out at the preserve
-            </h2>
-            <p className="text-navy-700 leading-relaxed">
-              Port A birder Beryl Armstrong is at the nature preserve this
-              morning watching the migration come through. We&apos;ll add
-              his sighting list as it comes in — bookmark this section.
-            </p>
-            <p className="text-xs text-navy-500 italic mt-3">
-              Spotting something interesting? Email{" "}
-              <a
-                href="mailto:hello@theportalocal.com"
-                className="text-coral-600 hover:underline"
-              >
-                hello@theportalocal.com
-              </a>{" "}
-              with the species + location and we&apos;ll add it here. This
-              is what local birding looks like.
-            </p>
+      {/* From the field — community-sourced day-list */}
+      {sighting && sightingGroups.length > 0 ? (
+        <section className="py-12">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6">
+            <div className="bg-emerald-50 border-2 border-emerald-300 rounded-2xl p-6 sm:p-10">
+              <div className="flex items-baseline justify-between gap-2 flex-wrap mb-4">
+                <p className="text-emerald-700 text-xs font-bold tracking-[0.2em] uppercase">
+                  ✨ From the field
+                </p>
+                <p className="text-emerald-700 text-xs font-mono tracking-wide">
+                  {new Date(sighting.date + "T12:00:00").toLocaleDateString(
+                    "en-US",
+                    {
+                      timeZone: "America/Chicago",
+                      weekday: "long",
+                      month: "long",
+                      day: "numeric",
+                    },
+                  )}
+                </p>
+              </div>
+              <h2 className="font-display text-4xl sm:text-6xl font-bold text-navy-900 leading-[0.95] mb-3">
+                {sighting.speciesCount} species. One morning.
+              </h2>
+              <p className="text-navy-700 text-base sm:text-lg leading-relaxed mb-2">
+                Port A birder <span className="font-bold">{sighting.birderName}</span>{" "}
+                logged this day-list at{" "}
+                {sighting.location ?? "the preserve"} on{" "}
+                {new Date(sighting.date + "T12:00:00").toLocaleDateString(
+                  "en-US",
+                  { month: "long", day: "numeric" },
+                )}{" "}
+                — peak spring migration on the Texas coast.
+              </p>
+              {sighting.note && (
+                <p className="text-sm text-emerald-800 leading-relaxed italic mt-2">
+                  {sighting.note}
+                </p>
+              )}
+
+              {/* Family-grouped species */}
+              <div className="mt-6 space-y-5">
+                {sightingGroups.map((g) => (
+                  <div key={g.group}>
+                    <p className="text-emerald-900 text-xs font-bold tracking-[0.15em] uppercase mb-2">
+                      <span className="mr-1.5">{g.emoji}</span>
+                      {g.label}
+                      <span className="ml-2 text-emerald-700 font-mono font-normal normal-case tracking-normal">
+                        ({g.species.length})
+                      </span>
+                    </p>
+                    <p className="text-navy-800 text-sm sm:text-base leading-relaxed">
+                      {g.species.join(" · ")}
+                    </p>
+                  </div>
+                ))}
+              </div>
+
+              <p className="text-xs text-navy-500 italic mt-8 pt-6 border-t border-emerald-200">
+                Spot something? Email{" "}
+                <a
+                  href="mailto:hello@theportalocal.com"
+                  className="text-coral-600 hover:underline font-semibold"
+                >
+                  hello@theportalocal.com
+                </a>{" "}
+                with the species + location. We&apos;re building the
+                authoritative public record of what flies through here. This
+                is what local birding looks like.
+              </p>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      ) : (
+        // Fallback when no recent sighting on file
+        <section className="py-12">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6">
+            <div className="bg-emerald-50 border-2 border-emerald-300 rounded-2xl p-6 sm:p-8">
+              <p className="text-emerald-700 text-xs font-bold tracking-[0.2em] uppercase mb-3">
+                ✨ From the field
+              </p>
+              <h2 className="font-display text-xl sm:text-2xl font-bold text-navy-900 mb-3">
+                Send us your sightings
+              </h2>
+              <p className="text-navy-700 leading-relaxed">
+                Email{" "}
+                <a
+                  href="mailto:hello@theportalocal.com"
+                  className="text-coral-600 hover:underline font-semibold"
+                >
+                  hello@theportalocal.com
+                </a>{" "}
+                with your day-list and we&apos;ll surface it here. We&apos;re
+                building the authoritative public record of what flies through
+                Port A.
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Hotspots */}
       <section className="py-12 bg-sand-50">

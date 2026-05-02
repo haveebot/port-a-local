@@ -1,34 +1,44 @@
 import { brandedOG, ogSize, ogContentType } from "@/lib/brandedOG";
 import { fetchBirdCastSnapshot } from "@/lib/birdcast";
+import { getLatestSighting } from "@/data/bird-sightings";
 
 export const alt = "Birding in Port Aransas — peak migration";
 export const size = ogSize;
 export const contentType = ogContentType;
 
 /**
- * Dynamic OG for /birding — pulls live BirdCast counts so the FB share
- * card reflects what's actually flying right now. If radar isn't
- * showing active migration (daytime, off-season), falls back to the
- * static "premier birding destination" framing.
+ * Dynamic OG for /birding. Priority order:
+ *   1. Latest community day-list (if a sighting was logged today/recently)
+ *      — leads with the species count + birder attribution. The most
+ *      shareable framing because it's real, current, named.
+ *   2. Live BirdCast cumulative count (if recent migration is active)
+ *   3. BirdCast aloft-now snapshot (if anything's flying)
+ *   4. Static "premier birding destination" framing (off-season)
  *
- * Like the live-music OG, this is generated fresh on each scrape +
- * cached at the framework layer. Cornell Lab BirdCast publishes new
- * data every 10 min during migration season.
+ * Generated fresh on each scrape + cached at the framework layer.
  */
 export default async function Image() {
+  const sighting = await getLatestSighting().catch(() => null);
   const radar = await fetchBirdCastSnapshot().catch(() => null);
 
-  // Prefer the cumulative ~12hr crossing total (impressive nighttime number)
-  // over the instantaneous aloft snapshot (small during day). If neither is
-  // available, fall back to evergreen framing.
   const recentTotal = Math.round(radar?.recentTotalCombined ?? 0);
-  const hasRecentTotal = recentTotal > 100; // skip noise; only show meaningful sums
   const aloftNow = Math.round(radar?.combinedAloft ?? 0);
 
   let title: string;
   let subtitle: string;
+  let badge = "Birding · Port A";
+  let meta: string | undefined;
 
-  if (hasRecentTotal) {
+  if (sighting && sighting.isFresh) {
+    title = `${sighting.speciesCount} species. One morning.`;
+    const radarLine =
+      recentTotal > 100
+        ? ` · ${recentTotal.toLocaleString()} crossed the Coastal Bend last night`
+        : "";
+    subtitle = `Port A birder ${sighting.birderName}'s day-list — Roseate Spoonbills, Cinnamon Teal, 11 species of warblers${radarLine}`;
+    badge = "From the field · Port A";
+    meta = sighting.date;
+  } else if (recentTotal > 100) {
     title = `${recentTotal.toLocaleString()} birds crossed the Coastal Bend`;
     subtitle =
       "Cornell Lab BirdCast radar · last ~12 hours · what's flying, where to look";
@@ -42,9 +52,10 @@ export default async function Image() {
   }
 
   return brandedOG({
-    badge: "Birding · Port A",
+    badge,
     title,
     subtitle,
+    meta,
     lockupVariant: "standard",
   });
 }
