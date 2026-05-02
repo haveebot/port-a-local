@@ -3,13 +3,22 @@ import Footer from "@/components/Footer";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { EmojiIcon } from "@/components/brand/PortalIcon";
+import {
+  fetchBirdCastSnapshot,
+  compassLabel,
+  msToMph,
+  mToFt,
+} from "@/lib/birdcast";
 
 export const metadata: Metadata = {
   title: "Birding in Port Aransas — Peak Spring Migration | Port A Local",
   description:
-    "Port Aransas is one of North America's premier birding destinations — an Audubon-designated Important Bird Area on the Central Flyway. Right now: 75,500 birds crossed the county overnight. Where to look, what's flying, and the conservation note birders should know.",
+    "Port Aransas is one of North America's premier birding destinations — an Audubon-designated Important Bird Area on the Central Flyway. Live BirdCast radar + recent sightings + the hotspots and species birders should know.",
   alternates: { canonical: "https://theportalocal.com/birding" },
 };
+
+// 10-min ISR — matches BirdCast's own publish cadence; no point fetching faster
+export const revalidate = 600;
 
 interface Hotspot {
   name: string;
@@ -95,7 +104,9 @@ const RIGHT_NOW_SPECIES: SpeciesRow[] = [
   },
 ];
 
-export default function BirdingPage() {
+export default async function BirdingPage() {
+  const radar = await fetchBirdCastSnapshot();
+
   return (
     <main className="min-h-screen">
       <Navigation />
@@ -120,39 +131,125 @@ export default function BirdingPage() {
         </div>
       </section>
 
-      {/* RIGHT NOW callout — the verifiable data */}
+      {/* LIVE RADAR — BirdCast snapshot */}
       <section className="py-12 bg-sand-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           <div className="bg-white rounded-2xl border-2 border-emerald-300 p-6 sm:p-8 shadow-sm">
-            <p className="text-emerald-700 text-xs font-bold tracking-[0.2em] uppercase mb-3">
-              ✨ Right now · this weekend
-            </p>
-            <h2 className="font-display text-2xl sm:text-3xl font-bold text-navy-900 mb-4 leading-snug">
-              <span className="text-emerald-700">75,500 birds</span> crossed
-              Aransas County overnight.
-            </h2>
-            <p className="text-navy-700 leading-relaxed mb-3">
-              That's verified from{" "}
+            <div className="flex items-baseline justify-between gap-2 mb-3 flex-wrap">
+              <p className="text-emerald-700 text-xs font-bold tracking-[0.2em] uppercase">
+                ✨ Live radar · Cornell&apos;s BirdCast
+              </p>
+              {radar?.asOf && (
+                <p className="text-[11px] text-navy-400 font-mono">
+                  as of {new Date(radar.asOf).toLocaleString("en-US", {
+                    timeZone: "America/Chicago",
+                    month: "short",
+                    day: "numeric",
+                    hour: "numeric",
+                    minute: "2-digit",
+                    hour12: true,
+                    timeZoneName: "short",
+                  })}
+                </p>
+              )}
+            </div>
+            {radar && radar.combinedAloft > 0 ? (
+              <>
+                <h2 className="font-display text-2xl sm:text-3xl font-bold text-navy-900 mb-4 leading-snug">
+                  <span className="text-emerald-700">
+                    {radar.combinedAloft.toLocaleString()} birds
+                  </span>{" "}
+                  aloft over the Coastal Bend right now.
+                </h2>
+                <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-4">
+                  <RadarStat
+                    label="Aransas County"
+                    sub="Port A is here"
+                    value={radar.aransas?.birdsAloft ?? 0}
+                    secondary={
+                      radar.aransas
+                        ? `${Math.round(
+                            radar.aransas.birdsPassed,
+                          ).toLocaleString()} passed last interval`
+                        : "no data"
+                    }
+                  />
+                  <RadarStat
+                    label="Nueces County"
+                    sub="Corpus / inland"
+                    value={radar.nueces?.birdsAloft ?? 0}
+                    secondary={
+                      radar.nueces
+                        ? `${Math.round(
+                            radar.nueces.birdsPassed,
+                          ).toLocaleString()} passed last interval`
+                        : "no data"
+                    }
+                  />
+                </div>
+                {radar.aransas && radar.aransas.flightSpeedMs > 0 && (
+                  <p className="text-navy-700 leading-relaxed">
+                    Flight direction:{" "}
+                    <span className="font-semibold">
+                      {compassLabel(radar.aransas.flightDirectionDeg)}
+                    </span>
+                    {" · "}
+                    speed:{" "}
+                    <span className="font-semibold">
+                      {Math.round(msToMph(radar.aransas.flightSpeedMs))} mph
+                    </span>
+                    {" · "}
+                    altitude:{" "}
+                    <span className="font-semibold">
+                      ~{Math.round(mToFt(radar.aransas.heightMeanM))} ft
+                    </span>{" "}
+                    <span className="text-navy-500">
+                      (max ~{Math.round(mToFt(radar.aransas.heightMaxM))} ft)
+                    </span>
+                    .
+                  </p>
+                )}
+                <p className="text-xs text-navy-500 italic mt-3">
+                  Updates every ~10 minutes from Cornell Lab&apos;s nationwide
+                  weather-radar network. Data shows up loudest at night when
+                  birds actively migrate; daytime readings are usually quiet.
+                </p>
+              </>
+            ) : (
+              <>
+                <h2 className="font-display text-2xl sm:text-3xl font-bold text-navy-900 mb-4 leading-snug">
+                  Skies are quiet right now.
+                </h2>
+                <p className="text-navy-700 leading-relaxed">
+                  BirdCast&apos;s radar isn&apos;t showing active migration
+                  over the Coastal Bend at this moment. Birds migrate
+                  primarily at night during the Mar–Jun and Aug–Nov windows;
+                  check back this evening or first thing in the morning. The
+                  most recent active reading is below.
+                </p>
+              </>
+            )}
+            <p className="text-[11px] text-navy-500 mt-4 leading-relaxed">
+              Source:{" "}
               <a
                 href="https://dashboard.birdcast.org/region/US-TX-007"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-coral-600 hover:underline font-semibold"
               >
-                Cornell Lab&apos;s BirdCast radar
-              </a>{" "}
-              — the night of May 1–2 saw a peak of about 34,000 birds aloft
-              simultaneously over Aransas County around 2 AM, heading
-              west-northwest at ~1,700 feet. Neighboring Nueces County saw
-              169,700 the same night. The whole corridor was lit up.
-            </p>
-            <p className="text-navy-700 leading-relaxed">
-              Friday&apos;s cold front is the reason this weekend matters.
-              Strong north-northeast winds (35–45 mph on the coast), heavy rain,
-              gale warnings on the bays. Migrants crossing the Gulf hit a wall
-              of headwinds and rain mid-flight; the barrier-island mottes are
-              the first dry land with food and shelter. That&apos;s the
-              textbook fallout setup{" "}
+                Cornell Lab BirdCast — Aransas dashboard
+              </a>
+              {" · "}
+              <a
+                href="https://dashboard.birdcast.org/region/US-TX-355"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-coral-600 hover:underline font-semibold"
+              >
+                Nueces dashboard
+              </a>
+              . Friday May 1&apos;s cold front (35–45 mph north winds + heavy
+              rain) is the textbook fallout setup{" "}
               <a
                 href="https://houstonaudubon.org/programs/birding/resources/spring-coastal-migration.html"
                 target="_blank"
@@ -161,7 +258,8 @@ export default function BirdingPage() {
               >
                 Houston Audubon
               </a>{" "}
-              describes for the Texas coast.
+              describes — birds crossing the Gulf hit headwinds, the
+              barrier-island mottes are the first dry land with food.
             </p>
           </div>
         </div>
@@ -482,5 +580,30 @@ export default function BirdingPage() {
 
       <Footer />
     </main>
+  );
+}
+
+function RadarStat({
+  label,
+  sub,
+  value,
+  secondary,
+}: {
+  label: string;
+  sub: string;
+  value: number;
+  secondary: string;
+}) {
+  return (
+    <div className="bg-emerald-50 rounded-lg border border-emerald-200 p-3 sm:p-4">
+      <p className="text-[11px] font-semibold uppercase tracking-wider text-emerald-700">
+        {label}
+      </p>
+      <p className="text-[10px] text-navy-500 mt-0.5 mb-2">{sub}</p>
+      <p className="font-display text-2xl sm:text-3xl font-bold text-navy-900 tabular-nums">
+        {Math.round(value).toLocaleString()}
+      </p>
+      <p className="text-[11px] text-navy-500 mt-1">{secondary}</p>
+    </div>
   );
 }
