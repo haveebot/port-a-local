@@ -41,7 +41,19 @@ async function ensureSchema(): Promise<void> {
   _schemaReady = true;
 }
 
-export type AlertSeverity = "info" | "warning" | "critical";
+/**
+ * Alert tones, in order of urgency:
+ *   spotlight — positive / celebratory / "look at this cool thing happening"
+ *               (bird migrations, sunsets, new mural, ferry-line clear)
+ *   info      — neutral notice (general announcements, parking, town news)
+ *   warning   — advisory (road closures, watches, advisories)
+ *   critical  — life-safety (evacuations, hurricanes, lockdowns)
+ *
+ * spotlight is intentionally distinct: vibrant + warm color, no pulsing
+ * dot. Banner location is the same so visitors learn one place to look,
+ * but the visual tone never falsely suggests emergency.
+ */
+export type AlertSeverity = "spotlight" | "info" | "warning" | "critical";
 
 export interface PALAlert {
   id: string;

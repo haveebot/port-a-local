@@ -30,6 +30,11 @@ function severityChip(severity: AlertSeverity): { label: string; cls: string } {
         label: "Warning",
         cls: "bg-coral-500/20 text-coral-200 border-coral-500/40",
       };
+    case "spotlight":
+      return {
+        label: "Spotlight",
+        cls: "bg-emerald-500/20 text-emerald-200 border-emerald-500/40",
+      };
     case "info":
     default:
       return {
@@ -197,7 +202,7 @@ export default function AlertsAdminClient({
               Severity
             </label>
             <div className="grid grid-cols-3 gap-2">
-              {(["info", "warning", "critical"] as AlertSeverity[]).map(
+              {(["spotlight", "info", "warning", "critical"] as AlertSeverity[]).map(
                 (s) => {
                   const chip = severityChip(s);
                   const selected = severity === s;
