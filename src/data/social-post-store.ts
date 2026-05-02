@@ -705,6 +705,21 @@ export async function getSentPostsToCheck(): Promise<SocialPost[]> {
 }
 
 /**
+ * All currently-active boosts — for at-a-glance display on the marketing hub.
+ * No 1-hour-old filter (operator sees freshly-fired boosts immediately).
+ */
+export async function getCurrentlyBoosting(): Promise<SocialPost[]> {
+  await ensureSchema();
+  const result = await sql`
+    SELECT * FROM social_post_queue
+    WHERE boost_status = 'active'
+    ORDER BY boost_created_at DESC
+    LIMIT 20
+  `;
+  return result.rows.map(rowToPost);
+}
+
+/**
  * Active boosts due for an insights pull — boost is 'active' AND was created
  * more than 1 hour ago (gives Meta time to populate metrics) AND was either
  * never synced OR last synced > 1hr ago.
