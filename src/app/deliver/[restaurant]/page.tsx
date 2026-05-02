@@ -9,7 +9,9 @@ import {
   getRestaurant,
   isOpenNow,
 } from "@/data/delivery-restaurants";
+import { getFoodSpotBySlug } from "@/data/restaurant-encyclopedia";
 import RestaurantOrderClient from "./RestaurantOrderClient";
+import CallDirectView from "./CallDirectView";
 
 export const dynamic = "force-dynamic";
 
@@ -20,11 +22,21 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { restaurant } = await params;
   const r = getRestaurant(restaurant);
-  if (!r) return { title: "PAL Delivery" };
-  return {
-    title: `${r.name} — delivery from PAL`,
-    description: r.shortDescription,
-  };
+  if (r) {
+    return {
+      title: `${r.name} — delivery from PAL`,
+      description: r.shortDescription,
+    };
+  }
+  // Fallback: encyclopedia lookup for call-direct spots
+  const spot = getFoodSpotBySlug(restaurant);
+  if (spot) {
+    return {
+      title: `${spot.name} — Port Aransas | Port A Local`,
+      description: spot.tagline,
+    };
+  }
+  return { title: "PAL Delivery" };
 }
 
 export default async function RestaurantPage({
@@ -34,7 +46,17 @@ export default async function RestaurantPage({
 }) {
   const { restaurant: slug } = await params;
   const r = getRestaurant(slug);
-  if (!r) notFound();
+
+  // Two paths:
+  //   1) PAL-delivery restaurant — full order flow (existing behavior)
+  //   2) Call-direct spot from the /eat encyclopedia — info-only view
+  if (!r) {
+    const spot = getFoodSpotBySlug(slug);
+    if (spot && spot.state === "call-direct") {
+      return <CallDirectView spot={spot} />;
+    }
+    notFound();
+  }
 
   const categories = getCategoriesFor(r.id);
   const items = getItemsFor(r.id);

@@ -32,7 +32,7 @@ export const RESTAURANTS: DeliveryRestaurant[] = [
     pickupNotes:
       "Tell the host it's a PAL Delivery pickup; they'll have it bagged at the front.",
     phone: "(361) 749-5069",
-    businessSlug: "crazy-cajun-seafood-restaurant",
+    businessSlug: "crazy-cajun",
     shortDescription:
       "Boiled seafood dumped on the table since 1987. Hungry Cajun, gumbo, étouffée — to your beach house.",
     cuisineTags: ["Cajun", "Seafood"],
