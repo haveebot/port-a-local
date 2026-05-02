@@ -90,6 +90,14 @@ export interface BirdCastSnapshot {
   isNight: boolean;
   /** Source URL — used in the UI's attribution link */
   sourceKey: string;
+  /** Cumulative birds_passed sum for Aransas County over the last ~12 hours (the "tonight" number) */
+  recentTotalAransas: number;
+  /** Cumulative birds_passed sum for Nueces County over the last ~12 hours */
+  recentTotalNueces: number;
+  /** Sum of recentTotalAransas + recentTotalNueces — the headline "X birds crossed overnight" number */
+  recentTotalCombined: number;
+  /** How many 10-min intervals were summed (sanity-check for partial-data nights) */
+  recentIntervalsCounted: number;
 }
 
 interface ListedFile {
@@ -218,11 +226,94 @@ async function fetchAndParse(
   return out;
 }
 
+/**
+ * Sum birds_passed across recent intervals to produce the "X birds crossed
+ * overnight" headline. Pulls files from the last ~12 hours, filters to
+ * enabled rows, sums birds_passed per county.
+ *
+ * Why 12 hours: covers a full overnight migration window (sunset → sunrise
+ * is ~10.5 hours in spring; 12 gives buffer for early-evening start). When
+ * called during day, captures last night's totals; when called at night,
+ * captures tonight-so-far PLUS late-yesterday tail — both impressive,
+ * neither inflated.
+ *
+ * Parallel-fetched in chunks of 8 to stay under Vercel's connection
+ * concurrency comfort + the 10s function-execution budget. ~72 files
+ * worst-case (12hr × 6 per hr); ~9 batches = sub-3-second total in practice.
+ */
+async function fetchRecentTotals(hoursBack: number = 12): Promise<{
+  aransas: number;
+  nueces: number;
+  intervalsCounted: number;
+}> {
+  const now = new Date();
+  const since = new Date(now.getTime() - hoursBack * 60 * 60 * 1000);
+
+  // Pull file lists for today + yesterday (UTC) — covers any 12hr window
+  const allFiles: ListedFile[] = [];
+  for (let dayOffset = 0; dayOffset < 2; dayOffset++) {
+    const d = new Date(now.getTime() - dayOffset * 24 * 60 * 60 * 1000);
+    const files = await listFiles(
+      d.getUTCFullYear(),
+      d.getUTCMonth() + 1,
+      d.getUTCDate(),
+    );
+    allFiles.push(...files);
+  }
+
+  // Filter to files within the lookback window — parse YYYYMMDD-HHMM out of filename
+  const inWindow: ListedFile[] = [];
+  for (const f of allFiles) {
+    const m = f.key.match(/livemig_gen-(\d{8})-(\d{4})/);
+    if (!m) continue;
+    const ymd = m[1];
+    const hm = m[2];
+    const fileTs = new Date(
+      `${ymd.slice(0, 4)}-${ymd.slice(4, 6)}-${ymd.slice(6, 8)}T${hm.slice(
+        0,
+        2,
+      )}:${hm.slice(2, 4)}:00Z`,
+    );
+    if (fileTs >= since) inWindow.push(f);
+  }
+
+  // Parallel-fetch in chunks of 8 to keep concurrency reasonable
+  const CHUNK = 8;
+  let aransas = 0;
+  let nueces = 0;
+  let intervalsCounted = 0;
+
+  for (let i = 0; i < inWindow.length; i += CHUNK) {
+    const chunk = inWindow.slice(i, i + CHUNK);
+    const results = await Promise.all(
+      chunk.map((f) =>
+        fetchAndParse(f.key, [ARANSAS, NUECES]).catch(() => []),
+      ),
+    );
+    for (const readings of results) {
+      const a = readings.find((r) => r.location === ARANSAS);
+      const n = readings.find((r) => r.location === NUECES);
+      if (a?.enabled) aransas += a.birdsPassed;
+      if (n?.enabled) nueces += n.birdsPassed;
+      intervalsCounted++;
+    }
+  }
+
+  return { aransas, nueces, intervalsCounted };
+}
+
 export async function fetchBirdCastSnapshot(): Promise<BirdCastSnapshot | null> {
   try {
     const key = await findLatestNightFile();
     if (!key) return null;
-    const readings = await fetchAndParse(key, [ARANSAS, NUECES]);
+    const [readings, totals] = await Promise.all([
+      fetchAndParse(key, [ARANSAS, NUECES]),
+      fetchRecentTotals(12).catch(() => ({
+        aransas: 0,
+        nueces: 0,
+        intervalsCounted: 0,
+      })),
+    ]);
     const aransas = readings.find((r) => r.location === ARANSAS) ?? null;
     const nueces = readings.find((r) => r.location === NUECES) ?? null;
     if (!aransas && !nueces) return null;
@@ -241,6 +332,10 @@ export async function fetchBirdCastSnapshot(): Promise<BirdCastSnapshot | null> 
       combinedAloft: (aransas?.birdsAloft ?? 0) + (nueces?.birdsAloft ?? 0),
       isNight,
       sourceKey: key,
+      recentTotalAransas: totals.aransas,
+      recentTotalNueces: totals.nueces,
+      recentTotalCombined: totals.aransas + totals.nueces,
+      recentIntervalsCounted: totals.intervalsCounted,
     };
   } catch (err) {
     console.warn("[birdcast] fetchBirdCastSnapshot failed:", err);

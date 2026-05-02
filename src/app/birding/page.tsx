@@ -153,37 +153,58 @@ export default async function BirdingPage() {
                 </p>
               )}
             </div>
-            {radar && radar.combinedAloft > 0 ? (
+            {radar && (radar.recentTotalCombined > 100 || radar.combinedAloft > 100) ? (
               <>
-                <h2 className="font-display text-2xl sm:text-3xl font-bold text-navy-900 mb-4 leading-snug">
-                  <span className="text-emerald-700">
-                    {radar.combinedAloft.toLocaleString()} birds
-                  </span>{" "}
-                  aloft over the Coastal Bend right now.
-                </h2>
+                {radar.recentTotalCombined > 100 ? (
+                  <h2 className="font-display text-2xl sm:text-3xl font-bold text-navy-900 mb-4 leading-snug">
+                    <span className="text-emerald-700">
+                      {Math.round(radar.recentTotalCombined).toLocaleString()} birds
+                    </span>{" "}
+                    crossed the Coastal Bend in the last ~12 hours.
+                  </h2>
+                ) : (
+                  <h2 className="font-display text-2xl sm:text-3xl font-bold text-navy-900 mb-4 leading-snug">
+                    <span className="text-emerald-700">
+                      {Math.round(radar.combinedAloft).toLocaleString()} birds
+                    </span>{" "}
+                    aloft over the Coastal Bend right now.
+                  </h2>
+                )}
                 <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-4">
                   <RadarStat
                     label="Aransas County"
                     sub="Port A is here"
-                    value={radar.aransas?.birdsAloft ?? 0}
+                    value={
+                      radar.recentTotalAransas > 0
+                        ? radar.recentTotalAransas
+                        : radar.aransas?.birdsAloft ?? 0
+                    }
                     secondary={
-                      radar.aransas
-                        ? `${Math.round(
-                            radar.aransas.birdsPassed,
-                          ).toLocaleString()} passed last interval`
-                        : "no data"
+                      radar.recentTotalAransas > 0
+                        ? `crossed in last ~12hr`
+                        : radar.aransas
+                          ? `${Math.round(
+                              radar.aransas.birdsAloft,
+                            ).toLocaleString()} aloft right now`
+                          : "no data"
                     }
                   />
                   <RadarStat
                     label="Nueces County"
                     sub="Corpus / inland"
-                    value={radar.nueces?.birdsAloft ?? 0}
+                    value={
+                      radar.recentTotalNueces > 0
+                        ? radar.recentTotalNueces
+                        : radar.nueces?.birdsAloft ?? 0
+                    }
                     secondary={
-                      radar.nueces
-                        ? `${Math.round(
-                            radar.nueces.birdsPassed,
-                          ).toLocaleString()} passed last interval`
-                        : "no data"
+                      radar.recentTotalNueces > 0
+                        ? `crossed in last ~12hr`
+                        : radar.nueces
+                          ? `${Math.round(
+                              radar.nueces.birdsAloft,
+                            ).toLocaleString()} aloft right now`
+                          : "no data"
                     }
                   />
                 </div>
