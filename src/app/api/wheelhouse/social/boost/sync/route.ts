@@ -35,7 +35,7 @@ export async function POST(_req: NextRequest) {
   const durationHours = Number(process.env.META_BOOST_DURATION_HOURS ?? "24");
   const completionMs = durationHours * 60 * 60 * 1000;
 
-  const boosts = await getActiveBoosts();
+  const boosts = await getActiveBoosts({ ignoreSyncThrottle: true });
   const results: {
     id: number;
     adId: string | null;

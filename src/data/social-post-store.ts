@@ -720,12 +720,28 @@ export async function getCurrentlyBoosting(): Promise<SocialPost[]> {
 }
 
 /**
- * Active boosts due for an insights pull — boost is 'active' AND was created
- * more than 1 hour ago (gives Meta time to populate metrics) AND was either
- * never synced OR last synced > 1hr ago.
+ * Active boosts due for an insights pull. Default (cron mode): boost is
+ * 'active' AND was created more than 1 hour ago (gives Meta time to
+ * populate metrics) AND was either never synced OR last synced > 1hr ago.
+ *
+ * Pass ignoreSyncThrottle=true for operator-triggered manual sync — skips
+ * the 1hr last-synced filter so a click always refreshes. Still respects
+ * the 1hr-since-creation guard since fresh ads genuinely have no data.
  */
-export async function getActiveBoosts(): Promise<SocialPost[]> {
+export async function getActiveBoosts(opts?: {
+  ignoreSyncThrottle?: boolean;
+}): Promise<SocialPost[]> {
   await ensureSchema();
+  if (opts?.ignoreSyncThrottle) {
+    const result = await sql`
+      SELECT * FROM social_post_queue
+      WHERE boost_status = 'active'
+        AND boost_created_at IS NOT NULL
+      ORDER BY boost_created_at ASC
+      LIMIT 50
+    `;
+    return result.rows.map(rowToPost);
+  }
   const result = await sql`
     SELECT * FROM social_post_queue
     WHERE boost_status = 'active'
