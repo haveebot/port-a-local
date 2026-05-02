@@ -29,6 +29,8 @@ export default async function EmergencyBanner() {
 
   return (
     <aside
+      data-pal-banner
+      data-severity={alert.severity}
       role={isSpotlight ? "status" : "alert"}
       aria-live={isSpotlight ? "polite" : "assertive"}
       className={`fixed top-0 left-0 right-0 z-[55] w-full ${styles.bg} ${styles.text} border-b ${styles.border}`}
