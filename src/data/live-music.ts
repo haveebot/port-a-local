@@ -99,7 +99,10 @@ export const CURRENT_WEEK: LiveMusicWeek = {
     { date: "2026-05-02", venue: "beach-bums", artist: "SA Lights — Journey Tribute", time: "9 PM" },
 
     // Sunday — May 3
-    { date: "2026-05-03", venue: "fred-rhodes", artist: "Farmers Market", time: "10 AM" },
+    // Farmers Market at Fred Rhodes Pavilion is a community event, not a live
+    // music act — keep it OUT of this data so headlines like "3 live acts"
+    // don't mis-count it. If we want to surface community events alongside
+    // music, that's a separate data source.
     { date: "2026-05-03", venue: "bierhaus", artist: "Mykel Martin", time: "2 PM" },
     { date: "2026-05-03", venue: "shortys", artist: "Jim Dugan", time: "3 PM" },
   ],
