@@ -29,7 +29,9 @@ function getToken(): string | null {
 }
 
 async function queryFbCache(url: string, token: string) {
-  const fields = "og_object{id,type,title,description,image,updated_time},share";
+  // share field deprecated v2.9+, removed it. og_object includes image
+  // which is what we actually need anyway.
+  const fields = "og_object{id,type,title,description,image,updated_time,site_name,url}";
   const queryUrl = `${GRAPH_BASE}/?id=${encodeURIComponent(url)}&fields=${encodeURIComponent(fields)}&access_token=${encodeURIComponent(token)}`;
   const res = await fetch(queryUrl, { cache: "no-store" });
   const data = await res.json().catch(() => ({ parseError: true }));
