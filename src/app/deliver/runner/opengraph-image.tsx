@@ -3,6 +3,7 @@ import { brandedOG, ogSize, ogContentType } from "@/lib/brandedOG";
 export const alt = "Drive for PAL Delivery — Port Aransas runners";
 export const size = ogSize;
 export const contentType = ogContentType;
+export const dynamic = "force-dynamic";
 
 export default function Image() {
   return brandedOG({

@@ -4,6 +4,7 @@ import { getRestaurant } from "@/data/delivery-restaurants";
 export const alt = "PAL Delivery — restaurant menu";
 export const size = ogSize;
 export const contentType = ogContentType;
+export const dynamic = "force-dynamic";
 
 export default function Image({
   params,

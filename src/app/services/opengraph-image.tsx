@@ -3,6 +3,7 @@ import { brandedOG, ogSize, ogContentType } from "@/lib/brandedOG";
 export const alt = "Services on Port A Local";
 export const size = ogSize;
 export const contentType = ogContentType;
+export const dynamic = "force-dynamic";
 
 export default function Image() {
   return brandedOG({

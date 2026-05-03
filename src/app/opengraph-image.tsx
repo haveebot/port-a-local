@@ -5,6 +5,7 @@ import path from "path";
 export const alt = "Port A Local — Port Aransas, TX";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
+export const dynamic = "force-dynamic";
 
 function loadSvg(file: string): string {
   const buf = fs.readFileSync(path.join(process.cwd(), "public/logos", file));

@@ -5,6 +5,7 @@ import { getLatestSighting } from "@/data/bird-sightings";
 export const alt = "Birding in Port Aransas — peak migration";
 export const size = ogSize;
 export const contentType = ogContentType;
+export const dynamic = "force-dynamic";
 
 /**
  * Dynamic OG for /birding. Priority order:

@@ -6,6 +6,7 @@ import { emojiToIconName } from "@/components/brand/PortalIcon";
 export const alt = "Port A Local — Guides";
 export const size = ogSize;
 export const contentType = ogContentType;
+export const dynamic = "force-dynamic";
 
 export function generateStaticParams() {
   return guides.map((g) => ({ slug: g.slug }));

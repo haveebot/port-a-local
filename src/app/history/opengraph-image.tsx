@@ -3,6 +3,7 @@ import { brandedOG, ogSize, ogContentType } from "@/lib/brandedOG";
 export const alt = "Port A Heritage — 21 stories of Port Aransas";
 export const size = ogSize;
 export const contentType = ogContentType;
+export const dynamic = "force-dynamic";
 
 export default function Image() {
   return brandedOG({

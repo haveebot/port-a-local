@@ -6,6 +6,7 @@ import type { PortalIconName } from "@/components/brand/PortalIcon";
 export const alt = "Port A Local — Directory";
 export const size = ogSize;
 export const contentType = ogContentType;
+export const dynamic = "force-dynamic";
 
 export function generateStaticParams() {
   return categories.map((c) => ({ category: c.slug }));

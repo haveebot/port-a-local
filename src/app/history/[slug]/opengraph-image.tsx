@@ -6,6 +6,7 @@ import { emojiToIconName } from "@/components/brand/PortalIcon";
 export const alt = "Port A Heritage";
 export const size = ogSize;
 export const contentType = ogContentType;
+export const dynamic = "force-dynamic";
 
 export default async function Image({
   params,
