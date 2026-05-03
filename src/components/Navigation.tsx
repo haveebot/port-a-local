@@ -270,7 +270,18 @@ export default function Navigation() {
 
         {/* Mobile menu — capped at viewport-minus-header with internal scroll */}
         {mobileOpen && (
-          <div className="md:hidden pb-4 border-t border-coral-500/20 bg-navy-950/98 backdrop-blur-md max-h-[calc(100dvh-4.5rem)] overflow-y-auto overscroll-contain">
+          <div
+            className="md:hidden border-t border-coral-500/20 bg-navy-950/98 backdrop-blur-md max-h-[calc(100dvh-4.5rem)] overflow-y-auto overscroll-contain"
+            style={{
+              // iOS Safari + Chrome on Android both eat ~80-100px of the
+              // bottom of 100dvh with their browser chrome (URL bar, home
+              // indicator). pb-4 was leaving the last 1-2 menu items
+              // visually obscured even though scroll technically reached
+              // them. Generous bottom padding + safe-area-inset handles
+              // both static + dynamic browser-chrome states.
+              paddingBottom: "max(5rem, env(safe-area-inset-bottom, 0px) + 4rem)",
+            }}
+          >
             {/* Gully */}
             <Link
               href="/gully"
