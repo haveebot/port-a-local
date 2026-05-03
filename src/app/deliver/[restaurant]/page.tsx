@@ -97,11 +97,18 @@ export default async function RestaurantPage({
             </Link>
           </div>
           <div className="flex items-start justify-between gap-3">
-            <div>
-              <h1 className="font-display text-2xl sm:text-3xl font-bold text-navy-900">
-                {r.name}
-              </h1>
-              <p className="text-sm text-navy-600 font-light mt-1 max-w-2xl">
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-2 flex-wrap mb-1">
+                <h1 className="font-display text-2xl sm:text-3xl font-bold text-navy-900">
+                  {r.name}
+                </h1>
+                {r.isBeta && (
+                  <span className="px-2 py-0.5 rounded text-[10px] font-bold tracking-widest uppercase bg-blue-50 text-blue-700 border border-blue-300">
+                    ⚡ Beta
+                  </span>
+                )}
+              </div>
+              <p className="text-sm text-navy-600 font-light max-w-2xl">
                 {r.shortDescription}
               </p>
             </div>
@@ -115,6 +122,17 @@ export default async function RestaurantPage({
               {open ? "Open · accepting orders" : "Closed"}
             </span>
           </div>
+          {r.isBeta && (
+            <div className="mt-4 bg-blue-50 border border-blue-200 rounded-lg px-4 py-3 text-[12px] text-blue-900 leading-relaxed">
+              <span className="font-bold">⚡ Beta delivery from {r.name}.</span>{" "}
+              We don&apos;t formally partner with this restaurant yet — your
+              order goes through an operator-confirm step before any charge.
+              We&apos;ll text you within ~10 min with a payment link if we can
+              pull it off, or a heads-up if we can&apos;t (no charge either way).
+              Menu prices may have drifted since we scraped them; we&apos;ll
+              confirm the actual total with you before billing.
+            </div>
+          )}
         </div>
       </header>
 

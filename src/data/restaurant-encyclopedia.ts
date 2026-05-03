@@ -22,7 +22,7 @@
  */
 
 import { businesses, type Business } from "./businesses";
-import { RESTAURANTS as DELIVERY_RESTAURANTS } from "./delivery-restaurants";
+import { getActiveRestaurants } from "./delivery-restaurants";
 import type { DeliveryRestaurant } from "./delivery-types";
 
 export type FoodSpotState = "pal-delivery" | "call-direct" | "reservations";
@@ -81,7 +81,8 @@ export function getAllFoodSpots(): FoodSpot[] {
 
   // Index businesses.ts by their delivery-cross-reference (where set).
   // delivery-restaurants.ts uses `businessSlug` as the foreign key.
-  for (const d of DELIVERY_RESTAURANTS) {
+  const deliveryRestaurants = getActiveRestaurants();
+  for (const d of deliveryRestaurants) {
     if (!d.isActive) continue;
     const b = businesses.find(
       (x) =>
@@ -94,7 +95,7 @@ export function getAllFoodSpots(): FoodSpot[] {
   }
 
   // 1) Add all PAL-delivery spots first (these win)
-  for (const d of DELIVERY_RESTAURANTS) {
+  for (const d of deliveryRestaurants) {
     if (!d.isActive) continue;
     const b = businessByDeliverySlug.get(d.slug);
     spots.push({

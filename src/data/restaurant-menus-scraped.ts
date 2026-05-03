@@ -17,7 +17,7 @@
 
 import type { MenuSection } from "./businesses";
 
-interface ScrapedMenu {
+export interface ScrapedMenu {
   slug: string;
   menu: MenuSection[];
   /** Optional — surfaced as a small italic note on the detail page */
@@ -28,7 +28,7 @@ interface ScrapedMenu {
   source?: string;
 }
 
-const SCRAPED: ScrapedMenu[] = [
+export const SCRAPED: ScrapedMenu[] = [
   {
     slug: "venetian-hot-plate",
     scrapedAt: "2026-05-02",

@@ -90,7 +90,7 @@ export default async function DeliverIndex() {
             — the menus are live, the platform&apos;s here, the demand is
             ours to drive. Your move.
           </p>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-3 mb-4">
             <Link
               href="/deliver/runner"
               className="inline-flex items-center gap-2 px-5 py-3 rounded-lg text-sm font-bold uppercase tracking-wide bg-white text-coral-700 hover:bg-coral-50 shadow-sm"
@@ -104,6 +104,14 @@ export default async function DeliverIndex() {
               🍳 Restaurants — claim your listing →
             </Link>
           </div>
+          <p className="text-[11px] sm:text-xs text-coral-100 italic leading-relaxed max-w-2xl">
+            <span className="font-bold not-italic">⚡ Beta delivery:</span> for
+            spots we don&apos;t formally partner with yet, every order gets
+            an operator-confirm step before we charge — we call the
+            restaurant, line up a runner, and only bill if we can pull it
+            off. No charge if we can&apos;t. We&apos;re building this in the
+            open.
+          </p>
         </div>
       </section>
 
@@ -283,6 +291,7 @@ function PalDeliveryCard({
   accent: "coral" | "emerald";
 }) {
   const open = spot.delivery ? isOpenNow(spot.delivery) : false;
+  const isBeta = !!spot.delivery?.isBeta;
   const hoverBorder =
     accent === "coral" ? "hover:border-coral-300" : "hover:border-emerald-400";
   const tagBg =
@@ -295,9 +304,16 @@ function PalDeliveryCard({
       className={`block bg-white border border-sand-200 rounded-xl p-5 ${hoverBorder} hover:shadow-sm transition-all`}
     >
       <div className="flex items-start justify-between gap-3 mb-2">
-        <h3 className="font-display font-bold text-navy-900 text-lg leading-tight">
-          {spot.name}
-        </h3>
+        <div className="min-w-0 flex-1">
+          <h3 className="font-display font-bold text-navy-900 text-lg leading-tight">
+            {spot.name}
+          </h3>
+          {isBeta && (
+            <span className="inline-block mt-1 px-1.5 py-0.5 rounded text-[9px] font-bold tracking-widest uppercase bg-blue-50 text-blue-700 border border-blue-200">
+              ⚡ Beta
+            </span>
+          )}
+        </div>
         <span
           className={
             open

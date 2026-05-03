@@ -917,10 +917,14 @@ export interface CreateOrderInput {
   paymentIntentId?: string;
 }
 
-export async function createOrder(input: CreateOrderInput): Promise<Order> {
+export async function createOrder(
+  input: CreateOrderInput,
+  opts?: { status?: OrderStatus },
+): Promise<Order> {
   await ensureSchema();
   const id = newId();
   const now = new Date().toISOString();
+  const status = opts?.status ?? "placed";
   await sql`
     INSERT INTO delivery_orders (
       id, restaurant_id, customer, items,
@@ -946,7 +950,7 @@ export async function createOrder(input: CreateOrderInput): Promise<Order> {
       ${input.checkoutSessionId ?? null},
       ${input.paymentIntentId ?? null},
       'pending',
-      'placed',
+      ${status},
       ${now}
     )
   `;
