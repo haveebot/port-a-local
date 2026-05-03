@@ -174,6 +174,7 @@ function getNextUpEvent() {
 }
 
 const recurringEvents: PAEvent[] = [
+  { name: "Sunday Farmers Market", timing: "Every Sunday, 10 AM – 2 PM", location: "Fred Rhodes Pavilion (Roberts Point Park)", description: "Local growers, makers, and food vendors set up under the pavilion every Sunday morning. The island's quiet anchor for the slow end of the weekend.", icon: "🥬" },
   { name: "Second Saturday at Farley Boat Works", timing: "2nd Saturday, Oct-Mar", location: "716 W. Ave C", description: "Potluck dinners with live music and dancing in the boat barn. PAPHA members eat free; guests $10.", icon: "🪵" },
   { name: "Art Center First Friday", timing: "1st Friday of each month", location: "Port Aransas Art Center", description: "Opening reception for new monthly exhibit with live music, wine, and art demos. 5:30-7:30 PM.", icon: "🎨" },
   { name: "UTMSI Wetlands Tours", timing: "Tuesdays & Thursdays, 9 AM", location: "UTMSI Visitors Center", description: "Free guided boardwalk tours of the 3.5-acre marsh and wetland habitat. Year-round.", icon: "🌿" },
