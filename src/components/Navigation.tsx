@@ -30,6 +30,12 @@ export default function Navigation() {
   const portalLinkClass =
     "px-4 py-2 rounded-full text-sm font-medium bg-coral-500/15 text-coral-300 border border-coral-500/25 hover:bg-coral-500/25 hover:border-coral-500/40 transition-all duration-300";
 
+  // Primary CTA pill — filled coral. Used for the "Eat" portal pill so
+  // the food encyclopedia stands out as THE call-to-action in the nav
+  // cluster (vs the outlined Rentals/Services pills).
+  const eatPillClass =
+    "px-4 py-2 rounded-full text-sm font-bold bg-coral-500 text-white border border-coral-400 hover:bg-coral-600 shadow-sm shadow-coral-500/30 transition-all duration-300";
+
   const dropdownLinkClass =
     "flex items-center gap-3 px-4 py-3 text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-white/5 transition-colors";
 
@@ -212,7 +218,7 @@ export default function Navigation() {
             {/* Three-vertical portal cluster — cleaner than the previous 6-pill row */}
             <Link
               href="/deliver"
-              className={`${portalLinkClass} inline-flex items-center gap-1.5`}
+              className={`${eatPillClass} inline-flex items-center gap-1.5`}
               title="Eat — every restaurant on the island, order through PAL where we deliver"
             >
               <PortalIcon name="eat" className="w-3.5 h-3.5" />

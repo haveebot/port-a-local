@@ -9,6 +9,7 @@ import { WebsiteSchema } from "@/components/StructuredData";
 import { categories } from "@/data/categories";
 import PortalIcon from "@/components/brand/PortalIcon";
 import AskGullyTrending from "@/components/AskGullyTrending";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -18,6 +19,45 @@ export default function Home() {
       <Hero />
       <FeaturedEventBanner />
       <RunnerLeaderboardTile />
+
+      {/* EAT — full-width promo strip for the food encyclopedia.
+          Most newly-launched feature on the site (2026-05-02), gets
+          dedicated above-the-fold real estate so cold visitors can't
+          miss it. Coral background to match the brand CTA color and
+          stand out against the navy-themed sections that follow. */}
+      <section className="bg-coral-500 text-white py-10 sm:py-14 border-t border-b border-coral-700/30">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center">
+          <p className="text-[11px] sm:text-xs font-bold tracking-[0.25em] uppercase text-coral-100 mb-3">
+            🍽️ Newly opened
+          </p>
+          <h2 className="font-display text-3xl sm:text-5xl font-extrabold leading-[1.05] mb-4">
+            Order delivery from{" "}
+            <span className="underline decoration-coral-200/60 underline-offset-4 decoration-2">
+              every restaurant
+            </span>{" "}
+            on the island.
+          </h2>
+          <p className="text-coral-50 text-base sm:text-lg font-light max-w-2xl mx-auto mb-6">
+            40+ kitchens, full menus, real prices. Order through PAL where
+            we deliver — call direct from the rest. One place for every
+            food question on Port A.
+          </p>
+          <div className="flex items-center justify-center flex-wrap gap-3">
+            <Link
+              href="/deliver"
+              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-lg text-base font-bold uppercase tracking-wide bg-white text-coral-700 hover:bg-coral-50 shadow-md transition-colors"
+            >
+              🍽️ Eat — browse all spots →
+            </Link>
+            <Link
+              href="/deliver/runner"
+              className="inline-flex items-center gap-2 px-5 py-3.5 rounded-lg text-sm font-bold uppercase tracking-wide bg-coral-700 text-white hover:bg-coral-800 transition-colors"
+            >
+              🚗 Drive for PAL
+            </Link>
+          </div>
+        </div>
+      </section>
 
       {/* Gully — Just Gully It */}
       <section className="py-20 bg-navy-900 relative">
