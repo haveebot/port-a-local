@@ -18,6 +18,7 @@ import {
 } from "@/lib/cartVendorSmsBlast";
 import { notifyClaimResolution } from "@/lib/beachVendorBlast";
 import { forwardInsiderSmsToAdmin } from "@/lib/insiderSmsForward";
+import { forwardStrangerSmsToAdmin } from "@/lib/strangerSmsForward";
 import { runInsiderAgent } from "@/lib/insiderSmsAgent";
 
 /**
@@ -196,15 +197,31 @@ export async function POST(req: NextRequest) {
     const vendor = cartVendors.find((v) => toE164(v.phone) === fromE164);
 
     if (!vendor) {
-      // Stranger or unidentified inbound — push to operator (Winston) so a
-      // human can read + decide. Per Winston rule 2026-04-29: intake the
-      // message, surface to a human, don't try to be clever with parsing.
-      // STOP is still honored by Twilio at carrier level regardless.
+      // Stranger or unidentified inbound — surface via TWO channels:
+      //
+      // 1) SMS forward to operator's phone (immediate human notification).
+      //    Per Winston rule 2026-04-29: intake the message, surface to a
+      //    human, don't try to be clever with prose parsing. STOP is still
+      //    honored by Twilio at carrier level regardless.
+      //
+      // 2) Email forward to admin@theportalocal.com (machine-readable shared
+      //    state). Origin: 2026-05-04 — the SMS-only path pinned inbound
+      //    state to Winston's physical phone, breaking hub-spoke architecture
+      //    (`feedback_hub_spoke_architecture.md`) and blocking the
+      //    "just text PAL" marketing pitch. Now any operator station, any
+      //    spoke Claude session, and the future Gully/agent layer can all
+      //    read stranger inbounds via pal_mail.py inbox.
+      //
+      // Both calls are fire-and-forget — webhook returns TwiML immediately;
+      // Twilio's 15s budget covers both side-effects in the background.
       sendSms(
         OPERATOR_PHONE_E164,
         `[unknown ${fromE164} → PAL] ${body}`.slice(0, 1500),
       ).catch((err) =>
         console.error("[twilio/inbound] stranger surface to operator failed:", err),
+      );
+      forwardStrangerSmsToAdmin(fromE164, body, messageSid).catch((err) =>
+        console.error("[twilio/inbound] stranger forward to admin@ failed:", err),
       );
       return twimlResponse();
     }
