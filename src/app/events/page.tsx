@@ -175,10 +175,31 @@ function getNextUpEvent() {
 
 const recurringEvents: PAEvent[] = [
   { name: "Sunday Farmers Market", timing: "Every Sunday, 10 AM – 2 PM", location: "Fred Rhodes Pavilion (Roberts Point Park)", description: "Local growers, makers, and food vendors set up under the pavilion every Sunday morning. The island's quiet anchor for the slow end of the weekend.", icon: "🥬" },
+  { name: "Belt Sander Races at The Gaff", timing: "2nd Saturday, monthly", location: "The Gaff", description: "Wood-on-asphalt belt sander racing — Port A's most original Saturday afternoon spectacle. The Gaff turns into a track.", icon: "🪚" },
+  { name: "Bodyweight Strength & Conditioning", timing: "Every Saturday morning", location: "The Studio (Alister Street)", description: "Bodyweight strength + conditioning class. Saturday-morning fitness fixture.", icon: "💪" },
   { name: "Second Saturday at Farley Boat Works", timing: "2nd Saturday, Oct-Mar", location: "716 W. Ave C", description: "Potluck dinners with live music and dancing in the boat barn. PAPHA members eat free; guests $10.", icon: "🪵" },
   { name: "Art Center First Friday", timing: "1st Friday of each month", location: "Port Aransas Art Center", description: "Opening reception for new monthly exhibit with live music, wine, and art demos. 5:30-7:30 PM.", icon: "🎨" },
   { name: "UTMSI Wetlands Tours", timing: "Tuesdays & Thursdays, 9 AM", location: "UTMSI Visitors Center", description: "Free guided boardwalk tours of the 3.5-acre marsh and wetland habitat. Year-round.", icon: "🌿" },
   { name: "Live Music Nightly", timing: "Year-round, most nights", location: "Multiple venues", description: "The Gaff, Shorty's, Bron's Backyard, Treasure Island, Sip Yard, VFW, Salty Dog, and more. See who's playing this week on our weekly roundup at /live-music.", icon: "🎵" },
+];
+
+/**
+ * Week-specific one-off events. Updated weekly from Collie's Friday/Saturday
+ * dispatch. These are time-bounded — they expire after their date passes
+ * and get swapped for next week's slate. Distinct from recurringEvents
+ * (perennial fixtures) and eventsByMonth (annual marquees).
+ *
+ * Source: Collie email 2026-05-06 (uid 293)
+ */
+interface WeekEvent extends PAEvent {
+  /** ISO date — used for filtering/sorting and the "this week" surface */
+  iso: string;
+}
+const weekEvents: WeekEvent[] = [
+  { iso: "2026-05-09", name: "Family Craft Time: Puffy Paint Hats", timing: "Saturday, May 9", location: "Roberts Point Park", description: "Family craft session — make a puffy-paint hat. Drop-in, kid-friendly.", icon: "🎨" },
+  { iso: "2026-05-09", name: "Oyster Reef Restoration Event", timing: "Saturday, May 9", location: "Goose Island State Park (Bayfront unit, Pier parking lot)", description: "Help restore oyster reef habitat in the Coastal Bend. Volunteers welcome — bring sturdy shoes.", icon: "🦪" },
+  { iso: "2026-05-09", name: "Special Story-time", timing: "Saturday, May 9", location: "Ellis Memorial Library", description: "Storytime for the kids at the island library. Free.", icon: "📚" },
+  { iso: "2026-05-10", name: "Mimosas For Mom Cruise", timing: "Sunday, May 10 (Mother's Day)", location: "Dolphin Adventures — Scarlet Lady", description: "Mother's Day cruise with mimosas aboard the Scarlet Lady. Tickets through Dolphin Adventures.", icon: "🥂" },
 ];
 
 export default function EventsPage() {
@@ -276,6 +297,53 @@ export default function EventsPage() {
           </div>
         </section>
       )}
+
+      {/* This Week — week-specific one-offs from Collie's Friday slate */}
+      {(() => {
+        const todayIso = new Date().toISOString().slice(0, 10);
+        const upcomingWeek = weekEvents.filter((e) => e.iso >= todayIso);
+        if (upcomingWeek.length === 0) return null;
+        return (
+          <section className="py-12 bg-sand-50 border-b border-sand-200">
+            <div className="max-w-4xl mx-auto px-4 sm:px-6">
+              <div className="mb-6">
+                <p className="text-coral-500 text-sm font-medium tracking-[0.2em] uppercase mb-3">
+                  This Week
+                </p>
+                <h2 className="font-display text-2xl sm:text-3xl font-bold text-navy-900">
+                  Happening Around the Island
+                </h2>
+              </div>
+              <div className="grid sm:grid-cols-2 gap-4">
+                {upcomingWeek.map((event) => (
+                  <div
+                    key={event.name}
+                    className="bg-white rounded-xl border border-sand-200 p-5"
+                  >
+                    <div className="flex items-start gap-3">
+                      <EmojiIcon
+                        emoji={event.icon}
+                        className="w-6 h-6 flex-shrink-0 mt-0.5 text-navy-900"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-display font-bold text-navy-900 mb-1 leading-snug">
+                          {event.name}
+                        </h4>
+                        <p className="text-xs font-medium text-coral-500 mb-2">
+                          {event.timing} · {event.location}
+                        </p>
+                        <p className="text-sm text-navy-500 font-light leading-relaxed">
+                          {event.description}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      })()}
 
       {/* Tournament Season cross-link */}
       <section className="py-10 bg-sand-50 border-b border-sand-200">
