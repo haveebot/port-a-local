@@ -68,43 +68,35 @@ export const VENUES: Record<string, LiveMusicVenue> = {
 };
 
 export const CURRENT_WEEK: LiveMusicWeek = {
-  weekOf: "2026-04-30",
-  sourcedFrom: "Collie — Port A Local calendar (week of Apr 30, 2026)",
-  sourceReceivedAt: "2026-04-30",
+  weekOf: "2026-05-07",
+  sourcedFrom: "Collie — Port A Local calendar (week of May 7, 2026)",
+  sourceReceivedAt: "2026-05-06",
   acts: [
-    // Thursday (carried from prior week's preview)
-    { date: "2026-04-30", venue: "the-gaff", artist: "Jim Dugan" },
-    { date: "2026-04-30", venue: "the-gaff", artist: "Jim Bush" },
-    { date: "2026-04-30", venue: "the-gaff", artist: "Joe Martyn Ricke" },
+    // Thursday — May 7
+    { date: "2026-05-07", venue: "sip-yard", artist: "Los Locals" },
+    { date: "2026-05-07", venue: "salty-dog", artist: "Clark Bros", notes: "Recurring weekly Sun + Thu through Dec 27" },
+    { date: "2026-05-07", venue: "salty-dog", artist: "Karaoke", notes: "Recurring weekly Sun + Thu through Dec 27" },
 
-    // Friday — May 1
-    { date: "2026-05-01", venue: "art-center", artist: "First Friday", time: "5:30 PM" },
-    { date: "2026-05-01", venue: "the-gaff", artist: "Aaron Boultinghouse", time: "7 PM" },
-    { date: "2026-05-01", venue: "brons", artist: "Harmonx", time: "7 PM" },
-    { date: "2026-05-01", venue: "vfw", artist: "Chris Lancaster", time: "7 PM" },
-    { date: "2026-05-01", venue: "sip-yard", artist: "Casey Chesnutt", time: "7:30 PM" },
-    { date: "2026-05-01", venue: "marker-25", artist: "Moonfire party", time: "7:30 PM" },
-    { date: "2026-05-01", venue: "shortys", artist: "Boone Holding", time: "9 PM" },
-    { date: "2026-05-01", venue: "treasure-island", artist: "Raul Ayala", time: "9 PM" },
+    // Friday — May 8
+    { date: "2026-05-08", venue: "the-gaff", artist: "Boudreaux & Pousson" },
+    { date: "2026-05-08", venue: "vfw", artist: "Carson Miller" },
+    { date: "2026-05-08", venue: "brons", artist: "John Elijah Band" },
+    { date: "2026-05-08", venue: "sip-yard", artist: "Kaleb Michaels" },
+    { date: "2026-05-08", venue: "shortys", artist: "Left Right Left" },
+    { date: "2026-05-08", venue: "sip-yard", artist: "Logan Samford" },
+    { date: "2026-05-08", venue: "treasure-island", artist: "Palacios Brothers" },
 
-    // Saturday — May 2
-    { date: "2026-05-02", venue: "bierhaus", artist: "Big Time Jukebox", time: "6 PM" },
-    { date: "2026-05-02", venue: "vfw", artist: "Groove 2.0", time: "7 PM" },
-    { date: "2026-05-02", venue: "the-gaff", artist: "Joe Martyn Ricke", time: "7 PM" },
-    { date: "2026-05-02", venue: "brons", artist: "Ruben V", time: "7 PM" },
-    { date: "2026-05-02", venue: "sip-yard", artist: "Mykel Martin", time: "7:30 PM" },
-    { date: "2026-05-02", venue: "sip-yard", artist: "Case Hardin", time: "9 PM" },
-    { date: "2026-05-02", venue: "shortys", artist: "Lucky Dogz", time: "9 PM" },
-    { date: "2026-05-02", venue: "treasure-island", artist: "Jam Band", time: "9 PM" },
-    { date: "2026-05-02", venue: "beach-bums", artist: "SA Lights — Journey Tribute", time: "9 PM" },
+    // Saturday — May 9
+    { date: "2026-05-09", venue: "sip-yard", artist: "18 Hours" },
+    { date: "2026-05-09", venue: "treasure-island", artist: "Cathouse" },
+    { date: "2026-05-09", venue: "shortys", artist: "Love Street" },
+    { date: "2026-05-09", venue: "brons", artist: "Palacios Bros" },
 
-    // Sunday — May 3
-    // Farmers Market at Fred Rhodes Pavilion is a community event, not a live
-    // music act — keep it OUT of this data so headlines like "3 live acts"
-    // don't mis-count it. If we want to surface community events alongside
-    // music, that's a separate data source.
-    { date: "2026-05-03", venue: "bierhaus", artist: "Mykel Martin", time: "2 PM" },
-    { date: "2026-05-03", venue: "shortys", artist: "Jim Dugan", time: "3 PM" },
+    // Sunday — May 10 (Mother's Day)
+    { date: "2026-05-10", venue: "the-gaff", artist: "Brad Ethridge Open Mic" },
+    { date: "2026-05-10", venue: "shortys", artist: "Jim Dugan & Ty Dietz", notes: "Recurring weekly Sunday through May 31" },
+    { date: "2026-05-10", venue: "salty-dog", artist: "Clark Bros", notes: "Recurring weekly Sun + Thu through Dec 27" },
+    { date: "2026-05-10", venue: "salty-dog", artist: "Karaoke", notes: "Recurring weekly Sun + Thu through Dec 27" },
   ],
   upcoming: [],
 };
