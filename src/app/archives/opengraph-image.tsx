@@ -13,5 +13,6 @@ export default function Image() {
     subtitle:
       "Public-domain photographs of Port Aransas, 1853–2017. The largest organized digital archive of the island, anywhere.",
     lockupVariant: "standard",
+    category: "archives",
   });
 }

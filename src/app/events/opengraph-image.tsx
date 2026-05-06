@@ -13,5 +13,6 @@ export default function Image() {
     subtitle:
       "Annual festivals, recurring gatherings, and what is actually happening on the island this month.",
     lockupVariant: "standard",
+    category: "events",
   });
 }

@@ -58,5 +58,6 @@ export default async function Image() {
     subtitle,
     meta,
     lockupVariant: "standard",
+    category: "birding",
   });
 }
