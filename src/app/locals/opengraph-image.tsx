@@ -13,5 +13,6 @@ export default function Image() {
     subtitle:
       "Real Port Aransas locals with stuff to rent and skills to bring to your trip. Beach gear, watercraft, photographers, captains, errand runners — the actual people who live here.",
     lockupVariant: "standard",
+    category: "pal-locals",
   });
 }

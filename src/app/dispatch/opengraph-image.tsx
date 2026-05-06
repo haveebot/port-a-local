@@ -13,5 +13,6 @@ export default function Image() {
     subtitle:
       "Features, analysis and reporting on the island as it is — not as it's advertised.",
     lockupVariant: "standard",
+    category: "dispatch",
   });
 }

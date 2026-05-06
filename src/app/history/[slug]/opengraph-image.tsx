@@ -46,5 +46,6 @@ export default async function Image({
     subtitle: story.subtitle,
     meta: `${story.readTime} read`,
     lockupVariant: "standard",
+    category: "heritage",
   });
 }

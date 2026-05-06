@@ -17,5 +17,6 @@ export default function Image() {
     title: h.title,
     subtitle: h.ogSubtitle,
     lockupVariant: "standard",
+    category: "live-music",
   });
 }

@@ -13,5 +13,6 @@ export default function Image() {
     subtitle:
       "Standard or priority dispatch. Locally-handled repairs, property checks, and quick fixes — 7 AM to 8 PM, year-round.",
     lockupVariant: "standard",
+    category: "maintenance",
   });
 }
