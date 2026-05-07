@@ -12,6 +12,20 @@ A curated subset of HeyeLab cross-project rules + brand canonicals that Claude o
 | `feedback_pal_email_signature.md` | Voice for any copy that touches transactional emails (PAL entity-only voice) |
 | `feedback_heyelab_brand_spelling.md` | HeyeLab one-word for marketing, Heye Lab two-word for legal — applies anywhere PAL footers reference the umbrella |
 | `feedback_heyedeploy_collie_validation.md` | The HeyeDeploy brand tokens (Collie-validated 2026-05-04) — colors, type, Pattern B architecture-layer color split |
+| `feedback_deploy_phase_naming.md` | The Pre/In/Post Deploy lifecycle naming discipline — never bare "Deploy" alone (locked 2026-05-07) |
+
+## Deploy lifecycle docs
+
+The HeyeDeploy lifecycle has three phases — PreDeploy → InDeploy → PostDeploy. Cross-tier framework + checklists:
+
+| File | What it covers |
+|---|---|
+| `pre-deploy.md` | PreDeploy phase framework — pre-flight (accounts, tools, identity, machine prep) |
+| `in-deploy.md` | InDeploy phase framework — the launch ritual itself (what Collie executed at her kitchen table) |
+| `post-deploy.md` | PostDeploy phase framework — operating mode, ongoing PR flow, tier graduation |
+| `predeploy-checklist.md` | Operator-facing checklist for PreDeploy — tier-aware (design contributor / operator / tenant) |
+| `onboarding-design-contributor.md` | Tier 1 scope rules + brand resources (cross-tier reference) |
+| `pal-design-contributor-launch.md` | Tier 1 InDeploy ritual (what Collie executed during her own InDeploy) |
 
 ## Maintenance
 
