@@ -53,5 +53,6 @@ export default async function Image({
     title: business.name,
     subtitle: business.tagline,
     lockupVariant: "standard",
+    category: "featured",
   });
 }

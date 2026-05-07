@@ -13,5 +13,6 @@ export default function Image() {
     subtitle:
       "Half the markup is yours. 100% of every tip is yours. Daily payouts to your bank. Local runners only.",
     lockupVariant: "standard",
+    category: "runner",
   });
 }

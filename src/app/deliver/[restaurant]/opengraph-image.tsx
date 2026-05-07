@@ -19,6 +19,7 @@ export default function Image({
       title: "PAL Delivery",
       subtitle: "Local food, to your beach house.",
       lockupVariant: "standard",
+      category: "pal-delivery",
     });
   }
   return brandedOG({
@@ -27,5 +28,6 @@ export default function Image({
     title: r.name,
     subtitle: r.shortDescription,
     lockupVariant: "standard",
+    category: "pal-delivery",
   });
 }

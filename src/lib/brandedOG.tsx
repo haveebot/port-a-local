@@ -162,6 +162,12 @@ export const CATEGORY_TO_SYSTEM: Record<string, CardSystem> = {
   "restaurant-partnerships": "seafoam", // not specified by Collie — defaulting
   "event-organizer": "coral",
 
+  // Surfaces not in Collie's spec — best-fit defaults
+  "beach": "seafoam", // transactional booking
+  "services": "seafoam", // operational booking + provider directory
+  "essentials": "coral", // visitor-guidance editorial, sibling to guides
+  "where-to-stay": "coral", // lodging directory-style listing
+
   // Banner alert tiers (separate concept)
   "alert-critical": "red",
   "alert-advisory": "yellow",

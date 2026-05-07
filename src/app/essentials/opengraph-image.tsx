@@ -13,5 +13,6 @@ export default function Image() {
     subtitle:
       "Ferry times, beach rules, parking, emergency contacts. Everything first-time and returning visitors actually need.",
     lockupVariant: "standard",
+    category: "essentials",
   });
 }

@@ -13,5 +13,6 @@ export default function Image() {
     subtitle:
       "Cabana ($300/day) or chairs & umbrellas ($85/day), set up and taken down for you. Anywhere on Mustang Island.",
     lockupVariant: "standard",
+    category: "beach",
   });
 }
