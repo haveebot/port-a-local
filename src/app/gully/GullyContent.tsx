@@ -30,6 +30,7 @@ import AskGullyAnswer from "@/components/AskGullyAnswer";
 import { businesses } from "@/data/businesses";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import Image from "next/image";
 import Link from "next/link";
 import PortalIcon, { EmojiIcon, type PortalIconName } from "@/components/brand/PortalIcon";
 
@@ -191,25 +192,42 @@ export default function GullyContent({ trendingSlot }: GullyContentProps) {
     <main className="min-h-screen">
       <Navigation />
 
-      {/* Hero */}
-      <section className="pt-28 pb-14 hero-gradient relative">
+      {/* Hero — Gully character on the left, search composition on the
+          right. Same character treatment as the homepage Just Gully It
+          section (2026-05-07 Collie). */}
+      <section className="pt-28 pb-14 hero-gradient relative overflow-hidden">
         <div className="absolute bottom-0 left-0 right-0 coral-line" />
         <div className="absolute inset-0 palm-pattern opacity-15" />
 
-        <div className="relative max-w-3xl mx-auto px-4 sm:px-6 text-center">
-          <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-coral-500/30 bg-coral-500/10 text-coral-300 text-sm font-medium tracking-wide mb-6">
-            <span className="w-1.5 h-1.5 rounded-full bg-coral-400" />
-            Port A&apos;s Local Search Engine
-          </div>
-          <h1 className="font-display text-5xl sm:text-6xl font-bold text-sand-50 mb-3">
-            Gully
-          </h1>
-          <p className="text-lg text-navy-200 font-light mb-8">
-            Find anything on the island. Restaurants, bars, charters, shops, history and more — just Gully it.
-          </p>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+            {/* Gully — left column on desktop, top on mobile */}
+            <div className="lg:col-span-4 flex justify-center lg:justify-start">
+              <Image
+                src="/icons/gully-search.svg"
+                alt="Gully — Port A's local search engine"
+                width={400}
+                height={400}
+                className="w-44 sm:w-56 lg:w-full lg:max-w-sm h-auto"
+                priority
+              />
+            </div>
 
-          {/* Search input */}
-          <div className="relative">
+            {/* Content — right column on desktop, right-aligned */}
+            <div className="lg:col-span-8 text-center lg:text-right">
+              <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-coral-500/30 bg-coral-500/10 text-coral-300 text-sm font-medium tracking-wide mb-6">
+                <span className="w-1.5 h-1.5 rounded-full bg-coral-400" />
+                Port A&apos;s Local Search Engine
+              </div>
+              <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold text-sand-50 mb-3 leading-[0.95]">
+                Gully
+              </h1>
+              <p className="text-lg text-navy-200 font-light mb-8 max-w-xl mx-auto lg:ml-auto lg:mr-0">
+                Find anything on the island. Restaurants, bars, charters, shops, history and more — just Gully it.
+              </p>
+
+              {/* Search input */}
+              <div className="relative max-w-2xl mx-auto lg:ml-auto lg:mr-0">
             <svg
               className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-navy-400"
               fill="none"
@@ -233,46 +251,48 @@ export default function GullyContent({ trendingSlot }: GullyContentProps) {
             />
           </div>
 
-          {/* Open Now + Category filters */}
-          <div className="flex flex-wrap justify-center gap-2 mt-4">
-            {hasOpenNowData && (
-              <button
-                onClick={() => setOpenNow(!openNow)}
-                className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium border transition-all duration-200 ${
-                  openNow
-                    ? "bg-coral-500 text-white border-coral-500"
-                    : "bg-white/10 text-sand-200 border-white/20 hover:bg-white/20"
-                }`}
-              >
-                <span className={`w-2 h-2 rounded-full ${openNow ? "bg-white" : "bg-green-400"}`} />
-                Open Now
-              </button>
-            )}
-            <button
-              onClick={() => setActiveCategory("All")}
-              className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-all duration-200 ${
-                activeCategory === "All"
-                  ? "bg-coral-500 text-white border-coral-500"
-                  : "bg-white/10 text-sand-200 border-white/20 hover:bg-white/20"
-              }`}
-            >
-              All
-            </button>
-            {categoriesInResults.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-all duration-200 ${
-                  activeCategory === cat
-                    ? "bg-coral-500 text-white border-coral-500"
-                    : "bg-white/10 text-sand-200 border-white/20 hover:bg-white/20"
-                }`}
-              >
-                {cat === "Heritage" ? (
-                  <span className="inline-flex items-center gap-1.5"><PortalIcon name="heritage" className="w-3.5 h-3.5" /> Heritage</span>
-                ) : cat}
-              </button>
-            ))}
+              {/* Open Now + Category filters */}
+              <div className="flex flex-wrap justify-center lg:justify-end gap-2 mt-4">
+                {hasOpenNowData && (
+                  <button
+                    onClick={() => setOpenNow(!openNow)}
+                    className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium border transition-all duration-200 ${
+                      openNow
+                        ? "bg-coral-500 text-white border-coral-500"
+                        : "bg-white/10 text-sand-200 border-white/20 hover:bg-white/20"
+                    }`}
+                  >
+                    <span className={`w-2 h-2 rounded-full ${openNow ? "bg-white" : "bg-green-400"}`} />
+                    Open Now
+                  </button>
+                )}
+                <button
+                  onClick={() => setActiveCategory("All")}
+                  className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-all duration-200 ${
+                    activeCategory === "All"
+                      ? "bg-coral-500 text-white border-coral-500"
+                      : "bg-white/10 text-sand-200 border-white/20 hover:bg-white/20"
+                  }`}
+                >
+                  All
+                </button>
+                {categoriesInResults.map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => setActiveCategory(cat)}
+                    className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-all duration-200 ${
+                      activeCategory === cat
+                        ? "bg-coral-500 text-white border-coral-500"
+                        : "bg-white/10 text-sand-200 border-white/20 hover:bg-white/20"
+                    }`}
+                  >
+                    {cat === "Heritage" ? (
+                      <span className="inline-flex items-center gap-1.5"><PortalIcon name="heritage" className="w-3.5 h-3.5" /> Heritage</span>
+                    ) : cat}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
