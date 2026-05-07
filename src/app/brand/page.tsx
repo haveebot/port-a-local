@@ -213,7 +213,7 @@ export default function BrandKitPage() {
           <div className="mb-8">
             <p className="text-coral-500 text-sm font-medium tracking-[0.2em] uppercase mb-2">Round 1 — Authoritative</p>
             <h2 className="font-display text-2xl sm:text-3xl font-bold text-navy-900">Directory &amp; Portal Icons</h2>
-            <p className="text-sm text-navy-500 mt-2 max-w-2xl">Collie&apos;s designs (2026-04-24 Illustrator revision). The nine core icons that anchor the site&apos;s taxonomy. One color per use — download below.</p>
+            <p className="text-sm text-navy-500 mt-2 max-w-2xl">The nine core icons that anchor the site&apos;s taxonomy (2026-04-24 Illustrator revision). One color per use — download below.</p>
           </div>
 
           <div className="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-9 gap-3">
@@ -266,7 +266,7 @@ export default function BrandKitPage() {
           <div className="mb-8">
             <p className="text-coral-500 text-sm font-medium tracking-[0.2em] uppercase mb-2">Reference</p>
             <h2 className="font-display text-2xl sm:text-3xl font-bold text-navy-900">Full Icon Library</h2>
-            <p className="text-sm text-navy-500 mt-2 max-w-2xl">All 46 site-wide icons drafted in Collie&apos;s monochrome style, ready for iteration. Used across nav, Gully, Essentials, Fishing Report, Live Pulse, and more.</p>
+            <p className="text-sm text-navy-500 mt-2 max-w-2xl">All 46 site-wide icons in the PAL monochrome style. Used across nav, Gully, Essentials, Fishing Report, Live Pulse, and more.</p>
           </div>
 
           {(
