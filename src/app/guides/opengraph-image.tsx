@@ -13,5 +13,6 @@ export default function Image() {
     subtitle:
       "Happy Hour, Pet-Friendly, Date Night, Seafood, and more. Honest shortlists built from the directory — not promoted placements.",
     lockupVariant: "standard",
+    category: "guides",
   });
 }

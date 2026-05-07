@@ -49,5 +49,6 @@ export default async function Image({
     title: guide.title,
     subtitle: guide.subtitle,
     lockupVariant: "standard",
+    category: "guides",
   });
 }
