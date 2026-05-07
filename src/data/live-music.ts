@@ -69,7 +69,7 @@ export const VENUES: Record<string, LiveMusicVenue> = {
 
 export const CURRENT_WEEK: LiveMusicWeek = {
   weekOf: "2026-05-07",
-  sourcedFrom: "Collie — Port A Local calendar (week of May 7, 2026)",
+  sourcedFrom: "Port A Local — week of May 7, 2026",
   sourceReceivedAt: "2026-05-06",
   acts: [
     // Thursday — May 7
