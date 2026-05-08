@@ -127,12 +127,24 @@ export async function GET() {
   // Synthesize a top-line diagnosis
   const issues: string[] = [];
 
+  // Token type matters: PAGE tokens don't carry user-level scopes the
+  // same way USER tokens do (they inherit perms from the source user
+  // token + the page-task assignment), and the page `tasks` field on a
+  // page-token-fetched /pageId response isn't populated in the same
+  // shape. Running USER-token-style scope/task checks against PAGE
+  // tokens produced two false positives in production diagnostics
+  // (2026-05-07 boost-create incident).
+  const debugData = debugRes.ok
+    ? ((debugRes.data.data ?? {}) as Record<string, unknown>)
+    : null;
+  const tokenType = (debugData?.type as string | undefined) ?? "USER";
+
   if (!debugRes.ok) {
     issues.push(
       `debug_token failed: ${debugRes.error.message ?? JSON.stringify(debugRes.error)}`,
     );
   } else {
-    const d = (debugRes.data.data ?? {}) as Record<string, unknown>;
+    const d = debugData!;
     if (d.is_valid === false) {
       issues.push(`token is_valid=false (likely expired or revoked)`);
     }
@@ -143,22 +155,34 @@ export async function GET() {
         issues.push(`token expires in ${daysLeft} day(s) — rotate soon`);
       }
     }
-    const scopes = (d.scopes as string[] | undefined) ?? [];
-    const required = ["ads_management", "ads_read", "pages_manage_ads", "pages_read_engagement"];
-    const missing = required.filter((s) => !scopes.includes(s));
-    if (missing.length > 0) {
-      issues.push(`token missing required scopes: ${missing.join(", ")}`);
+    // Scope check: only meaningful for USER tokens. PAGE tokens derive
+    // permissions from the source user; their `scopes` array is shaped
+    // differently and tripped a false-positive "missing scopes" issue.
+    if (tokenType === "USER") {
+      const scopes = (d.scopes as string[] | undefined) ?? [];
+      const required = ["ads_management", "ads_read", "pages_manage_ads", "pages_read_engagement"];
+      const missing = required.filter((s) => !scopes.includes(s));
+      if (missing.length > 0) {
+        issues.push(`token missing required scopes: ${missing.join(", ")}`);
+      }
     }
   }
 
   if (pageRes.ok) {
-    const tasks = (pageRes.data.tasks as string[] | undefined) ?? [];
-    const requiredPageTasks = ["MANAGE_ADS", "CREATE_CONTENT"];
-    const missingTasks = requiredPageTasks.filter((t) => !tasks.includes(t));
-    if (missingTasks.length > 0) {
-      issues.push(
-        `page tasks missing: ${missingTasks.join(", ")} — token does not have ad-manage rights on the page`,
-      );
+    // Page-tasks check: also only meaningful for USER tokens. PAGE
+    // tokens fetching their own /pageId record return `tasks` in a
+    // shape that doesn't reliably include MANAGE_ADS / CREATE_CONTENT
+    // even when the underlying user has them, producing a false-positive
+    // "page tasks missing" issue. Skip for PAGE tokens.
+    if (tokenType === "USER") {
+      const tasks = (pageRes.data.tasks as string[] | undefined) ?? [];
+      const requiredPageTasks = ["MANAGE_ADS", "CREATE_CONTENT"];
+      const missingTasks = requiredPageTasks.filter((t) => !tasks.includes(t));
+      if (missingTasks.length > 0) {
+        issues.push(
+          `page tasks missing: ${missingTasks.join(", ")} — token does not have ad-manage rights on the page`,
+        );
+      }
     }
   } else {
     issues.push(
