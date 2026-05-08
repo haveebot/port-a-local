@@ -1530,6 +1530,35 @@ The post-2025-election council composition documented across the two votes:
 
 **Crawford was promoted from Council Member to Mayor Pro-Tem after the May 2025 elections** — by the August venue-tax-election ordinance, he holds the second-highest seat on council. He was the council's named link from the 2019 RFP committee through the 2025 internal-alternative motion to the Aug 2025 venue-tax-election approval that finishes funding the project.
 
+### Nov 4, 2025 Venue Election — PASSED 469-285
+
+**RESOLUTION 2025-R55 (Canvassed Nov 12, 2025 — verbatim from minutes lines 82-96):**
+
+> *"Mayor Moore read the results of the November 4, 2025 Venue Election. Mayor Moore stated that the Venue Election 'Proposition A' Authorizing the City of Port Aransas, Texas to provide for the planning, acquisition, establishment, development, construction, financing, and renovation of a Venue Project, adjacent support facilities, and any related infrastructure, **collectively known as 'The Port Aransas Civic and Community Center'** and located in the City in accordance with the Chapter 334, as amended, Texas Local Government Code, including the payment of the costs of maintenance and operation thereof, and **to impose a new and additional hotel occupancy tax at a rate not to exceed two percent (2%)** in the City of Port Aransas, Texas and authorize the use of an amount **not to exceed five percent (5%) of the revenue derived from the City's property tax** for the purpose of financing the Venue Project. If approved, the maximum hotel occupancy tax rate in the City of Port Aransas, Texas would be **fifteen percent (15%)** of the price paid for a room in a hotel passed with the following vote:"*
+
+**Vote totals:**
+
+| | Early | Provisional | Election Day | Total |
+|---|---|---|---|---|
+| **For** | 260 | 0 | 209 | **469 (62.2%)** |
+| **Against** | 140 | 0 | 145 | **285 (37.8%)** |
+
+**Canvass vote (Nov 12, 2025 Special Meeting — RESOLUTION 2025-R55):** Christianson motioned, Crawford seconded. Carried 3-0 with 4 absent (Shimaitis, Owens, Krueger, Chambers). Only Mayor Moore, Mayor Pro-Tem Crawford, and Christianson present (quorum-of-two sufficient for canvass per TX EC §67.004(a)).
+
+**What the passage activates:**
+
+- New 2% HOT increment (raising Port Aransas's maximum HOT rate to **15%**)
+- Up to 5% of city property tax revenue dedicated to financing the Venue Project
+- The Bond Counsel reimbursement-Resolution mechanism (proposed Mar 25, 2025) is now ACTIVE — city will reimburse itself with venue tax for the HOT-funded portion of the Civic Center expansion
+- Project officially named **"The Port Aransas Civic and Community Center"** — the renamed/expanded Civic Center that absorbs the conference function the 2019 RFP would have built externally
+
+**Crawford on four pivot votes** (updated from three):
+
+1. 2019-01-17 — RFP committee for the Hotel Conference Center procurement (rejected Palmilla / McCombs Properties higher score)
+2. 2025-03-25 — Motioned RESOLUTION 2025-R14 awarding $9.575M City Hall/Civic Center contract to Weaver and Jacobs
+3. 2025-08-11 — On council for ORDINANCE 2025-04 calling the venue election (after promotion to Mayor Pro-Tem)
+4. 2025-11-12 — Seconded RESOLUTION 2025-R55 declaring election passage and project name "Port Aransas Civic and Community Center"
+
 ### Net structural finding — airtight
 
 **The same Hotel Motel Tax revenue stream funds both ends of the 2019→2025 arc.** Externally in 2019: Cinnamon Shore + ZJZ Hospitality partnership (Lamkin / Sea Oats Group). Internally in 2025: City Hall / Civic Center Expansion & Renovation contract to Weaver and Jacobs Constructors at $9.575M. Architect Turner Ramirez Architects appears on **both** sides of the bridge. Charles Crawford appears on the **2019 RFP committee, the Mar 25 2025 motion to award, and the Aug 11 2025 ordinance calling the venue-tax election** that activates the reimbursement mechanism. Both the 2019 RFP vote and the 2025 award vote were unanimous 7-0. Construction status as of Nov 18, 2025 is mid-build with Council Chambers phase scheduled April–August 2026.
