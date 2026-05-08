@@ -16,7 +16,7 @@ _Last updated: 2026-04-24 (Live Music feature + Collie's design+marketing drop f
 - [[People & Vendors/John Brown — Port A Maintenance Services]] — maintenance vendor
 - [[People & Vendors/JOY Cart Rentals]] — Tier 1 golf cart vendor (pre-marketplace; see cart-vendors.ts for current 20)
 - [[People & Vendors/Billy Gaskins — Woody's Last Stand]] — affiliate, family friend
-- [[People & Vendors/Collie Caraker — Design]] — design advisor, Palm Republic
+- [[People & Vendors/Collie Farley — Design]] — design advisor, Palm Republic
 - [[People & Vendors/Nick Merrill — Engineering]] — potential investor, not active
 
 ### Product

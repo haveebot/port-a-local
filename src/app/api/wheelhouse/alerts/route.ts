@@ -77,7 +77,8 @@ export async function POST(req: NextRequest) {
   const severity: AlertSeverity =
     body.severity === "info" ||
     body.severity === "warning" ||
-    body.severity === "critical"
+    body.severity === "critical" ||
+    body.severity === "spotlight"
       ? body.severity
       : "warning";
 

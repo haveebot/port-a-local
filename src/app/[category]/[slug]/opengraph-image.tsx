@@ -7,6 +7,7 @@ import type { PortalIconName } from "@/components/brand/PortalIcon";
 export const alt = "Port A Local — Business";
 export const size = ogSize;
 export const contentType = ogContentType;
+export const dynamic = "force-dynamic";
 
 export function generateStaticParams() {
   return getAllBusinessSlugs();
@@ -52,5 +53,6 @@ export default async function Image({
     title: business.name,
     subtitle: business.tagline,
     lockupVariant: "standard",
+    category: "featured",
   });
 }

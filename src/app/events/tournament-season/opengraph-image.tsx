@@ -3,6 +3,7 @@ import { brandedOG, ogSize, ogContentType } from "@/lib/brandedOG";
 export const alt = "Tournament Season — Port Aransas";
 export const size = ogSize;
 export const contentType = ogContentType;
+export const dynamic = "force-dynamic";
 
 export default async function Image() {
   return brandedOG({
@@ -13,5 +14,6 @@ export default async function Image() {
       "Four marquee tournaments July–August. DSR. Pachanga. Texas Legends. TWAT. The local handle for the cluster.",
     meta: "May–November · 20+ tournaments",
     lockupVariant: "standard",
+    category: "tournament-season",
   });
 }

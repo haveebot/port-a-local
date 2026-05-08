@@ -1,71 +1,139 @@
 ---
-name: Heye Lab — Nick Merrill's umbrella infrastructure company
-description: Parent platform-company for CrossRef + PAL beta projects; Nick is building an internal datacenter to self-host
+name: HeyeLab — Nick Merrill's platform-company; HeyeDeploy framework underneath
+description: HeyeLab (one-word brand) is Nick's company; Heye Lab is the official two-word form. Winston co-develops with Nick. HeyeDeploy framework lives under HeyeLab. Foundation track paused.
 type: project
 originSessionId: d5d877ac-231f-4032-ad5d-6942700a594d
 ---
-Heye Lab is **Nick Merrill's** umbrella corporation — the platform-company layer under which Winston's projects live. Nick is Zack Merrill's brother (distinct from 2M's Nate Nichols). Nick does NOT own Sage Em (Zack does); his role with Winston is tech co-builder.
 
-**What Heye Lab is:**
-- The infrastructure / platform-company layer. CrossRef (formerly Xwalk) and Port A Local (PAL) are Heye Lab **beta projects**.
-- Nick is building a "datacenter" ("the lab") to self-host services internally.
-- Nick has "a couple brewing too" — more Heye Lab projects incoming.
+# HeyeLab
 
-**The lab is real and GPU-capable** (locked 2026-04-27, Winston):
-- Nick is **running QWEN models natively on his rig in the lab** — Alibaba's open-source LLM family. That means the hardware is GPU-rich enough to host real model inference workloads, not just web services.
-- This is significant: the lab's capability ceiling is much higher than "container host for Next.js apps." It's a bare-metal AI/compute platform.
+**HeyeLab** (one-word brand name; **Heye Lab** for official / legal / placement use) is **Nick Merrill's company**. Winston Caraker co-develops with Nick — operating as co-developer/partner, behind-the-scenes by default; Nick is the founder. Nick's personal portfolio currently sits at heyelab.com and will evolve into the umbrella front-door with Nick's bio integrated as founder. The HeyeDeploy framework (canonical at `~/Projects/workspace/heyedeploy/` + GitHub `haveebot/heyedeploy`) is the operating substrate that lives under the HeyeLab umbrella.
 
-**The Heye Lab operating mindset: "max it and find out" — same on both sides** (locked 2026-04-27, Winston):
-- **There is NO planned migration from Vercel to the lab.** Don't think point-A-to-point-B.
-- **Both sides build to limit independently.** Nick maxes the platform (lab capability + native model hosting + capacity testing). Winston + Claude max the products (CrossRef graph density / Compare / materials / curated layer; PAL features / nav / business onboarding).
-- **Intersection happens organically when both are mature enough.** The day CrossRef is feature-complete enough to need different infra AND the lab is stable enough to host it, they meet. Until then, keep shipping both.
-- This is the same posture Winston applies to product builds (V1 at V3 altitude, ship into use, let use shape the next move). Apply it to platform too.
+> **Correction note (2026-05-01 PM):** Earlier model in this file framed Heye Lab as Winston-owned LLC with Nick as co-builder. That was wrong. HeyeLab is Nick's; Winston co-develops. Tenants like PAL / Sage Em / CrossRef are Winston-operated tenants riding on the HeyeDeploy framework. Don't propagate the old "Winston owns Heye Lab" framing.
 
-**Implicit long-term direction: AI features without per-query API cost.**
-- CrossRef has surfaces that would benefit from real LLM-backed inference: "Describe what you need" mode (currently trigram + heuristic), an LFS-import endpoint that parses engineer spec sheets, semantic search across the graph, automated industry-pair authoring suggestions.
-- All of those today would require OpenAI / Anthropic API calls = per-query billing.
-- With QWEN running natively in Nick's lab, those features can eventually run **for free at the per-call level** (only hardware cost, which is fixed). The AI workloads collapse from variable cost to fixed cost.
-- This is the real long-term Heye Lab vision — own the model infra so the products lean on AI without the meter running.
+**Canonical repo for the framework:** [github.com/haveebot/heyedeploy](https://github.com/haveebot/heyedeploy) — read this first for any framework-level question. Memory holds short principles + naming + how-to-apply; the repo holds the body.
 
-**Operational consequence today: cost decisions on Vercel stand alone.**
-- Vercel spend cap, crawl-delay, observability sampling — all the right moves regardless of lab timing.
-- "Don't optimize Vercel because we'll migrate" is the wrong frame. The migration isn't planned; it's emergent. Optimize today as if Vercel is permanent.
-- Build with portability in mind (no Vercel-specific lock-in beyond the build / ISR conventions) — this stays true.
-
-**The product hierarchy: HeyeDeploy → vertical-Deploys → tenants** (locked in 2026-04-27 PM by Winston, refined from earlier CityDeploy-only framing):
+## Org structure (revised 2026-05-01 PM — earlier framing was wrong)
 
 ```
-HeyeDeploy             ← framework / operating model (cross-project)
-   ├─ CityDeploy       ← vertical: small/mid-town local-marketplace SaaS
-   │     └─ PAL        ← first CityDeploy tenant (proof of concept)
-   ├─ <future-Deploy>  ← vertical: e.g. electrical-brokerage SaaS
-   │     └─ CrossRef   ← could become first tenant if it productizes
-   ├─ <future-Deploy>  ← vertical: e.g. creative-studio SaaS
-   │     └─ Sage Em    ← could become first tenant if it productizes
-   └─ shared cross-project tooling (Wheelhouse, arnold/truck, sync-memory, scripts)
+HeyeLab (Nick Merrill — founder / company owner)
+   └── Winston Caraker co-develops the platform-engineering work
+
+HeyeDeploy framework (lives under HeyeLab; Winston + Nick co-develop)
+   ├─ Patterns          — code shapes
+   ├─ Components        — bundled capabilities (<X>Deploy)
+   ├─ Vertical-Deploys  — SaaS shells per customer class
+   └─ Tenants           — concrete deployments
+
+Tenants on the framework (Winston-operated):
+   · PAL (CityDeploy first canonical) — theportalocal.com
+   · Sandfest (EventDeploy first canonical) — texassandfest.app + sandfest.app, LIVE shadow build
+   · CrossRef (XrefDeploy canonical) — crossref.app
+   · Sage Em (RepDeploy internal canonical) — sageem.co
+   · Palm Republic, TX Culture Co, RKay Builders, Cactus Coast Realty — incoming
 ```
 
-**Naming rules (non-conflate-able):**
-- **HeyeDeploy** = the framework. Operating model + pattern docs + shared tooling. Internal mostly. Could become public IP if Heye Lab ever publishes "build your own SaaS the Heye Lab way."
-- **`<Vertical>Deploy`** = a specific SaaS product built using HeyeDeploy patterns. CityDeploy is the first (small/mid towns). Sold/licensed to tenants in that vertical.
-- **Tenant instance** = one concrete deployment. PAL is the first CityDeploy tenant. theportalocal.com is the live site.
+> **Foundation track PAUSED 2026-05-01 PM** — the 501(c)(3) instantiation of an archive-tenant umbrella (for PortaHistory + Indianola) is paused pending internal discussion (Winston / Nick / Collie). Different structural route may replace it. Pre-pause locks (Colleen as Secretary, LegalZoom as registered agent, all director records) retained at `heyedeploy/operations/private/foundation-director-records.md`. The two-track *concept* (commercial-vs-archive separation) is not paused — only this specific 501(c)(3) instantiation. Strategic framing of 501(c)(3) as a productizable HeyeDeploy capability ("most SaaS firms can't help a customer become a 501(c)(3); we will") was a pre-pause angle — may or may not survive the alternate-route decision.
 
-**Footer chain stays the same:** `theportalocal.com` → "Powered by Heye Lab · Built on CityDeploy" — accurate as-is. CityDeploy IS Heye Lab's first vertical-Deploy. HeyeDeploy is the framework underneath that Heye Lab uses to make BOTH efficient.
+> **Legal-entity mapping** (which tenants are LLCs, who owns each, how HeyeLab the company corresponds to HeyeLab the brand): TBD — pending Winston clarity. The above reflects the operating mental model, not necessarily the legal stack.
 
-**Pattern docs already locked under HeyeDeploy** (filed 2026-04-27): Wheelhouse cross-project pattern, memory mirror sync, context-handoff "truck" protocol, startup-drill "arnold" protocol, plus `feedback_heyedeploy_pattern_thinking.md` itself as the meta-rule.
+## The 4-layer framework hierarchy (locked 2026-05-01)
 
-**Memory mirror at `port-a-local/Port A Local/Memory/`** is the working ground for pattern extraction — every Heye Lab project gets the same HeyeDeploy framework files (when CrossRef + Sage Em get mirrors established, they get the same set).
+```
+HeyeDeploy (framework + customer-facing brand action)
+   ├─ Patterns          — code shapes
+   ├─ Components        — bundled capabilities (<X>Deploy)
+   ├─ Vertical-Deploys  — SaaS shells per customer class
+   └─ Tenants           — concrete deployments
+```
 
-**The platform extraction Nick is mining for:** same Next.js + Postgres + Stripe Connect + cookie-session + email/SMS comms + admin dashboards stack, configurable per town under CityDeploy. The HeyeDeploy framework is the CONNECTIVE TISSUE — what makes that extraction efficient across multiple verticals, not just one.
+The framework name doubles as the customer-facing action. **"We HeyeDeploy your business in an hour."** Single-word brand pattern (like Shopify). Customer experiences "HeyeDeploy" as the moment of magic; OnboardDeploy is the engine behind it.
 
-**Public framing:** `CrossRef — Powered by Heye Lab` (tagline pattern; expect similar on other beta projects).
+## Verticals locked
 
-**Why:** Learned 2026-04-22 during the Xwalk → CrossRef rename discussion. The existing account-structure memory didn't reflect a platform-company layer — Heye Lab is that layer, and it reshapes how the projects present publicly and host technically.
+| Vertical | Status | First tenant(s) |
+|---|---|---|
+| CityDeploy | Production | Port A Local |
+| EventDeploy | Pre-build (LIVE shadow at texassandfest.app) | Texas Sandfest |
+| BrandDeploy | Two incoming | Palm Republic + Texas Culture Co |
+| RepDeploy | Internal (canonical at Sage Em) | Sage Em |
+| BuildDeploy *(proposed)* | One incoming | RKay Builders |
+| RealtyDeploy *(proposed)* | One incoming | Cactus Coast Realty |
 
-**How to apply:**
-- When branding CrossRef or PAL public surfaces, include "Powered by Heye Lab" framing where it fits naturally (footer, about page, meta).
-- When Winston says "Nick," that's Nick Merrill / Heye Lab — not anyone from Sage or 2M.
-- **Don't propose Vercel→Heye-Lab migrations unprompted.** There's no plan; both sides build to limit. Treat Vercel as permanent infra for cost decisions today.
-- **Build with portability in mind** (no Vercel-specific lock-in beyond standard build / ISR conventions). Keeps the org option open for whenever both sides are ready.
-- **AI feature ideas should note "could land natively on Heye Lab eventually."** Don't gate them on lab timing — but flag the cost-collapse-from-variable-to-fixed trajectory in the memory + decision log when the idea touches LLM-backed surfaces (semantic search, LFS-import, auto-pair authoring, etc.).
-- When account-structure takes shape under Heye Lab, update `project_account_structure.md` to reflect the three-layer model: Winston (owner) → Heye Lab (platform) → CrossRef / PAL / future beta projects (tenants).
+## Components catalog (9 entries)
+
+| Component | Stage | Canonical |
+|---|---|---|
+| OnboardDeploy | Pre-build | The HeyeDeploy moment — agent-driven migration. The moat. |
+| MarketingDeploy | Stage A (PAL) | Awaiting 2nd use at Sandfest → extraction trigger |
+| XrefDeploy | Stage A (CrossRef) | Awaiting 2nd-vertical plug-in |
+| ArchiveDeploy | Pre-build | Parallel canonical: PortaHistory + Indianola |
+| CRMDeploy | Stage A (Sage HQ) | Awaiting 2nd use |
+| ContractsDeploy | Stage A (Sage) | Awaiting 2nd use |
+| BrandPackDeploy | Stage A (Sage) | Awaiting 2nd use |
+| CommerceDeploy | Pre-build | Palm Republic first canonical |
+| WholesaleDeploy | Pre-build | Palm Republic first canonical |
+| TicketingDeploy | Pre-build | Texas Sandfest first canonical |
+
+## Tenants pipeline (8 — locked 2026-05-01)
+
+| Tenant | Vertical | Status | Domain |
+|---|---|---|---|
+| Port A Local | CityDeploy | Production | theportalocal.com |
+| Texas Sandfest | EventDeploy | LIVE shadow | texassandfest.app + sandfest.app (`.com` pending) |
+| Palm Republic | BrandDeploy | Incoming | TBD (palmrepublic.com?) |
+| Texas Culture Co | BrandDeploy | Incoming | TBD |
+| RKay Builders | BuildDeploy | Incoming | TBD |
+| Cactus Coast Realty | RealtyDeploy | Incoming | TBD |
+| Sage Em | RepDeploy | Internal | sageem.co + hq.sageem.co |
+| CrossRef | (no vertical — XrefDeploy canonical) | Beta | crossref.app |
+| PortaHistory | (no vertical — ArchiveDeploy parallel canonical) | Pre-build | portahistory.com |
+| Indianola | (no vertical — ArchiveDeploy parallel canonical) | Pre-build | indianola.museum target + indianola.org |
+
+## The lab + QWEN — long-term AI cost trajectory
+
+(Preserved from earlier memory; stays accurate.)
+
+Nick is building "the lab" — a GPU-rich datacenter to self-host inference workloads, including QWEN models running natively. The "max it and find out — same on both sides" mindset (locked 2026-04-27): no planned Vercel→lab migration; both sides build to limit independently; intersection happens organically when both are mature.
+
+**Why it matters strategically:** AI features that today require OpenAI/Anthropic API calls (semantic search, LFS-import, auto-pair authoring, agent inference) can eventually run on Nick's lab at fixed hardware cost rather than per-call API metering. That's the real long-term moat under HeyeDeploy.
+
+**BYOAK (Bring Your Own Agent Key, LOCKED 2026-05-01 PM)** interacts with this: customers bring their own Claude/OpenAI/Gemini keys for the agent layer post-onboarding, paying providers directly. Heye Lab fronts during the HeyeDeploy moment (Option A hybrid). Foundation tenants don't BYOAK — Foundation grant-funded inference pool covers them. When the lab is mature, customers could optionally route inference through Heye Lab's lab — own model serving, no per-query cost. See architecture doc at `heyedeploy/operations/byoak-architecture.md`.
+
+## Cross-project principles (HeyeDeploy operations layer)
+
+Locked into the framework, applies to every Heye Lab tenant:
+
+- Cleanest mental model
+- Clear-usable analytics
+- Anti-gatekeeping
+- Customer pulls the platform
+- Verify before declare
+- Consumer-app feel for non-tech operators
+- **Same-Environment Agent Auth** (locked 2026-05-01 — agent runs in our environment, customer credentials never reach the agent layer; Moomoo CEO citation as external validation)
+- **Graduated agent-trust ladder** (locked 2026-05-01 — Observe / Confirm-each / Autonomous; per capability, per tenant)
+
+Full body at `heyedeploy/framework.md`.
+
+## How to apply
+
+- When branding any tenant's public surfaces, use **"Powered by HeyeLab · Built on `<Vertical>Deploy`"** footer chain (HeyeLab one-word — see `feedback_heyelab_brand_spelling.md`)
+- When Winston says "Nick," that's Nick Merrill / HeyeLab founder / Winston's co-developer
+- **Don't propose Vercel→lab migrations unprompted.** Lab maturation is independent; emergent intersection.
+- **Build with portability in mind** (no Vercel-specific lock-in beyond standard build/ISR)
+- **For non-profit-shaped / archive tenants** (PortaHistory, Indianola, future archives) — Foundation track PAUSED 2026-05-01 PM; alternate structural route under discussion. Don't reference "Heye Lab Foundation" as if formed.
+- **For BYOAK questions**: LOCKED 2026-05-01 PM — Option A hybrid. HeyeLab fronts during the HeyeDeploy moment; customer transitions to own key after. (Foundation grant-funded inference pool variant pending the alternate-route decision.) Architecture doc at `heyedeploy/operations/byoak-architecture.md`.
+- **For brand-token questions** (colors, type, voice, wordmark): canonical at `heyedeploy/brand/tokens.md`. Composition 2 (charcoal canvas, neon dual-pop) + Pattern B (architecture-layer color split: coral=patterns / lime=components+verticals / pink=tenants) — locked 2026-05-01 PM. Decision rationale at `heyedeploy/decision-log/2026-05-01-heyedeploy-brand-tokens.md`.
+- **For brand-spelling questions**: HeyeLab (one-word) for marketing/wordmark; Heye Lab (two-word) for legal/official. See `feedback_heyelab_brand_spelling.md`.
+- When asked anything framework-level, **READ the heyedeploy repo** (`framework.md`, `brand/`, `components/`, `verticals/`, `operations/`, `tenants/`, `decision-log/`) — the repo is canonical, this memory is the index.
+
+## Current status (end of 2026-05-01 PM)
+
+- HeyeDeploy repo live at github.com/haveebot/heyedeploy (private; 14+ commits + truck commits)
+- Sandfest shadow build LIVE at texassandfest.app + sandfest.app (deployment-protection OFF; SEO front-run posture confirmed 2026-05-01 PM)
+- 10 tenants in pipeline, 4 verticals locked, 9 components catalogued
+- Heye Lab Foundation formation: **PAUSED 2026-05-01 PM** — Winston pausing 501(c)(3) application pending internal discussion (Winston / Nick / Colleen); different structural route may replace it. Pre-pause state retained: roadmap + filing-ready templates done, Colleen locked as Secretary, LegalZoom locked as registered agent, all three director records collected (filed at `heyedeploy/operations/private/foundation-director-records.md` — PII; do not propagate), heyelab.com domain owned by Nick (admin@ active; winston@ + colleen@ to be created), insider-board composition review parked (option matrix A/B/C/D). Nothing committed externally — no LegalZoom signup, no IRS filings. The two-track *concept* (commercial-vs-archive separation) is not paused — only this specific 501(c)(3) instantiation. BYOAK lock unaffected.
+- BYOAK auth model: **LOCKED 2026-05-01 PM** — Option A hybrid; architecture doc filed at `heyedeploy/operations/byoak-architecture.md`; framework principle added; OnboardDeploy customer-trust updated
+- Nick acknowledged Treasurer role; LegalZoom-instructions brief drafted at `heyedeploy/docs/briefs/2026-05-01-nick-legalzoom-instructions.md` awaiting Winston review/send
+- Cliff Strain Secretary brief archived as superseded (retained as historical reference + alternate)
+- Nextra docs scaffold paused on `site-scaffold-paused` branch — pending Winston's merge/deploy decision (heyedeploy.com landing + docs combo)

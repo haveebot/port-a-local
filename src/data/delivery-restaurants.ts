@@ -32,7 +32,7 @@ export const RESTAURANTS: DeliveryRestaurant[] = [
     pickupNotes:
       "Tell the host it's a PAL Delivery pickup; they'll have it bagged at the front.",
     phone: "(361) 749-5069",
-    businessSlug: "crazy-cajun-seafood-restaurant",
+    businessSlug: "crazy-cajun",
     shortDescription:
       "Boiled seafood dumped on the table since 1987. Hungry Cajun, gumbo, étouffée — to your beach house.",
     cuisineTags: ["Cajun", "Seafood"],
@@ -528,33 +528,49 @@ export const MENU_ITEMS: MenuItem[] = [
 
 /* -------------------- Helpers -------------------- */
 
+import {
+  BETA_RESTAURANTS,
+  BETA_CATEGORIES,
+  BETA_MENU_ITEMS,
+} from "./delivery-beta-from-scraped";
+
+// Merged views — curated PAL-confirmed roster + auto-generated Beta from
+// scraped menus. Lookups + iteration use these so the cart UX, detail
+// pages, and admin tooling don't need to know about the split.
+const ALL_RESTAURANTS: DeliveryRestaurant[] = [
+  ...RESTAURANTS,
+  ...BETA_RESTAURANTS,
+];
+const ALL_CATEGORIES: MenuCategory[] = [...CATEGORIES, ...BETA_CATEGORIES];
+const ALL_MENU_ITEMS: MenuItem[] = [...MENU_ITEMS, ...BETA_MENU_ITEMS];
+
 export function getRestaurant(slug: string): DeliveryRestaurant | undefined {
-  return RESTAURANTS.find((r) => r.slug === slug && r.isActive);
+  return ALL_RESTAURANTS.find((r) => r.slug === slug && r.isActive);
 }
 
 /** Lookup by internal id — used when id and slug diverge (e.g. DQ) */
 export function getRestaurantById(id: string): DeliveryRestaurant | undefined {
-  return RESTAURANTS.find((r) => r.id === id && r.isActive);
+  return ALL_RESTAURANTS.find((r) => r.id === id && r.isActive);
 }
 
 export function getActiveRestaurants(): DeliveryRestaurant[] {
-  return RESTAURANTS.filter((r) => r.isActive);
+  return ALL_RESTAURANTS.filter((r) => r.isActive);
 }
 
 export function getCategoriesFor(restaurantId: string): MenuCategory[] {
-  return CATEGORIES.filter((c) => c.restaurantId === restaurantId).sort(
+  return ALL_CATEGORIES.filter((c) => c.restaurantId === restaurantId).sort(
     (a, b) => a.sort - b.sort,
   );
 }
 
 export function getItemsFor(restaurantId: string): MenuItem[] {
-  return MENU_ITEMS.filter(
+  return ALL_MENU_ITEMS.filter(
     (i) => i.restaurantId === restaurantId && i.isAvailable,
   ).sort((a, b) => a.sort - b.sort);
 }
 
 export function getMenuItem(id: string): MenuItem | undefined {
-  return MENU_ITEMS.find((i) => i.id === id);
+  return ALL_MENU_ITEMS.find((i) => i.id === id);
 }
 
 /** Customer-facing price after markup, rounded to nearest cent (then nickel) */

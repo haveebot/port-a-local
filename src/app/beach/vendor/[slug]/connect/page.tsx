@@ -98,8 +98,9 @@ export default async function BeachVendorConnectPage({
               Stripe defaults to (typically 1-2 business days).
             </p>
             <p className="text-xs text-emerald-800">
-              If you ever need to update bank info, contact Winston and
-              he&apos;ll send you a fresh dashboard link.
+              Need to update bank info? Reply to any PAL message or
+              email <a href="mailto:admin@theportalocal.com" className="underline">admin@theportalocal.com</a>{" "}
+              and we&apos;ll send a fresh dashboard link.
             </p>
           </section>
         ) : (

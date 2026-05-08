@@ -5,12 +5,51 @@ import {
   getPending,
   getRecent,
   getStats,
+  type SocialPost,
 } from "@/data/social-post-store";
 import { isMetaConfigured } from "@/lib/metaGraph";
 import SocialPostCard from "./SocialPostCard";
-import ResendButton from "./ResendButton";
+import RecentSent from "./RecentSent";
 import MarketingBreadcrumb from "@/components/wheelhouse/MarketingBreadcrumb";
 import AskHavee from "./AskHavee";
+
+/**
+ * Bucket pending posts into three visual tiers based on auto_send_at.
+ * - 🔥 Firing soon: auto_send_at within next 24h (or in past — imminent)
+ * - ⏰ Scheduled later: auto_send_at >= 24h out
+ * - 📝 Stockpile: no auto_send_at (manual-fire only / drafts)
+ *
+ * display_order is preserved within each bucket — operator's manual
+ * ordering carries through. Reorder buttons (↑↓) operate on display_order
+ * globally, so an item can shuffle relative to items in adjacent buckets,
+ * but its bucket assignment is determined purely by auto_send_at.
+ */
+function bucketPending(pending: SocialPost[]): {
+  firingSoon: SocialPost[];
+  scheduledLater: SocialPost[];
+  stockpile: SocialPost[];
+} {
+  const now = Date.now();
+  const dayMs = 24 * 60 * 60 * 1000;
+  const out = {
+    firingSoon: [] as SocialPost[],
+    scheduledLater: [] as SocialPost[],
+    stockpile: [] as SocialPost[],
+  };
+  for (const p of pending) {
+    if (!p.autoSendAt) {
+      out.stockpile.push(p);
+      continue;
+    }
+    const t = new Date(p.autoSendAt).getTime();
+    if (t < now + dayMs) {
+      out.firingSoon.push(p);
+    } else {
+      out.scheduledLater.push(p);
+    }
+  }
+  return out;
+}
 
 export const dynamic = "force-dynamic";
 
@@ -27,24 +66,6 @@ export const dynamic = "force-dynamic";
  * each post before it fires to FB/IG. PAL brand voice is the surface
  * we cannot vibe-code, so human-in-the-loop is mandatory for v1.
  */
-
-function relativeTime(iso: string): string {
-  const ms = Date.now() - new Date(iso).getTime();
-  if (ms < 0) {
-    const future = -ms;
-    const min = Math.round(future / 60_000);
-    if (min < 60) return `in ${min}m`;
-    const hr = Math.round(min / 60);
-    if (hr < 24) return `in ${hr}h`;
-    return `in ${Math.round(hr / 24)}d`;
-  }
-  const min = Math.round(ms / 60_000);
-  if (min < 1) return "just now";
-  if (min < 60) return `${min}m ago`;
-  const hr = Math.round(min / 60);
-  if (hr < 24) return `${hr}h ago`;
-  return `${Math.round(hr / 24)}d ago`;
-}
 
 export default async function SocialQueuePage() {
   const cookieStore = await cookies();
@@ -131,15 +152,14 @@ export default async function SocialQueuePage() {
         {/* ASK HAVEE — NL composer */}
         <AskHavee />
 
-        {/* PENDING REVIEW */}
+        {/* PENDING REVIEW — sectioned by fire-readiness */}
         <section className="bg-white rounded-2xl border border-coral-300 p-6 shadow-sm">
           <h2 className="font-display text-xl font-bold mb-1">
             What&apos;s queued up
           </h2>
           <p className="text-xs text-navy-500 mb-4">
-            Look these over and fire when ready. Edit anything that
-            doesn&apos;t sound like you. Pick a custom image from the Bank
-            or upload one — or just send with the link card.
+            Look these over and fire when ready. Sections below sort by
+            fire-readiness — scheduled posts first, drafts at the bottom.
           </p>
           {pending.length === 0 ? (
             <p className="text-sm text-navy-500 italic">
@@ -147,63 +167,94 @@ export default async function SocialQueuePage() {
               automatically.
             </p>
           ) : (
-            <div className="space-y-3">
-              {pending.map((p, i) => (
-                <SocialPostCard
-                  key={p.id}
-                  post={p}
-                  position={i + 1}
-                  total={pending.length}
-                />
-              ))}
-            </div>
+            <PendingSections pending={pending} />
           )}
         </section>
 
-        {/* RECENT HISTORY */}
-        <section className="bg-white rounded-2xl border border-sand-300 p-6 shadow-sm">
-          <h2 className="font-display text-xl font-bold mb-1">Recently sent</h2>
-          <p className="text-xs text-navy-500 mb-4">
-            Last 30 — what shipped, what was skipped. Hit ↻ Resend on
-            anything you need to redo.
-          </p>
-          {recent.length === 0 ? (
-            <p className="text-sm text-navy-500 italic">No posts yet.</p>
-          ) : (
-            <div className="divide-y divide-sand-200">
-              {recent.map((p) => (
-                <div
-                  key={p.id}
-                  className="py-3 flex items-center gap-3 text-sm"
-                >
-                  <StatusPill status={p.status} />
-                  <span className="text-xs text-navy-500 font-mono w-12 shrink-0">
-                    {p.channel === "facebook" ? "FB" : p.channel === "instagram" ? "IG" : "X"}
-                  </span>
-                  <span className="text-[11px] text-navy-400 font-mono shrink-0">
-                    #{p.id}
-                  </span>
-                  <span className="text-navy-800 truncate min-w-0 flex-1">
-                    {p.caption.slice(0, 90)}
-                    {p.caption.length > 90 ? "…" : ""}
-                  </span>
-                  <span className="text-xs text-navy-500 whitespace-nowrap shrink-0">
-                    {p.sentAt
-                      ? `sent ${relativeTime(p.sentAt)}`
-                      : relativeTime(p.createdAt)}
-                  </span>
-                  {p.status !== "pending" && <ResendButton postId={p.id} />}
-                </div>
-              ))}
-            </div>
-          )}
-        </section>
+        {/* RECENT HISTORY — with FB click-through traffic per post */}
+        <RecentSent recent={recent} />
 
         <p className="text-[11px] text-navy-400 text-center pt-2">
           Stockpile the pond — fire what hits. Skip what doesn&apos;t.
         </p>
       </div>
     </main>
+  );
+}
+
+function PendingSections({ pending }: { pending: SocialPost[] }) {
+  const buckets = bucketPending(pending);
+  const sections: {
+    key: "firingSoon" | "scheduledLater" | "stockpile";
+    icon: string;
+    title: string;
+    sub: string;
+    tone: "coral" | "emerald" | "navy";
+    items: SocialPost[];
+  }[] = [
+    {
+      key: "firingSoon",
+      icon: "🔥",
+      title: "Firing soon",
+      sub: "auto-fire within 24 hours",
+      tone: "coral",
+      items: buckets.firingSoon,
+    },
+    {
+      key: "scheduledLater",
+      icon: "⏰",
+      title: "Scheduled later",
+      sub: "auto-fire more than 24 hours out",
+      tone: "emerald",
+      items: buckets.scheduledLater,
+    },
+    {
+      key: "stockpile",
+      icon: "📝",
+      title: "Stockpile",
+      sub: "drafts — no auto-fire time set; manual Send only",
+      tone: "navy",
+      items: buckets.stockpile,
+    },
+  ];
+
+  return (
+    <div className="space-y-6">
+      {sections
+        .filter((s) => s.items.length > 0)
+        .map((s) => (
+          <div key={s.key}>
+            <div className="flex items-baseline justify-between gap-2 mb-2">
+              <h3
+                className={`font-display text-base font-bold flex items-center gap-2 ${
+                  s.tone === "coral"
+                    ? "text-coral-700"
+                    : s.tone === "emerald"
+                      ? "text-emerald-700"
+                      : "text-navy-700"
+                }`}
+              >
+                <span>{s.icon}</span>
+                {s.title}
+                <span className="text-[11px] font-mono font-normal text-navy-400">
+                  ({s.items.length})
+                </span>
+              </h3>
+              <p className="text-[11px] text-navy-400 italic">{s.sub}</p>
+            </div>
+            <div className="space-y-3">
+              {s.items.map((p, i) => (
+                <SocialPostCard
+                  key={p.id}
+                  post={p}
+                  position={i + 1}
+                  total={s.items.length}
+                />
+              ))}
+            </div>
+          </div>
+        ))}
+    </div>
   );
 }
 
@@ -236,20 +287,3 @@ function Stat({
   );
 }
 
-function StatusPill({ status }: { status: string }) {
-  const cls =
-    status === "pending"
-      ? "bg-coral-50 text-coral-700 border-coral-200"
-      : status === "sent"
-        ? "bg-emerald-50 text-emerald-700 border-emerald-200"
-        : status === "skipped"
-          ? "bg-navy-100 text-navy-500 border-navy-200"
-          : "bg-coral-100 text-coral-800 border-coral-300";
-  return (
-    <span
-      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide border ${cls} shrink-0`}
-    >
-      {status}
-    </span>
-  );
-}

@@ -1394,6 +1394,189 @@ This fact base is more friendly to the working thesis than not. But several item
 
 ---
 
+## 2026-05-08 Update — The internal-pivot RESOLUTION 2025-R14 + Turner Ramirez continuity
+
+**This section was added on 2026-05-08 after a focused civicweb pull closed the 2019 → 2025 arc with full vote, contractor, architect, and bond-counsel records. It supersedes any prior framing of the conference-center outcome as "stalled" or "wound down." The structural arc is now: external RFP rubric-winner rejected (Jan 2019) → external partnership winds down (2020-2022) → council questions internal funding (Aug 2023) → Bond Counsel proposes reimbursement mechanism (Nov 2024) → 7-0 vote awarding internal $9.575M contract (Mar 2025) → construction underway (Jun 2025).**
+
+### McCombs Properties / Palmilla — clarification
+
+**Palmilla Beach is owned by McCombs Properties** (the Red McCombs San Antonio empire — same family behind the Minnesota Vikings ownership and Red McCombs Media). The 2012 acquisition (~150 acres of the Newport tract + the Arnold Palmer golf course) is documented at Schnell Urban Design's Palmilla Beach project archive. Earlier framing in this fact base treated McCombs Properties' appearance in the 2019 Resolution template's awardee field as a procedural-shell error ("wrong opponent name"). **That framing was inaccurate.** The Resolution template named McCombs Properties because that's Palmilla Beach's parent — the draft Resolution anticipated Palmilla/McCombs winning, consistent with the higher rubric score (Palmilla 182 vs Cinnamon Shore 175). Council voted 7-0 against the draft and awarded Cinnamon Shore + ZJZ Hospitality partnership instead; the "blank awardee" field was the post-vote update placeholder.
+
+**The 2019 7-0 vote, restated structurally:** council rejected the higher-scoring San-Antonio-anchored bidder (Palmilla / McCombs Properties — the Red McCombs empire) in favor of the lower-scoring Atlanta-anchored bidder (Cinnamon Shore + ZJZ Hospitality). Brett Hentz (Tourism Bureau CEO; hired January 2017 via a search committee chaired by Suzette Freeman of Mustang Island Ventures LLC) was running the procurement and briefed council on the bidders.
+
+### RESOLUTION 2025-R14 — March 25, 2025 (verbatim from civicweb minutes)
+
+> *"Awarding Request for Proposal for the City Of Port Aransas – City Hall/Civic Center Expansion & Renovation; Funds From General Fund Account #050-66320 and Facility Fund 115-66320; Authorizing the City Manager to Act as the Executive Officer and Authorized Representative of the City in All Matters Pertaining to Said Bid Award."*
+
+**Project:** $9 million budget; located at 710 W. Avenue A (existing City Hall). Architect: **Turner Ramirez Architects** (Project Manager: Jody Schade). City Manager: **David Parsons**. Bond Counsel: **Andrew Friedman, Samco Capital Markets**.
+
+**Three bids received (called for March 18, 2025):**
+
+| Bidder | Bid |
+|---|---|
+| Beecroft Construction | $10,144,799 |
+| **Weaver and Jacobs Constructors** | **$9,575,000** ← **awarded** |
+| Broaddus Construction | $10,478,325 |
+
+**Vote — Unanimous 7-0 For:**
+
+| Member | Vote |
+|---|---|
+| Mayor Wendy Moore | For |
+| Mayor Pro-Tem Kelly Owens | For |
+| Councilmember Mark Winton | For |
+| Councilmember Jo Ellyn Krueger | For |
+| Councilmember Tanya Chambers | For |
+| Councilmember Charles Crawford | **For — motioned** |
+| Councilmember Dale Christianson | **For — seconded** |
+
+**Funding mechanism (verbatim, lines 195-201 of the Mar 25, 2025 minutes):**
+
+> *"...November however the idea to apply those funds towards the Civic Center Expansion Project was presented. Bond Council suggested a reimbursement Resolution on the portion of the Civic Center Project being funded by HOT tax in which the City would reimburse itself with venue tax, if passed. City Manager Parsons reiterated to Council they are not committing to venue tax or a future streetscape project with this Resolution. City Manager Parsons introduced Bond Councilman Andrew Friedman with Samco Capital Markets."*
+
+The mechanism: HOT tax funds the Civic Center expansion portion initially; if voters later approve a venue tax, the city reimburses itself. The general-fund + facility-fund portions ($4.275M + $5.35M per the FY 2024-25 budget) cover the City Hall renovation and the rest of the Civic Center.
+
+### Aug 8, 2023 Special Meeting — the funding-source question (verbatim)
+
+> *"Mayor Moore stated that aside from the major addition, the City Hall renovation and expansion, which raises questions about its funding source, most of the requests from the council goals workshop and staff requests appear to be incorporated into the budget."*
+
+> *"Staff provided two exhibits detailing the administrative and Civic Center expansions. Director Honea stated that the Civic Center expansion would be funded primarily from the Hotel Motel fund account and the Facility fund account."*
+
+> *"...a tax anticipation note (TAN) of $14 million to maintain a lower tax rate while funding key projects."*
+
+The Aug 2023 minutes establish that 18 months before RESOLUTION 2025-R14, the project was already a known "major addition" with funding from the Hotel Motel fund + Facility fund — the same pool that under 2017 HMT legislation would have funded the 2019 external Hotel Conference Center under Lamkin / Cinnamon Shore + ZJZ.
+
+### The Turner Ramirez continuity finding
+
+**Turner Ramirez Architects (TRA) was on Cinnamon Shore's 2019 winning bid team** (per Fact Base section "Supporting team on Cinnamon Shore winning bid"). **TRA is also the architect of the 2025 City Hall / Civic Center Expansion & Renovation.** The same firm bridges both sides of the six-year external→internal pivot. Whether this is incidental (TRA is the regional go-to for civic / hospitality projects) or structural (continuity by design) is a research follow-up. **At minimum, the firm bridging both votes is on the record on both sides of the conference-center disposition.**
+
+### Crawford on both votes
+
+Charles Crawford was on the 2019 Hotel Conference Center RFP committee (per civicweb Jan 17, 2019 packet) and motioned the 2025 internal-alternative resolution. Both votes 7-0. He is the single named individual present at the structural pivot from external operator to internal facility.
+
+### Net structural finding for the Dispatch piece
+
+**Same Hotel Motel Tax revenue stream (under 2017 HB 4347 legislation that originally enabled the conference-center incentive). External private operator rejected. Internal city-owned facility approved. Both votes 7-0 six years apart. Crawford motioned both directions.** The dollars stayed; the recipient flipped from external (Cinnamon Shore + ZJZ + Lamkin / Sea Oats Group) to internal (Civic Center expansion absorbing the conference function the 2019 RFP would have built externally). Same architect on both sides of the bridge.
+
+### Records cited (this update)
+
+| Record | Source URL |
+|---|---|
+| Civicweb portal — Document Center | https://cityofportaransas.civicweb.net/filepro/documents/ |
+| Mar 25, 2025 City Council Regular Meeting Minutes (PDF) | https://cityofportaransas.civicweb.net/filepro/document/160874/ |
+| Aug 8, 2023 City Council Special Meeting Minutes (PDF) | https://cityofportaransas.civicweb.net/filepro/document/57145/ |
+| Aug 11, 2025 City Council Special Meeting Minutes (PDF) | https://cityofportaransas.civicweb.net/filepro/document/164528/ |
+| Nov 18, 2025 City Council Regular Meeting Agenda (PDF) | https://cityofportaransas.civicweb.net/filepro/document/165483/ |
+| June 4, 2025 City Hall construction public notice | https://cityofportaransas.org/2025/06/04/please-pardon-our-construction/ |
+| FY 2024-25 budget reporting (South Jetty) | https://www.portasouthjetty.com/articles/budget-funds-large-projects-around-port-a/ |
+
+### Airtight ledger — Aug 11 + Nov 18, 2025 records
+
+**Aug 11, 2025 — ORDINANCE 2025-04 (Calling A Venue Project Election under TX Local Government Code Chapter 334):**
+
+> *"City Manager Parsons confirmed that the Comptroller had reviewed and signed off on the measure, following Council's approval of the Comptroller letter at the June meeting. The election must be called by August 18, meeting the statutory deadline."*
+
+Motioned by Councilmember Tanya Chambers, seconded by Mayor Pro-Tem Kelly Owens. Approved unanimously. **The proposition language had originally referred to the project as the "sports complex" in error and was corrected to the actual venue project.** This is the venue-tax election that activates the Bond Counsel reimbursement-Resolution mechanism — the city would reimburse itself with venue tax for the HOT-funded portion of the Civic Center expansion if voters approve. **Election date: Nov 4, 2025.**
+
+**Aug 11, 2025 — Project budget remaining (verbatim, ACM Honea capital projects overview, page 9):**
+
+> *"City Hall Expansion and Civic Center Renovations: Approximately $2.9 million remains on the construction contract, with an additional $432,500 allocated for technology improvements including AV and computer upgrades for the Council Chambers."*
+
+So as of Aug 11, 2025, ~$3.33M remained committed on the $9.575M contract, with **$432,500 specifically for Council Chambers AV and computer upgrades** as part of the project scope.
+
+**Aug 11, 2025 — Reserves draw (verbatim):**
+
+> *"Of the $7.5 million reduction in reserves projected for FY 2025–2026, approximately $6.1 million is attributable to one-time capital expenditures, which will not impact future operating budgets. These include the City Hall expansion, animal shelter, and major technology projects."*
+
+**Aug 11, 2025 — $14M TAN clarification (verbatim):**
+
+> *"Discussion clarified that the Recreation Center project is partially funded through tax anticipation notes and park dedication fees."*
+
+The $14M TAN discussed in the Aug 8, 2023 minutes funds the **Recreation Center**, NOT the City Hall / Civic Center Expansion & Renovation. The two projects are distinct funding tracks: Recreation Center via TAN + park dedication fees; City Hall/Civic Center via General Fund + Facility Fund + reserves + HOT-reimbursement-via-venue-tax.
+
+**Nov 18, 2025 — Construction status (verbatim from agenda packet, lines 1295-1301):**
+
+> *"Civic Center / City Hall Renovations
+> - Admin addition: steel and corrugated roof up; slab work complete.
+> - Courtyard/caterer's kitchen: slab done; steel in place; more steel erection expected within two weeks.
+> - Lobby: demolition underway; tile floor jackhammered and removed.
+> - Civic center interior: ceiling system removed; strong visible progress."*
+
+**Nov 18, 2025 — Streetscape pending (verbatim):**
+
+> *"Streetscape Project — On hold pending November 4 venue election."*
+
+The Streetscape Project (the third element tied to the Bond Counsel reimbursement Resolution structure) was on hold as of Nov 18, 2025, awaiting the Nov 4 venue-tax election outcome.
+
+**Nov 18, 2025 — Council relocation Resolution (verbatim, lines 2577-2585):**
+
+> *"Due to ongoing construction at the Council Chambers and Civic Center, the meeting location will need to be temporarily relocated until the project is complete. ... staff recommends consideration of the Police Department's Municipal Courtroom as another potential temporary meeting venue. The contractor for the City Hall renovation estimates that work on the City Council Chambers will begin in April 2026 and be completed by August 2026."*
+
+The Resolution designates the **PAISD Administration Building Board Room (100 S. Station Street)** as the temporary council meeting location starting **Nov 20, 2025**, with the Municipal Courtroom (705 W. Avenue A) as alternate. **Council Chambers construction phase: April–August 2026.**
+
+### Council composition shift between Mar 25 and Aug 11, 2025
+
+The post-2025-election council composition documented across the two votes:
+
+| Seat | Mar 25, 2025 (RESOLUTION 2025-R14) | Aug 11, 2025 (ORDINANCE 2025-04) |
+|---|---|---|
+| Mayor | Wendy Moore | Wendy Moore |
+| Mayor Pro-Tem | **Kelly Owens** | **Charles Crawford** (promoted) |
+| Council seat | Mark Winton | **Chad Shimaitis** (Winton not running 2025) |
+| Council seat | Jo Ellyn Krueger | Jo Ellyn Krueger |
+| Council seat | Tanya Chambers | Tanya Chambers |
+| Council seat | Charles Crawford (motioned) | Kelly Owens (demoted) |
+| Council seat | Dale Christianson | Dale Christianson |
+
+**Crawford was promoted from Council Member to Mayor Pro-Tem after the May 2025 elections** — by the August venue-tax-election ordinance, he holds the second-highest seat on council. He was the council's named link from the 2019 RFP committee through the 2025 internal-alternative motion to the Aug 2025 venue-tax-election approval that finishes funding the project.
+
+### Nov 4, 2025 Venue Election — PASSED 469-285
+
+**RESOLUTION 2025-R55 (Canvassed Nov 12, 2025 — verbatim from minutes lines 82-96):**
+
+> *"Mayor Moore read the results of the November 4, 2025 Venue Election. Mayor Moore stated that the Venue Election 'Proposition A' Authorizing the City of Port Aransas, Texas to provide for the planning, acquisition, establishment, development, construction, financing, and renovation of a Venue Project, adjacent support facilities, and any related infrastructure, **collectively known as 'The Port Aransas Civic and Community Center'** and located in the City in accordance with the Chapter 334, as amended, Texas Local Government Code, including the payment of the costs of maintenance and operation thereof, and **to impose a new and additional hotel occupancy tax at a rate not to exceed two percent (2%)** in the City of Port Aransas, Texas and authorize the use of an amount **not to exceed five percent (5%) of the revenue derived from the City's property tax** for the purpose of financing the Venue Project. If approved, the maximum hotel occupancy tax rate in the City of Port Aransas, Texas would be **fifteen percent (15%)** of the price paid for a room in a hotel passed with the following vote:"*
+
+**Vote totals:**
+
+| | Early | Provisional | Election Day | Total |
+|---|---|---|---|---|
+| **For** | 260 | 0 | 209 | **469 (62.2%)** |
+| **Against** | 140 | 0 | 145 | **285 (37.8%)** |
+
+**Canvass vote (Nov 12, 2025 Special Meeting — RESOLUTION 2025-R55):** Christianson motioned, Crawford seconded. Carried 3-0 with 4 absent (Shimaitis, Owens, Krueger, Chambers). Only Mayor Moore, Mayor Pro-Tem Crawford, and Christianson present (quorum-of-two sufficient for canvass per TX EC §67.004(a)).
+
+**What the passage activates:**
+
+- New 2% HOT increment (raising Port Aransas's maximum HOT rate to **15%**)
+- Up to 5% of city property tax revenue dedicated to financing the Venue Project
+- The Bond Counsel reimbursement-Resolution mechanism (proposed Mar 25, 2025) is now ACTIVE — city will reimburse itself with venue tax for the HOT-funded portion of the Civic Center expansion
+- Project officially named **"The Port Aransas Civic and Community Center"** — the renamed/expanded Civic Center that absorbs the conference function the 2019 RFP would have built externally
+
+**Crawford on four pivot votes** (updated from three):
+
+1. 2019-01-17 — RFP committee for the Hotel Conference Center procurement (rejected Palmilla / McCombs Properties higher score)
+2. 2025-03-25 — Motioned RESOLUTION 2025-R14 awarding $9.575M City Hall/Civic Center contract to Weaver and Jacobs
+3. 2025-08-11 — On council for ORDINANCE 2025-04 calling the venue election (after promotion to Mayor Pro-Tem)
+4. 2025-11-12 — Seconded RESOLUTION 2025-R55 declaring election passage and project name "Port Aransas Civic and Community Center"
+
+### Net structural finding — airtight
+
+**The same Hotel Motel Tax revenue stream funds both ends of the 2019→2025 arc.** Externally in 2019: Cinnamon Shore + ZJZ Hospitality partnership (Lamkin / Sea Oats Group). Internally in 2025: City Hall / Civic Center Expansion & Renovation contract to Weaver and Jacobs Constructors at $9.575M. Architect Turner Ramirez Architects appears on **both** sides of the bridge. Charles Crawford appears on the **2019 RFP committee, the Mar 25 2025 motion to award, and the Aug 11 2025 ordinance calling the venue-tax election** that activates the reimbursement mechanism. Both the 2019 RFP vote and the 2025 award vote were unanimous 7-0. Construction status as of Nov 18, 2025 is mid-build with Council Chambers phase scheduled April–August 2026.
+
+**Records floor (every claim above sourced):**
+- 2019 RFP vote → Civicweb Jan 17, 2019 packet
+- 2019 RFP committee membership → Civicweb Jan 17, 2019 packet ("Mr. Hentz informed the council that the two proposed developers are The Palmilla Group and Cinnamon Shore and ZJZ Hospitality Group partnership")
+- McCombs Properties = Palmilla → Schnell Urban Design archives + 2012 acquisition press
+- 2023 funding question → Civicweb Aug 8, 2023 minutes (lines 392-399)
+- 2025 award vote → Civicweb Mar 25, 2025 minutes (lines 268-340)
+- Bond Counsel mechanism → Civicweb Mar 25, 2025 minutes (lines 195-201)
+- Venue-tax election → Civicweb Aug 11, 2025 minutes (lines 215-263) + Nov 18, 2025 agenda
+- Construction status → Civicweb Nov 18, 2025 agenda (lines 1295-1301)
+- Council relocation → Civicweb Nov 18, 2025 agenda (lines 2577-2620)
+- Council composition shift → cross-reference of Mar 25 and Aug 11 vote tallies
+
+---
+
 ## Recommended next research session focus
 
 If Winston / Collie / Nick can fund a 2-hour follow-up, the highest-leverage spend is:

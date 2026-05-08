@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 
 type OrderStatus =
+  | "pending_review"
   | "placed"
   | "paid"
   | "dispatching"

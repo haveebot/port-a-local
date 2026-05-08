@@ -2,6 +2,7 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import Link from "next/link";
 import type { Metadata } from "next";
+import { createHash } from "crypto";
 import { EmojiIcon } from "@/components/brand/PortalIcon";
 import {
   CURRENT_WEEK,
@@ -12,17 +13,48 @@ import {
   formatWeekday,
   formatDateLong,
   formatDateShort,
+  liveMusicHeadline,
   type LiveMusicAct,
 } from "@/data/live-music";
 
 export const revalidate = 3600;
 
-export const metadata: Metadata = {
-  title: "Live Music Tonight — Port Aransas, TX | Port A Local",
-  description:
-    "Who's playing where tonight and this week in Port Aransas. The Gaff, Shorty's, Bron's, Treasure Island, Sip Yard, VFW, Salty Dog — all in one place.",
-  alternates: { canonical: "https://theportalocal.com/live-music" },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const h = liveMusicHeadline();
+  // Cache-bust the og:image URL with a data-derived fingerprint. FB caches
+  // image bytes against the og:image URL forever — Sharing Debugger
+  // refreshes page metadata but does NOT re-fetch image bytes for an
+  // unchanged URL. Ship May 3 PM after two posts with stale OG images
+  // proved this empirically. The auto-generated PNG route ignores the ?v=
+  // query, so this is purely a URL-change signal to FB.
+  const ogFingerprint = createHash("sha1")
+    .update(
+      JSON.stringify({
+        iso: h.iso,
+        count: h.count,
+        framing: h.framing,
+        topActs: h.topActs.map((a) => `${a.venue}:${a.artist}`),
+      }),
+    )
+    .digest("hex")
+    .slice(0, 10);
+  return {
+    title: `${h.title} | Port A Local`,
+    description: h.description,
+    alternates: { canonical: "https://theportalocal.com/live-music" },
+    openGraph: {
+      title: `${h.title} | Port A Local`,
+      description: h.description,
+      images: [
+        {
+          url: `https://theportalocal.com/live-music/opengraph-image?v=${ogFingerprint}`,
+          width: 1200,
+          height: 630,
+        },
+      ],
+    },
+  };
+}
 
 function ActCard({ act, emphasize = false }: { act: LiveMusicAct; emphasize?: boolean }) {
   const venue = VENUES[act.venue];

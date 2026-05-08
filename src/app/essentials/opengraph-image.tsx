@@ -3,6 +3,7 @@ import { brandedOG, ogSize, ogContentType } from "@/lib/brandedOG";
 export const alt = "Island Essentials — everything you need to know about Port Aransas";
 export const size = ogSize;
 export const contentType = ogContentType;
+export const dynamic = "force-dynamic";
 
 export default function Image() {
   return brandedOG({
@@ -12,5 +13,6 @@ export default function Image() {
     subtitle:
       "Ferry times, beach rules, parking, emergency contacts. Everything first-time and returning visitors actually need.",
     lockupVariant: "standard",
+    category: "essentials",
   });
 }

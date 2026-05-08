@@ -56,10 +56,31 @@ async function ensureSchema(): Promise<void> {
   `;
   await sql`ALTER TABLE social_post_queue ADD COLUMN IF NOT EXISTS auto_send_at TIMESTAMPTZ`;
   await sql`ALTER TABLE social_post_queue ADD COLUMN IF NOT EXISTS display_order INTEGER NOT NULL DEFAULT 0`;
+  // FB Marketing API boost columns. boost_status: 'none' (default) | 'stub'
+  // | 'active' | 'complete' | 'failed' | 'disabled' (operator skip).
+  // boost_insights stores the full Marketing-API response so we can extract
+  // reach/impressions/clicks/CTR/demographics later without re-pulling.
+  await sql`ALTER TABLE social_post_queue ADD COLUMN IF NOT EXISTS boost_status TEXT DEFAULT 'none'`;
+  await sql`ALTER TABLE social_post_queue ADD COLUMN IF NOT EXISTS boost_campaign_id TEXT`;
+  await sql`ALTER TABLE social_post_queue ADD COLUMN IF NOT EXISTS boost_adset_id TEXT`;
+  await sql`ALTER TABLE social_post_queue ADD COLUMN IF NOT EXISTS boost_ad_id TEXT`;
+  await sql`ALTER TABLE social_post_queue ADD COLUMN IF NOT EXISTS boost_creative_id TEXT`;
+  await sql`ALTER TABLE social_post_queue ADD COLUMN IF NOT EXISTS boost_spend_cents INTEGER`;
+  await sql`ALTER TABLE social_post_queue ADD COLUMN IF NOT EXISTS boost_created_at TIMESTAMPTZ`;
+  await sql`ALTER TABLE social_post_queue ADD COLUMN IF NOT EXISTS boost_insights_synced_at TIMESTAMPTZ`;
+  await sql`ALTER TABLE social_post_queue ADD COLUMN IF NOT EXISTS boost_insights JSONB`;
+  await sql`ALTER TABLE social_post_queue ADD COLUMN IF NOT EXISTS boost_error TEXT`;
+  // FB deletion tracking. When a post is deleted on FB (manual cleanup, OG-bug
+  // refire cycle, etc.), our DB still has it as 'sent' until we notice. The
+  // /api/cron/social-removed-sweep cron polls FB and stamps this when the
+  // Graph API returns "Object does not exist" for an externalPostId. UI fades
+  // these rows + hides the 🚀 boost button.
+  await sql`ALTER TABLE social_post_queue ADD COLUMN IF NOT EXISTS removed_from_fb_at TIMESTAMPTZ`;
   await sql`CREATE INDEX IF NOT EXISTS social_post_status_idx ON social_post_queue(status, created_at DESC)`;
   await sql`CREATE INDEX IF NOT EXISTS social_post_trigger_idx ON social_post_queue(trigger_type, trigger_ref, channel)`;
   await sql`CREATE INDEX IF NOT EXISTS social_post_auto_send_idx ON social_post_queue(status, auto_send_at) WHERE auto_send_at IS NOT NULL`;
   await sql`CREATE INDEX IF NOT EXISTS social_post_pending_order_idx ON social_post_queue(status, display_order) WHERE status = 'pending'`;
+  await sql`CREATE INDEX IF NOT EXISTS social_post_boost_active_idx ON social_post_queue(boost_status, boost_created_at) WHERE boost_status = 'active'`;
   // Backfill display_order for existing rows that have it at default 0 —
   // idempotent (no-op once set). Mirrors the row id so the natural sort
   // preserves existing order without disturbing already-reordered rows.
@@ -69,6 +90,22 @@ async function ensureSchema(): Promise<void> {
 
 export type PostChannel = "facebook" | "instagram" | "twitter";
 export type PostStatus = "pending" | "sent" | "skipped" | "failed";
+/**
+ * FB Marketing API boost lifecycle:
+ *   none      — default, no boost ever requested
+ *   stub      — boost requested but META_AD_ACCOUNT_ID unset (logged only)
+ *   active    — campaign+adset+ad created, currently spending
+ *   complete  — boost duration ended, final insights synced
+ *   failed    — Marketing API rejected the request, see boost_error
+ *   disabled  — operator opted out (won't auto-fire even if global flag on)
+ */
+export type BoostStatus =
+  | "none"
+  | "stub"
+  | "active"
+  | "complete"
+  | "failed"
+  | "disabled";
 export type TriggerType =
   | "event_published"
   | "event_milestone_30d"
@@ -81,7 +118,8 @@ export type TriggerType =
   | "dispatch_published"
   | "business_added"
   | "glossary_active"
-  | "manual";
+  | "manual"
+  | "manual_external";
 
 export interface SocialPost {
   id: number;
@@ -112,6 +150,20 @@ export interface SocialPost {
   externalPostUrl: string | null;
   errorMsg: string | null;
   metadata: Record<string, unknown> | null;
+  // Boost lifecycle — populated after POST /api/wheelhouse/social/boost
+  // creates a Marketing API campaign+adset+ad on this post.
+  boostStatus: BoostStatus;
+  boostCampaignId: string | null;
+  boostAdsetId: string | null;
+  boostAdId: string | null;
+  boostCreativeId: string | null;
+  boostSpendCents: number | null;
+  boostCreatedAt: string | null;
+  boostInsightsSyncedAt: string | null;
+  boostInsights: Record<string, unknown> | null;
+  boostError: string | null;
+  /** ISO timestamp set by sweep cron when FB Graph API returns "doesn't exist" for the externalPostId */
+  removedFromFbAt: string | null;
 }
 
 function rowToPost(row: Record<string, unknown>): SocialPost {
@@ -141,6 +193,26 @@ function rowToPost(row: Record<string, unknown>): SocialPost {
     externalPostUrl: (row.external_post_url as string) ?? null,
     errorMsg: (row.error_msg as string) ?? null,
     metadata: (row.metadata as Record<string, unknown>) ?? null,
+    boostStatus: (row.boost_status as BoostStatus) ?? "none",
+    boostCampaignId: (row.boost_campaign_id as string) ?? null,
+    boostAdsetId: (row.boost_adset_id as string) ?? null,
+    boostAdId: (row.boost_ad_id as string) ?? null,
+    boostCreativeId: (row.boost_creative_id as string) ?? null,
+    boostSpendCents:
+      row.boost_spend_cents !== null && row.boost_spend_cents !== undefined
+        ? Number(row.boost_spend_cents)
+        : null,
+    boostCreatedAt: row.boost_created_at
+      ? new Date(row.boost_created_at as string).toISOString()
+      : null,
+    boostInsightsSyncedAt: row.boost_insights_synced_at
+      ? new Date(row.boost_insights_synced_at as string).toISOString()
+      : null,
+    boostInsights: (row.boost_insights as Record<string, unknown>) ?? null,
+    boostError: (row.boost_error as string) ?? null,
+    removedFromFbAt: row.removed_from_fb_at
+      ? new Date(row.removed_from_fb_at as string).toISOString()
+      : null,
   };
 }
 
@@ -471,4 +543,216 @@ export async function getStats(): Promise<QueueStats> {
     failed7d: Number(row.failed_7d ?? 0),
     totalSent: Number(row.total_sent ?? 0),
   };
+}
+
+/**
+ * Mark a post as having a boost in flight. Status transitions to 'active'
+ * (real campaign created) or 'stub' (META_AD_ACCOUNT_ID unset, logged-only).
+ */
+export async function markBoostCreated(p: {
+  id: number;
+  status: BoostStatus;
+  campaignId?: string | null;
+  adsetId?: string | null;
+  adId?: string | null;
+  creativeId?: string | null;
+  spendCents?: number | null;
+}): Promise<void> {
+  await ensureSchema();
+  await sql`
+    UPDATE social_post_queue
+    SET boost_status = ${p.status},
+        boost_campaign_id = ${p.campaignId ?? null},
+        boost_adset_id = ${p.adsetId ?? null},
+        boost_ad_id = ${p.adId ?? null},
+        boost_creative_id = ${p.creativeId ?? null},
+        boost_spend_cents = ${p.spendCents ?? null},
+        boost_created_at = NOW(),
+        boost_error = NULL,
+        updated_at = NOW()
+    WHERE id = ${p.id}
+  `;
+}
+
+export async function markBoostFailed(
+  id: number,
+  error: string,
+): Promise<void> {
+  await ensureSchema();
+  await sql`
+    UPDATE social_post_queue
+    SET boost_status = 'failed',
+        boost_error = ${error},
+        updated_at = NOW()
+    WHERE id = ${id}
+  `;
+}
+
+export async function markBoostInsights(p: {
+  id: number;
+  status: BoostStatus;
+  insights: Record<string, unknown>;
+  spendCents?: number | null;
+}): Promise<void> {
+  await ensureSchema();
+  await sql`
+    UPDATE social_post_queue
+    SET boost_status = ${p.status},
+        boost_insights = ${JSON.stringify(p.insights)}::jsonb,
+        boost_insights_synced_at = NOW(),
+        boost_spend_cents = ${p.spendCents ?? null},
+        updated_at = NOW()
+    WHERE id = ${p.id}
+  `;
+}
+
+/**
+ * Set boost_status to 'disabled' (operator opts this post OUT of any future
+ * auto-boost). Idempotent.
+ */
+export async function disableBoost(id: number): Promise<void> {
+  await ensureSchema();
+  await sql`
+    UPDATE social_post_queue
+    SET boost_status = 'disabled', updated_at = NOW()
+    WHERE id = ${id} AND boost_status = 'none'
+  `;
+}
+
+/**
+ * Find a row by its FB externalPostId. Used by the FB-import flow to dedupe:
+ * if a Page-feed scan returns a post we already track, skip it.
+ */
+export async function getByExternalPostId(
+  externalPostId: string,
+): Promise<SocialPost | null> {
+  await ensureSchema();
+  const result = await sql`
+    SELECT * FROM social_post_queue
+    WHERE external_post_id = ${externalPostId}
+    LIMIT 1
+  `;
+  return result.rows.length > 0 ? rowToPost(result.rows[0]) : null;
+}
+
+/**
+ * Insert a row representing a manually-published FB post (one that was
+ * created outside our queue — typed directly into FB by Collie/Winston).
+ * Used by the /api/wheelhouse/social/import-fb endpoint to back-fill our
+ * ledger. Status defaults to 'sent' since the post is already live on FB.
+ */
+export async function importExternalPost(p: {
+  channel: PostChannel;
+  caption: string;
+  linkUrl: string | null;
+  externalPostId: string;
+  externalPostUrl: string | null;
+  sentAt: Date;
+  sentBy: string;
+}): Promise<SocialPost> {
+  await ensureSchema();
+  const result = await sql`
+    INSERT INTO social_post_queue (
+      trigger_type, trigger_ref, channel, status, caption, link_url,
+      sent_at, sent_by, external_post_id, external_post_url
+    ) VALUES (
+      'manual_external',
+      ${"fb-import:" + p.externalPostId},
+      ${p.channel},
+      'sent',
+      ${p.caption},
+      ${p.linkUrl},
+      ${p.sentAt.toISOString()},
+      ${p.sentBy},
+      ${p.externalPostId},
+      ${p.externalPostUrl}
+    )
+    RETURNING *
+  `;
+  return rowToPost(result.rows[0]);
+}
+
+/**
+ * Mark a post as deleted on FB (Graph API returned "Object does not exist"
+ * for its externalPostId). Idempotent — sets removed_from_fb_at to NOW only
+ * if it's currently NULL.
+ */
+export async function markRemovedFromFb(id: number): Promise<void> {
+  await ensureSchema();
+  await sql`
+    UPDATE social_post_queue
+    SET removed_from_fb_at = NOW(), updated_at = NOW()
+    WHERE id = ${id} AND removed_from_fb_at IS NULL
+  `;
+}
+
+/**
+ * All sent posts with an externalPostId that haven't been marked as removed
+ * yet. Used by the sweep cron + manual cleanup endpoint to check FB existence.
+ */
+export async function getSentPostsToCheck(): Promise<SocialPost[]> {
+  await ensureSchema();
+  const result = await sql`
+    SELECT * FROM social_post_queue
+    WHERE status = 'sent'
+      AND external_post_id IS NOT NULL
+      AND external_post_id NOT LIKE 'stub:%'
+      AND removed_from_fb_at IS NULL
+    ORDER BY sent_at DESC
+    LIMIT 100
+  `;
+  return result.rows.map(rowToPost);
+}
+
+/**
+ * All currently-active boosts — for at-a-glance display on the marketing hub.
+ * No 1-hour-old filter (operator sees freshly-fired boosts immediately).
+ */
+export async function getCurrentlyBoosting(): Promise<SocialPost[]> {
+  await ensureSchema();
+  const result = await sql`
+    SELECT * FROM social_post_queue
+    WHERE boost_status = 'active'
+    ORDER BY boost_created_at DESC
+    LIMIT 20
+  `;
+  return result.rows.map(rowToPost);
+}
+
+/**
+ * Active boosts due for an insights pull. Default (cron mode): boost is
+ * 'active' AND was created more than 1 hour ago (gives Meta time to
+ * populate metrics) AND was either never synced OR last synced > 1hr ago.
+ *
+ * Pass ignoreSyncThrottle=true for operator-triggered manual sync — skips
+ * the 1hr last-synced filter so a click always refreshes. Still respects
+ * the 1hr-since-creation guard since fresh ads genuinely have no data.
+ */
+export async function getActiveBoosts(opts?: {
+  ignoreSyncThrottle?: boolean;
+}): Promise<SocialPost[]> {
+  await ensureSchema();
+  if (opts?.ignoreSyncThrottle) {
+    const result = await sql`
+      SELECT * FROM social_post_queue
+      WHERE boost_status = 'active'
+        AND boost_created_at IS NOT NULL
+      ORDER BY boost_created_at ASC
+      LIMIT 50
+    `;
+    return result.rows.map(rowToPost);
+  }
+  const result = await sql`
+    SELECT * FROM social_post_queue
+    WHERE boost_status = 'active'
+      AND boost_created_at IS NOT NULL
+      AND boost_created_at < NOW() - INTERVAL '1 hour'
+      AND (
+        boost_insights_synced_at IS NULL
+        OR boost_insights_synced_at < NOW() - INTERVAL '1 hour'
+      )
+    ORDER BY boost_created_at ASC
+    LIMIT 50
+  `;
+  return result.rows.map(rowToPost);
 }

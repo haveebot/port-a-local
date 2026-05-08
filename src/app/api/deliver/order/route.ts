@@ -235,9 +235,16 @@ export async function POST(req: NextRequest) {
     driverPayoutCents: priced.driverPayoutCents,
     palNetCents: priced.palNetCents,
   };
-  const order = await createOrder(orderInput);
+  // Beta restaurants ALWAYS take the no-Stripe path even when DELIVER_PUBLIC_LAUNCH=true.
+  // They get pending_review status so the operator can find them in the
+  // queue, confirm with the restaurant + line up a runner, and only then
+  // trigger payment via a Stripe link sent to the customer.
+  const isBetaOrder = !!restaurant.isBeta;
+  const order = await createOrder(orderInput, {
+    status: isBetaOrder ? "pending_review" : "placed",
+  });
 
-  const live = isDeliveryLive();
+  const live = isDeliveryLive() && !isBetaOrder;
 
   if (!live) {
     // BETA path — no Stripe, just intake notification (admin email

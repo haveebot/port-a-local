@@ -18,7 +18,9 @@ import {
 } from "@/lib/cartVendorSmsBlast";
 import { notifyClaimResolution } from "@/lib/beachVendorBlast";
 import { forwardInsiderSmsToAdmin } from "@/lib/insiderSmsForward";
+import { forwardStrangerSmsToAdmin } from "@/lib/strangerSmsForward";
 import { runInsiderAgent } from "@/lib/insiderSmsAgent";
+import { checkWatch, recordNotification } from "@/data/sms-watch-store";
 
 /**
  * Twilio inbound SMS webhook.
@@ -196,16 +198,51 @@ export async function POST(req: NextRequest) {
     const vendor = cartVendors.find((v) => toE164(v.phone) === fromE164);
 
     if (!vendor) {
-      // Stranger or unidentified inbound — push to operator (Winston) so a
-      // human can read + decide. Per Winston rule 2026-04-29: intake the
-      // message, surface to a human, don't try to be clever with parsing.
-      // STOP is still honored by Twilio at carrier level regardless.
-      sendSms(
-        OPERATOR_PHONE_E164,
-        `[unknown ${fromE164} → PAL] ${body}`.slice(0, 1500),
-      ).catch((err) =>
-        console.error("[twilio/inbound] stranger surface to operator failed:", err),
-      );
+      // Stranger or unidentified inbound — surface via TWO channels:
+      //
+      // 1) SMS forward to operator's phone (immediate human notification).
+      //    If the number is on the SMS watch list (we're expecting a reply
+      //    from a recent outbound), the push is *elevated* with a 🔔 prefix
+      //    + context label so it stands out from random stranger texts.
+      //
+      // 2) Email forward to admin@theportalocal.com (machine-readable shared
+      //    state). Origin: 2026-05-04 — the SMS-only path pinned inbound
+      //    state to Winston's physical phone, breaking hub-spoke architecture
+      //    (`feedback_hub_spoke_architecture.md`).
+      //
+      // RACE FIX (2026-05-06): both calls are AWAITED before TwiML return.
+      // Previously fire-and-forget — Bron Doyle's reply slipped through
+      // because Vercel killed the function before sendSms's network call
+      // completed. Twilio's 15s webhook budget easily covers both API
+      // calls (typical ~500-1500ms total).
+      const watch = await checkWatch(fromE164).catch((err) => {
+        console.error("[twilio/inbound] checkWatch failed:", err);
+        return null;
+      });
+      const operatorBody = watch
+        ? `🔔 WATCHED [${watch.context}] ${fromE164} → PAL: ${body}`.slice(0, 1500)
+        : `[unknown ${fromE164} → PAL] ${body}`.slice(0, 1500);
+      const [operatorResult, adminResult] = await Promise.allSettled([
+        sendSms(OPERATOR_PHONE_E164, operatorBody),
+        forwardStrangerSmsToAdmin(fromE164, body, messageSid),
+      ]);
+      if (operatorResult.status === "rejected") {
+        console.error(
+          "[twilio/inbound] stranger surface to operator failed:",
+          operatorResult.reason,
+        );
+      }
+      if (adminResult.status === "rejected") {
+        console.error(
+          "[twilio/inbound] stranger forward to admin@ failed:",
+          adminResult.reason,
+        );
+      }
+      if (watch && operatorResult.status === "fulfilled") {
+        recordNotification(fromE164).catch((err) =>
+          console.error("[twilio/inbound] recordNotification failed:", err),
+        );
+      }
       return twimlResponse();
     }
 

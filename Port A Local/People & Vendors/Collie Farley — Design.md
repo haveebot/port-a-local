@@ -1,11 +1,15 @@
-# Collie Caraker — Design
+# Collie Farley — Design
 _Last updated: 2026-04-10_
 
 ## Who She Is
 Winston's wife. Co-founder and expert designer. Co-owner of [[The Palm Republic]] (navy + coral sunset aesthetic). Port A Local's design eye.
 
 ## Contact
+- **Cell:** +12107095771
 - **Email:** collie.breah@gmail.com
+- **Slug (super-admin roster):** `collie` (in `src/data/super-admins.ts` + `src/data/insiders.ts` + `src/lib/wheelhousePush.ts`)
+- **Preferred channel:** SMS for fast pings; email for design feedback / brand decisions
+- **Receives:** all PAL revenue events as super-admin SMS pings (cart / beach / delivery / locals / housekeeping / maintenance)
 
 ## Role on PA Local
 - Design advisor — final word on visual direction

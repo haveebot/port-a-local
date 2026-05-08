@@ -1,0 +1,53 @@
+# CODEOWNERS for haveebot/port-a-local
+#
+# Set alongside agent-driven contributor autonomy (2026-05-04).
+# Branch protection requires status checks (Vercel build) but no
+# general approving review. Code owner review IS required on the paths
+# below — meaning sensitive surfaces still get operator eyes; cosmetic
+# / brand / copy / component changes auto-merge once checks pass.
+#
+# Default (no codeowner): no review required — checks-only gate.
+
+# ──────────────────────────────────────────────────────────────────
+# Backend / API / data — operator review required
+# ──────────────────────────────────────────────────────────────────
+/app/api/                       @haveebot @nickbmerrill-collab
+/middleware.ts                  @haveebot @nickbmerrill-collab
+/auth.ts                        @haveebot @nickbmerrill-collab
+/auth.config.ts                 @haveebot @nickbmerrill-collab
+
+# Auth / DB / messaging / payment integrations
+/lib/auth/                      @haveebot @nickbmerrill-collab
+/lib/db/                        @haveebot @nickbmerrill-collab
+/lib/stripe/                    @haveebot @nickbmerrill-collab
+/lib/twilio/                    @haveebot @nickbmerrill-collab
+/lib/resend/                    @haveebot @nickbmerrill-collab
+/db/                            @haveebot @nickbmerrill-collab
+/drizzle/                       @haveebot @nickbmerrill-collab
+
+# ──────────────────────────────────────────────────────────────────
+# Build / deps / config — operator review required
+# ──────────────────────────────────────────────────────────────────
+/package.json                   @haveebot @nickbmerrill-collab
+/package-lock.json              @haveebot @nickbmerrill-collab
+/pnpm-lock.yaml                 @haveebot @nickbmerrill-collab
+/next.config.*                  @haveebot @nickbmerrill-collab
+/vercel.json                    @haveebot @nickbmerrill-collab
+/tsconfig.json                  @haveebot @nickbmerrill-collab
+/drizzle.config.*               @haveebot @nickbmerrill-collab
+
+# Env (should already be gitignored — defense-in-depth)
+/.env*                          @haveebot @nickbmerrill-collab
+
+# CI / Actions
+/.github/workflows/             @haveebot @nickbmerrill-collab
+
+# ──────────────────────────────────────────────────────────────────
+# Free-merge surfaces (no codeowner = auto-merges on checks pass):
+#   - app/(public)/**           Brand pages, marketing, public routes
+#   - components/**             UI components
+#   - styles/**, app/globals.css  Styling
+#   - public/**                 Static assets, images
+#   - content/**, docs/**       Editorial content + docs
+#   - CONTRIBUTORS.md           Contributor list
+# ──────────────────────────────────────────────────────────────────

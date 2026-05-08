@@ -3,6 +3,7 @@ import { brandedOG, ogSize, ogContentType } from "@/lib/brandedOG";
 export const alt = "My Trip — saved spots in Port Aransas";
 export const size = ogSize;
 export const contentType = ogContentType;
+export const dynamic = "force-dynamic";
 
 export default function Image() {
   return brandedOG({
@@ -12,5 +13,6 @@ export default function Image() {
     subtitle:
       "Pin businesses, heritage stories, and dispatch pieces. Plan the trip you want, with the places you actually care about.",
     lockupVariant: "standard",
+    category: "my-trip",
   });
 }

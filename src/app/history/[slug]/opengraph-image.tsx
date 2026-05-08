@@ -6,6 +6,7 @@ import { emojiToIconName } from "@/components/brand/PortalIcon";
 export const alt = "Port A Heritage";
 export const size = ogSize;
 export const contentType = ogContentType;
+export const dynamic = "force-dynamic";
 
 export default async function Image({
   params,
@@ -45,5 +46,6 @@ export default async function Image({
     subtitle: story.subtitle,
     meta: `${story.readTime} read`,
     lockupVariant: "standard",
+    category: "heritage",
   });
 }

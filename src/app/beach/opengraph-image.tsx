@@ -3,6 +3,7 @@ import { brandedOG, ogSize, ogContentType } from "@/lib/brandedOG";
 export const alt = "Beach cabana, chair, and umbrella rentals in Port Aransas";
 export const size = ogSize;
 export const contentType = ogContentType;
+export const dynamic = "force-dynamic";
 
 export default function Image() {
   return brandedOG({
@@ -12,5 +13,6 @@ export default function Image() {
     subtitle:
       "Cabana ($300/day) or chairs & umbrellas ($85/day), set up and taken down for you. Anywhere on Mustang Island.",
     lockupVariant: "standard",
+    category: "beach",
   });
 }
