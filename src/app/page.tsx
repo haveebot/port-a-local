@@ -248,7 +248,7 @@ export default function Home() {
             </div>
 
             {/* Content — right column on desktop, right-aligned */}
-            <div className="lg:col-span-7 text-center lg:text-right">
+            <div className="lg:col-span-7 text-center">
               <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-coral-500/30 bg-coral-500/10 text-coral-300 text-sm font-medium tracking-wide mb-6">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -264,11 +264,11 @@ export default function Home() {
                 It
               </h2>
 
-              <p className="text-base sm:text-lg text-navy-200 font-light max-w-xl mx-auto lg:ml-auto lg:mr-0 mb-8 leading-relaxed">
+              <p className="text-base sm:text-lg text-navy-200 font-light max-w-xl mx-auto mb-8 leading-relaxed">
                 Gully knows the island. Search locally-vetted businesses, heritage articles, menus, adventures, happy hours and more. No ads, no sponsored results. Just local results from your favorite Local — Gully.
               </p>
 
-              <form action="/gully" className="max-w-2xl mx-auto lg:ml-auto lg:mr-0 mb-6 relative">
+              <form action="/gully" className="max-w-2xl mx-auto mb-6 relative">
                 <div className="relative">
                   <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-navy-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -282,7 +282,7 @@ export default function Home() {
                 </div>
               </form>
 
-              <p className="text-xs text-coral-300 uppercase tracking-[0.2em] mb-3 inline-flex items-center justify-center lg:justify-end gap-2 w-full flex-wrap">
+              <p className="text-xs text-coral-300 uppercase tracking-[0.2em] mb-3 inline-flex items-center justify-center gap-2 w-full flex-wrap">
                 <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                   <path d="M12 2l1.8 5.4L19 9l-5.2 1.6L12 16l-1.8-5.4L5 9l5.2-1.6L12 2z" />
                   <path d="M19 14l.9 2.7L22 17.5l-2.1.8L19 21l-.9-2.7L16 17.5l2.1-.8L19 14z" opacity="0.7" />
@@ -292,7 +292,7 @@ export default function Home() {
                   · powered by Heye Lab
                 </span>
               </p>
-              <div className="flex flex-wrap justify-center lg:justify-end gap-2">
+              <div className="flex flex-wrap justify-center gap-2">
                 {[
                   { label: "What is Sandfest?", q: "What is Sandfest?" },
                   { label: "Where can I see dolphins?", q: "Where can I see dolphins?" },

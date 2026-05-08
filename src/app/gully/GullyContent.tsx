@@ -213,8 +213,8 @@ export default function GullyContent({ trendingSlot }: GullyContentProps) {
               />
             </div>
 
-            {/* Content — right column on desktop, right-aligned */}
-            <div className="lg:col-span-8 text-center lg:text-right">
+            {/* Content — right column on desktop, centered */}
+            <div className="lg:col-span-8 text-center">
               <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-coral-500/30 bg-coral-500/10 text-coral-300 text-sm font-medium tracking-wide mb-6">
                 <span className="w-1.5 h-1.5 rounded-full bg-coral-400" />
                 Port A&apos;s Local Search Engine
@@ -222,12 +222,12 @@ export default function GullyContent({ trendingSlot }: GullyContentProps) {
               <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold text-sand-50 mb-3 leading-[0.95]">
                 Gully
               </h1>
-              <p className="text-lg text-navy-200 font-light mb-8 max-w-xl mx-auto lg:ml-auto lg:mr-0">
+              <p className="text-lg text-navy-200 font-light mb-8 max-w-xl mx-auto">
                 Find anything on the island. Restaurants, bars, charters, shops, history and more — just Gully it.
               </p>
 
               {/* Search input */}
-              <div className="relative max-w-2xl mx-auto lg:ml-auto lg:mr-0">
+              <div className="relative max-w-2xl mx-auto">
             <svg
               className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-navy-400"
               fill="none"
@@ -252,7 +252,7 @@ export default function GullyContent({ trendingSlot }: GullyContentProps) {
           </div>
 
               {/* Open Now + Category filters */}
-              <div className="flex flex-wrap justify-center lg:justify-end gap-2 mt-4">
+              <div className="flex flex-wrap justify-center gap-2 mt-4">
                 {hasOpenNowData && (
                   <button
                     onClick={() => setOpenNow(!openNow)}
