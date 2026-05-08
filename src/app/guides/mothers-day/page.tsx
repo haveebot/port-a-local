@@ -1,5 +1,6 @@
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { BreadcrumbListSchema } from "@/components/StructuredData";
@@ -15,7 +16,21 @@ export const metadata: Metadata = {
   },
 };
 
-const days = [
+interface DaySpot {
+  name: string;
+  note: string;
+  phone?: string;
+  url?: string;
+}
+
+interface Day {
+  label: string;
+  tagline: string;
+  body: string[];
+  spots: DaySpot[];
+}
+
+const days: Day[] = [
   {
     label: "Friday",
     tagline: "Live music. Dinner.",
@@ -25,7 +40,11 @@ const days = [
     ],
     spots: [
       { name: "Bron's Backyard", note: "Live music with John Elijah Band" },
-      { name: "Lisabella's", note: "Dinner — reservations recommended" },
+      {
+        name: "Lisabella's",
+        note: "Dinner — reservations by phone",
+        phone: "(361) 749-4222",
+      },
     ],
   },
   {
@@ -52,7 +71,11 @@ const days = [
       "Wind down with a stroll on the sand. The kind of slow Sunday that ends a weekend exactly right.",
     ],
     spots: [
-      { name: "Tortuga's Saltwater Grill", note: "Brunch — reservations recommended" },
+      {
+        name: "Tortuga's Saltwater Grill",
+        note: "Brunch — book ahead",
+        url: "https://www.tortugassaltwatergrill.com/reservations",
+      },
     ],
   },
 ];
@@ -69,30 +92,41 @@ export default function MothersDayGuide() {
       />
       <Navigation />
 
-      {/* Hero */}
-      <section className="pt-28 pb-16 hero-gradient relative">
+      {/* Hero — sunset/silhouette photo as full-bleed background; navy
+          gradient overlay holds text contrast. (2026-05-08 Collie.) */}
+      <section className="pt-28 pb-16 relative bg-navy-900 overflow-hidden">
+        <div className="absolute inset-0">
+          <Image
+            src="/images/mothers-day-hero.png"
+            alt=""
+            fill
+            sizes="100vw"
+            className="object-cover"
+            priority
+          />
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-b from-navy-900/60 via-navy-900/30 to-navy-900/80" />
         <div className="absolute bottom-0 left-0 right-0 coral-line" />
-        <div className="absolute inset-0 palm-pattern opacity-15" />
 
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6">
-          <div className="flex items-center gap-2 text-sm text-navy-300 mb-6">
+          <div className="flex items-center gap-2 text-sm text-navy-200 mb-6">
             <Link href="/guides" className="hover:text-coral-300 transition-colors">
               Guides
             </Link>
             <span className="text-coral-300/40">/</span>
-            <span className="text-navy-200">Mother&apos;s Day in Port A</span>
+            <span className="text-sand-100">Mother&apos;s Day in Port A</span>
           </div>
 
-          <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-coral-500/30 bg-coral-500/10 text-coral-300 text-sm font-medium tracking-[0.2em] uppercase mb-6">
+          <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-coral-500/30 bg-coral-500/10 text-coral-200 text-sm font-medium tracking-[0.2em] uppercase mb-6 backdrop-blur-sm">
             From Beach to Brunch
           </div>
 
-          <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-sand-50 leading-[1.05] mb-6">
+          <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-sand-50 leading-[1.05] mb-6 drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]">
             Celebrate Your Leading Lady the{" "}
             <span className="italic text-coral-400">Port A</span> Way
           </h1>
 
-          <p className="text-lg sm:text-xl text-navy-200 font-light max-w-2xl">
+          <p className="text-lg sm:text-xl text-sand-100 font-light max-w-2xl drop-shadow-[0_1px_4px_rgba(0,0,0,0.5)]">
             Plan your Mother&apos;s Day weekend like a local with this handy guide.
           </p>
         </div>
@@ -136,19 +170,42 @@ export default function MothersDayGuide() {
                   </p>
                 ))}
                 <ul className="mt-8 space-y-3 border-t border-sand-200 pt-6">
-                  {day.spots.map((spot) => (
-                    <li
-                      key={spot.name}
-                      className="flex flex-col sm:flex-row sm:items-baseline sm:gap-3"
-                    >
-                      <span className="font-semibold text-navy-900 text-sm sm:text-base">
-                        {spot.name}
-                      </span>
-                      <span className="text-navy-400 text-xs sm:text-sm">
-                        {spot.note}
-                      </span>
-                    </li>
-                  ))}
+                  {day.spots.map((spot) => {
+                    const telHref = spot.phone
+                      ? `tel:${spot.phone.replace(/\D/g, "")}`
+                      : null;
+                    return (
+                      <li
+                        key={spot.name}
+                        className="flex flex-col sm:flex-row sm:items-baseline sm:flex-wrap sm:gap-x-3 sm:gap-y-1"
+                      >
+                        <span className="font-semibold text-navy-900 text-sm sm:text-base">
+                          {spot.name}
+                        </span>
+                        <span className="text-navy-400 text-xs sm:text-sm">
+                          {spot.note}
+                        </span>
+                        {telHref && (
+                          <a
+                            href={telHref}
+                            className="text-coral-500 hover:text-coral-600 text-xs sm:text-sm font-medium"
+                          >
+                            {spot.phone}
+                          </a>
+                        )}
+                        {spot.url && (
+                          <a
+                            href={spot.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-coral-500 hover:text-coral-600 text-xs sm:text-sm font-medium"
+                          >
+                            Book online →
+                          </a>
+                        )}
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
             </div>

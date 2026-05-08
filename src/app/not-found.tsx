@@ -31,22 +31,22 @@ export default function NotFound() {
               />
             </div>
 
-            {/* Content — right column, right-aligned, with faint 404
+            {/* Content — right column, centered, with faint 404
                 watermark behind. */}
             <div className="lg:col-span-7 relative">
               {/* Faint "404" watermark */}
               <div
                 aria-hidden="true"
-                className="absolute inset-0 flex items-center justify-center lg:justify-end pointer-events-none select-none overflow-hidden"
+                className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden"
               >
                 <span className="font-display font-black text-[16rem] sm:text-[22rem] lg:text-[26rem] text-navy-200/[0.04] leading-none">
                   404
                 </span>
               </div>
 
-              <div className="relative text-center lg:text-right">
+              <div className="relative text-center">
                 {/* Small foreground lighthouse */}
-                <div className="flex justify-center lg:justify-end mb-6">
+                <div className="flex justify-center mb-6">
                   <LighthouseMark size={72} variant="light" detail="standard" />
                 </div>
 
@@ -58,9 +58,9 @@ export default function NotFound() {
                   Lost at Sea
                 </h1>
 
-                <div className="gold-line max-w-xs mx-auto lg:ml-auto lg:mr-0 mb-6" />
+                <div className="gold-line max-w-xs mx-auto mb-6" />
 
-                <p className="text-lg text-navy-200 font-light mb-4 leading-relaxed max-w-xl mx-auto lg:ml-auto lg:mr-0">
+                <p className="text-lg text-navy-200 font-light mb-4 leading-relaxed max-w-xl mx-auto">
                   Looks like this page washed out with the tide. It may have moved,
                   been renamed, or just does not exist on the island.
                 </p>
@@ -69,7 +69,7 @@ export default function NotFound() {
                   27°50′N · 97°03′W — but whatever you were looking for is not here.
                 </p>
 
-                <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-end">
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Link
                     href="/"
                     className="inline-flex items-center justify-center px-8 py-4 rounded-xl btn-coral text-base font-semibold tracking-wide"

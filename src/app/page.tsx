@@ -12,7 +12,21 @@ import AskGullyTrending from "@/components/AskGullyTrending";
 import Image from "next/image";
 import Link from "next/link";
 
+// Re-render hourly so date-based timed sections (e.g. Mother's Day,
+// future seasonal callouts) tick over without needing a fresh deploy.
+export const revalidate = 3600;
+
+// Timed-content cutoff registry. Pattern: define an end timestamp per
+// timed section; gate the section's render with a `Date.now() < cutoff`
+// check. Standalone guide pages stay live; only the homepage callout
+// disappears. Add new entries here as future seasonal sections ship.
+const MOTHERS_DAY_CUTOFF_MS = new Date(
+  "2026-05-11T05:00:00.000Z",
+).getTime(); // Midnight Sunday May 10 → Monday May 11, Central Daylight Time.
+
 export default function Home() {
+  const showMothersDay = Date.now() < MOTHERS_DAY_CUTOFF_MS;
+
   return (
     <main className="min-h-screen">
       <WebsiteSchema />
@@ -67,37 +81,40 @@ export default function Home() {
 
       {/* Mother's Day in Port A — links to /guides/mothers-day. Coral-300
           band; italic display headline left, CTA copy middle, location-
-          heart pin icon right. (2026-05-07 Mother's Day weekend feature.) */}
-      <Link
-        href="/guides/mothers-day"
-        className="block bg-coral-300 hover:bg-coral-400 transition-colors group"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-            <div className="lg:col-span-5">
-              <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-sand-50 italic leading-[1.0]">
-                Celebrate<br />
-                Mother&apos;s Day<br />
-                in Port A.
-              </h2>
-            </div>
-            <div className="lg:col-span-4 lg:border-l lg:border-sand-50/40 lg:pl-10">
-              <p className="text-base sm:text-lg text-navy-900 font-light leading-relaxed">
-                Check out our curated Local guide to plan the perfect weekend for your leading lady.
-              </p>
-            </div>
-            <div className="lg:col-span-3 flex justify-center lg:justify-end">
-              <Image
-                src="/icons/location-heart.svg"
-                alt=""
-                width={144}
-                height={144}
-                className="w-32 h-32 sm:w-36 sm:h-36 group-hover:scale-105 transition-transform"
-              />
+          heart pin icon right. (2026-05-07 Mother's Day weekend feature.)
+          Auto-hides after MOTHERS_DAY_CUTOFF_MS (midnight Sun → Mon CT). */}
+      {showMothersDay && (
+        <Link
+          href="/guides/mothers-day"
+          className="block bg-coral-300 hover:bg-coral-400 transition-colors group"
+        >
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+              <div className="lg:col-span-5">
+                <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-sand-50 italic leading-[1.0]">
+                  Celebrate<br />
+                  Mother&apos;s Day<br />
+                  in Port A.
+                </h2>
+              </div>
+              <div className="lg:col-span-4 lg:border-l lg:border-sand-50/40 lg:pl-10">
+                <p className="text-base sm:text-lg text-navy-900 font-light leading-relaxed">
+                  Check out our curated Local guide to plan the perfect weekend for your leading lady.
+                </p>
+              </div>
+              <div className="lg:col-span-3 flex justify-center lg:justify-end">
+                <Image
+                  src="/icons/location-heart.svg"
+                  alt=""
+                  width={144}
+                  height={144}
+                  className="w-32 h-32 sm:w-36 sm:h-36 group-hover:scale-105 transition-transform"
+                />
+              </div>
             </div>
           </div>
-        </div>
-      </Link>
+        </Link>
+      )}
 
       {/* Services on the Island — Portal Callouts, relocated. Styling
           unchanged from prior position. */}
@@ -248,7 +265,7 @@ export default function Home() {
             </div>
 
             {/* Content — right column on desktop, right-aligned */}
-            <div className="lg:col-span-7 text-center lg:text-right">
+            <div className="lg:col-span-7 text-center">
               <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-coral-500/30 bg-coral-500/10 text-coral-300 text-sm font-medium tracking-wide mb-6">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -264,11 +281,11 @@ export default function Home() {
                 It
               </h2>
 
-              <p className="text-base sm:text-lg text-navy-200 font-light max-w-xl mx-auto lg:ml-auto lg:mr-0 mb-8 leading-relaxed">
+              <p className="text-base sm:text-lg text-navy-200 font-light max-w-xl mx-auto mb-8 leading-relaxed">
                 Gully knows the island. Search locally-vetted businesses, heritage articles, menus, adventures, happy hours and more. No ads, no sponsored results. Just local results from your favorite Local — Gully.
               </p>
 
-              <form action="/gully" className="max-w-2xl mx-auto lg:ml-auto lg:mr-0 mb-6 relative">
+              <form action="/gully" className="max-w-2xl mx-auto mb-6 relative">
                 <div className="relative">
                   <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-navy-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -282,7 +299,7 @@ export default function Home() {
                 </div>
               </form>
 
-              <p className="text-xs text-coral-300 uppercase tracking-[0.2em] mb-3 inline-flex items-center justify-center lg:justify-end gap-2 w-full flex-wrap">
+              <p className="text-xs text-coral-300 uppercase tracking-[0.2em] mb-3 inline-flex items-center justify-center gap-2 w-full flex-wrap">
                 <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                   <path d="M12 2l1.8 5.4L19 9l-5.2 1.6L12 16l-1.8-5.4L5 9l5.2-1.6L12 2z" />
                   <path d="M19 14l.9 2.7L22 17.5l-2.1.8L19 21l-.9-2.7L16 17.5l2.1-.8L19 14z" opacity="0.7" />
@@ -292,7 +309,7 @@ export default function Home() {
                   · powered by Heye Lab
                 </span>
               </p>
-              <div className="flex flex-wrap justify-center lg:justify-end gap-2">
+              <div className="flex flex-wrap justify-center gap-2">
                 {[
                   { label: "What is Sandfest?", q: "What is Sandfest?" },
                   { label: "Where can I see dolphins?", q: "Where can I see dolphins?" },
