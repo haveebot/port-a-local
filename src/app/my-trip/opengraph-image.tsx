@@ -13,5 +13,6 @@ export default function Image() {
     subtitle:
       "Pin businesses, heritage stories, and dispatch pieces. Plan the trip you want, with the places you actually care about.",
     lockupVariant: "standard",
+    category: "my-trip",
   });
 }

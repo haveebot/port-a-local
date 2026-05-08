@@ -13,5 +13,6 @@ export default function Image() {
     subtitle:
       "Real Port Aransas spots. Local drivers. No app. PAL picks up, PAL delivers — you eat on the porch.",
     lockupVariant: "standard",
+    category: "pal-delivery",
   });
 }

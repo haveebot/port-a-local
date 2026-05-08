@@ -13,5 +13,6 @@ export default function Image() {
     subtitle:
       "Seasonal species, fishing types, TPWD regulations, live conditions, and captain report links.",
     lockupVariant: "standard",
+    category: "fishing-report",
   });
 }

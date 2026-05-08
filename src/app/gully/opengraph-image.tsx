@@ -13,5 +13,6 @@ export default function Image() {
     subtitle:
       "Port A's local search engine. Every business, every heritage story, every dispatch — one unified index. Built by locals.",
     lockupVariant: "standard",
+    category: "gully",
   });
 }

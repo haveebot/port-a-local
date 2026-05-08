@@ -49,5 +49,6 @@ export default async function Image({
     title: cat.name,
     subtitle: cat.description,
     lockupVariant: "standard",
+    category: "directory",
   });
 }

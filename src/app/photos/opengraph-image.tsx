@@ -13,5 +13,6 @@ export default function Image() {
     subtitle:
       "The island, as locals and visitors see it. Anonymous submissions welcome.",
     lockupVariant: "standard",
+    category: "photos",
   });
 }

@@ -13,5 +13,6 @@ export default function Image() {
     subtitle:
       "Book direct through PAL: golf cart rentals, beach setups, property maintenance. Plus vetted service providers from the directory.",
     lockupVariant: "standard",
+    category: "services",
   });
 }

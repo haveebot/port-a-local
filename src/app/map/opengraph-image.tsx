@@ -13,5 +13,6 @@ export default function Image() {
     subtitle:
       "Every business on Port A Local, placed on real coordinates. 127+ spots across Mustang Island.",
     lockupVariant: "standard",
+    category: "map",
   });
 }

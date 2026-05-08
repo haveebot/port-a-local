@@ -66,6 +66,7 @@ export default async function Image({
       subtitle: dispatch.subtitle,
       meta: `${dispatch.readTime} · ${date}`,
       lockupVariant: "standard",
+      category: "dispatch",
     });
   }
 
