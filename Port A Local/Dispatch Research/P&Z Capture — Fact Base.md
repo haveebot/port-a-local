@@ -1394,6 +1394,82 @@ This fact base is more friendly to the working thesis than not. But several item
 
 ---
 
+## 2026-05-08 Update — The internal-pivot RESOLUTION 2025-R14 + Turner Ramirez continuity
+
+**This section was added on 2026-05-08 after a focused civicweb pull closed the 2019 → 2025 arc with full vote, contractor, architect, and bond-counsel records. It supersedes any prior framing of the conference-center outcome as "stalled" or "wound down." The structural arc is now: external RFP rubric-winner rejected (Jan 2019) → external partnership winds down (2020-2022) → council questions internal funding (Aug 2023) → Bond Counsel proposes reimbursement mechanism (Nov 2024) → 7-0 vote awarding internal $9.575M contract (Mar 2025) → construction underway (Jun 2025).**
+
+### McCombs Properties / Palmilla — clarification
+
+**Palmilla Beach is owned by McCombs Properties** (the Red McCombs San Antonio empire — same family behind the Minnesota Vikings ownership and Red McCombs Media). The 2012 acquisition (~150 acres of the Newport tract + the Arnold Palmer golf course) is documented at Schnell Urban Design's Palmilla Beach project archive. Earlier framing in this fact base treated McCombs Properties' appearance in the 2019 Resolution template's awardee field as a procedural-shell error ("wrong opponent name"). **That framing was inaccurate.** The Resolution template named McCombs Properties because that's Palmilla Beach's parent — the draft Resolution anticipated Palmilla/McCombs winning, consistent with the higher rubric score (Palmilla 182 vs Cinnamon Shore 175). Council voted 7-0 against the draft and awarded Cinnamon Shore + ZJZ Hospitality partnership instead; the "blank awardee" field was the post-vote update placeholder.
+
+**The 2019 7-0 vote, restated structurally:** council rejected the higher-scoring San-Antonio-anchored bidder (Palmilla / McCombs Properties — the Red McCombs empire) in favor of the lower-scoring Atlanta-anchored bidder (Cinnamon Shore + ZJZ Hospitality). Brett Hentz (Tourism Bureau CEO; hired January 2017 via a search committee chaired by Suzette Freeman of Mustang Island Ventures LLC) was running the procurement and briefed council on the bidders.
+
+### RESOLUTION 2025-R14 — March 25, 2025 (verbatim from civicweb minutes)
+
+> *"Awarding Request for Proposal for the City Of Port Aransas – City Hall/Civic Center Expansion & Renovation; Funds From General Fund Account #050-66320 and Facility Fund 115-66320; Authorizing the City Manager to Act as the Executive Officer and Authorized Representative of the City in All Matters Pertaining to Said Bid Award."*
+
+**Project:** $9 million budget; located at 710 W. Avenue A (existing City Hall). Architect: **Turner Ramirez Architects** (Project Manager: Jody Schade). City Manager: **David Parsons**. Bond Counsel: **Andrew Friedman, Samco Capital Markets**.
+
+**Three bids received (called for March 18, 2025):**
+
+| Bidder | Bid |
+|---|---|
+| Beecroft Construction | $10,144,799 |
+| **Weaver and Jacobs Constructors** | **$9,575,000** ← **awarded** |
+| Broaddus Construction | $10,478,325 |
+
+**Vote — Unanimous 7-0 For:**
+
+| Member | Vote |
+|---|---|
+| Mayor Wendy Moore | For |
+| Mayor Pro-Tem Kelly Owens | For |
+| Councilmember Mark Winton | For |
+| Councilmember Jo Ellyn Krueger | For |
+| Councilmember Tanya Chambers | For |
+| Councilmember Charles Crawford | **For — motioned** |
+| Councilmember Dale Christianson | **For — seconded** |
+
+**Funding mechanism (verbatim, lines 195-201 of the Mar 25, 2025 minutes):**
+
+> *"...November however the idea to apply those funds towards the Civic Center Expansion Project was presented. Bond Council suggested a reimbursement Resolution on the portion of the Civic Center Project being funded by HOT tax in which the City would reimburse itself with venue tax, if passed. City Manager Parsons reiterated to Council they are not committing to venue tax or a future streetscape project with this Resolution. City Manager Parsons introduced Bond Councilman Andrew Friedman with Samco Capital Markets."*
+
+The mechanism: HOT tax funds the Civic Center expansion portion initially; if voters later approve a venue tax, the city reimburses itself. The general-fund + facility-fund portions ($4.275M + $5.35M per the FY 2024-25 budget) cover the City Hall renovation and the rest of the Civic Center.
+
+### Aug 8, 2023 Special Meeting — the funding-source question (verbatim)
+
+> *"Mayor Moore stated that aside from the major addition, the City Hall renovation and expansion, which raises questions about its funding source, most of the requests from the council goals workshop and staff requests appear to be incorporated into the budget."*
+
+> *"Staff provided two exhibits detailing the administrative and Civic Center expansions. Director Honea stated that the Civic Center expansion would be funded primarily from the Hotel Motel fund account and the Facility fund account."*
+
+> *"...a tax anticipation note (TAN) of $14 million to maintain a lower tax rate while funding key projects."*
+
+The Aug 2023 minutes establish that 18 months before RESOLUTION 2025-R14, the project was already a known "major addition" with funding from the Hotel Motel fund + Facility fund — the same pool that under 2017 HMT legislation would have funded the 2019 external Hotel Conference Center under Lamkin / Cinnamon Shore + ZJZ.
+
+### The Turner Ramirez continuity finding
+
+**Turner Ramirez Architects (TRA) was on Cinnamon Shore's 2019 winning bid team** (per Fact Base section "Supporting team on Cinnamon Shore winning bid"). **TRA is also the architect of the 2025 City Hall / Civic Center Expansion & Renovation.** The same firm bridges both sides of the six-year external→internal pivot. Whether this is incidental (TRA is the regional go-to for civic / hospitality projects) or structural (continuity by design) is a research follow-up. **At minimum, the firm bridging both votes is on the record on both sides of the conference-center disposition.**
+
+### Crawford on both votes
+
+Charles Crawford was on the 2019 Hotel Conference Center RFP committee (per civicweb Jan 17, 2019 packet) and motioned the 2025 internal-alternative resolution. Both votes 7-0. He is the single named individual present at the structural pivot from external operator to internal facility.
+
+### Net structural finding for the Dispatch piece
+
+**Same Hotel Motel Tax revenue stream (under 2017 HB 4347 legislation that originally enabled the conference-center incentive). External private operator rejected. Internal city-owned facility approved. Both votes 7-0 six years apart. Crawford motioned both directions.** The dollars stayed; the recipient flipped from external (Cinnamon Shore + ZJZ + Lamkin / Sea Oats Group) to internal (Civic Center expansion absorbing the conference function the 2019 RFP would have built externally). Same architect on both sides of the bridge.
+
+### Records cited (this update)
+
+| Record | Source URL |
+|---|---|
+| Civicweb portal — Document Center | https://cityofportaransas.civicweb.net/filepro/documents/ |
+| Mar 25, 2025 City Council Regular Meeting Minutes (PDF) | https://cityofportaransas.civicweb.net/filepro/document/160874/ |
+| Aug 8, 2023 City Council Special Meeting Minutes (PDF) | https://cityofportaransas.civicweb.net/filepro/document/57145/ |
+| June 4, 2025 City Hall construction public notice | https://cityofportaransas.org/2025/06/04/please-pardon-our-construction/ |
+| FY 2024-25 budget reporting (South Jetty) | https://www.portasouthjetty.com/articles/budget-funds-large-projects-around-port-a/ |
+
+---
+
 ## Recommended next research session focus
 
 If Winston / Collie / Nick can fund a 2-hour follow-up, the highest-leverage spend is:
