@@ -1,4 +1,4 @@
-# Collie Caraker — Design
+# Collie Farley — Design
 _Last updated: 2026-04-10_
 
 ## Who She Is
