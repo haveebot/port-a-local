@@ -62,6 +62,7 @@ Steps to do, in order:
 3. Clone haveebot/port-a-local into ~/port-a-local.
 4. Run `npm install` and start `npm run dev` so I can see the site at localhost:3000.
 5. Help me open my first PR — adding myself to a CONTRIBUTORS.md file at the root of the PAL repo with a one-line bio.
+6. After opening the PR, run `gh pr merge <PR_NUMBER> --auto --squash` to enable auto-merge. (Locked rule: auto-merge has to be enabled per PR; checks gate the merge once the Vercel build passes.)
 
 Take it one step at a time. Wait for me to confirm each step worked before moving to the next.
 ```
@@ -172,6 +173,7 @@ Steps:
 3. Clone haveebot/port-a-local into ~/Projects/port-a-local.
 4. Skip `npm install` AND `npm run dev` / localhost entirely. I won't be running a local dev server. Vercel runs install + build on every PR and gives me a live preview URL on the PR page (~2 min after push). That's my "live preview." (If I ever ask for live reload later, we'll set up Codespaces or local then — that's when pnpm/npm versions start to matter.)
 5. Help me open my first PR — adding myself to a CONTRIBUTORS.md file at the root of the PAL repo. Ask me for a one-line bio when we get there.
+6. After opening the PR, run `gh pr merge <PR_NUMBER> --auto --squash` to enable auto-merge. (Locked rule: auto-merge has to be enabled per PR; checks gate the merge once the Vercel build passes.)
 
 Take it one step at a time. Wait for me to confirm each step worked before moving to the next.
 ────
