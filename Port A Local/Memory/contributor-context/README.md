@@ -35,6 +35,18 @@ These are **curated mirrors** of files in the operator-tier `workspace-memory` v
 
 **To add a new design-relevant memory:** copy from workspace-memory into this directory + commit. The contributor's Claude will auto-load on next session.
 
+## How your work is captured
+
+Your sessions don't have a separate "truck" or end-of-session ritual — capture is seamless and operator-side:
+
+- **Your PR description IS your handoff brief.** Write it like an operator truck: what shipped, why, what's next, what to watch. The operator reads PR descriptions as the handoff. No separate doc to file.
+- **Cross-Heye productivity is auto-aggregated.** A workspace script (`contributor_activity.py`) regenerates a `memory/contributor_<slug>.md` log from your merged PRs across every Heye Lab repo. Operator scans it during their start-of-session drill.
+- **Pattern-promotion is operator-driven.** When you ship something framework-relevant, the operator catches it in the activity scan and promotes to `heyedeploy/patterns/`. You don't file separate pattern docs upfront.
+
+Net: you ship PRs with thoughtful descriptions, the rest happens automatically. No extra workflow.
+
+---
+
 ## Contribution back
 
 If you (or your Claude) discover a new pattern, design observation, or convention while working on PAL, add a note in this directory under `contributor-insights/<slug>.md`. These get reviewed by Winston during PR review and promoted to HeyeDeploy framework when patterns emerge.
