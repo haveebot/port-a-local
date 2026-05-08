@@ -12,7 +12,21 @@ import AskGullyTrending from "@/components/AskGullyTrending";
 import Image from "next/image";
 import Link from "next/link";
 
+// Re-render hourly so date-based timed sections (e.g. Mother's Day,
+// future seasonal callouts) tick over without needing a fresh deploy.
+export const revalidate = 3600;
+
+// Timed-content cutoff registry. Pattern: define an end timestamp per
+// timed section; gate the section's render with a `Date.now() < cutoff`
+// check. Standalone guide pages stay live; only the homepage callout
+// disappears. Add new entries here as future seasonal sections ship.
+const MOTHERS_DAY_CUTOFF_MS = new Date(
+  "2026-05-11T05:00:00.000Z",
+).getTime(); // Midnight Sunday May 10 → Monday May 11, Central Daylight Time.
+
 export default function Home() {
+  const showMothersDay = Date.now() < MOTHERS_DAY_CUTOFF_MS;
+
   return (
     <main className="min-h-screen">
       <WebsiteSchema />
@@ -67,37 +81,40 @@ export default function Home() {
 
       {/* Mother's Day in Port A — links to /guides/mothers-day. Coral-300
           band; italic display headline left, CTA copy middle, location-
-          heart pin icon right. (2026-05-07 Mother's Day weekend feature.) */}
-      <Link
-        href="/guides/mothers-day"
-        className="block bg-coral-300 hover:bg-coral-400 transition-colors group"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-            <div className="lg:col-span-5">
-              <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-sand-50 italic leading-[1.0]">
-                Celebrate<br />
-                Mother&apos;s Day<br />
-                in Port A.
-              </h2>
-            </div>
-            <div className="lg:col-span-4 lg:border-l lg:border-sand-50/40 lg:pl-10">
-              <p className="text-base sm:text-lg text-navy-900 font-light leading-relaxed">
-                Check out our curated Local guide to plan the perfect weekend for your leading lady.
-              </p>
-            </div>
-            <div className="lg:col-span-3 flex justify-center lg:justify-end">
-              <Image
-                src="/icons/location-heart.svg"
-                alt=""
-                width={144}
-                height={144}
-                className="w-32 h-32 sm:w-36 sm:h-36 group-hover:scale-105 transition-transform"
-              />
+          heart pin icon right. (2026-05-07 Mother's Day weekend feature.)
+          Auto-hides after MOTHERS_DAY_CUTOFF_MS (midnight Sun → Mon CT). */}
+      {showMothersDay && (
+        <Link
+          href="/guides/mothers-day"
+          className="block bg-coral-300 hover:bg-coral-400 transition-colors group"
+        >
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+              <div className="lg:col-span-5">
+                <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-sand-50 italic leading-[1.0]">
+                  Celebrate<br />
+                  Mother&apos;s Day<br />
+                  in Port A.
+                </h2>
+              </div>
+              <div className="lg:col-span-4 lg:border-l lg:border-sand-50/40 lg:pl-10">
+                <p className="text-base sm:text-lg text-navy-900 font-light leading-relaxed">
+                  Check out our curated Local guide to plan the perfect weekend for your leading lady.
+                </p>
+              </div>
+              <div className="lg:col-span-3 flex justify-center lg:justify-end">
+                <Image
+                  src="/icons/location-heart.svg"
+                  alt=""
+                  width={144}
+                  height={144}
+                  className="w-32 h-32 sm:w-36 sm:h-36 group-hover:scale-105 transition-transform"
+                />
+              </div>
             </div>
           </div>
-        </div>
-      </Link>
+        </Link>
+      )}
 
       {/* Services on the Island — Portal Callouts, relocated. Styling
           unchanged from prior position. */}
