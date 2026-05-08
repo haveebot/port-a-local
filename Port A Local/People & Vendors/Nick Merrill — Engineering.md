@@ -4,6 +4,14 @@ _Last updated: 2026-04-10_
 ## Who He Is
 Winston's best friend and business partner. Engineer. GitHub: nickbmerrill-collab. Originally co-building PA Local with Winston.
 
+## Contact
+- **Cell:** +15122015353
+- **Email:** nickbmerrill@gmail.com
+- **GitHub:** nickbmerrill-collab
+- **Slug (super-admin roster):** `nick` (in `src/data/super-admins.ts` + `src/data/insiders.ts` + `src/lib/wheelhousePush.ts`)
+- **Preferred channel:** SMS for fast pings; email for substantive engineering / strategic discussion
+- **Receives:** all PAL revenue events as super-admin SMS pings — *"Heye Lab founder — platform pulse / CityDeploy template signal"*
+
 ## Relationship
 - **Current status:** Port A Local is now independently built and operated by Winston + Havee. No dependency on Nick.
 - Potential investor / future collaborator
