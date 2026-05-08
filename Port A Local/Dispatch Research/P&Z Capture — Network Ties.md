@@ -239,3 +239,84 @@ These are individual seat-by-seat findings already catalogued in `P&Z Capture �
 ## Filed: 2026-05-07 PM
 
 First built during Winston-led network-ties review session. Two households on the matrix at file time (Zahn, Lorette). Empirically grounded by the Charter Review TPIA listing + civicweb minutes. **Owens family pending relationship-confirmation; remainder of households pending Winston dump.**
+
+---
+
+## Editorial roadmap — for Collie's review
+
+_Filed 2026-05-07 PM at the close of the network-ties research session. Captures where the published piece can ship, where the next records-pulls would go, and how the editorial sequence runs from here through Part 2._
+
+### Where v2/v3 stands
+
+**v3 is publishable on what we currently have.** It uses every piece of evidence the City Secretary's Texas Public Information Act response actually delivered:
+
+| TPIA item | Status from her reply | Used in v3? |
+|---|---|---|
+| #3 — Filings naming Sea Oats / ZJZ / Bhakta / Cinnamon Shore / Lamkin (2017-present) | CLOSED — zero records, in writing | ✅ Used in the disclosure-regime § |
+| #4 — 2019 RFP grading rubric | Rubric received as attachment | ✅ Used in the lede (175 vs 182) and structural argument |
+| #5 — Charter Review Commission listing + April 15, 2026 term expiration | Listing received | ✅ Used in § 3 (Charter Review anchor) + § 9 (fix path), elevated as the structural anchor of v3 |
+
+Items #1 (narrowed CIQ filings) and #2 (CIS filings) are NOT YET IN HAND — they're pending the focused follow-up to Francisca currently held until Winston + Collie review scope.
+
+Item #4 part 2 (bidder responses) requires an Attorney General Opinion (45-60 day wait) and is also not yet in hand.
+
+### Three pending vectors of follow-up
+
+| Pending | Source | Timing | Becomes |
+|---|---|---|---|
+| **Narrowed CIQ + officer-side CIS + § 171.004 affidavits** naming the same entities | Our focused follow-up to Francisca | ~10 business days after we send | A new paragraph in v4 OR a Part 2 piece |
+| **AG opinion on 2019 bidder responses** (Cinnamon Shore + Palmilla actual proposals) | Texas Attorney General | 45-60 days from when we tell Francisca to file | Most natural **Part 2 Dispatch** — what each developer pitched, what the rubric was applied against, how the rubric scoring matched the bidders' actual content |
+| **Charter Review term expiry / Council reseating action** | civicweb agendas + South Jetty election coverage | Now (the listing's term-of-record is already lapsed; any Council reseating action would be public) | Already incorporated into v3's § 3 and § 9; future updates fold in as records become available |
+
+### The editorial sequence
+
+1. **v3 ships when Collie signs off.** The piece is complete on what we have.
+2. **The narrowed-CIQ follow-up to Francisca** can land between v3 and Part 2. Either it confirms the architecture from the officer side (which sharpens v3's § 6) or it returns more zero-records (which deepens it). Either result is a documentary update worth folding into v4 or v5 of the existing piece, not a new piece.
+3. **The Part 2 piece writes itself** when the AG opinion lands (45-60 days). With Cinnamon Shore's actual proposal, Palmilla's actual proposal, and the rubric we already have, Part 2 becomes: *"What was on the page the council voted on that didn't make the meeting packet — and what each developer pitched."* Pure documents. Same voice. Same restraint.
+4. **The longer-run structural research** (Lorette P&Z tenure dates, Suzette Freeman's 2007 land-deal role, Charlie Zahn Sr.'s entity-shielded property holdings, Marcus Starkey TREC sponsorship history, Brandon Lafayette's specific Palmilla project list) feeds whichever piece needs the depth at the time the records land.
+
+### What's NOT yet in v3 but is documented in the matrix
+
+The internal matrix carries every household tie we've sourced. The published piece (v3) renders only what's needed to land the structural argument:
+
+- **Households A, B, C, D** — fully drafted as paragraphs (Zahn-Winton, Owens, Lorette, Lafayette)
+- **Starkey household** — referenced in the pattern coda only (not yet a full paragraph; could be promoted in v4 if the Marcus Starkey TREC + NCAD pulls return more)
+- **Cocke / Aransas Club** — referenced in the pattern coda + § 7 (development-by-demolition); Will Cocke's Corpus Christi residence noted
+- **Mustang Island Ventures LLC officers** — Suzette Freeman + Keith McMullin + Becky Corder; the LLC and the 2017 CEO search committee finding are in v3's Tourism Bureau §
+- **2019 RFP grading committee — six members identified**: David Parsons (City Manager), Charles Crawford Jr. (CCMS LLC, joined Council 2023), Wendy Moore (then-Council, now Mayor + American Bank Branch President), Keith McMullin (now Tourism Bureau Chair, former 6-yr Mayor + 10-yr Councilman), Robert Tipps (TBD), Jay Jones (TBD); v3 references three of these by role
+- **The 2009 South Jetty four-principal co-appearance** — anchor sentence in v3 § 4 opener
+
+### Operator-knowledge calls already locked in v3
+
+- **Tanya Chambers** — OUT OF SCOPE for the published piece (zero references in v3) per Winston editorial calibration
+- **Marnie Pate** — name-only-by-role-count (counted in "two of the Bureau's voting seats are held by principals of two of Port Aransas's largest residential-real-estate brokerages"; not described individually)
+- **Laurie Soechting / Fred Samudio / Scott Clanton** — OUT OF SCOPE
+- **Winton's Guide / Winton's Candy** — OUT OF SCOPE (small-business tier; the piece focuses on governance bodies + regulated-industry scale)
+- **Owens family relationship** — asserted as "members of the same family"; the documentary path (the 2010 obituary) is kept internal-only per Winston calibration
+- **David Parsons "Oz"** — described by role + tenure in v3, not named per the no-individual-names rule
+
+### Open editorial questions (carried from v2 + new in v3)
+
+For Winston:
+1. Harbor Drive renaming detail in Household A — keep cinematic + true, or trim?
+2. "Last remaining harborfront properties" marketing quote — keep as-is or paraphrase?
+3. Mustang Island Ventures LLC "May 2016 — within months of his terming out as Mayor" — keep tight or expand?
+4. **NEW**: § 3 closing line *"This is, in records terms, the structural anchor of how Port Aransas governs."* — does the structural-claim register tonally, or read as too declarative?
+
+For Collie:
+1. Tonal floor: does the unnamed-structural form land as published-Dispatch voice?
+2. Pull-quote / callout placements — the seven-words-on-page-71 quote, the 175 vs 182 numbers, the Charter Review tenure stat (3 of 5 since Oct 2020), the **NEW April 15, 2026 expiration date**, the 137 permits, the $5.1M / 49 parcels, the "Approved Expert Builders" detail, the "structured to avoid conflicts with state preemption" staff-memo quote — which to elevate vs. inline?
+3. Length: 2,550 words is on the longer end of published-Dispatch range
+4. **NEW**: with Charter Review elevated to the structural anchor in v3, does the title still hold? Current: *"How Port Aransas Decides."* Alternates: *"The Body That Drafts the Rules"* / *"Five Bodies, One Commission"* / *"What's in the Charter, What Isn't."*
+
+### Ship criteria
+
+v3 is ready to ship when:
+- Collie's tonal read on the unnamed-structural form lands at "publish"
+- The pull-quote / callout placements are decided
+- Winston's open questions above are answered
+- The headline + subhead are locked
+
+v3 does not need to wait for any pending records. The pending records sharpen v4 (officer-side CIS) or feed Part 2 (AG opinion bidder responses).
+
+---
