@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "node scripts/check-og-dynamic.js && node scripts/check-no-names.js",
     "build": "next build",
     "start": "next start"
   },

@@ -4,6 +4,7 @@ import Link from "next/link";
 import {
   getStats as getSocialStats,
   getPending as getSocialPending,
+  getCurrentlyBoosting,
 } from "@/data/social-post-store";
 import { getAllGlossaryEntries } from "@/data/glossary-store";
 import { listImages } from "@/data/image-library-store";
@@ -12,6 +13,8 @@ import { getTopCitations } from "@/data/ask-gully-log-store";
 import { getUpcomingMilestones } from "@/lib/eventMilestones";
 import { isMetaConfigured } from "@/lib/metaGraph";
 import MarketingBreadcrumb from "@/components/wheelhouse/MarketingBreadcrumb";
+import SyncBoostsButton from "@/components/wheelhouse/SyncBoostsButton";
+import TopUpBoostButton from "@/components/wheelhouse/TopUpBoostButton";
 
 export const dynamic = "force-dynamic";
 
@@ -54,6 +57,7 @@ export default async function MarketingHubPage() {
     bankImages,
     activeAlert,
     topCitations,
+    currentlyBoosting,
   ] = await Promise.all([
     getSocialStats(),
     getSocialPending(50),
@@ -61,6 +65,7 @@ export default async function MarketingHubPage() {
     listImages({ limit: 200 }).catch(() => []),
     getActiveAlert().catch(() => null),
     getTopCitations(7, 5).catch(() => []),
+    getCurrentlyBoosting().catch(() => []),
   ]);
   const upcoming = getUpcomingMilestones(60);
   const meta = isMetaConfigured();
@@ -144,7 +149,7 @@ export default async function MarketingHubPage() {
         </section>
 
         {/* MAIN TILES */}
-        <section className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <section className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
           <Tile
             href="/wheelhouse/social"
             icon="📱"
@@ -152,6 +157,14 @@ export default async function MarketingHubPage() {
             stat={`${socialStats.pending} queued`}
             statTone={socialStats.pending > 0 ? "coral" : "muted"}
             sub={`${socialStats.sent24h} sent today`}
+          />
+          <Tile
+            href="/wheelhouse/social#recent"
+            icon="📊"
+            title="Post performance"
+            stat={`${socialStats.totalSent} sent`}
+            statTone="muted"
+            sub="click-through analytics"
           />
           <Tile
             href="/wheelhouse/social/bank"
@@ -222,6 +235,94 @@ export default async function MarketingHubPage() {
                 until <code>META_PAGE_ACCESS_TOKEN</code> is set.
               </p>
             )}
+          </section>
+        )}
+
+        {/* ACTIVE BOOSTS — paid promotions currently spending */}
+        {currentlyBoosting.length > 0 && (
+          <section className="bg-white rounded-2xl border border-blue-200 p-6 shadow-sm">
+            <div className="flex items-baseline justify-between gap-2 mb-3 flex-wrap">
+              <h2 className="font-display text-lg font-bold flex items-center gap-2">
+                <span>🚀</span>
+                Currently boosting
+                <span className="text-[11px] font-mono font-normal text-navy-400">
+                  ({currentlyBoosting.length})
+                </span>
+              </h2>
+              <SyncBoostsButton />
+            </div>
+            <p className="text-[11px] text-navy-500 italic mb-3">
+              Paid promotions in flight — Meta is showing these to people
+              beyond your followers
+            </p>
+            <div className="divide-y divide-sand-200">
+              {currentlyBoosting.map((p) => {
+                const insights = p.boostInsights as
+                  | {
+                      reach?: number;
+                      impressions?: number;
+                      clicks?: number;
+                      spendCents?: number;
+                    }
+                  | null;
+                const hasInsights = !!(
+                  insights && (insights.reach || insights.impressions)
+                );
+                const reach = insights?.reach ?? 0;
+                const clicks = insights?.clicks ?? 0;
+                const spend = ((insights?.spendCents ?? 0) / 100).toFixed(2);
+                const fbUrl = p.externalPostUrl;
+                return (
+                  <div
+                    key={p.id}
+                    className="flex items-center gap-3 py-3 text-sm flex-wrap"
+                  >
+                    <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide border bg-blue-50 text-blue-700 border-blue-300 shrink-0">
+                      <span
+                        className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"
+                        aria-hidden
+                      />
+                      Active
+                    </span>
+                    <span className="text-navy-800 truncate min-w-0 flex-1">
+                      {p.caption.slice(0, 80)}
+                      {p.caption.length > 80 ? "…" : ""}
+                    </span>
+                    <span className="text-[11px] font-mono whitespace-nowrap shrink-0 text-navy-600">
+                      {hasInsights ? (
+                        <>
+                          {reach}r · {clicks}c · ${spend}
+                        </>
+                      ) : (
+                        <span className="italic opacity-70">syncing…</span>
+                      )}
+                    </span>
+                    <TopUpBoostButton postId={p.id} />
+                    {fbUrl && (
+                      <a
+                        href={fbUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[11px] text-coral-700 hover:text-coral-900 font-semibold whitespace-nowrap shrink-0"
+                      >
+                        View on FB ↗
+                      </a>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+            <p className="text-[11px] text-navy-400 mt-3">
+              Insights populate ~1 hour after each boost starts. Full breakdown
+              + history at{" "}
+              <Link
+                href="/wheelhouse/social#recent"
+                className="text-coral-700 hover:text-coral-900 font-semibold"
+              >
+                Post performance
+              </Link>
+              .
+            </p>
           </section>
         )}
 

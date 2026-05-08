@@ -4,6 +4,7 @@ import { getRestaurant } from "@/data/delivery-restaurants";
 export const alt = "PAL Delivery — restaurant menu";
 export const size = ogSize;
 export const contentType = ogContentType;
+export const dynamic = "force-dynamic";
 
 export default function Image({
   params,
@@ -18,6 +19,7 @@ export default function Image({
       title: "PAL Delivery",
       subtitle: "Local food, to your beach house.",
       lockupVariant: "standard",
+      category: "pal-delivery",
     });
   }
   return brandedOG({
@@ -26,5 +28,6 @@ export default function Image({
     title: r.name,
     subtitle: r.shortDescription,
     lockupVariant: "standard",
+    category: "pal-delivery",
   });
 }

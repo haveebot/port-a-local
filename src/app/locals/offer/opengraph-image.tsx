@@ -3,6 +3,7 @@ import { brandedOG, ogSize, ogContentType } from "@/lib/brandedOG";
 export const alt = "List your stuff or services on PAL Locals";
 export const size = ogSize;
 export const contentType = ogContentType;
+export const dynamic = "force-dynamic";
 
 export default function Image() {
   return brandedOG({
@@ -12,5 +13,6 @@ export default function Image() {
     subtitle:
       "Locals only. Tell us what you rent or what you do. We send you the customers. You keep 100% of your quote — PAL adds 10% on top, paid by the customer, never deducted from your pay.",
     lockupVariant: "standard",
+    category: "locals-offers",
   });
 }

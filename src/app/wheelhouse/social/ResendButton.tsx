@@ -54,7 +54,7 @@ export default function ResendButton({ postId }: Props) {
       className="text-[11px] font-semibold text-navy-500 hover:text-emerald-700 disabled:opacity-50 whitespace-nowrap"
       title="Re-queue a fresh pending copy of this post"
     >
-      {busy ? "…" : "↻ Resend"}
+      {busy ? "…" : "↻ Re-queue"}
     </button>
   );
 }

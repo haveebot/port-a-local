@@ -73,6 +73,18 @@ export interface DeliveryRestaurant {
   markupPct: number;
   /** When false, restaurant is hidden from /deliver */
   isActive: boolean;
+  /**
+   * Beta delivery — restaurant has NOT formally partnered. Menu scraped
+   * from public sources, markup at 0% (pass-through retail), orders go
+   * through the operator-confirm-before-charge flow:
+   *   1. Customer submits cart → status "pending_review", no Stripe charge
+   *   2. Operator confirms with restaurant + finds runner
+   *   3. If GO: operator creates Stripe payment link, SMS to customer
+   *   4. Customer pays → standard dispatch flow takes over
+   *   5. If NO GO: "sorry, no charge" SMS, order canceled
+   * Differs from non-beta restaurants where customer pre-pays at checkout.
+   */
+  isBeta?: boolean;
 }
 
 export interface MenuCategory {
@@ -119,6 +131,7 @@ export interface DeliveryDriver {
 /* -------------------- Orders -------------------- */
 
 export type OrderStatus =
+  | "pending_review" /* BETA: customer submitted, operator hasn't confirmed restaurant + runner yet, no charge */
   | "placed" /* customer submitted, awaiting payment */
   | "paid" /* Stripe confirmed; about to dispatch */
   | "dispatching" /* drivers notified, awaiting claim */

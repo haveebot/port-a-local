@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { categories } from "@/data/categories";
 import LighthouseMark from "@/components/brand/LighthouseMark";
-import PortalIcon, { type PortalIconName } from "@/components/brand/PortalIcon";
+import PortalIcon, { EmojiIcon, type PortalIconName } from "@/components/brand/PortalIcon";
 
 export default function Navigation() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -29,6 +29,12 @@ export default function Navigation() {
 
   const portalLinkClass =
     "px-4 py-2 rounded-full text-sm font-medium bg-coral-500/15 text-coral-300 border border-coral-500/25 hover:bg-coral-500/25 hover:border-coral-500/40 transition-all duration-300";
+
+  // Primary CTA pill — filled coral. Used for the "Eat" portal pill so
+  // the food encyclopedia stands out as THE call-to-action in the nav
+  // cluster (vs the outlined Rentals/Services pills).
+  const eatPillClass =
+    "px-4 py-2 rounded-full text-sm font-bold bg-coral-500 text-white border border-coral-400 hover:bg-coral-600 shadow-sm shadow-coral-500/30 transition-all duration-300";
 
   const dropdownLinkClass =
     "flex items-center gap-3 px-4 py-3 text-sm font-medium text-sand-200 hover:text-coral-300 hover:bg-white/5 transition-colors";
@@ -87,12 +93,18 @@ export default function Navigation() {
 
               {exploreOpen && (
                 <div className="absolute top-full left-0 mt-2 w-52 rounded-xl bg-navy-900/98 backdrop-blur-md border border-white/10 shadow-xl overflow-hidden">
-                  {categories.map((cat) => (
-                    <Link key={cat.slug} href={`/${cat.slug}`} onClick={() => setExploreOpen(false)} className={dropdownLinkClass}>
-                      <PortalIcon name={cat.slug as PortalIconName} className="w-4 h-4 text-coral-400 shrink-0" />
-                      {cat.name}
-                    </Link>
-                  ))}
+                  {categories.map((cat) => {
+                    // "Eat" goes to /deliver (the food encyclopedia + order
+                    // surface) instead of the legacy CategoryPage. /eat
+                    // redirects too, but skip the bounce when we can.
+                    const href = cat.slug === "eat" ? "/deliver" : `/${cat.slug}`;
+                    return (
+                      <Link key={cat.slug} href={href} onClick={() => setExploreOpen(false)} className={dropdownLinkClass}>
+                        <PortalIcon name={cat.slug as PortalIconName} className="w-4 h-4 text-coral-400 shrink-0" />
+                        {cat.name}
+                      </Link>
+                    );
+                  })}
                   <div className="border-t border-white/10">
                     <Link href="/services" onClick={() => setExploreOpen(false)} className={dropdownLinkClass}>
                       <PortalIcon name="services" className="w-4 h-4 text-coral-400 shrink-0" />
@@ -109,6 +121,10 @@ export default function Navigation() {
                     <Link href="/fishing-report" onClick={() => setExploreOpen(false)} className={dropdownLinkClass}>
                       <PortalIcon name="fish" className="w-4 h-4 text-coral-400 shrink-0" />
                       Fishing Report
+                    </Link>
+                    <Link href="/birding" onClick={() => setExploreOpen(false)} className={dropdownLinkClass}>
+                      <EmojiIcon emoji="🐦" className="w-4 h-4 text-coral-400 shrink-0" />
+                      Birding
                     </Link>
                   </div>
                 </div>
@@ -202,11 +218,11 @@ export default function Navigation() {
             {/* Three-vertical portal cluster — cleaner than the previous 6-pill row */}
             <Link
               href="/deliver"
-              className={`${portalLinkClass} inline-flex items-center gap-1.5`}
-              title="PAL Delivery — local food to your beach house"
+              className={`${eatPillClass} inline-flex items-center gap-1.5`}
+              title="Eat — every restaurant on the island, order through PAL where we deliver"
             >
               <PortalIcon name="eat" className="w-3.5 h-3.5" />
-              Delivery
+              Eat
             </Link>
             <Link
               href="/rent"
@@ -254,7 +270,18 @@ export default function Navigation() {
 
         {/* Mobile menu — capped at viewport-minus-header with internal scroll */}
         {mobileOpen && (
-          <div className="md:hidden pb-4 border-t border-coral-500/20 bg-navy-950/98 backdrop-blur-md max-h-[calc(100dvh-4.5rem)] overflow-y-auto overscroll-contain">
+          <div
+            className="md:hidden border-t border-coral-500/20 bg-navy-950/98 backdrop-blur-md max-h-[calc(100dvh-4.5rem)] overflow-y-auto overscroll-contain"
+            style={{
+              // iOS Safari + Chrome on Android both eat ~80-100px of the
+              // bottom of 100dvh with their browser chrome (URL bar, home
+              // indicator). pb-4 was leaving the last 1-2 menu items
+              // visually obscured even though scroll technically reached
+              // them. Generous bottom padding + safe-area-inset handles
+              // both static + dynamic browser-chrome states.
+              paddingBottom: "max(5rem, env(safe-area-inset-bottom, 0px) + 4rem)",
+            }}
+          >
             {/* Gully */}
             <Link
               href="/gully"
@@ -269,15 +296,19 @@ export default function Navigation() {
 
             {/* Explore */}
             <p className={sectionHeaderClass}>Explore</p>
-            {categories.map((cat) => (
-              <Link key={cat.slug} href={`/${cat.slug}`} onClick={() => setMobileOpen(false)} className={`${mobileLinkClass} flex items-center gap-2`}>
-                <PortalIcon name={cat.slug as PortalIconName} className="w-4 h-4 text-coral-400 shrink-0" />{cat.name}
-              </Link>
-            ))}
+            {categories.map((cat) => {
+              const href = cat.slug === "eat" ? "/deliver" : `/${cat.slug}`;
+              return (
+                <Link key={cat.slug} href={href} onClick={() => setMobileOpen(false)} className={`${mobileLinkClass} flex items-center gap-2`}>
+                  <PortalIcon name={cat.slug as PortalIconName} className="w-4 h-4 text-coral-400 shrink-0" />{cat.name}
+                </Link>
+              );
+            })}
             <Link href="/services" onClick={() => setMobileOpen(false)} className={`${mobileLinkClass} flex items-center gap-2`}><PortalIcon name="services" className="w-4 h-4 text-coral-400 shrink-0" /> Services</Link>
             <Link href="/events" onClick={() => setMobileOpen(false)} className={`${mobileLinkClass} flex items-center gap-2`}><PortalIcon name="events" className="w-4 h-4 text-coral-400 shrink-0" /> Events</Link>
             <Link href="/live-music" onClick={() => setMobileOpen(false)} className={`${mobileLinkClass} flex items-center gap-2`}><PortalIcon name="art" className="w-4 h-4 text-coral-400 shrink-0" /> Live Music</Link>
             <Link href="/fishing-report" onClick={() => setMobileOpen(false)} className={`${mobileLinkClass} flex items-center gap-2`}><PortalIcon name="fish" className="w-4 h-4 text-coral-400 shrink-0" /> Fishing Report</Link>
+            <Link href="/birding" onClick={() => setMobileOpen(false)} className={`${mobileLinkClass} flex items-center gap-2`}><EmojiIcon emoji="🐦" className="w-4 h-4 text-coral-400 shrink-0" /> Birding</Link>
 
             {/* Discover */}
             <p className={sectionHeaderClass}>Discover</p>

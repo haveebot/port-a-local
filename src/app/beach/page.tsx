@@ -22,14 +22,14 @@ const PRODUCTS = [
   {
     value: "cabana",
     label: "Cabana Setup",
-    description: "Full beach cabana — shade, comfort, the works.",
+    description: "16×16 shade cloth, 6 chairs, and a large cooler. Setup wherever you'd like on the beach.",
     vendorBaseCents: 27500, // $275 vendor take
     palFeeCents: 2500, // $25 PAL booking fee
   },
   {
     value: "chairs",
     label: "Chair & Umbrella Setup",
-    description: "Two chairs and a beach umbrella, set up and ready to go.",
+    description: "Two chairs and a beach umbrella. Setup wherever you'd like on the beach.",
     vendorBaseCents: 7500, // $75 vendor take
     palFeeCents: 1000, // $10 PAL booking fee
   },

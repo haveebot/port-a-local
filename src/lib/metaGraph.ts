@@ -68,11 +68,75 @@ interface PostToFacebookParams {
   imageUrl?: string;
 }
 
+async function scrapeUrl(url: string, token: string): Promise<void> {
+  const params = new URLSearchParams();
+  params.set("id", url);
+  params.set("scrape", "true");
+  params.set("access_token", token);
+  await fetch(`${GRAPH_BASE}/`, { method: "POST", body: params });
+}
+
+/**
+ * Force FB to re-scrape a URL's OG metadata + og:image, BEFORE we use that
+ * URL in a post. Without this, a post that links to a page whose OG was
+ * recently changed gets a stale link card — FB caches OG per-URL, and
+ * once a post snapshots that URL into a link card, the card is frozen.
+ *
+ * Two FB caches to bust, not one:
+ *   1. Page URL → OG metadata cache. Refreshed by scraping the page URL.
+ *   2. og:image URL → image bytes cache. Refreshed by scraping the
+ *      EXACT og:image URL from the page HTML. Critical because Next.js's
+ *      og:image URL hash (`?<hash>`) is build-stable — when underlying
+ *      data changes but the route doesn't rebuild, the URL stays the
+ *      same, FB sees same URL, FB serves cached bytes (which may be
+ *      from a previous data state). The May 3 Sunday-slow-roll incident
+ *      was caused by this: force-dynamic made our server return fresh
+ *      PNG, but FB's image cache for the stable URL stayed stale across
+ *      two re-fires.
+ *
+ * Failure on either step is non-fatal — we still post; worst case the
+ * link card is stale on this one post.
+ *
+ * Small delay after gives FB's cache layer a beat to land the new OG
+ * before the /feed call snapshots it.
+ */
+async function preScrapeLinkUrl(linkUrl: string, token: string): Promise<void> {
+  // Step 1: scrape the page URL itself
+  try {
+    await scrapeUrl(linkUrl, token);
+  } catch {
+    // Non-fatal
+  }
+
+  // Step 2: fetch the page HTML, extract the og:image URL (with whatever
+  // hash Next.js auto-appended), and scrape THAT URL too — the og:image
+  // bytes cache is independent of the page metadata cache.
+  try {
+    const pageRes = await fetch(linkUrl, { cache: "no-store" });
+    const html = await pageRes.text();
+    const ogImageMatch = html.match(
+      /<meta\s+property="og:image"\s+content="([^"]+)"/i,
+    );
+    if (ogImageMatch) {
+      const ogImageUrl = ogImageMatch[1].replace(/&amp;/g, "&");
+      await scrapeUrl(ogImageUrl, token);
+    }
+  } catch {
+    // Non-fatal
+  }
+
+  // Brief grace period so FB's caches propagate before /feed snapshots
+  await new Promise((r) => setTimeout(r, 500));
+}
+
 /**
  * Post to the FB Page feed. Two modes:
  *
  * - **Link mode** (default): POST /{page_id}/feed with message + link.
- *   FB scrapes the link's OG metadata for the preview card.
+ *   FB scrapes the link's OG metadata for the preview card. Pre-scrape
+ *   step forces a fresh OG fetch right before publish so the link card
+ *   captures the latest title/image/description (vs. whatever FB had
+ *   cached from a prior visit).
  *
  * - **Photo mode** (when imageUrl is set): POST /{page_id}/photos with
  *   url + caption. Higher organic reach historically; no link preview
@@ -139,7 +203,13 @@ export async function postToFacebook(
     }
   }
 
-  // LINK MODE — original behavior
+  // LINK MODE — pre-scrape the linkUrl so FB has fresh OG cached, THEN
+  // post. Without this, a post whose linkUrl had its OG image updated
+  // recently gets a stale link card (FB snapshots whatever it had
+  // cached at /feed call time, not whatever the page currently serves).
+  if (p.link) {
+    await preScrapeLinkUrl(p.link, token);
+  }
   const params = new URLSearchParams();
   params.set("message", p.message);
   if (p.link) params.set("link", p.link);
