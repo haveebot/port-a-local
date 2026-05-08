@@ -1,16 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
+import {
+  getBeachProduct,
+  dailyTotalCents,
+} from "@/data/beach-products";
 
 const getStripe = () => new Stripe(process.env.STRIPE_SECRET_KEY || "", {
   apiVersion: "2026-03-25.dahlia",
 });
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://theportalocal.com";
-
-const PRODUCT_LABELS: Record<string, string> = {
-  cabana: "Cabana Setup",
-  chairs: "Chair & Umbrella Setup",
-};
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
@@ -24,26 +23,36 @@ export async function POST(req: NextRequest) {
     returnDate,
     deliveryAddress,
     numDays,
-    totalPrice,
     qty,
     smsConsent,
-    vendorBaseCentsPerDay,
-    palFeeCentsPerDay,
   } = body;
 
-  if (!name || !phone || !email || !product || !pickupDate || !returnDate || !deliveryAddress || !numDays || !totalPrice) {
+  // Validate required fields. Note: we INTENTIONALLY ignore any
+  // totalPrice / vendorBaseCentsPerDay / palFeeCentsPerDay the client
+  // sends — those are computed server-side from the trusted catalog
+  // so a manipulated request body can't underpay.
+  if (!name || !phone || !email || !product || !pickupDate || !returnDate || !deliveryAddress || !numDays) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
   }
 
-  const productLabel = PRODUCT_LABELS[product] || product;
-  const actualQty = qty || quantity || 1;
-  // Vendor / PAL split — pass both to Stripe metadata so /confirm can record
-  // the vendor payout obligation and the PAL booking-fee retention without
-  // having to re-derive from product config (which may drift over time).
-  const vendorTotalCents =
-    Number(vendorBaseCentsPerDay || 0) * Number(numDays) * actualQty;
-  const palFeeTotalCents =
-    Number(palFeeCentsPerDay || 0) * Number(numDays) * actualQty;
+  const catalog = getBeachProduct(product);
+  if (!catalog) {
+    return NextResponse.json({ error: "Unknown product" }, { status: 400 });
+  }
+
+  const days = Number(numDays);
+  const actualQty = Number(qty || quantity || 1);
+  if (!Number.isFinite(days) || days < 1 || days > 60) {
+    return NextResponse.json({ error: "Invalid numDays" }, { status: 400 });
+  }
+  if (!Number.isFinite(actualQty) || actualQty < 1 || actualQty > 20) {
+    return NextResponse.json({ error: "Invalid quantity" }, { status: 400 });
+  }
+
+  // SERVER-COMPUTED amounts. Never trust client.
+  const totalCents = dailyTotalCents(catalog) * days * actualQty;
+  const vendorTotalCents = catalog.vendorBaseCents * days * actualQty;
+  const palFeeTotalCents = catalog.palFeeCents * days * actualQty;
 
   try {
     const session = await getStripe().checkout.sessions.create({
@@ -54,10 +63,10 @@ export async function POST(req: NextRequest) {
         {
           price_data: {
             currency: "usd",
-            unit_amount: totalPrice * 100, // Stripe uses cents
+            unit_amount: totalCents,
             product_data: {
-              name: `Beach Rental — ${productLabel}`,
-              description: `${actualQty} setup${actualQty > 1 ? "s" : ""} · ${numDays} day${numDays !== 1 ? "s" : ""} · ${pickupDate} → ${returnDate} · ${deliveryAddress} · Free cancellation up to 72 hours before setup date`,
+              name: `Beach Rental — ${catalog.label}`,
+              description: `${actualQty} setup${actualQty > 1 ? "s" : ""} · ${days} day${days !== 1 ? "s" : ""} · ${pickupDate} → ${returnDate} · ${deliveryAddress} · Free cancellation up to 72 hours before setup date`,
             },
           },
           quantity: 1,
@@ -73,8 +82,8 @@ export async function POST(req: NextRequest) {
         pickupDate,
         returnDate,
         deliveryAddress,
-        numDays: String(numDays),
-        totalPrice: String(totalPrice),
+        numDays: String(days),
+        totalPrice: String(totalCents / 100),
         smsConsent: smsConsent ? "true" : "false",
         vendor_total_cents: String(vendorTotalCents),
         pal_fee_total_cents: String(palFeeTotalCents),
