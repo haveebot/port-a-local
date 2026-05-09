@@ -55,7 +55,8 @@ Rule: **if the SHAPE generalizes, document the pattern. If only the CONTENT gene
 ## Where the body lives
 
 - `heyedeploy/framework.md` — full meta, principles, comparison table, customer-facing-action section
-- `heyedeploy/components/` — 9 components catalogued (OnboardDeploy, MarketingDeploy, XrefDeploy, ArchiveDeploy, CRMDeploy, ContractsDeploy, BrandPackDeploy, CommerceDeploy, WholesaleDeploy, TicketingDeploy)
+- `heyedeploy/components/` — 9 standalone components catalogued (OnboardDeploy, MarketingDeploy, XrefDeploy, ArchiveDeploy, CRMDeploy, ContractsDeploy, BrandPackDeploy, CommerceDeploy, WholesaleDeploy, TicketingDeploy)
+- `heyedeploy/components/RepDeploy/` — **first filed pattern cluster** (8 sub-patterns + README + REFERENCE_IMPLEMENTATIONS), extracted 2026-05-07 after Sage Em + HeyeWay both shipped on RepDeploy. Patterns: canonical foundation, channel roster, spec-sheet generator, CSI spec-section template, outreach template library, brand discipline, site shell, industry tools.
 - `heyedeploy/verticals/` — CityDeploy, EventDeploy, BrandDeploy, RepDeploy locked + BuildDeploy/RealtyDeploy proposed
 - `heyedeploy/operations/` — build-discipline, agent-trust-ladder, 501c3-formation, Heye Lab Foundation execution, sandfest-shadow-build
 - `heyedeploy/tenants/` — per-tenant docs (PAL, Sandfest, PR, TX Culture, RKay, Cactus Coast, Indianola, PortaHistory)

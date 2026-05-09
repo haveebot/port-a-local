@@ -32,8 +32,10 @@ In order, no skipping:
 
 3. **Read any feedback files mentioned in the handoff brief or memory file** that the prior session added or updated. Don't read everything — just what's freshly relevant.
 
+   - **Refresh + scan the contributor activity logs**: `python3 ~/Projects/workspace/scripts/contributor_activity.py` regenerates `contributor_<slug>.md` for each Tier 1 contributor (currently Collie). Scan the auto-loaded file for productivity, pattern-promotion candidates, and recurring blockers. This is operator-side capture for the spoke→hub flow — the contributor never runs it.
+
 4. **Run the project's orient command if it has one:**
-   - PAL: `python scripts/wheelhouse.py orient` — one screen, ~5 sec, shows awaiting-you / last-24h activity / traffic baseline
+   - PAL: `python3 ~/Projects/workspace/scripts/wheelhouse.py orient` — one screen, ~5 sec, shows awaiting-you / last-24h activity / traffic baseline. Note: this is the operator-tier diagnostic script (workspace-level, not PAL-level). Distinct from Wheelhouse the **product** (theportalocal.com/wheelhouse) — see `feedback_wheelhouse_product_vs_script.md`.
    - Other projects: TBD
 
 5. **Verify trucked state:**

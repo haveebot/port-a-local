@@ -8,6 +8,170 @@ originSessionId: 35a4d1eb-635d-424f-a8eb-a22e66a74d90
 
 **Operating model:** Winston makes product decisions and handles local relationships. Claude builds, maintains, deploys, and organizes everything else. Goal is a lean two-person operation.
 
+## Current State (as of 2026-05-07 PM — Collie InDeployed + lifecycle framework locked + heyedeploy twin'd + editorial substance landed)
+
+**Six PRs merged this session** (PAL #19, #20; heyedeploy #1, #2; plus Winston's commit `42b5bad` for the runbook fix; plus the FB billing fix on the operator side). Spans editorial research, contributor onboarding, framework lock, and architectural parity. **Headline: Collie InDeployed at PAL — first canonical design-contributor landing in real time, validating the entire Tier 1 architecture.**
+
+**FB billing root-caused and fixed:**
+- Account flipped from UNSETTLED to Active (`account_status = 1`); funding source intact (Mastercard *5656)
+- Real cause: Stripe Issuing operational balance was empty — card declines on auth regardless of spending-control cap
+- Memory rule updated: `feedback_meta_api_error_diagnostics.md` now leads with funding-balance mechanism + prevention pattern
+- Auto-cron resumed; boost create works again
+
+**Editorial substance shifted hard:**
+- City Secretary Francisca Nixon's TPIA reply parsed: 3 of 5 items fully closed, 1 partial (RFP rubric received; bidder responses await AG opinion 45-60 days), 1 needs narrowing (CIQ filings 2019-present)
+- **Item #3 closed with zero records** — no CIQ/CIS filings naming Sea Oats / ZJZ / Bhakta / Cinnamon Shore (or its General Partner) / Lamkin from Jan 2017 → Apr 2026
+- **Charter Review Commission listing received** — three of five seats since 2020 on a six-month-term board; one vacant; one missing TOMA training
+- **2019 RFP grading rubric received** — Palmilla beat Cinnamon Shore 182-175 (74% vs 71.5%), council voted 7-0 for the lower-scoring bidder
+- **Civicweb research agent ran in background** — 20 council agenda packets pulled; full SUMMARY at `port-a-local/Port A Local/Dispatch Research/civicweb-minutes-2018-2020/SUMMARY.md`
+- **Critical finding: rubric was NOT in the public Jan 17, 2019 packet.** Item 7-H reads literally: *"INFORMATION SENT SEPARATE BY CITY MANAGER FOR REVIEW."* Resolution template named the planned awardee as **"McCombs Properties"** — that's accurate, not a shell error: Palmilla Beach is owned by McCombs Properties (the Red McCombs San Antonio empire). The draft anticipated Palmilla/McCombs winning consistent with the rubric score (Palmilla 182 vs Cinnamon Shore 175). The "blank awardee" field was the post-vote update placeholder; council voted 7-0 against the draft and awarded Cinnamon Shore + ZJZ Hospitality partnership instead. **Crawford + Moore were on the RFP committee** — the other five council members voted on a contract whose evaluation criteria had not been distributed in the public record. Brett Hentz (Tourism Bureau CEO; hire driven by Suzette Freeman / Mustang Island Ventures LLC search committee in Jan 2017) was running the procurement and briefed council on the bidders.
+
+- **2025 INTERNAL PIVOT RESOLUTION 2025-R14 (Mar 25, 2025):** Council voted 7-0 to award $9.575M contract to **Weaver and Jacobs Constructors** for **City Hall / Civic Center Expansion & Renovation** at 710 W. Avenue A. Architect: **Turner Ramirez Architects** (Project Manager Jody Schade). Funding: General Fund Account #050-66320 + Facility Fund 115-66320. Bond Counsel: **Andrew Friedman, Samco Capital Markets** — proposed Hotel Occupancy Tax reimbursement Resolution mechanism (city would reimburse itself with venue tax if voter-approved). City Manager David Parsons. Three bids: Beecroft $10.14M / Weaver and Jacobs $9.575M (lowest, awarded) / Broaddus $10.48M. **Crawford motioned, Christianson seconded.** Voting yes: Mayor Moore, Mayor Pro-Tem Owens, Winton, Krueger, Chambers, Crawford, Christianson — same Crawford who was on the 2019 RFP committee. **Turner Ramirez Architects continuity finding:** TRA was on Cinnamon Shore's 2019 winning bid team AND is the architect of the 2025 internal alternative — same firm bridging both sides of the 6-year arc. **Project budget context:** Aug 8, 2023 Mayor Moore questioned funding for "the major addition, the City Hall renovation and expansion"; FY 2024-25 budget allocated $4.275M City Hall renovation + $5.35M Civic Center expansion. **Structural finding for Dispatch piece:** same Hotel Motel Tax revenue stream that funded the 2019 RFP under 2017 HMT legislation now flows (via reimbursement mechanism) to internal facility expansion. Dollars stayed; recipient flipped — external private operator → internal city-owned facility, with the Civic Center expansion absorbing the conference function the 2019 RFP would have housed externally. Both votes 7-0 six years apart. Source: civicweb Mar 25, 2025 minutes (lines 195-340) + Aug 8, 2023 Special Meeting minutes (lines 305-399).
+- **Jul 16, 2020 7-0 vote** relocated the conference center from Cinnamon Shore II to Brookdale parcel under "PA Waterfront, LP / The Brookdale Group, LLC"
+- **Nov 19, 2020 Resolution 2020-R59** (Second Amendment) extended Development Agreement with new SPV "The Inn, Spa & Conference Center, LP" through Dec 31, 2022. Lamkin's developer timeline: groundbreaking Dec 31, 2022.
+- **Two emails to Collie via haveebot** — original P&Z Capture editorial review + civicweb addendum (in-thread Re:)
+- Editorial roadmap recommendation: piece can publish on what's now sourced (~2,000 words); bidder responses become Part 2 follow-up after AG opinion (45-60 days)
+
+**Collie InDeployed at PAL — first canonical Tier 1 design contributor:**
+- Pre-flight verified end-to-end (GitHub `colliebreah` confirmed write collaborator; CODEOWNERS + branch protection settings audited; recent auto-merge in action via PR #18)
+- Onboarding launch email sent ("PAL design station — easy launch") with adjustments: dropped winstonciv CC, softened closing for synchronous launch, fixed the heyedeploy-paths runbook bug (referenced PAL contributor-context paths instead — the heyedeploy mirror is what Collie's Tier 1 access can reach)
+- **Empirical floor measured: 2 terminal commands + 2 Mac password entries**, ~30 min including auth flows
+- **PR #19 — "Add Collie as design contributor"** — merged by `colliebreah` herself at 18:11:22 UTC. ~2 min PR-to-merged, ~3 min PR-to-production. CONTRIBUTORS.md created with bio: *"Brand and design architect specializing in creative direction, graphic design, copywriting, and marketing strategy."*
+- One runbook gap discovered: auto-merge has to be explicitly enabled per PR. Winston pushed commit `42b5bad` to fix the canonical `pal-design-contributor-launch.md`.
+
+**PreDeploy / InDeploy / PostDeploy lifecycle framework locked + named:**
+- Brand-discipline rule: never bare "Deploy" — always Pre/In/Post temporal prefix. Reserved for HeyeDeploy (umbrella) + vertical products (MarketingDeploy, CityDeploy, ArchiveDeploy, OnboardDeploy, etc.)
+- Memory rule filed: `feedback_deploy_phase_naming.md` + MEMORY.md indexed (HARD CROSS-PROJECT BRAND-DISCIPLINE RULE — same teeth as HeyeLab spelling rule)
+- **PreDeploy** = pre-flight (productizable as a paid engagement — "Cleared for InDeploy" sign-off)
+- **InDeploy** = launch ritual (the wrapper Collie just executed; floor: 2 commands + 2 passwords)
+- **PostDeploy** = operating mode (steady-state PR flow, tier graduation, spoke→hub contribution)
+- Heyedeploy PR #1 (4 lifecycle docs) — MERGED 19:08:21 UTC
+- PAL PR #20 (mirror to contributor-context) — MERGED 19:14:35 UTC
+- Operator-facing PreDeploy checklist drafted with three tiers (design contributor / operator / tenant)
+
+**Heyedeploy architectural parity with PAL:**
+- Was originally `"Branch not protected"` — now matches PAL exactly
+- `allow_auto_merge: true` + `delete_branch_on_merge: true` + `allow_update_branch: true` (the latter also flipped on PAL — lets contributor Claudes self-serve branch updates when main moves between PR-open and Vercel-pass)
+- Branch protection on `main`: Vercel status check required, 0 approving reviews, code-owner reviews required on protected paths only
+- CODEOWNERS file (heyedeploy PR #2 — merged 19:12:40) — protects framework canonical (`framework.md`, `components/`, `operations/`, `tenants/`, `verticals/`, `decision-log/`, `patterns/`) + build/config; free-merge zone is `brand/`, `site/pages|components|styles|public/`, `docs/`, `CONTRIBUTORS.md`
+- Collie invited as collaborator with `write` permission (invitation ID 317854160 — pending her acceptance via GitHub notification)
+- Same Tier 1 architecture as PAL across both repos
+
+**Open dials carried into next session (priority order):**
+
+1. **Collie accepts heyedeploy invitation** — her action; visible at https://github.com/haveebot/heyedeploy/invitations
+2. **Francisca focused follow-up** (CIQ narrowing + AG opinion confirm + officer-side question) — PINNED per Winston for him + Collie to review scope first. Courtesy/holding reply already sent 2026-05-07 PM closing items 2, 3, 5 and committing to a single focused follow-up on 1, 4, plus the officer-side equivalent of #3 (Form CIS + § 171.004 affidavits naming Sea Oats / ZJZ / Bhakta / Cinnamon Shore / Lamkin)
+3. **Dispatch piece draft (P&Z Capture)** — substantively unlocked; gated only on Collie's tonal read of the absence-of-records paragraph
+4. **AG opinion request for bidder responses** — file after CIQ-narrowing locks (45-60 day wait)
+5. **Watch list active** for Bron Doyle + Angie Axtell (7-day TTL)
+6. **Jeremiah's photos** when Angie sends
+7. **Push parked autoBoost.ts** (still on `inbox/forward-stranger-sms-to-admin`)
+8. **Polish debug-perms** — drop two false-positive checks
+9. **Operator approval queue** (4-8 hr — biggest editorial-quality lever)
+10. **Day-of-week templates / Quick-fire composer / Sunday brief** — gated on #9
+11. **Wheelhouse social UI cleanup** — needs Collie design input
+12. **HeyeDeploy framework promotions** — patterns from tonight (lifecycle naming discipline, agent-driven autonomy mirror, PreDeploy productization angle, contributor-context path-mirror discovery)
+
+**Pre-2026-05-06 OPEN PRs (still untouched, separate triage):**
+- `#1` — Staff app Palm Republic brand polish
+- `#2` — Customer iOS app native shell
+- `#3` — Staff app Mock Mode for demos
+- `#4` — Checkout price-IDOR hotfix
+- `#5` — Maintenance HTML injection hotfix
+
+**Detailed handoff brief:** `port-a-local/Session Notes/handoff-2026-05-07-pm.md` — full context for the PM session.
+
+### LATE-PM CONTINUATION (after the initial PM truck — added through ~02:30 UTC May 8)
+
+After the initial PM truck closed (which captured up through the courtesy reply to Francisca), the session continued for several more hours and produced significant additional work. The handoff brief at `Session Notes/handoff-2026-05-07-pm.md` is the comprehensive document; key additional milestones:
+
+- **Editorial Dispatch piece moved from outline to v3 staged + delivered.** Three rounds of records research (static-URL → browser-driven → food-truck pattern) produced documented findings for four households (Lorette + Owens + Zahn-Winton + Lafayette) plus the Mustang Island Ventures LLC → Hentz CEO chain + the Aransas Club / Cocke development arc + the 2009 four-principal South Jetty co-appearance (network at minimum 17 years old). Drafts v1 (~1,800 words) → v2 (~2,400) → v3 (~2,550) with Charter Review elevated to the structural anchor per Winston's call ("the real Port A stuff"). v3 staged at GitHub + sent via SMS to Collie + Nick.
+- **Five Collie PRs after her bio merged.** Beyond #19, she shipped: #21 Homepage redesign + Mother's Day weekend guide → #22 Gully as a brand character → #23 Center Gully sections → #25 Mother's Day hero + booking links + homepage auto-hide. **+787/-375 lines across the 5 PRs.** First canonical Tier 1 design contributor running at full pace.
+- **Surname correction**: Collie's vault file was misnamed `Collie Caraker — Design.md` → corrected to `Collie Farley — Design.md`. Fix landed alongside the contact-ledger PR.
+- **Three more HARD CROSS-PROJECT memory rules locked**:
+  - `feedback_pal_synthesis_journalism.md` — records floor, synthesis is the value (Winston-articulated during the network-ties research)
+  - `feedback_email_recipient_verify.md` — pre-send To/CC/BCC verification + screenshot test
+  - `feedback_contact_ledger_check_first.md` — discovery hierarchy for internal-collaborator contacts (super-admins.ts + insiders.ts + wheelhousePush.ts + People & Vendors profiles + workspace .env)
+  - `feedback_contributor_context_mirror.md` — every Heye Lab repo with Tier 1+ contributor access has a `contributor-context/` folder with curated cross-project rule mirrors
+- **Heyedeploy contributor-context folder created** for Collie's next-session lock-in. PR #3 in heyedeploy merged at 02:21:47 UTC with 13 files: README + contributor-launch + pal-brand-inheritance + 10 memory mirrors. CLAUDE.md updated to route Tier 1 contributors there.
+- **Documented current super-admin contacts** (now in workspace memory + PAL vault profiles):
+
+| Slug | Name | Cell | Email |
+|---|---|---|---|
+| winston | Winston Caraker | `+15125681725` | `winstonciv@gmail.com` (personal) / `admin@theportalocal.com` (PAL ops) |
+| nick | Nick Merrill | `+15122015353` | `nickbmerrill@gmail.com` |
+| collie | Collie Farley | `+12107095771` | `collie.breah@gmail.com` |
+
+PAL Twilio sender: `+13614281706`.
+
+**Total session output (longest in PAL history):** 10 PRs across PAL + heyedeploy + 5 new HARD CROSS-PROJECT memory rules + 2 repos with full architectural parity + 1 new tier-1 contributor canonically InDeployed + 1 lifecycle framework named + locked + 1 Dispatch piece v3 staged + sent + 1 City Secretary TPIA closed on 3/5 items + multiple structural editorial findings documented.
+
+## Current State (as of 2026-05-07 AM — 12-PR shipping marathon + tenant outreach + Meta billing root-cause)
+
+**12 PRs merged in one evening session** (#7-#18). Bigger by PR count than any prior PAL session. Headline themes:
+
+**Tenant outreach in flight (real money):**
+- **Bron Doyle** (Bron's Backyard + Beach Carts) pitched as HeyeDeploy beta. SMS + email landed. He replied with phone-confirm 5/6 PM ("7143 for reservations but important info my personal 2766" — soft-engaged on the bigger pitch). Winston driving close. Watch list active (`bron-pitch`, 7-day TTL).
+- **Angie Axtell + Chef Matt Axtell** (Crabcakes & Caviar catering + Jeremiah's Boat Dock Grill at Woody's). Two-thread pitch (free catering leads + add Jeremiah's to /eat). Angie replied within 5 hours with full data. PAL closed both threads (Jeremiah's listing live with phone/hours/menu, Crabcakes & Caviar live as `/services` with Texas Chef of the Year framing). Open: photos for Jeremiah's. Watch list active (`chef-matt-catering`).
+
+**Editorial — Collie's full Tuesday delivery (3 asks → 3 PRs → 3 in-thread acks):**
+- PR #7 Live Music week of May 7 (18 acts Thu-Sun, with Bron's hosting Fri+Sat)
+- PR #8 Events this-week slate (May 9-10 one-offs + 2 new recurring fixtures, new "This Week" surface on /events that auto-rotates by date)
+- PR #9 OG color system (4 card systems · 14 routes wired) — full spec from Collie's PDF
+- Open: 3 missing OG colors from Collie (PAL Housekeeping · Maintenance Requests · Restaurant Partnerships) + plain-text May 6-8 events list
+
+**Strict no-names rule violation hotfix → systemic lock:**
+- Collie spotted "Collie — Port A Local calendar..." rendering on /live-music's Source & Scope panel
+- PR #10 + #11 swept 4 violations across /live-music + /brand (×2) + /beach/vendor/connect
+- Memory rule **`feedback_pal_no_names_on_website.md`** locked as cross-surface superset of email rule
+- PR #16 prebuild CI guard at `scripts/check-no-names.js` — caught 3 additional violations the audit missed (Saltwater Gypsies, Winton's Guide, TWAT event content). Future leaks fail the build.
+
+**OG color complete pass:**
+- PR #13 — 15 remaining OG routes wired to category-driven color system. Every standard `brandedOG` surface now flows through Collie's spec. Custom-layout cards (events/[slug] countdown, dispatch/[slug] highlights) skipped pending separate Collie review.
+
+**SMS reply infrastructure rebuilt:**
+- PR #14 SMS watch list + race-condition fix. New `sms_watch_list` Postgres table + `/api/wheelhouse/sms-watch` admin endpoint + race fix on stranger inbound webhook (was fire-and-forget; now `Promise.allSettled` before TwiML return — Bron's reply lost to that race).
+- Watched-number replies elevate operator push from `[unknown ... → PAL]` to `🔔 WATCHED [<context>] ... → PAL`.
+
+**Meta billing root-cause finally cracked open:**
+- 5 days of silent boost-create failures since Sunday 2026-05-02. Vague `creative: Permissions error` on every attempt.
+- PR #17 debug-perms diagnostic endpoint shipped — surfaced `account_status = 3` (UNSETTLED) on the ad account
+- PR #18 spend-breakdown diagnostic shipped — confirmed total spend was only **$3.16** (NOT $50, NOT close to the Stripe Issuing card cap)
+- **Real cause:** Meta tried to bill Stripe Issuing card "PAL · FB Ads" (Mastercard *5656) for the $3.16, charge declined, account flipped to UNSETTLED, blocking all subsequent boost creates
+- **Fix path (operator-side, next session):** Stripe Authorizations log → identify decline reason → Meta Billing → "Pay now" the $3.16 with different method → debug-perms verify account_status returns to 1 → resume boosting
+- Memory rule extended in `feedback_meta_api_error_diagnostics.md`: "billing first, scopes second" for any Meta `creative: Permissions error`. Stripe Issuing virtual cards on Meta have a known first-charge decline pattern.
+
+**Diagnostic endpoint inventory after tonight:**
+- `/api/wheelhouse/social/boost/diagnose?id=N` — per-post boost state + insights triangulation (existed before)
+- `/api/wheelhouse/social/boost/debug-perms` — token + perms + page tasks + ad_account.account_status (NEW)
+- `/api/wheelhouse/social/boost/spend-breakdown?days=30` — per-ad spend + daily curve (NEW)
+
+**Twilio + Vercel cost audit (no actual spike):**
+- April 2026 Twilio bill: $193.08 — **$106 of that was one-time A2P 10DLC registration fees** (brand registration + campaign vetting + carrier setup). Sunk cost. May so far: $1.14 — normal trajectory.
+- Vercel notification storm: caused by tonight's PR storm (12 PRs in 4 hours = 30-60 deploy emails). Mitigation = Winston tunes Vercel notification preferences (off "Deploy started" / "Build started"; keep "failed" only).
+
+**Open dials carried into next session (priority ORDER):**
+
+1. **Settle FB billing** ($3.16 outstanding on Meta ad account, fix the Stripe Issuing decline) — TOP PRIORITY
+2. Watch admin@ + PAL SMS for Bron / Angie / Adam Porto / Katie Rogers / Chris Jordan replies
+3. Jeremiah's photos when Angie sends them
+4. Push parked autoBoost.ts work (still stashed on `inbox/forward-stranger-sms-to-admin` branch, sitting since 2026-05-02)
+5. Polish debug-perms diagnostic (drop two false-positive checks for PAGE token type)
+6. Build operator approval queue for auto-drafted posts (biggest editorial lever)
+7. Day-of-week templates / quick-fire composer / Sunday brief (depend on operator approval queue)
+8. Wheelhouse social UI cleanup (Collie design input)
+9. Travis L&EA portal access (asked 2026-04-30, still open)
+10. HeyeDeploy framework promotions (5 patterns from spoke + 5 from PAL tonight)
+
+**Pre-tonight OPEN PRs (untouched, need separate triage):**
+- #5 Maintenance HTML injection hotfix
+- #4 Checkout price-IDOR hotfix
+- #3 Staff app Mock Mode for demos
+- #2 Customer iOS app native shell
+- #1 Staff app Palm Republic brand polish
+
+**Detailed handoff brief:** `port-a-local/Session Notes/handoff-2026-05-07-am.md` — pickup-here protocol, exact commands, watch list management.
+
 ## Current State (as of 2026-05-03 PM — OG link-card staleness bug-class permanently solved + agency outreach round)
 
 Eight commits today (`9192323` → `eef7b34`) plus two HeyeDeploy doc commits + one workspace-memory commit. Headline: **the multi-week recurring "stale OG link card on every shared post" bug is empirically dead.** The actual diagnosis only happened after Winston explicitly demanded evidence over theory (4+ hours of escalating-complexity guesses produced commits but no proof). Once the diagnostic endpoint shipped and we read FB's actual response: **FB caches OG image bytes against the FULL URL string (including query params), in a cache separate from the URL→metadata cache. Sharing Debugger refreshes metadata but does NOT re-fetch image bytes for unchanged URLs.** Force-dynamic on the route makes our server return fresh bytes — but FB never asks because the URL doesn't change. **The mechanism that works**: data-derived fingerprint as `?v=` query param on the og:image URL via `generateMetadata` override. URL changes → FB has no cache match → fresh fetch from server → fresh link card. Verified empirically with the Sunday "wind-down" post (#29).
