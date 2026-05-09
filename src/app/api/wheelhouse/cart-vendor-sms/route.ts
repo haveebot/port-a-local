@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { cartVendors, getSmsCapableVendors, smsPhoneFor } from "@/data/cart-vendors";
+import {
+  cartVendors,
+  getSmsCapableVendors,
+  smsPhoneFor,
+  hasSmsCapablePhone,
+} from "@/data/cart-vendors";
 import {
   getAllConsents,
   recordInvite,
@@ -119,9 +124,9 @@ export async function POST(req: NextRequest) {
   const phoneE164 = toE164(phone);
 
   if (action === "invite") {
-    if (vendor.smsCapable === false) {
+    if (!hasSmsCapablePhone(vendor)) {
       return NextResponse.json(
-        { error: "vendor_landline_only", detail: "Phone marked smsCapable:false (30006 landline)." },
+        { error: "vendor_landline_only", detail: "No SMS-capable phone on file (all numbers marked smsCapable:false / 30006 landline)." },
         { status: 400 },
       );
     }

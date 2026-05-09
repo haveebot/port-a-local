@@ -3,11 +3,26 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 
+interface PhoneEntry {
+  number: string;
+  label: string | null;
+  contactName: string | null;
+  smsCapable: boolean;
+}
+
+interface EmailEntry {
+  address: string;
+  label: string | null;
+  contactName: string | null;
+}
+
 interface RowData {
   slug: string;
   name: string;
-  phone: string;
-  phoneMobile: string | null;
+  phones: PhoneEntry[];
+  emails: EmailEntry[];
+  firstLookMinutes: number | null;
+  primaryPhone: string;
   active: boolean;
   smsCapable: boolean;
   status: "pending" | "opted_in" | "opted_out";
@@ -52,7 +67,7 @@ export default function VendorSmsRow({ row }: { row: RowData }) {
     setError(null);
     const confirmMsg =
       action === "invite"
-        ? `Send opt-in SMS to ${row.name} (${row.phone})?`
+        ? `Send opt-in SMS to ${row.name} (${row.primaryPhone})?`
         : action === "opt-in"
           ? `Manually mark ${row.name} as OPTED IN (verbal consent)?`
           : `Manually mark ${row.name} as OPTED OUT?`;
@@ -76,6 +91,8 @@ export default function VendorSmsRow({ row }: { row: RowData }) {
   }
 
   const pill = STATUS_PILL[row.status];
+  const smsCapableCount = row.phones.filter((p) => p.smsCapable).length;
+  const emailCount = row.emails.length;
 
   return (
     <div className="py-4 first:pt-0 last:pb-0">
@@ -88,6 +105,11 @@ export default function VendorSmsRow({ row }: { row: RowData }) {
             >
               {pill.label}
             </span>
+            {row.firstLookMinutes && row.firstLookMinutes > 0 && (
+              <span className="text-[10px] uppercase tracking-widest px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300">
+                ⏱ {row.firstLookMinutes}m first-look
+              </span>
+            )}
             {row.manualOverride && (
               <span className="text-[10px] uppercase tracking-widest px-2 py-0.5 rounded-full bg-navy-100 text-navy-700">
                 Manual
@@ -104,15 +126,59 @@ export default function VendorSmsRow({ row }: { row: RowData }) {
               </span>
             )}
           </div>
-          <p className="text-xs text-navy-500 font-mono mt-1">
-            {row.phoneMobile ?? row.phone}
-            {row.phoneMobile && (
-              <span className="ml-2 text-[10px] text-navy-400">
-                (main: {row.phone})
-              </span>
-            )}
-          </p>
+
+          {/* Phones — list all, label per-row */}
+          {row.phones.length > 0 && (
+            <ul className="mt-2 space-y-0.5">
+              {row.phones.map((p, idx) => (
+                <li
+                  key={`${p.number}-${idx}`}
+                  className="text-xs text-navy-600 font-mono flex items-center gap-2 flex-wrap"
+                >
+                  <span>{p.number}</span>
+                  {p.label && (
+                    <span className="text-[10px] uppercase tracking-wider text-navy-400">
+                      {p.label}
+                    </span>
+                  )}
+                  {p.contactName && (
+                    <span className="text-[10px] text-navy-400 italic">
+                      {p.contactName}
+                    </span>
+                  )}
+                  {!p.smsCapable && (
+                    <span className="text-[10px] text-coral-500">(landline)</span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
+
+          {/* Emails — list all */}
+          {row.emails.length > 0 && (
+            <ul className="mt-1 space-y-0.5">
+              {row.emails.map((e, idx) => (
+                <li
+                  key={`${e.address}-${idx}`}
+                  className="text-xs text-navy-500 flex items-center gap-2 flex-wrap"
+                >
+                  <span className="font-mono">{e.address}</span>
+                  {e.label && (
+                    <span className="text-[10px] uppercase tracking-wider text-navy-400">
+                      {e.label}
+                    </span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
+
+          {/* Channel summary + invite history */}
           <div className="text-[11px] text-navy-500 mt-2 flex flex-wrap gap-x-4 gap-y-1">
+            <span>
+              SMS-capable: {smsCapableCount}/{row.phones.length}
+            </span>
+            <span>Emails: {emailCount}</span>
             <span>Invited: {fmtTime(row.invitedAt)}</span>
             {row.status === "opted_in" && (
               <span>Opted in: {fmtTime(row.optedInAt)}</span>
@@ -142,7 +208,7 @@ export default function VendorSmsRow({ row }: { row: RowData }) {
               <button
                 onClick={() => fire("invite")}
                 disabled={pending || !row.smsCapable}
-                title={!row.smsCapable ? "Phone is a landline (Twilio 30006) — invite SMS would fail" : undefined}
+                title={!row.smsCapable ? "No SMS-capable phone — invite would fail" : undefined}
                 className="px-3 py-1.5 text-xs font-bold rounded bg-coral-500 text-white hover:bg-coral-600 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {row.invitedAt ? "Re-invite" : "Send invite"}

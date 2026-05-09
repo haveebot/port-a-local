@@ -35,6 +35,10 @@
     {
       "path": "/api/cron/boost-insights-sync",
       "schedule": "30 * * * *"
+    },
+    {
+      "path": "/api/cron/cart-first-look-expire",
+      "schedule": "* * * * *"
     }
   ]
 }

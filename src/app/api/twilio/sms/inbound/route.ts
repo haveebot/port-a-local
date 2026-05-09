@@ -1,10 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
-import { cartVendors } from "@/data/cart-vendors";
+import {
+  cartVendors,
+  smsPhonesFor,
+  findVendorByPhoneE164,
+} from "@/data/cart-vendors";
 import {
   recordOptIn,
   recordOptOut,
   toE164,
 } from "@/data/cart-vendor-sms-store";
+import {
+  getMostRecentPendingForVendor,
+  markAccepted,
+  markPassed,
+} from "@/data/cart-rental-first-look-store";
 import { findInsider } from "@/data/insiders";
 import { findBeachVendorByPhone } from "@/data/beach-vendors";
 import {
@@ -15,6 +24,8 @@ import { sendSms } from "@/lib/twilioSms";
 import {
   buildOptInConfirmSms,
   buildOptOutAckSms,
+  sendOpenBlastSms,
+  compactCartLabel,
 } from "@/lib/cartVendorSmsBlast";
 import { notifyClaimResolution } from "@/lib/beachVendorBlast";
 import { forwardInsiderSmsToAdmin } from "@/lib/insiderSmsForward";
@@ -37,21 +48,16 @@ import { checkWatch, recordNotification } from "@/data/sms-watch-store";
  *   MessagingServiceSid — MG197b... (our service)
  *
  * What we do here:
- *   1. Match From phone against a known cart vendor.
- *   2. If matched, parse Body for YES/NO/STOP intent and flip the
- *      consent record accordingly. Send an acknowledgement SMS.
- *   3. If NOT matched, log and ignore — could be a customer reply
- *      (CLAIM, STOP) or stranger. Future builds will dispatch
- *      CLAIM-from-known-vendor to the lead-claim flow.
+ *   1. Match From phone against insiders / beach vendors / cart vendors.
+ *   2. For cart vendors: parse Body for YES/NO/STOP/ACCEPT/PASS intent.
+ *      ACCEPT/PASS only matter when the vendor has a pending first-look
+ *      window (cart_rental_first_look_pending). CLAIM is accepted as a
+ *      synonym for ACCEPT (backward compat).
+ *   3. If NOT matched, surface to operator + admin@.
  *
  * Compliance: Twilio handles STOP at the carrier level automatically
  * (auto-blocks all outbound to that number). We mirror it in our DB
- * so we never even attempt to send to opted-out numbers and so the
- * admin tool reflects accurate state.
- *
- * Returns TwiML (empty <Response/>) — Twilio expects an XML response.
- * Sending an actual reply via TwiML is one option; we instead use the
- * Messages API for the ack so we can use the Messaging Service.
+ * so we never even attempt to send to opted-out numbers.
  */
 
 const TWIML_OK = '<?xml version="1.0" encoding="UTF-8"?><Response/>';
@@ -64,14 +70,28 @@ function twimlResponse() {
   });
 }
 
-type Intent = "yes" | "no" | "stop" | "claim" | "other";
+type Intent =
+  | "yes"
+  | "no"
+  | "stop"
+  | "accept"
+  | "pass"
+  | "claim"
+  | "other";
 
 function classifyBody(body: string): Intent {
   const trimmed = body.trim().toLowerCase();
   if (/\b(stop|stopall|cancel|end|quit|unsubscribe|revoke|optout)\b/.test(trimmed)) return "stop";
+  // ACCEPT / CLAIM both map to "accept" intent. CLAIM kept for backward
+  // compat with vendors who learned the old keyword. ACCEPT is the new
+  // canonical (per 2026-05-09 keyword UX softening).
+  if (/^(accept|take|takeit|i'?ll take it)\b/.test(trimmed)) return "accept";
+  if (/\bclaim\b/.test(trimmed)) return "claim";
+  // PASS is the new explicit "release this lead to other vendors"
+  // keyword. Distinct from NO (which is opt-out of SMS entirely).
+  if (/^(pass|skip|decline|release|no thanks|not me|cant|can'?t)\b/.test(trimmed)) return "pass";
   if (/^(yes|y|yeah|yep|sure|opt[ -]?in|ok|okay)\b/.test(trimmed)) return "yes";
   if (/^(no|nope|nah|opt[ -]?out|email[ -]?only)\b/.test(trimmed)) return "no";
-  if (/\bclaim\b/.test(trimmed)) return "claim";
   return "other";
 }
 
@@ -94,21 +114,7 @@ export async function POST(req: NextRequest) {
       `[twilio/inbound] from=${fromE164} intent=${intent} sid=${messageSid} body=${JSON.stringify(body)}`,
     );
 
-    // Insider bridge: if this number is on the allowlist (Winston, Collie,
-    // Nick, etc.), fire the email forward + the inline Claude agent.
-    //
-    // 1) forwardInsiderSmsToAdmin — email the message (with MMS attachments)
-    //    to admin@theportalocal.com for the operator's inbox + Claude's
-    //    next-session arnold drill. Fire-and-forget — single HTTP call,
-    //    completes quickly enough that Vercel doesn't kill it.
-    //
-    // 2) runInsiderAgent — inline Claude (Haiku 4.5) reads the message,
-    //    decides an action, and acts via tools (reply, send to third party,
-    //    or escalate to Winston). AWAITED before returning TwiML — the
-    //    multi-step loop (~3-5s typical) needs the function alive to
-    //    complete; Vercel kills background work after response. Twilio's
-    //    15s webhook budget covers it. Skipped instantly if
-    //    ANTHROPIC_API_KEY isn't set.
+    // Insider bridge (Winston, Collie, Nick, etc.) — unchanged
     const insider = findInsider(fromE164);
     if (insider) {
       forwardInsiderSmsToAdmin(insider, body, messageSid).catch((err) =>
@@ -125,9 +131,7 @@ export async function POST(req: NextRequest) {
       return twimlResponse();
     }
 
-    // Beach vendor CLAIM matcher — check before cart-vendor matcher because
-    // beach vendors (John, Tyler, Danny) may also receive non-CLAIM replies.
-    // CLAIM intent + beach-vendor phone match → atomic claim attempt.
+    // Beach vendor matcher (separate roster, unchanged)
     const beachVendor = findBeachVendorByPhone(fromE164);
     if (beachVendor && intent === "claim") {
       const unclaimed = await getMostRecentUnclaimed();
@@ -142,7 +146,6 @@ export async function POST(req: NextRequest) {
       }
       const won = await attemptClaim(unclaimed.stripeSessionId, beachVendor.slug);
       if (!won) {
-        // Lost the race — another vendor's CLAIM landed first.
         sendSms(
           fromRaw,
           `Port A Local: ${beachVendor.name} - sorry, that booking was just claimed by another vendor. Watch for the next one.`,
@@ -151,7 +154,6 @@ export async function POST(req: NextRequest) {
         );
         return twimlResponse();
       }
-      // Won the claim — fan out confirmations to all parties.
       notifyClaimResolution({
         winner: beachVendor,
         customerName: unclaimed.customerName ?? "Customer",
@@ -171,19 +173,12 @@ export async function POST(req: NextRequest) {
       return twimlResponse();
     }
     if (beachVendor && intent === "stop") {
-      // STOP from a beach vendor — log; we can't easily un-stop without
-      // them re-opting in, but Twilio handles delivery suppression. They
-      // may want to be removed from beach vendor list manually.
       console.log(
         `[twilio/inbound] STOP from beach vendor ${beachVendor.slug} - flag for manual removal from beach vendor roster`,
       );
       return twimlResponse();
     }
     if (beachVendor) {
-      // Non-CLAIM, non-STOP reply from a beach vendor — push to operator
-      // (Winston) so a human can read the prose and act. Per Winston rule
-      // 2026-04-29: "intake the message and do what we need to with it";
-      // we don't try to parse free-form intent — surface to a human.
       sendSms(
         OPERATOR_PHONE_E164,
         `[${beachVendor.name} → PAL] ${body}`.slice(0, 1500),
@@ -193,28 +188,13 @@ export async function POST(req: NextRequest) {
       return twimlResponse();
     }
 
-    // Match the inbound number to a known cart vendor (by phone).
-    // cartVendors phones may be in various formats; normalize for compare.
-    const vendor = cartVendors.find((v) => toE164(v.phone) === fromE164);
+    // Cart vendor matcher — checks ALL phones in the multi-phone array
+    // (not just primary). Bron's three numbers all match back to the
+    // brons-beach-carts vendor record.
+    const matched = findVendorByPhoneE164(fromE164, toE164);
 
-    if (!vendor) {
-      // Stranger or unidentified inbound — surface via TWO channels:
-      //
-      // 1) SMS forward to operator's phone (immediate human notification).
-      //    If the number is on the SMS watch list (we're expecting a reply
-      //    from a recent outbound), the push is *elevated* with a 🔔 prefix
-      //    + context label so it stands out from random stranger texts.
-      //
-      // 2) Email forward to admin@theportalocal.com (machine-readable shared
-      //    state). Origin: 2026-05-04 — the SMS-only path pinned inbound
-      //    state to Winston's physical phone, breaking hub-spoke architecture
-      //    (`feedback_hub_spoke_architecture.md`).
-      //
-      // RACE FIX (2026-05-06): both calls are AWAITED before TwiML return.
-      // Previously fire-and-forget — Bron Doyle's reply slipped through
-      // because Vercel killed the function before sendSms's network call
-      // completed. Twilio's 15s webhook budget easily covers both API
-      // calls (typical ~500-1500ms total).
+    if (!matched) {
+      // Stranger — surface via operator SMS + admin@ email forward (unchanged)
       const watch = await checkWatch(fromE164).catch((err) => {
         console.error("[twilio/inbound] checkWatch failed:", err);
         return null;
@@ -227,16 +207,10 @@ export async function POST(req: NextRequest) {
         forwardStrangerSmsToAdmin(fromE164, body, messageSid),
       ]);
       if (operatorResult.status === "rejected") {
-        console.error(
-          "[twilio/inbound] stranger surface to operator failed:",
-          operatorResult.reason,
-        );
+        console.error("[twilio/inbound] stranger surface to operator failed:", operatorResult.reason);
       }
       if (adminResult.status === "rejected") {
-        console.error(
-          "[twilio/inbound] stranger forward to admin@ failed:",
-          adminResult.reason,
-        );
+        console.error("[twilio/inbound] stranger forward to admin@ failed:", adminResult.reason);
       }
       if (watch && operatorResult.status === "fulfilled") {
         recordNotification(fromE164).catch((err) =>
@@ -246,13 +220,145 @@ export async function POST(req: NextRequest) {
       return twimlResponse();
     }
 
+    const { vendor, phone: matchedPhone } = matched;
+
+    // -------- ACCEPT / PASS for first-look priority leads --------
+    //
+    // ACCEPT (or CLAIM, kept as alias): vendor is taking the lead.
+    // PASS: vendor is releasing the lead to the rest of the directory.
+    //
+    // Both require an active pending first-look row. If none, ACCEPT
+    // falls back to legacy CLAIM-routing (manual log) and PASS is
+    // logged + surfaced to operator.
+    if (intent === "accept" || intent === "claim" || intent === "pass") {
+      const pending = await getMostRecentPendingForVendor(vendor.slug);
+
+      if (!pending) {
+        // No active first-look window — log + surface
+        console.log(
+          `[twilio/inbound] ${intent.toUpperCase()} from ${vendor.slug} (${vendor.name}) — no pending first-look; routing manually`,
+        );
+        sendSms(
+          OPERATOR_PHONE_E164,
+          `[${vendor.name} → PAL] ${intent.toUpperCase()}: ${body}`.slice(0, 1500),
+        ).catch((err) =>
+          console.error("[twilio/inbound] no-pending surface failed:", err),
+        );
+        return twimlResponse();
+      }
+
+      if (intent === "pass") {
+        const won = await markPassed(pending.id);
+        if (!won) {
+          // Race lost — already accepted/passed/expired. Acknowledge + bail.
+          sendSms(
+            matchedPhone.number,
+            `Port A Local: That lead was already resolved. No further action needed.`,
+          ).catch((err) =>
+            console.error("[twilio/inbound] pass race-lost ack failed:", err),
+          );
+          return twimlResponse();
+        }
+        // Acknowledge to all of vendor's phones (whoever passed, the
+        // others see the resolution)
+        const ackBody = `Port A Local: ${vendor.name} passed on the ${pending.leadMetadata.cartLabel} lead — released to the rest of the directory.`;
+        const allPhones = smsPhonesFor(vendor);
+        for (const p of allPhones) {
+          try {
+            await sendSms(p, ackBody);
+          } catch (err) {
+            console.error(`[twilio/inbound] pass ack to ${p} failed:`, err);
+          }
+          await new Promise((r) => setTimeout(r, 600));
+        }
+        // Fire open-blast to the rest of the directory immediately
+        sendOpenBlastSms(
+          {
+            cartLabel: compactCartLabel(pending.leadMetadata.cartLabel),
+            pickupFormatted: pending.leadMetadata.pickupShort,
+            returnFormatted: pending.leadMetadata.returnShort,
+            numDays: pending.leadMetadata.numDays,
+          },
+          { excludeSlugs: [vendor.slug] },
+        )
+          .then((sent) =>
+            console.log(`[first-look] PASS triggered open-blast to ${sent} vendors`),
+          )
+          .catch((err) =>
+            console.error("[first-look] PASS open-blast failed:", err),
+          );
+        return twimlResponse();
+      }
+
+      // ACCEPT / CLAIM
+      const won = await markAccepted({
+        id: pending.id,
+        acceptedViaPhone: matchedPhone.number,
+      });
+      if (!won) {
+        sendSms(
+          matchedPhone.number,
+          `Port A Local: That lead was already resolved. No further action needed.`,
+        ).catch((err) =>
+          console.error("[twilio/inbound] accept race-lost ack failed:", err),
+        );
+        return twimlResponse();
+      }
+
+      const md = pending.leadMetadata;
+      const acceptingContact = matchedPhone.contactName ?? "team";
+
+      // Confirmation to all of vendor's phones — whoever accepted, the
+      // others see who took it
+      const confirmBody = [
+        `Port A Local: ✅ ${vendor.name} accepted the ${md.cartLabel} lead`,
+        `Accepted by ${acceptingContact} (${matchedPhone.number}).`,
+        `Customer info follows in the next message.`,
+      ].join("\n\n");
+
+      // Customer-info follow-up — only sent to the accepting number to
+      // avoid spamming the team's other phones with the customer's
+      // contact details
+      const customerInfoBody = [
+        `Port A Local: 🛺 Lead details — ${md.cartLabel}`,
+        `Customer: ${md.customerName}`,
+        `Phone: ${md.customerPhone}`,
+        `Email: ${md.customerEmail}`,
+        `Pickup: ${md.pickupFormatted}`,
+        `Return: ${md.returnFormatted}`,
+        `Reach out directly. PAL is hands-off from here.`,
+      ].join("\n\n");
+
+      const allPhones = smsPhonesFor(vendor);
+      for (const p of allPhones) {
+        try {
+          await sendSms(p, confirmBody);
+        } catch (err) {
+          console.error(`[twilio/inbound] accept confirm to ${p} failed:`, err);
+        }
+        await new Promise((r) => setTimeout(r, 600));
+      }
+      // Customer info to accepting number only
+      sendSms(matchedPhone.number, customerInfoBody).catch((err) =>
+        console.error(`[twilio/inbound] accept customer-info to ${matchedPhone.number} failed:`, err),
+      );
+      // Operator ping — let Winston know the recovery worked
+      sendSms(
+        OPERATOR_PHONE_E164,
+        `[first-look ✅] ${vendor.name} (${acceptingContact}) accepted ${md.cartLabel} — ${md.pickupShort} to ${md.returnShort} for ${md.customerName}`,
+      ).catch((err) =>
+        console.error("[twilio/inbound] operator ping on accept failed:", err),
+      );
+      return twimlResponse();
+    }
+
+    // -------- Existing opt-in flow (YES / NO / STOP) --------
     if (intent === "yes") {
       await recordOptIn(vendor.slug, {
         inboundSid: messageSid,
         inboundBody: body,
       });
-      // Confirmation reply (best-effort, don't block the webhook on send)
-      sendSms(vendor.phone, buildOptInConfirmSms(vendor.name)).catch((err) =>
+      sendSms(matchedPhone.number, buildOptInConfirmSms(vendor.name)).catch((err) =>
         console.error("[twilio/inbound] confirm-send failed:", err),
       );
       return twimlResponse();
@@ -263,15 +369,13 @@ export async function POST(req: NextRequest) {
         inboundSid: messageSid,
         inboundBody: body,
       });
-      sendSms(vendor.phone, buildOptOutAckSms(vendor.name)).catch((err) =>
+      sendSms(matchedPhone.number, buildOptOutAckSms(vendor.name)).catch((err) =>
         console.error("[twilio/inbound] optout-ack-send failed:", err),
       );
       return twimlResponse();
     }
 
     if (intent === "stop") {
-      // Twilio auto-blocks outbound after STOP. Mirror in our record.
-      // No ack-send (Twilio handles STOP confirm automatically).
       await recordOptOut(vendor.slug, {
         inboundSid: messageSid,
         inboundBody: body,
@@ -279,22 +383,10 @@ export async function POST(req: NextRequest) {
       return twimlResponse();
     }
 
-    if (intent === "claim") {
-      // Lead-claim flow not yet wired (deferred). For now, log so admin
-      // can manually route. Future: match against the most recent
-      // unblasted lead and assign.
-      console.log(
-        `[twilio/inbound] CLAIM from ${vendor.slug} (${vendor.name}) — manual routing required for now`,
-      );
-      return twimlResponse();
-    }
-
-    // Other / unparseable from a cart vendor — push to operator so a human
-    // can read + act. Per Winston rule 2026-04-29: intake + surface, don't
-    // try to be clever with prose parsing.
+    // Other / unparseable from a cart vendor — push to operator
     sendSms(
       OPERATOR_PHONE_E164,
-      `[${vendor.name} → PAL] ${body}`.slice(0, 1500),
+      `[${vendor.name} (${matchedPhone.label ?? "phone"}) → PAL] ${body}`.slice(0, 1500),
     ).catch((err) =>
       console.error("[twilio/inbound] cart-vendor surface to operator failed:", err),
     );

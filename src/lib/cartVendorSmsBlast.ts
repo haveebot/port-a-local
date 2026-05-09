@@ -10,11 +10,27 @@
  *
  * Both message types use the same Messaging Service SID and end with
  * STOP keyword for compliance.
+ *
+ * 2026-05-09: keyword UX softened — outbound copy now says "Reply
+ * ACCEPT to take it, or PASS to release it" instead of "Reply CLAIM."
+ * Inbound webhook still accepts CLAIM as a synonym for ACCEPT for
+ * backward compat with vendors who learned the old keyword.
+ *
+ * 2026-05-09: split into two fan-out paths:
+ *   - sendFirstLookSms()  — sends to a single priority vendor's phones
+ *   - sendOpenBlastSms()  — sends to every vendor EXCEPT first-look
+ *                            vendors (they had their shot already)
+ *   - sendLeadBlastSms()  — kept as alias for sendOpenBlastSms() for
+ *                            callers that don't care about the split
  */
 
 import { sendSms } from "./twilioSms";
 import { getOptedOutSlugs } from "@/data/cart-vendor-sms-store";
-import { cartVendors, smsPhoneFor } from "@/data/cart-vendors";
+import {
+  cartVendors,
+  smsPhonesFor,
+  type CartVendor,
+} from "@/data/cart-vendors";
 
 /**
  * The opt-in invitation. One-shot SMS asking a vendor to join the
@@ -54,7 +70,7 @@ export function buildOptOutAckSms(vendorName: string): string {
  * the lock screen.
  *
  * Dates: weekday + month/day for fast skim. Duration in days.
- * No customer info in the blast — that's revealed only after claim.
+ * No customer info in the blast — that's revealed only after ACCEPT.
  */
 export interface CartLeadBlastInput {
   cartLabel: string; // "6-Passenger Golf Cart"
@@ -72,7 +88,27 @@ export function buildLeadBlastSms(input: CartLeadBlastInput): string {
     `Port A Local: 🛺 NEW CART LEAD`,
     `${cartLabel}, ${pickupFormatted} to ${returnFormatted} (${numDays} ${dayWord}).`,
     `$20 off your standard rate.`,
-    `Reply CLAIM to take it (first vendor wins).`,
+    `Reply ACCEPT to take it, or PASS to release it.`,
+    `STOP to opt out.`,
+  ].join("\n\n");
+}
+
+/**
+ * The first-look variant — same body as the open blast plus a one-line
+ * preamble that signals "you have a head start window before the rest
+ * of the directory sees this." Intentionally subtle — keeps the surface
+ * familiar so the lock-screen scan time stays fast.
+ */
+export function buildFirstLookLeadSms(
+  input: CartLeadBlastInput & { windowMinutes: number },
+): string {
+  const { windowMinutes, ...rest } = input;
+  const dayWord = rest.numDays === 1 ? "day" : "days";
+  return [
+    `Port A Local: 🛺 PRIORITY CART LEAD (${windowMinutes}-min head start)`,
+    `${rest.cartLabel}, ${rest.pickupFormatted} to ${rest.returnFormatted} (${rest.numDays} ${dayWord}).`,
+    `$20 off your standard rate.`,
+    `Reply ACCEPT to take it, or PASS to release it to the rest of the directory.`,
     `STOP to opt out.`,
   ].join("\n\n");
 }
@@ -88,44 +124,94 @@ export function compactCartLabel(cartLabel: string): string {
 }
 
 /**
- * Send the lead blast SMS to every opted-in vendor. Returns the
- * count of messages dispatched. Caller should NOT await individually
- * if dispatching in parallel — instead wrap in Promise.allSettled to
- * tolerate per-vendor failures.
+ * Send the first-look SMS to all of a single priority vendor's
+ * SMS-capable phones. Used when a lead arrives and the vendor has
+ * `firstLookMinutes > 0` configured.
+ *
+ * Returns the count of messages dispatched (one per phone number).
  */
-export async function sendLeadBlastSms(
-  input: CartLeadBlastInput,
+export async function sendFirstLookSms(
+  vendor: CartVendor,
+  input: CartLeadBlastInput & { windowMinutes: number },
 ): Promise<number> {
-  // Per Winston's policy 2026-04-29: every cart vendor in the directory
-  // is default opt-in. Blast targets all active + SMS-capable vendors
-  // EXCEPT those who manually opted out (STOP / NO reply tracked in
-  // cart_vendor_sms_consents.status='opted_out').
-  const optedOutSlugs = await getOptedOutSlugs();
-  const excludeSet = new Set(optedOutSlugs);
-  const targets = cartVendors.filter(
-    (v) =>
-      v.active &&
-      !excludeSet.has(v.slug) &&
-      v.smsCapable !== false &&
-      smsPhoneFor(v).trim().length > 0,
-  );
-  if (targets.length === 0) return 0;
+  const phones = smsPhonesFor(vendor);
+  if (phones.length === 0) return 0;
 
-  const body = buildLeadBlastSms(input);
-  // Send sequentially with light pacing — A2P 10DLC LOW_VOLUME tier on
-  // AT&T is 1.25 msg/sec. Sequential at ~1s pace stays comfortably under.
+  const body = buildFirstLookLeadSms(input);
   let sent = 0;
-  for (const vendor of targets) {
+  for (const phone of phones) {
     try {
-      await sendSms(smsPhoneFor(vendor), body);
+      await sendSms(phone, body);
       sent++;
     } catch (err) {
-      console.error(`[cart-vendor-blast] send failed for ${vendor.slug}:`, err);
+      console.error(
+        `[first-look-blast] send failed for ${vendor.slug} ${phone}:`,
+        err,
+      );
     }
-    // 800ms gap between sends — fits AT&T 1.25 mps with margin
-    if (sent < targets.length) {
+    // 800ms pacing — same as open blast for A2P 10DLC throttle margin
+    if (sent < phones.length) {
       await new Promise((r) => setTimeout(r, 800));
     }
   }
   return sent;
 }
+
+/**
+ * Send the lead blast SMS to every opted-in vendor — the OPEN-BLAST
+ * phase. Excludes vendors in `excludeSlugs` (used to skip first-look
+ * vendors that already had their priority window). Returns the count of
+ * messages dispatched.
+ *
+ * NOTE: A vendor with multiple SMS-capable phones receives one SMS per
+ * phone — one alert per number on file. That mirrors the multi-recipient
+ * model of the lead-blast email (one email per address).
+ */
+export async function sendOpenBlastSms(
+  input: CartLeadBlastInput,
+  opts: { excludeSlugs?: string[] } = {},
+): Promise<number> {
+  // Per Winston's policy 2026-04-29: every cart vendor in the directory
+  // is default opt-in. Blast targets all active vendors with at least one
+  // SMS-capable phone EXCEPT those who manually opted out (STOP / NO reply
+  // tracked in cart_vendor_sms_consents.status='opted_out').
+  const optedOutSlugs = await getOptedOutSlugs();
+  const excludeSet = new Set([
+    ...optedOutSlugs,
+    ...(opts.excludeSlugs ?? []),
+  ]);
+  const targets = cartVendors.filter(
+    (v) =>
+      v.active &&
+      !excludeSet.has(v.slug) &&
+      smsPhonesFor(v).length > 0,
+  );
+  if (targets.length === 0) return 0;
+
+  const body = buildLeadBlastSms(input);
+  let sent = 0;
+  for (const vendor of targets) {
+    const phones = smsPhonesFor(vendor);
+    for (const phone of phones) {
+      try {
+        await sendSms(phone, body);
+        sent++;
+      } catch (err) {
+        console.error(
+          `[cart-vendor-blast] send failed for ${vendor.slug} ${phone}:`,
+          err,
+        );
+      }
+      // 800ms gap between sends — fits AT&T 1.25 mps with margin
+      await new Promise((r) => setTimeout(r, 800));
+    }
+  }
+  return sent;
+}
+
+/**
+ * Backward-compat alias — older callers may import `sendLeadBlastSms`.
+ * New code should use `sendOpenBlastSms` for clarity. Both target the
+ * same fan-out (all active SMS-capable vendors not in the exclude set).
+ */
+export const sendLeadBlastSms = sendOpenBlastSms;

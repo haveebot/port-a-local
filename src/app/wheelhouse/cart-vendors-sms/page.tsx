@@ -1,10 +1,16 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { cartVendors } from "@/data/cart-vendors";
+import {
+  cartVendors,
+  hasSmsCapablePhone,
+  primaryPhoneFor,
+} from "@/data/cart-vendors";
 import { getAllConsents } from "@/data/cart-vendor-sms-store";
+import { getRecentFirstLookActivity } from "@/data/cart-rental-first-look-store";
 import VendorSmsRow from "./VendorSmsRow";
 import BulkInviteButton from "./BulkInviteButton";
+import FirstLookPanel from "./FirstLookPanel";
 
 export const dynamic = "force-dynamic";
 
@@ -13,7 +19,10 @@ export default async function CartVendorsSmsPage() {
   const who = cookieStore.get("wheelhouse_who")?.value;
   if (!who) redirect("/wheelhouse/login");
 
-  const consents = await getAllConsents();
+  const [consents, firstLookActivity] = await Promise.all([
+    getAllConsents(),
+    getRecentFirstLookActivity(20),
+  ]);
   const consentBySlug = new Map(consents.map((c) => [c.vendorSlug, c]));
 
   const rows = cartVendors.map((v) => {
@@ -21,10 +30,21 @@ export default async function CartVendorsSmsPage() {
     return {
       slug: v.slug,
       name: v.name,
-      phone: v.phone,
-      phoneMobile: v.phoneMobile ?? null,
+      phones: v.phones.map((p) => ({
+        number: p.number,
+        label: p.label ?? null,
+        contactName: p.contactName ?? null,
+        smsCapable: p.smsCapable !== false,
+      })),
+      emails: v.emails.map((e) => ({
+        address: e.address,
+        label: e.label ?? null,
+        contactName: e.contactName ?? null,
+      })),
+      firstLookMinutes: v.firstLookMinutes ?? null,
+      primaryPhone: primaryPhoneFor(v),
       active: v.active,
-      smsCapable: v.smsCapable !== false, // default true unless explicitly false
+      smsCapable: hasSmsCapablePhone(v),
       status: c?.status ?? "pending",
       invitedAt: c?.invitedAt ?? null,
       optedInAt: c?.optedInAt ?? null,
@@ -48,7 +68,7 @@ export default async function CartVendorsSmsPage() {
   const blastRoster = rows.filter(
     (r) =>
       r.active &&
-      r.phone &&
+      r.primaryPhone &&
       r.smsCapable &&
       r.status !== "opted_out",
   ).length;
@@ -56,7 +76,7 @@ export default async function CartVendorsSmsPage() {
   // Courtesy-invite-eligible = active + SMS-capable + not yet invited.
   // Used for the optional bulk courtesy intro send.
   const bulkEligible = rows.filter(
-    (r) => r.active && r.phone && r.smsCapable && !r.invitedAt,
+    (r) => r.active && r.primaryPhone && r.smsCapable && !r.invitedAt,
   ).length;
   const landlineOnly = rows.filter((r) => r.active && !r.smsCapable).length;
 
@@ -80,6 +100,8 @@ export default async function CartVendorsSmsPage() {
       </header>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-8">
+        <FirstLookPanel activity={firstLookActivity} />
+
         <section className="bg-white rounded-2xl border border-sand-300 p-6 shadow-sm">
           <h1 className="font-display text-2xl font-bold mb-2">
             Cart vendor SMS roster
