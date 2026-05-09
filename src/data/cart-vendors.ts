@@ -195,7 +195,7 @@ export const cartVendors: CartVendor[] = [
         address: "bron@bronsbeachcarts.com",
         label: "primary",
         contactName: "Bron Doyle",
-        note: "Unverified 2026-05-09 — added per Winston direction; bounce will tell us if it's wrong.",
+        note: "Unverified 2026-05-09 — added per operator direction; bounce will tell us if it's wrong.",
       },
       {
         address: "sales@bronsbeachcarts.com",
