@@ -54,8 +54,55 @@ function tokenToAgent(token: string): string | null {
   return null;
 }
 
+/**
+ * Multi-tenant host routing.
+ *
+ * When the incoming Host header matches one of our tenant domains
+ * (e.g. bronsbeach.com), rewrite the pathname into the tenant's
+ * route prefix so the same Next.js app serves a clean, PAL-chrome-free
+ * surface at that domain.
+ *
+ *   bronsbeach.com/           → /brons
+ *   bronsbeach.com/checkout/* → /brons/checkout/*
+ *   bronsbeach.com/anything   → /brons/anything
+ *
+ * Implementation note: API routes (/api/*) are NOT rewritten — they're
+ * the same code regardless of host. The browser hits bronsbeach.com/api/
+ * brons/checkout, the request reaches /api/brons/checkout, the response
+ * routes back. No rewrite needed because the path already matches.
+ */
+const TENANT_HOST_REWRITES: Record<string, string> = {
+  "bronsbeach.com": "/brons",
+  "www.bronsbeach.com": "/brons",
+};
+
+function tenantPrefixForHost(host: string | null): string | null {
+  if (!host) return null;
+  const cleanHost = host.split(":")[0].toLowerCase();
+  return TENANT_HOST_REWRITES[cleanHost] ?? null;
+}
+
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
+  const host = req.headers.get("host");
+  const tenantPrefix = tenantPrefixForHost(host);
+
+  // Tenant host routing — bronsbeach.com etc.
+  if (tenantPrefix) {
+    // Don't rewrite API routes (they live under /api/* regardless of host)
+    // Don't rewrite Next.js internals or static assets
+    if (
+      !pathname.startsWith("/api/") &&
+      !pathname.startsWith("/_next/") &&
+      !pathname.startsWith("/brons") && // already prefixed
+      pathname !== "/favicon.ico"
+    ) {
+      const url = req.nextUrl.clone();
+      // Map "/" → "/brons", "/foo" → "/brons/foo"
+      url.pathname = pathname === "/" ? tenantPrefix : `${tenantPrefix}${pathname}`;
+      return NextResponse.rewrite(url);
+    }
+  }
 
   if (PUBLIC_WHEELHOUSE_PATHS.includes(pathname)) {
     return NextResponse.next();
@@ -103,5 +150,15 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/wheelhouse/:path*", "/api/wheelhouse/:path*"],
+  // Matcher must include both the wheelhouse-gated routes AND the
+  // tenant-host-routed paths (everything under /, /brons, /checkout etc.
+  // when the request hits bronsbeach.com). The negative lookahead skips
+  // Next internals + static assets so we don't rewrite those.
+  matcher: [
+    "/wheelhouse/:path*",
+    "/api/wheelhouse/:path*",
+    // Tenant-routing matcher — runs middleware on top-level paths
+    // (everything except _next/, api/, favicon, static files)
+    "/((?!_next/|api/|favicon\\.ico|.*\\..*).*)",
+  ],
 };
