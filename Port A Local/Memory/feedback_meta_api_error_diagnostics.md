@@ -53,6 +53,52 @@ When writing future Meta API wrappers, propagate **all** error fields up the cal
 
 After the PAL boost build hit two consecutive "Invalid parameter" errors in 30 minutes — first at campaign create, then at adset create. Both took ~5 minutes each to resolve once we hit the API directly with curl + jq. Filing so this doesn't cost the same time on the next tenant's boost build.
 
+## Update 2026-05-06 — "creative: Permissions error" → check **billing first, scopes second**
+
+PAL boost #29 failed mid-day Sunday with `creative: Permissions error` and stayed broken for 5 days silently — every subsequent boost create hit the same wall. We initially assumed scope drift or token issues. **Wrong diagnosis path.**
+
+The actual cause: **`account_status = 3` (UNSETTLED)** on the ad account. Meta tried to bill the funding source (Stripe Issuing card "PAL · FB Ads") for an outstanding $3.16 balance, the charge declined, the account flipped to UNSETTLED, and every subsequent ad-create hit the vague `creative: Permissions error`.
+
+### The new diagnostic order for "creative: Permissions error" or any vague-perms-error from Meta Marketing API
+
+1. **First — check ad account billing**, not scopes. Hit `/api/wheelhouse/social/boost/debug-perms` (PAL endpoint shipped 2026-05-06). Look at `ad_account.account_status`:
+   - `1` = Active (good)
+   - `2` = Disabled
+   - **`3` = UNSETTLED** (most common — payment didn't go through)
+   - `7` = Pending Risk Review
+   - `9` = Grace Period
+   - `100` = Pending Closure
+   - `101` = Closed
+2. **Second — check the funding source**. If the card is a Stripe Issuing virtual card, look at Stripe Issuing → authorization log for declines from Meta/Facebook. Common decline reasons for new cards: AVS mismatch, 3DS not completed, spending control triggered, BIN block.
+3. **Third — check page tasks + token scopes**. Only after 1+2 are clean. The token rarely loses scopes silently; billing failures are the common drift.
+
+### Specific Stripe Issuing on Meta gotcha — funding-balance mechanism
+
+**Root cause confirmed 2026-05-07 (Winston operator-side):** Stripe Issuing cards are not credit lines — they **draw from the connected Stripe account's available Issuing balance**. If the operational account has $0 issuing balance, every authorization declines for `insufficient_funds` regardless of the spending-control cap. The card looks valid in Meta's UI (Mastercard *5656, accepted as funding source) but every charge fails at auth.
+
+PAL incident chain:
+1. Stripe Issuing card created and linked to Meta ad account 2026-05-02 — but operational Stripe account had no funded Issuing balance
+2. First six boosts ran on Meta credit (accumulating $3.16 net-30 invoice)
+3. Meta tried to settle the $3.16 → card declined for insufficient_funds → ad account flipped to UNSETTLED
+4. All subsequent boost creates hit `creative: Permissions error` for 5 days until operator paid the $3.16 manually with a different method
+
+**Other possible decline reasons** (less common in PAL's case but worth checking on first incident): AVS mismatch on freshly-issued cards, 3DS not completed, spending control triggered by Meta's $1 pre-auth pattern, BIN block.
+
+Recovery steps (operator-side):
+- Stripe Dashboard → Issuing → card → Authorizations → find declined Meta charge → read `decline_reason` (`insufficient_funds` is the most likely answer)
+- If `insufficient_funds`: top up the operational Stripe account's Issuing balance (transfer from connected account / payouts), OR pay Meta's outstanding balance from a different method
+- Meta Ads Manager → Billing → "Pay now" the outstanding balance manually with a different method (fastest unblock)
+- After settling, account_status returns to 1 within ~minutes
+
+**Prevention pattern:** When linking a Stripe Issuing card to any external billing system (Meta, Google Ads, etc.), pre-fund the Issuing balance with at least one month of expected spend BEFORE linking. The card's `spending_controls` cap is a ceiling, not a floor — it doesn't guarantee the auth will succeed.
+
+### Companion diagnostic endpoints PAL ships
+
+- `/api/wheelhouse/social/boost/debug-perms` — token + perms + page tasks + ad_account.account_status
+- `/api/wheelhouse/social/boost/spend-breakdown?days=30` — per-ad spend totals + daily curve
+- `/api/wheelhouse/social/boost/diagnose?id=N` — per-post boost state + insights triangulation (existing, pre-2026-05-06)
+
 Pairs with:
 - `feedback_meta_api_organic_deprecation.md` (the orgs-insights gap that drove us to build paid boost in the first place)
-- `feedback_oauth_scope_layers.md` (App-vs-Token scope distinction we hit yesterday)
+- `feedback_oauth_scope_layers.md` (App-vs-Token scope distinction)
+- `feedback_vercel_env_pull_escaped_newlines.md` (token-handling sibling)

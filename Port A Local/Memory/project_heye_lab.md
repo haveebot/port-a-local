@@ -9,6 +9,8 @@ originSessionId: d5d877ac-231f-4032-ad5d-6942700a594d
 
 **HeyeLab** (one-word brand name; **Heye Lab** for official / legal / placement use) is **Nick Merrill's company**. Winston Caraker co-develops with Nick — operating as co-developer/partner, behind-the-scenes by default; Nick is the founder. Nick's personal portfolio currently sits at heyelab.com and will evolve into the umbrella front-door with Nick's bio integrated as founder. The HeyeDeploy framework (canonical at `~/Projects/workspace/heyedeploy/` + GitHub `haveebot/heyedeploy`) is the operating substrate that lives under the HeyeLab umbrella.
 
+**Brand-name heritage (locked 2026-05-04):** "Heye" is **Nick's paternal family name** (his father's family was Heye). The brand carries genealogical weight, not just a stylistic spelling choice. The HeyeLab → HeyeDeploy → component-`<X>Deploy` naming chain all carry the family name forward. See `feedback_heyelab_brand_spelling.md` for full origin context + how-to-apply.
+
 > **Correction note (2026-05-01 PM):** Earlier model in this file framed Heye Lab as Winston-owned LLC with Nick as co-builder. That was wrong. HeyeLab is Nick's; Winston co-develops. Tenants like PAL / Sage Em / CrossRef are Winston-operated tenants riding on the HeyeDeploy framework. Don't propagate the old "Winston owns Heye Lab" framing.
 
 **Canonical repo for the framework:** [github.com/haveebot/heyedeploy](https://github.com/haveebot/heyedeploy) — read this first for any framework-level question. Memory holds short principles + naming + how-to-apply; the repo holds the body.
