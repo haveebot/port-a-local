@@ -65,6 +65,7 @@ INCLUDE=(
   "feedback_heyedeploy_pattern_thinking.md"
   "feedback_customer_recovery_patterns.md"
   "feedback_substance_flag_before_grammar.md"
+  "feedback_pal_self_provider_rule.md"
   "feedback_consumer_ux_for_non_tech_operators.md"
   "feedback_heye_lab_framing.md"
   "feedback_coverage_vs_goal.md"
