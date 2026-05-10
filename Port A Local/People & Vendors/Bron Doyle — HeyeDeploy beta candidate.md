@@ -1,19 +1,44 @@
 # Bron Doyle — HeyeDeploy beta candidate
 
-_Discovery filed 2026-05-09 PM. Revenue-share pitch: 12% target on every transaction PAL processes through systems we build for him, EXCLUDING bar/F&B sales (we market the venue free). Internal: actual ceiling is 12; pitch may negotiate to 8-10. Bar carve-out is a goodwill anchor, not a giveaway — bar sales are highest-volume/lowest-margin and the most painful to migrate, so removing them removes friction + frames PAL as growth partner, not vendor._
+_Discovery filed 2026-05-09 PM. Recalibrated 2026-05-09 PM-2 to Phase 1 / Phase 2 structure._
 
-## Operator at a glance
+## Deal structure (2026-05-09 recalibration)
 
-**Bron Doyle** owns and runs the entire 314 E Avenue G campus in Port Aransas. Five customer-visible arms under one roof, plus a vacation rental property arm noted but **out of scope for this deal**:
+**Tenant ownership:** HeyeLab takes ownership stake in Bron's digital surface. PAL is **affiliate / partner** only on public surfaces — never the principal in the deal. HeyeLab brand stays internal per `feedback_heye_lab_framing.md` ("quiet tech mystery" rule); Bron's customer sees Bron's brand alone. Internally, this is a HeyeDeploy tenant relationship with a revenue-share contract, not a typical paid-tenant SaaS agreement.
 
-| Arm | In deal? | What we'd do |
+**Phase 1 scope (now → close → prove):**
+- HeyeLab owns Bron's **entire digital surface** — bronsbeach.com (or whatever digital identity), online booking, online checkout, customer emails, online comms
+- **In-person stays untouched** — Cojilio walk-up flow, Clover POS at the bar, phone bookings, paper rental agreements, in-person rentals all run as they do today
+- **12% revenue share applies to digital transactions only** — money that flows through the platform we own. Walk-up cart at his shop = his 100%, untouched. Bar sale = his 100%, untouched.
+- We **prove digital revenue value** before any in-person conversation
+
+**Phase 2 (post-validation, undefined timeline):**
+- Extend to in-person operations once the digital side is performing
+- Different pricing structure, negotiated then with real digital-revenue data informing it
+- Not pre-committed today
+
+**Internal pricing target:** 12%. May negotiate to 8-10. Below 8 = walked back too far; above 12 = upside we don't expect.
+
+**Public framing of PAL relationship:** PAL features Bron's rental listings on `/rent` (already live, already first-look-priority) as a partner / affiliate listing. PAL is NOT publicly tied to bronsbeach.com or the digital surface ownership. Bron's customer sees Bron's brand; PAL sees Bron's transactions; HeyeLab takes the cut.
+
+## Two revenue streams under HeyeLab ownership
+
+| Stream | What it is | Status |
 |---|---|---|
-| **Bron's Backyard** (outdoor bar / event venue / live music / yard games / movie nights) | ❌ EXCLUDED — bar carve-out | Free venue marketing via PAL `/live-music`, `/events`, social composer mentions |
-| **Bron's Kitchen** (food service inside Backyard) | ❌ EXCLUDED — bar carve-out | Free food-spotlight surface on PAL |
-| **Bron's Shaved Ice & To-Go Bar** (frozen daiquiris / shaved ice / to-go cocktails) | ❌ EXCLUDED — bar carve-out | Free promotion |
-| **Bron's Beach Carts** (golf cart rentals, 4 + 6 passenger) | ✅ INCLUDED — revenue share | Replace Cojilio booking + integrate into PAL `/rent` (already done as of 2026-05-09 — first-look priority pattern) |
-| **Bron's Beach Rentals** (chairs / umbrellas / cabanas / coolers — beach equipment) | ✅ INCLUDED — revenue share | Replace Cojilio booking + integrate into a new PAL `/beach/rentals` surface |
-| **Vacation Properties** (Bron's Beach Shack / Bron's Place / Beach Breeze — three 3BR rentals) | 🚫 NO INVOLVEMENT | Per Winston 2026-05-09: PAL takes no involvement in property bookings. Listed here for awareness only — do NOT pitch, do NOT include in revenue scope, do NOT build a properties surface. |
+| **Bron's Beach Carts** (golf carts) | Online cart rentals — bookings flow through bronsbeach.com → Stripe Connect → 88% to Bron's connected account, 12% to HeyeLab | Vendor record live in PAL with first-look priority; staging surface scaffolded 2026-05-09 |
+| **Bron's Beach Rentals** (chairs / umbrellas / cabanas / coolers) | Online beach equipment rentals — same flow, same split | Staging surface scaffolded 2026-05-09 at `/brons` |
+
+## Bron's full operation — for context
+
+The 314 E Avenue G campus has more arms than just the two we operate in. **Listed for awareness; not in Phase 1 scope:**
+
+| Arm | Phase 1 status | Notes |
+|---|---|---|
+| Bron's Backyard (bar / venue / live music / yard games) | OUT — in-person, untouched | PAL marketing exposure on `/live-music`, `/events`, social composer mentions stays as-is (free, affiliate listing) |
+| Bron's Kitchen (food) | OUT — in-person, untouched | PAL exposure on `/eat` stays as-is |
+| Bron's Shaved Ice & To-Go Bar | OUT — in-person, untouched | PAL exposure stays as-is |
+| Vacation Properties (3 × 3BR — Beach Shack, Bron's Place, Beach Breeze) | OUT — no involvement, ever | Per Winston 2026-05-09: HeyeLab takes no involvement in property bookings. Do NOT pitch. |
+| In-person walk-ups, phone bookings | OUT — Phase 1 scope is digital only | Stays on Cojilio + Clover, no HeyeLab involvement |
 
 ## Commerce stack today (verified 2026-05-09 via webfetch)
 
@@ -104,11 +129,19 @@ To be answered in the walk-in conversation, NOT by web research:
 | Stripe Connect daily payouts | Same rails PAL beach-payouts cron uses. *"You see your share of every transaction land in your account daily, no invoice from us."* |
 | HeyeDeploy framework story | *"You're not buying software. You're a beta tenant in a system that's getting smarter every week."* |
 
+## Lead attribution — accept the gray zone
+
+When a customer calls Bron's phone team, his staff redirects to bronsbeach.com, the customer books online → HeyeLab gets 12% on a lead Bron's phone team generated. Same for FB-driven leads, in-store walk-ins who decide to book online, etc. **The cut is clean ("digital transactions = 12%, everything else = 0%"); attribution is gray.**
+
+**Stance:** accept it. Don't try to track who drove the lead. Use best practices to keep customers in our ecosystem (clean UX, fast checkout, email follow-ups, retargeting) so most demand naturally flows through the digital surface. If Bron raises this as friction, we adjust then.
+
 ## Internal notes
 
-- **Pricing — DO NOT show Bron**: 12% is the internal target. Pitch may land at 8-10% after negotiation. Below 8% probably means we walked back too far; above 12% is upside we don't expect to capture.
-- **The bar carve-out is a feature, not a concession**: explicitly framed as "we don't take a cut on your bar because we're not the ones selling those drinks." This anchors us as a value-add on transactions we DRIVE, not a tax on his existing business.
+- **Pricing — DO NOT show Bron**: 12% is the internal target. Pitch may land at 8-10% after negotiation.
+- **HeyeLab is the principal, PAL is an affiliate**: never frame PAL as the deal-holder publicly or to Bron. The relationship is HeyeLab ↔ Bron's; PAL is a listing surface that happens to feature Bron's rentals on its local guide.
+- **HeyeLab brand stays quiet**: per `feedback_heye_lab_framing.md`, no body-copy explanation of HeyeLab on customer surfaces. Bron's customer sees Bron's brand alone.
 - **Don't mention competitors by name**: PortA.Today, Cojilio. Let him bring those up. We replace systems, we don't badmouth them.
+- **Phase 2 framing**: don't pre-commit. Surface as *"after we prove digital, let's talk about what's next"* — leaves room for him to drive the timeline + scope.
 - **Watch list `bron-pitch`** TTL through 2026-05-14 — elevated 🔔 push fires on any reply from his three phones.
 - **Intro SMS landed 2026-05-09 21:46 UTC** to all 3 numbers (Bron reservations, Bron personal, Kristen) — all delivered cleanly. Zero replies as of doc-writing.
 
