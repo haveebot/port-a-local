@@ -1,9 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { emailLayout } from "@/lib/emailLayout";
-import { getBlastableVendors, getBlastCount } from "@/data/cart-vendors";
+import {
+  getBlastableVendors,
+  getBlastCount,
+  getFirstLookVendorsForSize,
+  emailsFor,
+} from "@/data/cart-vendors";
 import { sendConsumerSms } from "@/lib/twilioSms";
-import { sendLeadBlastSms, compactCartLabel } from "@/lib/cartVendorSmsBlast";
+import {
+  sendOpenBlastSms,
+  sendFirstLookSms,
+  compactCartLabel,
+} from "@/lib/cartVendorSmsBlast";
+import { startFirstLookWindow } from "@/data/cart-rental-first-look-store";
 import { pingSuperAdmins, formatCustomerDisplay } from "@/lib/superAdminPing";
 
 const getStripe = () => new Stripe(process.env.STRIPE_SECRET_KEY || "", {
@@ -73,6 +83,24 @@ export async function POST(req: NextRequest) {
     const days = parseInt(numDays);
     const fee = parseInt(reservationFee);
 
+    // Compact pickup/return labels for SMS — drops year + comma noise.
+    const pickupShort = formatDate(pickupDate).replace(/, \d{4}$/, "").replace(/^([A-Za-z]+), /, "$1 ");
+    const returnShort = formatDate(returnDate).replace(/, \d{4}$/, "").replace(/^([A-Za-z]+), /, "$1 ");
+
+    // -------- Determine first-look vendors for this lead --------
+    //
+    // Any vendor with `firstLookMinutes > 0` AND cartSizes including the
+    // requested size gets a parallel head-start window. The rest of the
+    // directory waits for the longest first-look window to expire (or
+    // for an ACCEPT/PASS reply) before they're blasted.
+    //
+    // For v1: Bron's Beach Carts is the only first-look-flagged vendor.
+    // The pattern is generalized — any future preferred vendor just sets
+    // the field and gets the same orchestration with no code change.
+    const firstLookVendors = getFirstLookVendorsForSize(cartSize);
+    const firstLookSlugs = firstLookVendors.map((v) => v.slug);
+    const hasFirstLook = firstLookVendors.length > 0;
+
     const internalHtml = emailLayout({
       tone: "alert",
       preheader: `Golf cart PAID — ${name} — $${fee}`,
@@ -88,6 +116,15 @@ export async function POST(req: NextRequest) {
         <p><strong>Return:</strong> ${returnFormatted}</p>
         <p><strong>Duration:</strong> ${days} day${days !== 1 ? "s" : ""}</p>
         <p><strong>Handoff:</strong> Pickup or delivery — vendor's call</p>
+        ${
+          hasFirstLook
+            ? `<p style="margin-top:12px; padding:10px; background:#fff7ed; border-left:3px solid #f59e0b; font-size:12px;">
+              ⏱ <strong>First-look window active</strong> — ${firstLookVendors
+                .map((v) => `${v.name} (${v.firstLookMinutes} min)`)
+                .join(", ")}. Open-blast fires at expiry or on PASS.
+            </p>`
+            : ""
+        }
         <hr style="border:none; border-top:1px solid #e4dccc; margin:16px 0;"/>
         <p style="font-size:16px;"><strong>Fee collected:</strong> $${fee}</p>
         <p style="font-size:11px; color:#8896ab; font-family:monospace; margin-top:12px;">Stripe session: ${session.id}</p>
@@ -119,8 +156,18 @@ export async function POST(req: NextRequest) {
 
     console.log(`[Rent/Confirm] Payment confirmed — ${name} | ${cartLabel} | ${pickupDate} → ${returnDate}`);
 
-    // --- Vendor lead blast ---
-    const vendors = getBlastableVendors();
+    // -------- Vendor lead blast --------
+    //
+    // Email channel: ALWAYS simultaneous to all vendors with at least one
+    // email, including first-look vendors. Email doesn't have the same
+    // urgency-on-lock-screen dynamic as SMS, and a wider net at T+0 means
+    // the lead has every realistic chance to land. First-look bias is
+    // expressed via the SMS channel alone.
+    //
+    // SMS channel: branches on first-look. If first-look vendors exist
+    // for this cart size, they get the priority SMS at T+0; everyone
+    // else waits until window expiry (or PASS) for the open blast.
+    const allEmailVendors = getBlastableVendors();
     const totalVendorCount = getBlastCount();
 
     const vendorLeadHtml = emailLayout({
@@ -147,38 +194,103 @@ export async function POST(req: NextRequest) {
       `,
     });
 
-    const vendorBlastPromises = vendors.map((v) =>
-      sendEmail(
-        v.email,
-        `🛺 New Cart Rental — ${cartLabel} — ${pickupDate} to ${returnDate} — Claim It`,
-        vendorLeadHtml
-      )
+    // Email blast — one Resend POST per email address (a vendor with
+    // multiple emails like Bron's gets one POST per address so each can
+    // independently succeed or bounce; we'll learn which addresses work)
+    const vendorBlastPromises = allEmailVendors.flatMap((v) =>
+      emailsFor(v).map((address) =>
+        sendEmail(
+          address,
+          `🛺 New Cart Rental — ${cartLabel} — ${pickupDate} to ${returnDate} — Claim It`,
+          vendorLeadHtml,
+        ),
+      ),
     );
 
-    console.log(`[Rent/Blast] Sending lead to ${vendors.length} vendors (${totalVendorCount} total on list)`);
+    console.log(
+      `[Rent/Blast] Sending lead email to ${vendorBlastPromises.length} addresses across ${allEmailVendors.length} vendors`,
+    );
 
     const customerSMS = `Port A Local: Your ${cartLabel} is reserved for ${pickupFormatted}. Cart logistics (pickup or delivery, vendor's call) arrive 24-48 hours before your trip. Reply STOP to opt out.`;
 
-    // Compact pickup/return labels for SMS — drops year + comma noise.
-    const pickupShort = formatDate(pickupDate).replace(/, \d{4}$/, "").replace(/^([A-Za-z]+), /, "$1 ");
-    const returnShort = formatDate(returnDate).replace(/, \d{4}$/, "").replace(/^([A-Za-z]+), /, "$1 ");
+    // SMS channel — branch on first-look
+    const smsPromises: Array<Promise<unknown>> = [];
+
+    if (hasFirstLook) {
+      // First-look phase: SMS only the priority vendors. Open blast
+      // deferred until window expiry (cron) OR a PASS reply (inbound webhook).
+      console.log(
+        `[Rent/Blast] First-look active — priority SMS to ${firstLookVendors.length} vendor(s): ${firstLookSlugs.join(", ")}`,
+      );
+      for (const v of firstLookVendors) {
+        // Persist the pending row so the cron + webhook can find it
+        const minutes = v.firstLookMinutes ?? 30;
+        smsPromises.push(
+          startFirstLookWindow({
+            leadId: session.id,
+            vendorSlug: v.slug,
+            windowMinutes: minutes,
+            metadata: {
+              cartSize,
+              cartLabel,
+              pickupDate,
+              returnDate,
+              pickupFormatted,
+              returnFormatted,
+              pickupShort,
+              returnShort,
+              numDays: days,
+              customerName: name,
+              customerPhone: phone,
+              customerEmail: email,
+              reservationFee: fee,
+            },
+          }).then((row) => {
+            if (!row) {
+              console.warn(
+                `[first-look] startFirstLookWindow returned null for ${v.slug} (likely duplicate lead_id) — skipping SMS to avoid double-send`,
+              );
+              return;
+            }
+            return sendFirstLookSms(v, {
+              cartLabel: compactCartLabel(cartLabel),
+              pickupFormatted: pickupShort,
+              returnFormatted: returnShort,
+              numDays: days,
+              windowMinutes: minutes,
+            }).then((sent) =>
+              console.log(
+                `[first-look] sent priority SMS to ${sent} number(s) for ${v.slug}`,
+              ),
+            );
+          }),
+        );
+      }
+    } else {
+      // No first-look match — standard simultaneous SMS blast
+      smsPromises.push(
+        sendOpenBlastSms({
+          cartLabel: compactCartLabel(cartLabel),
+          pickupFormatted: pickupShort,
+          returnFormatted: returnShort,
+          numDays: days,
+        }).then((sent) =>
+          console.log(`[Rent/Blast] SMS sent to ${sent} opted-in vendors`),
+        ),
+      );
+    }
 
     await Promise.allSettled([
       sendEmail(INTERNAL_RECIPIENTS, `✅ Golf Cart PAID — ${name} — ${pickupDate} to ${returnDate}`, internalHtml),
       sendEmail(email, "Your Golf Cart is Reserved — Port A Local", customerHtml),
       sendConsumerSms(phone, customerSMS, smsConsent),
-      sendLeadBlastSms({
-        cartLabel: compactCartLabel(cartLabel),
-        pickupFormatted: pickupShort,
-        returnFormatted: returnShort,
-        numDays: days,
-      }).then((sent) =>
-        console.log(`[Rent/Blast] SMS sent to ${sent} opted-in vendors`),
-      ),
+      ...smsPromises,
       pingSuperAdmins({
         kind: "cart-rental",
         amountCents: fee * 100,
-        summary: `${compactCartLabel(cartLabel)} · ${pickupShort} to ${returnShort} (${days} ${days === 1 ? "day" : "days"})`,
+        summary: `${compactCartLabel(cartLabel)} · ${pickupShort} to ${returnShort} (${days} ${days === 1 ? "day" : "days"})${
+          hasFirstLook ? ` · ⏱ first-look ${firstLookSlugs.join("/")}` : ""
+        }`,
         customerDisplay: formatCustomerDisplay(name),
       }),
       ...vendorBlastPromises,
