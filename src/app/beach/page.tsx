@@ -62,6 +62,11 @@ export default function BeachPage() {
     smsConsent: false,
   });
 
+  // Single-day setup is the default — matches Bron's pattern (a beach
+  // setup is a day, not a "stay"). Multi-day is opt-in via the toggle
+  // below the setup-date input.
+  const [multiDay, setMultiDay] = useState(false);
+
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -74,17 +79,20 @@ export default function BeachPage() {
   const selectedProduct = PRODUCTS.find((p) => p.value === form.product)!;
   const qty = parseInt(form.quantity) || 1;
 
-  const numDays =
-    form.pickupDate && form.returnDate
-      ? Math.max(
-          1,
-          Math.round(
-            (new Date(form.returnDate).getTime() -
-              new Date(form.pickupDate).getTime()) /
-              (1000 * 60 * 60 * 24)
+  const numDays = !form.pickupDate
+    ? null
+    : !multiDay
+      ? 1
+      : form.returnDate
+        ? Math.max(
+            1,
+            Math.round(
+              (new Date(form.returnDate).getTime() -
+                new Date(form.pickupDate).getTime()) /
+                (1000 * 60 * 60 * 24)
+            )
           )
-        )
-      : null;
+        : null;
 
   const dailyPrice = totalDailyPrice(selectedProduct);
   const totalPrice = numDays ? numDays * qty * dailyPrice : null;
@@ -92,12 +100,16 @@ export default function BeachPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.pickupDate || !form.returnDate) {
-      setErrorMsg("Please select both a start and end date.");
+    if (!form.pickupDate) {
+      setErrorMsg("Please select a setup date.");
       return;
     }
-    if (new Date(form.returnDate) <= new Date(form.pickupDate)) {
-      setErrorMsg("End date must be after start date.");
+    if (multiDay && !form.returnDate) {
+      setErrorMsg("Please select the last day of your setup.");
+      return;
+    }
+    if (multiDay && new Date(form.returnDate) <= new Date(form.pickupDate)) {
+      setErrorMsg("Last day must be after setup date.");
       return;
     }
     if (!form.deliveryAddress.trim()) {
@@ -108,12 +120,18 @@ export default function BeachPage() {
     setStatus("loading");
     setErrorMsg("");
 
+    // For single-day setups, send returnDate = pickupDate so the API
+    // contract stays uniform on the server side (existing email/Stripe
+    // code reads both fields).
+    const submitReturnDate = multiDay ? form.returnDate : form.pickupDate;
+
     try {
       const res = await fetch("/api/checkout/beach", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...form,
+          returnDate: submitReturnDate,
           numDays,
           totalPrice,
           qty,
@@ -259,38 +277,59 @@ export default function BeachPage() {
 
             {/* Dates & Location */}
             <div className="bg-white rounded-2xl border border-sand-200 p-6 space-y-4">
-              <h2 className="font-display text-xl font-bold text-navy-900">Dates & Location</h2>
+              <h2 className="font-display text-xl font-bold text-navy-900">Date & Location</h2>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-navy-700 mb-1">
-                    Start Date *
-                  </label>
-                  <input
-                    type="date"
-                    name="pickupDate"
-                    required
-                    min={today}
-                    value={form.pickupDate}
-                    onChange={handleChange}
-                    className="w-full border border-sand-300 rounded-lg px-3 py-2 text-navy-900 focus:outline-none focus:ring-2 focus:ring-coral-400"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-navy-700 mb-1">
-                    End Date *
-                  </label>
-                  <input
-                    type="date"
-                    name="returnDate"
-                    required
-                    min={form.pickupDate || today}
-                    value={form.returnDate}
-                    onChange={handleChange}
-                    className="w-full border border-sand-300 rounded-lg px-3 py-2 text-navy-900 focus:outline-none focus:ring-2 focus:ring-coral-400"
-                  />
-                </div>
+              <div>
+                <label className="block text-sm font-medium text-navy-700 mb-1">
+                  Setup Date *
+                </label>
+                <input
+                  type="date"
+                  name="pickupDate"
+                  required
+                  min={today}
+                  value={form.pickupDate}
+                  onChange={handleChange}
+                  className="w-full border border-sand-300 rounded-lg px-3 py-2 text-navy-900 focus:outline-none focus:ring-2 focus:ring-coral-400"
+                />
               </div>
+
+              {!multiDay ? (
+                <button
+                  type="button"
+                  onClick={() => setMultiDay(true)}
+                  className="text-sm text-coral-500 hover:text-coral-600 underline underline-offset-2"
+                >
+                  + Need a setup for multiple days?
+                </button>
+              ) : (
+                <div className="space-y-2">
+                  <div>
+                    <label className="block text-sm font-medium text-navy-700 mb-1">
+                      Last Day *
+                    </label>
+                    <input
+                      type="date"
+                      name="returnDate"
+                      required
+                      min={form.pickupDate || today}
+                      value={form.returnDate}
+                      onChange={handleChange}
+                      className="w-full border border-sand-300 rounded-lg px-3 py-2 text-navy-900 focus:outline-none focus:ring-2 focus:ring-coral-400"
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMultiDay(false);
+                      setForm({ ...form, returnDate: "" });
+                    }}
+                    className="text-sm text-navy-500 hover:text-navy-700 underline underline-offset-2"
+                  >
+                    ← Single day instead
+                  </button>
+                </div>
+              )}
 
               <div>
                 <label className="block text-sm font-medium text-navy-700 mb-1">
