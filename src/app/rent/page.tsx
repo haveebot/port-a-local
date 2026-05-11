@@ -129,15 +129,52 @@ export default function RentPage() {
         <div className="absolute bottom-0 left-0 right-0 coral-line" />
         <div className="absolute inset-0 palm-pattern opacity-15" />
         <div className="relative max-w-3xl mx-auto px-4 sm:px-6">
-          <div className="flex items-center gap-3 mb-2">
-            <PortalIcon name="cart" className="w-12 h-12 text-coral-400 shrink-0" />
-            <h1 className="font-display text-4xl sm:text-5xl font-bold text-sand-50">
-              Rent a Golf Cart
-            </h1>
-          </div>
+          <h1 className="font-display text-4xl sm:text-5xl font-bold text-sand-50">
+            Rentals
+          </h1>
           <p className="text-lg text-navy-200 mt-2 font-light max-w-2xl">
-            The island runs on golf carts. Reserve yours through Port A Local and we guarantee a clean, well-maintained cart from a vetted local company — plus a <strong className="text-sand-100">guaranteed $20 off</strong> the rental company&apos;s daily standard rate. <strong className="text-sand-100">$10/day reservation fee</strong> · pickup or delivery, your call.
+            Golf carts and beach setups, both with PAL&apos;s quality guarantee. Pick what you need below.
           </p>
+        </div>
+      </section>
+
+      {/* Rental Categories — both options reachable from the Rentals nav link */}
+      <section className="py-10 bg-sand-50 border-b border-sand-200">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* Golf Carts — scroll to the form below */}
+            <a
+              href="#golf-cart-rental"
+              className="group block bg-white border-2 border-coral-400 rounded-2xl p-6 hover:bg-coral-50 transition-colors"
+            >
+              <div className="flex items-center gap-3 mb-2">
+                <PortalIcon name="cart" className="w-9 h-9 text-coral-500 shrink-0" />
+                <h2 className="font-display text-xl font-bold text-navy-900">Golf Carts</h2>
+              </div>
+              <p className="text-sm text-navy-600 mb-3">
+                4, 6, or 8-passenger carts from vetted local companies. Pickup or delivery, your call. <strong>$20 off</strong> guaranteed.
+              </p>
+              <span className="text-sm font-medium text-coral-500 group-hover:text-coral-600">
+                Reserve a cart →
+              </span>
+            </a>
+            {/* Beach Setups — separate page */}
+            <Link
+              href="/beach"
+              className="group block bg-white border-2 border-sand-300 rounded-2xl p-6 hover:border-coral-400 hover:bg-coral-50 transition-colors"
+            >
+              <div className="flex items-center gap-3 mb-2">
+                <PortalIcon name="beach" className="w-9 h-9 text-coral-500 shrink-0" />
+                <h2 className="font-display text-xl font-bold text-navy-900">Beach Setups</h2>
+              </div>
+              <p className="text-sm text-navy-600 mb-3">
+                Cabanas, chairs, and umbrellas delivered to your spot on the sand. Show up, we handle the rest.
+              </p>
+              <span className="text-sm font-medium text-coral-500 group-hover:text-coral-600">
+                Book a setup →
+              </span>
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -189,7 +226,7 @@ export default function RentPage() {
       </section>
 
       {/* Form */}
-      <section className="py-14 overflow-x-hidden">
+      <section id="golf-cart-rental" className="py-14 overflow-x-hidden scroll-mt-24">
         <div className="max-w-2xl mx-auto px-4 sm:px-6">
           <form onSubmit={handleSubmit} className="space-y-6">
 
