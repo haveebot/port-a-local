@@ -79,6 +79,9 @@ export default function BeachPage() {
   const selectedProduct = PRODUCTS.find((p) => p.value === form.product)!;
   const qty = parseInt(form.quantity) || 1;
 
+  // INCLUSIVE day count: May 23 → May 24 is 2 days of beach service
+  // (Sat setup + Sun setup), not 1 interval-day. Matches the single-day-
+  // default mental model where every calendar day is a setup day.
   const numDays = !form.pickupDate
     ? null
     : !multiDay
@@ -90,7 +93,7 @@ export default function BeachPage() {
               (new Date(form.returnDate).getTime() -
                 new Date(form.pickupDate).getTime()) /
                 (1000 * 60 * 60 * 24)
-            )
+            ) + 1
           )
         : null;
 
