@@ -13,6 +13,7 @@ A curated subset of HeyeLab cross-project rules + brand canonicals that Claude o
 | `feedback_heyelab_brand_spelling.md` | HeyeLab one-word for marketing, Heye Lab two-word for legal — applies anywhere PAL footers reference the umbrella |
 | `feedback_heyedeploy_collie_validation.md` | The HeyeDeploy brand tokens (Collie-validated 2026-05-04) — colors, type, Pattern B architecture-layer color split |
 | `feedback_deploy_phase_naming.md` | The Pre/In/Post Deploy lifecycle naming discipline — never bare "Deploy" alone (locked 2026-05-07) |
+| `feedback_launch_prompt_autonomy.md` | Launch prompts must let Claude run the full technical chain autonomously; only stop for human-judgment inputs (filed 2026-05-11 after Collie's brons-beach launch) |
 
 ## Deploy lifecycle docs
 
