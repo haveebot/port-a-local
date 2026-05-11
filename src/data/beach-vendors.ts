@@ -36,28 +36,41 @@ export interface BeachVendor {
   smsCapable?: boolean;
 }
 
+// Beach-vendor routing pivoted 2026-05-11 PM: Bron's is the sole beach
+// vendor on PAL going forward. All three of Bron's directory phones
+// (reservations line + Bron's cell + Kristen) receive every new beach
+// booking blast. Prior vendors (John Brown, Tyler, Danny Peterson) are
+// retired from active routing — retained in git history if needed.
+//
+// Revenue split for Bron-on-PAL beach fulfillment is pending the
+// updated Bron's agreement review (separate from the bronsbeach.com
+// 12% revenue share, which covers bookings on Bron's own domain).
+// Until the new agreement lands, the existing /beach product pricing
+// in beach-products.ts stays as-is.
 export const beachVendors: BeachVendor[] = [
   {
-    slug: "john-brown",
-    name: "John Brown",
-    phone: "env:JOHN_BROWN_PHONE",
+    slug: "brons-reservations",
+    name: "Bron's reservations",
+    phone: "(361) 290-7143",
     active: true,
-    role: "Maintenance + beach setup contractor",
+    role: "Bron's Beach — primary reservations line",
+    smsCapable: true,
   },
   {
-    slug: "tyler",
-    name: "Tyler",
-    phone: "(361) 813-6958",
+    slug: "brons-bron-cell",
+    name: "Bron Doyle (cell)",
+    phone: "(361) 946-2766",
     active: true,
-    role: "Beach setup contractor (also a delivery-runner applicant — has a beach trailer)",
+    role: "Bron's Beach — owner direct cell",
+    smsCapable: true,
   },
   {
-    slug: "danny-peterson",
-    name: "Danny Peterson",
-    phone: "(808) 463-5544",
+    slug: "brons-kristen",
+    name: "Kristen",
+    phone: "(254) 220-3808",
     active: true,
-    role: "Beach setup contractor (beach trailer in the near future, like Tyler)",
-    smsCapable: true, // Twilio Lookup confirmed mobile (AT&T) 2026-04-29
+    role: "Bron's Beach — team operator",
+    smsCapable: true,
   },
 ];
 
