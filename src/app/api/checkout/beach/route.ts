@@ -54,6 +54,15 @@ export async function POST(req: NextRequest) {
   const vendorTotalCents = catalog.vendorBaseCents * days * actualQty;
   const palFeeTotalCents = catalog.palFeeCents * days * actualQty;
 
+  // Single-day setup is the new default (returnDate === pickupDate).
+  // Format the Stripe line_item description accordingly — avoid showing
+  // "May 24 → May 24" which reads as broken.
+  const isSingleDay = pickupDate === returnDate;
+  const dateSpan = isSingleDay ? pickupDate : `${pickupDate} → ${returnDate}`;
+  const durationLabel = isSingleDay
+    ? "1 day"
+    : `${days} day${days !== 1 ? "s" : ""}`;
+
   try {
     const session = await getStripe().checkout.sessions.create({
       payment_method_types: ["card"],
@@ -66,7 +75,7 @@ export async function POST(req: NextRequest) {
             unit_amount: totalCents,
             product_data: {
               name: `Beach Rental — ${catalog.label}`,
-              description: `${actualQty} setup${actualQty > 1 ? "s" : ""} · ${days} day${days !== 1 ? "s" : ""} · ${pickupDate} → ${returnDate} · ${deliveryAddress} · Free cancellation up to 72 hours before setup date`,
+              description: `${actualQty} setup${actualQty > 1 ? "s" : ""} · ${durationLabel} · ${dateSpan} · ${deliveryAddress} · Free cancellation up to 72 hours before setup date`,
             },
           },
           quantity: 1,
