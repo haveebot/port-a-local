@@ -64,7 +64,7 @@ Steps to do, in order:
 5. Help me open my first PR — adding myself to a CONTRIBUTORS.md file at the root of the PAL repo with a one-line bio.
 6. After opening the PR, run `gh pr merge <PR_NUMBER> --auto --squash` to enable auto-merge. (Locked rule: auto-merge has to be enabled per PR; checks gate the merge once the Vercel build passes.)
 
-Take it one step at a time. Wait for me to confirm each step worked before moving to the next.
+Run the technical chain autonomously — install, auth, clone, read contributor-context, open the first PR, enable auto-merge — in one go. Don't pause to ask me "did this step work?" between technical steps. Only stop when you need MY input as a person — my bio for CONTRIBUTORS.md, design decisions, anything that needs my judgment rather than your verification.
 ```
 
 ## What she should expect
@@ -175,7 +175,7 @@ Steps:
 5. Help me open my first PR — adding myself to a CONTRIBUTORS.md file at the root of the PAL repo. Ask me for a one-line bio when we get there.
 6. After opening the PR, run `gh pr merge <PR_NUMBER> --auto --squash` to enable auto-merge. (Locked rule: auto-merge has to be enabled per PR; checks gate the merge once the Vercel build passes.)
 
-Take it one step at a time. Wait for me to confirm each step worked before moving to the next.
+Run the technical chain autonomously — install, auth, clone, read contributor-context, open the first PR, enable auto-merge — in one go. Don't pause to ask me "did this step work?" between technical steps. Only stop when you need MY input as a person — my bio for CONTRIBUTORS.md, design decisions, anything that needs my judgment rather than your verification.
 ────
 
 Hit send. Claude on your Mac walks you through everything from there in plain English.
