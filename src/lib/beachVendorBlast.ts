@@ -81,11 +81,15 @@ export async function sendBeachLeadBlast(input: BeachLeadInput): Promise<number>
   return sent;
 }
 
-/** Confirmation SMS to the vendor who won the claim. */
+/** Confirmation SMS to the vendor who won the claim.
+ *
+ * Customer NAME is included for the vendor's reservation listing. Customer
+ * contact info is intentionally NOT in this message — PAL is the listed
+ * provider and handles all customer comms. The vendor's role ends at the
+ * setup; there's no customer-facing vendor identity. */
 export function buildClaimWonSms(
   vendor: BeachVendor,
   customerName: string,
-  customerPhone: string,
   product: string,
   qty: number,
   setupDateFormatted: string,
@@ -93,8 +97,8 @@ export function buildClaimWonSms(
   return [
     `Port A Local: ✅ CLAIM CONFIRMED`,
     `${vendor.name}, you've got it: ${productLabel(product, qty)} for ${setupDateFormatted}.`,
-    `Customer: ${customerName} - ${customerPhone}`,
-    `They'll get a text shortly with your name. Reach out to them to coordinate setup logistics.`,
+    `Booking name: ${customerName}`,
+    `Port A Local handles all customer comms — we'll send you setup details before the date. Reply here if you need anything from us.`,
   ].join("\n\n");
 }
 
@@ -107,37 +111,27 @@ export function buildClaimLostSms(
   return `Port A Local: That ${productLabel(product, qty)} booking just got claimed by ${winnerName}. Thanks for the quick eye - next one's still up for grabs.`;
 }
 
-/** SMS to the customer letting them know who's coming. */
-export function buildCustomerVendorAssignedSms(
-  vendorName: string,
-  product: string,
-  qty: number,
-  setupDateFormatted: string,
-): string {
-  return [
-    `Port A Local: ${vendorName} will set up your ${productLabel(product, qty)} on ${setupDateFormatted}.`,
-    `${vendorName} will be in touch before the date with delivery + pickup logistics.`,
-    `Questions? Reply to this number or hello@theportalocal.com.`,
-  ].join("\n\n");
-}
-
-/** Notify everyone after a successful claim. Best-effort; doesn't throw. */
+/** Notify everyone after a successful claim. Best-effort; doesn't throw.
+ *
+ * Customer receives NO claim-side SMS — PAL is the listed provider and the
+ * customer has no visibility into the internal CLAIM routing. Their only
+ * beach-booking touch points are the Stripe-success confirmation (sent at
+ * checkout) and the day-before arrival reminder (sent separately). */
 export async function notifyClaimResolution(input: {
   winner: BeachVendor;
   customerName: string;
-  customerPhone: string;
   product: string;
   qty: number;
   setupDateFormatted: string;
 }): Promise<void> {
-  const { winner, customerName, customerPhone, product, qty, setupDateFormatted } = input;
+  const { winner, customerName, product, qty, setupDateFormatted } = input;
 
   // 1) Confirm to winner
   const winnerPhone = beachVendorPhone(winner);
   if (winnerPhone) {
     sendSms(
       winnerPhone,
-      buildClaimWonSms(winner, customerName, customerPhone, product, qty, setupDateFormatted),
+      buildClaimWonSms(winner, customerName, product, qty, setupDateFormatted),
     ).catch((err) => console.error("[beach-vendor-blast] winner-confirm failed:", err));
   }
 
@@ -154,14 +148,6 @@ export async function notifyClaimResolution(input: {
     }
     i++;
     if (i < others.length) await new Promise((r) => setTimeout(r, 800));
-  }
-
-  // 3) Notify customer with vendor info (consent-gated by /beach form)
-  if (customerPhone) {
-    sendSms(
-      customerPhone,
-      buildCustomerVendorAssignedSms(winner.name, product, qty, setupDateFormatted),
-    ).catch((err) => console.error("[beach-vendor-blast] customer-notify failed:", err));
   }
 }
 
