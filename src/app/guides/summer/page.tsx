@@ -82,7 +82,8 @@ interface CtaTile {
   buttonLabel: string;
   href: string;
   bgClass: string;
-  iconName: PortalIconName;
+  iconName?: PortalIconName;
+  iconSrc?: string;
 }
 
 const ctaTiles: CtaTile[] = [
@@ -92,7 +93,7 @@ const ctaTiles: CtaTile[] = [
     buttonLabel: "Explore",
     href: "/guides/outdoor-adventures",
     bgClass: "bg-seafoam-500 hover:bg-seafoam-600",
-    iconName: "surfing",
+    iconSrc: "/icons/surfboard.svg",
   },
   {
     heading: "Book the beach",
@@ -234,10 +235,22 @@ export default function SummerGuide() {
                 href={t.href}
                 className={`group block rounded-3xl ${t.bgClass} transition-colors p-8 sm:p-10 relative overflow-hidden`}
               >
-                <PortalIcon
-                  name={t.iconName}
-                  className="absolute right-4 bottom-4 w-28 h-28 sm:w-32 sm:h-32 lg:w-36 lg:h-36 text-white/85 pointer-events-none"
-                />
+                {t.iconSrc ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={t.iconSrc}
+                    alt=""
+                    aria-hidden
+                    className="absolute right-4 bottom-4 h-28 sm:h-32 lg:h-36 w-auto pointer-events-none"
+                  />
+                ) : (
+                  t.iconName && (
+                    <PortalIcon
+                      name={t.iconName}
+                      className="absolute right-4 bottom-4 w-28 h-28 sm:w-32 sm:h-32 lg:w-36 lg:h-36 text-white/85 pointer-events-none"
+                    />
+                  )
+                )}
                 <div className="relative z-10 max-w-[65%]">
                   <h3 className="font-display italic text-3xl sm:text-4xl font-bold text-white leading-tight mb-3">
                     {t.heading}
