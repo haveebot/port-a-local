@@ -810,3 +810,253 @@ export async function listCampaigns(
     };
   }
 }
+
+/* ------------------------------------------------------------------ */
+/* Ads tool — Create Ad (parameterized boost)                         */
+/*                                                                    */
+/* createAd is the operator-facing equivalent of createBoost: same    */
+/* Campaign → AdSet → Creative → Ad chain, but exposes the objective  */
+/* + larger budget + longer duration caps. Boost is the simplified    */
+/* subset of Ad — fixed OUTCOME_TRAFFIC objective, $5/day cap, 7-day  */
+/* cap. createAd opens up Traffic / Awareness / Engagement / Leads at */
+/* $50/day cap and 30-day cap, suitable for dedicated campaigns       */
+/* rather than per-post amplification.                                */
+/*                                                                    */
+/* Naming convention distinguishes the two paths in the campaign list */
+/* (see /wheelhouse/ads): createBoost prefixes "Boost · ", createAd   */
+/* prefixes "Ad · ". The /wheelhouse/ads page uses this prefix to     */
+/* surface an "boost" tag next to boost-created campaigns.            */
+/* ------------------------------------------------------------------ */
+
+/** Objectives exposed in the Create Ad form. Subset of Meta's enum — */
+/* OUTCOME_SALES + OUTCOME_APP_PROMOTION need pixel + app setup; ship */
+/* later. */
+export type AdObjective =
+  | "OUTCOME_TRAFFIC"
+  | "OUTCOME_AWARENESS"
+  | "OUTCOME_ENGAGEMENT"
+  | "OUTCOME_LEADS";
+
+/** Hard cap on daily spend per ad (cents). 10x the boost cap. */
+export const AD_DAILY_BUDGET_CAP_CENTS = 5000;
+/** Hard cap on ad duration (hours). ~4x the boost cap. */
+export const AD_DURATION_CAP_HOURS = 720;
+
+export interface AdConfig {
+  /** numeric ad account ID — without the "act_" prefix */
+  adAccountId: string;
+  /** numeric Page ID owning the post being promoted */
+  pageId: string;
+  /** "{pageId}_{postId}" — what's in social_post_queue.external_post_id */
+  externalPostId: string;
+  /** human-readable name for the campaign — appears in Ads Manager */
+  campaignName: string;
+  /** Meta campaign objective (see AdObjective) */
+  objective: AdObjective;
+  /** daily spend in cents (whole cents, no decimals). Capped at AD_DAILY_BUDGET_CAP_CENTS. */
+  dailyBudgetCents: number;
+  /** how long the campaign runs (hours). Capped at AD_DURATION_CAP_HOURS. */
+  durationHours: number;
+  /** optional saved-audience ID; if unset, FALLBACK_TARGETING is used */
+  audienceId?: string | null;
+}
+
+export interface AdResult {
+  ok: boolean;
+  stubbed?: boolean;
+  campaignId?: string;
+  adsetId?: string;
+  creativeId?: string;
+  adId?: string;
+  error?: string;
+}
+
+/**
+ * Map an ad objective to the optimization_goal + billing_event that
+ * Meta accepts for that objective. Wrong combos produce error #2491:
+ * "Optimization goal X is not allowed with objective Y."
+ *
+ * Conservative defaults: IMPRESSIONS billing across the board (most
+ * forgiving), per-objective optimization_goal that's known-compatible.
+ * Future PR can expose these to the operator if they ever need more
+ * surgical control.
+ */
+function optimizationForObjective(objective: AdObjective): {
+  optimizationGoal: string;
+  billingEvent: string;
+} {
+  switch (objective) {
+    case "OUTCOME_AWARENESS":
+      return { optimizationGoal: "REACH", billingEvent: "IMPRESSIONS" };
+    case "OUTCOME_ENGAGEMENT":
+      return { optimizationGoal: "POST_ENGAGEMENT", billingEvent: "IMPRESSIONS" };
+    case "OUTCOME_LEADS":
+      return { optimizationGoal: "LEAD_GENERATION", billingEvent: "IMPRESSIONS" };
+    case "OUTCOME_TRAFFIC":
+    default:
+      return { optimizationGoal: "LINK_CLICKS", billingEvent: "IMPRESSIONS" };
+  }
+}
+
+/**
+ * Create an ad campaign for an existing FB post. Parameterized version
+ * of createBoost — same 4-step chain (Campaign → AdSet → Creative → Ad),
+ * but exposes objective + accepts wider budget/duration ranges.
+ *
+ * Stub mode: if META_AD_ACCOUNT_ID is unset, returns ok:true with
+ * stubbed:true + stub IDs. Mirrors createBoost so the UI flow works
+ * end-to-end before Marketing API permission is wired.
+ *
+ * Atomicity caveat: same as createBoost — partial-success leaves
+ * PAUSED objects in Ads Manager but doesn't bill.
+ */
+export async function createAd(c: AdConfig): Promise<AdResult> {
+  // Stub-mode short-circuit when ad account isn't configured. Mirrors
+  // boostPost's stub branch so the operator can exercise the Create Ad
+  // form end-to-end before ads_management is provisioned.
+  const envAdAccount = getAdAccountId();
+  if (!envAdAccount) {
+    console.log("[metaAds] STUB — would create ad:", {
+      reason: "META_AD_ACCOUNT_ID not set",
+      objective: c.objective,
+      campaignName: c.campaignName,
+      externalPostId: c.externalPostId,
+      dailyBudgetCents: c.dailyBudgetCents,
+      durationHours: c.durationHours,
+    });
+    return {
+      ok: true,
+      stubbed: true,
+      adId: `stub:ad:${Date.now()}`,
+      campaignId: `stub:campaign:${Date.now()}`,
+      adsetId: `stub:adset:${Date.now()}`,
+      creativeId: `stub:creative:${Date.now()}`,
+    };
+  }
+
+  const token = getToken();
+  if (!token) return { ok: false, error: "META_PAGE_ACCESS_TOKEN not set" };
+  if (!c.adAccountId) return { ok: false, error: "ad account id missing" };
+
+  // Enforce caps regardless of what caller passed. UI should validate
+  // first but server is the authority.
+  const dailyBudgetCents = Math.min(
+    Math.max(1, Math.round(c.dailyBudgetCents)),
+    AD_DAILY_BUDGET_CAP_CENTS,
+  );
+  const durationHours = Math.min(
+    Math.max(1, Math.round(c.durationHours)),
+    AD_DURATION_CAP_HOURS,
+  );
+
+  const startTime = new Date();
+  const endTime = new Date(startTime.getTime() + durationHours * 60 * 60 * 1000);
+  const { optimizationGoal, billingEvent } = optimizationForObjective(
+    c.objective,
+  );
+
+  // Step 1: Campaign — "Ad · " prefix distinguishes from "Boost · " in the
+  // campaign list so the /wheelhouse/ads UI can tag boost rows separately.
+  const campaignBody = new URLSearchParams();
+  campaignBody.set("name", `Ad · ${c.campaignName}`);
+  campaignBody.set("objective", c.objective);
+  campaignBody.set("status", "ACTIVE");
+  campaignBody.set("special_ad_categories", "[]");
+  campaignBody.set("is_adset_budget_sharing_enabled", "false");
+  campaignBody.set("access_token", token);
+  const campaignRes = await postForm<{ id: string }>(
+    `/act_${c.adAccountId}/campaigns`,
+    campaignBody,
+  );
+  if (campaignRes.error || !campaignRes.data?.id) {
+    return { ok: false, error: `campaign: ${campaignRes.error ?? "no id"}` };
+  }
+  const campaignId = campaignRes.data.id;
+
+  // Step 2: Ad Set — lifetime_budget = dailyBudget * (durationHours / 24)
+  // Same reasoning as createBoost: lifetime_budget has no minimum-duration
+  // constraint and gives absolute spend predictability.
+  const lifetimeBudgetCents = Math.round(
+    dailyBudgetCents * Math.max(1, durationHours / 24),
+  );
+  const adsetBody = new URLSearchParams();
+  adsetBody.set("name", `AdSet · ${c.campaignName}`);
+  adsetBody.set("campaign_id", campaignId);
+  adsetBody.set("lifetime_budget", String(lifetimeBudgetCents));
+  adsetBody.set("billing_event", billingEvent);
+  adsetBody.set("optimization_goal", optimizationGoal);
+  adsetBody.set("bid_strategy", "LOWEST_COST_WITHOUT_CAP");
+  adsetBody.set("start_time", startTime.toISOString());
+  adsetBody.set("end_time", endTime.toISOString());
+  adsetBody.set("status", "ACTIVE");
+  if (c.audienceId) {
+    adsetBody.set(
+      "targeting",
+      JSON.stringify({ saved_audience_id: c.audienceId }),
+    );
+  } else {
+    adsetBody.set("targeting", JSON.stringify(FALLBACK_TARGETING));
+  }
+  adsetBody.set("access_token", token);
+  const adsetRes = await postForm<{ id: string }>(
+    `/act_${c.adAccountId}/adsets`,
+    adsetBody,
+  );
+  if (adsetRes.error || !adsetRes.data?.id) {
+    return {
+      ok: false,
+      campaignId,
+      error: `adset: ${adsetRes.error ?? "no id"}`,
+    };
+  }
+  const adsetId = adsetRes.data.id;
+
+  // Step 3: Ad Creative — references the existing post via object_story_id.
+  // Same as createBoost: post-based ad, no new creative needed.
+  const creativeBody = new URLSearchParams();
+  creativeBody.set("name", `Creative · ${c.campaignName}`);
+  creativeBody.set("object_story_id", c.externalPostId);
+  creativeBody.set("access_token", token);
+  const creativeRes = await postForm<{ id: string }>(
+    `/act_${c.adAccountId}/adcreatives`,
+    creativeBody,
+  );
+  if (creativeRes.error || !creativeRes.data?.id) {
+    return {
+      ok: false,
+      campaignId,
+      adsetId,
+      error: `creative: ${creativeRes.error ?? "no id"}`,
+    };
+  }
+  const creativeId = creativeRes.data.id;
+
+  // Step 4: Ad — links adset + creative
+  const adBody = new URLSearchParams();
+  adBody.set("name", `Ad · ${c.campaignName}`);
+  adBody.set("adset_id", adsetId);
+  adBody.set("creative", JSON.stringify({ creative_id: creativeId }));
+  adBody.set("status", "ACTIVE");
+  adBody.set("access_token", token);
+  const adRes = await postForm<{ id: string }>(
+    `/act_${c.adAccountId}/ads`,
+    adBody,
+  );
+  if (adRes.error || !adRes.data?.id) {
+    return {
+      ok: false,
+      campaignId,
+      adsetId,
+      creativeId,
+      error: `ad: ${adRes.error ?? "no id"}`,
+    };
+  }
+
+  return {
+    ok: true,
+    campaignId,
+    adsetId,
+    creativeId,
+    adId: adRes.data.id,
+  };
+}

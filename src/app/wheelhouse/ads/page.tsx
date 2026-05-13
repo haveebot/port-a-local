@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { listCampaigns, type CampaignSummary } from "@/lib/metaAds";
 import { isMetaConfigured } from "@/lib/metaGraph";
 import MarketingBreadcrumb from "@/components/wheelhouse/MarketingBreadcrumb";
@@ -71,6 +72,14 @@ export default async function AdsPage() {
           { label: "📊 Marketing", href: "/wheelhouse/marketing" },
         ]}
         current="🎯 Ads"
+        right={
+          <Link
+            href="/wheelhouse/ads/new"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-coral-500 text-sand-50 hover:bg-coral-400 transition-colors whitespace-nowrap"
+          >
+            <span className="text-sm leading-none">+</span> Create ad
+          </Link>
+        }
       />
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 space-y-6">
