@@ -34,6 +34,20 @@ export interface BeachVendor {
    * for the phone. Same semantics as cart-vendors.smsCapable.
    */
   smsCapable?: boolean;
+  /**
+   * Team identifier — vendor records that share a `team` value belong to
+   * the same operating crew. Used by the inbound CLAIM handler to suppress
+   * race-lost SMS noise between teammates: when one of Bron's 3 phones
+   * claims a beach booking, the other two get a "claim-lost / claimed by"
+   * notification, but a redundant SECOND claim attempt from another
+   * Bron's number doesn't generate yet another race-lost SMS — the team
+   * was already notified by the first claim resolution.
+   *
+   * Bron's-only model on the beach side (2026-05-11 PR #46) means three
+   * BeachVendor records share team="brons". A future multi-tenant beach
+   * roster would assign team-id per crew. Omit on standalone vendors.
+   */
+  team?: string;
 }
 
 // Beach-vendor routing pivoted 2026-05-11 PM: Bron's is the sole beach
@@ -55,6 +69,7 @@ export const beachVendors: BeachVendor[] = [
     active: true,
     role: "Bron's Beach — primary reservations line",
     smsCapable: true,
+    team: "brons",
   },
   {
     slug: "brons-bron-cell",
@@ -63,6 +78,7 @@ export const beachVendors: BeachVendor[] = [
     active: true,
     role: "Bron's Beach — owner direct cell",
     smsCapable: true,
+    team: "brons",
   },
   {
     slug: "brons-kristen",
@@ -71,6 +87,7 @@ export const beachVendors: BeachVendor[] = [
     active: true,
     role: "Bron's Beach — team operator",
     smsCapable: true,
+    team: "brons",
   },
 ];
 
@@ -116,4 +133,27 @@ export function findBeachVendorByPhone(phoneE164: string): BeachVendor | null {
     if (vE164 === phoneE164) return v;
   }
   return null;
+}
+
+/**
+ * Find a beach vendor by slug. Used by the inbound CLAIM webhook to look
+ * up the winning vendor after a race-lost attemptClaim — so we can decide
+ * whether the would-be claimer is on the same team as the winner and
+ * suppress redundant race-lost SMS noise.
+ */
+export function findBeachVendorBySlug(slug: string): BeachVendor | null {
+  return beachVendors.find((v) => v.slug === slug) ?? null;
+}
+
+/**
+ * Two beach vendors are on the same team when both have a non-empty
+ * `team` value and the values match. Returns false if either side has
+ * no team set (standalone vendors are not in any team).
+ */
+export function beachVendorsAreTeammates(
+  a: BeachVendor,
+  b: BeachVendor,
+): boolean {
+  if (!a.team || !b.team) return false;
+  return a.team === b.team;
 }

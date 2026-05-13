@@ -219,6 +219,28 @@ export async function getMostRecentUnclaimed(): Promise<BeachBookingClaim | null
 }
 
 /**
+ * Look up a single claim record by Stripe session ID — regardless of
+ * whether it's still unclaimed. Used by the inbound CLAIM webhook
+ * after a race-lost `attemptClaim` to find out who actually won, so we
+ * can decide whether the would-be claimer is a teammate of the winner.
+ */
+export async function getClaim(
+  stripeSessionId: string,
+): Promise<BeachBookingClaim | null> {
+  try {
+    await ensureSchema();
+    const { rows } = await sql`
+      SELECT * FROM beach_booking_claims
+      WHERE stripe_session_id = ${stripeSessionId}
+      LIMIT 1
+    `;
+    return rows[0] ? rowToRec(rows[0]) : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
  * Recent claims (claimed or unclaimed) for the admin tool.
  */
 export async function listRecentClaims(limit = 30): Promise<BeachBookingClaim[]> {
