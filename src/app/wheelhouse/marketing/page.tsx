@@ -341,10 +341,13 @@ export default async function MarketingHubPage() {
                   key={c.slug}
                   className="flex items-center justify-between gap-3 py-2 text-sm"
                 >
-                  <span className="text-navy-800 truncate min-w-0 flex-1 font-mono text-[11px]">
-                    {c.slug}
-                  </span>
-                  <span className="font-semibold text-navy-900 font-mono tabular-nums whitespace-nowrap shrink-0">
+                  <Link
+                    href={`/${c.slug}`}
+                    className="text-navy-800 hover:text-coral-700 truncate min-w-0 flex-1"
+                  >
+                    /{c.slug}
+                  </Link>
+                  <span className="font-semibold text-navy-900 tabular-nums whitespace-nowrap shrink-0">
                     {c.count}×
                   </span>
                 </div>
