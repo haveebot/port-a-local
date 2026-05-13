@@ -1,7 +1,12 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { listCampaigns, type CampaignSummary } from "@/lib/metaAds";
+import {
+  listCampaigns,
+  fetchCampaignInsights,
+  type CampaignSummary,
+  type BoostInsights,
+} from "@/lib/metaAds";
 import { isMetaConfigured } from "@/lib/metaGraph";
 import MarketingBreadcrumb from "@/components/wheelhouse/MarketingBreadcrumb";
 
@@ -48,8 +53,25 @@ function formatDate(iso: string | null): string {
   });
 }
 
+type CampaignWithInsights = CampaignSummary & {
+  insights: BoostInsights | null;
+};
+
 function isActive(c: CampaignSummary): boolean {
   return c.status === "ACTIVE";
+}
+
+function formatSpend(cents: number | null | undefined): string {
+  if (!cents) return "$0";
+  const d = cents / 100;
+  return `$${d >= 100 ? Math.round(d) : d.toFixed(2)}`;
+}
+
+function formatCount(n: number | null | undefined): string {
+  if (!n) return "0";
+  if (n >= 10_000) return `${(n / 1000).toFixed(1)}k`;
+  if (n >= 1_000) return `${(n / 1000).toFixed(1)}k`;
+  return String(n);
 }
 
 export default async function AdsPage() {
@@ -61,8 +83,25 @@ export default async function AdsPage() {
   const meta = isMetaConfigured();
   const campaigns = result.campaigns ?? [];
 
-  const active = campaigns.filter(isActive);
-  const past = campaigns.filter((c) => !isActive(c));
+  // Pull per-campaign insights in parallel. Each insight call is ~200-500ms;
+  // 10 campaigns at once stays under the page-render budget. If any single
+  // call fails, that row falls back to "no data" — the page still renders.
+  const insightsList = result.stubbed
+    ? campaigns.map(() => null)
+    : await Promise.all(
+        campaigns.map((c) =>
+          fetchCampaignInsights(c.id)
+            .then((r) => (r.ok ? r.insights ?? null : null))
+            .catch(() => null),
+        ),
+      );
+  const enriched = campaigns.map((c, i) => ({
+    ...c,
+    insights: insightsList[i],
+  }));
+
+  const active = enriched.filter(isActive);
+  const past = enriched.filter((c) => !isActive(c));
 
   return (
     <main className="min-h-screen bg-sand-50 text-navy-900">
@@ -188,7 +227,7 @@ function CampaignSection({
 }: {
   title: string;
   sub: string;
-  items: CampaignSummary[];
+  items: CampaignWithInsights[];
   tone: "emerald" | "navy";
 }) {
   const accent = tone === "emerald" ? "border-emerald-300" : "border-sand-300";
@@ -212,7 +251,7 @@ function CampaignSection({
   );
 }
 
-function CampaignRow({ campaign }: { campaign: CampaignSummary }) {
+function CampaignRow({ campaign }: { campaign: CampaignWithInsights }) {
   const statusTone =
     campaign.status === "ACTIVE"
       ? "bg-emerald-50 text-emerald-700 border-emerald-200"
@@ -241,10 +280,24 @@ function CampaignRow({ campaign }: { campaign: CampaignSummary }) {
         </p>
       </div>
       <div className="text-right shrink-0 tabular-nums">
-        <p className="text-[11px] text-navy-500">
-          {formatBudget(campaign.dailyBudgetCents)}
-          <span className="text-navy-400">/day</span>
-        </p>
+        {campaign.insights && campaign.insights.impressions > 0 ? (
+          <>
+            <p className="text-[11px] text-navy-700 font-semibold">
+              {formatCount(campaign.insights.reach)}r ·{" "}
+              {formatCount(campaign.insights.clicks)}c ·{" "}
+              {formatSpend(campaign.insights.spendCents)}
+            </p>
+            <p className="text-[10px] text-navy-500">
+              CTR {campaign.insights.ctr.toFixed(2)}% ·{" "}
+              {formatBudget(campaign.dailyBudgetCents)}/day
+            </p>
+          </>
+        ) : (
+          <p className="text-[11px] text-navy-500">
+            {formatBudget(campaign.dailyBudgetCents)}
+            <span className="text-navy-400">/day</span>
+          </p>
+        )}
         {(campaign.startTime || campaign.stopTime) && (
           <p className="text-[10px] text-navy-400">
             {formatDate(campaign.startTime)}

@@ -1060,3 +1060,66 @@ export async function createAd(c: AdConfig): Promise<AdResult> {
     adId: adRes.data.id,
   };
 }
+
+/**
+ * Fetch campaign-level insights (reach, impressions, clicks, spend, CTR)
+ * for the whole lifetime of the campaign. Mirrors fetchBoostInsights but
+ * hits the campaign object's /insights edge rather than an ad's.
+ *
+ * Returns same BoostInsights shape — re-using the type avoids divergence
+ * in the UI. Stub-mode safe (returns ok:false if no token, caller can
+ * render fallback).
+ */
+export async function fetchCampaignInsights(
+  campaignId: string,
+): Promise<{ ok: boolean; insights?: BoostInsights; error?: string }> {
+  const token = getToken();
+  if (!token) return { ok: false, error: "META_PAGE_ACCESS_TOKEN not set" };
+
+  const fields = [
+    "reach",
+    "impressions",
+    "clicks",
+    "unique_clicks",
+    "ctr",
+    "spend",
+    "date_start",
+    "date_stop",
+  ].join(",");
+
+  try {
+    const url = `${GRAPH_BASE}/${campaignId}/insights?fields=${encodeURIComponent(fields)}&access_token=${encodeURIComponent(token)}`;
+    const res = await fetch(url);
+    const data = (await res.json()) as Record<string, unknown> & {
+      data?: Record<string, unknown>[];
+      error?: { message?: string };
+    };
+    if (!res.ok) {
+      return {
+        ok: false,
+        error:
+          (data.error as { message?: string })?.message ??
+          `HTTP ${res.status}`,
+      };
+    }
+    const row = (data.data ?? [])[0] ?? {};
+    const spendDollars = Number((row.spend as string) ?? "0");
+    const insights: BoostInsights = {
+      reach: Number((row.reach as string) ?? "0"),
+      impressions: Number((row.impressions as string) ?? "0"),
+      clicks: Number((row.clicks as string) ?? "0"),
+      uniqueClicks: Number((row.unique_clicks as string) ?? "0"),
+      ctr: Number((row.ctr as string) ?? "0"),
+      spendCents: Math.round(spendDollars * 100),
+      startTime: (row.date_start as string) ?? null,
+      stopTime: (row.date_stop as string) ?? null,
+      raw: row,
+    };
+    return { ok: true, insights };
+  } catch (err) {
+    return {
+      ok: false,
+      error: `fetch error: ${err instanceof Error ? err.message : String(err)}`,
+    };
+  }
+}
