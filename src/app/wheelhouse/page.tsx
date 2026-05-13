@@ -43,6 +43,7 @@ export default async function WheelhousePage({
   // mental model, archived threads are filed-away but findable.
   const activeThreads = allThreads.filter((t) => t.state !== "archived");
   const archivedThreads = allThreads.filter((t) => t.state === "archived");
+  const doneThreads = allThreads.filter((t) => t.state === "done");
 
   let visible: Thread[] = activeThreads;
   let title = "All threads";
@@ -97,6 +98,11 @@ export default async function WheelhousePage({
               active={filter === "blocked"}
             />
             <FilterChip
+              label={`Done (${doneThreads.length})`}
+              href="/wheelhouse?filter=done"
+              active={filter === "done"}
+            />
+            <FilterChip
               label={`Archived (${archivedThreads.length})`}
               href="/wheelhouse?filter=archived"
               active={filter === "archived"}
@@ -141,10 +147,6 @@ export default async function WheelhousePage({
           </div>
         )}
 
-        <p className="text-[11px] text-navy-400 font-light mt-8 text-center max-w-md mx-auto">
-          Push 1 — mock storage. Posts succeed but don&apos;t persist across
-          deploys. Real persistence ships in Push 3 (Vercel Postgres).
-        </p>
       </div>
     </main>
   );
