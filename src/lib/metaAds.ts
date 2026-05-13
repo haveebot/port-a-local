@@ -674,3 +674,139 @@ export async function boostPost(
     audienceId: getAudienceId(),
   });
 }
+
+/* ------------------------------------------------------------------ */
+/* Ads tool — list campaigns in the ad account                        */
+/*                                                                    */
+/* Foundation for /wheelhouse/ads. Returns every campaign the ad      */
+/* account owns, including boost campaigns (which createBoost names    */
+/* with the prefix "Boost · ") and any standalone ads created via the */
+/* Marketing API or Ads Manager UI.                                    */
+/* ------------------------------------------------------------------ */
+
+export type CampaignObjective =
+  | "OUTCOME_TRAFFIC"
+  | "OUTCOME_AWARENESS"
+  | "OUTCOME_ENGAGEMENT"
+  | "OUTCOME_LEADS"
+  | "OUTCOME_SALES"
+  | "OUTCOME_APP_PROMOTION"
+  | string;
+
+export type CampaignStatus =
+  | "ACTIVE"
+  | "PAUSED"
+  | "DELETED"
+  | "ARCHIVED"
+  | "WITH_ISSUES"
+  | string;
+
+export interface CampaignSummary {
+  id: string;
+  name: string;
+  objective: CampaignObjective;
+  status: CampaignStatus;
+  /** daily budget in cents (Meta returns smallest currency unit) */
+  dailyBudgetCents: number | null;
+  lifetimeBudgetCents: number | null;
+  createdTime: string | null;
+  startTime: string | null;
+  stopTime: string | null;
+  /** true if name starts with "Boost · " — created by createBoost rather than a standalone ad */
+  isBoost: boolean;
+}
+
+export interface ListCampaignsResult {
+  ok: boolean;
+  stubbed?: boolean;
+  campaigns?: CampaignSummary[];
+  error?: string;
+}
+
+/**
+ * List campaigns in the ad account. Defaults to the most recent 100,
+ * excluding DELETED + ARCHIVED. Returns stubbed=true with empty list
+ * when META_AD_ACCOUNT_ID isn't set, so the UI flow works end-to-end
+ * before Marketing API permission is wired.
+ */
+export async function listCampaigns(
+  opts: { limit?: number; includeArchived?: boolean } = {},
+): Promise<ListCampaignsResult> {
+  const token = getToken();
+  const adAccount = getAdAccountId();
+  if (!token || !adAccount) {
+    return { ok: true, stubbed: true, campaigns: [] };
+  }
+
+  const limit = Math.min(opts.limit ?? 100, 500);
+  const fields = [
+    "id",
+    "name",
+    "objective",
+    "status",
+    "daily_budget",
+    "lifetime_budget",
+    "created_time",
+    "start_time",
+    "stop_time",
+  ].join(",");
+
+  const params = new URLSearchParams();
+  params.set("fields", fields);
+  params.set("limit", String(limit));
+  if (!opts.includeArchived) {
+    params.set(
+      "effective_status",
+      JSON.stringify([
+        "ACTIVE",
+        "PAUSED",
+        "PENDING_REVIEW",
+        "DISAPPROVED",
+        "PREAPPROVED",
+        "CAMPAIGN_PAUSED",
+      ]),
+    );
+  }
+  params.set("access_token", token);
+
+  try {
+    const url = `${GRAPH_BASE}/act_${adAccount}/campaigns?${params.toString()}`;
+    const res = await fetch(url);
+    const data = (await res.json()) as Record<string, unknown> & {
+      error?: { message?: string };
+    };
+    if (!res.ok) {
+      return {
+        ok: false,
+        error:
+          (data.error as { message?: string })?.message ??
+          `HTTP ${res.status}`,
+      };
+    }
+    const rows = (data.data as Record<string, unknown>[] | undefined) ?? [];
+    const campaigns: CampaignSummary[] = rows.map((row) => {
+      const name = (row.name as string) ?? "";
+      const daily = row.daily_budget ? Number(row.daily_budget) : null;
+      const lifetime = row.lifetime_budget ? Number(row.lifetime_budget) : null;
+      return {
+        id: (row.id as string) ?? "",
+        name,
+        objective: (row.objective as string) ?? "",
+        status: (row.status as string) ?? "",
+        dailyBudgetCents: daily && Number.isFinite(daily) ? daily : null,
+        lifetimeBudgetCents:
+          lifetime && Number.isFinite(lifetime) ? lifetime : null,
+        createdTime: (row.created_time as string) ?? null,
+        startTime: (row.start_time as string) ?? null,
+        stopTime: (row.stop_time as string) ?? null,
+        isBoost: name.startsWith("Boost · "),
+      };
+    });
+    return { ok: true, campaigns };
+  } catch (err) {
+    return {
+      ok: false,
+      error: `fetch error: ${err instanceof Error ? err.message : String(err)}`,
+    };
+  }
+}
