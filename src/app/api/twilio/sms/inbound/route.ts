@@ -15,9 +15,14 @@ import {
   markPassed,
 } from "@/data/cart-rental-first-look-store";
 import { findInsider } from "@/data/insiders";
-import { findBeachVendorByPhone } from "@/data/beach-vendors";
+import {
+  findBeachVendorByPhone,
+  findBeachVendorBySlug,
+  beachVendorsAreTeammates,
+} from "@/data/beach-vendors";
 import {
   attemptClaim,
+  getClaim,
   getMostRecentUnclaimed,
 } from "@/data/beach-claim-store";
 import { sendSms } from "@/lib/twilioSms";
@@ -146,9 +151,27 @@ export async function POST(req: NextRequest) {
       }
       const won = await attemptClaim(unclaimed.stripeSessionId, beachVendor.slug);
       if (!won) {
+        // Race-lost. Look up the actual winner — if they're on the same
+        // team as the attempter, the team was already notified by the
+        // first claim resolution (notifyClaimResolution sends "claim-lost"
+        // to all teammates), so suppress the redundant race-lost SMS.
+        // Otherwise (cross-vendor race) name the winner so the attempter
+        // knows it's gone.
+        const winningClaim = await getClaim(unclaimed.stripeSessionId);
+        const winnerSlug = winningClaim?.claimedBySlug ?? null;
+        const winnerVendor = winnerSlug
+          ? findBeachVendorBySlug(winnerSlug)
+          : null;
+        if (winnerVendor && beachVendorsAreTeammates(beachVendor, winnerVendor)) {
+          console.log(
+            `[twilio/inbound beach] race-lost suppressed: ${beachVendor.slug} (${fromE164}) is on same team as winner ${winnerVendor.slug}`,
+          );
+          return twimlResponse();
+        }
+        const winnerName = winnerVendor?.name ?? "another vendor";
         sendSms(
           fromRaw,
-          `Port A Local: ${beachVendor.name} - sorry, that booking was just claimed by another vendor. Watch for the next one.`,
+          `Port A Local: ${beachVendor.name} - sorry, ${winnerName} already claimed that booking. Watch for the next one.`,
         ).catch((err) =>
           console.error("[twilio/inbound] beach lost-race reply failed:", err),
         );

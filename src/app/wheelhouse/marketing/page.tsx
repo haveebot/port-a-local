@@ -12,6 +12,7 @@ import { getActiveAlert } from "@/data/alerts-store";
 import { getTopCitations } from "@/data/ask-gully-log-store";
 import { getUpcomingMilestones } from "@/lib/eventMilestones";
 import { isMetaConfigured } from "@/lib/metaGraph";
+import { listCampaigns } from "@/lib/metaAds";
 import MarketingBreadcrumb from "@/components/wheelhouse/MarketingBreadcrumb";
 import SyncBoostsButton from "@/components/wheelhouse/SyncBoostsButton";
 import TopUpBoostButton from "@/components/wheelhouse/TopUpBoostButton";
@@ -58,6 +59,7 @@ export default async function MarketingHubPage() {
     activeAlert,
     topCitations,
     currentlyBoosting,
+    adsResult,
   ] = await Promise.all([
     getSocialStats(),
     getSocialPending(50),
@@ -66,7 +68,14 @@ export default async function MarketingHubPage() {
     getActiveAlert().catch(() => null),
     getTopCitations(7, 5).catch(() => []),
     getCurrentlyBoosting().catch(() => []),
+    listCampaigns({ limit: 200 }).catch(() => ({
+      ok: false,
+      campaigns: [] as { status: string }[],
+    })),
   ]);
+  const activeAdsCount = (adsResult.campaigns ?? []).filter(
+    (c) => c.status === "ACTIVE",
+  ).length;
   const upcoming = getUpcomingMilestones(60);
   const meta = isMetaConfigured();
 
@@ -149,7 +158,7 @@ export default async function MarketingHubPage() {
         </section>
 
         {/* MAIN TILES */}
-        <section className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+        <section className="grid grid-cols-2 sm:grid-cols-3 gap-3">
           <Tile
             href="/wheelhouse/social"
             icon="📱"
@@ -157,6 +166,14 @@ export default async function MarketingHubPage() {
             stat={`${socialStats.pending} queued`}
             statTone={socialStats.pending > 0 ? "coral" : "muted"}
             sub={`${socialStats.sent24h} sent today`}
+          />
+          <Tile
+            href="/wheelhouse/ads"
+            icon="🎯"
+            title="Ads"
+            stat={`${activeAdsCount} active`}
+            statTone={activeAdsCount > 0 ? "emerald" : "muted"}
+            sub="Meta Marketing API"
           />
           <Tile
             href="/wheelhouse/social#recent"
