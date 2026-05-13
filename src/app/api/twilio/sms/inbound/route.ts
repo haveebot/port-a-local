@@ -249,12 +249,13 @@ export async function POST(req: NextRequest) {
       if (intent === "pass") {
         const won = await markPassed(pending.id);
         if (!won) {
-          // Race lost — already accepted/passed/expired. Acknowledge + bail.
-          sendSms(
-            matchedPhone.number,
-            `Port A Local: That lead was already resolved. No further action needed.`,
-          ).catch((err) =>
-            console.error("[twilio/inbound] pass race-lost ack failed:", err),
+          // Race-lost: the row is no longer 'pending'. Because the row was
+          // fetched via getMostRecentPendingForVendor(vendor.slug), the
+          // winning resolution belongs to THIS vendor (a teammate already
+          // accepted or passed). They've already received the team alert,
+          // so don't pile on a "lead was resolved" SMS — silently log + bail.
+          console.log(
+            `[twilio/inbound] pass race-lost suppressed for ${vendor.slug} (${matchedPhone.number}) — same-team resolution already announced`,
           );
           return twimlResponse();
         }
@@ -277,6 +278,7 @@ export async function POST(req: NextRequest) {
             pickupFormatted: pending.leadMetadata.pickupShort,
             returnFormatted: pending.leadMetadata.returnShort,
             numDays: pending.leadMetadata.numDays,
+            handoff: pending.leadMetadata.handoff,
           },
           { excludeSlugs: [vendor.slug] },
         )
@@ -295,37 +297,40 @@ export async function POST(req: NextRequest) {
         acceptedViaPhone: matchedPhone.number,
       });
       if (!won) {
-        sendSms(
-          matchedPhone.number,
-          `Port A Local: That lead was already resolved. No further action needed.`,
-        ).catch((err) =>
-          console.error("[twilio/inbound] accept race-lost ack failed:", err),
+        // Race-lost: the row was fetched via getMostRecentPendingForVendor(vendor.slug),
+        // so the winner is THIS vendor — a teammate already accepted (or passed).
+        // They've already gotten the team-wide "claimed" alert; no need to send
+        // a redundant "lead resolved" SMS to a second Bron's phone. Silently
+        // log + bail. (Race-lost messaging for RIVAL vendors who try to claim
+        // a lead they were never offered is handled via the no-pending path
+        // above, which surfaces to the operator only — not to the rival vendor.)
+        console.log(
+          `[twilio/inbound] accept race-lost suppressed for ${vendor.slug} (${matchedPhone.number}) — same-team resolution already announced`,
         );
         return twimlResponse();
       }
 
       const md = pending.leadMetadata;
       const acceptingContact = matchedPhone.contactName ?? "team";
+      const handoffLabel =
+        md.handoff === "pickup"
+          ? "PICKUP at your shop"
+          : "DELIVERY to customer's address";
 
-      // Confirmation to all of vendor's phones — whoever accepted, the
-      // others see who took it
+      // ONE merged alert to ALL of vendor's phones. Contains exactly what the
+      // vendor needs to fulfill the rental: cart, dates, customer NAME,
+      // handoff choice. Customer phone + email are intentionally NOT included
+      // (PAL stays the listed provider; PAL relays handoff details before the
+      // rental date). Replaces the prior two-message flow (team-confirm +
+      // customer-info-to-accepter) per Winston spec 2026-05-13.
       const confirmBody = [
-        `Port A Local: ✅ ${vendor.name} accepted the ${md.cartLabel} lead`,
-        `Accepted by ${acceptingContact} (${matchedPhone.number}).`,
-        `Customer info follows in the next message.`,
-      ].join("\n\n");
-
-      // Customer-info follow-up — only sent to the accepting number to
-      // avoid spamming the team's other phones with the customer's
-      // contact details
-      const customerInfoBody = [
-        `Port A Local: 🛺 Lead details — ${md.cartLabel}`,
-        `Customer: ${md.customerName}`,
-        `Phone: ${md.customerPhone}`,
-        `Email: ${md.customerEmail}`,
+        `Port A Local: ✅ ${vendor.name} claimed the ${md.cartLabel} lead`,
+        `Claimed by ${acceptingContact}.`,
+        `Booking name: ${md.customerName}`,
         `Pickup: ${md.pickupFormatted}`,
         `Return: ${md.returnFormatted}`,
-        `Reach out directly. PAL is hands-off from here.`,
+        `Customer chose: ${handoffLabel}`,
+        `Port A Local handles all customer comms — we'll relay handoff details before the rental date. Reply here if you need anything from us.`,
       ].join("\n\n");
 
       const allPhones = smsPhonesFor(vendor);
@@ -337,14 +342,10 @@ export async function POST(req: NextRequest) {
         }
         await new Promise((r) => setTimeout(r, 600));
       }
-      // Customer info to accepting number only
-      sendSms(matchedPhone.number, customerInfoBody).catch((err) =>
-        console.error(`[twilio/inbound] accept customer-info to ${matchedPhone.number} failed:`, err),
-      );
-      // Operator ping — let Winston know the recovery worked
+      // Operator ping — let Winston know who claimed
       sendSms(
         OPERATOR_PHONE_E164,
-        `[first-look ✅] ${vendor.name} (${acceptingContact}) accepted ${md.cartLabel} — ${md.pickupShort} to ${md.returnShort} for ${md.customerName}`,
+        `[first-look ✅] ${vendor.name} (${acceptingContact}) claimed ${md.cartLabel} — ${md.pickupShort} to ${md.returnShort} for ${md.customerName} — ${md.handoff}`,
       ).catch((err) =>
         console.error("[twilio/inbound] operator ping on accept failed:", err),
       );

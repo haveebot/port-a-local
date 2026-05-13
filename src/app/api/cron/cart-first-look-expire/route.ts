@@ -71,6 +71,7 @@ export async function GET(req: NextRequest) {
           pickupFormatted: row.leadMetadata.pickupShort,
           returnFormatted: row.leadMetadata.returnShort,
           numDays: row.leadMetadata.numDays,
+          handoff: row.leadMetadata.handoff,
         },
         { excludeSlugs: [row.vendorSlug] },
       );
