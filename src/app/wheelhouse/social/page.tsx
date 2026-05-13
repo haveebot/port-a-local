@@ -11,7 +11,7 @@ import { isMetaConfigured } from "@/lib/metaGraph";
 import SocialPostCard from "./SocialPostCard";
 import RecentSent from "./RecentSent";
 import MarketingBreadcrumb from "@/components/wheelhouse/MarketingBreadcrumb";
-import AskHavee from "./AskHavee";
+import SocialComposerTabs from "./SocialComposerTabs";
 
 /**
  * Bucket pending posts into three visual tiers based on auto_send_at.
@@ -149,8 +149,8 @@ export default async function SocialQueuePage() {
           )}
         </section>
 
-        {/* ASK HAVEE — NL composer */}
-        <AskHavee />
+        {/* COMPOSER — toggle between Ask Havee (LLM) and Write-it-yourself */}
+        <SocialComposerTabs />
 
         {/* PENDING REVIEW — sectioned by fire-readiness */}
         <section className="bg-white rounded-2xl border border-coral-300 p-6 shadow-sm">
