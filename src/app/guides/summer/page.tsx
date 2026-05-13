@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { BreadcrumbListSchema } from "@/components/StructuredData";
+import PortalIcon, { type PortalIconName } from "@/components/brand/PortalIcon";
 
 export const metadata: Metadata = {
   title: "Summer Like a Local — Port A Summer Guide | Port A Local",
@@ -81,6 +82,7 @@ interface CtaTile {
   buttonLabel: string;
   href: string;
   bgClass: string;
+  iconName: PortalIconName;
 }
 
 const ctaTiles: CtaTile[] = [
@@ -90,6 +92,7 @@ const ctaTiles: CtaTile[] = [
     buttonLabel: "Explore",
     href: "/guides/outdoor-adventures",
     bgClass: "bg-seafoam-500 hover:bg-seafoam-600",
+    iconName: "surfing",
   },
   {
     heading: "Book the beach",
@@ -97,6 +100,7 @@ const ctaTiles: CtaTile[] = [
     buttonLabel: "Book",
     href: "/beach",
     bgClass: "bg-coral-500 hover:bg-coral-600",
+    iconName: "beach",
   },
   {
     heading: "Reserve your cart",
@@ -104,6 +108,7 @@ const ctaTiles: CtaTile[] = [
     buttonLabel: "Reserve",
     href: "/rent",
     bgClass: "bg-ocean-500 hover:bg-ocean-600",
+    iconName: "cart",
   },
   {
     heading: "Family-friendly",
@@ -111,6 +116,7 @@ const ctaTiles: CtaTile[] = [
     buttonLabel: "Explore",
     href: "/guides/family-friendly",
     bgClass: "bg-gold-500 hover:bg-gold-600",
+    iconName: "castle",
   },
 ];
 
@@ -226,20 +232,26 @@ export default function SummerGuide() {
               <Link
                 key={t.href}
                 href={t.href}
-                className={`group block rounded-3xl ${t.bgClass} transition-colors p-8 sm:p-10`}
+                className={`group block rounded-3xl ${t.bgClass} transition-colors p-8 sm:p-10 relative overflow-hidden`}
               >
-                <h3 className="font-display italic text-3xl sm:text-4xl font-bold text-white leading-tight mb-3">
-                  {t.heading}
-                </h3>
-                <p className="text-white/85 text-base leading-relaxed mb-8 max-w-md">
-                  {t.body}
-                </p>
-                <span className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-navy-900 text-white text-xs tracking-[0.2em] uppercase font-bold group-hover:bg-navy-800 transition-colors">
-                  {t.buttonLabel}
-                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                </span>
+                <PortalIcon
+                  name={t.iconName}
+                  className="absolute right-4 bottom-4 w-28 h-28 sm:w-32 sm:h-32 lg:w-36 lg:h-36 text-white/85 pointer-events-none"
+                />
+                <div className="relative z-10 max-w-[65%]">
+                  <h3 className="font-display italic text-3xl sm:text-4xl font-bold text-white leading-tight mb-3">
+                    {t.heading}
+                  </h3>
+                  <p className="text-white/85 text-base leading-relaxed mb-8">
+                    {t.body}
+                  </p>
+                  <span className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-navy-900 text-white text-xs tracking-[0.2em] uppercase font-bold group-hover:bg-navy-800 transition-colors">
+                    {t.buttonLabel}
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                  </span>
+                </div>
               </Link>
             ))}
           </div>
