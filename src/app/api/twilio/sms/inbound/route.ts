@@ -157,7 +157,6 @@ export async function POST(req: NextRequest) {
       notifyClaimResolution({
         winner: beachVendor,
         customerName: unclaimed.customerName ?? "Customer",
-        customerPhone: unclaimed.customerPhone ?? "",
         product: unclaimed.product ?? "setup",
         qty: unclaimed.qty ?? 1,
         setupDateFormatted: unclaimed.setupDate
