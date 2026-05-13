@@ -75,11 +75,43 @@ const eats: Pick[] = [
   },
 ];
 
-const ctas: { label: string; href: string }[] = [
-  { label: "Adventures", href: "/guides/outdoor-adventures" },
-  { label: "Book the beach", href: "/beach" },
-  { label: "Reserve your cart", href: "/rent" },
-  { label: "Family-friendly Port A", href: "/guides/family-friendly" },
+interface CtaTile {
+  heading: string;
+  body: string;
+  buttonLabel: string;
+  href: string;
+  bgClass: string;
+}
+
+const ctaTiles: CtaTile[] = [
+  {
+    heading: "Adventures",
+    body: "Fishing, kayak, dolphin tours, the jetty boat — full outdoor guide.",
+    buttonLabel: "Explore",
+    href: "/guides/outdoor-adventures",
+    bgClass: "bg-seafoam-500 hover:bg-seafoam-600",
+  },
+  {
+    heading: "Book the beach",
+    body: "Chairs, umbrellas, full set-up — delivered straight to your spot.",
+    buttonLabel: "Book",
+    href: "/beach",
+    bgClass: "bg-coral-500 hover:bg-coral-600",
+  },
+  {
+    heading: "Reserve your cart",
+    body: "The best way to get around. Reserve and we'll deliver to you.",
+    buttonLabel: "Reserve",
+    href: "/rent",
+    bgClass: "bg-ocean-500 hover:bg-ocean-600",
+  },
+  {
+    heading: "Family-friendly",
+    body: "Kid-approved spots, calm-water swims, easy wins for the crew.",
+    buttonLabel: "Explore",
+    href: "/guides/family-friendly",
+    bgClass: "bg-gold-500 hover:bg-gold-600",
+  },
 ];
 
 export default function SummerGuide() {
@@ -171,6 +203,49 @@ export default function SummerGuide() {
         </div>
       </section>
 
+      {/* Plan ahead — tile CTAs (placed mid-page so the action is reachable
+          before the user gets lost in copy). */}
+      <section className="py-20 sm:py-24 bg-navy-900 relative">
+        <div className="absolute top-0 left-0 right-0 coral-line" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-12">
+            <p className="text-coral-300 text-sm font-medium tracking-[0.2em] uppercase mb-3">
+              Plan ahead
+            </p>
+            <h2 className="font-display text-3xl sm:text-4xl font-bold text-sand-50 mb-4">
+              Make it a summer to remember.
+            </h2>
+            <div className="coral-line max-w-xs mx-auto mb-6" />
+            <p className="text-lg text-navy-200 font-light max-w-xl mx-auto">
+              Book your beach day, reserve a cart, or dig into a full guide. All locally vetted — no runaround.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
+            {ctaTiles.map((t) => (
+              <Link
+                key={t.href}
+                href={t.href}
+                className={`group block rounded-3xl ${t.bgClass} transition-colors p-8 sm:p-10`}
+              >
+                <h3 className="font-display italic text-3xl sm:text-4xl font-bold text-white leading-tight mb-3">
+                  {t.heading}
+                </h3>
+                <p className="text-white/85 text-base leading-relaxed mb-8 max-w-md">
+                  {t.body}
+                </p>
+                <span className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-navy-900 text-white text-xs tracking-[0.2em] uppercase font-bold group-hover:bg-navy-800 transition-colors">
+                  {t.buttonLabel}
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Restaurants */}
       <section className="py-16 sm:py-20 bg-sand-50">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
@@ -194,33 +269,6 @@ export default function SummerGuide() {
               </li>
             ))}
           </ul>
-        </div>
-      </section>
-
-      {/* Closing CTAs */}
-      <section className="py-20 sm:py-24 hero-gradient relative">
-        <div className="absolute top-0 left-0 right-0 coral-line" />
-        <div className="absolute inset-0 palm-pattern opacity-15" />
-
-        <div className="relative max-w-3xl mx-auto px-4 sm:px-6 text-center">
-          <h2 className="font-display text-3xl sm:text-4xl font-bold text-sand-50 mb-4">
-            Make it a summer to remember.
-          </h2>
-          <div className="coral-line max-w-xs mx-auto mb-6" />
-          <p className="text-lg text-navy-200 font-light max-w-xl mx-auto mb-10">
-            Book your beach day, reserve a cart, or dig into a full guide. All locally vetted — no runaround.
-          </p>
-          <div className="flex items-center justify-center flex-wrap gap-3">
-            {ctas.map((c) => (
-              <Link
-                key={c.href}
-                href={c.href}
-                className="inline-flex items-center justify-center px-7 py-3.5 rounded-xl border border-coral-400/60 text-coral-100 hover:bg-coral-500 hover:text-white text-sm font-semibold transition-colors"
-              >
-                {c.label}
-              </Link>
-            ))}
-          </div>
         </div>
       </section>
 
