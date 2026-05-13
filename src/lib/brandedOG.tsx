@@ -27,6 +27,26 @@ export function loadLighthouse(variant: LighthouseVariant = "standard"): string 
 }
 
 /* ------------------------------------------------------------------ */
+/* Fonts — Inter (body / pill / headline) + Playfair Display (wordmark) */
+/* Per Collie's spec, every Link Card uses Inter except "PORT A LOCAL" */
+/* which uses Playfair Display.                                         */
+/* ------------------------------------------------------------------ */
+
+const FONTS_DIR = path.join(process.cwd(), "public/fonts");
+
+const interRegular = fs.readFileSync(path.join(FONTS_DIR, "Inter-Regular.ttf"));
+const interSemiBold = fs.readFileSync(path.join(FONTS_DIR, "Inter-SemiBold.ttf"));
+const interExtraBold = fs.readFileSync(path.join(FONTS_DIR, "Inter-ExtraBold.ttf"));
+const playfairBold = fs.readFileSync(path.join(FONTS_DIR, "PlayfairDisplay-Bold.ttf"));
+
+const OG_FONTS = [
+  { name: "Inter", data: interRegular, weight: 400 as const, style: "normal" as const },
+  { name: "Inter", data: interSemiBold, weight: 600 as const, style: "normal" as const },
+  { name: "Inter", data: interExtraBold, weight: 800 as const, style: "normal" as const },
+  { name: "Playfair Display", data: playfairBold, weight: 700 as const, style: "normal" as const },
+];
+
+/* ------------------------------------------------------------------ */
 /* Card systems — Collie's spec                                       */
 /* ------------------------------------------------------------------ */
 
@@ -255,6 +275,7 @@ export function brandedOG({
           height: "100%",
           backgroundColor: bg,
           padding: "60px 70px",
+          fontFamily: "Inter",
         }}
       >
         {/* Top — badge + meta */}
@@ -327,7 +348,7 @@ export function brandedOG({
                 color: subColor,
                 lineHeight: 1.35,
                 maxWidth: 960,
-                fontWeight: 300,
+                fontWeight: 400,
               }}
             >
               {subtitle.length > 180 ? subtitle.slice(0, 180) + "..." : subtitle}
@@ -349,6 +370,7 @@ export function brandedOG({
             <div style={{ display: "flex", flexDirection: "column" }}>
               <span
                 style={{
+                  fontFamily: "Playfair Display",
                   fontSize: 28,
                   fontWeight: 700,
                   color: tokens.wordmark,
@@ -382,6 +404,6 @@ export function brandedOG({
         </div>
       </div>
     ),
-    { ...ogSize }
+    { ...ogSize, fonts: OG_FONTS }
   );
 }
