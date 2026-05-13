@@ -18,7 +18,14 @@ export async function POST(req: NextRequest) {
     returnDate,
     numDays,
     smsConsent,
+    handoff,
   } = body;
+
+  // Customer's handoff choice — required. Vendor must honor it. Default to
+  // delivery if absent (the form initial state) to keep backward compat with
+  // any in-flight checkout sessions that predate the field.
+  const handoffNormalized: "delivery" | "pickup" =
+    handoff === "pickup" ? "pickup" : "delivery";
 
   // Note: any reservationFee in the body is INTENTIONALLY ignored. The fee is
   // computed server-side ($10/day) so a manipulated client can't underpay.
@@ -62,6 +69,7 @@ export async function POST(req: NextRequest) {
         numDays: String(days),
         reservationFee: String(reservationFeeCents / 100),
         smsConsent: smsConsent ? "true" : "false",
+        handoff: handoffNormalized,
       },
       success_url: `${APP_URL}/rent/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${APP_URL}/rent`,

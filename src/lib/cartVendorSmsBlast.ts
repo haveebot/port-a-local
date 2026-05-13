@@ -77,16 +77,27 @@ export interface CartLeadBlastInput {
   pickupFormatted: string; // "Sun May 17"
   returnFormatted: string; // "Fri May 22"
   numDays: number;
+  // Customer's pickup/delivery choice — surfaced in the lead body so the
+  // vendor knows what they're committing to before they ACCEPT. Vendor is
+  // required to honor it.
+  handoff: "delivery" | "pickup";
+}
+
+function handoffLine(h: "delivery" | "pickup"): string {
+  return h === "pickup"
+    ? `Customer chose: PICKUP at your shop.`
+    : `Customer chose: DELIVERY to their address.`;
 }
 
 export function buildLeadBlastSms(input: CartLeadBlastInput): string {
-  const { cartLabel, pickupFormatted, returnFormatted, numDays } = input;
+  const { cartLabel, pickupFormatted, returnFormatted, numDays, handoff } = input;
   const dayWord = numDays === 1 ? "day" : "days";
   // Block format per Collie 2026-04-29 — line-spacing makes the SMS skim
   // faster on a vendor's lock screen. Each line carries one fact.
   return [
     `Port A Local: 🛺 NEW CART LEAD`,
     `${cartLabel}, ${pickupFormatted} to ${returnFormatted} (${numDays} ${dayWord}).`,
+    handoffLine(handoff),
     `$20 off your standard rate.`,
     `Reply ACCEPT to take it, or PASS to release it.`,
     `STOP to opt out.`,
@@ -107,6 +118,7 @@ export function buildFirstLookLeadSms(
   return [
     `Port A Local: 🛺 PRIORITY CART LEAD (${windowMinutes}-min head start)`,
     `${rest.cartLabel}, ${rest.pickupFormatted} to ${rest.returnFormatted} (${rest.numDays} ${dayWord}).`,
+    handoffLine(rest.handoff),
     `$20 off your standard rate.`,
     `Reply ACCEPT to take it, or PASS to release it to the rest of the directory.`,
     `STOP to opt out.`,

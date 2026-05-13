@@ -69,9 +69,15 @@ export interface FirstLookLeadMetadata {
   returnShort: string;
   numDays: number;
   customerName: string;
+  // customerPhone / customerEmail stay on the row for refund + operator
+  // use, but are NEVER surfaced to vendor SMS. Per the PAL-as-listed-
+  // provider rule (locked 2026-05-09): vendor only knows name + dates +
+  // handoff choice. PAL relays anything else.
   customerPhone: string;
   customerEmail: string;
   reservationFee: number;
+  // Customer's pickup/delivery choice. Vendor is required to honor it.
+  handoff: "delivery" | "pickup";
 }
 
 export interface FirstLookPendingRow {

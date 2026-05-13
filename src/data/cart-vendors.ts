@@ -454,18 +454,24 @@ export function getBlastCount(): number {
 }
 
 /**
- * Vendors with `firstLookMinutes > 0` whose `cartSizes` includes the
- * requested size — the priority cohort for a given lead. Returns
- * empty array if no priority vendors match (→ standard simultaneous
- * blast applies).
+ * Vendors with `firstLookMinutes > 0` — the priority cohort for any new
+ * lead, regardless of cart size. Per Winston 2026-05-13: first-look
+ * priority is NOT gated on size match. We assume the priority vendor
+ * (Bron's) can fulfill every cart size we offer; gating by size would
+ * cost real first-look windows for no operational benefit.
+ *
+ * The `cartSize` parameter is retained for API stability (the call site
+ * in /api/rent/confirm doesn't have to change) but is intentionally
+ * ignored.
  */
-export function getFirstLookVendorsForSize(cartSize: string): CartVendor[] {
+export function getFirstLookVendorsForSize(
+  _cartSize: string,
+): CartVendor[] {
   return cartVendors.filter(
     (v) =>
       v.active &&
       typeof v.firstLookMinutes === "number" &&
-      v.firstLookMinutes > 0 &&
-      v.cartSizes.includes(cartSize),
+      v.firstLookMinutes > 0,
   );
 }
 

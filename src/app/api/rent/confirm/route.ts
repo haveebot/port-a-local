@@ -76,6 +76,12 @@ export async function POST(req: NextRequest) {
 
     const m = session.metadata || {};
     const { name, phone, email, cartSize, pickupDate, returnDate, numDays, reservationFee, smsConsent } = m;
+    // Customer's pickup/delivery choice — vendor is required to honor it.
+    // Default to "delivery" for any pre-existing sessions without the field.
+    const handoff: "delivery" | "pickup" =
+      m.handoff === "pickup" ? "pickup" : "delivery";
+    const handoffLabel =
+      handoff === "pickup" ? "Pickup at vendor's shop" : "Delivery to customer";
 
     const pickupFormatted = formatDate(pickupDate);
     const returnFormatted = formatDate(returnDate);
@@ -115,7 +121,7 @@ export async function POST(req: NextRequest) {
         <p><strong>Pickup:</strong> ${pickupFormatted}</p>
         <p><strong>Return:</strong> ${returnFormatted}</p>
         <p><strong>Duration:</strong> ${days} day${days !== 1 ? "s" : ""}</p>
-        <p><strong>Handoff:</strong> Pickup or delivery — vendor's call</p>
+        <p><strong>Handoff:</strong> ${handoffLabel} <span style="color:#8896ab; font-size:12px;">(customer's choice — vendor must honor)</span></p>
         ${
           hasFirstLook
             ? `<p style="margin-top:12px; padding:10px; background:#fff7ed; border-left:3px solid #f59e0b; font-size:12px;">
@@ -135,7 +141,7 @@ export async function POST(req: NextRequest) {
       preheader: "Your golf cart reservation is confirmed.",
       bodyHtml: `
         <h2 style="margin:0 0 8px 0; font-size:22px; color:#0b1120;">Your cart is reserved</h2>
-        <p style="margin:0 0 16px 0; color:#4a5568; font-size:14px;">Payment received. We&apos;re matching your reservation with a vetted local cart company now. You&apos;ll receive <strong>cart logistics 24–48 hours before your arrival date</strong> — pickup or delivery, vendor&apos;s call.</p>
+        <p style="margin:0 0 16px 0; color:#4a5568; font-size:14px;">Payment received. We&apos;re matching your reservation with a vetted local cart company now. You&apos;ll receive <strong>cart logistics 24–48 hours before your arrival date</strong> based on the handoff you chose at booking.</p>
         <p>Hi ${name},</p>
         <p><strong>Your reservation:</strong></p>
         <ul>
@@ -143,8 +149,9 @@ export async function POST(req: NextRequest) {
           <li><strong>Pickup date:</strong> ${pickupFormatted}</li>
           <li><strong>Return date:</strong> ${returnFormatted}</li>
           <li><strong>Duration:</strong> ${days} day${days !== 1 ? "s" : ""}</li>
+          <li><strong>Handoff:</strong> ${handoff === "pickup" ? "Pickup at the vendor's shop" : "Delivery to your address"}</li>
           <li><strong>Reservation fee paid:</strong> $${fee}</li>
-          <li><strong>Pickup location:</strong> Sent 24–48 hours before arrival</li>
+          <li><strong>${handoff === "pickup" ? "Pickup location" : "Delivery details"}:</strong> Sent 24–48 hours before arrival</li>
         </ul>
         <p><strong>What to bring:</strong> Valid photo ID (must be 18+).</p>
         <p><strong>Your savings:</strong> Every PAL reservation includes a guaranteed <strong>$20 discount</strong> off the rental company's standard rate.</p>
@@ -181,14 +188,15 @@ export async function POST(req: NextRequest) {
         <p><strong>Pickup:</strong> ${pickupFormatted}</p>
         <p><strong>Return:</strong> ${returnFormatted}</p>
         <p><strong>Duration:</strong> ${days} day${days !== 1 ? "s" : ""}</p>
+        <p><strong>Customer's handoff choice:</strong> ${handoff === "pickup" ? "Pickup at your shop" : "Delivery to customer's address"} <span style="color:#8896ab; font-size:12px;">(required — customer chose this at booking)</span></p>
         <hr style="border:none; border-top:1px solid #e4dccc; margin:16px 0;"/>
         <p style="font-size:13px; color:#4a5568;"><strong>By responding to claim this lead, you agree to:</strong></p>
         <ul style="font-size:13px; color:#4a5568; padding-left:20px;">
-          <li>Have a clean, well-maintained ${cartSize}-passenger cart ready for the customer on <strong>${pickupFormatted}</strong> — <strong>pickup at your shop OR delivery to their address, your call</strong> (whichever you offer)</li>
+          <li>Have a clean, well-maintained ${cartSize}-passenger cart ready for the customer on <strong>${pickupFormatted}</strong> via <strong>${handoff === "pickup" ? "pickup at your shop" : "delivery to their address"}</strong> (the customer's choice — you are required to honor it)</li>
           <li>Provide the customer a <strong>minimum $20 discount</strong> off your standard rental rate</li>
           <li>Adhere to your standard rental practices — including rental agreements, ID verification, deposit handling, customer service, and emergency maintenance support for the duration of the rental</li>
         </ul>
-        <p style="font-size:13px; color:#4a5568;">Customer contact info is shared after you claim.</p>
+        <p style="font-size:13px; color:#4a5568;">Port A Local handles all customer comms — we'll relay handoff logistics to you closer to the date.</p>
         <hr style="border:none; border-top:1px solid #e4dccc; margin:16px 0;"/>
         <p style="font-size:12px; color:#8896ab; font-style:italic;">This lead was sent to ${totalVendorCount} Port Aransas cart companies. First to respond wins.</p>
       `,
@@ -211,7 +219,7 @@ export async function POST(req: NextRequest) {
       `[Rent/Blast] Sending lead email to ${vendorBlastPromises.length} addresses across ${allEmailVendors.length} vendors`,
     );
 
-    const customerSMS = `Port A Local: Your ${cartLabel} is reserved for ${pickupFormatted}. Cart logistics (pickup or delivery, vendor's call) arrive 24-48 hours before your trip. Reply STOP to opt out.`;
+    const customerSMS = `Port A Local: Your ${cartLabel} is reserved for ${pickupFormatted}. ${handoff === "pickup" ? "Pickup details" : "Delivery details"} arrive 24-48 hours before your trip. Reply STOP to opt out.`;
 
     // SMS channel — branch on first-look
     const smsPromises: Array<Promise<unknown>> = [];
@@ -244,6 +252,7 @@ export async function POST(req: NextRequest) {
               customerPhone: phone,
               customerEmail: email,
               reservationFee: fee,
+              handoff,
             },
           }).then((row) => {
             if (!row) {
@@ -258,6 +267,7 @@ export async function POST(req: NextRequest) {
               returnFormatted: returnShort,
               numDays: days,
               windowMinutes: minutes,
+              handoff,
             }).then((sent) =>
               console.log(
                 `[first-look] sent priority SMS to ${sent} number(s) for ${v.slug}`,
@@ -274,6 +284,7 @@ export async function POST(req: NextRequest) {
           pickupFormatted: pickupShort,
           returnFormatted: returnShort,
           numDays: days,
+          handoff,
         }).then((sent) =>
           console.log(`[Rent/Blast] SMS sent to ${sent} opted-in vendors`),
         ),
