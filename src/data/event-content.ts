@@ -314,18 +314,8 @@ export const eventContent: Record<string, EventContent> = {
       },
       {
         label:
-          "Port Aransas CVB event listing — Fly It Port A's Spring Kite Festival",
-        url: "https://www.portaransas.org/event/fly-it-port-a%E2%80%99s-spring-kite-festival/5655/",
-      },
-      {
-        label:
           "Port Aransas South Jetty — Fly-It! kite shop celebrates 30 years (2021)",
         url: "https://www.portasouthjetty.com/articles/fly-it-kite-shop-to-celebrate-30-years/",
-      },
-      {
-        label:
-          "Port Aransas CVB — Q&A with the new owners of Fly It! Port A Kite Shop (2022)",
-        url: "https://www.portaransas.org/blog/stories/post/meet-the-new-owners-of-fly-it-port-a-kite-shop/",
       },
     ],
     photoCTA: {
@@ -509,11 +499,6 @@ export const eventContent: Record<string, EventContent> = {
       {
         label: "Port Aransas Boatmen, Inc.",
         url: "https://paboatmen.org/",
-      },
-      {
-        label:
-          "Port Aransas CVB — Texas's Oldest Fishing Tournament",
-        url: "https://www.portaransas.org/blog/stories/post/deep-sea-roundup/",
       },
       {
         label:
@@ -1162,10 +1147,6 @@ export const eventContent: Record<string, EventContent> = {
         label: "The Purple Door — beneficiary",
         url: "https://purpledoortx.org/",
       },
-      {
-        label: "Port Aransas CVB — Texas Women Anglers Tournament",
-        url: "https://www.portaransas.org/blog/stories/post/texas-women-anglers-tournament/",
-      },
     ],
   },
 
@@ -1366,10 +1347,6 @@ export const eventContent: Record<string, EventContent> = {
       {
         label: "Texas SandFest — board",
         url: "https://www.texassandfest.org/board",
-      },
-      {
-        label: "Port Aransas CVB — SandFest",
-        url: "https://www.portaransas.org/sandfest/",
       },
       {
         label: "PAL Heritage — The Card Table That Built Texas Sandfest",

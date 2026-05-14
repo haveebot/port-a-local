@@ -476,16 +476,6 @@ export default function TournamentSeasonPage() {
               </li>
               <li>
                 <a
-                  href="https://www.portaransas.org/events/fishing-tournaments/"
-                  className="text-coral-500 hover:text-coral-600 underline decoration-coral-200 hover:decoration-coral-400"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Port Aransas CVB — Fishing Tournaments listing (20+)
-                </a>
-              </li>
-              <li>
-                <a
                   href="https://www.portasouthjetty.com/articles/its-tourney-time/"
                   className="text-coral-500 hover:text-coral-600 underline decoration-coral-200 hover:decoration-coral-400"
                   target="_blank"

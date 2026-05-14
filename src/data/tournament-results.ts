@@ -833,10 +833,6 @@ export const tournamentResults: Record<string, TournamentResults> = {
         label: "The Purple Door — beneficiary",
         url: "https://purpledoortx.org/",
       },
-      {
-        label: "Port Aransas CVB — TWAT listing",
-        url: "https://www.portaransas.org/blog/stories/post/texas-women-anglers-tournament/",
-      },
     ],
   },
 
@@ -1128,11 +1124,6 @@ export const tournamentResults: Record<string, TournamentResults> = {
       {
         label: "Port Aransas Boatmen, Inc. — sanctioning org",
         url: "https://paboatmen.org/",
-      },
-      {
-        label:
-          "Port Aransas CVB — Texas's Oldest Fishing Tournament",
-        url: "https://www.portaransas.org/blog/stories/post/deep-sea-roundup/",
       },
       {
         label:

@@ -1844,8 +1844,6 @@ export const storyContent: Record<string, StoryContent> = {
     sources: [
       { label: "Texas Sandfest official — History", url: "https://www.texassandfest.org/history" },
       { label: "Texas Sandfest official — 2025 Winners", url: "https://www.texassandfest.org/winners" },
-      { label: "Port Aransas Tourism Bureau — History of Texas SandFest", url: "https://www.portaransas.org/texas-sandfest/about/history/" },
-      { label: "Port Aransas Tourism Bureau — Texas SandFest 2026", url: "https://www.portaransas.org/texas-sandfest/" },
       { label: "Port Aransas South Jetty — \"Shelton was sparkling community leader\" (Sept 10, 2025)", url: "https://www.portasouthjetty.com/articles/shelton-was-sparkling-community-leader/" },
       { label: "Port Aransas South Jetty — \"SandFest gives back to area organizations\" (2025)", url: "https://www.portasouthjetty.com/articles/sandfest-gives-back-to-area-organizations/" },
       { label: "Port Aransas South Jetty — \"SandFest was super\" (2025 coverage)", url: "https://www.portasouthjetty.com/articles/sandfest-was-super/" },
