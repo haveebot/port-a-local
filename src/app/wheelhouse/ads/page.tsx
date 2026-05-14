@@ -9,6 +9,7 @@ import {
 } from "@/lib/metaAds";
 import { isMetaConfigured } from "@/lib/metaGraph";
 import MarketingBreadcrumb from "@/components/wheelhouse/MarketingBreadcrumb";
+import CampaignStatusToggle from "./CampaignStatusToggle";
 
 export const dynamic = "force-dynamic";
 
@@ -211,8 +212,7 @@ export default async function AdsPage() {
         )}
 
         <p className="text-[11px] text-navy-400 text-center pt-2">
-          Foundation read-only view. Create / Pause / Resume + custom-audience
-          management ship in follow-up PRs.
+          Per-campaign insights + custom-audience CRUD ship in follow-up PRs.
         </p>
       </div>
     </main>
@@ -279,6 +279,11 @@ function CampaignRow({ campaign }: { campaign: CampaignWithInsights }) {
           )}
         </p>
       </div>
+      <CampaignStatusToggle
+        campaignId={campaign.id}
+        campaignName={campaign.name}
+        initialStatus={campaign.status}
+      />
       <div className="text-right shrink-0 tabular-nums">
         {campaign.insights && campaign.insights.impressions > 0 ? (
           <>

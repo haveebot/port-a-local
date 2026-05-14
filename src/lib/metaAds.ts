@@ -1123,3 +1123,83 @@ export async function fetchCampaignInsights(
     };
   }
 }
+
+/* ------------------------------------------------------------------ */
+/* Pause / Resume campaign status                                     */
+/*                                                                    */
+/* Meta Marketing API: POST /<campaign_id> with status=PAUSED|ACTIVE  */
+/* updates the campaign status. PAUSED stops spend immediately; ACTIVE */
+/* resumes a paused campaign within its existing budget + dates.       */
+/*                                                                    */
+/* Distinct from DELETED (permanent + non-recoverable in our UI) — we  */
+/* don't expose Delete via the operator surface; if a campaign should  */
+/* truly be ended, paused is sufficient since Meta won't spend on a    */
+/* PAUSED campaign and the operator can re-resume if they change mind. */
+/* ------------------------------------------------------------------ */
+
+export interface SetCampaignStatusResult {
+  ok: boolean;
+  stubbed?: boolean;
+  campaignId: string;
+  newStatus: "ACTIVE" | "PAUSED";
+  error?: string;
+}
+
+async function setCampaignStatus(
+  campaignId: string,
+  newStatus: "ACTIVE" | "PAUSED",
+): Promise<SetCampaignStatusResult> {
+  const token = getToken();
+  if (!token) {
+    return {
+      ok: false,
+      campaignId,
+      newStatus,
+      error: "META_PAGE_ACCESS_TOKEN not set",
+    };
+  }
+  if (!getAdAccountId()) {
+    console.log(
+      `[metaAds] STUB — would set campaign ${campaignId} → ${newStatus}`,
+    );
+    return { ok: true, stubbed: true, campaignId, newStatus };
+  }
+
+  const body = new URLSearchParams();
+  body.set("status", newStatus);
+  body.set("access_token", token);
+
+  const res = await postForm<{ success?: boolean; id?: string }>(
+    `/${campaignId}`,
+    body,
+  );
+  if (res.error) {
+    return {
+      ok: false,
+      campaignId,
+      newStatus,
+      error: res.error,
+    };
+  }
+  return { ok: true, campaignId, newStatus };
+}
+
+/**
+ * Pause a campaign. Idempotent on Meta's side (PAUSE on a PAUSED
+ * campaign is a no-op success). Stub-mode safe.
+ */
+export async function pauseCampaign(
+  campaignId: string,
+): Promise<SetCampaignStatusResult> {
+  return setCampaignStatus(campaignId, "PAUSED");
+}
+
+/**
+ * Resume (un-pause) a campaign. Brings a PAUSED campaign back to ACTIVE
+ * within its existing budget + date window. Idempotent. Stub-mode safe.
+ */
+export async function resumeCampaign(
+  campaignId: string,
+): Promise<SetCampaignStatusResult> {
+  return setCampaignStatus(campaignId, "ACTIVE");
+}
