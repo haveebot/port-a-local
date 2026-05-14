@@ -186,7 +186,7 @@ export async function POST(req: NextRequest) {
       })(),
     ]);
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true, value: total, currency: "USD" });
   } catch (err) {
     console.error("[Beach/Confirm] Error:", err);
     return NextResponse.json({ error: "Confirmation failed" }, { status: 500 });
