@@ -80,7 +80,9 @@ export type PortalIconName =
   | "winter"
   | "storm"
   | "castle"
-  | "hammer";
+  | "hammer"
+  // Round 5 — Link card icon set (Collie 2026-05-14)
+  | "lighthouse";
 
 const svgBase = {
   viewBox: "0 0 64 64",
@@ -918,6 +920,22 @@ function Hammer(props: SVGProps<SVGSVGElement>) {
 // Icon registry + component
 // ═══════════════════════════════════════════════════════════════════
 
+function Lighthouse(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...svgBase} viewBox="0 0 128 128" {...props}>
+      <rect x="62.6" y="6.3" width="2.8" height="10.68" />
+      <rect x="27.38" y="41.5" width="10.51" height="2.8" />
+      <rect x="90.11" y="41.5" width="10.51" height="2.8" />
+      <path d="M47.74,121.7l1.32-13.84c.07-.72-.02-1.33.35-2.02l28.18-12.01,2.66,27.86h-32.52Z" />
+      <polygon points="76.4 81.09 50.56 92.1 51.81 78.93 75.21 68.94 76.4 81.09" />
+      <path
+        fillRule="evenodd"
+        d="M74.15,57.08l-20.98,8.95c-.16-1.1.05-1.79.13-2.64l.73-8.09c.05-.55.43-1.49.01-1.91-1.14-.58-2.21-1.55-1.93-2.31.08-.22.31-.48.68-.48h1.58s0-13.11,0-13.11h-1.58c-.26-.01-.44-.16-.54-.27-.19-.2-.18-.48-.1-.71.31-.96,1.05-1.27,1.81-1.75,4.36-2.78,5.93-7.33,8.3-9.01,1.07-.76,2.44-.77,3.52,0,2.47,1.77,4.31,6.95,9.07,9.46.78.41,1.26,1.42,1,1.9-.09.16-.31.36-.62.36h-1.58s0,13.11,0,13.11h1.58c.48.02.77.44.69.85-.21,1.08-1.13,1.44-1.95,1.94-.39.4-.03,1.3.01,1.76.06.68-.05,1.17.19,1.94ZM69.96,37.47h-11.91v13.13h11.91v-13.13Z"
+      />
+    </svg>
+  );
+}
+
 const icons: Record<
   PortalIconName,
   (p: SVGProps<SVGSVGElement>) => ReactElement
@@ -977,6 +995,7 @@ const icons: Record<
   storm: Storm,
   castle: Castle,
   hammer: Hammer,
+  lighthouse: Lighthouse,
 };
 
 /**

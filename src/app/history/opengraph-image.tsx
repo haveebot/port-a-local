@@ -7,11 +7,14 @@ export const dynamic = "force-dynamic";
 
 export default function Image() {
   return brandedOG({
-    badge: "Heritage",
-    badgeIcon: "heritage",
+    where: "Discover",
+    what: "Heritage",
+    badgeIcon: "lighthouse",
     title: "Port A Heritage",
     subtitle:
       "The people, places, and moments that shaped Port Aransas. Preserved by locals, built to last.",
-    lockupVariant: "standard",
+    body: "21 stories · built to last",
+    path: "/history",
+    category: "heritage",
   });
 }
