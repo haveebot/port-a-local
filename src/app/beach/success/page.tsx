@@ -11,6 +11,7 @@ function BeachSuccessContent() {
   const searchParams = useSearchParams();
   const sessionId = searchParams.get("session_id");
   const [status, setStatus] = useState<"loading" | "success" | "error">("loading");
+  const [purchaseValue, setPurchaseValue] = useState<number>(0);
 
   useEffect(() => {
     if (!sessionId) {
@@ -23,8 +24,12 @@ function BeachSuccessContent() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ sessionId }),
     })
-      .then((res) => {
+      .then(async (res) => {
         if (res.ok) {
+          const body = (await res.json().catch(() => ({}))) as {
+            value?: number;
+          };
+          if (typeof body.value === "number") setPurchaseValue(body.value);
           setStatus("success");
         } else {
           setStatus("error");
@@ -52,7 +57,7 @@ function BeachSuccessContent() {
           event="Purchase"
           contentName="Beach Setup Booking"
           contentCategory="beach-booking"
-          value={0}
+          value={purchaseValue}
           orderId={sessionId ?? undefined}
         />
         <PortalIcon name="beach" className="w-20 h-20 mx-auto mb-6 text-coral-400" />

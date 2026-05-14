@@ -307,7 +307,7 @@ export async function POST(req: NextRequest) {
       ...vendorBlastPromises,
     ]);
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true, value: fee, currency: "USD" });
   } catch (err) {
     console.error("[Rent/Confirm] Error:", err);
     return NextResponse.json({ error: "Confirmation failed" }, { status: 500 });
