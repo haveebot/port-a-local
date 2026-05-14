@@ -27,7 +27,7 @@ export default async function Image() {
 
   let title: string;
   let subtitle: string;
-  let badge = "Birding · Port A";
+  let body: string | undefined;
   let meta: string | undefined;
 
   if (sighting && sighting.isFresh) {
@@ -37,27 +37,33 @@ export default async function Image() {
         ? ` · ${recentTotal.toLocaleString()} crossed the Coastal Bend last night`
         : "";
     subtitle = `Port A birder ${sighting.birderName}'s day-list — Roseate Spoonbills, Cinnamon Teal, 11 species of warblers${radarLine}`;
-    badge = "From the field · Port A";
+    body = "From the field";
     meta = sighting.date;
   } else if (recentTotal > 100) {
     title = `${recentTotal.toLocaleString()} birds crossed the Coastal Bend`;
     subtitle =
       "Cornell Lab BirdCast radar · last ~12 hours · what's flying, where to look";
+    body = "Live radar";
   } else if (aloftNow > 100) {
     title = `${aloftNow.toLocaleString()} birds aloft over the Coastal Bend`;
     subtitle =
       "Live BirdCast radar · Aransas + Nueces counties · what's flying, where to look";
+    body = "Live radar";
   } else {
     title = "Peak Spring Migration in Port Aransas";
     subtitle = "An Audubon-designated Important Bird Area on the Central Flyway";
+    body = "Central Flyway · IBA";
   }
 
   return brandedOG({
-    badge,
+    where: "Discover",
+    what: "Birding",
+    pngIcon: "bird",
     title,
     subtitle,
-    meta,
-    lockupVariant: "standard",
+    body,
+    bodyTopRight: meta,
+    path: "/birding",
     category: "birding",
   });
 }

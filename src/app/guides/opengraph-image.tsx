@@ -7,12 +7,13 @@ export const dynamic = "force-dynamic";
 
 export default function Image() {
   return brandedOG({
-    badge: "Guides",
-    badgeIcon: "guides",
+    where: "Discover",
+    what: "Guides",
+    pngIcon: "location-heart",
     title: "Curated Guides",
     subtitle:
       "Happy Hour, Pet-Friendly, Date Night, Seafood, and more. Honest shortlists built from the directory — not promoted placements.",
-    lockupVariant: "standard",
+    path: "/guides",
     category: "guides",
   });
 }

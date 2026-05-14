@@ -7,12 +7,13 @@ export const dynamic = "force-dynamic";
 
 export default function Image() {
   return brandedOG({
-    badge: "Events",
-    badgeIcon: "events",
+    where: "Discover",
+    what: "Events",
+    pngIcon: "calendar",
     title: "Events & Happenings",
     subtitle:
       "Annual festivals, recurring gatherings, and what is actually happening on the island this month.",
-    lockupVariant: "standard",
+    path: "/events",
     category: "events",
   });
 }

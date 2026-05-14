@@ -7,12 +7,13 @@ export const dynamic = "force-dynamic";
 
 export default function Image() {
   return brandedOG({
-    badge: "Island Pulse",
-    badgeIcon: "live",
+    where: "Discover",
+    what: "Live Conditions",
+    badgeIcon: "lighthouse",
     title: "Live from the Island",
     subtitle:
       "Webcams, tides, weather, marine traffic. Real-time conditions on Mustang Island.",
-    lockupVariant: "standard",
+    path: "/live",
     category: "live-conditions",
   });
 }
