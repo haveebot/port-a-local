@@ -448,7 +448,11 @@ export default function Home() {
         </div>
         <div className="bg-coral-400 flex flex-col items-center justify-center px-6 sm:px-10 py-12 sm:py-16 text-center">
           <div className="w-14 h-14 rounded-full bg-navy-900 flex items-center justify-center mb-5">
-            <PortalIcon name="music" className="w-7 h-7 text-white" />
+            <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden>
+              <path d="M9 17V5l11-2v12" stroke="currentColor" strokeWidth="1.6" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+              <circle cx="6" cy="17" r="3" />
+              <circle cx="17" cy="15" r="3" />
+            </svg>
           </div>
           <p className="text-navy-900 text-xs sm:text-sm tracking-[0.25em] uppercase font-semibold mb-4">
             Explore <span className="mx-1">·</span> Live Music
