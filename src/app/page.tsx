@@ -262,37 +262,66 @@ export default function Home() {
         </div>
       </section>
 
-      {/* EAT — Order delivery promo, relocated. Coral background, copy
-          unchanged from prior position. */}
-      <section className="bg-coral-500 text-white py-10 sm:py-14 border-t border-b border-coral-700/30">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center">
-          <p className="text-[11px] sm:text-xs font-bold tracking-[0.25em] uppercase text-coral-100 mb-3">
-            🍽️ Newly opened
-          </p>
-          <h2 className="font-display text-3xl sm:text-5xl font-extrabold leading-[1.05] mb-4">
-            Order delivery from{" "}
-            <span className="underline decoration-coral-200/60 underline-offset-4 decoration-2">
-              every restaurant
-            </span>{" "}
-            on the island.
-          </h2>
-          <p className="text-coral-50 text-base sm:text-lg font-light max-w-2xl mx-auto mb-6">
-            40+ kitchens, full menus, real prices. Order through PAL where
-            we deliver — call direct from the rest. One place for every
-            food question on Port A.
-          </p>
-          <div className="flex items-center justify-center flex-wrap gap-3">
+      {/* Order Local Delivery — restyled per C's mockup (2026-05-13 PR #6).
+          Full-bleed aerial bg of the marina/ferry channel; two negative-
+          space tiles overlaid: EAT → /deliver, DRIVE → /deliver/runner.
+          Tiles are solid color (coral / navy) — the bg image shows through
+          the gap between them and the section's top/bottom padding. */}
+      <section className="relative py-16 sm:py-24 overflow-hidden">
+        <Image
+          src="/images/pal-delivery-bg.jpg"
+          alt=""
+          fill
+          sizes="100vw"
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-navy-900/40" />
+
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-10 sm:mb-12">
+            <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-4 drop-shadow-[0_2px_8px_rgba(0,0,0,0.55)]">
+              Order Local Delivery
+            </h2>
+            <p className="text-lg text-white/90 font-light max-w-2xl mx-auto drop-shadow-[0_1px_4px_rgba(0,0,0,0.5)]">
+              Whether you&apos;re hungry or you&apos;ve got time on your hands.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
             <Link
               href="/deliver"
-              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-lg text-base font-bold uppercase tracking-wide bg-white text-coral-700 hover:bg-coral-50 shadow-md transition-colors"
+              className="group block rounded-3xl bg-coral-500 hover:bg-coral-600 transition-colors p-10 sm:p-12 text-center"
             >
-              🍽️ Eat — browse all spots →
+              <h3 className="font-display italic text-6xl sm:text-7xl font-bold text-white leading-none mb-4">
+                EAT
+              </h3>
+              <p className="text-white/90 text-sm sm:text-base leading-relaxed mb-8 max-w-sm mx-auto">
+                Delivery from 40+ kitchens on the island. Full menus, real prices, one place.
+              </p>
+              <span className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-navy-900 text-white text-xs tracking-[0.2em] uppercase font-bold group-hover:bg-navy-800 transition-colors">
+                Browse Menus
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </span>
             </Link>
+
             <Link
               href="/deliver/runner"
-              className="inline-flex items-center gap-2 px-5 py-3.5 rounded-lg text-sm font-bold uppercase tracking-wide bg-coral-700 text-white hover:bg-coral-800 transition-colors"
+              className="group block rounded-3xl bg-navy-900 hover:bg-navy-800 transition-colors p-10 sm:p-12 text-center"
             >
-              🚗 Drive for PAL
+              <h3 className="font-display italic text-6xl sm:text-7xl font-bold text-white leading-none mb-4">
+                DRIVE
+              </h3>
+              <p className="text-white/90 text-sm sm:text-base leading-relaxed mb-8 max-w-sm mx-auto">
+                Earn extra cash delivering on the island. Your hours, paid weekly.
+              </p>
+              <span className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-coral-500 text-white text-xs tracking-[0.2em] uppercase font-bold group-hover:bg-coral-600 transition-colors">
+                Sign Up
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </span>
             </Link>
           </div>
         </div>
