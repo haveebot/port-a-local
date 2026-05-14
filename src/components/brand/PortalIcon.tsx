@@ -82,7 +82,8 @@ export type PortalIconName =
   | "castle"
   | "hammer"
   // Round 5 — Link card icon set (Collie 2026-05-14)
-  | "lighthouse";
+  | "lighthouse"
+  | "music";
 
 const svgBase = {
   viewBox: "0 0 64 64",
@@ -920,6 +921,19 @@ function Hammer(props: SVGProps<SVGSVGElement>) {
 // Icon registry + component
 // ═══════════════════════════════════════════════════════════════════
 
+function Music(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...svgBase} viewBox="0 0 128 128" {...props}>
+      {/* Stem */}
+      <rect x="66" y="22" width="7" height="70" rx="1" />
+      {/* Flag — curves right from top of stem and tapers back down */}
+      <path d="M73 22 C 92 28, 102 40, 100 56 C 99 64, 94 70, 88 72 C 92 64, 92 52, 88 44 C 84 36, 78 32, 73 32 Z" />
+      {/* Note head — tilted ellipse below */}
+      <ellipse cx="44" cy="92" rx="24" ry="15" transform="rotate(-22 44 92)" />
+    </svg>
+  );
+}
+
 function Lighthouse(props: SVGProps<SVGSVGElement>) {
   return (
     <svg {...svgBase} viewBox="0 0 128 128" {...props}>
@@ -996,6 +1010,7 @@ const icons: Record<
   castle: Castle,
   hammer: Hammer,
   lighthouse: Lighthouse,
+  music: Music,
 };
 
 /**

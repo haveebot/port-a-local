@@ -12,11 +12,13 @@ export const dynamic = "force-dynamic";
 export default function Image() {
   const h = liveMusicHeadline();
   return brandedOG({
-    badge: "Live Music",
-    badgeIcon: "art",
+    where: "Discover",
+    what: "Live Music",
+    badgeIcon: "music",
     title: h.title,
     subtitle: h.ogSubtitle,
-    lockupVariant: "standard",
+    body: "Seven days · seven spots",
+    path: "/live-music",
     category: "live-music",
   });
 }
