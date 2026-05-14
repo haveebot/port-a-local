@@ -3,7 +3,6 @@ import Hero from "@/components/Hero";
 import CategoryCard from "@/components/CategoryCard";
 import FeaturedSpots from "@/components/FeaturedSpots";
 import FeaturedEventBanner from "@/components/FeaturedEventBanner";
-import RunnerLeaderboardTile from "@/components/RunnerLeaderboardTile";
 import Footer from "@/components/Footer";
 import { WebsiteSchema } from "@/components/StructuredData";
 import { categories } from "@/data/categories";
@@ -260,45 +259,107 @@ export default function Home() {
         </div>
       </section>
 
-      {/* EAT — Order delivery promo, relocated. Coral background, copy
-          unchanged from prior position. */}
-      <section className="bg-coral-500 text-white py-10 sm:py-14 border-t border-b border-coral-700/30">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center">
-          <p className="text-[11px] sm:text-xs font-bold tracking-[0.25em] uppercase text-coral-100 mb-3">
-            🍽️ Newly opened
-          </p>
-          <h2 className="font-display text-3xl sm:text-5xl font-extrabold leading-[1.05] mb-4">
-            Order delivery from{" "}
-            <span className="underline decoration-coral-200/60 underline-offset-4 decoration-2">
-              every restaurant
-            </span>{" "}
-            on the island.
-          </h2>
-          <p className="text-coral-50 text-base sm:text-lg font-light max-w-2xl mx-auto mb-6">
-            40+ kitchens, full menus, real prices. Order through PAL where
-            we deliver — call direct from the rest. One place for every
-            food question on Port A.
-          </p>
-          <div className="flex items-center justify-center flex-wrap gap-3">
-            <Link
-              href="/deliver"
-              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-lg text-base font-bold uppercase tracking-wide bg-white text-coral-700 hover:bg-coral-50 shadow-md transition-colors"
-            >
-              🍽️ Eat — browse all spots →
-            </Link>
-            <Link
-              href="/deliver/runner"
-              className="inline-flex items-center gap-2 px-5 py-3.5 rounded-lg text-sm font-bold uppercase tracking-wide bg-coral-700 text-white hover:bg-coral-800 transition-colors"
-            >
-              🚗 Drive for PAL
-            </Link>
+      {/* Order Local Delivery — restyled to match C's Canva mockup
+          (2026-05-13 PR #6 follow-up). Full-bleed aerial bg with a
+          two-column layout: outlined negative-space tiles on the left
+          (icon top, colored pill at bottom with EAT/DRIVE + subtitle
+          + arrow), title block on the right (eyebrow caps + split-
+          color heading "Order Local" italic white / "Delivery" navy,
+          white hairline, navy body copy). */}
+      <section className="relative py-16 sm:py-24 overflow-hidden">
+        <Image
+          src="/images/pal-delivery-bg.jpg"
+          alt=""
+          fill
+          sizes="100vw"
+          className="object-cover"
+        />
+        <div className="absolute top-0 left-0 right-0 coral-line z-10" />
+
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+            {/* Title (right column on desktop, top on mobile) */}
+            <div className="lg:order-2 text-center lg:text-right">
+              <p className="text-white text-xs sm:text-sm tracking-[0.25em] uppercase font-semibold mb-5 drop-shadow-[0_1px_4px_rgba(0,0,0,0.5)]">
+                Order Online &amp; Dine
+              </p>
+              <h2 className="font-display font-bold leading-[1.0] mb-6">
+                <span className="block italic text-white text-5xl sm:text-6xl lg:text-7xl drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)]">
+                  Order Local
+                </span>
+                <span className="block text-navy-900 text-5xl sm:text-6xl lg:text-7xl mt-1">
+                  Delivery
+                </span>
+              </h2>
+              <div className="h-px bg-white max-w-md mx-auto lg:ml-auto lg:mr-0 mb-6" />
+              <p className="text-white text-base sm:text-lg font-light leading-relaxed max-w-md mx-auto lg:ml-auto lg:mr-0 drop-shadow-[0_1px_4px_rgba(0,0,0,0.5)]">
+                40+ kitchens, full menus, real prices.
+                <br />
+                Order through PAL where we deliver.
+                <br />
+                Call direct from the rest.
+              </p>
+            </div>
+
+            {/* Tiles (left column on desktop, below title on mobile) */}
+            <div className="lg:order-1 grid grid-cols-2 gap-3 sm:gap-4 max-w-md mx-auto lg:mx-0 w-full">
+              <Link
+                href="/deliver"
+                className="group block rounded-2xl border-2 border-white p-3 sm:p-4 flex flex-col gap-3 hover:bg-white/10 transition-colors"
+              >
+                <div className="flex-1 flex items-center justify-center py-6 sm:py-8 min-h-[120px]">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/icons/eat.svg"
+                    alt=""
+                    aria-hidden
+                    className="w-20 h-20 sm:w-24 sm:h-24 lg:w-28 lg:h-28 object-contain"
+                  />
+                </div>
+                <div className="rounded-xl bg-navy-900 px-3 py-3 text-center">
+                  <p className="text-white text-sm tracking-[0.25em] uppercase font-bold mb-1">
+                    EAT
+                  </p>
+                  <p className="text-white/85 text-[11px] sm:text-xs leading-tight mb-2">
+                    Browse all Restaurants
+                  </p>
+                  <svg className="w-4 h-4 mx-auto text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </div>
+              </Link>
+
+              <Link
+                href="/deliver/runner"
+                className="group block rounded-2xl border-2 border-white p-3 sm:p-4 flex flex-col gap-3 hover:bg-white/10 transition-colors"
+              >
+                <div className="flex-1 flex items-center justify-center py-6 sm:py-8 min-h-[120px]">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/icons/driver.svg"
+                    alt=""
+                    aria-hidden
+                    className="w-20 h-20 sm:w-24 sm:h-24 lg:w-28 lg:h-28 object-contain"
+                  />
+                </div>
+                <div className="rounded-xl bg-coral-500 px-3 py-3 text-center">
+                  <p className="text-white text-sm tracking-[0.25em] uppercase font-bold mb-1">
+                    DRIVE
+                  </p>
+                  <p className="text-white/85 text-[11px] sm:text-xs leading-tight mb-2">
+                    Drive for Port A Local
+                  </p>
+                  <svg className="w-4 h-4 mx-auto text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </div>
+              </Link>
+            </div>
           </div>
         </div>
       </section>
 
       <FeaturedSpots />
-
-      <RunnerLeaderboardTile />
 
       {/* Just Gully It — Gully introduced as a brand character (seagull
           with gold "LOCAL" medallion necklace). Layout: Gully on the left,
