@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { EmojiIcon } from "@/components/brand/PortalIcon";
 import EventCountdown from "@/components/EventCountdown";
 import { events as detailedEvents } from "@/data/events";
+import MetaPixelEvent from "@/components/MetaPixelEvent";
 
 export const metadata: Metadata = {
   title: "Events & Happenings — Port Aransas, TX | Port A Local",
@@ -209,6 +210,11 @@ export default function EventsPage() {
 
   return (
     <main className="min-h-screen">
+      <MetaPixelEvent
+        event="ViewContent"
+        contentName="Events & Happenings"
+        contentCategory="events"
+      />
       <Navigation />
 
       {/* Hero */}

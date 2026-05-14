@@ -5,6 +5,7 @@ import { guides } from "@/data/guides";
 import { businesses } from "@/data/businesses";
 import type { Metadata } from "next";
 import { EmojiIcon } from "@/components/brand/PortalIcon";
+import MetaPixelEvent from "@/components/MetaPixelEvent";
 
 export const metadata: Metadata = {
   title: "Local Guides — Port Aransas, TX | Port A Local",
@@ -25,6 +26,11 @@ function guideMatchCount(matchTags: string[], cats?: string[]): number {
 export default function GuidesIndex() {
   return (
     <main className="min-h-screen">
+      <MetaPixelEvent
+        event="ViewContent"
+        contentName="Local Guides"
+        contentCategory="guides"
+      />
       <Navigation />
 
       {/* Hero */}
