@@ -113,12 +113,20 @@ export default async function AdsPage() {
         ]}
         current="🎯 Ads"
         right={
-          <Link
-            href="/wheelhouse/ads/new"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-coral-500 text-sand-50 hover:bg-coral-400 transition-colors whitespace-nowrap"
-          >
-            <span className="text-sm leading-none">+</span> Create ad
-          </Link>
+          <div className="flex items-center gap-2">
+            <Link
+              href="/wheelhouse/ads/audiences"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-white text-navy-700 border border-sand-300 hover:bg-sand-50 transition-colors whitespace-nowrap"
+            >
+              👥 Audiences
+            </Link>
+            <Link
+              href="/wheelhouse/ads/new"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-coral-500 text-sand-50 hover:bg-coral-400 transition-colors whitespace-nowrap"
+            >
+              <span className="text-sm leading-none">+</span> Create ad
+            </Link>
+          </div>
         }
       />
 

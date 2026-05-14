@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { getSentPostsToCheck, type SocialPost } from "@/data/social-post-store";
-import { isBoostConfigured } from "@/lib/metaAds";
+import { isBoostConfigured, listCustomAudiences } from "@/lib/metaAds";
 import MarketingBreadcrumb from "@/components/wheelhouse/MarketingBreadcrumb";
 import CreateAdForm from "./CreateAdForm";
 
@@ -50,6 +50,12 @@ export default async function NewAdPage() {
   const eligible = sent
     .filter((p) => p.channel === "facebook")
     .map(toPromotable);
+
+  const audienceResult = await listCustomAudiences();
+  const audiences = (audienceResult.audiences ?? []).map((a) => ({
+    id: a.id,
+    name: a.name,
+  }));
 
   const cfg = isBoostConfigured();
   const stubMode = !cfg.ok;
@@ -103,7 +109,7 @@ export default async function NewAdPage() {
             </p>
           </section>
         ) : (
-          <CreateAdForm posts={eligible} />
+          <CreateAdForm posts={eligible} audiences={audiences} />
         )}
       </div>
     </main>
