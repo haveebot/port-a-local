@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { CATEGORIES, type LocalsCategory } from "@/data/locals-types";
+import MetaPixelEvent from "@/components/MetaPixelEvent";
 
 export default function InquiryForm() {
   const search = useSearchParams();
@@ -64,6 +65,11 @@ export default function InquiryForm() {
   if (done) {
     return (
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-8">
+        <MetaPixelEvent
+          event="Lead"
+          contentName="Locals inquiry"
+          contentCategory={category || "uncategorized"}
+        />
         <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-6 text-center">
           <p className="font-display text-xl font-bold text-emerald-900 mb-2">
             Got it.
