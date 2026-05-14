@@ -216,18 +216,18 @@ export default function BeachPage() {
           <div className="flex justify-center mb-5">
             <PortalIcon
               name="beach"
-              className="w-9 h-9 text-navy-900"
+              className="w-14 h-14 sm:w-16 sm:h-16 text-navy-900"
             />
           </div>
-          <p className="text-navy-900 text-xs sm:text-sm font-semibold tracking-[0.3em] uppercase mb-5">
+          <p className="text-sand-50 text-xs sm:text-sm font-semibold tracking-[0.3em] uppercase mb-5">
             Explore <span className="mx-1">•</span> Beach
           </p>
-          <div className="h-px bg-sand-50 max-w-md mx-auto" />
+          <div className="h-0.5 bg-sand-50 max-w-md mx-auto" />
           <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold text-navy-900 py-6 sm:py-8">
-            Beach <span className="italic">Rentals</span>
+            Beach <span className="italic text-sand-50">Rentals</span>
           </h1>
-          <div className="h-px bg-sand-50 max-w-md mx-auto" />
-          <p className="text-base sm:text-lg text-navy-900 font-light max-w-xl mx-auto mt-6">
+          <div className="h-0.5 bg-sand-50 max-w-md mx-auto" />
+          <p className="text-base sm:text-lg text-sand-50 font-light max-w-xl mx-auto mt-6">
             Show up, we handle the rest.<br />
             Your setup is waiting for you on the sand.
           </p>
