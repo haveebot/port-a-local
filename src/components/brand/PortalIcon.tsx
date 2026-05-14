@@ -924,12 +924,12 @@ function Hammer(props: SVGProps<SVGSVGElement>) {
 function Music(props: SVGProps<SVGSVGElement>) {
   return (
     <svg {...svgBase} viewBox="0 0 128 128" {...props}>
-      {/* Stem */}
-      <rect x="66" y="22" width="7" height="70" rx="1" />
-      {/* Flag — single closed curve, outer arc out + down, inner arc back to stem */}
-      <path d="M73 22 C 96 26 100 50 86 70 C 90 60 90 40 73 35 Z" />
-      {/* Note head — tilted ellipse below */}
-      <ellipse cx="44" cy="92" rx="24" ry="15" transform="rotate(-22 44 92)" />
+      {/* Stem — thin vertical bar */}
+      <rect x="63" y="22" width="4" height="68" rx="1" />
+      {/* Flag — comma curve matching the canonical PAL music note */}
+      <path d="M 67 22 C 82 26 92 38 90 54 C 88 64 80 70 72 66 C 80 60 80 48 76 40 C 73 32 68 26 67 22 Z" />
+      {/* Note head — tilted oval below, slimmer than v1 to match the canva proportions */}
+      <ellipse cx="46" cy="92" rx="18" ry="12" transform="rotate(-18 46 92)" />
     </svg>
   );
 }
