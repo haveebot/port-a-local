@@ -1,9 +1,10 @@
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import Link from "next/link";
+import Image from "next/image";
 import type { Metadata } from "next";
 import { createHash } from "crypto";
-import { EmojiIcon } from "@/components/brand/PortalIcon";
+import PortalIcon, { EmojiIcon } from "@/components/brand/PortalIcon";
 import {
   CURRENT_WEEK,
   VENUES,
@@ -149,20 +150,37 @@ export default function LiveMusicPage() {
       <Navigation />
 
       {/* Hero */}
-      <section className="pt-28 pb-16 hero-gradient relative">
-        <div className="absolute bottom-0 left-0 right-0 coral-line" />
-        <div className="absolute inset-0 palm-pattern opacity-15" />
-
-        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 text-center">
-          <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-coral-500/30 bg-coral-500/10 text-coral-300 text-sm font-medium tracking-wide mb-6">
-            <EmojiIcon emoji="🎵" className="w-4 h-4 text-coral-300" />
-            Live Music
+      <section className="relative pt-28 overflow-hidden">
+        <div className="absolute inset-0">
+          <Image
+            src="/images/live-music-hero.jpg"
+            alt=""
+            fill
+            sizes="100vw"
+            priority
+            className="object-cover object-center"
+          />
+          <div className="absolute inset-0 bg-navy-900/40" />
+        </div>
+        <div className="relative max-w-3xl mx-auto px-4 sm:px-6 py-16 sm:py-24 text-center">
+          <div className="flex justify-center mb-5">
+            <PortalIcon
+              name="music"
+              className="w-9 h-9 text-coral-300"
+            />
           </div>
-          <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-sand-50 mb-4">
-            Live Music Tonight
+          <p className="text-sand-50 text-xs sm:text-sm font-semibold tracking-[0.3em] uppercase mb-5">
+            Explore <span className="mx-1">•</span> Live Music
+          </p>
+          <div className="h-px bg-sand-50/80 max-w-md mx-auto" />
+          <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold text-sand-50 py-6 sm:py-8">
+            Live{" "}
+            <span className="italic text-coral-300">Music</span>{" "}
+            Tonight
           </h1>
-          <p className="text-lg sm:text-xl text-navy-200 font-light max-w-2xl mx-auto">
-            Who&apos;s playing where, across the island&apos;s stages. Updated weekly from the printed roundup.
+          <div className="h-px bg-sand-50/80 max-w-md mx-auto" />
+          <p className="text-base sm:text-lg text-sand-50 font-light max-w-xl mx-auto mt-6">
+            Who&apos;s playing where, across the island&apos;s stages.
           </p>
         </div>
       </section>
