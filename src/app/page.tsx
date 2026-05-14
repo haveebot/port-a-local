@@ -262,11 +262,13 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Order Local Delivery — restyled per C's mockup (2026-05-13 PR #6).
-          Full-bleed aerial bg of the marina/ferry channel; two negative-
-          space tiles overlaid: EAT → /deliver, DRIVE → /deliver/runner.
-          Tiles are solid color (coral / navy) — the bg image shows through
-          the gap between them and the section's top/bottom padding. */}
+      {/* Order Local Delivery — restyled to match C's Canva mockup
+          (2026-05-13 PR #6 follow-up). Full-bleed aerial bg with a
+          two-column layout: outlined negative-space tiles on the left
+          (icon top, colored pill at bottom with EAT/DRIVE + subtitle
+          + arrow), title block on the right (eyebrow caps + split-
+          color heading "Order Local" italic white / "Delivery" navy,
+          white hairline, navy body copy). */}
       <section className="relative py-16 sm:py-24 overflow-hidden">
         <Image
           src="/images/pal-delivery-bg.jpg"
@@ -275,54 +277,87 @@ export default function Home() {
           sizes="100vw"
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-navy-900/40" />
+        <div className="absolute top-0 left-0 right-0 coral-line z-10" />
 
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="text-center mb-10 sm:mb-12">
-            <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-4 drop-shadow-[0_2px_8px_rgba(0,0,0,0.55)]">
-              Order Local Delivery
-            </h2>
-            <p className="text-lg text-white/90 font-light max-w-2xl mx-auto drop-shadow-[0_1px_4px_rgba(0,0,0,0.5)]">
-              Whether you&apos;re hungry or you&apos;ve got time on your hands.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-            <Link
-              href="/deliver"
-              className="group block rounded-3xl bg-coral-500 hover:bg-coral-600 transition-colors p-10 sm:p-12 text-center"
-            >
-              <h3 className="font-display italic text-6xl sm:text-7xl font-bold text-white leading-none mb-4">
-                EAT
-              </h3>
-              <p className="text-white/90 text-sm sm:text-base leading-relaxed mb-8 max-w-sm mx-auto">
-                Delivery from 40+ kitchens on the island. Full menus, real prices, one place.
+          <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+            {/* Title (right column on desktop, top on mobile) */}
+            <div className="lg:order-2 text-center lg:text-right">
+              <p className="text-navy-900 text-xs sm:text-sm tracking-[0.25em] uppercase font-semibold mb-5">
+                Order Online &amp; Dine
               </p>
-              <span className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-navy-900 text-white text-xs tracking-[0.2em] uppercase font-bold group-hover:bg-navy-800 transition-colors">
-                Browse Menus
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </span>
-            </Link>
-
-            <Link
-              href="/deliver/runner"
-              className="group block rounded-3xl bg-navy-900 hover:bg-navy-800 transition-colors p-10 sm:p-12 text-center"
-            >
-              <h3 className="font-display italic text-6xl sm:text-7xl font-bold text-white leading-none mb-4">
-                DRIVE
-              </h3>
-              <p className="text-white/90 text-sm sm:text-base leading-relaxed mb-8 max-w-sm mx-auto">
-                Earn extra cash delivering on the island. Your hours, paid weekly.
+              <h2 className="font-display font-bold leading-[1.0] mb-6">
+                <span className="block italic text-white text-5xl sm:text-6xl lg:text-7xl drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)]">
+                  Order Local
+                </span>
+                <span className="block text-navy-900 text-5xl sm:text-6xl lg:text-7xl mt-1">
+                  Delivery
+                </span>
+              </h2>
+              <div className="h-px bg-white max-w-md mx-auto lg:ml-auto lg:mr-0 mb-6" />
+              <p className="text-navy-900 text-base sm:text-lg font-light leading-relaxed max-w-md mx-auto lg:ml-auto lg:mr-0">
+                40+ kitchens, full menus, real prices.
+                <br />
+                Order through PAL where we deliver.
+                <br />
+                Call direct from the rest.
               </p>
-              <span className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-coral-500 text-white text-xs tracking-[0.2em] uppercase font-bold group-hover:bg-coral-600 transition-colors">
-                Sign Up
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </span>
-            </Link>
+            </div>
+
+            {/* Tiles (left column on desktop, below title on mobile) */}
+            <div className="lg:order-1 grid grid-cols-2 gap-3 sm:gap-4 max-w-md mx-auto lg:mx-0 w-full">
+              <Link
+                href="/deliver"
+                className="group block rounded-2xl border-2 border-white p-3 sm:p-4 flex flex-col gap-3 hover:bg-white/10 transition-colors"
+              >
+                <div className="flex-1 flex items-center justify-center py-6 sm:py-8 min-h-[120px]">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/icons/eat.svg"
+                    alt=""
+                    aria-hidden
+                    className="w-20 h-20 sm:w-24 sm:h-24 lg:w-28 lg:h-28 object-contain"
+                  />
+                </div>
+                <div className="rounded-xl bg-navy-900 px-3 py-3 text-center">
+                  <p className="text-white text-sm tracking-[0.25em] uppercase font-bold mb-1">
+                    EAT
+                  </p>
+                  <p className="text-white/85 text-[11px] sm:text-xs leading-tight mb-2">
+                    Browse all Restaurants
+                  </p>
+                  <svg className="w-4 h-4 mx-auto text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </div>
+              </Link>
+
+              <Link
+                href="/deliver/runner"
+                className="group block rounded-2xl border-2 border-white p-3 sm:p-4 flex flex-col gap-3 hover:bg-white/10 transition-colors"
+              >
+                <div className="flex-1 flex items-center justify-center py-6 sm:py-8 min-h-[120px]">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/icons/driver.svg"
+                    alt=""
+                    aria-hidden
+                    className="w-20 h-20 sm:w-24 sm:h-24 lg:w-28 lg:h-28 object-contain"
+                  />
+                </div>
+                <div className="rounded-xl bg-ocean-300 px-3 py-3 text-center">
+                  <p className="text-white text-sm tracking-[0.25em] uppercase font-bold mb-1">
+                    DRIVE
+                  </p>
+                  <p className="text-white/85 text-[11px] sm:text-xs leading-tight mb-2">
+                    Drive for Port A Local
+                  </p>
+                  <svg className="w-4 h-4 mx-auto text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </div>
+              </Link>
+            </div>
           </div>
         </div>
       </section>
