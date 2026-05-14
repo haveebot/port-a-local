@@ -283,7 +283,7 @@ export default function Home() {
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
             {/* Title (right column on desktop, top on mobile) */}
             <div className="lg:order-2 text-center lg:text-right">
-              <p className="text-navy-900 text-xs sm:text-sm tracking-[0.25em] uppercase font-semibold mb-5">
+              <p className="text-white text-xs sm:text-sm tracking-[0.25em] uppercase font-semibold mb-5 drop-shadow-[0_1px_4px_rgba(0,0,0,0.5)]">
                 Order Online &amp; Dine
               </p>
               <h2 className="font-display font-bold leading-[1.0] mb-6">
@@ -295,7 +295,7 @@ export default function Home() {
                 </span>
               </h2>
               <div className="h-px bg-white max-w-md mx-auto lg:ml-auto lg:mr-0 mb-6" />
-              <p className="text-navy-900 text-base sm:text-lg font-light leading-relaxed max-w-md mx-auto lg:ml-auto lg:mr-0">
+              <p className="text-white text-base sm:text-lg font-light leading-relaxed max-w-md mx-auto lg:ml-auto lg:mr-0 drop-shadow-[0_1px_4px_rgba(0,0,0,0.5)]">
                 40+ kitchens, full menus, real prices.
                 <br />
                 Order through PAL where we deliver.
@@ -345,7 +345,7 @@ export default function Home() {
                     className="w-20 h-20 sm:w-24 sm:h-24 lg:w-28 lg:h-28 object-contain"
                   />
                 </div>
-                <div className="rounded-xl bg-ocean-300 px-3 py-3 text-center">
+                <div className="rounded-xl bg-coral-500 px-3 py-3 text-center">
                   <p className="text-white text-sm tracking-[0.25em] uppercase font-bold mb-1">
                     DRIVE
                   </p>
