@@ -7,12 +7,13 @@ export const dynamic = "force-dynamic";
 
 export default function Image() {
   return brandedOG({
-    badge: "Fishing Report",
-    badgeIcon: "fish",
+    where: "Discover",
+    what: "Fishing Report",
+    pngIcon: "fish",
     title: "Port A Fishing Report",
     subtitle:
       "Seasonal species, fishing types, TPWD regulations, live conditions, and captain report links.",
-    lockupVariant: "standard",
+    path: "/fishing-report",
     category: "fishing-report",
   });
 }

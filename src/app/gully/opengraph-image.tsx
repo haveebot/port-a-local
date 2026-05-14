@@ -7,12 +7,13 @@ export const dynamic = "force-dynamic";
 
 export default function Image() {
   return brandedOG({
-    badge: "Gully",
-    badgeIcon: "search",
+    where: "Discover",
+    what: "Gully",
+    badgeIcon: "lighthouse",
     title: "Just Gully It",
     subtitle:
       "Port A's local search engine. Every business, every heritage story, every dispatch — one unified index. Built by locals.",
-    lockupVariant: "standard",
+    path: "/gully",
     category: "gully",
   });
 }

@@ -7,12 +7,13 @@ export const dynamic = "force-dynamic";
 
 export default function Image() {
   return brandedOG({
-    badge: "My Trip",
-    badgeIcon: "mytrip",
+    where: "Plan",
+    what: "My Trip",
+    pngIcon: "location-heart",
     title: "Your Port A, Saved",
     subtitle:
       "Pin businesses, heritage stories, and dispatch pieces. Plan the trip you want, with the places you actually care about.",
-    lockupVariant: "standard",
+    path: "/my-trip",
     category: "my-trip",
   });
 }

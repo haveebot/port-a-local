@@ -7,12 +7,13 @@ export const dynamic = "force-dynamic";
 
 export default function Image() {
   return brandedOG({
-    badge: "Delivery · Beta",
-    badgeIcon: "eat",
+    where: "Order",
+    what: "PAL Delivery",
+    pngIcon: "driver",
     title: "Local food, to your beach house.",
     subtitle:
       "Real Port Aransas spots. Local drivers. No app. PAL picks up, PAL delivers — you eat on the porch.",
-    lockupVariant: "standard",
+    path: "/deliver",
     category: "pal-delivery",
   });
 }

@@ -7,12 +7,13 @@ export const dynamic = "force-dynamic";
 
 export default function Image() {
   return brandedOG({
-    badge: "Archives",
-    badgeIcon: "archives",
+    where: "Discover",
+    what: "Archives",
+    badgeIcon: "lighthouse",
     title: "Historical Archives",
     subtitle:
       "Public-domain photographs of Port Aransas, 1853–2017. The largest organized digital archive of the island, anywhere.",
-    lockupVariant: "standard",
+    path: "/archives",
     category: "archives",
   });
 }

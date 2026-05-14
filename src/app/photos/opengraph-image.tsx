@@ -7,12 +7,13 @@ export const dynamic = "force-dynamic";
 
 export default function Image() {
   return brandedOG({
-    badge: "Community Photos",
-    badgeIcon: "photos",
+    where: "Discover",
+    what: "Photos",
+    badgeIcon: "lighthouse",
     title: "Port A Through Your Eyes",
     subtitle:
       "The island, as locals and visitors see it. Anonymous submissions welcome.",
-    lockupVariant: "standard",
+    path: "/photos",
     category: "photos",
   });
 }

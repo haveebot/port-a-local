@@ -7,12 +7,13 @@ export const dynamic = "force-dynamic";
 
 export default function Image() {
   return brandedOG({
-    badge: "Locals",
-    badgeIcon: "services",
+    where: "Locals",
+    what: "PAL Locals",
+    badgeIcon: "lighthouse",
     title: "Rent it. Hire them. From locals.",
     subtitle:
       "Real Port Aransas locals with stuff to rent and skills to bring to your trip. Beach gear, watercraft, photographers, captains, errand runners — the actual people who live here.",
-    lockupVariant: "standard",
+    path: "/locals",
     category: "pal-locals",
   });
 }

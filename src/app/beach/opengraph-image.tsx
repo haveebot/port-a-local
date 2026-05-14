@@ -7,12 +7,13 @@ export const dynamic = "force-dynamic";
 
 export default function Image() {
   return brandedOG({
-    badge: "Beach Setup",
-    badgeIcon: "beach",
+    where: "Order",
+    what: "Beach Setup",
+    pngIcon: "beach-umbrella",
     title: "Beach Setups, Delivered",
     subtitle:
       "Cabana ($300/day) or chairs & umbrellas ($85/day), set up and taken down for you. Anywhere on Mustang Island.",
-    lockupVariant: "standard",
+    path: "/beach",
     category: "beach",
   });
 }

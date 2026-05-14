@@ -7,12 +7,13 @@ export const dynamic = "force-dynamic";
 
 export default function Image() {
   return brandedOG({
-    badge: "Dispatch",
-    badgeIcon: "dispatch",
+    where: "Discover",
+    what: "Dispatch",
+    badgeIcon: "lighthouse",
     title: "Dispatch",
     subtitle:
       "Features, analysis and reporting on the island as it is — not as it's advertised.",
-    lockupVariant: "standard",
+    path: "/dispatch",
     category: "dispatch",
   });
 }

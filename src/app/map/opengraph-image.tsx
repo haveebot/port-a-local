@@ -7,12 +7,13 @@ export const dynamic = "force-dynamic";
 
 export default function Image() {
   return brandedOG({
-    badge: "Map",
-    badgeIcon: "map",
+    where: "Discover",
+    what: "Map",
+    badgeIcon: "lighthouse",
     title: "The Island, Mapped",
     subtitle:
       "Every business on Port A Local, placed on real coordinates. 127+ spots across Mustang Island.",
-    lockupVariant: "standard",
+    path: "/map",
     category: "map",
   });
 }
