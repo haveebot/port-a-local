@@ -31,6 +31,25 @@ export function loadLighthouse(variant: LighthouseVariant = "standard"): string 
   return `data:image/svg+xml;base64,${buf.toString("base64")}`;
 }
 
+/**
+ * Load a PNG icon from public/icons/og/<name>.png as a base64 data URI.
+ *
+ * Use this for icons where satori's SVG renderer drifts the path — its
+ * Bezier interpretation isn't 1:1 with browser SVG, so complex curves
+ * (like the music-note flag) render visibly off-spec. Pre-rasterized PNG
+ * is pixel-perfect because it skips satori's SVG path interpreter entirely.
+ *
+ * Trade-off: PNGs ship at a fixed color (light coral, in this case) and
+ * can't currentColor-tint per card system. Acceptable for icons that only
+ * appear in one card-color context (music → coral cards only).
+ */
+export function loadPngIcon(name: string): string {
+  const buf = fs.readFileSync(
+    path.join(process.cwd(), "public/icons/og", `${name}.png`),
+  );
+  return `data:image/png;base64,${buf.toString("base64")}`;
+}
+
 /* ------------------------------------------------------------------ */
 /* Fonts — Inter (body / pill / headline) + Playfair Display (wordmark) */
 /* Per Collie's spec, every Link Card uses Inter except "PORT A LOCAL" */
@@ -238,6 +257,13 @@ interface BrandedOGProps {
   what?: string;
   /** Big icon-in-circle on the right side of the card. */
   badgeIcon?: PortalIconName;
+  /**
+   * PNG-backed icon — loaded from public/icons/og/<name>.png. Use when
+   * satori's SVG renderer drifts a complex path (e.g. music-note). The PNG
+   * already carries its color, so no `iconColor` tint is applied.
+   * Mutually exclusive with badgeIcon; if both are set, pngIcon wins.
+   */
+  pngIcon?: string;
   /** Headline — the biggest piece of type. Required. */
   title: string;
   /** Sub-headline / dek (subhead position per the brand templates). */
@@ -282,6 +308,7 @@ export function brandedOG({
   where,
   what,
   badgeIcon,
+  pngIcon,
   title,
   subtitle,
   body,
@@ -442,7 +469,7 @@ export function brandedOG({
             ) : null}
           </div>
 
-          {badgeIcon ? (
+          {pngIcon || badgeIcon ? (
             <div
               style={{
                 display: "flex",
@@ -456,7 +483,17 @@ export function brandedOG({
                 flexShrink: 0,
               }}
             >
-              <PortalIcon name={badgeIcon} width={170} height={170} />
+              {pngIcon ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={loadPngIcon(pngIcon)}
+                  width={200}
+                  height={200}
+                  alt=""
+                />
+              ) : (
+                <PortalIcon name={badgeIcon!} width={170} height={170} />
+              )}
             </div>
           ) : null}
         </div>
