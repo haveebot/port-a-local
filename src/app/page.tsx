@@ -24,8 +24,19 @@ const MOTHERS_DAY_CUTOFF_MS = new Date(
   "2026-05-11T05:00:00.000Z",
 ).getTime(); // Midnight Sunday May 10 → Monday May 11, Central Daylight Time.
 
+// Summer Countdown target = midnight CDT going into Saturday May 23 (= end
+// of Friday May 22). Section never hides; countdown floors at 0 once the
+// target passes.
+const SUMMER_COUNTDOWN_TARGET_MS = new Date(
+  "2026-05-23T05:00:00.000Z",
+).getTime();
+
 export default function Home() {
   const showMothersDay = Date.now() < MOTHERS_DAY_CUTOFF_MS;
+  const daysToSummer = Math.max(
+    0,
+    Math.floor((SUMMER_COUNTDOWN_TARGET_MS - Date.now()) / 86400000),
+  );
 
   return (
     <main className="min-h-screen">
@@ -115,6 +126,46 @@ export default function Home() {
           </div>
         </Link>
       )}
+
+      {/* Summer Countdown — coral circle running countdown to end of Fri
+          May 22 CDT. Floors at 0; section never auto-hides. */}
+      <section className="bg-coral-50 py-16 sm:py-20 border-y border-coral-100">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6">
+          <div className="grid md:grid-cols-2 gap-10 sm:gap-12 items-center">
+            <div className="flex justify-center md:justify-end">
+              <div className="w-52 h-52 sm:w-60 sm:h-60 rounded-full bg-coral-500 text-white flex flex-col items-center justify-center shadow-xl">
+                <span className="font-display text-7xl sm:text-8xl font-bold leading-none">
+                  {daysToSummer}
+                </span>
+                <span className="text-xs sm:text-sm tracking-[0.25em] uppercase mt-2 font-semibold">
+                  {daysToSummer === 1 ? "Day" : "Days"}
+                </span>
+              </div>
+            </div>
+            <div className="text-center md:text-left">
+              <p className="font-display italic text-2xl text-coral-500 mb-2">
+                Plan your trip
+              </p>
+              <h2 className="font-display text-4xl sm:text-5xl font-bold text-navy-900 mb-4">
+                Summer Countdown
+              </h2>
+              <div className="coral-line max-w-xs mx-auto md:mx-0 mb-6" />
+              <p className="text-base sm:text-lg text-navy-700 font-light leading-relaxed mb-8 max-w-md mx-auto md:mx-0">
+                Lock in your beach day, golf cart, and reservations before the lines get long. Locals know — summer fills up fast.
+              </p>
+              <Link
+                href="/guides/summer"
+                className="inline-flex items-center justify-center px-8 py-4 rounded-xl bg-ocean-500 hover:bg-ocean-600 text-white font-semibold text-lg tracking-wide transition-colors"
+              >
+                Plan your Summer
+                <svg className="ml-3 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Services on the Island — Portal Callouts, relocated. Styling
           unchanged from prior position. */}
