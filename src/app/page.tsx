@@ -85,7 +85,7 @@ export default function Home() {
       {/* Directory — relocated above Kite Festival; pier photo at 50%
           opacity over navy as background; cards on left, heading on right
           on desktop (mock-up: 2026-05-07 Collie homepage redesign). */}
-      <section className="relative py-20 sm:py-28 bg-navy-900 overflow-hidden" id="explore">
+      <section className="relative py-12 sm:py-20 lg:py-28 bg-navy-900 overflow-hidden" id="explore">
         <div className="absolute inset-0 opacity-50">
           <Image
             src="/images/pal-home-hero.png"
@@ -116,8 +116,8 @@ export default function Home() {
               </p>
             </div>
 
-            {/* Cards — 3×2 on desktop, 2×3 on tablet, 1×6 on mobile */}
-            <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            {/* Cards — 3×2 on desktop+, 2×3 on mobile (was 1×6 mobile, too tall) */}
+            <div className="lg:col-span-8 grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
               {categories.map((cat) => (
                 <CategoryCard key={cat.slug} category={cat} />
               ))}
@@ -272,7 +272,7 @@ export default function Home() {
           alt=""
           fill
           sizes="100vw"
-          className="object-cover"
+          className="object-cover object-top sm:object-center"
         />
         <div className="absolute top-0 left-0 right-0 coral-line z-10" />
 
@@ -462,7 +462,7 @@ export default function Home() {
             alt=""
             fill
             sizes="100vw"
-            className="object-cover object-right"
+            className="object-cover object-center sm:object-right"
           />
         </div>
         <div className="absolute inset-0 bg-gradient-to-r from-navy-900 via-navy-900/85 to-navy-900/30" />
