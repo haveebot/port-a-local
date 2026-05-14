@@ -926,8 +926,8 @@ function Music(props: SVGProps<SVGSVGElement>) {
     <svg {...svgBase} viewBox="0 0 128 128" {...props}>
       {/* Stem */}
       <rect x="66" y="22" width="7" height="70" rx="1" />
-      {/* Flag — curves right from top of stem and tapers back down */}
-      <path d="M73 22 C 92 28, 102 40, 100 56 C 99 64, 94 70, 88 72 C 92 64, 92 52, 88 44 C 84 36, 78 32, 73 32 Z" />
+      {/* Flag — single closed curve, outer arc out + down, inner arc back to stem */}
+      <path d="M73 22 C 96 26 100 50 86 70 C 90 60 90 40 73 35 Z" />
       {/* Note head — tilted ellipse below */}
       <ellipse cx="44" cy="92" rx="24" ry="15" transform="rotate(-22 44 92)" />
     </svg>
