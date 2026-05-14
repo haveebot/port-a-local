@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
@@ -199,20 +200,37 @@ export default function BeachPage() {
       />
       <Navigation />
 
-      {/* Header */}
-      <section className="pt-28 pb-14 hero-gradient relative">
-        <div className="absolute bottom-0 left-0 right-0 coral-line" />
-        <div className="absolute inset-0 palm-pattern opacity-15" />
-        <div className="relative max-w-3xl mx-auto px-4 sm:px-6">
-          <div className="flex items-center gap-3 mb-2">
-            <PortalIcon name="beach" className="w-12 h-12 text-coral-400 shrink-0" />
-            <h1 className="font-display text-4xl sm:text-5xl font-bold text-sand-50">
-              Beach Rentals
-            </h1>
+      {/* Hero */}
+      <section className="relative pt-28 overflow-hidden">
+        <div className="absolute inset-0">
+          <Image
+            src="/images/beach-hero.jpg"
+            alt=""
+            fill
+            sizes="100vw"
+            priority
+            className="object-cover object-center"
+          />
+          <div className="absolute inset-0 bg-navy-900/10" />
+        </div>
+        <div className="relative max-w-3xl mx-auto px-4 sm:px-6 py-16 sm:py-24 text-center">
+          <div className="flex justify-center mb-5">
+            <PortalIcon
+              name="beach"
+              className="w-9 h-9 text-navy-900"
+            />
           </div>
-          <p className="text-lg text-navy-200 mt-2 font-light">
-            Show up, we handle the rest. Your setup is waiting for you on the
-            sand.
+          <p className="text-sand-50 text-xs sm:text-sm font-semibold tracking-[0.3em] uppercase mb-5">
+            Explore <span className="mx-1">•</span> Beach
+          </p>
+          <div className="h-px bg-sand-50/80 max-w-md mx-auto" />
+          <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold text-navy-900 py-6 sm:py-8">
+            Beach <span className="italic">Rentals</span>
+          </h1>
+          <div className="h-px bg-sand-50/80 max-w-md mx-auto" />
+          <p className="text-base sm:text-lg text-sand-50 font-light max-w-xl mx-auto mt-6">
+            Show up, we handle the rest.<br />
+            Your setup is waiting for you on the sand.
           </p>
         </div>
       </section>
