@@ -127,8 +127,6 @@ export default function Home() {
         </div>
       </section>
 
-      <FeaturedEventBanner />
-
       {/* Mother's Day in Port A — links to /guides/mothers-day. Coral-300
           band; italic display headline left, CTA copy middle, location-
           heart pin icon right. (2026-05-07 Mother's Day weekend feature.)
@@ -433,6 +431,53 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Live and Local — NEW section per C's mockup (PR #7). Two-column
+          50/50 split: concert photo on the left, coral panel on the right
+          with navy music-note circle, eyebrow, split-color "Live and
+          Local" headline, navy hairline, body, and navy Live Music CTA. */}
+      <section className="grid md:grid-cols-2">
+        <div className="relative min-h-[280px] md:min-h-[480px]">
+          <Image
+            src="/images/live-music-bg.jpg"
+            alt=""
+            fill
+            sizes="(min-width: 768px) 50vw, 100vw"
+            className="object-cover"
+          />
+        </div>
+        <div className="bg-coral-400 flex flex-col items-center justify-center px-6 sm:px-10 py-12 sm:py-16 text-center">
+          <div className="w-14 h-14 rounded-full bg-navy-900 flex items-center justify-center mb-5">
+            <PortalIcon name="music" className="w-7 h-7 text-white" />
+          </div>
+          <p className="text-navy-900 text-xs sm:text-sm tracking-[0.25em] uppercase font-semibold mb-4">
+            Explore <span className="mx-1">·</span> Live Music
+          </p>
+          <h2 className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold leading-none mb-5">
+            <span className="text-navy-900">Live </span>
+            <span className="italic text-white">and</span>
+            <span className="text-navy-900"> Local</span>
+          </h2>
+          <div className="h-px bg-navy-900 max-w-md w-full mb-5" />
+          <p className="text-navy-900 text-base sm:text-lg font-light leading-relaxed max-w-md mb-7">
+            Check out the upcoming acts around town and plan your trip.
+          </p>
+          <Link
+            href="/live-music"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-navy-900 hover:bg-navy-800 text-white text-sm font-semibold tracking-wide transition-colors"
+          >
+            Live Music
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </Link>
+        </div>
+      </section>
+
+      {/* Deep Sea Roundup featured event — relocated here from above the
+          Directory per C's mockup. Component logic unchanged; it picks the
+          soonest in-flight featured event and renders nothing off-season. */}
+      <FeaturedEventBanner />
 
       {/* Business Name Strip — relocated, styling unchanged */}
       <section className="py-14 bg-navy-900 border-y border-navy-800">
