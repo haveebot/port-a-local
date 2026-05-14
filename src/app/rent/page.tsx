@@ -5,6 +5,8 @@ import Link from "next/link";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import PortalIcon from "@/components/brand/PortalIcon";
+import MetaPixelEvent from "@/components/MetaPixelEvent";
+import { trackInitiateCheckout } from "@/lib/metaPixel";
 
 const CART_SIZES = [
   { value: "4", label: "4-Passenger Cart" },
@@ -74,6 +76,15 @@ export default function RentPage() {
     setStatus("loading");
     setErrorMsg("");
 
+    // Fire Meta Pixel InitiateCheckout BEFORE the Stripe redirect. Once
+    // window.location.href changes, any deferred client code is lost.
+    trackInitiateCheckout({
+      value: reservationFee ?? 0,
+      contentName: `${form.cartSize}-Passenger Golf Cart Reservation`,
+      contentCategory: "cart-rental",
+      numItems: 1,
+    });
+
     try {
       const res = await fetch("/api/checkout/rent", {
         method: "POST",
@@ -122,6 +133,11 @@ export default function RentPage() {
 
   return (
     <main className="min-h-screen">
+      <MetaPixelEvent
+        event="ViewContent"
+        contentName="Golf Cart Rentals + Beach Setups"
+        contentCategory="rental-hub"
+      />
       <Navigation />
 
       {/* Hero */}
