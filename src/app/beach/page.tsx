@@ -5,6 +5,8 @@ import Link from "next/link";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import PortalIcon from "@/components/brand/PortalIcon";
+import MetaPixelEvent from "@/components/MetaPixelEvent";
+import { trackInitiateCheckout } from "@/lib/metaPixel";
 
 /**
  * Beach product pricing (2026-04-29 — vendor-model rebuild).
@@ -128,6 +130,14 @@ export default function BeachPage() {
     // code reads both fields).
     const submitReturnDate = multiDay ? form.returnDate : form.pickupDate;
 
+    // Fire Meta Pixel InitiateCheckout BEFORE the Stripe redirect.
+    trackInitiateCheckout({
+      value: totalPrice ?? 0,
+      contentName: selectedProduct.label,
+      contentCategory: "beach-booking",
+      numItems: qty,
+    });
+
     try {
       const res = await fetch("/api/checkout/beach", {
         method: "POST",
@@ -182,6 +192,11 @@ export default function BeachPage() {
 
   return (
     <main className="min-h-screen">
+      <MetaPixelEvent
+        event="ViewContent"
+        contentName="Beach Setup Booking"
+        contentCategory="beach-booking"
+      />
       <Navigation />
 
       {/* Header */}
