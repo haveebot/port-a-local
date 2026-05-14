@@ -3,7 +3,6 @@ import Hero from "@/components/Hero";
 import CategoryCard from "@/components/CategoryCard";
 import FeaturedSpots from "@/components/FeaturedSpots";
 import FeaturedEventBanner from "@/components/FeaturedEventBanner";
-import RunnerLeaderboardTile from "@/components/RunnerLeaderboardTile";
 import Footer from "@/components/Footer";
 import { WebsiteSchema } from "@/components/StructuredData";
 import { categories } from "@/data/categories";
@@ -361,8 +360,6 @@ export default function Home() {
       </section>
 
       <FeaturedSpots />
-
-      <RunnerLeaderboardTile />
 
       {/* Just Gully It — Gully introduced as a brand character (seagull
           with gold "LOCAL" medallion necklace). Layout: Gully on the left,
