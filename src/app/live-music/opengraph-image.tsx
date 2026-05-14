@@ -14,7 +14,7 @@ export default function Image() {
   return brandedOG({
     where: "Discover",
     what: "Live Music",
-    badgeIcon: "music",
+    pngIcon: "music-note",
     title: h.title,
     subtitle: h.ogSubtitle,
     body: "Seven days · seven spots",
