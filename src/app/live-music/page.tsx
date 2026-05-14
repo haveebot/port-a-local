@@ -162,24 +162,24 @@ export default function LiveMusicPage() {
           />
           <div className="absolute inset-0 bg-navy-900/15" />
         </div>
-        <div className="relative max-w-3xl mx-auto px-4 sm:px-6 py-16 sm:py-24 text-center">
-          <div className="flex justify-center mb-5">
+        <div className="relative max-w-3xl mx-auto px-4 sm:px-6 py-12 sm:py-20 text-center">
+          <div className="flex justify-center mb-4 sm:mb-5">
             <PortalIcon
               name="music"
-              className="w-9 h-9 text-coral-300"
+              className="w-12 h-12 sm:w-16 sm:h-16 text-coral-300"
             />
           </div>
-          <p className="text-sand-50 text-xs sm:text-sm font-semibold tracking-[0.3em] uppercase mb-5">
+          <p className="text-sand-50 text-[11px] sm:text-sm font-semibold tracking-[0.25em] sm:tracking-[0.3em] uppercase mb-4 sm:mb-5">
             Explore <span className="mx-1">•</span> Live Music
           </p>
-          <div className="h-px bg-sand-50/80 max-w-md mx-auto" />
-          <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold text-sand-50 py-6 sm:py-8">
+          <div className="h-0.5 bg-sand-50 max-w-[200px] sm:max-w-md mx-auto" />
+          <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl font-bold text-sand-50 py-5 sm:py-8">
             Live{" "}
             <span className="italic text-coral-300">Music</span>{" "}
             Tonight
           </h1>
-          <div className="h-px bg-sand-50/80 max-w-md mx-auto" />
-          <p className="text-base sm:text-lg text-sand-50 font-light max-w-xl mx-auto mt-6">
+          <div className="h-0.5 bg-sand-50 max-w-[200px] sm:max-w-md mx-auto" />
+          <p className="text-sm sm:text-lg text-sand-50 font-light max-w-xl mx-auto mt-5 sm:mt-6 px-4">
             Who&apos;s playing where, across the island&apos;s stages.
           </p>
         </div>
