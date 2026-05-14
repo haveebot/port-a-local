@@ -7,7 +7,7 @@ import RunnerLeaderboardTile from "@/components/RunnerLeaderboardTile";
 import Footer from "@/components/Footer";
 import { WebsiteSchema } from "@/components/StructuredData";
 import { categories } from "@/data/categories";
-import PortalIcon from "@/components/brand/PortalIcon";
+import PortalIcon, { type PortalIconName } from "@/components/brand/PortalIcon";
 import AskGullyTrending from "@/components/AskGullyTrending";
 import Image from "next/image";
 import Link from "next/link";
@@ -30,6 +30,45 @@ const MOTHERS_DAY_CUTOFF_MS = new Date(
 const SUMMER_COUNTDOWN_TARGET_MS = new Date(
   "2026-05-23T05:00:00.000Z",
 ).getTime();
+
+// Services on the Island — Book Direct tiles. Three colored tile cards
+// linking to /rent, /beach, /maintenance. Layout/copy locked from C's
+// mockup; colors mapped to PAL brand tokens (coral / ocean / seafoam).
+interface ServiceTile {
+  href: string;
+  heading: string;
+  body: string;
+  buttonLabel: string;
+  bgClass: string;
+  iconName: PortalIconName;
+}
+
+const SERVICE_TILES: ServiceTile[] = [
+  {
+    href: "/rent",
+    heading: "Golf Cart Rentals",
+    body: "The best way to get around Port Aransas. Reserve and pick up or we'll have it delivered.",
+    buttonLabel: "Reserve",
+    bgClass: "bg-coral-400 hover:bg-coral-500",
+    iconName: "cart",
+  },
+  {
+    href: "/beach",
+    heading: "Beach Day Rentals",
+    body: "Chairs and umbrellas, cooler and more delivered to the sand. You just show up and enjoy the beach.",
+    buttonLabel: "Book",
+    bgClass: "bg-ocean-400 hover:bg-ocean-500",
+    iconName: "beach",
+  },
+  {
+    href: "/maintenance",
+    heading: "Maintenance",
+    body: "Need something fixed? Submit a request and we'll connect you with Port A's most trusted.",
+    buttonLabel: "Schedule",
+    bgClass: "bg-seafoam-500 hover:bg-seafoam-600",
+    iconName: "maintenance",
+  },
+];
 
 export default function Home() {
   const showMothersDay = Date.now() < MOTHERS_DAY_CUTOFF_MS;
@@ -173,90 +212,52 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Services on the Island — Portal Callouts, relocated. Styling
-          unchanged from prior position. */}
-      <section className="py-24 bg-sand-50 relative">
+      {/* Services on the Island — Book Direct, redesigned per C's mockup
+          (2026-05-13 PR #4). Navy section bg, three colored tile cards
+          with italic display headings + navy pill buttons + white icons. */}
+      <section className="py-24 bg-navy-900 relative">
         <div className="absolute top-0 left-0 right-0 coral-line" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-14">
-            <p className="text-coral-500 text-sm font-medium tracking-[0.2em] uppercase mb-3">
+            <p className="text-coral-300 text-sm font-medium tracking-[0.2em] uppercase mb-3">
               Book Direct
             </p>
-            <h2 className="font-display text-3xl sm:text-4xl font-bold text-navy-900 mb-4">
+            <h2 className="font-display text-3xl sm:text-4xl font-bold text-sand-50 mb-4">
               Services on the Island
             </h2>
             <div className="coral-line max-w-xs mx-auto mb-6" />
-            <p className="text-lg text-navy-400 max-w-2xl mx-auto font-light">
+            <p className="text-lg text-navy-200 max-w-2xl mx-auto font-light">
               Skip the runaround. Book directly through Port A Local. Our local team handles everything.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <a
-              href="/rent"
-              className="group block rounded-2xl bg-white border border-sand-200 overflow-hidden card-hover"
-            >
-              <div className="h-1 bg-gradient-to-r from-navy-600 via-coral-400 to-gold-400" />
-              <div className="p-8">
-                <PortalIcon name="cart" className="w-12 h-12 mb-4 text-navy-900 group-hover:text-coral-500 transition-colors" />
-                <h3 className="font-display text-xl font-bold text-navy-900 group-hover:text-coral-600 transition-colors mb-2">
-                  Golf Cart Rentals
-                </h3>
-                <p className="text-navy-400 text-sm leading-relaxed mb-6">
-                  The best way to get around Port Aransas. Reserve your cart and we&apos;ll have it delivered to you.
-                </p>
-                <span className="inline-flex items-center gap-2 text-sm font-semibold text-coral-500 group-hover:text-coral-600 transition-colors">
-                  Reserve Now
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                </span>
-              </div>
-            </a>
-
-            <a
-              href="/beach"
-              className="group block rounded-2xl bg-white border border-sand-200 overflow-hidden card-hover"
-            >
-              <div className="h-1 bg-gradient-to-r from-navy-600 via-coral-400 to-gold-400" />
-              <div className="p-8">
-                <PortalIcon name="beach" className="w-12 h-12 mb-4 text-navy-900 group-hover:text-coral-500 transition-colors" />
-                <h3 className="font-display text-xl font-bold text-navy-900 group-hover:text-coral-600 transition-colors mb-2">
-                  Beach Rentals
-                </h3>
-                <p className="text-navy-400 text-sm leading-relaxed mb-6">
-                  Cabana setups and chair &amp; umbrella packages delivered straight to your spot on the sand.
-                </p>
-                <span className="inline-flex items-center gap-2 text-sm font-semibold text-coral-500 group-hover:text-coral-600 transition-colors">
-                  Book a Setup
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                </span>
-              </div>
-            </a>
-
-            <a
-              href="/maintenance"
-              className="group block rounded-2xl bg-white border border-sand-200 overflow-hidden card-hover"
-            >
-              <div className="h-1 bg-gradient-to-r from-navy-600 via-coral-400 to-gold-400" />
-              <div className="p-8">
-                <PortalIcon name="maintenance" className="w-12 h-12 mb-4 text-navy-900 group-hover:text-coral-500 transition-colors" />
-                <h3 className="font-display text-xl font-bold text-navy-900 group-hover:text-coral-600 transition-colors mb-2">
-                  Maintenance
-                </h3>
-                <p className="text-navy-400 text-sm leading-relaxed mb-6">
-                  Need something fixed? Submit a request and we&apos;ll connect you with Port A&apos;s most trusted local crew.
-                </p>
-                <span className="inline-flex items-center gap-2 text-sm font-semibold text-coral-500 group-hover:text-coral-600 transition-colors">
-                  Submit a Request
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                </span>
-              </div>
-            </a>
+            {SERVICE_TILES.map((tile) => (
+              <Link
+                key={tile.href}
+                href={tile.href}
+                className={`group block rounded-3xl ${tile.bgClass} transition-colors p-8 sm:p-10 relative overflow-hidden`}
+              >
+                <PortalIcon
+                  name={tile.iconName}
+                  className="absolute right-4 bottom-4 w-32 h-32 sm:w-36 sm:h-36 lg:w-40 lg:h-40 text-white/85 pointer-events-none"
+                />
+                <div className="relative z-10 max-w-[65%]">
+                  <h3 className="font-display italic text-3xl sm:text-4xl font-bold text-white leading-tight mb-3">
+                    {tile.heading}
+                  </h3>
+                  <p className="text-white/85 text-sm sm:text-base leading-relaxed mb-8">
+                    {tile.body}
+                  </p>
+                  <span className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-navy-900 text-white text-xs tracking-[0.2em] uppercase font-bold group-hover:bg-navy-800 transition-colors">
+                    {tile.buttonLabel}
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                  </span>
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
