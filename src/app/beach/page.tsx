@@ -211,7 +211,6 @@ export default function BeachPage() {
             priority
             className="object-cover object-center"
           />
-          <div className="absolute inset-0 bg-navy-900/10" />
         </div>
         <div className="relative max-w-3xl mx-auto px-4 sm:px-6 py-16 sm:py-24 text-center">
           <div className="flex justify-center mb-5">
@@ -220,15 +219,15 @@ export default function BeachPage() {
               className="w-9 h-9 text-navy-900"
             />
           </div>
-          <p className="text-sand-50 text-xs sm:text-sm font-semibold tracking-[0.3em] uppercase mb-5">
+          <p className="text-navy-900 text-xs sm:text-sm font-semibold tracking-[0.3em] uppercase mb-5">
             Explore <span className="mx-1">•</span> Beach
           </p>
-          <div className="h-px bg-sand-50/80 max-w-md mx-auto" />
+          <div className="h-px bg-sand-50 max-w-md mx-auto" />
           <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold text-navy-900 py-6 sm:py-8">
             Beach <span className="italic">Rentals</span>
           </h1>
-          <div className="h-px bg-sand-50/80 max-w-md mx-auto" />
-          <p className="text-base sm:text-lg text-sand-50 font-light max-w-xl mx-auto mt-6">
+          <div className="h-px bg-sand-50 max-w-md mx-auto" />
+          <p className="text-base sm:text-lg text-navy-900 font-light max-w-xl mx-auto mt-6">
             Show up, we handle the rest.<br />
             Your setup is waiting for you on the sand.
           </p>
