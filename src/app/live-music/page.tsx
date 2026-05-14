@@ -160,7 +160,7 @@ export default function LiveMusicPage() {
             priority
             className="object-cover object-center"
           />
-          <div className="absolute inset-0 bg-navy-900/40" />
+          <div className="absolute inset-0 bg-navy-900/15" />
         </div>
         <div className="relative max-w-3xl mx-auto px-4 sm:px-6 py-16 sm:py-24 text-center">
           <div className="flex justify-center mb-5">
