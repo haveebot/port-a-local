@@ -32,20 +32,25 @@ export function loadLighthouse(variant: LighthouseVariant = "standard"): string 
 }
 
 /**
- * Load a PNG icon from public/icons/og/<name>.png as a base64 data URI.
+ * Load a PNG icon, tinted to match the card system's iconColor.
  *
- * Use this for icons where satori's SVG renderer drifts the path — its
- * Bezier interpretation isn't 1:1 with browser SVG, so complex curves
- * (like the music-note flag) render visibly off-spec. Pre-rasterized PNG
- * is pixel-perfect because it skips satori's SVG path interpreter entirely.
+ * Files live at public/icons/og/<name>-<HEX>.png — one variant per
+ * iconColor used in CARD_SYSTEMS. Pre-generated from C's master icon
+ * set (the navy-on-transparent PNGs in her PAL Icons folder) via PIL
+ * alpha-composite; see PR description in the intake PR for the script.
  *
- * Trade-off: PNGs ship at a fixed color (light coral, in this case) and
- * can't currentColor-tint per card system. Acceptable for icons that only
- * appear in one card-color context (music → coral cards only).
+ * The 6-letter HEX is the tint color without `#` (e.g. "FFBABD" for
+ * light coral). hexColor argument can be passed with or without `#`;
+ * it's normalized here.
+ *
+ * Why PNG instead of SVG: satori (Next.js OG renderer) drifts complex
+ * Bezier curves even when given exact source paths. PNG sidesteps the
+ * path interpreter entirely — pixel-perfect every time.
  */
-export function loadPngIcon(name: string): string {
+export function loadPngIcon(name: string, hexColor: string): string {
+  const hex = hexColor.replace("#", "").toUpperCase();
   const buf = fs.readFileSync(
-    path.join(process.cwd(), "public/icons/og", `${name}.png`),
+    path.join(process.cwd(), "public/icons/og", `${name}-${hex}.png`),
   );
   return `data:image/png;base64,${buf.toString("base64")}`;
 }
@@ -486,7 +491,7 @@ export function brandedOG({
               {pngIcon ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
-                  src={loadPngIcon(pngIcon)}
+                  src={loadPngIcon(pngIcon, tokens.iconColor)}
                   width={200}
                   height={200}
                   alt=""
