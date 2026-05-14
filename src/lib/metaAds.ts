@@ -1203,3 +1203,270 @@ export async function resumeCampaign(
 ): Promise<SetCampaignStatusResult> {
   return setCampaignStatus(campaignId, "ACTIVE");
 }
+
+/* ------------------------------------------------------------------ */
+/* Custom Audiences — Website Custom Audience (WCA) from Pixel events */
+/*                                                                    */
+/* Audiences live at the ad-account level. A Website Custom Audience  */
+/* is defined by an `event_sources` reference to a Pixel ID plus a    */
+/* rule filter on event names + a retention window. Meta needs ~24    */
+/* hours of Pixel data to start populating; size estimate appears in  */
+/* approximate_count_lower_bound / upper_bound on the list endpoint.  */
+/*                                                                    */
+/* Limit: WCA list calls return small payloads; we paginate up to 200 */
+/* in one fetch (Meta default is 25, max useful is a couple hundred). */
+/* ------------------------------------------------------------------ */
+
+export interface CustomAudienceSummary {
+  id: string;
+  name: string;
+  description: string | null;
+  subtype: string | null;
+  retentionDays: number | null;
+  countLower: number | null;
+  countUpper: number | null;
+  deliveryStatus: string | null;
+  operationStatus: string | null;
+  timeCreated: string | null;
+}
+
+export interface ListCustomAudiencesResult {
+  ok: boolean;
+  stubbed?: boolean;
+  audiences?: CustomAudienceSummary[];
+  error?: string;
+}
+
+export async function listCustomAudiences(): Promise<ListCustomAudiencesResult> {
+  const token = getToken();
+  const adAccount = getAdAccountId();
+  if (!token || !adAccount) {
+    return { ok: true, stubbed: true, audiences: [] };
+  }
+
+  const fields = [
+    "id",
+    "name",
+    "description",
+    "subtype",
+    "retention_days",
+    "approximate_count_lower_bound",
+    "approximate_count_upper_bound",
+    "delivery_status",
+    "operation_status",
+    "time_created",
+  ].join(",");
+
+  const params = new URLSearchParams();
+  params.set("fields", fields);
+  params.set("limit", "200");
+  params.set("access_token", token);
+
+  try {
+    const url = `${GRAPH_BASE}/act_${adAccount}/customaudiences?${params.toString()}`;
+    const res = await fetch(url);
+    const data = (await res.json()) as Record<string, unknown> & {
+      data?: Record<string, unknown>[];
+      error?: { message?: string };
+    };
+    if (!res.ok) {
+      return {
+        ok: false,
+        error:
+          (data.error as { message?: string })?.message ??
+          `HTTP ${res.status}`,
+      };
+    }
+    const rows = data.data ?? [];
+    const audiences: CustomAudienceSummary[] = rows.map((row) => {
+      const lower = row.approximate_count_lower_bound;
+      const upper = row.approximate_count_upper_bound;
+      const ret = row.retention_days;
+      const delivery = row.delivery_status as
+        | Record<string, unknown>
+        | undefined;
+      const op = row.operation_status as Record<string, unknown> | undefined;
+      return {
+        id: (row.id as string) ?? "",
+        name: (row.name as string) ?? "",
+        description: (row.description as string) ?? null,
+        subtype: (row.subtype as string) ?? null,
+        retentionDays:
+          typeof ret === "number"
+            ? ret
+            : ret != null && Number.isFinite(Number(ret))
+              ? Number(ret)
+              : null,
+        countLower:
+          typeof lower === "number"
+            ? lower
+            : lower != null && Number.isFinite(Number(lower))
+              ? Number(lower)
+              : null,
+        countUpper:
+          typeof upper === "number"
+            ? upper
+            : upper != null && Number.isFinite(Number(upper))
+              ? Number(upper)
+              : null,
+        deliveryStatus: (delivery?.description as string) ?? null,
+        operationStatus: (op?.description as string) ?? null,
+        timeCreated: (row.time_created as string) ?? null,
+      };
+    });
+    return { ok: true, audiences };
+  } catch (err) {
+    return {
+      ok: false,
+      error: `fetch error: ${err instanceof Error ? err.message : String(err)}`,
+    };
+  }
+}
+
+export interface CreateWcaConfig {
+  /** human-readable name shown in Ads Manager + the Wheelhouse picker */
+  name: string;
+  /** the Pixel ID — defaults to NEXT_PUBLIC_META_PIXEL_ID */
+  pixelId?: string;
+  /** which Pixel event to match. PageView = "all site visitors". */
+  event: "PageView" | "ViewContent" | "InitiateCheckout" | "Purchase" | "Lead";
+  /** how long users stay in the audience after firing the event */
+  retentionDays: number;
+  /** optional operator-visible description */
+  description?: string;
+}
+
+export interface CreateWcaResult {
+  ok: boolean;
+  stubbed?: boolean;
+  audienceId?: string;
+  error?: string;
+}
+
+function getPixelId(): string | null {
+  const id = (process.env.NEXT_PUBLIC_META_PIXEL_ID ?? "").trim();
+  return id.length > 0 ? id : null;
+}
+
+/**
+ * Create a Website Custom Audience defined by a Pixel event filter.
+ * Returns the new audience ID; once Meta populates it (~24h), the
+ * audience becomes selectable in the Create Ad form.
+ */
+export async function createWebsiteCustomAudience(
+  c: CreateWcaConfig,
+): Promise<CreateWcaResult> {
+  const token = getToken();
+  const adAccount = getAdAccountId();
+  const pixelId = c.pixelId?.trim() || getPixelId();
+
+  if (!token || !adAccount) {
+    console.log(
+      `[metaAds] STUB — would create WCA "${c.name}" (event=${c.event}, ${c.retentionDays}d)`,
+    );
+    return { ok: true, stubbed: true, audienceId: `stub:wca:${Date.now()}` };
+  }
+  if (!pixelId) {
+    return { ok: false, error: "NEXT_PUBLIC_META_PIXEL_ID not set" };
+  }
+  if (c.retentionDays < 1 || c.retentionDays > 180) {
+    return { ok: false, error: "retentionDays must be between 1 and 180" };
+  }
+
+  const rule = {
+    inclusions: {
+      operator: "or",
+      rules: [
+        {
+          event_sources: [{ id: pixelId, type: "pixel" }],
+          retention_seconds: c.retentionDays * 86400,
+          filter: {
+            operator: "and",
+            filters: [
+              {
+                field: "event",
+                operator: "eq",
+                value: c.event,
+              },
+            ],
+          },
+        },
+      ],
+    },
+  };
+
+  const body = new URLSearchParams();
+  body.set("name", c.name);
+  body.set("subtype", "WEBSITE");
+  body.set("pixel_id", pixelId);
+  body.set("rule", JSON.stringify(rule));
+  body.set("retention_days", String(c.retentionDays));
+  body.set("prefill", "true");
+  if (c.description) body.set("description", c.description);
+  body.set("access_token", token);
+
+  const res = await postForm<{ id: string }>(
+    `/act_${adAccount}/customaudiences`,
+    body,
+  );
+  if (res.error || !res.data?.id) {
+    return {
+      ok: false,
+      error: res.error ?? "no audience id returned",
+    };
+  }
+  return { ok: true, audienceId: res.data.id };
+}
+
+export interface DeleteCustomAudienceResult {
+  ok: boolean;
+  stubbed?: boolean;
+  audienceId: string;
+  error?: string;
+}
+
+/**
+ * Delete a Custom Audience permanently. Meta soft-deletes — the row
+ * disappears from listings but historical ad attribution stays in
+ * Insights. Idempotent: re-deleting returns ok:true.
+ */
+export async function deleteCustomAudience(
+  audienceId: string,
+): Promise<DeleteCustomAudienceResult> {
+  const token = getToken();
+  if (!token) {
+    return {
+      ok: false,
+      audienceId,
+      error: "META_PAGE_ACCESS_TOKEN not set",
+    };
+  }
+  if (!getAdAccountId()) {
+    console.log(`[metaAds] STUB — would delete audience ${audienceId}`);
+    return { ok: true, stubbed: true, audienceId };
+  }
+
+  try {
+    const url = `${GRAPH_BASE}/${audienceId}?access_token=${encodeURIComponent(token)}`;
+    const res = await fetch(url, { method: "DELETE" });
+    const data = (await res.json()) as Record<string, unknown> & {
+      error?: { message?: string };
+    };
+    if (!res.ok) {
+      return {
+        ok: false,
+        audienceId,
+        error:
+          (data.error as { message?: string })?.message ??
+          `HTTP ${res.status}`,
+      };
+    }
+    return { ok: true, audienceId };
+  } catch (err) {
+    return {
+      ok: false,
+      audienceId,
+      error: `fetch error: ${err instanceof Error ? err.message : String(err)}`,
+    };
+  }
+}
