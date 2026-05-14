@@ -8,6 +8,7 @@ import {
   splitByState,
   type FoodSpot,
 } from "@/data/restaurant-encyclopedia";
+import MetaPixelEvent from "@/components/MetaPixelEvent";
 
 export const dynamic = "force-dynamic";
 
@@ -31,6 +32,11 @@ export default async function DeliverIndex() {
 
   return (
     <main className="min-h-screen bg-sand-50">
+      <MetaPixelEvent
+        event="ViewContent"
+        contentName="Eat in Port Aransas"
+        contentCategory="eat"
+      />
       <header className="bg-navy-900 text-sand-100 border-b border-coral-500/20">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6">
           <Link

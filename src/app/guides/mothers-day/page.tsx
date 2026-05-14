@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { BreadcrumbListSchema } from "@/components/StructuredData";
+import MetaPixelEvent from "@/components/MetaPixelEvent";
 
 export const metadata: Metadata = {
   title: "Mother's Day in Port A — From Beach to Brunch | Port A Local",
@@ -83,6 +84,12 @@ const days: Day[] = [
 export default function MothersDayGuide() {
   return (
     <main className="min-h-screen">
+      <MetaPixelEvent
+        event="ViewContent"
+        contentName="Mother's Day in Port A"
+        contentCategory="guides"
+        contentIds={["guides/mothers-day"]}
+      />
       <BreadcrumbListSchema
         items={[
           { name: "Home", path: "/" },

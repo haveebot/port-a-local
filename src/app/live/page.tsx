@@ -3,6 +3,7 @@ import Footer from "@/components/Footer";
 import IslandConditions from "@/components/IslandConditions";
 import type { Metadata } from "next";
 import { EmojiIcon } from "@/components/brand/PortalIcon";
+import MetaPixelEvent from "@/components/MetaPixelEvent";
 
 export const metadata: Metadata = {
   title: "Island Pulse — Live Webcams, Weather & Tides | Port A Local",
@@ -119,6 +120,11 @@ const externalLinks = [
 export default function LivePage() {
   return (
     <main className="min-h-screen">
+      <MetaPixelEvent
+        event="ViewContent"
+        contentName="Island Pulse"
+        contentCategory="live"
+      />
       <Navigation />
 
       {/* Hero */}
