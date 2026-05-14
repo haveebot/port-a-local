@@ -67,7 +67,6 @@ export const VENUES: Record<string, LiveMusicVenue> = {
   "fred-rhodes": { slug: "fred-rhodes", name: "Fred Rhodes Pavilion" },
   "roberts-point-park": { slug: "roberts-point-park", name: "Roberts Point Park" },
   "roosevelts-tarpon-inn": { slug: "roosevelts-tarpon-inn", name: "Roosevelt's at the Tarpon Inn" },
-  "palmilla-beach": { slug: "palmilla-beach", name: "Palmilla Beach Resort & Golf Community" },
 };
 
 export const CURRENT_WEEK: LiveMusicWeek = {
@@ -121,7 +120,6 @@ export const CURRENT_WEEK: LiveMusicWeek = {
     { date: "2026-05-23", venue: "treasure-island", artist: "Five Card Draw" },
     { date: "2026-05-23", venue: "sip-yard", artist: "Larry Joe Taylor" },
     { date: "2026-05-23", venue: "vfw", artist: "Lucky Dogz" },
-    { date: "2026-05-23", venue: "palmilla-beach", artist: "Memorial Day Concert" },
     { date: "2026-05-23", venue: "brons", artist: "Riptide" },
 
     // Sunday — May 24
