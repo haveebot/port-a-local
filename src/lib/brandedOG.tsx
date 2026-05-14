@@ -12,7 +12,12 @@ import PortalIcon, { type PortalIconName } from "@/components/brand/PortalIcon";
  * COLOR SYSTEM (Collie 2026-05-06):
  * Each surface category maps to one of 4 card systems (seafoam · coral · navy · yellow).
  * Pages pass `category` and the system + tokens are derived automatically.
- * Source spec: PAL SOCIAL - LINK CARDS VISUAL IDENTITY & SYSTEMS.pdf (uid 294).
+ *
+ * LAYOUT REFRESH (Collie 2026-05-14):
+ * Updated to match the OG Link Card Post Templates brand templates.
+ * Icon moved from the pill to a large icon-in-circle on the right.
+ * Pill now follows "WHERE • WHAT" structure; bottom-left lockup is
+ * "PORT A LOCAL" wordmark + section/path with no lighthouse silhouette.
  */
 
 export const ogSize = { width: 1200, height: 630 };
@@ -63,6 +68,8 @@ interface CardTokens {
   wordmark: string;
   wordmarkSubtitle: string;
   meta: string;
+  iconCircle: string;
+  iconColor: string;
 }
 
 const PALETTE = {
@@ -89,6 +96,8 @@ export const CARD_SYSTEMS: Record<CardSystem, CardTokens> = {
     wordmark: PALETTE.white,
     wordmarkSubtitle: PALETTE.navyMid,
     meta: PALETTE.navyMid,
+    iconCircle: PALETTE.navyMid,
+    iconColor: PALETTE.lightCoral,
   },
   coral: {
     background: PALETTE.coral,
@@ -101,6 +110,8 @@ export const CARD_SYSTEMS: Record<CardSystem, CardTokens> = {
     wordmark: PALETTE.white,
     wordmarkSubtitle: PALETTE.navyMid,
     meta: PALETTE.navyMid,
+    iconCircle: PALETTE.navyDeep,
+    iconColor: PALETTE.lightCoral,
   },
   navy: {
     background: PALETTE.navyDeep,
@@ -113,6 +124,8 @@ export const CARD_SYSTEMS: Record<CardSystem, CardTokens> = {
     wordmark: PALETTE.white,
     wordmarkSubtitle: PALETTE.white,
     meta: PALETTE.coralAlt,
+    iconCircle: PALETTE.coralAlt,
+    iconColor: PALETTE.lightCoral,
   },
   yellow: {
     background: PALETTE.yellow,
@@ -125,6 +138,8 @@ export const CARD_SYSTEMS: Record<CardSystem, CardTokens> = {
     wordmark: PALETTE.navyMid,
     wordmarkSubtitle: PALETTE.navyMid,
     meta: PALETTE.navyMid,
+    iconCircle: PALETTE.seafoam,
+    iconColor: PALETTE.navyMid,
   },
   red: {
     background: PALETTE.red,
@@ -137,6 +152,8 @@ export const CARD_SYSTEMS: Record<CardSystem, CardTokens> = {
     wordmark: PALETTE.white,
     wordmarkSubtitle: PALETTE.white,
     meta: PALETTE.white,
+    iconCircle: PALETTE.white,
+    iconColor: PALETTE.red,
   },
 };
 
@@ -210,18 +227,39 @@ export function categoryCardSystem(category?: string): CardSystem {
 /* ------------------------------------------------------------------ */
 
 interface BrandedOGProps {
-  /** Small pill at the top — text of the badge */
+  /**
+   * Pill — pre-2026-05-14 single-string form. New code prefers `where` + `what`.
+   * If `where`/`what` are provided, `badge` is ignored.
+   */
   badge?: string;
-  /** Optional silhouette icon rendered inside the badge, before the text */
+  /** Pill — left half (e.g. "DISCOVER", "PLAN", "ORDER"). */
+  where?: string;
+  /** Pill — right half (e.g. "HERITAGE", "LIVE MUSIC"). */
+  what?: string;
+  /** Big icon-in-circle on the right side of the card. */
   badgeIcon?: PortalIconName;
   /** Headline — the biggest piece of type. Required. */
   title: string;
-  /** Sub-headline / dek */
+  /** Sub-headline / dek (subhead position per the brand templates). */
   subtitle?: string;
-  /** Lighthouse variant for the bottom-left lockup */
-  lockupVariant?: LighthouseVariant;
-  /** Optional right-side meta, e.g. ISO date */
+  /** Body / pull quote line shown between the headline and the subheading. */
+  body?: string;
+  /** Top-right supporting text (tracked uppercase). */
+  bodyTopRight?: string;
+  /** Bottom-right supporting text (tracked uppercase). */
+  bodyBottomRight?: string;
+  /**
+   * Bottom-left URL path under the PORT A LOCAL wordmark, e.g. "/heritage".
+   * Rendered as "DISCOVER • theportalocal.com{path}".
+   */
+  path?: string;
+  /** Optional right-side meta, e.g. ISO date — falls back as bodyTopRight. */
   meta?: string;
+  /**
+   * Lighthouse silhouette variant — retained for back-compat with v1 callers;
+   * the new layout (2026-05-14) doesn't render the lighthouse in the lockup.
+   */
+  lockupVariant?: LighthouseVariant;
   /**
    * Surface category — drives color system per Collie's spec.
    * Use `categoryCardSystem(category)` keys (e.g. "live-music", "dispatch").
@@ -241,10 +279,15 @@ interface BrandedOGProps {
 /** Generate a consistent, branded 1200×630 OG image. */
 export function brandedOG({
   badge,
+  where,
+  what,
   badgeIcon,
   title,
   subtitle,
-  lockupVariant = "standard",
+  body,
+  bodyTopRight,
+  bodyBottomRight,
+  path,
   meta,
   category,
   cardSystem,
@@ -252,17 +295,21 @@ export function brandedOG({
   titleColor,
   subtitleColor,
 }: BrandedOGProps): ImageResponse {
-  const lighthouse = loadLighthouse(lockupVariant);
   const titleFontSize =
-    title.length > 60 ? 52 : title.length > 30 ? 66 : 78;
+    title.length > 60 ? 56 : title.length > 30 ? 68 : 78;
 
   const system = cardSystem ?? categoryCardSystem(category);
   const tokens = CARD_SYSTEMS[system];
 
-  // Per-element overrides win over system tokens
   const bg = background ?? tokens.background;
   const headlineColor = titleColor ?? tokens.headline;
   const subColor = subtitleColor ?? tokens.subhead;
+
+  const pillWhere = (where ?? "DISCOVER").toUpperCase();
+  const pillWhat = (what ?? badge ?? "").toUpperCase();
+  const showPill = Boolean(pillWhat);
+  const topRight = bodyTopRight ?? meta;
+  const displayPath = path ? `theportalocal.com${path}` : "theportalocal.com";
 
   return new ImageResponse(
     (
@@ -274,11 +321,11 @@ export function brandedOG({
           width: "100%",
           height: "100%",
           backgroundColor: bg,
-          padding: "60px 70px",
+          padding: "50px 60px",
           fontFamily: "Inter",
         }}
       >
-        {/* Top — badge + meta */}
+        {/* Top row: WHERE • WHAT pill + top-right supporting text */}
         <div
           style={{
             display: "flex",
@@ -286,121 +333,180 @@ export function brandedOG({
             justifyContent: "space-between",
           }}
         >
-          {badge ? (
+          {showPill ? (
             <div
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: 10,
-                padding: "8px 20px",
+                gap: 12,
+                padding: "10px 26px",
                 borderRadius: 999,
                 backgroundColor: tokens.pillBg,
                 color: tokens.pillText,
                 fontSize: 16,
                 fontWeight: 600,
-                letterSpacing: "0.1em",
+                letterSpacing: "0.12em",
                 textTransform: "uppercase",
               }}
             >
+              <span>{pillWhere}</span>
               <div
                 style={{
                   display: "flex",
-                  width: 8,
-                  height: 8,
+                  width: 6,
+                  height: 6,
                   borderRadius: 999,
                   backgroundColor: tokens.pillBullet,
                 }}
               />
-              {badgeIcon && (
-                <div style={{ display: "flex", width: 20, height: 20 }}>
-                  <PortalIcon name={badgeIcon} width={20} height={20} />
-                </div>
-              )}
-              {badge}
+              <span>{pillWhat}</span>
             </div>
           ) : (
             <div />
           )}
-          {meta && (
-            <span style={{ color: tokens.meta, fontSize: 14, fontFamily: "monospace" }}>
-              {meta}
-            </span>
-          )}
-        </div>
-
-        {/* Center — title + subtitle */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
-          <div
-            style={{
-              fontSize: titleFontSize,
-              fontWeight: 800,
-              color: headlineColor,
-              lineHeight: 1.05,
-              maxWidth: 1060,
-            }}
-          >
-            {title}
-          </div>
-          {subtitle && (
-            <div
+          {topRight ? (
+            <span
               style={{
-                fontSize: 24,
-                color: subColor,
-                lineHeight: 1.35,
-                maxWidth: 960,
-                fontWeight: 400,
+                color: tokens.body,
+                fontSize: 14,
+                letterSpacing: "0.22em",
+                textTransform: "uppercase",
+                fontWeight: 600,
               }}
             >
-              {subtitle.length > 180 ? subtitle.slice(0, 180) + "..." : subtitle}
-            </div>
-          )}
+              {topRight}
+            </span>
+          ) : null}
         </div>
 
-        {/* Bottom — PAL lockup + coordinates */}
+        {/* Middle row: headline column + icon-in-circle */}
         <div
           style={{
             display: "flex",
+            flex: 1,
             alignItems: "center",
-            justifyContent: "space-between",
+            gap: 40,
+            marginTop: 24,
+            marginBottom: 24,
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={lighthouse} width={54} height={54} alt="" />
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <span
-                style={{
-                  fontFamily: "Playfair Display",
-                  fontSize: 28,
-                  fontWeight: 700,
-                  color: tokens.wordmark,
-                  letterSpacing: "0.05em",
-                }}
-              >
-                PORT A LOCAL
-              </span>
-              <span
-                style={{
-                  fontSize: 12,
-                  color: tokens.wordmarkSubtitle,
-                  letterSpacing: "0.2em",
-                  textTransform: "uppercase",
-                  marginTop: 2,
-                }}
-              >
-                Discover · theportalocal.com
-              </span>
-            </div>
-          </div>
-          <span
+          <div
             style={{
-              fontSize: 14,
-              color: tokens.meta,
-              fontFamily: "monospace",
+              display: "flex",
+              flexDirection: "column",
+              flex: 1,
+              gap: 18,
             }}
           >
-            27°50′N · 97°03′W
-          </span>
+            <div
+              style={{
+                fontSize: titleFontSize,
+                fontWeight: 800,
+                color: headlineColor,
+                lineHeight: 1.02,
+                letterSpacing: "-0.01em",
+                maxWidth: 720,
+              }}
+            >
+              {title}
+            </div>
+            {body ? (
+              <div
+                style={{
+                  fontSize: 16,
+                  color: tokens.body,
+                  letterSpacing: "0.18em",
+                  textTransform: "uppercase",
+                  fontWeight: 500,
+                  maxWidth: 700,
+                }}
+              >
+                {body}
+              </div>
+            ) : null}
+            {subtitle ? (
+              <div
+                style={{
+                  fontSize: 28,
+                  color: subColor,
+                  lineHeight: 1.3,
+                  fontWeight: 700,
+                  maxWidth: 700,
+                  marginTop: 4,
+                }}
+              >
+                {subtitle.length > 140
+                  ? subtitle.slice(0, 140) + "…"
+                  : subtitle}
+              </div>
+            ) : null}
+          </div>
+
+          {badgeIcon ? (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: 300,
+                height: 300,
+                borderRadius: 999,
+                backgroundColor: tokens.iconCircle,
+                color: tokens.iconColor,
+                flexShrink: 0,
+              }}
+            >
+              <PortalIcon name={badgeIcon} width={170} height={170} />
+            </div>
+          ) : null}
+        </div>
+
+        {/* Bottom row: PORT A LOCAL + path (left), bottom-right body (right) */}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-end",
+          }}
+        >
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <span
+              style={{
+                fontFamily: "Playfair Display",
+                fontSize: 30,
+                fontWeight: 700,
+                color: tokens.wordmark,
+                letterSpacing: "0.02em",
+              }}
+            >
+              PORT A LOCAL
+            </span>
+            <span
+              style={{
+                fontSize: 13,
+                color: tokens.wordmarkSubtitle,
+                letterSpacing: "0.18em",
+                textTransform: "uppercase",
+                marginTop: 6,
+                fontWeight: 600,
+              }}
+            >
+              {pillWhere} • {displayPath}
+            </span>
+          </div>
+          {bodyBottomRight ? (
+            <span
+              style={{
+                color: tokens.body,
+                fontSize: 14,
+                letterSpacing: "0.22em",
+                textTransform: "uppercase",
+                fontWeight: 600,
+              }}
+            >
+              {bodyBottomRight}
+            </span>
+          ) : null}
         </div>
       </div>
     ),
