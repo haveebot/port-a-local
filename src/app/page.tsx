@@ -128,37 +128,43 @@ export default function Home() {
       )}
 
       {/* Summer Countdown — coral circle running countdown to end of Fri
-          May 22 CDT. Floors at 0; section never auto-hides. */}
-      <section className="bg-coral-50 py-16 sm:py-20 border-y border-coral-100">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <div className="grid md:grid-cols-2 gap-10 sm:gap-12 items-center">
-            <div className="flex justify-center md:justify-end">
-              <div className="w-52 h-52 sm:w-60 sm:h-60 rounded-full bg-coral-500 text-white flex flex-col items-center justify-center shadow-xl">
+          May 22 CDT. Floors at 0; section never auto-hides. Layout follows
+          C's Canva mockup: 3-col (circle / center stack / navy CTA). */}
+      <section className="bg-sand-50 py-16 sm:py-20">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="grid grid-cols-1 md:grid-cols-[auto_1fr_auto] gap-10 sm:gap-12 items-center">
+            <div className="flex justify-center md:justify-start">
+              <div className="w-48 h-48 sm:w-56 sm:h-56 rounded-full bg-coral-300 text-navy-900 flex flex-col items-center justify-center">
                 <span className="font-display text-7xl sm:text-8xl font-bold leading-none">
                   {daysToSummer}
                 </span>
-                <span className="text-xs sm:text-sm tracking-[0.25em] uppercase mt-2 font-semibold">
+                <span className="text-xs sm:text-sm tracking-[0.25em] uppercase mt-2 font-bold">
                   {daysToSummer === 1 ? "Day" : "Days"}
                 </span>
               </div>
             </div>
-            <div className="text-center md:text-left">
-              <p className="font-display italic text-2xl text-coral-500 mb-2">
+            <div className="text-center">
+              <p className="text-xs sm:text-sm tracking-[0.25em] uppercase font-semibold text-navy-900 mb-5 leading-loose">
                 Plan your trip
+                <br />
+                Book your services
               </p>
-              <h2 className="font-display text-4xl sm:text-5xl font-bold text-navy-900 mb-4">
+              <div className="h-px bg-navy-900 max-w-md mx-auto mb-5" />
+              <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-coral-400 mb-5 italic">
                 Summer Countdown
               </h2>
-              <div className="coral-line max-w-xs mx-auto md:mx-0 mb-6" />
-              <p className="text-base sm:text-lg text-navy-700 font-light leading-relaxed mb-8 max-w-md mx-auto md:mx-0">
-                Lock in your beach day, golf cart, and reservations before the lines get long. Locals know — summer fills up fast.
+              <div className="h-px bg-navy-900 max-w-md mx-auto mb-5" />
+              <p className="text-base sm:text-lg text-navy-900 font-light leading-relaxed max-w-md mx-auto">
+                Check out our curated guide for where to eat, what to do, and book ahead for a seamless Summer getaway.
               </p>
+            </div>
+            <div className="flex justify-center md:justify-end">
               <Link
                 href="/guides/summer"
-                className="inline-flex items-center justify-center px-8 py-4 rounded-xl bg-ocean-500 hover:bg-ocean-600 text-white font-semibold text-lg tracking-wide transition-colors"
+                className="inline-flex items-center justify-center px-7 py-4 rounded-xl bg-navy-900 hover:bg-navy-800 text-white font-semibold text-base tracking-wide transition-colors"
               >
                 Plan your Summer
-                <svg className="ml-3 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="ml-3 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </Link>
