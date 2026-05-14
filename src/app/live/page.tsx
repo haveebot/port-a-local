@@ -114,12 +114,6 @@ const externalLinks = [
     url: "https://www.ndbc.noaa.gov/station_page.php?station=PTAT2",
     icon: "📡",
   },
-  {
-    name: "All Port A Webcams",
-    description: "Full list of webcams on the official tourism site",
-    url: "https://www.portaransas.org/plan/webcam/",
-    icon: "📹",
-  },
 ];
 
 export default function LivePage() {

@@ -607,17 +607,6 @@ export default async function BirdingPage() {
               </li>
               <li>
                 <a
-                  href="https://www.portaransas.org/things-to-do/birding/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-coral-600 hover:underline"
-                >
-                  Port Aransas tourism birding page
-                </a>{" "}
-                — official hotspot list
-              </li>
-              <li>
-                <a
                   href="https://tpwd.texas.gov/huntwild/wild/birding/migration/migration_times/"
                   target="_blank"
                   rel="noopener noreferrer"
