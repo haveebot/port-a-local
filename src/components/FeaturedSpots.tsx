@@ -1,6 +1,20 @@
 import BusinessCard from "./BusinessCard";
 import { getFeaturedBusinesses } from "@/data/businesses";
 
+/**
+ * Mobile-only subset of the Featured Spots list (Collie 2026-05-14).
+ * Mobile users get just these four cards; tablet/desktop see the full
+ * curated set. Non-mobile cards are hidden via Tailwind below the `md`
+ * breakpoint so SSR ships the full list and SEO/crawlers still see every
+ * featured business.
+ */
+const MOBILE_FEATURED_SLUGS = new Set([
+  "venetian-hot-plate",
+  "drink-brons-backyard",
+  "aloha-acai",
+  "eat-jeremiahs-boat-dock-grill",
+]);
+
 export default function FeaturedSpots() {
   const featured = getFeaturedBusinesses();
 
@@ -23,9 +37,17 @@ export default function FeaturedSpots() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {featured.map((biz) => (
-            <BusinessCard key={biz.slug} business={biz} />
-          ))}
+          {featured.map((biz) => {
+            const showOnMobile = MOBILE_FEATURED_SLUGS.has(biz.slug);
+            return (
+              <div
+                key={biz.slug}
+                className={showOnMobile ? undefined : "hidden md:block"}
+              >
+                <BusinessCard business={biz} />
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>
