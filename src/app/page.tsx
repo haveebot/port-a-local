@@ -642,48 +642,50 @@ export default function Home() {
       </section>
 
       {/* About Section */}
-      <section className="py-24" id="about">
+      <section className="py-12 sm:py-24" id="about">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="max-w-3xl mx-auto text-center">
-            <p className="text-coral-500 text-sm font-medium tracking-[0.2em] uppercase mb-3">
+            <p className="text-coral-500 text-xs sm:text-sm font-medium tracking-[0.2em] uppercase mb-2 sm:mb-3">
               Our Mission
             </p>
-            <h2 className="font-display text-3xl sm:text-4xl font-bold text-navy-900 mb-6">
+            <h2 className="font-display text-2xl sm:text-4xl font-bold text-navy-900 mb-3 sm:mb-6">
               Why Port A Local?
             </h2>
-            <div className="coral-line max-w-xs mx-auto mb-8" />
-            <p className="text-lg text-navy-400 leading-relaxed mb-12 font-light">
+            <div className="coral-line max-w-xs mx-auto mb-4 sm:mb-8" />
+            {/* Long-form mission copy hidden on mobile; the three pillars below
+                carry the message in tighter space. */}
+            <p className="hidden sm:block text-lg text-navy-400 leading-relaxed mb-12 font-light">
               Port Aransas is one of the most beloved beach towns on the Texas coast, but finding
               the real gems has always been word-of-mouth. We built Port A Local to change that.
               One place to discover businesses that are genuinely local, genuinely good, and
               genuinely cared about by the community.
             </p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
-              <div className="p-8 rounded-2xl bg-white border border-sand-200 card-hover">
-                <div className="w-12 h-12 rounded-full bg-navy-50 flex items-center justify-center mx-auto mb-4">
-                  <PortalIcon name="palm" className="w-7 h-7 text-navy-900" />
+            <div className="grid grid-cols-3 gap-2 sm:gap-8">
+              <div className="p-3 sm:p-8 rounded-2xl bg-white border border-sand-200 card-hover">
+                <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-navy-50 flex items-center justify-center mx-auto mb-2 sm:mb-4">
+                  <PortalIcon name="palm" className="w-5 h-5 sm:w-7 sm:h-7 text-navy-900" />
                 </div>
-                <h3 className="font-display font-bold text-navy-900 mb-2">Island Curated</h3>
-                <p className="text-sm text-navy-400 font-light">
+                <h3 className="font-display font-bold text-navy-900 text-xs sm:text-base mb-0 sm:mb-2 leading-tight">Island Curated</h3>
+                <p className="hidden sm:block text-sm text-navy-400 font-light">
                   Every business is reviewed and approved by people who live and work on the island.
                 </p>
               </div>
-              <div className="p-8 rounded-2xl bg-white border border-sand-200 card-hover">
-                <div className="w-12 h-12 rounded-full bg-coral-50 flex items-center justify-center mx-auto mb-4">
-                  <PortalIcon name="handshake" className="w-7 h-7 text-coral-600" />
+              <div className="p-3 sm:p-8 rounded-2xl bg-white border border-sand-200 card-hover">
+                <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-coral-50 flex items-center justify-center mx-auto mb-2 sm:mb-4">
+                  <PortalIcon name="handshake" className="w-5 h-5 sm:w-7 sm:h-7 text-coral-600" />
                 </div>
-                <h3 className="font-display font-bold text-navy-900 mb-2">Community First</h3>
-                <p className="text-sm text-navy-400 font-light">
+                <h3 className="font-display font-bold text-navy-900 text-xs sm:text-base mb-0 sm:mb-2 leading-tight">Community First</h3>
+                <p className="hidden sm:block text-sm text-navy-400 font-light">
                   We exist to serve Port Aransas. Connecting visitors with the businesses that make this town great.
                 </p>
               </div>
-              <div className="p-8 rounded-2xl bg-white border border-sand-200 card-hover">
-                <div className="w-12 h-12 rounded-full bg-gold-50 flex items-center justify-center mx-auto mb-4">
-                  <PortalIcon name="trophy" className="w-7 h-7 text-navy-900" />
+              <div className="p-3 sm:p-8 rounded-2xl bg-white border border-sand-200 card-hover">
+                <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-gold-50 flex items-center justify-center mx-auto mb-2 sm:mb-4">
+                  <PortalIcon name="trophy" className="w-5 h-5 sm:w-7 sm:h-7 text-navy-900" />
                 </div>
-                <h3 className="font-display font-bold text-navy-900 mb-2">No Pay-to-Play</h3>
-                <p className="text-sm text-navy-400 font-light">
+                <h3 className="font-display font-bold text-navy-900 text-xs sm:text-base mb-0 sm:mb-2 leading-tight">No Pay-to-Play</h3>
+                <p className="hidden sm:block text-sm text-navy-400 font-light">
                   Listings aren&apos;t for sale. You earn your spot by being great at what you do.
                 </p>
               </div>
