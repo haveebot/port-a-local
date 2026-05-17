@@ -19,57 +19,59 @@ anonymization_rule: paid city officials + corporate counterparties named; electe
 
 ---
 
-On the 413-page agenda packet for the **January 17, 2019** Port Aransas City Council meeting, the most consequential decision of the night fits in seven words. They appear at page 71, in the commentary line for the contract awarding the city's hotel-and-conference center procurement:
+**This Wednesday at 5:00 PM, the Port Aransas City Council will vote to consent to a $66 million hotel-and-convention center at Palmilla Beach Resort.**
+
+The applicant is **KM Beach, LLC** — a Texas company headquartered at the same San Antonio address as **McCombs Properties**, the family business of San Antonio billionaire Red McCombs and the named owner of Palmilla Beach Resort. The financing is structured as a Tax Increment Reinvestment Zone and a Municipal Management District: two mechanisms by which public revenue is captured to fund private development on a particular parcel. The City Manager is empowered, by the same resolution, to appoint staff and legal counsel to a three-member Council working group that will negotiate the Master Development Agreement over the next ninety days.
+
+The deliberation of the District's boundaries and the MDA's financial terms occurs in closed executive session.
+
+The staff memos describing both are listed on the Council's public agenda. They are not downloadable from the City's public-facing website.
+
+Three weeks ago, on April 21, the same Council voted 5-2 to enter a Memorandum of Understanding and Professional Services Agreement with the same KM Beach, LLC. The packet for that meeting carried no posted action item for the agreement. The deliberation occurred in closed executive session. The vote was reported afterward by the *Port Aransas South Jetty.*
+
+Seven years and four months ago, the same Council voted 7-0 to award a different hotel-and-conference center contract — the city's first attempt at the project. That earlier deliberation was also held outside the public packet. The procedural mechanism that kept it off the public record fit in seven words.
+
+They appeared on page 71 of the meeting agenda packet, in the commentary line for the contract:
 
 > *INFORMATION SENT SEPARATE BY CITY MANAGER FOR REVIEW*
 
-That is the entire substantive content, in the public packet, of the deliberation that resulted in a 7-0 council vote awarding the project. The grading rubric the City has since confirmed was used to evaluate the two bidders is not in the packet. A full-text search of the 413 pages returns zero hits for the words *"rubric," "175," "182," "71.5,"* or *"74%."* The resolution template lists the wrong opponent — McCombs Properties rather than Palmilla Beach — and leaves the awardee field blank.
+That is the entire substantive content, in the public packet, of the deliberation that resulted in the 7-0 vote.
 
-The Council voted 7-0 anyway.
+The grading rubric the City has since confirmed was used to evaluate the two bidders is not in the packet. A full-text search of the 413 pages returns zero hits for the words *"rubric," "175," "182," "71.5,"* or *"74%."* The resolution template lists the wrong opponent — **McCombs Properties** rather than Palmilla Beach — and leaves the awardee field blank.
 
-A full-text search of the eleven publicly-available 2019 Port Aransas council packets — roughly 2,800 pages combined — returns the verbatim phrase *"INFORMATION SENT SEPARATE BY CITY MANAGER FOR REVIEW"* **exactly once.** Not on a routine consent item. Not on a budget line. Not on a personnel matter. On the hotel-and-conference center contract.
+A full-text search of the eleven publicly-available 2019 council packets — roughly 2,800 pages combined — returns the verbatim phrase *"INFORMATION SENT SEPARATE BY CITY MANAGER FOR REVIEW"* **exactly once.** Not on a routine consent item. Not on a budget line. On the hotel-and-conference center contract.
 
-The rubric the City has since produced under a Texas Public Information Act request shows the bidder receiving the 7-0 votes — Cinnamon Shore, with ZJZ Hospitality as hospitality partner — scored **175 of 245 possible points (71.5 percent).** The competing bidder — Palmilla Beach — scored **182 of 245 (74 percent).** The category the lower-scoring bidder won most decisively was *"minimal impact of future tax revenue to the City."*
+The rubric, since produced under a Texas Public Information Act request, shows the bidder receiving the 7-0 votes — Cinnamon Shore, with ZJZ Hospitality as hospitality partner — scored 175 of 245 possible points. The losing bidder — **Palmilla Beach** — scored 182. The category the lower-scoring bidder won most decisively was *"minimal impact of future tax revenue to the City."*
 
-Two of the seven council members who cast that 7-0 vote had personally helped develop and apply the rubric. The other five had not seen the rubric in any publicly distributed materials. Both members who served on the grading committee retained their Council seats through 2026.
+Two of the seven council members who cast that 7-0 vote had personally helped develop and apply the rubric. The other five had not seen the rubric in any publicly distributed materials.
 
----
+Both members who served on the grading committee still hold Council seats. Both voted in favor of the April 21, 2026 agreement with KM Beach, LLC. The bidder the 2019 rubric had winning is the bidder on Wednesday's vote.
 
-## Seven years later
-
-On **April 21, 2026** — seven years and four months later — the same City Council voted **5-2** to enter a Memorandum of Understanding and a Professional Services Agreement with KM Beach, LLC for a Hotel and Convention Center at Palmilla Beach Resort & Golf Community. Both members of the 2019 grading committee voted in favor.
-
-The packet for that meeting carried no posted action item for the agreement. The substantive deliberation occurred in closed executive session — under exceptions for real-property and economic-development negotiations. The agenda's open-session line said only that the Council *"may take action regarding the matters which are the subjects of the above agenda item '5. Closed Executive Session.'"* The vote was reported afterward by the *Port Aransas South Jetty.*
-
-The 2019 mechanism for keeping the deliberation off the public record was the page-71 routing notation. The 2026 mechanism was closed executive session. The outcomes are the same: a council vote on a hotel-and-conference center at Palmilla Beach Resort, with the deliberative material the public would have to read to evaluate the decision held outside the public record at the time of the vote.
+The parcel is the same parcel. The family is the same family. The City Manager is the same City Manager.
 
 ---
 
-## Who is on the other side of the agreement
+## What is in KM Beach, LLC
 
-**KM Beach, LLC** is a Texas-registered company headquartered at the same San Antonio address as McCombs Properties. Its filed officers are **Marsha Shields**, **Harry Ben Adams IV**, and **Steve L. Cummings.** It has filed two assumed-name certificates with the State of Texas: *"Palmilla Beach Golf Club"* and *"Black Marlin Bar & Grill."* It has been the named applicant on Palmilla Beach Planned Unit Development replats with the City since at least 2022. Its parent, McCombs Properties, describes Palmilla Beach Resort on its own marketing site as *"owned and being built by McCombs Properties, the real estate development company owned by famed San Antonio businessman Red McCombs."*
+KM Beach, LLC has been the named applicant on Palmilla Beach Planned Unit Development replats with the City since at least 2022. Its officers — **Marsha Shields**, **Harry Ben Adams IV**, and **Steve L. Cummings** — are filed with the State of Texas. Its assumed-name certificates trade as *"Palmilla Beach Golf Club"* and *"Black Marlin Bar & Grill."* Its parent, McCombs Properties, describes Palmilla Beach Resort on its own marketing site as *"owned and being built by McCombs Properties, the real estate development company owned by famed San Antonio businessman Red McCombs."*
 
-The 2019 procurement's higher-scoring bidder, **Palmilla Beach**, is the parcel of the 2026 applicant.
+The 2019 procurement was awarded to Cinnamon Shore, which sits inside a different Port Aransas Planned Unit Development across the island. As of May 2026, that conference center has not been constructed. The Cinnamon Shore award was relocated by Council to a third parcel in 2020, then transferred to a third entity, then allowed to expire when no construction broke ground by the December 2022 deadline in the developer's filed timeline.
 
-The reported cost of the 2026 project is approximately **$66 million.** The financing is to be structured as a **Tax Increment Reinvestment Zone** and a **Municipal Management District** — two mechanisms by which public revenue is captured to fund private development on a particular parcel. The project location is **Beach Access Road 1**, inside Palmilla Beach Resort.
-
----
-
-## This Wednesday
-
-On **May 20, 2026, 5:00 PM**, the City Council convenes again. On the public agenda are two itemized actions: a resolution *"Conditionally Consenting to the Creation of a Municipal Management District… with KM Beach, LLC"* and the authorization of a *"temporary working group consisting of three City Council members"* to negotiate the Master Development Agreement, for up to 90 days, with the City Manager empowered to appoint staff and legal counsel to support the committee.
-
-The deliberation of the District's geographic boundaries and the MDA's financial terms occurs, again, in closed executive session.
-
-The staff memos behind both items are listed in the agenda but are not downloadable from the City's public-facing website. They are gated behind a portal account login. The 2019 procurement packet — the one that contains the seven words on page 71 — is, by comparison, freely downloadable from the City's public website. The newer documents do not appear there.
+Wednesday's vote is the procurement's third attempt — at the parcel of the 2019 procurement's higher-scoring bidder, under the family that owns it.
 
 ---
 
-## The City Manager who routed the 2019 deliberation
+## Wednesday
 
-The City Manager who served on the 2019 grading committee — **David Parsons** — remains the City Manager today. He recommended the March 2025 contract awarded 7-0 to Weaver and Jacobs Constructors, for $9.575 million, to expand the City Hall and Civic Center — with Turner Ramirez Architects as the project's architect, the same firm that was on Cinnamon Shore's 2019 winning conference-center bid team. He recommended the April 21, 2026 agreement with KM Beach, LLC. He is the official the May 20 working-group resolution authorizes to appoint staff and legal counsel to support the committee's MDA negotiations.
+The May 20 agenda lists two itemized actions. The first is a resolution *"Conditionally Consenting to the Creation of a Municipal Management District… with KM Beach, LLC."* The second is the authorization of the three-member Council working group, for up to 90 days, to negotiate the Master Development Agreement.
 
-The phrase that returned exactly one result in the publicly-available 2019 corpus — on this procurement — corresponds to a procedural play. The publicly retrievable record after 2019 sits behind a portal login and cannot be searched the same way.
+The deliberation, again, occurs in closed executive session. The staff memos describing the District's geographic boundaries and the MDA's financial terms are listed in the public agenda but are gated behind a portal-account login at the City's civicweb portal. They are not on the City's public-facing website. The January 17, 2019 packet — the one that contains the seven words on page 71 — is, by comparison, freely downloadable from the City's public website. The newer documents do not appear there.
+
+---
+
+## The City Manager
+
+The City Manager who served on the 2019 grading committee — **David Parsons** — remains the City Manager today. He recommended the March 2025 contract awarded 7-0 to Weaver and Jacobs Constructors, for $9.575 million, to expand the City Hall and Civic Center — with Turner Ramirez Architects as the project's architect, the same firm that was on Cinnamon Shore's 2019 winning conference-center bid team. He recommended the April 21, 2026 agreement with KM Beach, LLC. He is the official Wednesday's working-group resolution empowers to appoint staff and legal counsel to support the MDA negotiations.
 
 ---
 
@@ -85,9 +87,9 @@ The second will ask the City Secretary to identify every agenda item in the same
 
 ## Close
 
-The Council that voted 7-0 in January 2019 on a rubric not in the public packet is largely the same Council voting Wednesday on a development agreement whose deliberation happened, again, off the public record. The bidder the 2019 rubric had winning is the bidder on Wednesday's agenda. The City Manager who signed the 2019 grading committee is the City Manager recommending Wednesday's working group. The parcel is the same parcel.
+The Council that voted 7-0 in January 2019 — on a rubric the public packet did not contain — is largely the same Council voting Wednesday. The bidder the 2019 rubric had winning is the bidder on Wednesday's vote, financed by mechanisms that capture public revenue on the parcel the development will be built on, deliberated in closed session, with the staff memos that explain the terms gated behind a login the public cannot enter.
 
-The case is one decision. The wider pattern this case fits inside — five governance bodies the city's organizational chart presents as independent, in practice run by the same network of households; the body that drafts the rules with terms now lapsed; the disclosure-form regime that does not surface the architecture — is the subject of a forthcoming Dispatch.
+This case is one decision. The wider pattern it sits inside — five governance bodies the city presents as independent, in practice run by the same network of households; the body that drafts the rules with terms now lapsed; the disclosure-form regime that does not surface the architecture — is the subject of a forthcoming Dispatch.
 
 The records describe an architecture. The architecture was decided.
 
