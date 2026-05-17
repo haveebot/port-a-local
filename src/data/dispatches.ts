@@ -44,6 +44,45 @@ export interface Dispatch {
 
 export const dispatches: Dispatch[] = [
   {
+    slug: "closed-session-66-million",
+    title: "$66 Million in Closed Session",
+    subtitle:
+      "Wednesday at 5 PM, the Port Aransas City Council votes to consent to a $66 million hotel-and-convention center at Palmilla Beach Resort. The Master Development Agreement is being negotiated in closed session. Seven years ago, the same Council made a similar decision the same way — and the project was never built.",
+    description:
+      "On May 20, 2026, the Port Aransas City Council is scheduled to consent to a Municipal Management District financing a $66 million hotel-and-convention center at Palmilla Beach Resort, with the underlying agreement negotiated in closed session. The 2019 procurement of a similar project, also deliberated outside the public packet, was awarded to a lower-scoring bidder and never built. The bidder the 2019 rubric had winning is the bidder on Wednesday's vote.",
+    category: "investigation",
+    icon: "📋",
+    readTime: "7 min",
+    featured: true,
+    published: true,
+    date: "2026-05-17",
+    tags: [
+      "Port Aransas",
+      "City Council",
+      "Palmilla Beach",
+      "Cinnamon Shore",
+      "McCombs Properties",
+      "KM Beach LLC",
+      "Municipal Management District",
+      "MMD",
+      "TIRZ",
+      "hotel conference center",
+      "closed session",
+      "David Parsons",
+      "Marsha Shields",
+      "Red McCombs",
+      "PUD",
+      "P&Z Capture",
+    ],
+    relatedDispatches: ["the-two-port-aransases"],
+    ogHighlight: {
+      type: "quote",
+      text: "INFORMATION SENT SEPARATE BY CITY MANAGER FOR REVIEW",
+      attribution:
+        "Port Aransas City Council agenda packet · January 17, 2019 · page 71",
+    },
+  },
+  {
     slug: "nueces-drought-disaster-2026",
     title: "Nueces County Declares Local Drought Disaster",
     subtitle:
