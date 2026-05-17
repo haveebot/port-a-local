@@ -76,10 +76,9 @@ export const dispatches: Dispatch[] = [
     ],
     relatedDispatches: ["the-two-port-aransases"],
     ogHighlight: {
-      type: "quote",
-      text: "INFORMATION SENT SEPARATE BY CITY MANAGER FOR REVIEW",
-      attribution:
-        "Port Aransas City Council agenda packet · January 17, 2019 · page 71",
+      type: "stat",
+      text: "$66M",
+      label: "Closed-session vote · Port Aransas City Council · May 20, 2026",
     },
   },
   {
