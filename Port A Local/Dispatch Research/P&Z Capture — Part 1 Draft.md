@@ -1,8 +1,8 @@
 ---
-working_title: INFORMATION SENT SEPARATE BY CITY MANAGER FOR REVIEW
-subtitle: Seven years and four months apart, two Port Aransas council votes used different mechanisms to keep the deliberative record off the public packet. The bidder the 2019 rubric had winning is back this week — at the same parcel, through a different structure.
+working_title: $66 Million in Closed Session
+subtitle: Wednesday at 5 PM, the Port Aransas City Council votes to consent to a $66 million hotel-and-convention center at Palmilla Beach Resort. The Master Development Agreement is being negotiated in closed session. The staff memos describing the terms are not on the City's public website. Seven years ago, the same Council made a similar decision the same way — and the project was never built.
 series: P&Z Capture — Part 1 of 2
-status: draft v1
+status: draft v2
 date: 2026-05-17
 type: dispatch (news + investigation)
 voice: records-only synthesis; restraint; anti-villain
@@ -11,9 +11,9 @@ sources_floor: every claim sourced to a public record; no interviews
 anonymization_rule: paid city officials + corporate counterparties named; elected officials and volunteer commissioners by seat or aggregate only
 ---
 
-# INFORMATION SENT SEPARATE BY CITY MANAGER FOR REVIEW
+# $66 Million in Closed Session
 
-*Seven years and four months apart, two Port Aransas council votes used different mechanisms to keep the deliberative record off the public packet. The bidder the 2019 rubric had winning is back this week — at the same parcel, through a different structure.*
+*Wednesday at 5 PM, the Port Aransas City Council votes to consent to a $66 million hotel-and-convention center at Palmilla Beach Resort. The Master Development Agreement is being negotiated in closed session. The staff memos describing the terms are not on the City's public website. Seven years ago, the same Council made a similar decision the same way — and the project was never built.*
 
 *Part 1 of 2.*
 
