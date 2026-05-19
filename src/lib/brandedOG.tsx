@@ -68,7 +68,7 @@ const interSemiBold = fs.readFileSync(path.join(FONTS_DIR, "Inter-SemiBold.ttf")
 const interExtraBold = fs.readFileSync(path.join(FONTS_DIR, "Inter-ExtraBold.ttf"));
 const playfairBold = fs.readFileSync(path.join(FONTS_DIR, "PlayfairDisplay-Bold.ttf"));
 
-const OG_FONTS = [
+export const OG_FONTS = [
   { name: "Inter", data: interRegular, weight: 400 as const, style: "normal" as const },
   { name: "Inter", data: interSemiBold, weight: 600 as const, style: "normal" as const },
   { name: "Inter", data: interExtraBold, weight: 800 as const, style: "normal" as const },
