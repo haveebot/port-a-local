@@ -96,24 +96,24 @@ export const BEACH_ADDONS: readonly BeachProduct[] = [
     value: "addon-boogie",
     label: "Boogie Board",
     description: "Add a boogie board to your setup.",
-    vendorBaseCents: 2200, // $22 vendor take
-    palFeeCents: 300, // $3 PAL booking fee
+    vendorBaseCents: 1875, // $18.75 vendor take (75% of $25)
+    palFeeCents: 625, // $6.25 PAL booking fee (25% of $25)
     smsNoun: { singular: "boogie board", plural: "boogie boards" },
   },
   {
     value: "addon-chair",
     label: "Beach Chair",
     description: "Add an extra chair to your setup.",
-    vendorBaseCents: 2200,
-    palFeeCents: 300,
+    vendorBaseCents: 1875,
+    palFeeCents: 625,
     smsNoun: { singular: "extra chair", plural: "extra chairs" },
   },
   {
     value: "addon-umbrella",
     label: "Umbrella",
     description: "Add an extra umbrella to your setup.",
-    vendorBaseCents: 2200,
-    palFeeCents: 300,
+    vendorBaseCents: 1875,
+    palFeeCents: 625,
     smsNoun: { singular: "extra umbrella", plural: "extra umbrellas" },
   },
 ];
