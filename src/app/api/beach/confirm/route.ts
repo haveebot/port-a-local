@@ -5,6 +5,30 @@ import { sendConsumerSms } from "@/lib/twilioSms";
 import { sendBeachLeadBlast } from "@/lib/beachVendorBlast";
 import { recordBlast } from "@/data/beach-claim-store";
 import { pingSuperAdmins, formatCustomerDisplay } from "@/lib/superAdminPing";
+import {
+  getBeachProductLabel,
+  getBeachAddon,
+  addonsSmsSummary,
+  type BeachAddonSelection,
+} from "@/data/beach-products";
+
+/** Parse the JSON-encoded add-on selection from Stripe metadata. */
+function parseAddons(raw: string | undefined): BeachAddonSelection {
+  if (!raw) return {};
+  try {
+    const obj = JSON.parse(raw) as Record<string, unknown>;
+    const out: BeachAddonSelection = {};
+    for (const [slug, q] of Object.entries(obj)) {
+      const n = Number(q);
+      if (Number.isFinite(n) && n > 0 && getBeachAddon(slug)) {
+        out[slug] = n;
+      }
+    }
+    return out;
+  } catch {
+    return {};
+  }
+}
 
 const getStripe = () => new Stripe(process.env.STRIPE_SECRET_KEY || "", {
   apiVersion: "2026-03-25.dahlia",
@@ -53,11 +77,6 @@ function formatDate(dateStr: string) {
   });
 }
 
-const PRODUCT_LABELS: Record<string, string> = {
-  cabana: "Cabana Setup",
-  chairs: "Chair & Umbrella Setup",
-};
-
 export async function POST(req: NextRequest) {
   const { sessionId } = await req.json();
 
@@ -81,10 +100,20 @@ export async function POST(req: NextRequest) {
 
     const startFormatted = formatDate(pickupDate);
     const endFormatted = formatDate(returnDate);
-    const productLabel = PRODUCT_LABELS[product] || product;
+    const productLabel = getBeachProductLabel(product);
     const qty = parseInt(quantity);
     const days = parseInt(numDays);
     const total = parseInt(totalPrice);
+    const addonSelection = parseAddons(m.addons);
+    const addonEntries = Object.entries(addonSelection);
+    const addonsHtmlRows = addonEntries
+      .map(([slug, q]) => {
+        const a = getBeachAddon(slug);
+        return a ? `<li><strong>${a.label}:</strong> ${q}</li>` : "";
+      })
+      .filter(Boolean)
+      .join("");
+    const addonsInlineSummary = addonsSmsSummary(addonSelection); // "" when empty
 
     const internalHtml = emailLayout({
       tone: "alert",
@@ -98,10 +127,11 @@ export async function POST(req: NextRequest) {
         <hr style="border:none; border-top:1px solid #e4dccc; margin:16px 0;"/>
         <p><strong>Setup:</strong> ${productLabel}</p>
         <p><strong>Quantity:</strong> ${qty}</p>
+        ${addonsHtmlRows ? `<p style="margin:8px 0 4px 0;"><strong>Add-ons:</strong></p><ul style="margin:0 0 8px 0; padding-left:20px;">${addonsHtmlRows}</ul>` : ""}
         <p><strong>Start:</strong> ${startFormatted}</p>
         <p><strong>End:</strong> ${endFormatted}</p>
         <p><strong>Duration:</strong> ${days} day${days !== 1 ? "s" : ""}</p>
-        <p><strong>Beach location:</strong> ${deliveryAddress}</p>
+        <p><strong>Setup location:</strong> ${deliveryAddress}</p>
         <hr style="border:none; border-top:1px solid #e4dccc; margin:16px 0;"/>
         <p style="font-size:16px;"><strong>Total collected:</strong> $${total}</p>
         <p style="margin:4px 0; font-size:13px;"><strong>Vendor payout (owed):</strong> ${vendorTotalUsd}</p>
@@ -120,10 +150,11 @@ export async function POST(req: NextRequest) {
         <ul>
           <li><strong>Setup:</strong> ${productLabel}</li>
           <li><strong>Quantity:</strong> ${qty}</li>
+          ${addonsHtmlRows ? `<li><strong>Add-ons:</strong><ul>${addonsHtmlRows}</ul></li>` : ""}
           <li><strong>Start:</strong> ${startFormatted}</li>
           <li><strong>End:</strong> ${endFormatted}</li>
           <li><strong>Duration:</strong> ${days} day${days !== 1 ? "s" : ""}</li>
-          <li><strong>Beach location:</strong> ${deliveryAddress}</li>
+          <li><strong>Setup location:</strong> ${deliveryAddress}</li>
           <li><strong>Total paid:</strong> $${total}</li>
         </ul>
         <hr style="border:none; border-top:1px solid #e4dccc; margin:16px 0;"/>
@@ -136,7 +167,7 @@ export async function POST(req: NextRequest) {
 
     console.log(`[Beach/Confirm] Payment confirmed — ${name} | ${productLabel} x${qty} | ${pickupDate} → ${returnDate} | $${total}`);
 
-    const customerSMS = `Port A Local: Your ${productLabel} (${days} day${days !== 1 ? "s" : ""}) is booked for ${startFormatted}. Delivered to: ${deliveryAddress}. Reply STOP to opt out.`;
+    const customerSMS = `Port A Local: Your ${productLabel}${addonsInlineSummary ? ` + ${addonsInlineSummary}` : ""} (${days} day${days !== 1 ? "s" : ""}) is booked for ${startFormatted}. Delivered to: ${deliveryAddress}. Reply STOP to opt out.`;
 
     // Beach vendor blast — short ID is the last 6 chars of session ID,
     // friendly to vendors who reply CLAIM. Format compact for SMS.
@@ -152,7 +183,7 @@ export async function POST(req: NextRequest) {
       pingSuperAdmins({
         kind: "beach-rental",
         amountCents: total * 100,
-        summary: `${productLabel} ×${qty} · ${startFormatted.replace(/, \d{4}$/,"").replace(/^([A-Za-z]+), /,"$1 ")} (${days} ${days === 1 ? "day" : "days"}) · ${deliveryAddress}\n\nVendor: ${vendorTotalUsd} · PAL fee: ${palFeeTotalUsd}`,
+        summary: `${productLabel} ×${qty}${addonsInlineSummary ? ` + ${addonsInlineSummary}` : ""} · ${startFormatted.replace(/, \d{4}$/,"").replace(/^([A-Za-z]+), /,"$1 ")} (${days} ${days === 1 ? "day" : "days"}) · ${deliveryAddress}\n\nVendor: ${vendorTotalUsd} · PAL fee: ${palFeeTotalUsd}`,
         customerDisplay: formatCustomerDisplay(name),
       }),
       // Record the blast in claim store (idempotent on session ID), then fan
@@ -174,6 +205,7 @@ export async function POST(req: NextRequest) {
           const sent = await sendBeachLeadBlast({
             product,
             qty,
+            addons: addonSelection,
             setupDateFormatted: startCompact,
             numDays: days,
             customerName: name,

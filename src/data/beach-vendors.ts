@@ -50,17 +50,11 @@ export interface BeachVendor {
   team?: string;
 }
 
-// Beach-vendor routing pivoted 2026-05-11 PM: Bron's is the sole beach
-// vendor on PAL going forward. All three of Bron's directory phones
-// (reservations line + Bron's cell + Kristen) receive every new beach
-// booking blast. Prior vendors (John Brown, Tyler, Danny Peterson) are
-// retired from active routing — retained in git history if needed.
-//
-// Revenue split for Bron-on-PAL beach fulfillment is pending the
-// updated Bron's agreement review (separate from the bronsbeach.com
-// 12% revenue share, which covers bookings on Bron's own domain).
-// Until the new agreement lands, the existing /beach product pricing
-// in beach-products.ts stays as-is.
+// Beach-vendor routing — Bron's is the sole vendor for chairs + shibumi
+// setups (all three directory phones receive every blast on those products).
+// Tyler is the sole vendor for The Beach Rig (he has the 16-ft trailer).
+// Per-product routing is encoded in beach-products.ts via `vendorSlugs`;
+// this file is just the active vendor roster.
 export const beachVendors: BeachVendor[] = [
   {
     slug: "brons-reservations",
@@ -88,6 +82,14 @@ export const beachVendors: BeachVendor[] = [
     role: "Bron's Beach — team operator",
     smsCapable: true,
     team: "brons",
+  },
+  {
+    slug: "tyler",
+    name: "Tyler",
+    phone: "(361) 813-6958",
+    active: true,
+    role: "Beach Rig vendor — has the 16-ft beach trailer",
+    smsCapable: true,
   },
 ];
 

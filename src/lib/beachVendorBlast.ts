@@ -13,10 +13,32 @@ import {
   getBlastableBeachVendors,
   type BeachVendor,
 } from "@/data/beach-vendors";
+import {
+  getBeachProduct,
+  productSmsLabel,
+  addonsSmsSummary,
+  type BeachAddonSelection,
+} from "@/data/beach-products";
+
+/**
+ * Active vendors filtered by per-product routing. If the product specifies
+ * a `vendorSlugs` allowlist, only those vendors are returned (intersected
+ * with the active+smsCapable filter); otherwise all active vendors.
+ */
+function vendorsForProduct(productSlug: string): BeachVendor[] {
+  const active = getBlastableBeachVendors();
+  const spec = getBeachProduct(productSlug);
+  if (!spec?.vendorSlugs?.length) return active;
+  const allowed = new Set(spec.vendorSlugs);
+  return active.filter((v) => allowed.has(v.slug));
+}
 
 export interface BeachLeadInput {
-  product: string; // "cabana" | "chairs"
+  /** Slug from BEACH_PRODUCTS in @/data/beach-products. */
+  product: string;
   qty: number;
+  /** Optional add-on selection — slug → qty. Empty/missing = no add-ons. */
+  addons?: BeachAddonSelection;
   setupDateFormatted: string; // e.g. "Sat May 10"
   numDays: number;
   customerName: string;
@@ -28,27 +50,20 @@ function dayWord(n: number): string {
   return n === 1 ? "day" : "days";
 }
 
-function productLabel(product: string, qty: number): string {
-  if (product === "cabana") {
-    return `${qty} cabana${qty === 1 ? "" : "s"}`;
-  }
-  if (product === "chairs") {
-    // /beach defines "chairs" = "Two chairs and a beach umbrella"
-    return `${qty} chair-set${qty === 1 ? "" : "s"} (2 chairs + umbrella each)`;
-  }
-  return `${qty} × ${product}`;
-}
-
 /**
  * The lead-blast SMS sent to every active beach vendor when a booking
  * is paid. Block format same as cart vendor lead per Collie revisions
  * 2026-04-29 — line-spaced for fast lock-screen skim.
  */
 export function buildBeachLeadSms(input: BeachLeadInput): string {
-  const { product, qty, setupDateFormatted, numDays, shortId } = input;
+  const { product, qty, addons, setupDateFormatted, numDays, shortId } = input;
+  const addonsLine = addons ? addonsSmsSummary(addons) : "";
+  const itemLine = addonsLine
+    ? `${productSmsLabel(product, qty)} + ${addonsLine}`
+    : productSmsLabel(product, qty);
   return [
     `Port A Local: 🏖️ NEW BEACH BOOKING`,
-    `${productLabel(product, qty)} for ${setupDateFormatted} (${numDays} ${dayWord(numDays)}).`,
+    `${itemLine} for ${setupDateFormatted} (${numDays} ${dayWord(numDays)}).`,
     `Reply CLAIM to take it (first vendor wins).`,
     `Booking ref: ${shortId}`,
     `STOP to opt out.`,
@@ -60,7 +75,7 @@ export function buildBeachLeadSms(input: BeachLeadInput): string {
  * Returns the count of messages successfully dispatched.
  */
 export async function sendBeachLeadBlast(input: BeachLeadInput): Promise<number> {
-  const targets = getBlastableBeachVendors();
+  const targets = vendorsForProduct(input.product);
   if (targets.length === 0) return 0;
 
   const body = buildBeachLeadSms(input);
@@ -96,7 +111,7 @@ export function buildClaimWonSms(
 ): string {
   return [
     `Port A Local: ✅ CLAIM CONFIRMED`,
-    `${vendor.name}, you've got it: ${productLabel(product, qty)} for ${setupDateFormatted}.`,
+    `${vendor.name}, you've got it: ${productSmsLabel(product, qty)} for ${setupDateFormatted}.`,
     `Booking name: ${customerName}`,
     `Port A Local handles all customer comms — we'll send you setup details before the date. Reply here if you need anything from us.`,
   ].join("\n\n");
@@ -108,7 +123,7 @@ export function buildClaimLostSms(
   qty: number,
   winnerName: string,
 ): string {
-  return `Port A Local: That ${productLabel(product, qty)} booking just got claimed by ${winnerName}. Thanks for the quick eye - next one's still up for grabs.`;
+  return `Port A Local: That ${productSmsLabel(product, qty)} booking just got claimed by ${winnerName}. Thanks for the quick eye - next one's still up for grabs.`;
 }
 
 /** Notify everyone after a successful claim. Best-effort; doesn't throw.
@@ -135,8 +150,11 @@ export async function notifyClaimResolution(input: {
     ).catch((err) => console.error("[beach-vendor-blast] winner-confirm failed:", err));
   }
 
-  // 2) Notify other active vendors
-  const others = getBlastableBeachVendors().filter((v) => v.slug !== winner.slug);
+  // 2) Notify other vendors who were on the original blast for this product.
+  //    Wrong-product vendors (e.g. Bron's on a Beach Rig claim, or Tyler on
+  //    a chairs claim) never received the lead, so they shouldn't get the
+  //    claim-lost SMS either.
+  const others = vendorsForProduct(product).filter((v) => v.slug !== winner.slug);
   let i = 0;
   for (const v of others) {
     const phone = beachVendorPhone(v);
