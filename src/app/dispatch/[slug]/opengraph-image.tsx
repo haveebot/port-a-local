@@ -1,5 +1,11 @@
 import { getDispatchBySlug } from "@/data/dispatches";
-import { brandedOG, ogSize, ogContentType, loadLighthouse } from "@/lib/brandedOG";
+import {
+  brandedOG,
+  ogSize,
+  ogContentType,
+  loadLighthouse,
+  OG_FONTS,
+} from "@/lib/brandedOG";
 import { ImageResponse } from "next/og";
 
 export const alt = "Port A Dispatch";
@@ -47,7 +53,7 @@ export default async function Image({
           Port A Dispatch
         </div>
       ),
-      { ...size },
+      { ...size, fonts: OG_FONTS },
     );
   }
 
@@ -293,7 +299,7 @@ export default async function Image({
           </div>
         </div>
       ),
-      { ...size },
+      { ...size, fonts: OG_FONTS },
     );
   }
 
@@ -374,7 +380,7 @@ export default async function Image({
               textShadow: "0 0 60px rgba(232, 101, 111, 0.3)",
             }}
           >
-            “{text}”
+            {`“${text}”`}
           </div>
           <div
             style={{
@@ -384,7 +390,7 @@ export default async function Image({
               letterSpacing: "0.02em",
             }}
           >
-            — {attribution}
+            {`— ${attribution}`}
           </div>
           <div
             style={{
@@ -447,6 +453,6 @@ export default async function Image({
         </div>
       </div>
     ),
-    { ...size },
+    { ...size, fonts: OG_FONTS },
   );
 }
