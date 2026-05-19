@@ -76,8 +76,7 @@ export const BEACH_PRODUCTS: readonly BeachProduct[] = [
       "10 chairs (6 loungers + 4 fold-out)",
       "2 fold-out tables",
       "2 ice chests",
-      "12×12 attached shade cloth",
-      "2 umbrellas",
+      "6×12 foot shade structure",
     ],
     vendorBaseCents: 40000, // $400 vendor take
     palFeeCents: 5000, // $50 PAL booking fee
