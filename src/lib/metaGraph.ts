@@ -130,6 +130,46 @@ async function preScrapeLinkUrl(linkUrl: string, token: string): Promise<void> {
 }
 
 /**
+ * Find a recently-published post on the Page that matches the given
+ * message body. Defends against a Graph API race we hit 2026-05-19:
+ * the /feed POST returns an error like "Please reduce the amount of
+ * data you're asking for" AFTER the post has actually been created
+ * (the downstream link-scrape step is what failed, not the post
+ * itself). Without this check, callers mark the post failed → resend
+ * → double-post on the feed.
+ *
+ * Strategy: query /{pageId}/feed?since=<unixSec>&limit=10 within the
+ * race window and look for a post whose `message` matches verbatim.
+ * Returns the matched post or null.
+ */
+async function findRecentMatchingPost(
+  message: string,
+  sinceUnixSec: number,
+  pageId: string,
+  token: string,
+): Promise<{ id: string } | null> {
+  try {
+    const url = new URL(`${GRAPH_BASE}/${pageId}/feed`);
+    url.searchParams.set("since", String(sinceUnixSec));
+    url.searchParams.set("fields", "id,message,created_time");
+    url.searchParams.set("limit", "10");
+    url.searchParams.set("access_token", token);
+    const res = await fetch(url.toString());
+    if (!res.ok) return null;
+    const data = (await res.json()) as {
+      data?: Array<{ id?: string; message?: string }>;
+    };
+    const trimmed = message.trim();
+    const match = (data.data ?? []).find(
+      (p) => typeof p.message === "string" && p.message.trim() === trimmed,
+    );
+    return match?.id ? { id: match.id } : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
  * Post to the FB Page feed. Two modes:
  *
  * - **Link mode** (default): POST /{page_id}/feed with message + link.
@@ -142,6 +182,12 @@ async function preScrapeLinkUrl(linkUrl: string, token: string): Promise<void> {
  *   url + caption. Higher organic reach historically; no link preview
  *   card (link still goes in caption text). Used when operator uploads
  *   a custom image.
+ *
+ * Both modes guard against the "post-created-but-API-errored" race
+ * (see findRecentMatchingPost): on any non-OK response from the create
+ * call, we query the Page's recent feed for a verbatim message match
+ * before declaring failure. If found, return success with the matched
+ * post ID — prevents the caller from resending into a duplicate.
  */
 export async function postToFacebook(
   p: PostToFacebookParams,
@@ -171,6 +217,10 @@ export async function postToFacebook(
     params.set("caption", p.message);
     params.set("published", "true");
     params.set("access_token", token);
+    // Capture race-window start BEFORE the create call so the recovery
+    // query covers anything FB may have created between our request and
+    // its error response.
+    const sinceUnixSec = Math.floor(Date.now() / 1000) - 5;
     try {
       const res = await fetch(`${GRAPH_BASE}/${pageId}/photos`, {
         method: "POST",
@@ -182,6 +232,29 @@ export async function postToFacebook(
         error?: { message?: string };
       };
       if (!res.ok || !data.post_id) {
+        // Recovery: FB sometimes returns an error after the post landed
+        // (downstream step failed, post itself is live). Check the Page
+        // feed before declaring failure → prevents double-posts.
+        const recovered = await findRecentMatchingPost(
+          p.message,
+          sinceUnixSec,
+          pageId,
+          token,
+        );
+        if (recovered) {
+          const postPath = recovered.id.includes("_")
+            ? recovered.id.split("_")[1]
+            : recovered.id;
+          console.warn(
+            `[metaGraph] PHOTO POST returned error but post ${recovered.id} exists — recovering as success.`,
+            { error: data.error?.message },
+          );
+          return {
+            ok: true,
+            externalPostId: recovered.id,
+            externalPostUrl: `https://www.facebook.com/${pageId}/posts/${postPath}`,
+          };
+        }
         return {
           ok: false,
           error:
@@ -215,6 +288,10 @@ export async function postToFacebook(
   if (p.link) params.set("link", p.link);
   params.set("access_token", token);
 
+  // Capture race-window start BEFORE the create call so the recovery
+  // query covers anything FB may have created between our request and
+  // its error response.
+  const sinceUnixSec = Math.floor(Date.now() / 1000) - 5;
   try {
     const res = await fetch(`${GRAPH_BASE}/${pageId}/feed`, {
       method: "POST",
@@ -222,6 +299,31 @@ export async function postToFacebook(
     });
     const data = (await res.json()) as { id?: string; error?: { message?: string } };
     if (!res.ok || !data.id) {
+      // Recovery: FB sometimes returns an error after the post has
+      // actually been published (the downstream link-scrape step is what
+      // failed — repro 2026-05-19 with "Please reduce the amount of data
+      // you're asking for"). Check the Page feed before declaring
+      // failure → prevents the caller from resending into a duplicate.
+      const recovered = await findRecentMatchingPost(
+        p.message,
+        sinceUnixSec,
+        pageId,
+        token,
+      );
+      if (recovered) {
+        const postPath = recovered.id.includes("_")
+          ? recovered.id.split("_")[1]
+          : recovered.id;
+        console.warn(
+          `[metaGraph] FEED POST returned error but post ${recovered.id} exists — recovering as success.`,
+          { error: data.error?.message },
+        );
+        return {
+          ok: true,
+          externalPostId: recovered.id,
+          externalPostUrl: `https://www.facebook.com/${pageId}/posts/${postPath}`,
+        };
+      }
       return {
         ok: false,
         error: data.error?.message ?? `FB post failed (HTTP ${res.status})`,
