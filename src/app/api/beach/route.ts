@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { emailLayout } from "@/lib/emailLayout";
+import { getBeachProductLabel } from "@/data/beach-products";
 
 const RESEND_KEY = process.env.RESEND_API_KEY || "";
 const INTERNAL_EMAIL = process.env.INTERNAL_ALERT_EMAIL || "";
@@ -38,11 +39,6 @@ function formatDate(dateStr: string) {
   });
 }
 
-const PRODUCT_LABELS: Record<string, string> = {
-  cabana: "Cabana Setup",
-  chairs: "Chair & Umbrella Setup",
-};
-
 export async function POST(req: NextRequest) {
   const body = await req.json();
   const {
@@ -65,7 +61,7 @@ export async function POST(req: NextRequest) {
 
   const startFormatted = formatDate(pickupDate);
   const endFormatted = formatDate(returnDate);
-  const productLabel = PRODUCT_LABELS[product] || product;
+  const productLabel = getBeachProductLabel(product);
 
   // --- Internal alert ---
   const internalHtml = emailLayout({
@@ -83,7 +79,7 @@ export async function POST(req: NextRequest) {
       <p><strong>Start:</strong> ${startFormatted}</p>
       <p><strong>End:</strong> ${endFormatted}</p>
       <p><strong>Duration:</strong> ${numDays} day${numDays !== 1 ? "s" : ""}</p>
-      <p><strong>Beach Location:</strong> ${deliveryAddress}</p>
+      <p><strong>Setup location:</strong> ${deliveryAddress}</p>
       <hr style="border:none; border-top:1px solid #e4dccc; margin:16px 0;"/>
       <p style="font-size:16px;"><strong>Total to collect:</strong> $${totalPrice}</p>
     `,
@@ -103,7 +99,7 @@ export async function POST(req: NextRequest) {
         <li><strong>Start:</strong> ${startFormatted}</li>
         <li><strong>End:</strong> ${endFormatted}</li>
         <li><strong>Duration:</strong> ${numDays} day${numDays !== 1 ? "s" : ""}</li>
-        <li><strong>Beach location:</strong> ${deliveryAddress}</li>
+        <li><strong>Setup location:</strong> ${deliveryAddress}</li>
         <li><strong>Total:</strong> $${totalPrice}</li>
       </ul>
       <p>Questions? Reply to this email.</p>

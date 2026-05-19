@@ -8,42 +8,26 @@ import Footer from "@/components/Footer";
 import PortalIcon from "@/components/brand/PortalIcon";
 import MetaPixelEvent from "@/components/MetaPixelEvent";
 import { trackInitiateCheckout } from "@/lib/metaPixel";
+import {
+  BEACH_PRODUCTS,
+  BEACH_ADDONS,
+  dailyTotalCents,
+  type BeachProduct,
+} from "@/data/beach-products";
 
 /**
  * Beach product pricing (2026-04-29 — vendor-model rebuild).
  *
+ * Catalog lives in @/data/beach-products so checkout, emails, and the
+ * vendor-blast SMS all render from the same source of truth.
+ *
  * Customer pays the total. Internally split:
  *   - vendorBaseCents: paid out to the beach vendor who claims the booking
- *     (John, Tyler, Danny — see src/data/beach-vendors.ts)
+ *     (see src/data/beach-vendors.ts)
  *   - palFeeCents: PAL's booking fee, retained on the platform side
- *
- * Customer-facing display shows the total prominently with a small note
- * about the PAL booking fee — same transparent-fee pattern as /rent's
- * reservation fee and /locals's 10% platform fee.
  */
-const PRODUCTS = [
-  {
-    value: "cabana",
-    label: "Cabana Setup",
-    description: "16×16 shade cloth, 6 chairs, and a large cooler. Setup wherever you'd like on the beach.",
-    vendorBaseCents: 27500, // $275 vendor take
-    palFeeCents: 2500, // $25 PAL booking fee
-  },
-  {
-    value: "chairs",
-    label: "Chair & Umbrella Setup",
-    description: "Two chairs and a beach umbrella. Setup wherever you'd like on the beach.",
-    vendorBaseCents: 7500, // $75 vendor take
-    palFeeCents: 1000, // $10 PAL booking fee
-  },
-];
-
-type BeachProduct = (typeof PRODUCTS)[number];
 function totalDailyPrice(p: BeachProduct): number {
-  return (p.vendorBaseCents + p.palFeeCents) / 100;
-}
-function dailyFeeUsd(p: BeachProduct): number {
-  return p.palFeeCents / 100;
+  return dailyTotalCents(p) / 100;
 }
 
 function getTodayStr() {
@@ -65,6 +49,14 @@ export default function BeachPage() {
     smsConsent: false,
   });
 
+  // Add-on selections — slug → qty. Default 0 for all (filtered out at
+  // submit time so we only send non-zero add-ons to the API).
+  const [addons, setAddons] = useState<Record<string, number>>(
+    () => Object.fromEntries(BEACH_ADDONS.map((a) => [a.value, 0])),
+  );
+  const setAddonQty = (slug: string, qty: number) =>
+    setAddons((prev) => ({ ...prev, [slug]: qty }));
+
   // Single-day setup is the default — matches Bron's pattern (a beach
   // setup is a day, not a "stay"). Multi-day is opt-in via the toggle
   // below the setup-date input.
@@ -79,7 +71,7 @@ export default function BeachPage() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const selectedProduct = PRODUCTS.find((p) => p.value === form.product)!;
+  const selectedProduct = BEACH_PRODUCTS.find((p) => p.value === form.product)!;
   const qty = parseInt(form.quantity) || 1;
 
   // INCLUSIVE day count: May 23 → May 24 is 2 days of beach service
@@ -100,9 +92,22 @@ export default function BeachPage() {
           )
         : null;
 
-  const dailyPrice = totalDailyPrice(selectedProduct);
-  const totalPrice = numDays ? numDays * qty * dailyPrice : null;
-  const totalFeeUsd = numDays ? numDays * qty * dailyFeeUsd(selectedProduct) : 0;
+  // Daily price math — base product × qty plus each add-on at its own qty.
+  // Per-day numbers are integers (cents); convert to USD only at render time.
+  const baseDailyCents = dailyTotalCents(selectedProduct) * qty;
+  const baseDailyFeeCents = selectedProduct.palFeeCents * qty;
+  const addonDailyCents = BEACH_ADDONS.reduce((sum, a) => {
+    const q = addons[a.value] || 0;
+    return q > 0 ? sum + dailyTotalCents(a) * q : sum;
+  }, 0);
+  const addonDailyFeeCents = BEACH_ADDONS.reduce((sum, a) => {
+    const q = addons[a.value] || 0;
+    return q > 0 ? sum + a.palFeeCents * q : sum;
+  }, 0);
+  const dailyTotalUsd = (baseDailyCents + addonDailyCents) / 100;
+  const dailyFeeAllUsd = (baseDailyFeeCents + addonDailyFeeCents) / 100;
+  const totalPrice = numDays ? numDays * dailyTotalUsd : null;
+  const totalFeeUsd = numDays ? numDays * dailyFeeAllUsd : 0;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -119,7 +124,7 @@ export default function BeachPage() {
       return;
     }
     if (!form.deliveryAddress.trim()) {
-      setErrorMsg("Please enter your beach delivery address or location.");
+      setErrorMsg("Please enter your setup location (e.g. Sandcastle Drive).");
       return;
     }
 
@@ -139,6 +144,13 @@ export default function BeachPage() {
       numItems: qty,
     });
 
+    // Strip 0-qty add-ons before submitting; the API only sees positive
+    // selections.
+    const submitAddons: Record<string, number> = {};
+    for (const [slug, q] of Object.entries(addons)) {
+      if (q > 0) submitAddons[slug] = q;
+    }
+
     try {
       const res = await fetch("/api/checkout/beach", {
         method: "POST",
@@ -149,6 +161,7 @@ export default function BeachPage() {
           numDays,
           totalPrice,
           qty,
+          addons: submitAddons,
           vendorBaseCentsPerDay: selectedProduct.vendorBaseCents,
           palFeeCentsPerDay: selectedProduct.palFeeCents,
         }),
@@ -266,8 +279,8 @@ export default function BeachPage() {
             <div className="bg-white rounded-2xl border border-sand-200 p-6 space-y-4">
               <h2 className="font-display text-xl font-bold text-navy-900">Choose Your Setup</h2>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {PRODUCTS.map((p) => (
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                {BEACH_PRODUCTS.map((p) => (
                   <label
                     key={p.value}
                     className={`relative flex flex-col gap-1 p-4 rounded-xl border-2 cursor-pointer transition-all ${
@@ -286,6 +299,13 @@ export default function BeachPage() {
                     />
                     <span className="font-semibold text-navy-900">{p.label}</span>
                     <span className="text-sm text-navy-500">{p.description}</span>
+                    {p.includes && p.includes.length > 0 && (
+                      <ul className="text-sm text-navy-500 list-disc pl-5 mt-1 space-y-0.5">
+                        {p.includes.map((item) => (
+                          <li key={item}>{item}</li>
+                        ))}
+                      </ul>
+                    )}
                     <span className="text-lg font-bold text-coral-500 mt-1">${totalDailyPrice(p)}<span className="text-sm font-normal text-navy-400"> / day</span></span>
                   </label>
                 ))}
@@ -307,6 +327,34 @@ export default function BeachPage() {
                     </option>
                   ))}
                 </select>
+              </div>
+            </div>
+
+            {/* Add-ons */}
+            <div className="bg-white rounded-2xl border border-sand-200 p-6 space-y-4">
+              <div>
+                <h2 className="font-display text-xl font-bold text-navy-900">Add-ons</h2>
+                <p className="text-sm text-navy-500 mt-1">Optional extras to round out your setup. $25 each per day.</p>
+              </div>
+              <div className="divide-y divide-sand-200">
+                {BEACH_ADDONS.map((a) => (
+                  <div key={a.value} className="flex items-center justify-between gap-3 py-3 first:pt-0 last:pb-0">
+                    <div>
+                      <p className="font-medium text-navy-900">{a.label}</p>
+                      <p className="text-xs text-navy-500">${dailyTotalCents(a) / 100}/day</p>
+                    </div>
+                    <select
+                      value={addons[a.value] || 0}
+                      onChange={(e) => setAddonQty(a.value, parseInt(e.target.value) || 0)}
+                      aria-label={`Quantity of ${a.label}`}
+                      className="border border-sand-300 rounded-lg px-3 py-2 text-navy-900 focus:outline-none focus:ring-2 focus:ring-coral-400"
+                    >
+                      {[0, 1, 2, 3, 4, 5].map((n) => (
+                        <option key={n} value={n}>{n}</option>
+                      ))}
+                    </select>
+                  </div>
+                ))}
               </div>
             </div>
 
@@ -368,7 +416,7 @@ export default function BeachPage() {
 
               <div>
                 <label className="block text-sm font-medium text-navy-700 mb-1">
-                  Beach Location *
+                  Setup Location *
                 </label>
                 <input
                   type="text"
@@ -376,19 +424,35 @@ export default function BeachPage() {
                   required
                   value={form.deliveryAddress}
                   onChange={handleChange}
-                  placeholder="e.g. Access Road 1A, near the blue beach house"
+                  placeholder="e.g. Sandcastle Drive or Ave G access road"
                   className="w-full border border-sand-300 rounded-lg px-3 py-2 text-navy-900 focus:outline-none focus:ring-2 focus:ring-coral-400"
                 />
               </div>
 
               {totalPrice && numDays && (
                 <div className="bg-sand-50 border border-sand-200 rounded-xl p-4">
-                  <div className="flex flex-wrap justify-between items-baseline gap-x-4 gap-y-1 text-sm text-navy-700 mb-1">
-                    <span className="text-navy-500">{qty} {selectedProduct.label}{qty > 1 ? "s" : ""} × {numDays} day{numDays !== 1 ? "s" : ""} × ${dailyPrice}</span>
-                    <span className="font-semibold whitespace-nowrap">${totalPrice} total</span>
+                  <div className="space-y-1 text-sm text-navy-700">
+                    <div className="flex justify-between items-baseline gap-x-4">
+                      <span className="text-navy-500">{qty} × {selectedProduct.label}</span>
+                      <span className="whitespace-nowrap">${(baseDailyCents / 100).toLocaleString()}/day</span>
+                    </div>
+                    {BEACH_ADDONS.map((a) => {
+                      const q = addons[a.value] || 0;
+                      if (q < 1) return null;
+                      return (
+                        <div key={a.value} className="flex justify-between items-baseline gap-x-4">
+                          <span className="text-navy-500">{q} × {a.label}</span>
+                          <span className="whitespace-nowrap">${((dailyTotalCents(a) * q) / 100).toLocaleString()}/day</span>
+                        </div>
+                      );
+                    })}
                   </div>
-                  <p className="text-[11px] text-navy-400 mt-1">
-                    Includes ${dailyFeeUsd(selectedProduct)}/day PAL booking fee (${totalFeeUsd} total). Vendor receives ${(selectedProduct.vendorBaseCents / 100)}/day.
+                  <div className="border-t border-sand-300 mt-2 pt-2 flex flex-wrap justify-between items-baseline gap-x-4 gap-y-1 text-sm">
+                    <span className="text-navy-500">${dailyTotalUsd.toLocaleString()}/day × {numDays} day{numDays !== 1 ? "s" : ""}</span>
+                    <span className="font-semibold whitespace-nowrap">${totalPrice.toLocaleString()} total</span>
+                  </div>
+                  <p className="text-[11px] text-navy-400 mt-2">
+                    Includes ${dailyFeeAllUsd.toLocaleString()}/day PAL booking fee (${totalFeeUsd.toLocaleString()} total). Vendor receives ${((totalPrice - totalFeeUsd)).toLocaleString()} total.
                   </p>
                   <p className="text-xs text-navy-400 mt-2">
                     Charged at checkout via Stripe. Vendor confirms setup details ahead of your arrival date.
