@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { listClaimsReadyForPayout } from "@/data/beach-claim-store";
 import { attemptBeachPayout } from "@/lib/beachPayouts";
 import { sendSms } from "@/lib/twilioSms";
+import { beachVendors } from "@/data/beach-vendors";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -59,7 +60,24 @@ export async function GET(req: Request) {
 
   let paidCount = 0;
   let skippedNoConnect = 0;
+  let skippedManualOnly = 0;
   for (const claim of eligible) {
+    // Out-of-band vendors (e.g. Bron's during the pre-Connect period):
+    // operator settles payouts directly. Skip the cron entirely — no
+    // Stripe transfer attempt, no contribution to skippedNoConnect, no
+    // operator nudge SMS.
+    const vendor = beachVendors.find((v) => v.slug === claim.claimedBySlug);
+    if (vendor?.manualPayoutsOnly) {
+      results.push({
+        sessionId: claim.stripeSessionId,
+        vendor: claim.claimedBySlug,
+        amountCents: claim.vendorAmountCents,
+        ok: true,
+        skipReason: "manual-payouts-only",
+      });
+      skippedManualOnly++;
+      continue;
+    }
     const r = await attemptBeachPayout(claim);
     results.push({
       sessionId: claim.stripeSessionId,
@@ -96,6 +114,7 @@ export async function GET(req: Request) {
     scanned: eligible.length,
     paid: paidCount,
     skipped_no_connect: skippedNoConnect,
+    skipped_manual_only: skippedManualOnly,
     results,
   });
 }

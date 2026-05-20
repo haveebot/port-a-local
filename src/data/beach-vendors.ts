@@ -48,6 +48,19 @@ export interface BeachVendor {
    * roster would assign team-id per crew. Omit on standalone vendors.
    */
   team?: string;
+  /**
+   * When true, payouts to this vendor are handled OUT OF BAND by the
+   * operator (not via Stripe Connect auto-transfer). The hourly beach-
+   * payouts cron skips these vendors entirely — no payout attempt is
+   * fired, no "vendor needs Stripe Connect" SMS to Winston, no entries
+   * in the cron's skippedNoConnect count.
+   *
+   * Used 2026-05-20 for Bron's vendors while the revenue-split agreement
+   * is being finalized — Winston and Bron settle payouts directly. Once
+   * the agreement signs + Stripe Connect onboards, flip back to false
+   * (or remove the field) and the cron resumes auto-payouts.
+   */
+  manualPayoutsOnly?: boolean;
 }
 
 // Beach-vendor routing — Bron's is the sole vendor for chairs + shibumi
@@ -64,6 +77,7 @@ export const beachVendors: BeachVendor[] = [
     role: "Bron's Beach — primary reservations line",
     smsCapable: true,
     team: "brons",
+    manualPayoutsOnly: true,
   },
   {
     slug: "brons-bron-cell",
@@ -73,6 +87,7 @@ export const beachVendors: BeachVendor[] = [
     role: "Bron's Beach — owner direct cell",
     smsCapable: true,
     team: "brons",
+    manualPayoutsOnly: true,
   },
   {
     slug: "brons-kristen",
@@ -82,6 +97,7 @@ export const beachVendors: BeachVendor[] = [
     role: "Bron's Beach — team operator",
     smsCapable: true,
     team: "brons",
+    manualPayoutsOnly: true,
   },
   {
     slug: "tyler",
