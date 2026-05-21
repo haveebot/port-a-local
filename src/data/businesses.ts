@@ -1470,6 +1470,21 @@ export const businesses: Business[] = [
     tags: ["boutique", "women's clothing", "children's clothing", "accessories", "beachwear", "Alister Street", "Old Town", "locally owned"],
     priceRange: "$$",
   },
+  {
+    slug: "loving-coastal-living-origins",
+    name: "Loving Coastal Living Origins",
+    category: "shop",
+    tagline: "Real seashells, vintage coral & coastal decor — Cotter Ave",
+    description: "Loving Coastal Living Origins is a Port Aransas boutique specializing in real seashells, vintage coral pieces, and coastal home decor — for collectors, crafting, and beach-inspired homes. Sister concept to the Loving Coastal Living brand.",
+    address: "165 W Cotter Ave, Port Aransas, TX 78373",
+    coordinates: [27.8379, -97.0623],
+    phone: "(361) 740-5178",
+    website: "https://lclporta.com",
+    hours: "See website",
+    featured: false,
+    tags: ["coastal decor", "seashells", "vintage coral", "home decor", "gifts", "Cotter Ave", "locally owned"],
+    priceRange: "$$",
+  },
 
   // --- SERVICES ---
   {
