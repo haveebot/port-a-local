@@ -70,40 +70,10 @@ export const VENUES: Record<string, LiveMusicVenue> = {
 };
 
 export const CURRENT_WEEK: LiveMusicWeek = {
-  weekOf: "2026-05-13",
-  sourcedFrom: "Port A Local — week of May 13, 2026",
-  sourceReceivedAt: "2026-05-13",
+  weekOf: "2026-05-20",
+  sourcedFrom: "Port A Local — week of May 20, 2026",
+  sourceReceivedAt: "2026-05-22",
   acts: [
-    // Wednesday — May 13
-    { date: "2026-05-13", venue: "vfw", artist: "The Coastal Benders" },
-
-    // Thursday — May 14
-    { date: "2026-05-14", venue: "sip-yard", artist: "B Flat Dueling Pianos" },
-    { date: "2026-05-14", venue: "salty-dog", artist: "Clark Bros", notes: "Recurring weekly Sun + Thu through Dec 27" },
-    { date: "2026-05-14", venue: "salty-dog", artist: "Karaoke", notes: "Recurring weekly Sun + Thu through Dec 27" },
-
-    // Friday — May 15
-    { date: "2026-05-15", venue: "sip-yard", artist: "Bo Luna Band" },
-    { date: "2026-05-15", venue: "brons", artist: "Dreaming in Color" },
-    { date: "2026-05-15", venue: "treasure-island", artist: "Luck Dogz" },
-    { date: "2026-05-15", venue: "shortys", artist: "Mantle Jennings" },
-    { date: "2026-05-15", venue: "roberts-point-park", artist: "Sunset Sounds Concerts In the Park" },
-
-    // Saturday — May 16
-    { date: "2026-05-16", venue: "treasure-island", artist: "Diamond's Edge" },
-    { date: "2026-05-16", venue: "roosevelts-tarpon-inn", artist: "Into the Blue Annual Gala" },
-    { date: "2026-05-16", venue: "brons", artist: "Jerry Ward & Dirty Birds" },
-    { date: "2026-05-16", venue: "sip-yard", artist: "Mario Flores & The Soda Creek Band" },
-    { date: "2026-05-16", venue: "vfw", artist: "Silver Corvette Band" },
-
-    // Sunday — May 17
-    { date: "2026-05-17", venue: "the-gaff", artist: "Brad Ethridge Open Mic" },
-    { date: "2026-05-17", venue: "shortys", artist: "Jim Dugan & Ty Dietz", notes: "Recurring weekly Sunday through May 31" },
-
-    // Tuesday — May 19
-    { date: "2026-05-19", venue: "vfw", artist: "Brad Ethridge" },
-  ],
-  upcoming: [
     // Wednesday — May 20
     { date: "2026-05-20", venue: "vfw", artist: "The Cleartones" },
 
@@ -129,6 +99,7 @@ export const CURRENT_WEEK: LiveMusicWeek = {
     // Tuesday — May 26
     { date: "2026-05-26", venue: "brons", artist: "Ty Dietz" },
   ],
+  upcoming: [],
 };
 
 export function todayInCentral(): string {
