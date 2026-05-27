@@ -1498,3 +1498,146 @@ export async function deleteCustomAudience(
     };
   }
 }
+
+export interface SearchTargetingResult {
+  ok: boolean;
+  stubbed?: boolean;
+  results?: Array<{
+    id?: string | number;
+    name?: string;
+    audience_size?: number;
+    audience_size_lower_bound?: number;
+    audience_size_upper_bound?: number;
+    type?: string;
+    path?: string[];
+    description?: string;
+    [key: string]: unknown;
+  }>;
+  error?: string;
+}
+
+/**
+ * Look up Meta Marketing API targeting options by type + query string.
+ *
+ * Dispatches internally to the right Meta endpoint based on type:
+ *   - `/search?type=X&q=Y`             — for textually searchable types:
+ *                                        adinterest, adgeolocation,
+ *                                        adlocale, adeducation*, adwork*
+ *   - `/act_X/targetingbrowse?class=X` — for browse-only categories:
+ *                                        behaviors, demographics, income,
+ *                                        interests (taxonomy node),
+ *                                        family_statuses, life_events,
+ *                                        industries
+ *
+ * Returns the raw `data` array from Meta. Caller picks IDs from name
+ * matches and assembles a `customTargeting` JSON for `createAd`.
+ *
+ * For browse types, an optional `q` filters server-returned results
+ * client-side by case-insensitive substring match against `name`
+ * (Meta's targetingbrowse endpoint does not accept a search query).
+ *
+ * Use cases:
+ *   - "Port Aransas" interest    → searchTargeting({type:"adinterest", q:"Port Aransas"})
+ *   - "Engaged shoppers"         → searchTargeting({type:"behaviors", q:"engaged shop"})
+ *   - Top-50% household income   → searchTargeting({type:"demographics", q:"household income"})
+ *   - Houston metro              → searchTargeting({type:"adgeolocation", q:"Houston"})
+ */
+export async function searchTargeting(opts: {
+  type: string;
+  q?: string;
+  limit?: number;
+}): Promise<SearchTargetingResult> {
+  const token = getToken();
+  if (!token) {
+    return { ok: false, error: "META_PAGE_ACCESS_TOKEN not set" };
+  }
+
+  const limit = Math.min(Math.max(1, opts.limit ?? 25), 100);
+  const type = opts.type.trim();
+  const q = (opts.q ?? "").trim();
+
+  // Meta's /search endpoint accepts these `type` values.
+  const SEARCH_TYPES = new Set([
+    "adinterest",
+    "adgeolocation",
+    "adlocale",
+    "adeducationmajor",
+    "adeducationschool",
+    "adworkemployer",
+    "adworkposition",
+    "adgeolocationmeta",
+  ]);
+
+  // Meta's /act_X/targetingbrowse endpoint accepts these `class` values.
+  const BROWSE_TYPES = new Set([
+    "behaviors",
+    "demographics",
+    "interests",
+    "family_statuses",
+    "life_events",
+    "industries",
+    "income",
+    "user_device",
+    "user_os",
+  ]);
+
+  try {
+    if (SEARCH_TYPES.has(type)) {
+      const url = `${GRAPH_BASE}/search?type=${encodeURIComponent(type)}&q=${encodeURIComponent(q)}&limit=${limit}&access_token=${encodeURIComponent(token)}`;
+      const res = await fetch(url);
+      const data = (await res.json()) as {
+        data?: Array<Record<string, unknown>>;
+        error?: { message?: string };
+      };
+      if (!res.ok) {
+        return {
+          ok: false,
+          error: data.error?.message ?? `HTTP ${res.status}`,
+        };
+      }
+      return {
+        ok: true,
+        results: (data.data ?? []) as SearchTargetingResult["results"],
+      };
+    }
+
+    if (BROWSE_TYPES.has(type)) {
+      const adAccount = getAdAccountId();
+      if (!adAccount) {
+        return { ok: false, error: "META_AD_ACCOUNT_ID not set" };
+      }
+      const url = `${GRAPH_BASE}/act_${adAccount}/targetingbrowse?include_headers=false&class=${encodeURIComponent(type)}&limit=${limit}&access_token=${encodeURIComponent(token)}`;
+      const res = await fetch(url);
+      const data = (await res.json()) as {
+        data?: Array<Record<string, unknown>>;
+        error?: { message?: string };
+      };
+      if (!res.ok) {
+        return {
+          ok: false,
+          error: data.error?.message ?? `HTTP ${res.status}`,
+        };
+      }
+      let results = (data.data ?? []) as SearchTargetingResult["results"];
+      // targetingbrowse doesn't accept a search query — filter client-side.
+      if (q && results) {
+        const qLower = q.toLowerCase();
+        results = results.filter(
+          (r) =>
+            typeof r.name === "string" && r.name.toLowerCase().includes(qLower),
+        );
+      }
+      return { ok: true, results };
+    }
+
+    return {
+      ok: false,
+      error: `unsupported type: "${type}" (supported: ${[...SEARCH_TYPES, ...BROWSE_TYPES].join(", ")})`,
+    };
+  } catch (err) {
+    return {
+      ok: false,
+      error: `fetch error: ${err instanceof Error ? err.message : String(err)}`,
+    };
+  }
+}
