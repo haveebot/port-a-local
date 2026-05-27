@@ -229,7 +229,7 @@ const portalItems: GullyItem[] = [
     name: "Golf Cart Rentals",
     tagline: "Reserve a cart from a vetted local company — $20 off standard rates",
     description:
-      "Pick your dates, lock in with a $10/day reservation fee. We blast your request to 20 local cart companies and the first to claim wins. Pickup or delivery — vendor's call. Guaranteed $20 off the standard rate.",
+      "Pick your dates, lock in with a $10/day reservation fee. We blast your request to 20 local cart companies and the first to claim wins. Pickup or delivery — your call. Guaranteed $20 off the standard rate.",
     tags: [
       "rent",
       "rental",

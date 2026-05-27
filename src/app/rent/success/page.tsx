@@ -79,7 +79,7 @@ function RentSuccessContent() {
           </div>
           <div className="flex items-start gap-3">
             <span className="text-coral-400 font-bold">3</span>
-            <p className="text-navy-200 text-sm">Cart logistics arrive <strong className="text-sand-50">24–48 hours before your arrival date</strong> — pickup at the shop or delivery to your door, vendor&apos;s call. Either way, easy.</p>
+            <p className="text-navy-200 text-sm">Cart logistics arrive <strong className="text-sand-50">24–48 hours before your arrival date</strong> — pickup at the shop or delivery to your door, your call. Either way, easy.</p>
           </div>
         </div>
         <a href="/" className="inline-flex items-center justify-center px-8 py-3 rounded-xl btn-coral text-sm font-semibold">
