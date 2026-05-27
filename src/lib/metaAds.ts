@@ -859,6 +859,26 @@ export interface AdConfig {
   durationHours: number;
   /** optional saved-audience ID; if unset, FALLBACK_TARGETING is used */
   audienceId?: string | null;
+  /**
+   * Optional ad-hoc Meta targeting spec — full JSON object passed straight
+   * to Marketing API's targeting field. Use when you want geo / interest /
+   * demographic / behavior layering that a saved audience doesn't cover.
+   *
+   * Wins precedence over audienceId. Caller is responsible for shape — this
+   * function does not validate against Meta's schema.
+   *
+   * Example:
+   *   {
+   *     geo_locations: { custom_locations: [{lat, lng, radius, distance_unit}] },
+   *     excluded_geo_locations: { zips: [{key: "US:78373"}] },
+   *     age_min: 28, age_max: 65,
+   *     income: [{id: "6017253486583"}],
+   *     behaviors: [{id: "6071631541183"}],
+   *     publisher_platforms: ["facebook"],
+   *     facebook_positions: ["feed"],
+   *   }
+   */
+  customTargeting?: Record<string, unknown>;
 }
 
 export interface AdResult {
@@ -923,6 +943,11 @@ export async function createAd(c: AdConfig): Promise<AdResult> {
       externalPostId: c.externalPostId,
       dailyBudgetCents: c.dailyBudgetCents,
       durationHours: c.durationHours,
+      targeting: c.customTargeting
+        ? "customTargeting"
+        : c.audienceId
+          ? `saved_audience:${c.audienceId}`
+          : "FALLBACK_TARGETING",
     });
     return {
       ok: true,
@@ -989,7 +1014,10 @@ export async function createAd(c: AdConfig): Promise<AdResult> {
   adsetBody.set("start_time", startTime.toISOString());
   adsetBody.set("end_time", endTime.toISOString());
   adsetBody.set("status", "ACTIVE");
-  if (c.audienceId) {
+  if (c.customTargeting) {
+    // Caller-provided ad-hoc targeting — wins over saved audience + fallback.
+    adsetBody.set("targeting", JSON.stringify(c.customTargeting));
+  } else if (c.audienceId) {
     adsetBody.set(
       "targeting",
       JSON.stringify({ saved_audience_id: c.audienceId }),
