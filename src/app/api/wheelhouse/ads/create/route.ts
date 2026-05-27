@@ -22,6 +22,9 @@ export const runtime = "nodejs";
  *       dailyBudgetCents: number,          // 1..AD_DAILY_BUDGET_CAP_CENTS
  *       durationDays: number,              // 1..30
  *       audienceId?: string | null,        // optional saved-audience ID
+ *       customTargeting?: object,          // optional ad-hoc Meta targeting JSON
+ *                                          //   (geo / interests / demographics /
+ *                                          //    behaviors); wins over audienceId
  *       sourcePostId?: number              // social_post_queue.id, optional —
  *                                          // helps server verify the post is
  *                                          // sent & has a real externalPostId
@@ -50,6 +53,12 @@ interface CreateAdBody {
   dailyBudgetCents?: number;
   durationDays?: number;
   audienceId?: string | null;
+  /**
+   * Optional ad-hoc Meta targeting JSON — geo / interests / demographics /
+   * behaviors layering. Wins precedence over audienceId. Shape passed
+   * straight through to Marketing API; caller is responsible for validity.
+   */
+  customTargeting?: Record<string, unknown>;
   /** Optional: social_post_queue.id so the server can re-verify the post. */
   sourcePostId?: number;
 }
@@ -162,6 +171,27 @@ export async function POST(req: NextRequest) {
       ? body.audienceId.trim()
       : null;
 
+  // Validate customTargeting shape if present — must be a plain object
+  // (not array, not primitive, not null). Trust the caller (authenticated
+  // wheelhouse client) on the inner schema; Meta will reject malformed
+  // structures at the adset-create step with a clear error.
+  let customTargeting: Record<string, unknown> | undefined;
+  if (body.customTargeting !== undefined && body.customTargeting !== null) {
+    if (
+      typeof body.customTargeting !== "object" ||
+      Array.isArray(body.customTargeting)
+    ) {
+      return NextResponse.json(
+        {
+          error: "invalid_custom_targeting",
+          detail: "customTargeting must be a plain object.",
+        },
+        { status: 400 },
+      );
+    }
+    customTargeting = body.customTargeting;
+  }
+
   // createAd handles stub-mode short-circuit internally when
   // META_AD_ACCOUNT_ID is unset — same pattern as boostPost.
   // Pass empty strings for adAccountId + pageId in stub mode; createAd
@@ -181,6 +211,7 @@ export async function POST(req: NextRequest) {
     dailyBudgetCents: Math.round(dailyBudgetCents),
     durationHours,
     audienceId,
+    customTargeting,
   });
 
   if (!result.ok) {
