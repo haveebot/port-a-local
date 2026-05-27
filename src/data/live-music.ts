@@ -61,6 +61,7 @@ export const VENUES: Record<string, LiveMusicVenue> = {
   "salty-dog": { slug: "salty-dog", name: "Salty Dog", directoryHref: "/drink/drink-salty-dog" },
   "sip-yard": { slug: "sip-yard", name: "Sip Yard" },
   "bierhaus": { slug: "bierhaus", name: "BierHaus" },
+  "reds-patio-bar": { slug: "reds-patio-bar", name: "Red's Patio Bar" },
   "beach-bums": { slug: "beach-bums", name: "Beach Bums" },
   "art-center": { slug: "art-center", name: "Port Aransas Art Center" },
   "marker-25": { slug: "marker-25", name: "Marker 25 (beach)" },
@@ -70,40 +71,10 @@ export const VENUES: Record<string, LiveMusicVenue> = {
 };
 
 export const CURRENT_WEEK: LiveMusicWeek = {
-  weekOf: "2026-05-13",
-  sourcedFrom: "Port A Local — week of May 13, 2026",
-  sourceReceivedAt: "2026-05-13",
+  weekOf: "2026-05-20",
+  sourcedFrom: "Port A Local — week of May 20, 2026",
+  sourceReceivedAt: "2026-05-22",
   acts: [
-    // Wednesday — May 13
-    { date: "2026-05-13", venue: "vfw", artist: "The Coastal Benders" },
-
-    // Thursday — May 14
-    { date: "2026-05-14", venue: "sip-yard", artist: "B Flat Dueling Pianos" },
-    { date: "2026-05-14", venue: "salty-dog", artist: "Clark Bros", notes: "Recurring weekly Sun + Thu through Dec 27" },
-    { date: "2026-05-14", venue: "salty-dog", artist: "Karaoke", notes: "Recurring weekly Sun + Thu through Dec 27" },
-
-    // Friday — May 15
-    { date: "2026-05-15", venue: "sip-yard", artist: "Bo Luna Band" },
-    { date: "2026-05-15", venue: "brons", artist: "Dreaming in Color" },
-    { date: "2026-05-15", venue: "treasure-island", artist: "Luck Dogz" },
-    { date: "2026-05-15", venue: "shortys", artist: "Mantle Jennings" },
-    { date: "2026-05-15", venue: "roberts-point-park", artist: "Sunset Sounds Concerts In the Park" },
-
-    // Saturday — May 16
-    { date: "2026-05-16", venue: "treasure-island", artist: "Diamond's Edge" },
-    { date: "2026-05-16", venue: "roosevelts-tarpon-inn", artist: "Into the Blue Annual Gala" },
-    { date: "2026-05-16", venue: "brons", artist: "Jerry Ward & Dirty Birds" },
-    { date: "2026-05-16", venue: "sip-yard", artist: "Mario Flores & The Soda Creek Band" },
-    { date: "2026-05-16", venue: "vfw", artist: "Silver Corvette Band" },
-
-    // Sunday — May 17
-    { date: "2026-05-17", venue: "the-gaff", artist: "Brad Ethridge Open Mic" },
-    { date: "2026-05-17", venue: "shortys", artist: "Jim Dugan & Ty Dietz", notes: "Recurring weekly Sunday through May 31" },
-
-    // Tuesday — May 19
-    { date: "2026-05-19", venue: "vfw", artist: "Brad Ethridge" },
-  ],
-  upcoming: [
     // Wednesday — May 20
     { date: "2026-05-20", venue: "vfw", artist: "The Cleartones" },
 
@@ -112,23 +83,41 @@ export const CURRENT_WEEK: LiveMusicWeek = {
     { date: "2026-05-21", venue: "brons", artist: "Karaoke" },
 
     // Friday — May 22
-    { date: "2026-05-22", venue: "sip-yard", artist: "Clay Hollis" },
-    { date: "2026-05-22", venue: "brons", artist: "Flying Free" },
-    { date: "2026-05-22", venue: "vfw", artist: "Lisa Sullivan" },
+    { date: "2026-05-22", venue: "reds-patio-bar", artist: "Cajun Music", time: "6 PM" },
+    { date: "2026-05-22", venue: "bierhaus", artist: "Jim Dugan", time: "6 PM" },
+    { date: "2026-05-22", venue: "the-gaff", artist: "Boudreaux & Pousson", time: "7 PM" },
+    { date: "2026-05-22", venue: "brons", artist: "Flying Free", time: "7 PM" },
+    { date: "2026-05-22", venue: "vfw", artist: "Lisa Sullivan", time: "7 PM" },
+    { date: "2026-05-22", venue: "sip-yard", artist: "Cody Bradley", time: "7:30 PM" },
+    { date: "2026-05-22", venue: "treasure-island", artist: "Cathouse", time: "9 PM" },
+    { date: "2026-05-22", venue: "sip-yard", artist: "Clay Hollis", time: "9 PM" },
+    { date: "2026-05-22", venue: "shortys", artist: "Groove Chili", time: "9 PM" },
 
     // Saturday — May 23 (Memorial Day weekend)
-    { date: "2026-05-23", venue: "treasure-island", artist: "Five Card Draw" },
-    { date: "2026-05-23", venue: "sip-yard", artist: "Larry Joe Taylor" },
-    { date: "2026-05-23", venue: "vfw", artist: "Lucky Dogz" },
-    { date: "2026-05-23", venue: "brons", artist: "Riptide" },
+    { date: "2026-05-23", venue: "salty-dog", artist: "Clark Bros", time: "3 PM" },
+    { date: "2026-05-23", venue: "bierhaus", artist: "TJ Davis", time: "7 PM" },
+    { date: "2026-05-23", venue: "the-gaff", artist: "Jim Dugan", time: "7 PM" },
+    { date: "2026-05-23", venue: "vfw", artist: "Lucky Dogz", time: "7 PM" },
+    { date: "2026-05-23", venue: "brons", artist: "Riptide", time: "7 PM" },
+    { date: "2026-05-23", venue: "sip-yard", artist: "Bo Moore", time: "7:30 PM" },
+    { date: "2026-05-23", venue: "treasure-island", artist: "Five Card Draw", time: "9 PM" },
+    { date: "2026-05-23", venue: "shortys", artist: "Groove 2.0", time: "9 PM" },
+    { date: "2026-05-23", venue: "sip-yard", artist: "Larry Joe Taylor", time: "9 PM" },
 
     // Sunday — May 24
-    { date: "2026-05-24", venue: "brons", artist: "Darren McGill" },
-    { date: "2026-05-24", venue: "sip-yard", artist: "Nick Lawrence" },
+    { date: "2026-05-24", venue: "salty-dog", artist: "Clark Bros", time: "3 PM" },
+    { date: "2026-05-24", venue: "shortys", artist: "Jim Dugan", time: "3 PM" },
+    { date: "2026-05-24", venue: "sip-yard", artist: "Brodie Lane", time: "5 PM" },
+    { date: "2026-05-24", venue: "brons", artist: "Darren McGill", time: "7 PM" },
+    { date: "2026-05-24", venue: "the-gaff", artist: "The Dunebillies", time: "7 PM" },
+    { date: "2026-05-24", venue: "shortys", artist: "Ty Dietz", time: "8 PM" },
+    { date: "2026-05-24", venue: "sip-yard", artist: "Nick Lawrence", time: "8:30 PM" },
+    { date: "2026-05-24", venue: "treasure-island", artist: "John Michael Mraz Band", time: "9 PM" },
 
     // Tuesday — May 26
     { date: "2026-05-26", venue: "brons", artist: "Ty Dietz" },
   ],
+  upcoming: [],
 };
 
 export function todayInCentral(): string {
