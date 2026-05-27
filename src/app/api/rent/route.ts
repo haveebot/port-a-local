@@ -74,7 +74,7 @@ export async function POST(req: NextRequest) {
       <p><strong>Pickup:</strong> ${pickupFormatted}</p>
       <p><strong>Return:</strong> ${returnFormatted}</p>
       <p><strong>Duration:</strong> ${numDays} day${numDays !== 1 ? "s" : ""}</p>
-      <p><strong>Handoff:</strong> Pickup or delivery — vendor's call (TBD on claim)</p>
+      <p><strong>Handoff:</strong> Pickup or delivery — customer's call (TBD on claim)</p>
       <hr style="border:none; border-top:1px solid #e4dccc; margin:16px 0;"/>
       <p style="font-size:16px;"><strong>Reservation fee to collect:</strong> $${reservationFee}</p>
     `,
@@ -84,7 +84,7 @@ export async function POST(req: NextRequest) {
     preheader: "Your golf cart reservation request is in.",
     bodyHtml: `
       <h2 style="margin:0 0 8px 0; font-size:22px; color:#0b1120;">Your cart reservation is confirmed</h2>
-      <p style="margin:0 0 16px 0; color:#4a5568; font-size:14px;">We&apos;re matching your reservation with a vetted local cart company now. You&apos;ll receive <strong>cart logistics 24–48 hours before your arrival date</strong> — pickup at the shop or delivery to your door, vendor&apos;s call.</p>
+      <p style="margin:0 0 16px 0; color:#4a5568; font-size:14px;">We&apos;re matching your reservation with a vetted local cart company now. You&apos;ll receive <strong>cart logistics 24–48 hours before your arrival date</strong> — pickup at the shop or delivery to your door, your call.</p>
       <p>Hi ${name},</p>
       <p><strong>Your reservation:</strong></p>
       <ul>
