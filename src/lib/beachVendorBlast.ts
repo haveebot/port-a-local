@@ -118,12 +118,8 @@ export function buildClaimWonSms(
 }
 
 /** SMS to the other vendors letting them know it was claimed. */
-export function buildClaimLostSms(
-  product: string,
-  qty: number,
-  winnerName: string,
-): string {
-  return `Port A Local: That ${productSmsLabel(product, qty)} booking just got claimed by ${winnerName}. Thanks for the quick eye - next one's still up for grabs.`;
+export function buildClaimLostSms(winnerName: string): string {
+  return `Port A Local: Claimed for Bron's by ${winnerName}`;
 }
 
 /** Notify everyone after a successful claim. Best-effort; doesn't throw.
@@ -160,7 +156,7 @@ export async function notifyClaimResolution(input: {
     const phone = beachVendorPhone(v);
     if (!phone) continue;
     try {
-      await sendSms(phone, buildClaimLostSms(product, qty, winner.name));
+      await sendSms(phone, buildClaimLostSms(winner.name));
     } catch (err) {
       console.error(`[beach-vendor-blast] claim-lost send failed for ${v.slug}:`, err);
     }
