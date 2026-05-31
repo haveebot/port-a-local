@@ -11,8 +11,11 @@
 # ──────────────────────────────────────────────────────────────────
 # Backend / API / data — operator review required
 # ──────────────────────────────────────────────────────────────────
-/app/api/                       @haveebot @nickbmerrill-collab
-/middleware.ts                  @haveebot @nickbmerrill-collab
+# Paths anchored with /src/ prefix to match actual repo layout
+# (Next.js src-dir mode). Pre-2026-05-31 these used /app/api/ etc.
+# which never matched any file — see handoff-2026-05-31.md for context.
+/src/app/api/                   @haveebot @nickbmerrill-collab
+/src/middleware.ts              @haveebot @nickbmerrill-collab
 /auth.ts                        @haveebot @nickbmerrill-collab
 /auth.config.ts                 @haveebot @nickbmerrill-collab
 
