@@ -57,7 +57,7 @@ export async function POST(req: NextRequest) {
   }
   if (!offer.approvedAt) {
     return NextResponse.json(
-      { error: "Listing isn't approved yet. Hold tight — Winston reviews these by hand." },
+      { error: "Listing isn't approved yet. Hold tight — our team reviews these by hand." },
       { status: 403 },
     );
   }
