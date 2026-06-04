@@ -165,7 +165,7 @@ export async function POST(req: NextRequest) {
           <li><strong>${handoff === "pickup" ? "Pickup location" : "Delivery details"}:</strong> Sent 24–48 hours before arrival</li>
         </ul>
         <p><strong>What to bring:</strong> Valid photo ID (must be 18+).</p>
-        <p><strong>Your savings:</strong> Every PAL reservation includes a guaranteed <strong>$20 discount</strong> off the rental company's standard rate.</p>
+        <p><strong>Your savings:</strong> Every PAL reservation includes a guaranteed <strong>$20/day discount</strong> off the rental company's standard rate.</p>
         <p><strong>Our guarantee:</strong> If we're unable to source a cart for your dates, your reservation fee is fully refunded.</p>
         <p>Questions? Reply to this email.</p>
         <p style="margin-top:20px;">— The Port A Local</p>
@@ -204,7 +204,7 @@ export async function POST(req: NextRequest) {
         <p style="font-size:13px; color:#4a5568;"><strong>By responding to claim this lead, you agree to:</strong></p>
         <ul style="font-size:13px; color:#4a5568; padding-left:20px;">
           <li>Have a clean, well-maintained ${cartSize}-passenger cart ready for the customer on <strong>${pickupFormatted}</strong> via <strong>${handoff === "pickup" ? "pickup at your shop" : "delivery to their address"}</strong> (the customer's choice — you are required to honor it)</li>
-          <li>Provide the customer a <strong>minimum $20 discount</strong> off your standard rental rate</li>
+          <li>Provide the customer a <strong>minimum $20/day discount</strong> off your standard rental rate</li>
           <li>Adhere to your standard rental practices — including rental agreements, ID verification, deposit handling, customer service, and emergency maintenance support for the duration of the rental</li>
         </ul>
         <p style="font-size:13px; color:#4a5568;">Port A Local handles all customer comms — we'll relay handoff logistics to you closer to the date.</p>
