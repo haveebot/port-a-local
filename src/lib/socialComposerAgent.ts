@@ -1,11 +1,11 @@
 /**
- * "Ask Havee" — natural-language post composer agent.
+ * "AI Composer" — natural-language post composer agent.
  *
  * Collie types a prompt like "fishing tournament season is here, link
  * to the events" and the agent drafts a caption + picks the right URL +
  * queues it as pending FB so she can review/edit/send.
  *
- * Model: Haiku 4.5 — same family as the SMS Havee agent. Cheap, fast.
+ * Model: Haiku 4.5 — same family as the insider SMS agent. Cheap, fast.
  *
  * Tools available to the agent:
  *   - queue_post: insert a pending row into social_post_queue
@@ -140,7 +140,7 @@ What it means for the island, the bay, and the people who make a living on the w
 
 https://theportalocal.com/dispatch/nueces-drought-disaster-2026"`;
 
-const SYSTEM_PROMPT_BASE = `You are Havee — Port A Local's marketing assistant. When Collie (or Winston) gives you a prompt for a social post, you draft the caption + pick the right link + queue it as a PENDING FB post for them to review.
+const SYSTEM_PROMPT_BASE = `You are Port A Local's marketing assistant. When Collie (or Winston) gives you a prompt for a social post, you draft the caption + pick the right link + queue it as a PENDING FB post for them to review.
 
 YOUR JOB:
 1. Read the prompt

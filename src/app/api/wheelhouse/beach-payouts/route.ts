@@ -137,7 +137,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "vendor_has_no_phone" }, { status: 400 });
     }
     const url = `${APP_URL}/beach/vendor/${body.slug}/connect`;
-    const sms = `Port A Local: Hi ${vendor.name.split(" ")[0]} - quick one-time setup so we can auto-pay you for beach setups: ${url}\n\n3-5 min via Stripe (identity + bank). Once done, your $275/cabana share lands in your account 1-2 days after each setup. - Havee`;
+    const sms = `Port A Local: Hi ${vendor.name.split(" ")[0]} - quick one-time setup so we can auto-pay you for beach setups: ${url}\n\n3-5 min via Stripe (identity + bank). Once done, your $275/cabana share lands in your account 1-2 days after each setup. — The Port A Local`;
     try {
       await sendSms(phone, sms);
       return NextResponse.json({ ok: true });

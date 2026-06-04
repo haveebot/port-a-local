@@ -73,7 +73,7 @@ export default function SocialComposerTabs() {
               : "text-navy-600 hover:text-coral-700"
           }`}
         >
-          ✨ Ask Havee
+          ✨ AI Composer
         </button>
         <button
           type="button"
