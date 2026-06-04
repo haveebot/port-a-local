@@ -7,6 +7,7 @@
  */
 
 import { sendSms } from "./twilioSms";
+import { formatCustomerDisplay } from "./superAdminPing";
 import {
   beachVendors,
   beachVendorPhone,
@@ -112,7 +113,7 @@ export function buildClaimWonSms(
   return [
     `Port A Local: ✅ CLAIM CONFIRMED`,
     `${vendor.name}, you've got it: ${productSmsLabel(product, qty)} for ${setupDateFormatted}.`,
-    `Booking name: ${customerName}`,
+    `Booking name: ${formatCustomerDisplay(customerName) ?? customerName}`,
     `Port A Local handles all customer comms — we'll send you setup details before the date. Reply here if you need anything from us.`,
   ].join("\n\n");
 }

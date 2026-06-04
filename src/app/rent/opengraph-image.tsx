@@ -11,7 +11,7 @@ export default function Image() {
     badgeIcon: "cart",
     title: "Golf Cart Rentals",
     subtitle:
-      "Book through PAL — we route your reservation to 20+ Port A cart shops. First to claim wins, $20+ discount baked in. Pickup or delivery, your call.",
+      "Book through PAL — we route your reservation to 20+ Port A cart shops. First to claim wins, $20/day discount baked in. Pickup or delivery, your call.",
     lockupVariant: "standard",
     category: "pal-carts",
   });

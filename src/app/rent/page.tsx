@@ -168,7 +168,7 @@ export default function RentPage() {
                 <h2 className="font-display text-xl font-bold text-navy-900">Golf Carts</h2>
               </div>
               <p className="text-sm text-navy-600 mb-3">
-                4, 6, or 8-passenger carts from vetted local companies. Pickup or delivery, your call. <strong>$20 off</strong> guaranteed.
+                4, 6, or 8-passenger carts from vetted local companies. Pickup or delivery, your call. <strong>$20/day off</strong> guaranteed.
               </p>
               <span className="text-sm font-medium text-coral-500 group-hover:text-coral-600">
                 Reserve a cart →
@@ -231,7 +231,7 @@ export default function RentPage() {
             </div>
             <div className="flex items-center justify-center gap-2">
               <PortalIcon name="check" className="w-4 h-4 text-coral-400 shrink-0" />
-              <span className="text-sand-200 text-sm font-medium">Guaranteed $20 Off Rental</span>
+              <span className="text-sand-200 text-sm font-medium">Guaranteed $20/day Off Rental</span>
             </div>
             <div className="flex items-center justify-center gap-2">
               <PortalIcon name="check" className="w-4 h-4 text-coral-400 shrink-0" />
@@ -347,7 +347,7 @@ export default function RentPage() {
                     <span className="font-semibold">${reservationFee}</span>
                   </div>
                   <p className="text-xs text-navy-400 mt-2">
-                    Reservation fee secures your cart. Rental balance paid directly to the cart company — with a guaranteed $20 off their standard rate.
+                    Reservation fee secures your cart. Rental balance paid directly to the cart company — with a guaranteed $20/day off their standard rate.
                   </p>
                 </div>
               )}

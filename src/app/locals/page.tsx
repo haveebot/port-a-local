@@ -225,8 +225,8 @@ export default async function LocalsPage({
                 Reserve via PAL Carts.
               </p>
               <p className="text-sm text-navy-600 font-light mt-1">
-                Vetted cart vendors, $10/day reservation fee, $20 off the
-                vendor&apos;s daily rate, pickup or delivery.
+                Vetted cart vendors, $10/day reservation fee, $20/day off
+                the vendor&apos;s rate, pickup or delivery.
               </p>
             </div>
             <Link

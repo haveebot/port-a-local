@@ -36,6 +36,7 @@ import {
   compactCartLabel,
 } from "@/lib/cartVendorSmsBlast";
 import { notifyClaimResolution } from "@/lib/beachVendorBlast";
+import { formatCustomerDisplay } from "@/lib/superAdminPing";
 import { forwardInsiderSmsToAdmin } from "@/lib/insiderSmsForward";
 import { forwardStrangerSmsToAdmin } from "@/lib/strangerSmsForward";
 import { runInsiderAgent } from "@/lib/insiderSmsAgent";
@@ -262,11 +263,11 @@ async function handleCartFirstLook(
   const confirmBody = [
     `Port A Local: ✅ ${vendor.name} claimed the ${md.cartLabel} lead`,
     `Claimed by ${acceptingContact}.`,
-    `Booking name: ${md.customerName}`,
+    `Booking name: ${formatCustomerDisplay(md.customerName) ?? md.customerName}`,
     `Pickup: ${md.pickupFormatted}`,
     `Return: ${md.returnFormatted}`,
     `Customer chose: ${handoffLabel}`,
-    `Port A Local handles all customer comms — we'll relay handoff details before the rental date. Reply here if you need anything from us.`,
+    `We'll confirm the reservation with you 24–48 hours before the trip — PAL handles all customer comms until then. Reply here if you need anything from us.`,
   ].join("\n\n");
 
   const allPhones = smsPhonesFor(vendor);
