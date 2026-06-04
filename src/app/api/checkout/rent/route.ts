@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
+import { decodeAttribution, ATTRIBUTION_COOKIE } from "@/lib/attribution";
 
 const getStripe = () => new Stripe(process.env.STRIPE_SECRET_KEY || "", {
   apiVersion: "2026-03-25.dahlia",
@@ -40,6 +41,20 @@ export async function POST(req: NextRequest) {
   const RESERVATION_FEE_CENTS_PER_DAY = 1000; // $10/day, source of truth
   const reservationFeeCents = days * RESERVATION_FEE_CENTS_PER_DAY;
 
+  // Ad attribution — same treatment as the beach flow: lift pal_attrib +
+  // _fbc/_fbp cookies + client IP into Stripe metadata so the confirm
+  // route can trace the booking and fire a deduped Conversions API event.
+  const attribCookie = decodeAttribution(req.cookies.get(ATTRIBUTION_COOKIE)?.value);
+  const attribution = {
+    ...(attribCookie ?? {}),
+    fbc: req.cookies.get("_fbc")?.value,
+    fbp: req.cookies.get("_fbp")?.value,
+    ip: req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || undefined,
+  };
+  const attributionJson = Object.values(attribution).some(Boolean)
+    ? JSON.stringify(attribution).slice(0, 500)
+    : "";
+
   try {
     const session = await getStripe().checkout.sessions.create({
       payment_method_types: ["card"],
@@ -70,6 +85,7 @@ export async function POST(req: NextRequest) {
         reservationFee: String(reservationFeeCents / 100),
         smsConsent: smsConsent ? "true" : "false",
         handoff: handoffNormalized,
+        ...(attributionJson ? { attribution: attributionJson } : {}),
       },
       success_url: `${APP_URL}/rent/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${APP_URL}/rent`,

@@ -6,6 +6,7 @@ import {
   dailyTotalCents,
   type BeachAddonSelection,
 } from "@/data/beach-products";
+import { decodeAttribution, ATTRIBUTION_COOKIE } from "@/lib/attribution";
 
 const getStripe = () => new Stripe(process.env.STRIPE_SECRET_KEY || "", {
   apiVersion: "2026-03-25.dahlia",
@@ -132,6 +133,24 @@ export async function POST(req: NextRequest) {
     });
   }
 
+  // Ad attribution — lift the first-party pal_attrib cookie + Meta's
+  // _fbc/_fbp pixel cookies off the request and fold them into Stripe
+  // metadata, so the confirm route can trace this booking back to the
+  // ad/campaign that drove it (and later send a deduped Conversions API
+  // Purchase). Best-effort — never blocks checkout, capped at Stripe's
+  // 500-char metadata value limit.
+  const attribCookie = decodeAttribution(req.cookies.get(ATTRIBUTION_COOKIE)?.value);
+  const attribution = {
+    ...(attribCookie ?? {}),
+    fbc: req.cookies.get("_fbc")?.value,
+    fbp: req.cookies.get("_fbp")?.value,
+    // Client IP for Conversions API match quality (Vercel sets x-forwarded-for).
+    ip: req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || undefined,
+  };
+  const attributionJson = Object.values(attribution).some(Boolean)
+    ? JSON.stringify(attribution).slice(0, 500)
+    : "";
+
   try {
     const session = await getStripe().checkout.sessions.create({
       payment_method_types: ["card"],
@@ -154,6 +173,7 @@ export async function POST(req: NextRequest) {
         vendor_total_cents: String(vendorTotalCents),
         pal_fee_total_cents: String(palFeeTotalCents),
         addons: JSON.stringify(addonSelection),
+        ...(attributionJson ? { attribution: attributionJson } : {}),
       },
       success_url: `${APP_URL}/beach/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${APP_URL}/beach`,

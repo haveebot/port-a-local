@@ -89,6 +89,11 @@ export async function POST(req: NextRequest) {
         : null,
       transferId: (rows[0].transfer_id as string) ?? null,
       vendorAmountCents: rows[0].vendor_amount_cents as number | null,
+      utmSource: (rows[0].utm_source as string) ?? null,
+      utmMedium: (rows[0].utm_medium as string) ?? null,
+      utmCampaign: (rows[0].utm_campaign as string) ?? null,
+      utmContent: (rows[0].utm_content as string) ?? null,
+      fbclid: (rows[0].fbclid as string) ?? null,
     };
     const result = await attemptBeachPayout(claim);
     return NextResponse.json({ ok: result.ok, result });
