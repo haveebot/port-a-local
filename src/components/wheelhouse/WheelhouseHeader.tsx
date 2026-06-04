@@ -29,6 +29,7 @@ const ALERT_LINKS = [
 ];
 
 const TOOLS_LINKS = [
+  { href: "/wheelhouse/rentals", label: "Rentals calendar" },
   { href: "/wheelhouse/marketing", label: "Marketing" },
   { href: "/wheelhouse/revenue", label: "Revenue" },
   { href: "/wheelhouse/ask-gully", label: "Ask Gully insights" },
