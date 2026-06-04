@@ -254,8 +254,8 @@ async function handleCartFirstLook(
   const acceptingContact = matchedPhone.contactName ?? "team";
   const handoffLabel =
     md.handoff === "pickup"
-      ? "PICKUP at your shop"
-      : "DELIVERY to customer's address";
+      ? "pickup at your shop"
+      : "delivery to their address";
 
   // ONE merged alert to ALL of vendor's phones. Customer phone + email are
   // intentionally NOT included (PAL stays the listed provider; PAL relays
@@ -264,9 +264,9 @@ async function handleCartFirstLook(
     `Port A Local: ✅ ${vendor.name} claimed the ${md.cartLabel} lead`,
     `Claimed by ${acceptingContact}.`,
     `Booking name: ${formatCustomerDisplay(md.customerName) ?? md.customerName}`,
-    `Pickup: ${md.pickupFormatted}`,
-    `Return: ${md.returnFormatted}`,
-    `Customer chose: ${handoffLabel}`,
+    `Date: ${md.pickupShort}`,
+    `Return: ${md.returnShort}`,
+    `Method: Customer chose ${handoffLabel}`,
     `We'll confirm the reservation with you 24–48 hours before the trip — PAL handles all customer comms until then. Reply here if you need anything from us.`,
   ].join("\n\n");
 
