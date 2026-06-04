@@ -62,7 +62,7 @@ export default function AskHavee() {
       <div className="flex items-center gap-2 mb-2">
         <span className="text-2xl">✨</span>
         <h2 className="font-display text-xl font-bold text-navy-900">
-          Ask Havee for a post
+          AI Composer — draft a post
         </h2>
       </div>
       <p className="text-xs text-navy-600 mb-3 leading-relaxed">
@@ -109,7 +109,7 @@ export default function AskHavee() {
 
       {result && result.status === "clarify" && (
         <div className="mt-4 p-3 rounded-lg bg-coral-50 border border-coral-200 text-xs text-navy-800">
-          <p className="font-bold mb-1">🤔 Havee needs a bit more:</p>
+          <p className="font-bold mb-1">🤔 Need a bit more:</p>
           <p className="leading-relaxed mb-2">{result.question}</p>
           <button
             onClick={() => {
@@ -126,7 +126,7 @@ export default function AskHavee() {
 
       {result && result.status === "declined" && (
         <div className="mt-4 p-3 rounded-lg bg-navy-50 border border-navy-200 text-xs text-navy-800">
-          <p className="font-bold mb-1">🚫 Havee declined:</p>
+          <p className="font-bold mb-1">🚫 Declined:</p>
           <p className="leading-relaxed">{result.reason}</p>
         </div>
       )}

@@ -121,7 +121,7 @@ export default function DirectPostForm() {
   return (
     <div>
       <p className="text-xs text-navy-600 mb-3 leading-relaxed">
-        Write your own caption — no Havee in the middle. Drops into the
+        Write your own caption — no AI in the middle. Drops into the
         queue below for review (or auto-fires if you set a time).
       </p>
 
