@@ -38,7 +38,7 @@ import {
  */
 export function buildOptInInviteSms(vendorName: string): string {
   return [
-    `Port A Local: Hi ${vendorName} — this is Winston with Port A Local (theportalocal.com).`,
+    `Port A Local: Hi ${vendorName} — this is the Port A Local team (theportalocal.com).`,
     `We blast cart-rental leads to local cart cos when a customer books on PAL — first to claim the lead wins.`,
     `Want to receive these by SMS in addition to email?`,
     `Reply YES to opt in, NO to keep email-only.`,

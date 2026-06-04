@@ -95,7 +95,7 @@ export async function sendVendorSaleEmail(
     ? `<div style="background:#fef3c7; border:1px solid #fcd34d; padding:12px; border-radius:8px; margin-bottom:18px;">
          <p style="margin:0; font-size:13px; color:#92400e;">
            <strong>Heads up:</strong> ${escapeHtml(listing.provider)} doesn't have an email on file yet —
-           Winston will forward this manually. Reply with their address to wire direct routing.
+           our team will forward this manually. Reply with their address to wire direct routing.
          </p>
        </div>`
     : "";
@@ -355,7 +355,7 @@ export async function sendAdminSaleEmail(
       ${
         vendorRouted
           ? "Vendor notified directly. Admin CC'd."
-          : "<strong style='color:#C84A2C;'>Vendor email missing — Winston needs to forward.</strong>"
+          : "<strong style='color:#C84A2C;'>Vendor email missing — needs manual forward.</strong>"
       }
       ${
         listing.stripeAccountId
