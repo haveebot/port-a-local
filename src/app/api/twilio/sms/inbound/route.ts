@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import {
-  cartVendors,
   smsPhonesFor,
   findVendorByPhoneE164,
+  type CartVendor,
+  type CartVendorPhone,
 } from "@/data/cart-vendors";
 import {
   recordOptIn,
@@ -19,11 +20,13 @@ import {
   findBeachVendorByPhone,
   findBeachVendorBySlug,
   beachVendorsAreTeammates,
+  type BeachVendor,
 } from "@/data/beach-vendors";
 import {
   attemptClaim,
   getClaim,
   getMostRecentUnclaimed,
+  type BeachBookingClaim,
 } from "@/data/beach-claim-store";
 import { sendSms } from "@/lib/twilioSms";
 import {
@@ -39,30 +42,27 @@ import { runInsiderAgent } from "@/lib/insiderSmsAgent";
 import { checkWatch, recordNotification } from "@/data/sms-watch-store";
 
 /**
- * Twilio inbound SMS webhook.
+ * Twilio inbound SMS webhook — one number, two SEPARATE revenue streams.
  *
- * Configured at the Messaging Service level (MG197b...) via the
- * "Inbound Settings" tab in Twilio Console — set this URL as the
- * "A message comes in" webhook. Twilio POSTs application/x-www-form-
- * urlencoded with these fields:
+ * Beach and cart rentals share PAL's single number (+13614281706) and this
+ * one webhook, and Bron's three phones are registered as BOTH beach AND
+ * cart vendors. So we must route by the INTENT of the reply, not by "which
+ * roster matched first." The old order checked the beach roster first and
+ * let its catch-all (operator ping + return) swallow cart ACCEPT/PASS from
+ * Bron's dual-registered phones — every cart claim silently died.
  *
- *   From              — sender E.164 (e.g. +13615551234)
- *   To                — PAL's number (+13614281706)
- *   Body              — raw message text
- *   MessageSid        — Twilio's ID for this inbound message
- *   MessagingServiceSid — MG197b... (our service)
+ * Dispatch (this is the separation):
+ *   ACCEPT / PASS  -> CART  (cart-only keywords)
+ *   CLAIM          -> BEACH if a beach booking is waiting; otherwise the
+ *                     pending CART first-look (CLAIM is a legacy cart alias)
+ *   YES / NO       -> CART  (SMS opt-in)
+ *   STOP           -> BOTH  (flag beach roster + cart opt-out)
+ * The beach/cart "catch-all -> operator" branches are FALLBACKS that run
+ * only after the stream handlers, so neither stream can short-circuit the
+ * other.
  *
- * What we do here:
- *   1. Match From phone against insiders / beach vendors / cart vendors.
- *   2. For cart vendors: parse Body for YES/NO/STOP/ACCEPT/PASS intent.
- *      ACCEPT/PASS only matter when the vendor has a pending first-look
- *      window (cart_rental_first_look_pending). CLAIM is accepted as a
- *      synonym for ACCEPT (backward compat).
- *   3. If NOT matched, surface to operator + admin@.
- *
- * Compliance: Twilio handles STOP at the carrier level automatically
- * (auto-blocks all outbound to that number). We mirror it in our DB
- * so we never even attempt to send to opted-out numbers.
+ * Compliance: Twilio handles STOP at the carrier level automatically; we
+ * mirror it in our DB so we never attempt to send to opted-out numbers.
  */
 
 const TWIML_OK = '<?xml version="1.0" encoding="UTF-8"?><Response/>';
@@ -87,18 +87,208 @@ type Intent =
 function classifyBody(body: string): Intent {
   const trimmed = body.trim().toLowerCase();
   if (/\b(stop|stopall|cancel|end|quit|unsubscribe|revoke|optout)\b/.test(trimmed)) return "stop";
-  // ACCEPT / CLAIM both map to "accept" intent. CLAIM kept for backward
-  // compat with vendors who learned the old keyword. ACCEPT is the new
-  // canonical (per 2026-05-09 keyword UX softening).
+  // ACCEPT / CLAIM both map to "take it". CLAIM kept for backward compat
+  // with vendors who learned the old keyword. ACCEPT is the new canonical
+  // (per 2026-05-09 keyword UX softening).
   if (/^(accept|take|takeit|i'?ll take it)\b/.test(trimmed)) return "accept";
   if (/\bclaim\b/.test(trimmed)) return "claim";
-  // PASS is the new explicit "release this lead to other vendors"
-  // keyword. Distinct from NO (which is opt-out of SMS entirely).
+  // PASS = "release this lead to other vendors". Distinct from NO (opt-out).
   if (/^(pass|skip|decline|release|no thanks|not me|cant|can'?t)\b/.test(trimmed)) return "pass";
   if (/^(yes|y|yeah|yep|sure|opt[ -]?in|ok|okay)\b/.test(trimmed)) return "yes";
   if (/^(no|nope|nah|opt[ -]?out|email[ -]?only)\b/.test(trimmed)) return "no";
   return "other";
 }
+
+/* =====================================================================
+ * BEACH STREAM handler
+ * ===================================================================== */
+
+/**
+ * Resolve a beach CLAIM against the most-recent unclaimed booking. Atomic
+ * claim, teammate race-loss suppression, winner confirm + claim-lost fan
+ * out (inside notifyClaimResolution), AND an operator alert so the
+ * operator knows a booking was grabbed (this alert was previously missing
+ * — Winston wasn't being told when Bron's claimed a beach setup).
+ */
+async function handleBeachClaim(
+  beachVendor: BeachVendor,
+  unclaimed: BeachBookingClaim,
+  fromRaw: string,
+  fromE164: string,
+): Promise<void> {
+  const won = await attemptClaim(unclaimed.stripeSessionId, beachVendor.slug);
+  if (!won) {
+    // Race-lost. If the winner is a teammate, the team was already told via
+    // notifyClaimResolution's claim-lost fan-out — suppress the redundant
+    // SMS. Cross-vendor race: name the winner so the loser knows it's gone.
+    const winningClaim = await getClaim(unclaimed.stripeSessionId);
+    const winnerSlug = winningClaim?.claimedBySlug ?? null;
+    const winnerVendor = winnerSlug ? findBeachVendorBySlug(winnerSlug) : null;
+    if (winnerVendor && beachVendorsAreTeammates(beachVendor, winnerVendor)) {
+      console.log(
+        `[twilio/inbound beach] race-lost suppressed: ${beachVendor.slug} (${fromE164}) is on same team as winner ${winnerVendor.slug}`,
+      );
+      return;
+    }
+    const winnerName = winnerVendor?.name ?? "another vendor";
+    sendSms(
+      fromRaw,
+      `Port A Local: ${beachVendor.name} - sorry, ${winnerName} already claimed that booking. Watch for the next one.`,
+    ).catch((err) =>
+      console.error("[twilio/inbound] beach lost-race reply failed:", err),
+    );
+    return;
+  }
+
+  const setupDateFormatted = unclaimed.setupDate
+    ? new Date(unclaimed.setupDate + "T00:00:00").toLocaleDateString("en-US", {
+        weekday: "short",
+        month: "short",
+        day: "numeric",
+      })
+    : "your scheduled date";
+
+  notifyClaimResolution({
+    winner: beachVendor,
+    customerName: unclaimed.customerName ?? "Customer",
+    product: unclaimed.product ?? "setup",
+    qty: unclaimed.qty ?? 1,
+    setupDateFormatted,
+  }).catch((err) =>
+    console.error("[twilio/inbound] notifyClaimResolution failed:", err),
+  );
+
+  // Operator alert — beach parity with the cart accept ping. The operator
+  // now hears when a beach booking is claimed (and by which team member).
+  const qtyLabel = unclaimed.qty && unclaimed.qty > 1 ? ` ×${unclaimed.qty}` : "";
+  sendSms(
+    OPERATOR_PHONE_E164,
+    `[beach ✅] ${beachVendor.name} claimed ${unclaimed.product ?? "setup"}${qtyLabel} — ${setupDateFormatted} — ${unclaimed.customerName ?? "customer"}`,
+  ).catch((err) =>
+    console.error("[twilio/inbound] beach claim operator ping failed:", err),
+  );
+}
+
+/* =====================================================================
+ * CART STREAM handler
+ * ===================================================================== */
+
+/**
+ * Resolve a cart ACCEPT / PASS (or legacy CLAIM) against the vendor's
+ * pending first-look window. ACCEPT confirms to the whole team + pings the
+ * operator; PASS releases the lead + fires the open-blast. No pending
+ * window -> surface to operator.
+ */
+async function handleCartFirstLook(
+  vendor: CartVendor,
+  matchedPhone: CartVendorPhone,
+  intent: "accept" | "pass" | "claim",
+  body: string,
+): Promise<void> {
+  const pending = await getMostRecentPendingForVendor(vendor.slug);
+
+  if (!pending) {
+    console.log(
+      `[twilio/inbound] ${intent.toUpperCase()} from ${vendor.slug} (${vendor.name}) — no pending first-look; routing manually`,
+    );
+    sendSms(
+      OPERATOR_PHONE_E164,
+      `[${vendor.name} → PAL] ${intent.toUpperCase()}: ${body}`.slice(0, 1500),
+    ).catch((err) =>
+      console.error("[twilio/inbound] no-pending surface failed:", err),
+    );
+    return;
+  }
+
+  if (intent === "pass") {
+    const won = await markPassed(pending.id);
+    if (!won) {
+      // Race-lost on a row fetched for THIS vendor -> a teammate already
+      // resolved it + got the team alert. Don't pile on. Silently log.
+      console.log(
+        `[twilio/inbound] pass race-lost suppressed for ${vendor.slug} (${matchedPhone.number}) — same-team resolution already announced`,
+      );
+      return;
+    }
+    const ackBody = `Port A Local: ${vendor.name} passed on the ${pending.leadMetadata.cartLabel} lead — released to the rest of the directory.`;
+    const allPhones = smsPhonesFor(vendor);
+    for (const p of allPhones) {
+      try {
+        await sendSms(p, ackBody);
+      } catch (err) {
+        console.error(`[twilio/inbound] pass ack to ${p} failed:`, err);
+      }
+      await new Promise((r) => setTimeout(r, 600));
+    }
+    sendOpenBlastSms(
+      {
+        cartLabel: compactCartLabel(pending.leadMetadata.cartLabel),
+        pickupFormatted: pending.leadMetadata.pickupShort,
+        returnFormatted: pending.leadMetadata.returnShort,
+        numDays: pending.leadMetadata.numDays,
+        handoff: pending.leadMetadata.handoff,
+      },
+      { excludeSlugs: [vendor.slug] },
+    )
+      .then((sent) =>
+        console.log(`[first-look] PASS triggered open-blast to ${sent} vendors`),
+      )
+      .catch((err) => console.error("[first-look] PASS open-blast failed:", err));
+    return;
+  }
+
+  // ACCEPT / CLAIM
+  const won = await markAccepted({
+    id: pending.id,
+    acceptedViaPhone: matchedPhone.number,
+  });
+  if (!won) {
+    console.log(
+      `[twilio/inbound] accept race-lost suppressed for ${vendor.slug} (${matchedPhone.number}) — same-team resolution already announced`,
+    );
+    return;
+  }
+
+  const md = pending.leadMetadata;
+  const acceptingContact = matchedPhone.contactName ?? "team";
+  const handoffLabel =
+    md.handoff === "pickup"
+      ? "PICKUP at your shop"
+      : "DELIVERY to customer's address";
+
+  // ONE merged alert to ALL of vendor's phones. Customer phone + email are
+  // intentionally NOT included (PAL stays the listed provider; PAL relays
+  // handoff details before the rental date).
+  const confirmBody = [
+    `Port A Local: ✅ ${vendor.name} claimed the ${md.cartLabel} lead`,
+    `Claimed by ${acceptingContact}.`,
+    `Booking name: ${md.customerName}`,
+    `Pickup: ${md.pickupFormatted}`,
+    `Return: ${md.returnFormatted}`,
+    `Customer chose: ${handoffLabel}`,
+    `Port A Local handles all customer comms — we'll relay handoff details before the rental date. Reply here if you need anything from us.`,
+  ].join("\n\n");
+
+  const allPhones = smsPhonesFor(vendor);
+  for (const p of allPhones) {
+    try {
+      await sendSms(p, confirmBody);
+    } catch (err) {
+      console.error(`[twilio/inbound] accept confirm to ${p} failed:`, err);
+    }
+    await new Promise((r) => setTimeout(r, 600));
+  }
+  sendSms(
+    OPERATOR_PHONE_E164,
+    `[first-look ✅] ${vendor.name} (${acceptingContact}) claimed ${md.cartLabel} — ${md.pickupShort} to ${md.returnShort} for ${md.customerName} — ${md.handoff}`,
+  ).catch((err) =>
+    console.error("[twilio/inbound] operator ping on accept failed:", err),
+  );
+}
+
+/* =====================================================================
+ * Webhook — thin dispatcher
+ * ===================================================================== */
 
 export async function POST(req: NextRequest) {
   try {
@@ -119,7 +309,8 @@ export async function POST(req: NextRequest) {
       `[twilio/inbound] from=${fromE164} intent=${intent} sid=${messageSid} body=${JSON.stringify(body)}`,
     );
 
-    // Insider bridge (Winston, Collie, Nick, etc.) — unchanged
+    // Insider bridge (Winston, Collie, Nick, etc.) — runs before the
+    // vendor streams since insiders aren't vendors.
     const insider = findInsider(fromE164);
     if (insider) {
       forwardInsiderSmsToAdmin(insider, body, messageSid).catch((err) =>
@@ -136,70 +327,88 @@ export async function POST(req: NextRequest) {
       return twimlResponse();
     }
 
-    // Beach vendor matcher (separate roster, unchanged)
+    // Which stream(s) does this phone belong to? A Bron's number is in both.
     const beachVendor = findBeachVendorByPhone(fromE164);
-    if (beachVendor && intent === "claim") {
-      const unclaimed = await getMostRecentUnclaimed();
-      if (!unclaimed) {
-        sendSms(
-          fromRaw,
-          `Port A Local: Thanks ${beachVendor.name} - no unclaimed beach booking right now. Next blast comes through automatically.`,
-        ).catch((err) =>
-          console.error("[twilio/inbound] beach no-lead reply failed:", err),
+    const cartMatch = findVendorByPhoneE164(fromE164, toE164);
+
+    // ---- STOP — applies to whichever stream(s) this phone belongs to ----
+    if (intent === "stop") {
+      if (beachVendor) {
+        console.log(
+          `[twilio/inbound] STOP from beach vendor ${beachVendor.slug} - flag for manual removal from beach vendor roster`,
         );
+      }
+      if (cartMatch) {
+        await recordOptOut(cartMatch.vendor.slug, {
+          inboundSid: messageSid,
+          inboundBody: body,
+        });
+      }
+      return twimlResponse();
+    }
+
+    // ---- CART STREAM: ACCEPT / PASS (cart-only keywords) ----
+    // This is the fix: these route straight to cart even when the sender is
+    // ALSO a beach vendor, so the beach catch-all can't swallow them.
+    if ((intent === "accept" || intent === "pass") && cartMatch) {
+      await handleCartFirstLook(cartMatch.vendor, cartMatch.phone, intent, body);
+      return twimlResponse();
+    }
+
+    // ---- BEACH STREAM: CLAIM ----
+    if (intent === "claim" && beachVendor) {
+      const unclaimed = await getMostRecentUnclaimed();
+      if (unclaimed) {
+        await handleBeachClaim(beachVendor, unclaimed, fromRaw, fromE164);
         return twimlResponse();
       }
-      const won = await attemptClaim(unclaimed.stripeSessionId, beachVendor.slug);
-      if (!won) {
-        // Race-lost. Look up the actual winner — if they're on the same
-        // team as the attempter, the team was already notified by the
-        // first claim resolution (notifyClaimResolution sends "claim-lost"
-        // to all teammates), so suppress the redundant race-lost SMS.
-        // Otherwise (cross-vendor race) name the winner so the attempter
-        // knows it's gone.
-        const winningClaim = await getClaim(unclaimed.stripeSessionId);
-        const winnerSlug = winningClaim?.claimedBySlug ?? null;
-        const winnerVendor = winnerSlug
-          ? findBeachVendorBySlug(winnerSlug)
-          : null;
-        if (winnerVendor && beachVendorsAreTeammates(beachVendor, winnerVendor)) {
-          console.log(
-            `[twilio/inbound beach] race-lost suppressed: ${beachVendor.slug} (${fromE164}) is on same team as winner ${winnerVendor.slug}`,
-          );
+      // No beach booking waiting. If this phone is also a cart vendor with a
+      // pending first-look, CLAIM means the cart lead (legacy alias).
+      if (cartMatch) {
+        const pending = await getMostRecentPendingForVendor(cartMatch.vendor.slug);
+        if (pending) {
+          await handleCartFirstLook(cartMatch.vendor, cartMatch.phone, "claim", body);
           return twimlResponse();
         }
-        const winnerName = winnerVendor?.name ?? "another vendor";
-        sendSms(
-          fromRaw,
-          `Port A Local: ${beachVendor.name} - sorry, ${winnerName} already claimed that booking. Watch for the next one.`,
-        ).catch((err) =>
-          console.error("[twilio/inbound] beach lost-race reply failed:", err),
-        );
-        return twimlResponse();
       }
-      notifyClaimResolution({
-        winner: beachVendor,
-        customerName: unclaimed.customerName ?? "Customer",
-        product: unclaimed.product ?? "setup",
-        qty: unclaimed.qty ?? 1,
-        setupDateFormatted: unclaimed.setupDate
-          ? new Date(unclaimed.setupDate + "T00:00:00").toLocaleDateString("en-US", {
-              weekday: "short",
-              month: "short",
-              day: "numeric",
-            })
-          : "your scheduled date",
-      }).catch((err) =>
-        console.error("[twilio/inbound] notifyClaimResolution failed:", err),
+      sendSms(
+        fromRaw,
+        `Port A Local: Thanks ${beachVendor.name} - no unclaimed beach booking right now. Next blast comes through automatically.`,
+      ).catch((err) =>
+        console.error("[twilio/inbound] beach no-lead reply failed:", err),
       );
       return twimlResponse();
     }
-    if (beachVendor && intent === "stop") {
-      console.log(
-        `[twilio/inbound] STOP from beach vendor ${beachVendor.slug} - flag for manual removal from beach vendor roster`,
+
+    // ---- CART STREAM: CLAIM from a cart-only vendor (not a beach vendor) ----
+    if (intent === "claim" && cartMatch) {
+      await handleCartFirstLook(cartMatch.vendor, cartMatch.phone, "claim", body);
+      return twimlResponse();
+    }
+
+    // ---- CART STREAM: SMS opt-in (YES / NO) ----
+    if (intent === "yes" && cartMatch) {
+      await recordOptIn(cartMatch.vendor.slug, {
+        inboundSid: messageSid,
+        inboundBody: body,
+      });
+      sendSms(cartMatch.phone.number, buildOptInConfirmSms(cartMatch.vendor.name)).catch((err) =>
+        console.error("[twilio/inbound] confirm-send failed:", err),
       );
       return twimlResponse();
     }
+    if (intent === "no" && cartMatch) {
+      await recordOptOut(cartMatch.vendor.slug, {
+        inboundSid: messageSid,
+        inboundBody: body,
+      });
+      sendSms(cartMatch.phone.number, buildOptOutAckSms(cartMatch.vendor.name)).catch((err) =>
+        console.error("[twilio/inbound] optout-ack-send failed:", err),
+      );
+      return twimlResponse();
+    }
+
+    // ---- BEACH catch-all (fallback: any other beach-vendor reply) ----
     if (beachVendor) {
       sendSms(
         OPERATOR_PHONE_E164,
@@ -210,209 +419,40 @@ export async function POST(req: NextRequest) {
       return twimlResponse();
     }
 
-    // Cart vendor matcher — checks ALL phones in the multi-phone array
-    // (not just primary). Bron's three numbers all match back to the
-    // brons-beach-carts vendor record.
-    const matched = findVendorByPhoneE164(fromE164, toE164);
-
-    if (!matched) {
-      // Stranger — surface via operator SMS + admin@ email forward (unchanged)
-      const watch = await checkWatch(fromE164).catch((err) => {
-        console.error("[twilio/inbound] checkWatch failed:", err);
-        return null;
-      });
-      const operatorBody = watch
-        ? `🔔 WATCHED [${watch.context}] ${fromE164} → PAL: ${body}`.slice(0, 1500)
-        : `[unknown ${fromE164} → PAL] ${body}`.slice(0, 1500);
-      const [operatorResult, adminResult] = await Promise.allSettled([
-        sendSms(OPERATOR_PHONE_E164, operatorBody),
-        forwardStrangerSmsToAdmin(fromE164, body, messageSid),
-      ]);
-      if (operatorResult.status === "rejected") {
-        console.error("[twilio/inbound] stranger surface to operator failed:", operatorResult.reason);
-      }
-      if (adminResult.status === "rejected") {
-        console.error("[twilio/inbound] stranger forward to admin@ failed:", adminResult.reason);
-      }
-      if (watch && operatorResult.status === "fulfilled") {
-        recordNotification(fromE164).catch((err) =>
-          console.error("[twilio/inbound] recordNotification failed:", err),
-        );
-      }
-      return twimlResponse();
-    }
-
-    const { vendor, phone: matchedPhone } = matched;
-
-    // -------- ACCEPT / PASS for first-look priority leads --------
-    //
-    // ACCEPT (or CLAIM, kept as alias): vendor is taking the lead.
-    // PASS: vendor is releasing the lead to the rest of the directory.
-    //
-    // Both require an active pending first-look row. If none, ACCEPT
-    // falls back to legacy CLAIM-routing (manual log) and PASS is
-    // logged + surfaced to operator.
-    if (intent === "accept" || intent === "claim" || intent === "pass") {
-      const pending = await getMostRecentPendingForVendor(vendor.slug);
-
-      if (!pending) {
-        // No active first-look window — log + surface
-        console.log(
-          `[twilio/inbound] ${intent.toUpperCase()} from ${vendor.slug} (${vendor.name}) — no pending first-look; routing manually`,
-        );
-        sendSms(
-          OPERATOR_PHONE_E164,
-          `[${vendor.name} → PAL] ${intent.toUpperCase()}: ${body}`.slice(0, 1500),
-        ).catch((err) =>
-          console.error("[twilio/inbound] no-pending surface failed:", err),
-        );
-        return twimlResponse();
-      }
-
-      if (intent === "pass") {
-        const won = await markPassed(pending.id);
-        if (!won) {
-          // Race-lost: the row is no longer 'pending'. Because the row was
-          // fetched via getMostRecentPendingForVendor(vendor.slug), the
-          // winning resolution belongs to THIS vendor (a teammate already
-          // accepted or passed). They've already received the team alert,
-          // so don't pile on a "lead was resolved" SMS — silently log + bail.
-          console.log(
-            `[twilio/inbound] pass race-lost suppressed for ${vendor.slug} (${matchedPhone.number}) — same-team resolution already announced`,
-          );
-          return twimlResponse();
-        }
-        // Acknowledge to all of vendor's phones (whoever passed, the
-        // others see the resolution)
-        const ackBody = `Port A Local: ${vendor.name} passed on the ${pending.leadMetadata.cartLabel} lead — released to the rest of the directory.`;
-        const allPhones = smsPhonesFor(vendor);
-        for (const p of allPhones) {
-          try {
-            await sendSms(p, ackBody);
-          } catch (err) {
-            console.error(`[twilio/inbound] pass ack to ${p} failed:`, err);
-          }
-          await new Promise((r) => setTimeout(r, 600));
-        }
-        // Fire open-blast to the rest of the directory immediately
-        sendOpenBlastSms(
-          {
-            cartLabel: compactCartLabel(pending.leadMetadata.cartLabel),
-            pickupFormatted: pending.leadMetadata.pickupShort,
-            returnFormatted: pending.leadMetadata.returnShort,
-            numDays: pending.leadMetadata.numDays,
-            handoff: pending.leadMetadata.handoff,
-          },
-          { excludeSlugs: [vendor.slug] },
-        )
-          .then((sent) =>
-            console.log(`[first-look] PASS triggered open-blast to ${sent} vendors`),
-          )
-          .catch((err) =>
-            console.error("[first-look] PASS open-blast failed:", err),
-          );
-        return twimlResponse();
-      }
-
-      // ACCEPT / CLAIM
-      const won = await markAccepted({
-        id: pending.id,
-        acceptedViaPhone: matchedPhone.number,
-      });
-      if (!won) {
-        // Race-lost: the row was fetched via getMostRecentPendingForVendor(vendor.slug),
-        // so the winner is THIS vendor — a teammate already accepted (or passed).
-        // They've already gotten the team-wide "claimed" alert; no need to send
-        // a redundant "lead resolved" SMS to a second Bron's phone. Silently
-        // log + bail. (Race-lost messaging for RIVAL vendors who try to claim
-        // a lead they were never offered is handled via the no-pending path
-        // above, which surfaces to the operator only — not to the rival vendor.)
-        console.log(
-          `[twilio/inbound] accept race-lost suppressed for ${vendor.slug} (${matchedPhone.number}) — same-team resolution already announced`,
-        );
-        return twimlResponse();
-      }
-
-      const md = pending.leadMetadata;
-      const acceptingContact = matchedPhone.contactName ?? "team";
-      const handoffLabel =
-        md.handoff === "pickup"
-          ? "PICKUP at your shop"
-          : "DELIVERY to customer's address";
-
-      // ONE merged alert to ALL of vendor's phones. Contains exactly what the
-      // vendor needs to fulfill the rental: cart, dates, customer NAME,
-      // handoff choice. Customer phone + email are intentionally NOT included
-      // (PAL stays the listed provider; PAL relays handoff details before the
-      // rental date). Replaces the prior two-message flow (team-confirm +
-      // customer-info-to-accepter) per Winston spec 2026-05-13.
-      const confirmBody = [
-        `Port A Local: ✅ ${vendor.name} claimed the ${md.cartLabel} lead`,
-        `Claimed by ${acceptingContact}.`,
-        `Booking name: ${md.customerName}`,
-        `Pickup: ${md.pickupFormatted}`,
-        `Return: ${md.returnFormatted}`,
-        `Customer chose: ${handoffLabel}`,
-        `Port A Local handles all customer comms — we'll relay handoff details before the rental date. Reply here if you need anything from us.`,
-      ].join("\n\n");
-
-      const allPhones = smsPhonesFor(vendor);
-      for (const p of allPhones) {
-        try {
-          await sendSms(p, confirmBody);
-        } catch (err) {
-          console.error(`[twilio/inbound] accept confirm to ${p} failed:`, err);
-        }
-        await new Promise((r) => setTimeout(r, 600));
-      }
-      // Operator ping — let Winston know who claimed
+    // ---- CART catch-all (fallback: any other cart-vendor reply) ----
+    if (cartMatch) {
       sendSms(
         OPERATOR_PHONE_E164,
-        `[first-look ✅] ${vendor.name} (${acceptingContact}) claimed ${md.cartLabel} — ${md.pickupShort} to ${md.returnShort} for ${md.customerName} — ${md.handoff}`,
+        `[${cartMatch.vendor.name} (${cartMatch.phone.label ?? "phone"}) → PAL] ${body}`.slice(0, 1500),
       ).catch((err) =>
-        console.error("[twilio/inbound] operator ping on accept failed:", err),
+        console.error("[twilio/inbound] cart-vendor surface to operator failed:", err),
       );
       return twimlResponse();
     }
 
-    // -------- Existing opt-in flow (YES / NO / STOP) --------
-    if (intent === "yes") {
-      await recordOptIn(vendor.slug, {
-        inboundSid: messageSid,
-        inboundBody: body,
-      });
-      sendSms(matchedPhone.number, buildOptInConfirmSms(vendor.name)).catch((err) =>
-        console.error("[twilio/inbound] confirm-send failed:", err),
+    // ---- STRANGER — unknown number: surface to operator + admin@ ----
+    const watch = await checkWatch(fromE164).catch((err) => {
+      console.error("[twilio/inbound] checkWatch failed:", err);
+      return null;
+    });
+    const operatorBody = watch
+      ? `🔔 WATCHED [${watch.context}] ${fromE164} → PAL: ${body}`.slice(0, 1500)
+      : `[unknown ${fromE164} → PAL] ${body}`.slice(0, 1500);
+    const [operatorResult, adminResult] = await Promise.allSettled([
+      sendSms(OPERATOR_PHONE_E164, operatorBody),
+      forwardStrangerSmsToAdmin(fromE164, body, messageSid),
+    ]);
+    if (operatorResult.status === "rejected") {
+      console.error("[twilio/inbound] stranger surface to operator failed:", operatorResult.reason);
+    }
+    if (adminResult.status === "rejected") {
+      console.error("[twilio/inbound] stranger forward to admin@ failed:", adminResult.reason);
+    }
+    if (watch && operatorResult.status === "fulfilled") {
+      recordNotification(fromE164).catch((err) =>
+        console.error("[twilio/inbound] recordNotification failed:", err),
       );
-      return twimlResponse();
     }
-
-    if (intent === "no") {
-      await recordOptOut(vendor.slug, {
-        inboundSid: messageSid,
-        inboundBody: body,
-      });
-      sendSms(matchedPhone.number, buildOptOutAckSms(vendor.name)).catch((err) =>
-        console.error("[twilio/inbound] optout-ack-send failed:", err),
-      );
-      return twimlResponse();
-    }
-
-    if (intent === "stop") {
-      await recordOptOut(vendor.slug, {
-        inboundSid: messageSid,
-        inboundBody: body,
-      });
-      return twimlResponse();
-    }
-
-    // Other / unparseable from a cart vendor — push to operator
-    sendSms(
-      OPERATOR_PHONE_E164,
-      `[${vendor.name} (${matchedPhone.label ?? "phone"}) → PAL] ${body}`.slice(0, 1500),
-    ).catch((err) =>
-      console.error("[twilio/inbound] cart-vendor surface to operator failed:", err),
-    );
     return twimlResponse();
   } catch (err) {
     console.error("[twilio/inbound] unhandled:", err);

@@ -64,10 +64,21 @@ export interface CartVendor {
    * minutes when a matching lead arrives. During the window only this
    * vendor's phones/emails receive the alert. At expiry (or on PASS reply)
    * the rest of the directory is blasted. Multiple priority vendors with
-   * matching `cartSizes` get parallel windows. Undefined or 0 = standard
-   * simultaneous blast (the default for most vendors).
+   * matching first-look sizes get parallel windows. Undefined or 0 =
+   * standard simultaneous blast (the default for most vendors).
    */
   firstLookMinutes?: number;
+
+  /**
+   * The cart sizes this vendor gets the first-look HEAD-START on — which
+   * can be narrower than what they rent (`cartSizes`). Lets us route
+   * first-look by size: Bron's owns 4/6, Joy owns 8, even though both
+   * rent multiple sizes and both still receive open-blasts for everything
+   * in their `cartSizes`. Undefined falls back to `cartSizes` (vendor gets
+   * first-look on every size they rent). Only meaningful when
+   * `firstLookMinutes > 0`.
+   */
+  firstLookSizes?: string[];
 }
 
 export const cartVendors: CartVendor[] = [
@@ -241,9 +252,23 @@ export const cartVendors: CartVendor[] = [
     slug: "joy-cart-rentals",
     name: "Joy Cart Rentals",
     address: "307 Sea Isle Dr, Port Aransas, TX",
-    cartSizes: ["4", "6"],
+    cartSizes: ["4", "6", "8"],
     active: true,
-    phones: [{ number: "(361) 749-2278", label: "primary" }],
+    // 8-seater first-look owner (confirmed they rent 8s). Bron's keeps 4/6;
+    // Joy still receives open-blasts on 4/6 they rent, just not the
+    // head-start there.
+    firstLookMinutes: 30,
+    firstLookSizes: ["8"],
+    phones: [
+      // Shop line — not used for SMS (text the manager's cell instead).
+      { number: "(361) 749-2278", label: "primary", smsCapable: false },
+      {
+        number: "(361) 332-6532",
+        label: "team",
+        contactName: "Vivian Frank",
+        smsCapable: true,
+      },
+    ],
     emails: [{ address: "info@joycartrentals.com", label: "primary" }],
   },
   {
@@ -465,13 +490,18 @@ export function getBlastCount(): number {
  * ignored.
  */
 export function getFirstLookVendorsForSize(
-  _cartSize: string,
+  cartSize: string,
 ): CartVendor[] {
   return cartVendors.filter(
     (v) =>
       v.active &&
       typeof v.firstLookMinutes === "number" &&
-      v.firstLookMinutes > 0,
+      v.firstLookMinutes > 0 &&
+      // First-look is awarded per SIZE. firstLookSizes (when set) narrows
+      // the head-start to specific sizes; otherwise it covers everything
+      // the vendor rents. This is what keeps an 8-seater lead from going to
+      // a 4/6-only first-look vendor (the bug this replaces ignored size).
+      (v.firstLookSizes ?? v.cartSizes).includes(cartSize),
   );
 }
 
