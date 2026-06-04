@@ -15,6 +15,7 @@ import {
   markAccepted,
   markPassed,
 } from "@/data/cart-rental-first-look-store";
+import { assignCartVendor } from "@/data/cart-booking-store";
 import { findInsider } from "@/data/insiders";
 import {
   findBeachVendorByPhone,
@@ -249,6 +250,12 @@ async function handleCartFirstLook(
     );
     return;
   }
+
+  // Record the vendor on the durable booking row (the rentals calendar's
+  // source of truth). lead_id is the Stripe session id. Fail-soft.
+  assignCartVendor(pending.leadId, vendor.slug).catch((err) =>
+    console.error("[twilio/inbound] assignCartVendor failed:", err),
+  );
 
   const md = pending.leadMetadata;
   const acceptingContact = matchedPhone.contactName ?? "team";

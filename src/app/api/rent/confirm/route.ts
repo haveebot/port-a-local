@@ -14,6 +14,7 @@ import {
   compactCartLabel,
 } from "@/lib/cartVendorSmsBlast";
 import { startFirstLookWindow } from "@/data/cart-rental-first-look-store";
+import { recordCartBooking } from "@/data/cart-booking-store";
 import { sendPurchaseEvent } from "@/lib/metaConversions";
 import { pingSuperAdmins, formatCustomerDisplay } from "@/lib/superAdminPing";
 
@@ -306,6 +307,28 @@ export async function POST(req: NextRequest) {
       sendEmail(INTERNAL_RECIPIENTS, `✅ Golf Cart PAID — ${name} — ${pickupDate} to ${returnDate}`, internalHtml),
       sendEmail(email, "Your Golf Cart is Reserved — Port A Local", customerHtml),
       sendConsumerSms(phone, customerSMS, smsConsent),
+      // Durable cart booking record — the source of truth for the rentals
+      // calendar + vendor updates. Vendor gets assigned on ACCEPT (inbound
+      // webhook) or manual reassign. Idempotent on session id; fail-soft.
+      recordCartBooking({
+        stripeSessionId: session.id,
+        customerName: name,
+        customerPhone: phone,
+        customerEmail: email,
+        cartSize,
+        pickupDate,
+        returnDate,
+        numDays: days,
+        handoff,
+        reservationFeeCents: Math.round((Number(reservationFee) || fee) * 100),
+        utmSource: attribution.utm_source,
+        utmMedium: attribution.utm_medium,
+        utmCampaign: attribution.utm_campaign,
+        utmContent: attribution.utm_content,
+        fbclid: attribution.fbclid,
+      }).catch((err) =>
+        console.error("[Rent/Confirm] recordCartBooking failed:", err),
+      ),
       // Server-side Conversions API Purchase — value is the reservation
       // fee actually transacted via Stripe. Deduped against the client
       // pixel by event_id = session.id. Fail-soft.
