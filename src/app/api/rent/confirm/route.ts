@@ -14,6 +14,7 @@ import {
   compactCartLabel,
 } from "@/lib/cartVendorSmsBlast";
 import { startFirstLookWindow } from "@/data/cart-rental-first-look-store";
+import { sendPurchaseEvent } from "@/lib/metaConversions";
 import { pingSuperAdmins, formatCustomerDisplay } from "@/lib/superAdminPing";
 
 const getStripe = () => new Stripe(process.env.STRIPE_SECRET_KEY || "", {
@@ -76,6 +77,16 @@ export async function POST(req: NextRequest) {
 
     const m = session.metadata || {};
     const { name, phone, email, cartSize, pickupDate, returnDate, numDays, reservationFee, smsConsent } = m;
+
+    // Ad attribution captured at checkout (pal_attrib + _fbc/_fbp/ip →
+    // Stripe metadata). Used here to fire the deduped Conversions API
+    // Purchase. Best-effort parse.
+    let attribution: Record<string, string | undefined> = {};
+    try {
+      if (m.attribution) attribution = JSON.parse(m.attribution);
+    } catch {
+      /* ignore malformed attribution blob */
+    }
     // Customer's pickup/delivery choice — vendor is required to honor it.
     // Default to "delivery" for any pre-existing sessions without the field.
     const handoff: "delivery" | "pickup" =
@@ -295,6 +306,25 @@ export async function POST(req: NextRequest) {
       sendEmail(INTERNAL_RECIPIENTS, `✅ Golf Cart PAID — ${name} — ${pickupDate} to ${returnDate}`, internalHtml),
       sendEmail(email, "Your Golf Cart is Reserved — Port A Local", customerHtml),
       sendConsumerSms(phone, customerSMS, smsConsent),
+      // Server-side Conversions API Purchase — value is the reservation
+      // fee actually transacted via Stripe. Deduped against the client
+      // pixel by event_id = session.id. Fail-soft.
+      sendPurchaseEvent({
+        eventId: session.id,
+        value: Number(reservationFee) || fee,
+        email,
+        phone,
+        fbc: attribution.fbc,
+        fbp: attribution.fbp,
+        clientIp: attribution.ip,
+        eventSourceUrl: `${process.env.NEXT_PUBLIC_APP_URL || "https://theportalocal.com"}/rent`,
+      }).then((r) => {
+        if (r.ok) {
+          console.log(`[Rent/CAPI] Purchase sent — event_id ${session.id}, received ${r.eventsReceived}`);
+        } else if (!r.skipped) {
+          console.error(`[Rent/CAPI] Purchase failed — ${r.error}`);
+        }
+      }),
       ...smsPromises,
       pingSuperAdmins({
         kind: "cart-rental",

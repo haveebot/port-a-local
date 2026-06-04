@@ -35,6 +35,14 @@ async function ensureSchema(): Promise<void> {
   await sql`ALTER TABLE beach_booking_claims ADD COLUMN IF NOT EXISTS paid_out_at TIMESTAMPTZ`;
   await sql`ALTER TABLE beach_booking_claims ADD COLUMN IF NOT EXISTS transfer_id TEXT`;
   await sql`ALTER TABLE beach_booking_claims ADD COLUMN IF NOT EXISTS vendor_amount_cents INTEGER`;
+  // Ad attribution columns (added 2026-06-04) — populated from the
+  // pal_attrib cookie threaded through Stripe metadata, so every booking
+  // carries the campaign that drove it (cost-per-booking reporting).
+  await sql`ALTER TABLE beach_booking_claims ADD COLUMN IF NOT EXISTS utm_source TEXT`;
+  await sql`ALTER TABLE beach_booking_claims ADD COLUMN IF NOT EXISTS utm_medium TEXT`;
+  await sql`ALTER TABLE beach_booking_claims ADD COLUMN IF NOT EXISTS utm_campaign TEXT`;
+  await sql`ALTER TABLE beach_booking_claims ADD COLUMN IF NOT EXISTS utm_content TEXT`;
+  await sql`ALTER TABLE beach_booking_claims ADD COLUMN IF NOT EXISTS fbclid TEXT`;
   _schemaReady = true;
 }
 
@@ -53,6 +61,11 @@ export interface BeachBookingClaim {
   paidOutAt: string | null;
   transferId: string | null;
   vendorAmountCents: number | null;
+  utmSource: string | null;
+  utmMedium: string | null;
+  utmCampaign: string | null;
+  utmContent: string | null;
+  fbclid: string | null;
 }
 
 function rowToRec(row: Record<string, unknown>): BeachBookingClaim {
@@ -75,6 +88,11 @@ function rowToRec(row: Record<string, unknown>): BeachBookingClaim {
       : null,
     transferId: (row.transfer_id as string) ?? null,
     vendorAmountCents: row.vendor_amount_cents as number | null,
+    utmSource: (row.utm_source as string) ?? null,
+    utmMedium: (row.utm_medium as string) ?? null,
+    utmCampaign: (row.utm_campaign as string) ?? null,
+    utmContent: (row.utm_content as string) ?? null,
+    fbclid: (row.fbclid as string) ?? null,
   };
 }
 
@@ -87,6 +105,11 @@ export interface RecordBlastInput {
   setupDate?: string;
   numDays?: number;
   vendorAmountCents?: number;
+  utmSource?: string;
+  utmMedium?: string;
+  utmCampaign?: string;
+  utmContent?: string;
+  fbclid?: string;
 }
 
 /**
@@ -98,7 +121,8 @@ export async function recordBlast(input: RecordBlastInput): Promise<void> {
   await sql`
     INSERT INTO beach_booking_claims (
       stripe_session_id, customer_phone, customer_name, product, qty,
-      setup_date, num_days, vendor_amount_cents
+      setup_date, num_days, vendor_amount_cents,
+      utm_source, utm_medium, utm_campaign, utm_content, fbclid
     ) VALUES (
       ${input.stripeSessionId},
       ${input.customerPhone ?? null},
@@ -107,7 +131,12 @@ export async function recordBlast(input: RecordBlastInput): Promise<void> {
       ${input.qty ?? null},
       ${input.setupDate ?? null},
       ${input.numDays ?? null},
-      ${input.vendorAmountCents ?? null}
+      ${input.vendorAmountCents ?? null},
+      ${input.utmSource ?? null},
+      ${input.utmMedium ?? null},
+      ${input.utmCampaign ?? null},
+      ${input.utmContent ?? null},
+      ${input.fbclid ?? null}
     )
     ON CONFLICT (stripe_session_id) DO NOTHING
   `;
@@ -237,6 +266,51 @@ export async function getClaim(
     return rows[0] ? rowToRec(rows[0]) : null;
   } catch {
     return null;
+  }
+}
+
+export interface BookingsBySourceRow {
+  utmSource: string | null;
+  utmCampaign: string | null;
+  bookings: number;
+  vendorRevenueCents: number;
+}
+
+/**
+ * Bookings grouped by ad source/campaign over the last `sinceDays`. The
+ * ground-truth conversion side of cost-per-booking: pair `bookings`
+ * against per-campaign ad spend (from /api/wheelhouse/ads/list) to see
+ * what each campaign actually costs to produce a paid setup.
+ *
+ * Rows with null utm_source/utm_campaign are organic/direct or pre-date
+ * attribution capture — surfaced as their own bucket, not dropped.
+ */
+export async function getBookingsBySource(
+  sinceDays = 30,
+): Promise<BookingsBySourceRow[]> {
+  const days = Math.max(1, Math.floor(sinceDays));
+  try {
+    await ensureSchema();
+    const { rows } = await sql`
+      SELECT
+        utm_source,
+        utm_campaign,
+        COUNT(*)::int AS bookings,
+        COALESCE(SUM(vendor_amount_cents), 0)::int AS vendor_revenue_cents
+      FROM beach_booking_claims
+      WHERE blasted_at > NOW() - make_interval(days => ${days})
+      GROUP BY utm_source, utm_campaign
+      ORDER BY bookings DESC
+    `;
+    return rows.map((r) => ({
+      utmSource: (r.utm_source as string) ?? null,
+      utmCampaign: (r.utm_campaign as string) ?? null,
+      bookings: r.bookings as number,
+      vendorRevenueCents: r.vendor_revenue_cents as number,
+    }));
+  } catch (err) {
+    console.error("[beach-claim-store] getBookingsBySource failed:", err);
+    return [];
   }
 }
 

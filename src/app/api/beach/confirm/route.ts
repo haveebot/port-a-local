@@ -4,6 +4,7 @@ import { emailLayout } from "@/lib/emailLayout";
 import { sendConsumerSms } from "@/lib/twilioSms";
 import { sendBeachLeadBlast } from "@/lib/beachVendorBlast";
 import { recordBlast } from "@/data/beach-claim-store";
+import { sendPurchaseEvent } from "@/lib/metaConversions";
 import { pingSuperAdmins, formatCustomerDisplay } from "@/lib/superAdminPing";
 import {
   getBeachProductLabel,
@@ -93,6 +94,17 @@ export async function POST(req: NextRequest) {
 
     const m = session.metadata || {};
     const { name, phone, email, product, quantity, pickupDate, returnDate, deliveryAddress, numDays, totalPrice, smsConsent } = m;
+
+    // Ad attribution captured at checkout (pal_attrib cookie → Stripe
+    // metadata). Parsed best-effort; absent/malformed just means the
+    // booking has no traceable campaign (organic/direct).
+    let attribution: Record<string, string | undefined> = {};
+    try {
+      if (m.attribution) attribution = JSON.parse(m.attribution);
+    } catch {
+      /* ignore malformed attribution blob */
+    }
+
     const vendorTotalCents = parseInt(m.vendor_total_cents || "0") || 0;
     const palFeeTotalCents = parseInt(m.pal_fee_total_cents || "0") || 0;
     const vendorTotalUsd = vendorTotalCents > 0 ? `$${(vendorTotalCents / 100).toFixed(2)}` : "(not split)";
@@ -180,6 +192,25 @@ export async function POST(req: NextRequest) {
       sendEmail(INTERNAL_RECIPIENTS, `✅ Beach Rental PAID — ${name} — ${pickupDate} to ${returnDate}`, internalHtml),
       sendEmail(email, "Your Beach Setup is Booked — Port A Local", customerHtml),
       sendConsumerSms(phone, customerSMS, smsConsent),
+      // Server-side Conversions API Purchase — deduped against the client
+      // pixel via event_id = session.id. Fire-and-forget; fail-soft so a
+      // CAPI hiccup never affects the booking confirmation.
+      sendPurchaseEvent({
+        eventId: session.id,
+        value: Number(totalPrice) || total,
+        email,
+        phone,
+        fbc: attribution.fbc,
+        fbp: attribution.fbp,
+        clientIp: attribution.ip,
+        eventSourceUrl: `${process.env.NEXT_PUBLIC_APP_URL || "https://theportalocal.com"}/beach`,
+      }).then((r) => {
+        if (r.ok) {
+          console.log(`[Beach/CAPI] Purchase sent — event_id ${session.id}, received ${r.eventsReceived}`);
+        } else if (!r.skipped) {
+          console.error(`[Beach/CAPI] Purchase failed — ${r.error}`);
+        }
+      }),
       pingSuperAdmins({
         kind: "beach-rental",
         amountCents: total * 100,
@@ -201,6 +232,11 @@ export async function POST(req: NextRequest) {
             setupDate: pickupDate,
             numDays: days,
             vendorAmountCents: vendorTotalCents,
+            utmSource: attribution.utm_source,
+            utmMedium: attribution.utm_medium,
+            utmCampaign: attribution.utm_campaign,
+            utmContent: attribution.utm_content,
+            fbclid: attribution.fbclid,
           });
           const sent = await sendBeachLeadBlast({
             product,

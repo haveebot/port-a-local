@@ -15,8 +15,18 @@
 
 type FbqArgs =
   | [event: "init", pixelId: string]
-  | [event: "track", eventName: string, params?: Record<string, unknown>]
-  | [event: "trackCustom", eventName: string, params?: Record<string, unknown>];
+  | [
+      event: "track",
+      eventName: string,
+      params?: Record<string, unknown>,
+      options?: { eventID?: string },
+    ]
+  | [
+      event: "trackCustom",
+      eventName: string,
+      params?: Record<string, unknown>,
+      options?: { eventID?: string },
+    ];
 
 declare global {
   interface Window {
@@ -47,10 +57,19 @@ export type MetaStandardEvent =
 export function trackEvent(
   event: MetaStandardEvent,
   params?: Record<string, unknown>,
+  options?: { eventID?: string },
 ): void {
   if (!pixelEnabled()) return;
   try {
-    window.fbq!("track", event, params);
+    // Pass eventID (4th fbq arg) when supplied so Meta can dedupe this
+    // browser event against the matching server-side Conversions API
+    // event that shares the same event_id. Without an eventID we keep
+    // the 3-arg call to avoid sending an empty options object.
+    if (options?.eventID) {
+      window.fbq!("track", event, params, options);
+    } else {
+      window.fbq!("track", event, params);
+    }
   } catch (err) {
     console.error(`[meta-pixel] trackEvent(${event}) threw:`, err);
   }
@@ -110,14 +129,20 @@ export function trackPurchase(params: {
   contentIds?: string[];
   orderId?: string;
 }): void {
-  trackEvent("Purchase", {
-    content_name: params.contentName,
-    content_category: params.contentCategory,
-    content_ids: params.contentIds,
-    value: params.value,
-    currency: "USD",
-    order_id: params.orderId,
-  });
+  trackEvent(
+    "Purchase",
+    {
+      content_name: params.contentName,
+      content_category: params.contentCategory,
+      content_ids: params.contentIds,
+      value: params.value,
+      currency: "USD",
+      order_id: params.orderId,
+    },
+    // eventID = the Stripe session id (same key the server Conversions
+    // API Purchase uses) so the two events dedupe to one conversion.
+    params.orderId ? { eventID: params.orderId } : undefined,
+  );
 }
 
 /**

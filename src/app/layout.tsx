@@ -7,6 +7,7 @@ import EmergencyBanner from "@/components/EmergencyBanner";
 import PalBannerHeightSync from "@/components/PalBannerHeightSync";
 import VisitorHeartbeat from "@/components/VisitorHeartbeat";
 import AnalyticsWrapper from "@/components/AnalyticsWrapper";
+import AttributionCapture from "@/components/AttributionCapture";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { getActiveAlert } from "@/data/alerts-store";
 
@@ -144,6 +145,7 @@ export default async function RootLayout({
         {activeAlert && <PalBannerHeightSync />}
         {children}
         <GullyPalette />
+        <AttributionCapture />
         <VisitorHeartbeat />
         <AnalyticsWrapper />
         <SpeedInsights />
