@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { CATEGORIES, type LocalsCategory } from "@/data/locals-types";
 import { mirrorLocalsInquiryToWheelhouse } from "@/lib/localsDispatch";
+import { sendPalEmail } from "@/lib/palEmail";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -81,21 +82,14 @@ export async function POST(req: NextRequest) {
 
   if (apiKey) {
     try {
-      await fetch("https://api.resend.com/emails", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+      await sendPalEmail({
           from: "PAL Locals <bookings@theportalocal.com>",
           to: ["admin@theportalocal.com", "hello@theportalocal.com"],
-          reply_to: body.email,
+          replyTo: body.email,
           subject,
           html,
           text,
-        }),
-      });
+        });
     } catch (err) {
       console.error("[locals inquiry] email failed:", err);
     }

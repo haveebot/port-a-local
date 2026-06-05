@@ -5,6 +5,7 @@ import {
 } from "@/data/locals-store";
 import { signLocalsToken, verifyLocalsToken } from "@/lib/locals-hmac";
 import { magicLinkQrDataUrl, qrEmailBlock } from "@/lib/qrEmail";
+import { sendPalEmail } from "@/lib/palEmail";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -188,21 +189,14 @@ async function sendOfferApprovedEmail(i: ApprovedEmailInput): Promise<void> {
       : ``) +
     `Questions? Reply or email hello@theportalocal.com.\n\n— The Port A Local`;
   try {
-    await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey.trim()}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
+    await sendPalEmail({
         from: "PAL Locals <bookings@theportalocal.com>",
         to: [i.email],
-        reply_to: "hello@theportalocal.com",
+        replyTo: "hello@theportalocal.com",
         subject,
         html,
         text,
-      }),
-    });
+      });
   } catch (err) {
     console.error("[locals offer approve] email failed:", err);
   }

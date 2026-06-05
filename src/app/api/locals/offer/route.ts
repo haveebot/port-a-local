@@ -7,6 +7,7 @@ import {
 import { mirrorLocalsInquiryToWheelhouse } from "@/lib/localsDispatch";
 import { createLocalsOffer } from "@/data/locals-store";
 import { signLocalsToken } from "@/lib/locals-hmac";
+import { sendPalEmail } from "@/lib/palEmail";
 
 const APP_URL =
   process.env.NEXT_PUBLIC_APP_URL ?? "https://theportalocal.com";
@@ -247,21 +248,14 @@ export async function POST(req: NextRequest) {
 
   if (apiKey) {
     try {
-      await fetch("https://api.resend.com/emails", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+      await sendPalEmail({
           from: "PAL Locals <bookings@theportalocal.com>",
           to: ["admin@theportalocal.com", "hello@theportalocal.com"],
-          reply_to: body.email,
+          replyTo: body.email,
           subject,
           html,
           text,
-        }),
-      });
+        });
     } catch (err) {
       console.error("[locals offer] email failed:", err);
     }
@@ -351,21 +345,14 @@ async function sendApplicantReceivedEmail(
     `Quality over volume — PAL Locals stays small on purpose. Hang tight.\n\n` +
     `Questions? Reply to this email.\n\n— The Port A Local`;
   try {
-    await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey.trim()}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
+    await sendPalEmail({
         from: "PAL Locals <bookings@theportalocal.com>",
         to: [i.email],
-        reply_to: "hello@theportalocal.com",
+        replyTo: "hello@theportalocal.com",
         subject,
         html,
         text,
-      }),
-    });
+      });
   } catch (err) {
     console.error("[locals offer applicant email] failed:", err);
   }

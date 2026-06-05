@@ -3,6 +3,7 @@ import crypto from "crypto";
 import { approveDriver, getDriverById } from "@/data/delivery-store";
 import { magicLinkQrDataUrl, qrEmailBlock } from "@/lib/qrEmail";
 import { sendInsuranceAddRunnerEmail } from "@/lib/insuranceDispatch";
+import { sendPalEmail } from "@/lib/palEmail";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -193,20 +194,13 @@ async function sendDriverWelcomeEmail(i: WelcomeInput): Promise<void> {
     `Questions? Reply or email hello@theportalocal.com.\n\n` +
     `— The Port A Local`;
   try {
-    await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
+    await sendPalEmail({
         from: "PAL Delivery <bookings@theportalocal.com>",
         to: [i.email],
         subject,
         html,
         text,
-      }),
-    });
+      });
   } catch (err) {
     console.error("[runner welcome] failed:", err);
   }

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { mirrorRestaurantSignup } from "@/lib/vendorPipelineDispatch";
+import { sendPalEmail } from "@/lib/palEmail";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -99,21 +100,14 @@ export async function POST(req: NextRequest) {
       (body.notes ? `\nNotes: ${body.notes.trim()}\n` : "") +
       `\n— PAL Restaurant pipeline`;
     try {
-      await fetch("https://api.resend.com/emails", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${apiKey.trim()}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+      await sendPalEmail({
           from: "PAL Delivery <bookings@theportalocal.com>",
           to: ["admin@theportalocal.com", "hello@theportalocal.com"],
-          reply_to: email || undefined,
+          replyTo: email || undefined,
           subject,
           html,
           text,
-        }),
-      });
+        });
     } catch (err) {
       console.error("[restaurant signup] email failed:", err);
     }

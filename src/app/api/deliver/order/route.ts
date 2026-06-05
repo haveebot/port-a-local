@@ -12,6 +12,7 @@ import {
 } from "@/data/delivery-pricing";
 import { getRestaurant, isOpenNow } from "@/data/delivery-restaurants";
 import { isDeliveryLive } from "@/data/delivery-launch";
+import { sendPalEmail } from "@/lib/palEmail";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -114,24 +115,14 @@ async function sendOrderEmail(i: OrderEmailInput): Promise<void> {
     `Subtotal: ${i.subtotal} · Tip: ${i.tip} · ${i.paid ? "Total charged" : "Total (would be)"}: ${i.total}\n\n` +
     `Economics:\n  Restaurant: ${i.restaurantCost}\n  Driver Venmo: ${i.driverPayout}\n  PAL net: ${i.palNet}`;
   try {
-    const res = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
+    await sendPalEmail({
         from: "PAL Delivery <bookings@theportalocal.com>",
         to: ["admin@theportalocal.com", "hello@theportalocal.com"],
-        reply_to: i.customerEmail,
+        replyTo: i.customerEmail,
         subject,
         html,
         text,
-      }),
-    });
-    if (!res.ok) {
-      console.error("[deliver] resend non-200:", await res.text());
-    }
+      });
   } catch (err) {
     console.error("[deliver] email send failed:", err);
   }

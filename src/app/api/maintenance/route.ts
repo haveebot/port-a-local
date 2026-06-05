@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { emailLayout } from "@/lib/emailLayout";
 import { sendSms, sendConsumerSms } from "@/lib/twilioSms";
+import { sendPalEmail } from "@/lib/palEmail";
 
 const JOHN_PHONE = process.env.JOHN_BROWN_PHONE || "(361) 455-8606";
 const ADMIN_PHONE = process.env.ADMIN_PHONE || "";
 const INTERNAL_EMAIL = process.env.INTERNAL_ALERT_EMAIL || "";
-const RESEND_KEY = process.env.RESEND_API_KEY || "";
 
 // Maintenance vendor is SMS-only by design — doesn't take email.
 // All maintenance internal emails go to INTERNAL_ALERT_EMAIL for records.
@@ -33,27 +33,12 @@ function escapeHtml(s: unknown): string {
 }
 
 async function sendEmail(to: string, subject: string, html: string) {
-  if (!RESEND_KEY) {
-    console.log("[Email] Resend not configured — would send to", to, subject);
-    return;
-  }
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${RESEND_KEY}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
+  await sendPalEmail({
       from: "Port A Local <bookings@theportalocal.com>",
       to,
       subject,
       html,
-    }),
-  });
-  if (!res.ok) {
-    const err = await res.text();
-    console.error("[Email] Resend error:", err);
-  }
+    });
 }
 
 export async function POST(req: NextRequest) {

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { promises as fs } from "fs";
 import path from "path";
 import { emailLayout } from "@/lib/emailLayout";
+import { sendPalEmail } from "@/lib/palEmail";
 
 const RESEND_KEY = process.env.RESEND_API_KEY;
 const SUGGESTIONS_FILE = path.join(process.cwd(), "data", "suggestions.json");
@@ -40,24 +41,12 @@ async function sendNotificationEmail(suggestion: Suggestion) {
     cta: { label: "Open admin queue", href: "https://theportalocal.com/admin/suggestions" },
   });
 
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${RESEND_KEY}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
+  await sendPalEmail({
       from: "Port A Local <bookings@theportalocal.com>",
       to: "admin@theportalocal.com",
       subject: `Tag Suggestion: ${suggestion.businessName}`,
       html,
-    }),
-  });
-
-  if (!res.ok) {
-    const err = await res.text();
-    console.error("[Email] Resend error:", err);
-  }
+    });
 }
 
 async function readSuggestions(): Promise<Suggestion[]> {

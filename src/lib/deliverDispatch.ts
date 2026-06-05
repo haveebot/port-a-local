@@ -22,6 +22,7 @@ import type { Order } from "@/data/delivery-types";
 import { formatUSD } from "@/data/delivery-pricing";
 import { createMessage as createWheelhouseMessage } from "@/data/wheelhouse-store";
 import { sql as vercelSql } from "@vercel/postgres";
+import { sendPalEmail } from "@/lib/palEmail";
 
 const APP_URL =
   process.env.NEXT_PUBLIC_APP_URL ?? "https://theportalocal.com";
@@ -160,18 +161,12 @@ async function sendDriverDispatchEmail(i: DriverEmailInput): Promise<void> {
   `;
   const text = `PAL Delivery — new order\n\n${i.restaurantName} → ${i.dropAddress}\n${i.items}\n\nYou earn ${i.payoutLabel}\n\nClaim: ${i.claimUrl}`;
   try {
-    const res = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey.trim()}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
+    await sendPalEmail({
         from: "PAL Delivery <bookings@theportalocal.com>",
         to: [i.to],
         // Reply-to a real human inbox so replies don't bounce. Helps
         // sender reputation too — Gmail favors mail with a real reply path.
-        reply_to: "hello@theportalocal.com",
+        replyTo: "hello@theportalocal.com",
         subject,
         html,
         text,
@@ -180,11 +175,7 @@ async function sendDriverDispatchEmail(i: DriverEmailInput): Promise<void> {
         headers: {
           "X-Entity-Ref-ID": `pal-deliver-dispatch`,
         },
-      }),
-    });
-    if (!res.ok) {
-      console.error("[deliver dispatch email]", await res.text());
-    }
+      });
   } catch (err) {
     console.error("[deliver dispatch email] send failed:", err);
   }

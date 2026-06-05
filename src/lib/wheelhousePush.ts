@@ -31,6 +31,7 @@
  */
 
 import type { Thread } from "@/data/wheelhouse-types";
+import { sendPalEmail } from "@/lib/palEmail";
 
 const APP_URL =
   process.env.NEXT_PUBLIC_APP_URL ?? "https://theportalocal.com";
@@ -197,21 +198,14 @@ async function sendAwaitingEmail(i: AwaitingEmailInput): Promise<void> {
     `— The Port A Local · Wheelhouse push`;
 
   try {
-    await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey.trim()}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
+    await sendPalEmail({
         from: "PAL Wheelhouse <bookings@theportalocal.com>",
         to: [i.recipient],
-        reply_to: "hello@theportalocal.com",
+        replyTo: "hello@theportalocal.com",
         subject,
         html,
         text,
-      }),
-    });
+      });
   } catch (err) {
     console.error("[wheelhouse push] email failed:", err);
   }
