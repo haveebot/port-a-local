@@ -109,13 +109,18 @@ export function buildClaimWonSms(
   product: string,
   qty: number,
   setupDateFormatted: string,
+  setupLocation?: string | null,
 ): string {
-  return [
+  const lines = [
     `Port A Local: ✅ CLAIM CONFIRMED`,
     `${vendor.name}, you've got it: ${productSmsLabel(product, qty)} for ${setupDateFormatted}.`,
     `Booking name: ${formatCustomerDisplay(customerName) ?? customerName}`,
-    `Port A Local handles all customer comms — we'll send you setup details before the date. Reply here if you need anything from us.`,
-  ].join("\n\n");
+  ];
+  if (setupLocation) lines.push(`Setup spot: ${setupLocation}`);
+  lines.push(
+    `Port A Local handles all customer comms — just let us know if you need anything.`,
+  );
+  return lines.join("\n\n");
 }
 
 /** SMS to the other vendors letting them know it was claimed. */
@@ -135,15 +140,16 @@ export async function notifyClaimResolution(input: {
   product: string;
   qty: number;
   setupDateFormatted: string;
+  setupLocation?: string | null;
 }): Promise<void> {
-  const { winner, customerName, product, qty, setupDateFormatted } = input;
+  const { winner, customerName, product, qty, setupDateFormatted, setupLocation } = input;
 
   // 1) Confirm to winner
   const winnerPhone = beachVendorPhone(winner);
   if (winnerPhone) {
     sendSms(
       winnerPhone,
-      buildClaimWonSms(winner, customerName, product, qty, setupDateFormatted),
+      buildClaimWonSms(winner, customerName, product, qty, setupDateFormatted, setupLocation),
     ).catch((err) => console.error("[beach-vendor-blast] winner-confirm failed:", err));
   }
 

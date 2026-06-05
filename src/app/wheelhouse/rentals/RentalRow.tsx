@@ -128,6 +128,9 @@ export default function RentalRow({
             <strong>{dateLabel}</strong> · Vendor:{" "}
             <strong>{rental.vendorName ?? "— none —"}</strong>
           </p>
+          {rental.location && (
+            <p className="text-[11px] text-navy-500 mt-0.5">📍 {rental.location}</p>
+          )}
           {reassignOpen && (
             <div className="mt-2 flex items-center gap-2 flex-wrap">
               <span className="text-[11px] text-navy-500">Reassign to:</span>

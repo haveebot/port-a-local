@@ -38,6 +38,8 @@ export interface UnifiedRental {
   handoff: string | null;
   vendorSlug: string | null;
   vendorName: string | null;
+  /** beach setup spot (from the booking); null for cart */
+  location: string | null;
   status: "assigned" | "open";
 }
 
@@ -81,6 +83,7 @@ export async function listRentals(): Promise<UnifiedRental[]> {
       handoff: null,
       vendorSlug: c.claimedBySlug,
       vendorName: c.claimedBySlug ? beachVendorName(c.claimedBySlug) : null,
+      location: c.setupLocation,
       status: c.claimedBySlug ? "assigned" : "open",
     });
   }
@@ -97,6 +100,7 @@ export async function listRentals(): Promise<UnifiedRental[]> {
       handoff: b.handoff,
       vendorSlug: b.assignedVendorSlug,
       vendorName: b.assignedVendorSlug ? cartVendorName(b.assignedVendorSlug) : null,
+      location: null,
       status: b.assignedVendorSlug ? "assigned" : "open",
     });
   }
@@ -138,8 +142,9 @@ export function buildVendorUpdateSms(r: UnifiedRental): string {
     );
   } else {
     lines.push(`Setup: ${fmtRentalDate(r.startDate)}`);
+    if (r.location) lines.push(`Setup spot: ${r.location}`);
     lines.push(
-      `We'll send setup details before the date — PAL handles all customer comms until then. Reply here with any questions.`,
+      `PAL handles all customer comms — just let us know if you need anything.`,
     );
   }
   return lines.join("\n\n");
