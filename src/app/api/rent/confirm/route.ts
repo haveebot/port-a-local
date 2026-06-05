@@ -17,39 +17,19 @@ import { startFirstLookWindow } from "@/data/cart-rental-first-look-store";
 import { recordCartBooking } from "@/data/cart-booking-store";
 import { sendPurchaseEvent } from "@/lib/metaConversions";
 import { pingSuperAdmins, formatCustomerDisplay } from "@/lib/superAdminPing";
+import { sendPalEmail } from "@/lib/palEmail";
 
 const getStripe = () => new Stripe(process.env.STRIPE_SECRET_KEY || "", {
   apiVersion: "2026-03-25.dahlia",
 });
 
-const RESEND_KEY = process.env.RESEND_API_KEY || "";
 const INTERNAL_EMAIL = process.env.INTERNAL_ALERT_EMAIL || "";
 const INTERNAL_RECIPIENTS = [INTERNAL_EMAIL, "bookings@theportalocal.com"]
   .map((r) => r.trim())
   .filter(Boolean);
 
 async function sendEmail(to: string | string[], subject: string, html: string) {
-  if (!RESEND_KEY) {
-    console.log("[Email] Resend not configured — would send to", to, subject);
-    return;
-  }
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${RESEND_KEY}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      from: "Port A Local <bookings@theportalocal.com>",
-      to,
-      subject,
-      html,
-    }),
-  });
-  if (!res.ok) {
-    const err = await res.text();
-    console.error("[Email] Resend error:", err);
-  }
+  await sendPalEmail({ to, subject, html });
 }
 
 function formatDate(dateStr: string) {
@@ -168,7 +148,7 @@ export async function POST(req: NextRequest) {
         <p><strong>What to bring:</strong> Valid photo ID (must be 18+).</p>
         <p><strong>Your savings:</strong> Every PAL reservation includes a guaranteed <strong>$20/day discount</strong> off the rental company's standard rate.</p>
         <p><strong>Our guarantee:</strong> If we're unable to source a cart for your dates, your reservation fee is fully refunded.</p>
-        <p>Questions? Reply to this email.</p>
+        <p>A <strong>vetted local cart company</strong> fulfills your reservation — Port A Local stays your single point of contact until handoff. Questions or changes? Reply to this email or text us at <a href="tel:+13614281706" style="color:#e8656f;">(361) 428-1706</a>.</p>
         <p style="margin-top:20px;">— The Port A Local</p>
       `,
     });
