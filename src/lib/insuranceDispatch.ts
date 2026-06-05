@@ -22,6 +22,7 @@
  */
 
 import type { DriverRecord } from "@/data/delivery-store";
+import { sendPalEmail } from "@/lib/palEmail";
 
 interface InsuranceEmailContext {
   approvedAt: string;
@@ -122,22 +123,15 @@ export async function sendInsuranceAddRunnerEmail(
     `— The Port A Local`;
 
   try {
-    await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey.trim()}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
+    await sendPalEmail({
         from: "PAL Delivery <bookings@theportalocal.com>",
         to: [agentEmail],
         cc: ["admin@theportalocal.com"],
-        reply_to: "hello@theportalocal.com",
+        replyTo: "hello@theportalocal.com",
         subject,
         html,
         text,
-      }),
-    });
+      });
   } catch (err) {
     console.error("[insurance dispatch] email failed:", err);
   }

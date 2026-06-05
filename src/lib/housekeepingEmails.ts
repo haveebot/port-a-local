@@ -7,6 +7,7 @@
 import type { HousekeepingBooking } from "@/data/housekeeping-store";
 import { formatUSD } from "@/data/housekeeping-store";
 import { emailLayout } from "@/lib/emailLayout";
+import { sendPalEmail } from "@/lib/palEmail";
 
 const SITE = "https://theportalocal.com";
 
@@ -88,21 +89,14 @@ export async function sendHousekeepingAdminEmail(
     `Paid: ${formatUSD(b.totalCents)}\n\n` +
     `Booking ID: ${b.id}\nView: ${SITE}/housekeeping/success/${b.id}`;
   try {
-    await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey.trim()}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
+    await sendPalEmail({
         from: "PAL Housekeeping <bookings@theportalocal.com>",
         to: ["admin@theportalocal.com", "hello@theportalocal.com", "bookings@theportalocal.com"],
-        reply_to: b.customerEmail,
+        replyTo: b.customerEmail,
         subject,
         html,
         text,
-      }),
-    });
+      });
   } catch (err) {
     console.error("[housekeeping admin email] failed:", err);
   }
@@ -204,24 +198,17 @@ export async function sendHousekeepingCustomerEmail(
     .join("\n");
 
   try {
-    await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey.trim()}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
+    await sendPalEmail({
         from: "PAL Housekeeping <bookings@theportalocal.com>",
         to: [b.customerEmail],
-        reply_to: "hello@theportalocal.com",
+        replyTo: "hello@theportalocal.com",
         subject,
         html: emailLayout({
           preheader: `Cleaning booked at ${b.propertyAddress} · ${formatUSD(b.totalCents)}`,
           bodyHtml,
         }),
         text,
-      }),
-    });
+      });
   } catch (err) {
     console.error("[housekeeping customer email] failed:", err);
   }

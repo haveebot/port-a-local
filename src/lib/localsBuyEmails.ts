@@ -19,6 +19,7 @@
 import type { Listing } from "@/data/locals-types";
 import type { LocalsPurchaseRecord } from "@/data/locals-store";
 import { emailLayout } from "@/lib/emailLayout";
+import { sendPalEmail } from "@/lib/palEmail";
 
 const SITE = "https://theportalocal.com";
 
@@ -50,26 +51,15 @@ async function sendViaResend(payload: {
     return;
   }
   try {
-    const res = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey.trim()}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
+    await sendPalEmail({
         from: payload.from,
         to: payload.to,
         ...(payload.cc ? { cc: payload.cc } : {}),
-        ...(payload.replyTo ? { reply_to: payload.replyTo } : {}),
+        ...(payload.replyTo ? { replyTo: payload.replyTo } : {}),
         subject: payload.subject,
         html: payload.html,
         text: payload.text,
-      }),
-    });
-    if (!res.ok) {
-      const body = await res.text().catch(() => "");
-      console.error("[locals buy email] Resend non-200:", res.status, body);
-    }
+      });
   } catch (err) {
     console.error("[locals buy email] send failed:", err);
   }

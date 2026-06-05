@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { sql as vercelSql } from "@vercel/postgres";
 import type { DriverRecord } from "@/data/delivery-store";
 import { magicLinkQrDataUrl, qrEmailBlock } from "@/lib/qrEmail";
+import { sendPalEmail } from "@/lib/palEmail";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -130,20 +131,13 @@ async function sendDriverLinkEmail(i: LinkEmailInput): Promise<void> {
     `After that, bookmark the page — your phone stays signed in for 30 days.\n\n` +
     `Didn't request this? Ignore it.\n\n— The Port A Local`;
   try {
-    await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey.trim()}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
+    await sendPalEmail({
         from: "PAL Delivery <bookings@theportalocal.com>",
         to: [i.email],
         subject,
         html,
         text,
-      }),
-    });
+      });
   } catch (err) {
     console.error("[driver lookup] email failed:", err);
   }

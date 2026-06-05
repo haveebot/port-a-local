@@ -4,6 +4,7 @@ import {
   createDriverApplication,
   getDriverByPhone,
 } from "@/data/delivery-store";
+import { sendPalEmail } from "@/lib/palEmail";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -198,8 +199,6 @@ async function sendApplicantReceivedEmail(i: {
   name: string;
   email: string;
 }): Promise<void> {
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) return;
   const first = i.name.split(" ")[0];
   const subject = `Got your runner application — PAL Delivery`;
   const html = `
@@ -237,19 +236,12 @@ async function sendApplicantReceivedEmail(i: {
     `Anything urgent? Reply to this email.\n\n` +
     `— The Port A Local`;
   try {
-    await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey.trim()}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        from: "PAL Delivery <bookings@theportalocal.com>",
-        to: [i.email],
-        subject,
-        html,
-        text,
-      }),
+    await sendPalEmail({
+      from: "PAL Delivery <bookings@theportalocal.com>",
+      to: [i.email],
+      subject,
+      html,
+      text,
     });
   } catch (err) {
     console.error("[applicant received] email failed:", err);
@@ -277,13 +269,6 @@ interface AdminEmailInput {
 }
 
 async function sendAdminApplicationEmail(i: AdminEmailInput): Promise<void> {
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) {
-    console.warn("[runner signup] RESEND_API_KEY not set — logging only");
-    console.log("[runner signup]", i);
-    return;
-  }
-
   const subject = `🚗 PAL Runner application — ${i.name}`;
   const approveBlock = i.approveUrl
     ? `
@@ -364,20 +349,13 @@ async function sendAdminApplicationEmail(i: AdminEmailInput): Promise<void> {
     `\nDriver ID: ${i.driverId}`;
 
   try {
-    await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        from: "PAL Delivery <bookings@theportalocal.com>",
-        to: ["admin@theportalocal.com", "hello@theportalocal.com"],
-        reply_to: i.email,
-        subject,
-        html,
-        text,
-      }),
+    await sendPalEmail({
+      from: "PAL Delivery <bookings@theportalocal.com>",
+      to: ["admin@theportalocal.com", "hello@theportalocal.com"],
+      replyTo: i.email,
+      subject,
+      html,
+      text,
     });
   } catch (err) {
     console.error("[runner signup] email failed:", err);

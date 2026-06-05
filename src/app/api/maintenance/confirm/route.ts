@@ -3,6 +3,7 @@ import Stripe from "stripe";
 import { emailLayout } from "@/lib/emailLayout";
 import { sendSms, sendConsumerSms } from "@/lib/twilioSms";
 import { pingSuperAdmins, formatCustomerDisplay } from "@/lib/superAdminPing";
+import { sendPalEmail } from "@/lib/palEmail";
 
 const getStripe = () => new Stripe(process.env.STRIPE_SECRET_KEY || "", {
   apiVersion: "2026-03-25.dahlia",
@@ -11,7 +12,6 @@ const getStripe = () => new Stripe(process.env.STRIPE_SECRET_KEY || "", {
 const JOHN_PHONE = process.env.JOHN_BROWN_PHONE || "(361) 455-8606";
 const ADMIN_PHONE = process.env.ADMIN_PHONE || "";
 const INTERNAL_EMAIL = process.env.INTERNAL_ALERT_EMAIL || "";
-const RESEND_KEY = process.env.RESEND_API_KEY || "";
 const INTERNAL_RECIPIENTS = [INTERNAL_EMAIL, "bookings@theportalocal.com"]
   .map((r) => r.trim())
   .filter(Boolean);
@@ -20,24 +20,7 @@ const INTERNAL_RECIPIENTS = [INTERNAL_EMAIL, "bookings@theportalocal.com"]
 // All maintenance internal emails go to INTERNAL_RECIPIENTS for records.
 
 async function sendEmail(to: string | string[], subject: string, html: string) {
-  if (!RESEND_KEY) {
-    console.log("[Email] Resend not configured — would send to", to, subject);
-    return;
-  }
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${RESEND_KEY}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      from: "Port A Local <bookings@theportalocal.com>",
-      to,
-      subject,
-      html,
-    }),
-  });
-  if (!res.ok) console.error("[Email] Resend error:", await res.text());
+  await sendPalEmail({ from: "Port A Local <bookings@theportalocal.com>", to, subject, html });
 }
 
 export async function POST(req: NextRequest) {

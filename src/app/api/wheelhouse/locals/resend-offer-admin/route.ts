@@ -7,6 +7,7 @@ import {
   type LocalsCategory,
 } from "@/data/locals-types";
 import { createLocalsOffer } from "@/data/locals-store";
+import { sendPalEmail } from "@/lib/palEmail";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -205,21 +206,14 @@ export async function POST(req: NextRequest) {
 
   if (apiKey) {
     try {
-      await fetch("https://api.resend.com/emails", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${apiKey.trim()}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+      await sendPalEmail({
           from: "PAL Locals <bookings@theportalocal.com>",
           to: ["admin@theportalocal.com", "hello@theportalocal.com"],
-          reply_to: body.email || "hello@theportalocal.com",
+          replyTo: body.email || "hello@theportalocal.com",
           subject,
           html,
           text,
-        }),
-      });
+        });
     } catch (err) {
       console.error("[wheelhouse locals resend] email failed:", err);
       return NextResponse.json(

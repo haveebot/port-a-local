@@ -16,6 +16,7 @@
 import { formatUSD } from "@/data/delivery-pricing";
 import { getRestaurant } from "@/data/delivery-restaurants";
 import type { Order } from "@/data/delivery-types";
+import { sendPalEmail } from "@/lib/palEmail";
 
 function escapeHtml(s: string): string {
   return s
@@ -39,24 +40,14 @@ async function sendResendEmail(opts: {
     return;
   }
   try {
-    const res = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey.trim()}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
+    await sendPalEmail({
         from: "PAL Delivery <bookings@theportalocal.com>",
         to: opts.to,
-        reply_to: opts.replyTo,
+        replyTo: opts.replyTo,
         subject: opts.subject,
         html: opts.html,
         text: opts.text,
-      }),
-    });
-    if (!res.ok) {
-      console.error("[deliver email] resend non-200:", await res.text());
-    }
+      });
   } catch (err) {
     console.error("[deliver email] send failed:", err);
   }

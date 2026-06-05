@@ -20,11 +20,13 @@ import nodemailer, { type Transporter } from "nodemailer";
 
 export interface PalEmailInput {
   to: string | string[];
+  cc?: string | string[];
   subject: string;
   html: string;
   text?: string;
   replyTo?: string;
   from?: string;
+  headers?: Record<string, string>;
 }
 
 function toList(to: string | string[]): string[] {
@@ -67,19 +69,30 @@ function workspaceTransport(): Transporter | null {
   return _transport;
 }
 
+/** Pull a display name out of a "Name <addr>" (or bare "Name") from-string. */
+function displayName(from?: string): string | null {
+  if (!from) return null;
+  const m = from.match(/^\s*"?([^"<]+?)"?\s*</);
+  if (m) return m[1].trim();
+  return from.includes("@") ? null : from.trim();
+}
+
 async function sendViaWorkspace(opts: PalEmailInput, to: string[]): Promise<boolean> {
   const t = workspaceTransport();
   if (!t) return false;
   const user = (process.env.PAL_ADMIN_EMAIL as string).trim();
   await t.sendMail({
     // Gmail SMTP can only send as the authenticated mailbox, so the address
-    // is always admin@; the display name stays "Port A Local".
-    from: `Port A Local <${user}>`,
+    // is forced to admin@; a caller-provided display name (e.g. "PAL Delivery")
+    // is preserved so each surface keeps its own sender identity.
+    from: `${displayName(opts.from) ?? "Port A Local"} <${user}>`,
     to,
+    cc: opts.cc,
     replyTo: opts.replyTo ?? user,
     subject: opts.subject,
     html: opts.html,
     text: opts.text ?? htmlToText(opts.html),
+    headers: opts.headers,
   });
   return true;
 }
@@ -96,10 +109,12 @@ async function sendViaResend(opts: PalEmailInput, to: string[]): Promise<boolean
     body: JSON.stringify({
       from: opts.from ?? "Port A Local <bookings@theportalocal.com>",
       to,
+      cc: opts.cc,
       reply_to: opts.replyTo,
       subject: opts.subject,
       html: opts.html,
       text: opts.text ?? htmlToText(opts.html),
+      headers: opts.headers,
     }),
   });
   if (!res.ok) {
