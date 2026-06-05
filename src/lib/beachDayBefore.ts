@@ -17,7 +17,7 @@ import {
   findBeachVendorBySlug,
   beachVendorsAreTeammates,
 } from "@/data/beach-vendors";
-import { productSmsLabel } from "@/data/beach-products";
+import { getBeachProductLabel } from "@/data/beach-products";
 import { formatCustomerDisplay } from "./superAdminPing";
 import {
   markDayBeforeSent,
@@ -87,7 +87,7 @@ export async function sendBeachDayBeforeComms(
   claim: BeachBookingClaim,
 ): Promise<DayBeforeResult> {
   const itemLabel = claim.product
-    ? productSmsLabel(claim.product, claim.qty ?? 1)
+    ? getBeachProductLabel(claim.product)
     : "beach setup";
   const dateFormatted = claim.setupDate
     ? fmtSetupDate(claim.setupDate)

@@ -16,6 +16,7 @@ import {
 } from "@/data/beach-vendors";
 import {
   getBeachProduct,
+  getBeachProductLabel,
   productSmsLabel,
   addonsSmsSummary,
   type BeachAddonSelection,
@@ -111,14 +112,15 @@ export function buildClaimWonSms(
   setupDateFormatted: string,
   setupLocation?: string | null,
 ): string {
+  void qty; // label is qty-agnostic now (friendly product label)
   const lines = [
-    `Port A Local: ✅ CLAIM CONFIRMED`,
-    `${vendor.name}, you've got it: ${productSmsLabel(product, qty)} for ${setupDateFormatted}.`,
+    `Port A Local — Claim Confirmed`,
+    `${vendor.name}, you're confirmed for ${getBeachProductLabel(product)}, ${setupDateFormatted}.`,
     `Booking name: ${formatCustomerDisplay(customerName) ?? customerName}`,
   ];
-  if (setupLocation) lines.push(`Setup spot: ${setupLocation}`);
+  if (setupLocation) lines.push(`Setup location: ${setupLocation}`);
   lines.push(
-    `Port A Local handles all customer comms — just let us know if you need anything.`,
+    `Port A Local manages all customer communication — please reach out with any questions or needs.`,
   );
   return lines.join("\n\n");
 }
