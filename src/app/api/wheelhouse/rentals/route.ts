@@ -2,10 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import {
   listRentals,
   buildVendorUpdateSms,
+  buildVendorUpdateEmail,
   vendorPhonesForRental,
+  vendorEmailsForRental,
   type RentalSource,
 } from "@/data/rentals-calendar";
 import { sendSms } from "@/lib/twilioSms";
+import { sendPalEmail } from "@/lib/palEmail";
 import { assignCartVendor } from "@/data/cart-booking-store";
 import { sql } from "@vercel/postgres";
 
@@ -42,8 +45,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: false, error: "no_vendor_assigned" }, { status: 400 });
     }
     const phones = vendorPhonesForRental(r);
-    if (phones.length === 0) {
-      return NextResponse.json({ ok: false, error: "no_textable_vendor_phone" }, { status: 400 });
+    const emails = vendorEmailsForRental(r);
+    if (phones.length === 0 && emails.length === 0) {
+      return NextResponse.json({ ok: false, error: "no_vendor_contact" }, { status: 400 });
     }
     const msg = buildVendorUpdateSms(r);
     let sent = 0;
@@ -52,12 +56,23 @@ export async function POST(req: NextRequest) {
         await sendSms(p, msg);
         sent++;
       } catch (err) {
-        console.error("[wh/rentals] send-update failed:", err);
+        console.error("[wh/rentals] send-update SMS failed:", err);
       }
       await new Promise((res) => setTimeout(res, 600));
     }
-    console.log(`[wh/rentals] update sent to ${r.vendorName} (${sent} phone(s)) for ${sessionId}`);
-    return NextResponse.json({ ok: sent > 0, result: { sent, vendor: r.vendorName } });
+    let emailed = 0;
+    if (emails.length > 0) {
+      const { subject, html, text } = buildVendorUpdateEmail(r);
+      const ok = await sendPalEmail({ to: emails, subject, html, text });
+      if (ok) emailed = emails.length;
+    }
+    console.log(
+      `[wh/rentals] update sent to ${r.vendorName} (${sent} sms, ${emailed} email) for ${sessionId}`,
+    );
+    return NextResponse.json({
+      ok: sent > 0 || emailed > 0,
+      result: { sent, emailed, vendor: r.vendorName },
+    });
   }
 
   if (action === "reassign") {

@@ -14,6 +14,7 @@ import { listCartBookings } from "@/data/cart-booking-store";
 import {
   findBeachVendorBySlug,
   beachVendorPhone,
+  beachVendorEmails,
 } from "@/data/beach-vendors";
 import { cartVendors, smsPhonesFor } from "@/data/cart-vendors";
 import { productSmsLabel } from "@/data/beach-products";
@@ -142,4 +143,43 @@ export function buildVendorUpdateSms(r: UnifiedRental): string {
     );
   }
   return lines.join("\n\n");
+}
+
+/** Resolve the assigned vendor's alert email(s) for ONE rental (scoped to
+ *  its vendor — same per-vendor discipline as vendorPhonesForRental). */
+export function vendorEmailsForRental(r: UnifiedRental): string[] {
+  if (!r.vendorSlug) return [];
+  if (r.source === "beach") {
+    const v = findBeachVendorBySlug(r.vendorSlug);
+    return v ? beachVendorEmails(v) : [];
+  }
+  const v = cartVendors.find((cv) => cv.slug === r.vendorSlug);
+  return v ? v.emails.map((e) => e.address) : [];
+}
+
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+/** Build the vendor-facing update EMAIL for ONE rental — same content as the
+ *  SMS, light-HTML wrapped + a plain-text fallback. Scoped to the rental's
+ *  vendor, so it never carries another vendor's booking. */
+export function buildVendorUpdateEmail(r: UnifiedRental): {
+  subject: string;
+  html: string;
+  text: string;
+} {
+  const text = buildVendorUpdateSms(r);
+  const subject = `Port A Local — booking update: ${r.itemLabel} (${fmtRentalDate(r.startDate)})`;
+  const body = text
+    .split("\n\n")
+    .map((p) => `<p style="margin:0 0 12px;">${escapeHtml(p).replace(/\n/g, "<br/>")}</p>`)
+    .join("");
+  const html = `<div style="font-family:Inter,system-ui,sans-serif;color:#1a2433;line-height:1.55;font-size:15px;">${body}</div>`;
+  return { subject, html, text };
 }
