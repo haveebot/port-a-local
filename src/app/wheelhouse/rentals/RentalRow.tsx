@@ -65,7 +65,11 @@ export default function RentalRow({
       sessionId: rental.sessionId,
     });
     if (data) {
-      setInfo(`Update sent to ${data.result.vendor} (${data.result.sent} text${data.result.sent === 1 ? "" : "s"})`);
+      const e = data.result.emailed ?? 0;
+      const emailPart = e > 0 ? ` + ${e} email${e === 1 ? "" : "s"}` : "";
+      setInfo(
+        `Update sent to ${data.result.vendor} (${data.result.sent} text${data.result.sent === 1 ? "" : "s"}${emailPart})`,
+      );
       startTransition(() => router.refresh());
     }
   }

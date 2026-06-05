@@ -26,6 +26,13 @@ export interface BeachVendor {
    */
   phone: string;
   email?: string;
+  /**
+   * Alert email(s) for this vendor — used by the wheelhouse rentals
+   * "Send update" (+ day-before reminders) to email the crew alongside
+   * SMS. Unset falls back to the crew's shared business inbox via
+   * beachVendorEmails() (keyed by `team`). Added 2026-06-04.
+   */
+  emails?: string[];
   active: boolean;
   /** Free-text role/note for admin display. */
   role?: string;
@@ -122,6 +129,27 @@ export function beachVendorPhone(v: BeachVendor): string {
     return (process.env[key] || "").trim();
   }
   return raw;
+}
+
+/**
+ * Shared business inbox(es) per beach crew, keyed by `team`. A booking
+ * alert/reminder to any one of a crew's lines resolves to these, so it
+ * lands in the crew's monitored inbox regardless of which line claimed
+ * the job. Bron's: their two business addresses (mirrors cart-vendors).
+ */
+const BEACH_TEAM_EMAILS: Record<string, string[]> = {
+  brons: ["bron@bronsbeachcarts.com", "sales@bronsbeachcarts.com"],
+};
+
+/**
+ * Resolve alert email(s) for a beach vendor — explicit per-vendor `emails`
+ * win, else the crew's shared business inbox(es) via `team`. Returns an
+ * empty array if neither is set (caller skips email cleanly).
+ */
+export function beachVendorEmails(v: BeachVendor): string[] {
+  if (v.emails && v.emails.length > 0) return v.emails;
+  if (v.team && BEACH_TEAM_EMAILS[v.team]) return BEACH_TEAM_EMAILS[v.team];
+  return [];
 }
 
 /**
