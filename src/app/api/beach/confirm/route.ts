@@ -213,6 +213,7 @@ export async function POST(req: NextRequest) {
             numDays: days,
             vendorAmountCents: vendorTotalCents,
             setupLocation: deliveryAddress,
+            smsConsent: smsConsent === "true",
             utmSource: attribution.utm_source,
             utmMedium: attribution.utm_medium,
             utmCampaign: attribution.utm_campaign,
