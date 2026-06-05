@@ -95,6 +95,10 @@ export async function POST(req: NextRequest) {
       utmContent: (rows[0].utm_content as string) ?? null,
       fbclid: (rows[0].fbclid as string) ?? null,
       setupLocation: (rows[0].setup_location as string) ?? null,
+      smsConsent: (rows[0].sms_consent as boolean) ?? null,
+      dayBeforeSentAt: rows[0].day_before_sent_at
+        ? new Date(rows[0].day_before_sent_at as string).toISOString()
+        : null,
     };
     const result = await attemptBeachPayout(claim);
     return NextResponse.json({ ok: result.ok, result });

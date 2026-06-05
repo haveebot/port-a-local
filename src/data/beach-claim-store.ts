@@ -46,6 +46,11 @@ async function ensureSchema(): Promise<void> {
   // Setup location (the beach spot) — captured from Stripe metadata.deliveryAddress
   // so it's canonical on the booking, not just in Stripe. Added 2026-06-05.
   await sql`ALTER TABLE beach_booking_claims ADD COLUMN IF NOT EXISTS setup_location TEXT`;
+  // Day-before reminder bookkeeping — sms_consent mirrors the booking opt-in
+  // checkbox (so the day-before customer SMS respects consent) + a
+  // day_before_sent_at idempotency stamp for the cron. Added 2026-06-05.
+  await sql`ALTER TABLE beach_booking_claims ADD COLUMN IF NOT EXISTS sms_consent BOOLEAN`;
+  await sql`ALTER TABLE beach_booking_claims ADD COLUMN IF NOT EXISTS day_before_sent_at TIMESTAMPTZ`;
   _schemaReady = true;
 }
 
@@ -70,6 +75,8 @@ export interface BeachBookingClaim {
   utmContent: string | null;
   fbclid: string | null;
   setupLocation: string | null;
+  smsConsent: boolean | null;
+  dayBeforeSentAt: string | null;
 }
 
 function rowToRec(row: Record<string, unknown>): BeachBookingClaim {
@@ -98,6 +105,10 @@ function rowToRec(row: Record<string, unknown>): BeachBookingClaim {
     utmContent: (row.utm_content as string) ?? null,
     fbclid: (row.fbclid as string) ?? null,
     setupLocation: (row.setup_location as string) ?? null,
+    smsConsent: (row.sms_consent as boolean) ?? null,
+    dayBeforeSentAt: row.day_before_sent_at
+      ? new Date(row.day_before_sent_at as string).toISOString()
+      : null,
   };
 }
 
@@ -116,6 +127,7 @@ export interface RecordBlastInput {
   utmContent?: string;
   fbclid?: string;
   setupLocation?: string;
+  smsConsent?: boolean;
 }
 
 /**
@@ -127,7 +139,7 @@ export async function recordBlast(input: RecordBlastInput): Promise<void> {
   await sql`
     INSERT INTO beach_booking_claims (
       stripe_session_id, customer_phone, customer_name, product, qty,
-      setup_date, num_days, vendor_amount_cents, setup_location,
+      setup_date, num_days, vendor_amount_cents, setup_location, sms_consent,
       utm_source, utm_medium, utm_campaign, utm_content, fbclid
     ) VALUES (
       ${input.stripeSessionId},
@@ -139,6 +151,7 @@ export async function recordBlast(input: RecordBlastInput): Promise<void> {
       ${input.numDays ?? null},
       ${input.vendorAmountCents ?? null},
       ${input.setupLocation ?? null},
+      ${input.smsConsent ?? null},
       ${input.utmSource ?? null},
       ${input.utmMedium ?? null},
       ${input.utmCampaign ?? null},
@@ -335,5 +348,42 @@ export async function listRecentClaims(limit = 30): Promise<BeachBookingClaim[]>
     return rows.map(rowToRec);
   } catch {
     return [];
+  }
+}
+
+/**
+ * Claimed beach bookings whose setup is on `setupDate` (YYYY-MM-DD) and that
+ * haven't had their day-before comms sent yet. Drives the day-before cron.
+ */
+export async function getClaimsForSetupDate(
+  setupDate: string,
+): Promise<BeachBookingClaim[]> {
+  try {
+    await ensureSchema();
+    const { rows } = await sql`
+      SELECT * FROM beach_booking_claims
+      WHERE setup_date = ${setupDate}
+        AND claimed_by_slug IS NOT NULL
+        AND day_before_sent_at IS NULL
+      ORDER BY blasted_at ASC
+    `;
+    return rows.map(rowToRec);
+  } catch (err) {
+    console.error("[beach-claim-store] getClaimsForSetupDate failed:", err);
+    return [];
+  }
+}
+
+/** Stamp a booking's day-before comms as sent (cron idempotency). */
+export async function markDayBeforeSent(stripeSessionId: string): Promise<void> {
+  try {
+    await ensureSchema();
+    await sql`
+      UPDATE beach_booking_claims
+      SET day_before_sent_at = NOW()
+      WHERE stripe_session_id = ${stripeSessionId}
+    `;
+  } catch (err) {
+    console.error("[beach-claim-store] markDayBeforeSent failed:", err);
   }
 }
