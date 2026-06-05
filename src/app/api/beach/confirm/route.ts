@@ -5,6 +5,7 @@ import { sendConsumerSms } from "@/lib/twilioSms";
 import { sendBeachLeadBlast } from "@/lib/beachVendorBlast";
 import { recordBlast } from "@/data/beach-claim-store";
 import { sendPurchaseEvent } from "@/lib/metaConversions";
+import { sendPalEmail } from "@/lib/palEmail";
 import { pingSuperAdmins, formatCustomerDisplay } from "@/lib/superAdminPing";
 import {
   getBeachProductLabel,
@@ -35,7 +36,6 @@ const getStripe = () => new Stripe(process.env.STRIPE_SECRET_KEY || "", {
   apiVersion: "2026-03-25.dahlia",
 });
 
-const RESEND_KEY = process.env.RESEND_API_KEY || "";
 const INTERNAL_EMAIL = process.env.INTERNAL_ALERT_EMAIL || "";
 // Internal alerts CC bookings@ for transactional record-keeping per
 // Winston rule 2026-04-29 (the same alias that's already the FROM
@@ -45,27 +45,7 @@ const INTERNAL_RECIPIENTS = [INTERNAL_EMAIL, "bookings@theportalocal.com"]
   .filter(Boolean);
 
 async function sendEmail(to: string | string[], subject: string, html: string) {
-  if (!RESEND_KEY) {
-    console.log("[Email] Resend not configured — would send to", to, subject);
-    return;
-  }
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${RESEND_KEY}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      from: "Port A Local <bookings@theportalocal.com>",
-      to,
-      subject,
-      html,
-    }),
-  });
-  if (!res.ok) {
-    const err = await res.text();
-    console.error("[Email] Resend error:", err);
-  }
+  await sendPalEmail({ to, subject, html });
 }
 
 function formatDate(dateStr: string) {
@@ -172,7 +152,7 @@ export async function POST(req: NextRequest) {
         <hr style="border:none; border-top:1px solid #e4dccc; margin:16px 0;"/>
         <p style="font-size:13px; color:#4a5568;"><strong>Cancellation policy</strong></p>
         <p style="font-size:12px; color:#4a5568; line-height:1.5;">Free cancellation up to <strong>72 hours before your setup date</strong>. After that, the booking is non-refundable — your local vendor has held the slot. To cancel, reply to this email.</p>
-        <p style="margin-top:20px;">Questions? Reply to this email.</p>
+        <p style="margin-top:20px;">A <strong>vetted local Port Aransas beach crew</strong> handles your setup — Port A Local stays your single point of contact start to finish. Questions or changes? Reply to this email or text us at <a href="tel:+13614281706" style="color:#e8656f;">(361) 428-1706</a>.</p>
         <p style="margin-top:20px;">— The Port A Local</p>
       `,
     });
