@@ -156,6 +156,7 @@ async function handleBeachClaim(
     product: unclaimed.product ?? "setup",
     qty: unclaimed.qty ?? 1,
     setupDateFormatted,
+    setupLocation: unclaimed.setupLocation,
   }).catch((err) =>
     console.error("[twilio/inbound] notifyClaimResolution failed:", err),
   );

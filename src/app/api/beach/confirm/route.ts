@@ -212,6 +212,7 @@ export async function POST(req: NextRequest) {
             setupDate: pickupDate,
             numDays: days,
             vendorAmountCents: vendorTotalCents,
+            setupLocation: deliveryAddress,
             utmSource: attribution.utm_source,
             utmMedium: attribution.utm_medium,
             utmCampaign: attribution.utm_campaign,

@@ -43,6 +43,9 @@ async function ensureSchema(): Promise<void> {
   await sql`ALTER TABLE beach_booking_claims ADD COLUMN IF NOT EXISTS utm_campaign TEXT`;
   await sql`ALTER TABLE beach_booking_claims ADD COLUMN IF NOT EXISTS utm_content TEXT`;
   await sql`ALTER TABLE beach_booking_claims ADD COLUMN IF NOT EXISTS fbclid TEXT`;
+  // Setup location (the beach spot) — captured from Stripe metadata.deliveryAddress
+  // so it's canonical on the booking, not just in Stripe. Added 2026-06-05.
+  await sql`ALTER TABLE beach_booking_claims ADD COLUMN IF NOT EXISTS setup_location TEXT`;
   _schemaReady = true;
 }
 
@@ -66,6 +69,7 @@ export interface BeachBookingClaim {
   utmCampaign: string | null;
   utmContent: string | null;
   fbclid: string | null;
+  setupLocation: string | null;
 }
 
 function rowToRec(row: Record<string, unknown>): BeachBookingClaim {
@@ -93,6 +97,7 @@ function rowToRec(row: Record<string, unknown>): BeachBookingClaim {
     utmCampaign: (row.utm_campaign as string) ?? null,
     utmContent: (row.utm_content as string) ?? null,
     fbclid: (row.fbclid as string) ?? null,
+    setupLocation: (row.setup_location as string) ?? null,
   };
 }
 
@@ -110,6 +115,7 @@ export interface RecordBlastInput {
   utmCampaign?: string;
   utmContent?: string;
   fbclid?: string;
+  setupLocation?: string;
 }
 
 /**
@@ -121,7 +127,7 @@ export async function recordBlast(input: RecordBlastInput): Promise<void> {
   await sql`
     INSERT INTO beach_booking_claims (
       stripe_session_id, customer_phone, customer_name, product, qty,
-      setup_date, num_days, vendor_amount_cents,
+      setup_date, num_days, vendor_amount_cents, setup_location,
       utm_source, utm_medium, utm_campaign, utm_content, fbclid
     ) VALUES (
       ${input.stripeSessionId},
@@ -132,6 +138,7 @@ export async function recordBlast(input: RecordBlastInput): Promise<void> {
       ${input.setupDate ?? null},
       ${input.numDays ?? null},
       ${input.vendorAmountCents ?? null},
+      ${input.setupLocation ?? null},
       ${input.utmSource ?? null},
       ${input.utmMedium ?? null},
       ${input.utmCampaign ?? null},
