@@ -27,6 +27,8 @@ export interface PalEmailInput {
   replyTo?: string;
   from?: string;
   headers?: Record<string, string>;
+  /** base64-encoded attachments (e.g. forwarded MMS media). */
+  attachments?: Array<{ filename: string; content: string; contentType?: string }>;
 }
 
 function toList(to: string | string[]): string[] {
@@ -93,6 +95,12 @@ async function sendViaWorkspace(opts: PalEmailInput, to: string[]): Promise<bool
     html: opts.html,
     text: opts.text ?? htmlToText(opts.html),
     headers: opts.headers,
+    attachments: opts.attachments?.map((a) => ({
+      filename: a.filename,
+      content: a.content,
+      encoding: "base64" as const,
+      contentType: a.contentType,
+    })),
   });
   return true;
 }
@@ -115,6 +123,11 @@ async function sendViaResend(opts: PalEmailInput, to: string[]): Promise<boolean
       html: opts.html,
       text: opts.text ?? htmlToText(opts.html),
       headers: opts.headers,
+      attachments: opts.attachments?.map((a) => ({
+        filename: a.filename,
+        content: a.content,
+        content_type: a.contentType,
+      })),
     }),
   });
   if (!res.ok) {
