@@ -14,9 +14,9 @@
  */
 
 import { emailLayout } from "./emailLayout";
+import { sendPalEmail } from "./palEmail";
 import type { Insider } from "@/data/insiders";
 
-const RESEND_KEY = process.env.RESEND_API_KEY || "";
 const ADMIN_EMAIL =
   process.env.INTERNAL_ALERT_EMAIL || "admin@theportalocal.com";
 const TWILIO_SID = process.env.TWILIO_ACCOUNT_SID || "";
@@ -97,13 +97,6 @@ export async function forwardInsiderSmsToAdmin(
   body: string,
   sid: string,
 ): Promise<void> {
-  if (!RESEND_KEY) {
-    console.log(
-      `[insider-sms] Resend not configured — would forward "${body}" from ${insider.name}`,
-    );
-    return;
-  }
-
   // Fetch any attached MMS media in parallel with composing the email.
   const mediaPromise = fetchMmsMedia(sid);
 
@@ -130,7 +123,7 @@ export async function forwardInsiderSmsToAdmin(
   const attachments = media.map((m) => ({
     filename: m.filename,
     content: m.content,
-    content_type: m.contentType,
+    contentType: m.contentType,
   }));
 
   // Append a hint to the body if media is attached so admin@ readers
@@ -143,26 +136,11 @@ export async function forwardInsiderSmsToAdmin(
         )
       : html;
 
-  try {
-    const res = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${RESEND_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        from: "Port A Local <bookings@theportalocal.com>",
-        to: ADMIN_EMAIL,
-        subject,
-        html: finalHtml,
-        attachments: attachments.length > 0 ? attachments : undefined,
-      }),
-    });
-    if (!res.ok) {
-      const err = await res.text();
-      console.error("[insider-sms] Resend error:", err);
-    }
-  } catch (err) {
-    console.error("[insider-sms] forward failed:", err);
-  }
+  await sendPalEmail({
+    from: "Port A Local <bookings@theportalocal.com>",
+    to: ADMIN_EMAIL,
+    subject,
+    html: finalHtml,
+    attachments: attachments.length > 0 ? attachments : undefined,
+  });
 }
