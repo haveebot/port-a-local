@@ -879,6 +879,14 @@ export interface AdConfig {
    *   }
    */
   customTargeting?: Record<string, unknown>;
+  /**
+   * Optional query string (no leading "?") appended by Meta to every link
+   * clicked from the ad — including URLs in the post message. This is how a
+   * post-based ad carries utm_* params for the attribution pipeline without
+   * uglying the visible caption. Example:
+   *   "utm_source=facebook&utm_medium=paid&utm_campaign=summer-2026-beach"
+   */
+  urlTags?: string;
 }
 
 export interface AdResult {
@@ -1044,6 +1052,7 @@ export async function createAd(c: AdConfig): Promise<AdResult> {
   const creativeBody = new URLSearchParams();
   creativeBody.set("name", `Creative · ${c.campaignName}`);
   creativeBody.set("object_story_id", c.externalPostId);
+  if (c.urlTags) creativeBody.set("url_tags", c.urlTags);
   creativeBody.set("access_token", token);
   const creativeRes = await postForm<{ id: string }>(
     `/act_${c.adAccountId}/adcreatives`,
