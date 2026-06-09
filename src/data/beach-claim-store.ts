@@ -374,6 +374,29 @@ export async function getClaimsForSetupDate(
   }
 }
 
+/**
+ * Set (or clear, with null) the operator-entered customer note on a booking —
+ * post-booking details the customer tells us (arrival time, gate code, "look
+ * for the blue tent"). Rendered into every subsequent vendor-facing comm.
+ */
+export async function setClaimNote(
+  stripeSessionId: string,
+  note: string | null,
+): Promise<boolean> {
+  try {
+    await ensureSchema();
+    const { rowCount } = await sql`
+      UPDATE beach_booking_claims
+      SET notes = ${note}
+      WHERE stripe_session_id = ${stripeSessionId}
+    `;
+    return (rowCount ?? 0) > 0;
+  } catch (err) {
+    console.error("[beach-claim-store] setClaimNote failed:", err);
+    return false;
+  }
+}
+
 /** Stamp a booking's day-before comms as sent (cron idempotency). */
 export async function markDayBeforeSent(stripeSessionId: string): Promise<void> {
   try {

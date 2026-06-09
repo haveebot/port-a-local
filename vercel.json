@@ -42,7 +42,7 @@
     },
     {
       "path": "/api/cron/beach-day-before",
-      "schedule": "0 14 * * *"
+      "schedule": "0 14,23 * * *"
     }
   ]
 }

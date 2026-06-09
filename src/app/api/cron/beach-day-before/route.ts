@@ -7,7 +7,10 @@ export const runtime = "nodejs";
 
 /**
  * Vercel Cron: beach day-before comms.
- * Schedule: daily ~9am CT (configured in vercel.json).
+ * Schedule: twice daily — ~9am CT + ~6pm CT (configured in vercel.json).
+ * The evening run exists to catch next-day bookings made after the morning
+ * pass (e.g. books Tuesday afternoon for Wednesday); day_before_sent_at
+ * keeps the two runs from double-sending.
  *
  * Finds claimed beach setups happening TOMORROW (America/Chicago) that
  * haven't had their day-before comms sent yet, and for each fires:

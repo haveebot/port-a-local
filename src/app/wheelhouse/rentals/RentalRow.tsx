@@ -28,6 +28,8 @@ export default function RentalRow({
   const [error, setError] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
   const [reassignOpen, setReassignOpen] = useState(false);
+  const [noteOpen, setNoteOpen] = useState(false);
+  const [noteDraft, setNoteDraft] = useState(rental.notes ?? "");
 
   async function post(payload: Record<string, unknown>) {
     setBusy(true);
@@ -69,6 +71,24 @@ export default function RentalRow({
       const emailPart = e > 0 ? ` + ${e} email${e === 1 ? "" : "s"}` : "";
       setInfo(
         `Update sent to ${data.result.vendor} (${data.result.sent} text${data.result.sent === 1 ? "" : "s"}${emailPart})`,
+      );
+      startTransition(() => router.refresh());
+    }
+  }
+
+  async function saveNote() {
+    const data = await post({
+      action: "set-note",
+      source: rental.source,
+      sessionId: rental.sessionId,
+      note: noteDraft,
+    });
+    if (data) {
+      setNoteOpen(false);
+      setInfo(
+        noteDraft.trim()
+          ? "Note saved — it rides along in every vendor update from here."
+          : "Note cleared.",
       );
       startTransition(() => router.refresh());
     }
@@ -131,6 +151,43 @@ export default function RentalRow({
           {rental.location && (
             <p className="text-[11px] text-navy-500 mt-0.5">📍 {rental.location}</p>
           )}
+          {rental.notes && !noteOpen && (
+            <p className="text-[11px] text-navy-500 mt-0.5 italic">📝 {rental.notes}</p>
+          )}
+          {noteOpen && (
+            <div className="mt-2">
+              <textarea
+                value={noteDraft}
+                onChange={(e) => setNoteDraft(e.target.value)}
+                maxLength={300}
+                rows={2}
+                placeholder="e.g. Party arrives at 10am — have setup ready by then"
+                className="w-full text-xs border border-navy-200 rounded px-2 py-1.5 bg-white"
+                disabled={busy}
+              />
+              <div className="mt-1 flex items-center gap-2">
+                <button
+                  onClick={saveNote}
+                  disabled={busy}
+                  className="px-3 py-1 text-[11px] font-bold rounded bg-navy-700 text-white hover:bg-navy-800 disabled:opacity-40"
+                >
+                  {busy ? "…" : "Save note"}
+                </button>
+                <button
+                  onClick={() => {
+                    setNoteOpen(false);
+                    setNoteDraft(rental.notes ?? "");
+                  }}
+                  className="text-[11px] text-navy-400 hover:text-navy-700"
+                >
+                  cancel
+                </button>
+                <span className="text-[10px] text-navy-300 ml-auto">
+                  goes out with every vendor update
+                </span>
+              </div>
+            </div>
+          )}
           {reassignOpen && (
             <div className="mt-2 flex items-center gap-2 flex-wrap">
               <span className="text-[11px] text-navy-500">Reassign to:</span>
@@ -175,6 +232,13 @@ export default function RentalRow({
               Reassign
             </button>
           )}
+          <button
+            onClick={() => setNoteOpen((o) => !o)}
+            disabled={busy || pending}
+            className="px-3 py-1 text-[11px] font-semibold rounded border border-navy-200 text-navy-700 hover:bg-navy-50 disabled:opacity-40"
+          >
+            {rental.notes ? "Edit note" : "📝 Note"}
+          </button>
         </div>
       </div>
       {info && <p className="text-[11px] text-emerald-700 mt-1">{info}</p>}
