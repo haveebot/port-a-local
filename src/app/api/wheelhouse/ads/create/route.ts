@@ -61,6 +61,12 @@ interface CreateAdBody {
   customTargeting?: Record<string, unknown>;
   /** Optional: social_post_queue.id so the server can re-verify the post. */
   sourcePostId?: number;
+  /**
+   * Optional query string (no leading "?") Meta appends to every link
+   * clicked from the ad — utm_* params for the attribution pipeline
+   * without changing the visible post.
+   */
+  urlTags?: string;
 }
 
 export async function POST(req: NextRequest) {
@@ -192,6 +198,18 @@ export async function POST(req: NextRequest) {
     customTargeting = body.customTargeting;
   }
 
+  let urlTags: string | undefined;
+  if (typeof body.urlTags === "string" && body.urlTags.trim().length > 0) {
+    const t = body.urlTags.trim().replace(/^\?/, "");
+    if (t.length > 500) {
+      return NextResponse.json(
+        { error: "url_tags_too_long", maxChars: 500 },
+        { status: 400 },
+      );
+    }
+    urlTags = t;
+  }
+
   // createAd handles stub-mode short-circuit internally when
   // META_AD_ACCOUNT_ID is unset — same pattern as boostPost.
   // Pass empty strings for adAccountId + pageId in stub mode; createAd
@@ -212,6 +230,7 @@ export async function POST(req: NextRequest) {
     durationHours,
     audienceId,
     customTargeting,
+    urlTags,
   });
 
   if (!result.ok) {
