@@ -40,6 +40,7 @@ export function buildVendorDayBeforeSms(
   setupDateFormatted: string,
   customerName: string,
   setupLocation?: string | null,
+  customerNote?: string | null,
 ): string {
   const lines = [
     `Port A Local — Beach Setup Reminder`,
@@ -47,6 +48,7 @@ export function buildVendorDayBeforeSms(
     `Booking name: ${formatCustomerDisplay(customerName) ?? customerName}`,
   ];
   if (setupLocation) lines.push(`Setup location: ${setupLocation}`);
+  if (customerNote) lines.push(`Customer note: ${customerNote}`);
   lines.push(
     `Port A Local manages all customer communication — please reach out with any questions or needs.`,
   );
@@ -110,6 +112,7 @@ export async function sendBeachDayBeforeComms(
       dateFormatted,
       claim.customerName ?? "Customer",
       claim.setupLocation,
+      claim.notes,
     );
     for (const v of crew) {
       const phone = beachVendorPhone(v);

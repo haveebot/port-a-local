@@ -192,6 +192,29 @@ export async function assignCartVendor(
   return true;
 }
 
+/**
+ * Set (or clear, with null) the operator-entered customer note on a booking —
+ * the cart twin of beach-claim-store.setClaimNote. Rendered into every
+ * subsequent vendor-facing comm.
+ */
+export async function setCartBookingNote(
+  stripeSessionId: string,
+  note: string | null,
+): Promise<boolean> {
+  try {
+    await ensureSchema();
+    const { rowCount } = await sql`
+      UPDATE cart_bookings
+      SET notes = ${note}
+      WHERE stripe_session_id = ${stripeSessionId}
+    `;
+    return (rowCount ?? 0) > 0;
+  } catch (err) {
+    console.error("[cart-booking-store] setCartBookingNote failed:", err);
+    return false;
+  }
+}
+
 /** Single booking by session id. */
 export async function getCartBooking(
   stripeSessionId: string,

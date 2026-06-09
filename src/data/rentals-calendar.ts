@@ -40,6 +40,9 @@ export interface UnifiedRental {
   vendorName: string | null;
   /** beach setup spot (from the booking); null for cart */
   location: string | null;
+  /** operator-entered customer note (post-booking details — arrival time,
+   *  gate code, etc.); flows into every vendor-facing comm */
+  notes: string | null;
   status: "assigned" | "open";
 }
 
@@ -84,6 +87,7 @@ export async function listRentals(): Promise<UnifiedRental[]> {
       vendorSlug: c.claimedBySlug,
       vendorName: c.claimedBySlug ? beachVendorName(c.claimedBySlug) : null,
       location: c.setupLocation,
+      notes: c.notes,
       status: c.claimedBySlug ? "assigned" : "open",
     });
   }
@@ -101,6 +105,7 @@ export async function listRentals(): Promise<UnifiedRental[]> {
       vendorSlug: b.assignedVendorSlug,
       vendorName: b.assignedVendorSlug ? cartVendorName(b.assignedVendorSlug) : null,
       location: null,
+      notes: b.notes,
       status: b.assignedVendorSlug ? "assigned" : "open",
     });
   }
@@ -137,12 +142,14 @@ export function buildVendorUpdateSms(r: UnifiedRental): string {
     if (r.handoff) {
       lines.push(`Method: Customer chose ${r.handoff} ${r.handoff === "pickup" ? "at your shop" : "to their address"}`);
     }
+    if (r.notes) lines.push(`Customer note: ${r.notes}`);
     lines.push(
       `We'll confirm the reservation with you 24–48 hours before the trip — PAL handles all customer comms until then. Reply here with any questions.`,
     );
   } else {
     lines.push(`Setup: ${fmtRentalDate(r.startDate)}`);
     if (r.location) lines.push(`Setup spot: ${r.location}`);
+    if (r.notes) lines.push(`Customer note: ${r.notes}`);
     lines.push(
       `PAL handles all customer comms — just let us know if you need anything.`,
     );

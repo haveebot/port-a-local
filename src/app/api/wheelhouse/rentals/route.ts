@@ -9,7 +9,8 @@ import {
 } from "@/data/rentals-calendar";
 import { sendSms } from "@/lib/twilioSms";
 import { sendPalEmail } from "@/lib/palEmail";
-import { assignCartVendor } from "@/data/cart-booking-store";
+import { assignCartVendor, setCartBookingNote } from "@/data/cart-booking-store";
+import { setClaimNote } from "@/data/beach-claim-store";
 import { sql } from "@vercel/postgres";
 
 export const dynamic = "force-dynamic";
@@ -24,6 +25,9 @@ export const runtime = "nodejs";
  *       vendor, never the full list).
  *   { action: "reassign", source, sessionId, vendorSlug } — move the
  *       booking to a different vendor (records the new owner).
+ *   { action: "set-note", source, sessionId, note }     — store a customer
+ *       note on the booking (post-booking details like arrival time); flows
+ *       into every subsequent vendor comm. Empty note clears it.
  */
 export async function POST(req: NextRequest) {
   const body = (await req.json().catch(() => ({}))) as {
@@ -31,6 +35,7 @@ export async function POST(req: NextRequest) {
     source?: RentalSource;
     sessionId?: string;
     vendorSlug?: string;
+    note?: string;
   };
   const { action, source, sessionId, vendorSlug } = body;
   if (!action || !sessionId || !source) {
@@ -92,6 +97,28 @@ export async function POST(req: NextRequest) {
     }
     console.log(`[wh/rentals] ${source} ${sessionId} reassigned to ${vendorSlug}`);
     return NextResponse.json({ ok: true, result: { reassignedTo: vendorSlug } });
+  }
+
+  if (action === "set-note") {
+    // Notes ride along inside vendor SMS — keep them SMS-sized.
+    const trimmed = (body.note ?? "").trim();
+    if (trimmed.length > 300) {
+      return NextResponse.json({ ok: false, error: "note_too_long" }, { status: 400 });
+    }
+    const note = trimmed.length > 0 ? trimmed : null;
+    let updated = false;
+    if (source === "beach") {
+      updated = await setClaimNote(sessionId, note);
+    } else if (source === "cart") {
+      updated = await setCartBookingNote(sessionId, note);
+    } else {
+      return NextResponse.json({ ok: false, error: "bad_source" }, { status: 400 });
+    }
+    if (!updated) {
+      return NextResponse.json({ ok: false, error: "rental_not_found" }, { status: 404 });
+    }
+    console.log(`[wh/rentals] ${source} ${sessionId} note ${note ? "set" : "cleared"}`);
+    return NextResponse.json({ ok: true, result: { note } });
   }
 
   return NextResponse.json({ error: "unknown_action" }, { status: 400 });
