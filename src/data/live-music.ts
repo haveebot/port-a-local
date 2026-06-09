@@ -134,6 +134,21 @@ export function actsByDate(week: LiveMusicWeek, isoDate: string): LiveMusicAct[]
   return week.acts.filter((a) => a.date === isoDate);
 }
 
+/**
+ * True once the printed week's 7-day window is fully past. The page uses this
+ * to switch into its "between schedules" state (venue directory + how-to-find
+ * copy) instead of advertising a dated week with zero shows — the site should
+ * never look stale just because a weekly refresh hasn't landed yet.
+ */
+export function weekIsStale(
+  week: LiveMusicWeek = CURRENT_WEEK,
+  today: string = todayInCentral(),
+): boolean {
+  const end = new Date(week.weekOf + "T12:00:00-05:00");
+  end.setDate(end.getDate() + 7);
+  return today >= end.toISOString().slice(0, 10);
+}
+
 export function actsThisWeek(week: LiveMusicWeek, todayIso: string): { iso: string; acts: LiveMusicAct[] }[] {
   const start = new Date(week.weekOf + "T12:00:00-05:00");
   const days: { iso: string; acts: LiveMusicAct[] }[] = [];
