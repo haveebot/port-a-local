@@ -67,6 +67,16 @@ interface CreateAdBody {
    * without changing the visible post.
    */
   urlTags?: string;
+  /**
+   * Dark-post creative (object_story_spec link ad) — the ad's content
+   * never appears on the Page timeline. Wins over externalPostId.
+   */
+  creativeSpec?: {
+    message?: string;
+    link?: string;
+    picture?: string;
+    callToAction?: string;
+  };
 }
 
 export async function POST(req: NextRequest) {
@@ -98,10 +108,52 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  // --- Dark-post creative (wins over externalPostId) ---
+  let creativeSpec:
+    | { message: string; link: string; picture?: string; callToAction?: string }
+    | undefined;
+  if (body.creativeSpec) {
+    const cs = body.creativeSpec;
+    const message = (cs.message ?? "").trim();
+    const link = (cs.link ?? "").trim();
+    if (!message || message.length > 2000) {
+      return NextResponse.json(
+        { error: "invalid_creative_message", detail: "1..2000 chars." },
+        { status: 400 },
+      );
+    }
+    if (!/^https?:\/\//.test(link)) {
+      return NextResponse.json(
+        { error: "invalid_creative_link", detail: "http(s) URL required." },
+        { status: 400 },
+      );
+    }
+    const picture = (cs.picture ?? "").trim();
+    if (picture && !/^https?:\/\//.test(picture)) {
+      return NextResponse.json(
+        { error: "invalid_creative_picture", detail: "http(s) URL required." },
+        { status: 400 },
+      );
+    }
+    const callToAction = (cs.callToAction ?? "").trim();
+    if (callToAction && !/^[A-Z_]{2,40}$/.test(callToAction)) {
+      return NextResponse.json(
+        { error: "invalid_call_to_action", detail: "UPPER_SNAKE Meta CTA type." },
+        { status: 400 },
+      );
+    }
+    creativeSpec = {
+      message,
+      link,
+      ...(picture ? { picture } : {}),
+      ...(callToAction ? { callToAction } : {}),
+    };
+  }
+
   let externalPostId = (body.externalPostId ?? "").trim();
-  if (!externalPostId) {
+  if (!externalPostId && !creativeSpec) {
     return NextResponse.json(
-      { error: "missing_external_post_id" },
+      { error: "missing_external_post_id", detail: "Provide externalPostId or creativeSpec." },
       { status: 400 },
     );
   }
@@ -223,7 +275,7 @@ export async function POST(req: NextRequest) {
   const result = await createAd({
     adAccountId,
     pageId,
-    externalPostId,
+    externalPostId: externalPostId || undefined,
     campaignName,
     objective,
     dailyBudgetCents: Math.round(dailyBudgetCents),
@@ -231,6 +283,7 @@ export async function POST(req: NextRequest) {
     audienceId,
     customTargeting,
     urlTags,
+    creativeSpec,
   });
 
   if (!result.ok) {

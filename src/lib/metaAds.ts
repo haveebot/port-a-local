@@ -847,8 +847,11 @@ export interface AdConfig {
   adAccountId: string;
   /** numeric Page ID owning the post being promoted */
   pageId: string;
-  /** "{pageId}_{postId}" — what's in social_post_queue.external_post_id */
-  externalPostId: string;
+  /**
+   * "{pageId}_{postId}" — what's in social_post_queue.external_post_id.
+   * Required unless creativeSpec is provided (dark-post mode).
+   */
+  externalPostId?: string;
   /** human-readable name for the campaign — appears in Ads Manager */
   campaignName: string;
   /** Meta campaign objective (see AdObjective) */
@@ -887,6 +890,22 @@ export interface AdConfig {
    *   "utm_source=facebook&utm_medium=paid&utm_campaign=summer-2026-beach"
    */
   urlTags?: string;
+  /**
+   * Dark-post creative — the ad's content lives only inside the ad and is
+   * NEVER published to the Page timeline (object_story_spec link ad). Wins
+   * over externalPostId. Put utm params directly in `link`; skip urlTags to
+   * avoid double-appending.
+   */
+  creativeSpec?: {
+    /** body copy shown above the link card */
+    message: string;
+    /** destination URL — carry utm_* params here */
+    link: string;
+    /** image URL for the link card (Meta fetches it) */
+    picture?: string;
+    /** CTA button type, e.g. "BOOK_TRAVEL", "LEARN_MORE" */
+    callToAction?: string;
+  };
 }
 
 export interface AdResult {
@@ -970,6 +989,12 @@ export async function createAd(c: AdConfig): Promise<AdResult> {
   const token = getToken();
   if (!token) return { ok: false, error: "META_PAGE_ACCESS_TOKEN not set" };
   if (!c.adAccountId) return { ok: false, error: "ad account id missing" };
+  if (!c.creativeSpec && !c.externalPostId) {
+    return { ok: false, error: "need externalPostId or creativeSpec" };
+  }
+  if (c.creativeSpec && !c.pageId) {
+    return { ok: false, error: "creativeSpec requires pageId" };
+  }
 
   // Enforce caps regardless of what caller passed. UI should validate
   // first but server is the authority.
@@ -1047,11 +1072,29 @@ export async function createAd(c: AdConfig): Promise<AdResult> {
   }
   const adsetId = adsetRes.data.id;
 
-  // Step 3: Ad Creative — references the existing post via object_story_id.
-  // Same as createBoost: post-based ad, no new creative needed.
+  // Step 3: Ad Creative — either a dark post (object_story_spec; never on
+  // the Page timeline) or a reference to an existing post (object_story_id).
   const creativeBody = new URLSearchParams();
   creativeBody.set("name", `Creative · ${c.campaignName}`);
-  creativeBody.set("object_story_id", c.externalPostId);
+  if (c.creativeSpec) {
+    const linkData: Record<string, unknown> = {
+      message: c.creativeSpec.message,
+      link: c.creativeSpec.link,
+    };
+    if (c.creativeSpec.picture) linkData.picture = c.creativeSpec.picture;
+    if (c.creativeSpec.callToAction) {
+      linkData.call_to_action = {
+        type: c.creativeSpec.callToAction,
+        value: { link: c.creativeSpec.link },
+      };
+    }
+    creativeBody.set(
+      "object_story_spec",
+      JSON.stringify({ page_id: c.pageId, link_data: linkData }),
+    );
+  } else {
+    creativeBody.set("object_story_id", c.externalPostId!);
+  }
   if (c.urlTags) creativeBody.set("url_tags", c.urlTags);
   creativeBody.set("access_token", token);
   const creativeRes = await postForm<{ id: string }>(
