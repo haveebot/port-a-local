@@ -15,6 +15,7 @@ import {
   formatDateLong,
   formatDateShort,
   liveMusicHeadline,
+  weekIsStale,
   type LiveMusicAct,
 } from "@/data/live-music";
 
@@ -132,7 +133,8 @@ function DaySection({ iso, acts, isToday }: { iso: string; acts: LiveMusicAct[];
 
 export default function LiveMusicPage() {
   const today = todayInCentral();
-  const days = actsThisWeek(CURRENT_WEEK, today);
+  const stale = weekIsStale(CURRENT_WEEK, today);
+  const days = stale ? [] : actsThisWeek(CURRENT_WEEK, today);
   const tonightDay = days[0];
   const restOfWeek = days.slice(1);
 
@@ -184,6 +186,52 @@ export default function LiveMusicPage() {
           </p>
         </div>
       </section>
+
+      {/* Between schedules — the printed week has lapsed; show where the
+          music happens instead of a dated, empty listing. */}
+      {stale && (
+        <section className="py-12 bg-sand-50">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6">
+            <div className="mb-8">
+              <p className="text-coral-500 text-sm font-medium tracking-[0.2em] uppercase mb-2">
+                In Season
+              </p>
+              <h2 className="font-display text-2xl sm:text-3xl font-bold text-navy-900 mb-3">
+                Music Nearly Every Night
+              </h2>
+              <p className="text-sm sm:text-base text-navy-600 leading-relaxed max-w-2xl">
+                The weekly schedule is between printings — but in season, live
+                music is a near-nightly thing on the island. These are the
+                stages where it happens. Swing by, or check a venue&apos;s page
+                before you head out.
+              </p>
+            </div>
+            <div className="grid sm:grid-cols-2 gap-3">
+              {Object.values(VENUES).map((v) =>
+                v.directoryHref ? (
+                  <Link
+                    key={v.slug}
+                    href={v.directoryHref}
+                    className="bg-white rounded-xl border border-sand-200 p-4 font-display text-base font-semibold text-navy-900 hover:border-coral-300 transition-colors"
+                  >
+                    {v.name}
+                    <span className="block text-xs font-sans font-normal text-coral-600 mt-0.5">
+                      View listing →
+                    </span>
+                  </Link>
+                ) : (
+                  <div
+                    key={v.slug}
+                    className="bg-white rounded-xl border border-sand-200 p-4 font-display text-base font-semibold text-navy-900"
+                  >
+                    {v.name}
+                  </div>
+                ),
+              )}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Tonight */}
       {tonightDay && (
@@ -255,9 +303,19 @@ export default function LiveMusicPage() {
               Source &amp; Scope
             </p>
             <p className="text-sm text-navy-700 leading-relaxed">
-              {CURRENT_WEEK.sourcedFrom}. Port Aransas venues only — mainland Corpus,
-              Portland, and Fulton listings from the same roundup are filtered out.
-              Schedules are printed weekly and may shift. Got a correction?
+              {stale ? (
+                <>
+                  Schedules are printed weekly — this page updates when the new
+                  week posts. Port Aransas venues only. Know what&apos;s coming
+                  up, or got a correction?
+                </>
+              ) : (
+                <>
+                  {CURRENT_WEEK.sourcedFrom}. Port Aransas venues only — mainland Corpus,
+                  Portland, and Fulton listings from the same roundup are filtered out.
+                  Schedules are printed weekly and may shift. Got a correction?
+                </>
+              )}{" "}
               Email <a href="mailto:hello@theportalocal.com" className="text-coral-600 hover:underline">hello@theportalocal.com</a>.
             </p>
           </div>
