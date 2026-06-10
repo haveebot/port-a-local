@@ -19,6 +19,8 @@
  *   deposit handling, customer service, emergency maintenance for the rental duration)
  */
 
+import { NEW_LEAD_FANOUT_PAUSED } from "./lead-fanout";
+
 export interface CartVendorPhone {
   number: string;
   label?: "primary" | "personal" | "team" | string;
@@ -471,6 +473,7 @@ export function hasSmsCapablePhone(v: CartVendor): boolean {
  * SMS-capable phone. The bulk-invite + lead-blast SMS paths use this list.
  */
 export function getSmsCapableVendors(): CartVendor[] {
+  if (NEW_LEAD_FANOUT_PAUSED) return [];
   return cartVendors.filter(
     (v) => v.active && v.leadBlasts !== false && hasSmsCapablePhone(v),
   );
@@ -480,6 +483,7 @@ export function getSmsCapableVendors(): CartVendor[] {
  * Vendors with at least one email — ready for the email blast.
  */
 export function getBlastableVendors(): CartVendor[] {
+  if (NEW_LEAD_FANOUT_PAUSED) return [];
   return cartVendors.filter(
     (v) => v.active && v.leadBlasts !== false && emailsFor(v).length > 0,
   );
@@ -509,6 +513,7 @@ export function getBlastCount(): number {
 export function getFirstLookVendorsForSize(
   cartSize: string,
 ): CartVendor[] {
+  if (NEW_LEAD_FANOUT_PAUSED) return [];
   return cartVendors.filter(
     (v) =>
       v.active &&
