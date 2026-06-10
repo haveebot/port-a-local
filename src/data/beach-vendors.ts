@@ -15,6 +15,8 @@
  * confirms. Inbound CLAIM matching lives in /api/twilio/sms/inbound.
  */
 
+import { NEW_LEAD_FANOUT_PAUSED } from "./lead-fanout";
+
 export interface BeachVendor {
   slug: string;
   name: string;
@@ -170,6 +172,7 @@ export function beachVendorEmails(v: BeachVendor): string[] {
  * Active + has phone + not flagged smsCapable:false.
  */
 export function getBlastableBeachVendors(): BeachVendor[] {
+  if (NEW_LEAD_FANOUT_PAUSED) return [];
   return beachVendors.filter(
     (v) =>
       v.active &&

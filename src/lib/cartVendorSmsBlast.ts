@@ -31,6 +31,7 @@ import {
   smsPhonesFor,
   type CartVendor,
 } from "@/data/cart-vendors";
+import { NEW_LEAD_FANOUT_PAUSED } from "@/data/lead-fanout";
 
 /**
  * The opt-in invitation. One-shot SMS asking a vendor to join the
@@ -192,6 +193,10 @@ export async function sendOpenBlastSms(
     ...optedOutSlugs,
     ...(opts.excludeSlugs ?? []),
   ]);
+  if (NEW_LEAD_FANOUT_PAUSED) {
+    console.log("[cart-vendor-blast] open blast skipped — fan-out paused");
+    return 0;
+  }
   const targets = cartVendors.filter(
     (v) =>
       v.active &&
