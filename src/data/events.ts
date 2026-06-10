@@ -140,7 +140,7 @@ export const events: EventDetails[] = [
       "TWAT — the Texas Women Anglers Tournament — is Port Aransas's women-only fishing tournament. Founded 1984 by Pete Fox; Fox family still runs it. Dozens of boats, hundreds of women anglers each summer. Every dollar that doesn't go to the winners benefits The Purple Door, the Coastal Bend's shelter for survivors of domestic violence and sexual assault. Tournament has contributed over $130,000 to The Purple Door to date. Late August 2026.",
     startISO: "2026-08-21T17:00:00-05:00",
     endISO: "2026-08-23T18:00:00-05:00",
-    dateLabel: "August 21–23, 2026 (tentative — confirming via official site)",
+    dateLabel: "August 21–23, 2026",
     headlineTime: "Boats depart Friday 8 PM · weigh-in Saturday 5 PM",
     venueName: "Fisherman's Wharf (weigh-in) · Reception venue downtown (announced closer to event)",
     venueAddress: "Port Aransas, TX 78373",
@@ -185,10 +185,10 @@ export const events: EventDetails[] = [
     tagline:
       "$800,000+ in prize money. The biggest billfish tournament in Port Aransas. One leg of the Texas Triple Crown.",
     description:
-      "The Texas Legends Billfish Tournament — Port Aransas's premier offshore tournament. August 6–10, 2026. $800,000+ in prize money split across mandatory + optional billfish pools and blue marlin pools. Boats may depart any Texas port; all weigh-ins and video releases verified at Fisherman's Wharf, Port Aransas. Dee Wallace, lifelong Port Aransan and Texas Saltwater Fishing Hall of Fame inductee, runs it as co-tournament director. One of three legs of the Texas Triple Crown Billfish Series — with Lone Star Shootout (Port O'Connor) and TIFT (South Padre Island).",
+      "The Texas Legends Billfish Tournament — Port Aransas's premier offshore tournament. August 5–9, 2026. $800,000+ in prize money split across mandatory + optional billfish pools and blue marlin pools. Boats may depart any Texas port; all weigh-ins and video releases verified at Fisherman's Wharf, Port Aransas. Dee Wallace, lifelong Port Aransan and Texas Saltwater Fishing Hall of Fame inductee, runs it as co-tournament director. One of three legs of the Texas Triple Crown Billfish Series — with Lone Star Shootout (Port O'Connor) and TIFT (South Padre Island).",
     startISO: "2026-08-05T17:00:00-05:00",
     endISO: "2026-08-09T22:00:00-05:00",
-    dateLabel: "August 6–10, 2026",
+    dateLabel: "August 5–9, 2026",
     headlineTime: "Weigh-ins at Fisherman's Wharf · final day Saturday Aug 8",
     venueName: "Fisherman's Wharf, Port Aransas (HQ)",
     venueAddress: "900 Tarpon St, Port Aransas, TX 78373",
@@ -218,10 +218,10 @@ export const events: EventDetails[] = [
     tagline:
       "40 boats max. Catch-and-release only. The science-funding edition of Tournament Season.",
     description:
-      "The Billfish Pachanga is Port Aransas's smallest-by-design marquee tournament — a 40-boat-cap, catch-and-release-only billfish event hosted at Virginia's on the Bay. Founded in 2019 by Virginia's co-owner Gabe Goodman. Mid-July 2026 (typically the 3rd weekend; 2025 was July 16–19). 100-nautical-mile fence from the tip of the south jetty — no chasing fish across the Gulf. Half the proceeds go to Harte Research Institute for Sportfish Science (Texas A&M University-Corpus Christi); the other half to the Port Aransas Scholarship fund. The tournament that funds the science of the fish it chases.",
+      "The Billfish Pachanga is Port Aransas's smallest-by-design marquee tournament — a 40-boat-cap, catch-and-release-only billfish event hosted at Virginia's on the Bay. Founded in 2019 by Virginia's co-owner Gabe Goodman. July 15–18, 2026. 100-nautical-mile fence from the tip of the south jetty — no chasing fish across the Gulf. Half the proceeds go to Harte Research Institute for Sportfish Science (Texas A&M University-Corpus Christi); the other half to the Port Aransas Scholarship fund. The tournament that funds the science of the fish it chases.",
     startISO: "2026-07-15T17:00:00-05:00",
     endISO: "2026-07-18T22:00:00-05:00",
-    dateLabel: "Mid-July 2026 (tentative — 2025 was July 16–19)",
+    dateLabel: "July 15–18, 2026",
     headlineTime: "Wednesday check-in at Virginia's · 3 fishing days",
     venueName: "Virginia's on the Bay (HQ)",
     venueAddress: "815 Trout St, Port Aransas, TX 78373",

@@ -546,22 +546,22 @@ export const eventContent: Record<string, EventContent> = {
           "Fisherman's Wharf headquarters. Boats register, pools are paid, captains review the year's rules with the tournament committee. Public welcome to the reception.",
       },
       {
-        time: "Thu Aug 6 · pre-dawn",
-        label: "Day 1 — lines in the water",
+        time: "Thu Aug 6 · 5 PM",
+        label: "Lines in — the fishing window opens",
         body:
-          "Boats may depart from any Texas port. Lines-in is set per the official rules — typically before sunrise. Long offshore day in pursuit of billfish.",
+          "Boats may depart from any Texas port. The official window runs continuously from 5 PM Thursday to 5 PM Saturday — crews pick their weather and their water inside it. Long offshore runs in pursuit of billfish.",
       },
       {
-        time: "Thu Aug 6 · evening",
+        time: "Fri Aug 7 · evening",
         label: "Day 1 weigh-in / video review",
         body:
           "Boats return to Fisherman's Wharf. Any blue marlin weighed; releases verified by video against the Wallace protocol. Leaderboard goes live on the app.",
       },
       {
-        time: "Fri Aug 7 + Sat Aug 8",
-        label: "Day 2 + Day 3 fishing + weigh-ins",
+        time: "Sat Aug 8 · 5 PM",
+        label: "Lines out + final weigh-in",
         body:
-          "Same rhythm. Some boats run further offshore each day; others work the same proven grounds. Saturday evening is the most-watched weigh-in — final chance to climb the leaderboard before the cutoff.",
+          "The window closes at 5 PM. Saturday evening is the most-watched weigh-in of the tournament — final chance to climb the leaderboard before the cutoff.",
       },
       {
         time: "Sun Aug 9 · 1 PM",
@@ -687,7 +687,7 @@ export const eventContent: Record<string, EventContent> = {
     },
     photoCTA: {
       headline: "Got a Texas Legends photo? Send it.",
-      body: "Past tournaments, your boat at Fisherman's Wharf, a billfish video frame, the awards-night crowd, captain spotlights, anything that shows what tournament week actually looks like on the dock. We'll feature them leading up to August 6.",
+      body: "Past tournaments, your boat at Fisherman's Wharf, a billfish video frame, the awards-night crowd, captain spotlights, anything that shows what tournament week actually looks like on the dock. We'll feature them leading up to August 5.",
       secondaryBody: "Day-of, the same inbox loads release videos and weigh-in photos in real time. Tag the boat, the species, the day.",
       mailSubject: "Texas Legends photo — TXL 2026",
     },
@@ -1015,9 +1015,9 @@ export const eventContent: Record<string, EventContent> = {
           "Live leaderboards run through the Reel Time Apps platform — Texas Women Angler Tournament app on iOS + Android. Download before Saturday.",
       },
       {
-        label: "Date is tentative",
+        label: "Dates confirmed",
         detail:
-          "We've slotted Aug 21–23 based on the 2025 pattern (4th weekend of August). Will update as soon as the official site posts confirmed 2026 dates.",
+          "TWAT 2026 is August 21–23, confirmed on the tournament's official site.",
       },
     ],
     faq: [

@@ -489,6 +489,35 @@ export default function TournamentSeasonPage() {
         </div>
       </section>
 
+      {/* Tournament weekend, handled — booking cross-links (mirrors
+          /live-music's "Make It a Night" CTA pattern) */}
+      <section className="py-16 hero-gradient relative">
+        <div className="absolute top-0 left-0 right-0 gold-line" />
+        <div className="absolute inset-0 palm-pattern opacity-20" />
+
+        <div className="relative max-w-3xl mx-auto px-4 sm:px-6 text-center">
+          <h2 className="font-display text-3xl font-bold text-sand-50 mb-4">
+            Tournament Weekend, Handled
+          </h2>
+          <p className="text-lg text-navy-200 font-light mb-8">
+            A cart for the dock-to-weigh-in shuffle, a beach setup for the
+            family while the boats are out, and dinner spots that earn the
+            wait.
+          </p>
+          <div className="flex flex-wrap justify-center gap-4">
+            <Link href="/rent" className="btn-coral px-8 py-3 rounded-xl text-sm font-semibold">
+              Rent a Cart
+            </Link>
+            <Link href="/beach" className="px-8 py-3 rounded-xl text-sm font-semibold bg-white/10 text-sand-200 border border-white/20 hover:bg-white/20 transition-colors">
+              Beach Setups
+            </Link>
+            <Link href="/eat" className="px-8 py-3 rounded-xl text-sm font-semibold bg-white/10 text-sand-200 border border-white/20 hover:bg-white/20 transition-colors">
+              Where to Eat
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Back link */}
       <section className="py-12 border-t border-sand-200">
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
