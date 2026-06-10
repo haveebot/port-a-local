@@ -195,6 +195,7 @@ export async function sendOpenBlastSms(
   const targets = cartVendors.filter(
     (v) =>
       v.active &&
+      v.leadBlasts !== false &&
       !excludeSet.has(v.slug) &&
       smsPhonesFor(v).length > 0,
   );
