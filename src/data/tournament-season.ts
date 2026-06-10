@@ -76,7 +76,7 @@ export const seasonMembers: SeasonMember[] = [
       "The smallest-by-design marquee — 40 boats max, catch-and-release-only, hosted out of a restaurant.",
     founded: 2019, // verified — first edition Jul 17-20, 2019
     sanctioning: "Independent · founder Gabe Goodman, hosted at Virginia's on the Bay",
-    dates2026: "Mid-July 2026 (tentative — 2025 was July 16–19)",
+    dates2026: "July 15–18, 2026",
     divisions:
       "3 billfish species — Blue Marlin, White Marlin, Sailfish (all release-only). Field capped at 40 boats.",
     scoring:
@@ -100,7 +100,7 @@ export const seasonMembers: SeasonMember[] = [
       "The biggest purse on the Texas Gulf Coast — a Triple Crown circuit anchor.",
     founded: 2010, // approximate — confirm closer to event
     sanctioning: "Texas Legends (independent) · Dee Wallace, co-tournament director",
-    dates2026: "August 6–10, 2026",
+    dates2026: "August 5–9, 2026",
     divisions:
       "3 species — Blue Marlin (weighed or released), White Marlin (release), Sailfish (release).",
     scoring:
@@ -124,7 +124,7 @@ export const seasonMembers: SeasonMember[] = [
       "One of the originals of the women-only fishing tournament — charity-engine, quietly run, no online merch store.",
     founded: 1984,
     sanctioning: "Fox family (Pete Fox founded; Chris Fox + Fox family today)",
-    dates2026: "Late August (tentative Aug 21–23)",
+    dates2026: "August 21–23, 2026",
     divisions: "4 (Billfish, Dolphin, Tuna, Wahoo) — offshore-only.",
     scoring:
       "Billfish points + 1 point per pound for dolphin, tuna, and wahoo. Overall = total. Women-only on the boats.",
