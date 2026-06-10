@@ -68,6 +68,16 @@ export interface BeachVendor {
    * (or remove the field) and the cron resumes auto-payouts.
    */
   manualPayoutsOnly?: boolean;
+  /**
+   * Set false to exclude this vendor from AUTOMATIC new-booking fan-out
+   * (lead blasts + claim-lost noise). Comms on jobs already assigned to
+   * them — day-before crew reminders, claim confirmations, operator
+   * Send-updates, manual reassignment — are unaffected.
+   *
+   * Used 2026-06-10 for Bron's vendors: operator receives new bookings
+   * and routes them manually while the partnership terms are worked out.
+   */
+  leadBlasts?: boolean;
 }
 
 // Beach-vendor routing — Bron's is the sole vendor for chairs + shibumi
@@ -85,6 +95,7 @@ export const beachVendors: BeachVendor[] = [
     smsCapable: true,
     team: "brons",
     manualPayoutsOnly: true,
+    leadBlasts: false,
   },
   {
     slug: "brons-bron-cell",
@@ -95,6 +106,7 @@ export const beachVendors: BeachVendor[] = [
     smsCapable: true,
     team: "brons",
     manualPayoutsOnly: true,
+    leadBlasts: false,
   },
   {
     slug: "brons-kristen",
@@ -105,6 +117,7 @@ export const beachVendors: BeachVendor[] = [
     smsCapable: true,
     team: "brons",
     manualPayoutsOnly: true,
+    leadBlasts: false,
   },
   {
     slug: "tyler",
@@ -160,6 +173,7 @@ export function getBlastableBeachVendors(): BeachVendor[] {
   return beachVendors.filter(
     (v) =>
       v.active &&
+      v.leadBlasts !== false &&
       beachVendorPhone(v).length > 0 &&
       v.smsCapable !== false,
   );

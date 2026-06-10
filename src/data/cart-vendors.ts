@@ -79,6 +79,18 @@ export interface CartVendor {
    * `firstLookMinutes > 0`.
    */
   firstLookSizes?: string[];
+
+  /**
+   * Set false to exclude this vendor from AUTOMATIC new-lead fan-out
+   * (first-look windows + open blasts, SMS and email). Comms on bookings
+   * already assigned to them — operator Send-updates, manual reassign,
+   * the confirm-time handoff package — are unaffected, and they remain
+   * available in the rentals-tool reassign dropdown.
+   *
+   * Used 2026-06-10 for Bron's: operator receives new bookings and routes
+   * them manually while the partnership terms are worked out.
+   */
+  leadBlasts?: boolean;
 }
 
 export const cartVendors: CartVendor[] = [
@@ -183,6 +195,7 @@ export const cartVendors: CartVendor[] = [
     address: "314 E Ave G, Port Aransas, TX",
     cartSizes: ["4", "6"],
     active: true,
+    leadBlasts: false,
     firstLookMinutes: 30,
     phones: [
       {
@@ -458,14 +471,18 @@ export function hasSmsCapablePhone(v: CartVendor): boolean {
  * SMS-capable phone. The bulk-invite + lead-blast SMS paths use this list.
  */
 export function getSmsCapableVendors(): CartVendor[] {
-  return cartVendors.filter((v) => v.active && hasSmsCapablePhone(v));
+  return cartVendors.filter(
+    (v) => v.active && v.leadBlasts !== false && hasSmsCapablePhone(v),
+  );
 }
 
 /**
  * Vendors with at least one email — ready for the email blast.
  */
 export function getBlastableVendors(): CartVendor[] {
-  return cartVendors.filter((v) => v.active && emailsFor(v).length > 0);
+  return cartVendors.filter(
+    (v) => v.active && v.leadBlasts !== false && emailsFor(v).length > 0,
+  );
 }
 
 /** All vendors (for admin reference). */
@@ -495,6 +512,7 @@ export function getFirstLookVendorsForSize(
   return cartVendors.filter(
     (v) =>
       v.active &&
+      v.leadBlasts !== false &&
       typeof v.firstLookMinutes === "number" &&
       v.firstLookMinutes > 0 &&
       // First-look is awarded per SIZE. firstLookSizes (when set) narrows
