@@ -59,6 +59,7 @@ export const VENUES: Record<string, LiveMusicVenue> = {
   "vfw": { slug: "vfw", name: "VFW Post 8967", directoryHref: "/drink/drink-vfw" },
   "brons": { slug: "brons", name: "Bron's Backyard", directoryHref: "/drink/drink-brons-backyard" },
   "salty-dog": { slug: "salty-dog", name: "Salty Dog", directoryHref: "/drink/drink-salty-dog" },
+  "bernies": { slug: "bernies", name: "Bernie's Beach House" },
   "sip-yard": { slug: "sip-yard", name: "Sip Yard" },
   "bierhaus": { slug: "bierhaus", name: "BierHaus" },
   "reds-patio-bar": { slug: "reds-patio-bar", name: "Red's Patio Bar" },
@@ -71,53 +72,60 @@ export const VENUES: Record<string, LiveMusicVenue> = {
 };
 
 export const CURRENT_WEEK: LiveMusicWeek = {
-  weekOf: "2026-05-20",
-  sourcedFrom: "Port A Local — week of May 20, 2026",
-  sourceReceivedAt: "2026-05-22",
+  weekOf: "2026-06-28",
+  sourcedFrom: "Port A Local — week of June 28, 2026",
+  sourceReceivedAt: "2026-06-28",
   acts: [
-    // Wednesday — May 20
-    { date: "2026-05-20", venue: "vfw", artist: "The Cleartones" },
+    // Sunday — June 28
+    { date: "2026-06-28", venue: "bernies", artist: "Tumble Dry Low" },
+    { date: "2026-06-28", venue: "brons", artist: "Tate Mitchell" },
+    { date: "2026-06-28", venue: "salty-dog", artist: "Clark Bros" },
+    { date: "2026-06-28", venue: "shortys", artist: "Jim Dugan" },
+    { date: "2026-06-28", venue: "shortys", artist: "Ty Dietz" },
+    { date: "2026-06-28", venue: "sip-yard", artist: "Brett Axelson" },
+    { date: "2026-06-28", venue: "the-gaff", artist: "Brad Ethridge", notes: "Open mic" },
+    { date: "2026-06-28", venue: "salty-dog", artist: "Karaoke" },
 
-    // Thursday — May 21
-    { date: "2026-05-21", venue: "sip-yard", artist: "Cruise Control" },
-    { date: "2026-05-21", venue: "brons", artist: "Karaoke" },
+    // Monday — June 29
+    { date: "2026-06-29", venue: "shortys", artist: "John Elijah Band" },
+    { date: "2026-06-29", venue: "brons", artist: "Karaoke" },
 
-    // Friday — May 22
-    { date: "2026-05-22", venue: "reds-patio-bar", artist: "Cajun Music", time: "6 PM" },
-    { date: "2026-05-22", venue: "bierhaus", artist: "Jim Dugan", time: "6 PM" },
-    { date: "2026-05-22", venue: "the-gaff", artist: "Boudreaux & Pousson", time: "7 PM" },
-    { date: "2026-05-22", venue: "brons", artist: "Flying Free", time: "7 PM" },
-    { date: "2026-05-22", venue: "vfw", artist: "Lisa Sullivan", time: "7 PM" },
-    { date: "2026-05-22", venue: "sip-yard", artist: "Cody Bradley", time: "7:30 PM" },
-    { date: "2026-05-22", venue: "treasure-island", artist: "Cathouse", time: "9 PM" },
-    { date: "2026-05-22", venue: "sip-yard", artist: "Clay Hollis", time: "9 PM" },
-    { date: "2026-05-22", venue: "shortys", artist: "Groove Chili", time: "9 PM" },
+    // Tuesday — June 30
+    { date: "2026-06-30", venue: "brons", artist: "Brandon Michael" },
+    { date: "2026-06-30", venue: "vfw", artist: "Brad Ethridge" },
 
-    // Saturday — May 23 (Memorial Day weekend)
-    { date: "2026-05-23", venue: "salty-dog", artist: "Clark Bros", time: "3 PM" },
-    { date: "2026-05-23", venue: "bierhaus", artist: "TJ Davis", time: "7 PM" },
-    { date: "2026-05-23", venue: "the-gaff", artist: "Jim Dugan", time: "7 PM" },
-    { date: "2026-05-23", venue: "vfw", artist: "Lucky Dogz", time: "7 PM" },
-    { date: "2026-05-23", venue: "brons", artist: "Riptide", time: "7 PM" },
-    { date: "2026-05-23", venue: "sip-yard", artist: "Bo Moore", time: "7:30 PM" },
-    { date: "2026-05-23", venue: "treasure-island", artist: "Five Card Draw", time: "9 PM" },
-    { date: "2026-05-23", venue: "shortys", artist: "Groove 2.0", time: "9 PM" },
-    { date: "2026-05-23", venue: "sip-yard", artist: "Larry Joe Taylor", time: "9 PM" },
+    // Wednesday — July 1
+    { date: "2026-07-01", venue: "brons", artist: "Jerry Ward Duo" },
 
-    // Sunday — May 24
-    { date: "2026-05-24", venue: "salty-dog", artist: "Clark Bros", time: "3 PM" },
-    { date: "2026-05-24", venue: "shortys", artist: "Jim Dugan", time: "3 PM" },
-    { date: "2026-05-24", venue: "sip-yard", artist: "Brodie Lane", time: "5 PM" },
-    { date: "2026-05-24", venue: "brons", artist: "Darren McGill", time: "7 PM" },
-    { date: "2026-05-24", venue: "the-gaff", artist: "The Dunebillies", time: "7 PM" },
-    { date: "2026-05-24", venue: "shortys", artist: "Ty Dietz", time: "8 PM" },
-    { date: "2026-05-24", venue: "sip-yard", artist: "Nick Lawrence", time: "8:30 PM" },
-    { date: "2026-05-24", venue: "treasure-island", artist: "John Michael Mraz Band", time: "9 PM" },
+    // Thursday — July 2
+    { date: "2026-07-02", venue: "sip-yard", artist: "Carson Jeffrey" },
+    { date: "2026-07-02", venue: "brons", artist: "Brad Ethridge" },
 
-    // Tuesday — May 26
-    { date: "2026-05-26", venue: "brons", artist: "Ty Dietz" },
+    // Friday — July 3 (4th of July weekend kicks off)
+    { date: "2026-07-03", venue: "treasure-island", artist: "Diamond's Edge" },
+    { date: "2026-07-03", venue: "treasure-island", artist: "Five Card Draw" },
+    { date: "2026-07-03", venue: "sip-yard", artist: "Kin Faux" },
+    { date: "2026-07-03", venue: "salty-dog", artist: "Clark Bros", notes: "4th of July weekend" },
+    { date: "2026-07-03", venue: "roosevelts-tarpon-inn", artist: "The Dunebillies" },
+    { date: "2026-07-03", venue: "brons", artist: "Tallula Junction" },
+
+    // Saturday — July 4
+    { date: "2026-07-04", venue: "sip-yard", artist: "Clay Hollis", notes: "4th of July" },
+    { date: "2026-07-04", venue: "bierhaus", artist: "Bigtime Jukebox" },
+    { date: "2026-07-04", venue: "vfw", artist: "The Groove 2.0" },
+    { date: "2026-07-04", venue: "brons", artist: "David Florez Duo" },
+    { date: "2026-07-04", venue: "bernies", artist: "20th Annual 4th of July Bash", notes: "Holiday bash" },
   ],
-  upcoming: [],
+  upcoming: [
+    { date: "2026-07-05", venue: "brons", artist: "Brandon Michael Band" },
+    { date: "2026-07-07", venue: "brons", artist: "Ty Dietz" },
+    { date: "2026-07-09", venue: "brons", artist: "Billy Snipes" },
+    { date: "2026-07-10", venue: "treasure-island", artist: "JonMikael Mraz Band" },
+    { date: "2026-07-10", venue: "brons", artist: "Chanklas" },
+    { date: "2026-07-11", venue: "brons", artist: "Dreaming in Color" },
+    { date: "2026-07-12", venue: "treasure-island", artist: "Drew Brown Band" },
+    { date: "2026-07-12", venue: "brons", artist: "The Resolution" },
+  ],
 };
 
 export function todayInCentral(): string {
