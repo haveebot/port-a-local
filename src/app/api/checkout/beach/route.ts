@@ -14,7 +14,19 @@ const getStripe = () => new Stripe(process.env.STRIPE_SECRET_KEY || "", {
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://theportalocal.com";
 
+// HALT 2026-06-29 — beach rentals SUSPENDED pending the Bron vendor agreement.
+// While true, no Stripe session is ever created, so no booking can be paid or
+// processed (even from a cached/stale page). Re-enable by setting this to false.
+const BEACH_RENTALS_SUSPENDED: boolean = true;
+
 export async function POST(req: NextRequest) {
+  if (BEACH_RENTALS_SUSPENDED) {
+    return NextResponse.json(
+      { error: "Beach setups are temporarily unavailable. Please check back soon." },
+      { status: 503 },
+    );
+  }
+
   const body = await req.json();
   const {
     name,
