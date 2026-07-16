@@ -60,8 +60,12 @@ function isContactUnlocked(setupDate: string | null): boolean {
 
 /**
  * Amount currently owed to Bron's, in cents:
- *   opening balance ($1,142) + forward jobs' payouts not yet paid out.
- * Paid-out forward jobs (paidOutAt set) drop off automatically.
+ *   opening balance ($1,142) + FULFILLED forward jobs' payouts not yet paid out.
+ *
+ * A job only counts toward owed once its setup day has passed (fulfilled) — an
+ * upcoming/future booking isn't earned yet (and could still cancel within the
+ * 72h free-cancellation window), so it stays visible in the jobs list but does
+ * not inflate the balance until the setup is done. Paid-out jobs drop off.
  */
 export async function getBronsOwedCents(): Promise<number> {
   const { rows } = await sql`
@@ -70,11 +74,12 @@ export async function getBronsOwedCents(): Promise<number> {
     WHERE claimed_by_slug = ANY(${BRONS_SLUGS as unknown as string})
       AND product IS DISTINCT FROM ${EXCLUDED_PRODUCT}
       AND setup_date >= ${BRONS_AGREEMENT_DATE}
+      AND setup_date < CURRENT_DATE
       AND paid_out_at IS NULL
       AND vendor_amount_cents IS NOT NULL
   `;
-  const forwardUnpaid = (rows[0]?.owed as number) ?? 0;
-  return BRONS_OPENING_OWED_CENTS + forwardUnpaid;
+  const fulfilledUnpaid = (rows[0]?.owed as number) ?? 0;
+  return BRONS_OPENING_OWED_CENTS + fulfilledUnpaid;
 }
 
 /**
