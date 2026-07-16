@@ -143,8 +143,24 @@ export async function notifyClaimResolution(input: {
   qty: number;
   setupDateFormatted: string;
   setupLocation?: string | null;
+  /** Raw setup date (YYYY-MM-DD). If already past, claim SMS are suppressed. */
+  setupDate?: string | null;
 }): Promise<void> {
-  const { winner, customerName, product, qty, setupDateFormatted, setupLocation } = input;
+  const { winner, customerName, product, qty, setupDateFormatted, setupLocation, setupDate } = input;
+
+  // Suppress claim confirmations for a setup whose date has already passed —
+  // e.g. a vendor back-claiming old reservations. The confirm + teammate-notify
+  // are pure noise once the setup day is gone. Reusable-model hygiene (applies
+  // to any tenant using this claim flow), not Bron's-specific.
+  if (setupDate) {
+    const today = new Date().toLocaleDateString("en-CA", { timeZone: "America/Chicago" });
+    if (setupDate < today) {
+      console.log(
+        `[beach-vendor-blast] claim SMS suppressed — past setup ${setupDate} (today ${today})`,
+      );
+      return;
+    }
+  }
 
   // 1) Confirm to winner
   const winnerPhone = beachVendorPhone(winner);
