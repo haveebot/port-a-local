@@ -68,13 +68,16 @@ function isContactUnlocked(setupDate: string | null): boolean {
  * not inflate the balance until the setup is done. Paid-out jobs drop off.
  */
 export async function getBronsOwedCents(): Promise<number> {
+  // setup_date is TEXT (ISO "YYYY-MM-DD"); compare as strings, not against a
+  // DATE type. A setup counts as fulfilled once its day is strictly past.
+  const today = new Date().toISOString().slice(0, 10);
   const { rows } = await sql`
     SELECT COALESCE(SUM(vendor_amount_cents), 0)::int AS owed
     FROM beach_booking_claims
     WHERE claimed_by_slug = ANY(${BRONS_SLUGS as unknown as string})
       AND product IS DISTINCT FROM ${EXCLUDED_PRODUCT}
       AND setup_date >= ${BRONS_AGREEMENT_DATE}
-      AND setup_date < CURRENT_DATE
+      AND setup_date < ${today}
       AND paid_out_at IS NULL
       AND vendor_amount_cents IS NOT NULL
   `;
