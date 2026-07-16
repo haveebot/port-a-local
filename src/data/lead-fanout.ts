@@ -10,9 +10,10 @@
  * crew reminders, claim confirmations, operator Send-updates, and manual
  * reassignment all keep working.
  *
- * Set 2026-06-10 (operator direction: "we will receive the rentals and
- * decide where they go independently for now"). Flip to false to restore
- * automatic fan-out — the per-vendor `leadBlasts` flags still apply
- * underneath.
+ * History:
+ *  - 2026-06-10: paused (operator direction: "we will receive the rentals and
+ *    decide where they go independently for now").
+ *  - 2026-07-16: RESUMED — beach (Bron's, "another shot") and carts both back
+ *    to automatic fan-out. The per-vendor `leadBlasts` flags still apply.
  */
-export const NEW_LEAD_FANOUT_PAUSED = true;
+export const NEW_LEAD_FANOUT_PAUSED = false;

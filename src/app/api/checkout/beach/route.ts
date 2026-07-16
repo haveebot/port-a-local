@@ -14,10 +14,10 @@ const getStripe = () => new Stripe(process.env.STRIPE_SECRET_KEY || "", {
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://theportalocal.com";
 
-// HALT 2026-06-29 — beach rentals SUSPENDED pending the Bron vendor agreement.
-// While true, no Stripe session is ever created, so no booking can be paid or
-// processed (even from a cached/stale page). Re-enable by setting this to false.
-const BEACH_RENTALS_SUSPENDED: boolean = true;
+// Beach rentals were SUSPENDED 2026-06-29 pending the Bron vendor agreement;
+// RESUMED 2026-07-16 ("giving Bron's another shot"). While true, no Stripe
+// session is created, so no booking can be paid/processed. Set true to re-halt.
+const BEACH_RENTALS_SUSPENDED: boolean = false;
 
 export async function POST(req: NextRequest) {
   if (BEACH_RENTALS_SUSPENDED) {

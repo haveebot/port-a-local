@@ -97,7 +97,7 @@ export const beachVendors: BeachVendor[] = [
     smsCapable: true,
     team: "brons",
     manualPayoutsOnly: true,
-    leadBlasts: false,
+    leadBlasts: true,
   },
   {
     slug: "brons-bron-cell",
@@ -108,7 +108,7 @@ export const beachVendors: BeachVendor[] = [
     smsCapable: true,
     team: "brons",
     manualPayoutsOnly: true,
-    leadBlasts: false,
+    leadBlasts: true,
   },
   {
     slug: "brons-kristen",
@@ -119,7 +119,7 @@ export const beachVendors: BeachVendor[] = [
     smsCapable: true,
     team: "brons",
     manualPayoutsOnly: true,
-    leadBlasts: false,
+    leadBlasts: true,
   },
   {
     slug: "tyler",
