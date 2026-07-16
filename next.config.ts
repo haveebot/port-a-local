@@ -16,10 +16,12 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
 
-      // bronsbeach.com → the Bron's team dashboard. The root lands on /brons
-      // (which middleware gates to /brons/login until they authenticate).
+      // bronsbeach.com serves ONLY the Bron's dashboard. Every path except the
+      // dashboard itself (/brons), its API (/api/brons), and assets (_next,
+      // favicon) redirects to /brons — so the domain never exposes PAL's own
+      // pages. Host-gated: this rule cannot affect theportalocal.com.
       {
-        source: "/",
+        source: "/:path((?!brons|api|_next|favicon).*)",
         has: [{ type: "host", value: "(www\\.)?bronsbeach\\.com" }],
         destination: "/brons",
         permanent: false,
