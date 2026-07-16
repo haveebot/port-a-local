@@ -41,7 +41,7 @@ export interface BronsJob {
   qty: number | null;
   /** Bron's payout for this job, in cents. */
   payoutCents: number;
-  status: "upcoming" | "fulfilled" | "paid";
+  status: "upcoming" | "completed" | "paid";
   /** True once we're inside the 24h window and contact is released. */
   contactUnlocked: boolean;
   /** Null until contactUnlocked — do not surface before the gate opens. */
@@ -97,7 +97,10 @@ export async function getBronsJobs(): Promise<BronsJob[]> {
     const setupDate = (r.setup_date as string) ?? null;
     const unlocked = isContactUnlocked(setupDate);
     const paidOut = Boolean(r.paid_out_at);
-    const claimed = Boolean(r.claimed_at);
+    // Setup counts as "completed" once its calendar day has fully passed.
+    const setupPassed = setupDate
+      ? new Date(`${setupDate}T23:59:59`).getTime() < Date.now()
+      : false;
     return {
       bookingId: r.stripe_session_id as string,
       setupDate,
@@ -105,7 +108,7 @@ export async function getBronsJobs(): Promise<BronsJob[]> {
       product: (r.product as string) ?? null,
       qty: (r.qty as number) ?? null,
       payoutCents: (r.vendor_amount_cents as number) ?? 0,
-      status: paidOut ? "paid" : claimed ? "fulfilled" : "upcoming",
+      status: paidOut ? "paid" : setupPassed ? "completed" : "upcoming",
       contactUnlocked: unlocked,
       customerName: unlocked ? ((r.customer_name as string) ?? null) : null,
       customerPhone: unlocked ? ((r.customer_phone as string) ?? null) : null,

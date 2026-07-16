@@ -16,7 +16,7 @@ function fmtDate(d: string | null): string {
 
 const STATUS_STYLE: Record<BronsJob["status"], string> = {
   upcoming: "bg-amber-500/20 text-amber-200",
-  fulfilled: "bg-sky-500/20 text-sky-200",
+  completed: "bg-sky-500/20 text-sky-200",
   paid: "bg-emerald-500/20 text-emerald-200",
 };
 
