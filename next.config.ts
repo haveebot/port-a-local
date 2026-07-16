@@ -16,6 +16,15 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
 
+      // bronsbeach.com → the Bron's team dashboard. The root lands on /brons
+      // (which middleware gates to /brons/login until they authenticate).
+      {
+        source: "/",
+        has: [{ type: "host", value: "(www\\.)?bronsbeach\\.com" }],
+        destination: "/brons",
+        permanent: false,
+      },
+
       // Cart-rental shops removed 2026-04-30 — bookable only via /rent
       // (PAL marketplace). Catches direct slug links + any /[category]/[slug]
       // bookmarks tourists or partners may have stashed.

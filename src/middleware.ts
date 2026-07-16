@@ -54,8 +54,33 @@ function tokenToAgent(token: string): string | null {
   return null;
 }
 
+// Bron's team dashboard (bronsbeach.com) — separate cookie gate. A Bron's
+// session (brons_auth) NEVER grants Wheelhouse access, and vice versa.
+const PUBLIC_BRONS_PATHS = [
+  "/brons/login",
+  "/api/brons/login",
+  "/api/brons/logout",
+];
+
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
+
+  // --- Bron's dashboard gate ---
+  const isBrons =
+    pathname === "/brons" ||
+    pathname.startsWith("/brons/") ||
+    pathname.startsWith("/api/brons/");
+  if (isBrons) {
+    if (PUBLIC_BRONS_PATHS.includes(pathname)) return NextResponse.next();
+    const bronsAuthed = req.cookies.get("brons_auth")?.value === "ok";
+    if (bronsAuthed) return NextResponse.next();
+    if (pathname.startsWith("/api/")) {
+      return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+    }
+    const loginUrl = req.nextUrl.clone();
+    loginUrl.pathname = "/brons/login";
+    return NextResponse.redirect(loginUrl);
+  }
 
   if (PUBLIC_WHEELHOUSE_PATHS.includes(pathname)) {
     return NextResponse.next();
@@ -103,5 +128,10 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/wheelhouse/:path*", "/api/wheelhouse/:path*"],
+  matcher: [
+    "/wheelhouse/:path*",
+    "/api/wheelhouse/:path*",
+    "/brons/:path*",
+    "/api/brons/:path*",
+  ],
 };
