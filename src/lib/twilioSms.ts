@@ -5,13 +5,15 @@
  * - Consumer SMS must be gated on an explicit opt-in (`smsConsent === true`) collected
  *   via the separate unchecked-by-default checkbox on the maintenance/rent/beach forms.
  * - "Vendor / internal-ops SMS" (maintenance vendor dispatch, admin alerts, driver dispatch)
- *   gets the same plumbing but is NOT magically exempt from carrier filtering
- *   pre-A2P 10DLC — AT&T and Verizon have been blocking or heavily throttling
- *   unregistered long-code A2P traffic to consumer mobile numbers since ~2024,
- *   regardless of B2B vs B2C intent. Twilio reports "delivered" even when the
- *   carrier silently drops it. Treat ALL SMS as best-effort until A2P 10DLC is
- *   approved at TCR. Always pair with email backup for any flow that ACTUALLY
- *   has to reach someone (e.g. driver dispatch — see deliverDispatch.ts).
+ *   gets the same plumbing and the same carrier treatment as consumer SMS.
+ * - A2P 10DLC status: VERIFIED (checked live 2026-07-18 — campaign
+ *   QE2c6890da8086d771620e9b13fadeba0b, LOW_VOLUME use case, on the messaging
+ *   service SID). Registered traffic is no longer subject to the unregistered
+ *   long-code filtering that AT&T/Verizon apply. LOW_VOLUME caps daily
+ *   throughput (~2k msgs/day to T-Mobile, lower per-carrier tiers) — fine at
+ *   current volume; revisit the campaign tier before any bulk-blast feature.
+ *   Email backup still wise for flows that ACTUALLY have to reach someone
+ *   (e.g. driver dispatch — see deliverDispatch.ts).
  */
 
 const TWILIO_SID = process.env.TWILIO_ACCOUNT_SID || "";
