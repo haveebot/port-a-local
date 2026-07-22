@@ -10,6 +10,7 @@ import {
   getParticipant,
   type ParticipantId,
 } from "@/data/wheelhouse-types";
+import { getUnrepliedLeads, type UnrepliedLead } from "@/lib/unrepliedLeads";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -39,10 +40,11 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
 
-  const [thread, activity, stats] = await Promise.all([
+  const [thread, activity, stats, unrepliedLeads] = await Promise.all([
     findOrCreatePulseThread(),
     getRecentActivity(24),
     getPalStats(),
+    getUnrepliedLeads(),
   ]);
 
   const humans: ParticipantId[] = ["winston", "collie", "nick"];
@@ -57,6 +59,7 @@ export async function GET(req: Request) {
     activity,
     stats,
     awaitingByHuman,
+    unrepliedLeads,
   });
 
   const msg = await createMessage({
@@ -78,10 +81,12 @@ function renderPulseDigest({
   activity,
   stats,
   awaitingByHuman,
+  unrepliedLeads,
 }: {
   activity: Awaited<ReturnType<typeof getRecentActivity>>;
   stats: Awaited<ReturnType<typeof getPalStats>>;
   awaitingByHuman: { who: ParticipantId; count: number }[];
+  unrepliedLeads: UnrepliedLead[];
 }): string {
   const today = new Date().toLocaleDateString("en-US", {
     weekday: "long",
@@ -145,6 +150,19 @@ function renderPulseDigest({
           `- \`${e.eventName}\` — ${e.count.toLocaleString("en-US")}`,
         );
       }
+    }
+  }
+
+  if (unrepliedLeads.length > 0) {
+    lines.push("");
+    lines.push("## Unreplied leads 📵");
+    lines.push(
+      "Texted by PAL, no reply and no booking since — may need a nudge or a call:",
+    );
+    for (const l of unrepliedLeads) {
+      lines.push(
+        `- **${l.phoneDisplay}** — quiet **${l.quietHours}h** · our last text: “${l.lastOutboundPreview}…”`,
+      );
     }
   }
 
