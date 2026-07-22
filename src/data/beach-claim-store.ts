@@ -260,13 +260,25 @@ export async function attemptClaim(
  * blast. Multiple unclaimed bookings is a real edge case; for v1 the
  * vendor would need to specify which one (future: include booking
  * shortcode in the blast SMS).
+ *
+ * Freshness guard (2026-07-22): only rows blasted within the last 72h
+ * whose setup date hasn't passed are claimable. Without it, a stray
+ * CLAIM latches onto weeks-old unclaimed rows — live incident
+ * 2026-07-21: a duplicate "Claim" marked a five-week-stale row as
+ * claimed, polluting the vendor-owed math. Stale rows now fall through
+ * to the existing "no unclaimed beach booking right now" reply.
  */
 export async function getMostRecentUnclaimed(): Promise<BeachBookingClaim | null> {
   try {
     await ensureSchema();
+    // setup_date is TEXT (ISO "YYYY-MM-DD"); compare as strings, not
+    // against a DATE type (same idiom as brons-dashboard).
+    const today = new Date().toISOString().slice(0, 10);
     const { rows } = await sql`
       SELECT * FROM beach_booking_claims
       WHERE claimed_at IS NULL
+        AND blasted_at >= NOW() - INTERVAL '72 hours'
+        AND (setup_date IS NULL OR setup_date >= ${today})
       ORDER BY blasted_at DESC
       LIMIT 1
     `;
