@@ -11,6 +11,7 @@ import {
   type ParticipantId,
 } from "@/data/wheelhouse-types";
 import { getUnrepliedLeads, type UnrepliedLead } from "@/lib/unrepliedLeads";
+import { alertNewUnrepliedLeads } from "@/lib/unrepliedLeadAlert";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -69,11 +70,18 @@ export async function GET(req: Request) {
     body,
   });
 
+  // Push side of the detector: text the operator about leads not yet
+  // alerted on. Awaited — Vercel kills fire-and-forget after the response
+  // (the original sms-watch-store lesson).
+  const alertedLeads = await alertNewUnrepliedLeads(unrepliedLeads);
+
   return NextResponse.json({
     ok: true,
     threadId: thread.id,
     messageId: msg?.id ?? null,
     bytes: body.length,
+    unrepliedLeads: unrepliedLeads.length,
+    alertedLeads,
   });
 }
 
