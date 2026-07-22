@@ -133,10 +133,18 @@ export interface RecordBlastInput {
 /**
  * Insert (or upsert) a claim row at blast time. Idempotent on session ID.
  * Existing rows aren't overwritten — we keep the original blast metadata.
+ *
+ * Returns true when THIS call inserted the row (first confirm for the
+ * session), false when the row already existed. Callers use this as the
+ * atomic exactly-once gate for confirmation side-effects: a Stripe
+ * success-page revisit re-POSTs /api/beach/confirm, and only the call
+ * that wins the insert may send SMS/emails/vendor blast (live incident
+ * 2026-07-21 — a revisit 18 min later re-texted the customer and
+ * re-blasted vendors on an already-claimed booking).
  */
-export async function recordBlast(input: RecordBlastInput): Promise<void> {
+export async function recordBlast(input: RecordBlastInput): Promise<boolean> {
   await ensureSchema();
-  await sql`
+  const { rowCount } = await sql`
     INSERT INTO beach_booking_claims (
       stripe_session_id, customer_phone, customer_name, product, qty,
       setup_date, num_days, vendor_amount_cents, setup_location, sms_consent,
@@ -160,6 +168,7 @@ export async function recordBlast(input: RecordBlastInput): Promise<void> {
     )
     ON CONFLICT (stripe_session_id) DO NOTHING
   `;
+  return (rowCount ?? 0) > 0;
 }
 
 /**

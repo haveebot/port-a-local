@@ -97,6 +97,47 @@ export async function POST(req: NextRequest) {
     const days = parseInt(numDays);
     const total = parseInt(totalPrice);
     const addonSelection = parseAddons(m.addons);
+
+    // Exactly-once gate: the INSERT wins only for the first confirm of
+    // this session. The Stripe success page re-POSTs this endpoint on
+    // revisit/refresh — 2026-07-21 a revisit 18 min later re-texted the
+    // customer and re-blasted vendors on an already-claimed booking.
+    // Recording first also guarantees a fast CLAIM reply finds the row.
+    // Fail-open on DB error: losing dedupe beats losing booking comms.
+    let isFirstConfirm = true;
+    try {
+      isFirstConfirm = await recordBlast({
+        stripeSessionId: session.id,
+        customerPhone: phone,
+        customerName: name,
+        product,
+        qty,
+        setupDate: pickupDate,
+        numDays: days,
+        vendorAmountCents: vendorTotalCents,
+        setupLocation: deliveryAddress,
+        smsConsent: smsConsent === "true",
+        utmSource: attribution.utm_source,
+        utmMedium: attribution.utm_medium,
+        utmCampaign: attribution.utm_campaign,
+        utmContent: attribution.utm_content,
+        fbclid: attribution.fbclid,
+      });
+    } catch (err) {
+      console.error("[Beach/Confirm] recordBlast gate failed (fail-open):", err);
+    }
+    if (!isFirstConfirm) {
+      console.log(
+        `[Beach/Confirm] Duplicate confirm for ${session.id} — side-effects skipped`,
+      );
+      return NextResponse.json({
+        success: true,
+        alreadyProcessed: true,
+        value: total,
+        currency: "USD",
+      });
+    }
+
     const addonEntries = Object.entries(addonSelection);
     const addonsHtmlRows = addonEntries
       .map(([slug, q]) => {
@@ -197,29 +238,11 @@ export async function POST(req: NextRequest) {
         summary: `${productLabel} ×${qty}${addonsInlineSummary ? ` + ${addonsInlineSummary}` : ""} · ${startFormatted.replace(/, \d{4}$/,"").replace(/^([A-Za-z]+), /,"$1 ")} (${days} ${days === 1 ? "day" : "days"}) · ${deliveryAddress}\n\nVendor: ${vendorTotalUsd} · PAL fee: ${palFeeTotalUsd}`,
         customerDisplay: formatCustomerDisplay(name),
       }),
-      // Record the blast in claim store (idempotent on session ID), then fan
-      // out to active beach vendors. Sequential 800ms pacing inside the
-      // helper. recordBlast first so a CLAIM reply landing fast still finds
-      // the row.
+      // Fan out to active beach vendors. Sequential 800ms pacing inside
+      // the helper. The claim row was already recorded by the
+      // exactly-once gate above, so a fast CLAIM reply finds it.
       (async () => {
         try {
-          await recordBlast({
-            stripeSessionId: session.id,
-            customerPhone: phone,
-            customerName: name,
-            product,
-            qty,
-            setupDate: pickupDate,
-            numDays: days,
-            vendorAmountCents: vendorTotalCents,
-            setupLocation: deliveryAddress,
-            smsConsent: smsConsent === "true",
-            utmSource: attribution.utm_source,
-            utmMedium: attribution.utm_medium,
-            utmCampaign: attribution.utm_campaign,
-            utmContent: attribution.utm_content,
-            fbclid: attribution.fbclid,
-          });
           const sent = await sendBeachLeadBlast({
             product,
             qty,
