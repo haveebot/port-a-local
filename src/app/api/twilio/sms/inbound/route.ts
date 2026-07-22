@@ -40,6 +40,7 @@ import { notifyClaimResolution } from "@/lib/beachVendorBlast";
 import { formatCustomerDisplay } from "@/lib/superAdminPing";
 import { forwardInsiderSmsToAdmin } from "@/lib/insiderSmsForward";
 import { forwardStrangerSmsToAdmin } from "@/lib/strangerSmsForward";
+import { findBookingCustomer } from "@/lib/customerLookup";
 import { runInsiderAgent } from "@/lib/insiderSmsAgent";
 import { checkWatch, recordNotification } from "@/data/sms-watch-store";
 
@@ -440,17 +441,30 @@ export async function POST(req: NextRequest) {
       return twimlResponse();
     }
 
-    // ---- STRANGER — unknown number: surface to operator + admin@ ----
-    const watch = await checkWatch(fromE164).catch((err) => {
-      console.error("[twilio/inbound] checkWatch failed:", err);
-      return null;
-    });
+    // ---- STRANGER — non-roster number: surface to operator + admin@ ----
+    // Not every non-roster number is unknown: booking customers reply to
+    // their own confirmations from here (2026-07-22 — a day-before reply
+    // surfaced as "[unknown ...]"). Label with booking context when the
+    // phone matches a beach/cart customer. Watch entries stay highest
+    // priority (operator explicitly asked to be flagged).
+    const [watch, customer] = await Promise.all([
+      checkWatch(fromE164).catch((err) => {
+        console.error("[twilio/inbound] checkWatch failed:", err);
+        return null;
+      }),
+      findBookingCustomer(fromE164),
+    ]);
+    const customerLabel = customer
+      ? `[customer ${customer.nameDisplay} · ${customer.what}${customer.date ? ` · ${customer.surface === "beach" ? "setup" : "pickup"} ${customer.date}` : ""} → PAL]`
+      : null;
     const operatorBody = watch
       ? `🔔 WATCHED [${watch.context}] ${fromE164} → PAL: ${body}`.slice(0, 1500)
-      : `[unknown ${fromE164} → PAL] ${body}`.slice(0, 1500);
+      : customerLabel
+        ? `${customerLabel} ${body}`.slice(0, 1500)
+        : `[unknown ${fromE164} → PAL] ${body}`.slice(0, 1500);
     const [operatorResult, adminResult] = await Promise.allSettled([
       sendSms(OPERATOR_PHONE_E164, operatorBody),
-      forwardStrangerSmsToAdmin(fromE164, body, messageSid),
+      forwardStrangerSmsToAdmin(fromE164, body, messageSid, customer),
     ]);
     if (operatorResult.status === "rejected") {
       console.error("[twilio/inbound] stranger surface to operator failed:", operatorResult.reason);

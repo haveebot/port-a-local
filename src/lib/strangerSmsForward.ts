@@ -30,6 +30,7 @@
 
 import { emailLayout } from "./emailLayout";
 import { sendPalEmail } from "./palEmail";
+import type { CustomerBookingContext } from "./customerLookup";
 
 const ADMIN_EMAIL =
   process.env.INTERNAL_ALERT_EMAIL || "admin@theportalocal.com";
@@ -118,24 +119,39 @@ async function fetchMmsMedia(messageSid: string): Promise<MediaAttachment[]> {
  *                  the inbound route).
  * @param body      Raw SMS body.
  * @param sid       Twilio MessageSid (for media lookup + audit trail).
+ * @param customer  Booking-customer context when the phone matches a
+ *                  beach/cart booking (2026-07-22 — customers replying
+ *                  to their own confirmations were forwarded as
+ *                  "unknown"). Null/undefined keeps the unknown shape.
  */
 export async function forwardStrangerSmsToAdmin(
   fromE164: string,
   body: string,
   sid: string,
+  customer?: CustomerBookingContext | null,
 ): Promise<void> {
   // Fetch any attached MMS media in parallel with composing the email.
   const mediaPromise = fetchMmsMedia(sid);
 
   const previewSlice = body.slice(0, 60).replace(/\s+/g, " ").trim();
-  const subject = `[SMS from ${fromE164}] ${previewSlice}${body.length > 60 ? "…" : ""}`;
+  const senderTag = customer ? `${customer.nameDisplay} ${fromE164}` : fromE164;
+  const subject = `[SMS from ${senderTag}] ${previewSlice}${body.length > 60 ? "…" : ""}`;
 
+  const customerLine = customer
+    ? `${customer.what}${customer.date ? ` · ${customer.surface === "beach" ? "setup" : "pickup"} ${customer.date}` : ""}`
+    : null;
   const html = emailLayout({
     tone: "alert",
-    preheader: `Unknown number ${fromE164} just texted PAL`,
+    preheader: customer
+      ? `Booking customer ${customer.nameDisplay} just texted PAL`
+      : `Unknown number ${fromE164} just texted PAL`,
     bodyHtml: `
-      <h2 style="margin:0 0 8px 0; font-size:20px; color:#0b1120;">📱 SMS from unknown number</h2>
-      <p style="margin:0 0 16px 0; color:#4a5568; font-size:13px;">Sender is not in the insider, cart-vendor, or beach-vendor allowlists. Treat as a customer / lead inquiry until classified.</p>
+      <h2 style="margin:0 0 8px 0; font-size:20px; color:#0b1120;">📱 SMS from ${customer ? `booking customer ${escapeHtml(customer.nameDisplay)}` : "unknown number"}</h2>
+      ${
+        customerLine
+          ? `<p style="margin:0 0 16px 0; color:#4a5568; font-size:13px;">On file: ${escapeHtml(customerLine)}. Likely a reply to a booking confirmation or reminder.</p>`
+          : `<p style="margin:0 0 16px 0; color:#4a5568; font-size:13px;">Sender is not in the insider, cart-vendor, or beach-vendor allowlists. Treat as a customer / lead inquiry until classified.</p>`
+      }
       <blockquote style="border-left:4px solid #e8656f; padding:14px 18px; margin:16px 0; background:#faf8f3; border-radius:6px;">
         <p style="margin:0; font-size:16px; line-height:1.6; color:#0b1120; white-space:pre-wrap;">${escapeHtml(body)}</p>
       </blockquote>
