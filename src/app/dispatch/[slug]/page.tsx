@@ -53,10 +53,13 @@ export default async function DispatchArticlePage({
     notFound();
   }
 
+  // Dispatch dates are plain ISO days ("2026-08-15"), which Date parses as UTC
+  // midnight — formatting them in the server's local zone shifts them a day back.
   const publishedDate = new Date(dispatch.date).toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
     day: "numeric",
+    timeZone: "UTC",
   });
 
   const publishedDispatches = dispatches.filter(
@@ -132,6 +135,7 @@ export default async function DispatchArticlePage({
                     year: "numeric",
                     month: "long",
                     day: "numeric",
+                    timeZone: "UTC",
                   })}
                 </time>
               </>
@@ -199,6 +203,26 @@ export default async function DispatchArticlePage({
                   {paragraph}
                 </p>
               ))}
+
+              {/* Figure — chart or map built from the records */}
+              {section.figure && (
+                <figure className="my-10">
+                  <div className="overflow-x-auto rounded-xl border border-sand-200 bg-white">
+                    <img
+                      src={section.figure.src}
+                      alt={section.figure.alt}
+                      className="h-auto w-full"
+                      style={{ minWidth: section.figure.minWidth ?? 620 }}
+                      loading="lazy"
+                    />
+                  </div>
+                  {section.figure.caption && (
+                    <figcaption className="mt-3 text-sm text-navy-400 leading-relaxed">
+                      {section.figure.caption}
+                    </figcaption>
+                  )}
+                </figure>
+              )}
 
               {section.pullQuote && (
                 <blockquote className="my-10 pl-6 border-l-4 border-coral-400">
