@@ -45,7 +45,7 @@ export interface Dispatch {
 export const dispatches: Dispatch[] = [
   {
     slug: "highway-361-fatal-crashes",
-    title: "Three Dead in Five Days on the Island Road",
+    title: "Three Dead in Five Days on the “Island Road”",
     subtitle:
       "Port A Local pulled ten years of state crash records for State Highway 361. Per mile driven, the island road produces fewer crashes than a typical Texas rural two-lane highway — and nearly twice the deaths. Every fatal crash on the corridor since 2016 is north of the only stretch TxDOT has funded.",
     description:
