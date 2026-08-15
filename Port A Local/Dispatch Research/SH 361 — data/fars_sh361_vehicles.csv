@@ -1,0 +1,73 @@
+year,st_case,veh_no,numoccs,make,makename,mod_year,body_typ,body_typname,trav_sp,vspd_lim,dr_drink,dr_drinkname,deaths,impact1,impact1name,rollover,rollovername,m_harm,m_harmname,dr_zip,l_state,prev_dwi,speedrel,speedrelname,hit_run
+2014,480428,1,1,72,,1999,80,,998,45,1,,1,98,,0,,33,,78210,48,0,5,,0
+2014,480657,1,1,20,,2014,31,,998,55,1,,0,12,,1,,12,,78416,48,0,0,,0
+2014,480657,2,2,35,,2003,4,,998,55,0,,1,12,,0,,12,,78410,48,0,0,,0
+2014,482039,1,3,49,,1999,14,,998,45,0,,0,12,,0,,8,,78746,48,0,0,,0
+2014,482104,1,1,13,,2001,4,,998,35,0,,0,12,,0,,8,,78418,48,0,0,,0
+2014,482394,1,99,12,,2013,31,,998,45,0,,0,12,,0,,8,,99999,99,99,5,,1
+2014,483021,1,2,20,,2001,21,,998,55,0,,0,12,,0,,8,,78404,48,0,0,,0
+2014,483226,1,0,7,,2002,14,,998,30,0,,0,61,,0,,8,,99997,0,998,8,,0
+2015,480918,1,1,72,Harley-Davidson,2007,80,Motorcycle,998,60,1,Yes,1,0,Non-Collision,0,No Rollover,1,Rollover/Overturn,78413,48,0,0,No,0
+2015,482289,1,1,72,Harley-Davidson,2002,80,Motorcycle,998,30,1,Yes,1,98,Not Reported,0,No Rollover,31,"Other Post, Other Pole or Other Supports",78373,48,0,0,No,0
+2015,483217,1,3,22,Pontiac,2005,6,Station Wagon (excluding van and truck based),998,98,0,No,1,9,9 Clock Point,0,No Rollover,12,Motor Vehicle In-Transport,78418,48,0,0,No,0
+2015,483217,2,1,2,Jeep / Kaiser-Jeep / Willys- Jeep,2008,14,"Compact Utility (Utility Vehicle Categories ""Small"" and ""Midsize"")",998,55,0,No,0,12,12 Clock Point,0,No Rollover,12,Motor Vehicle In-Transport,78418,48,0,0,No,0
+2015,483217,3,2,49,Toyota,2007,4,"4-door sedan, hardtop",998,55,0,No,0,12,12 Clock Point,0,No Rollover,54,"Motor Vehicle In-Transport Strikes or is Struck by Cargo, Persons or Objects Set-in-Motion from/by Another Motor Vehicle In Transport",78414,48,0,0,No,0
+2016,480080,1,2,72,Harley-Davidson,2009,80,Motorcycle,998,60,1,Yes,1,0,Non-Collision,0,No Rollover,1,Rollover/Overturn,78336,48,0,0,No,0
+2016,482076,1,99,99,Unknown Make,9999,99,Unknown body type,998,45,0,No,0,12,12 Clock Point,0,No Rollover,8,Pedestrian,99999,99,99,0,No,1
+2016,482076,2,99,99,Unknown Make,9999,99,Unknown body type,998,45,0,No,0,12,12 Clock Point,0,No Rollover,8,Pedestrian,99999,99,99,0,No,1
+2016,482881,1,2,37,Honda,2007,20,"Minivan (Chrysler Town and Country, Caravan, Grand Caravan, Voyager, Voyager, Honda-Odyssey, ...)",998,65,0,No,1,12,12 Clock Point,1,"Rollover, Tripped by Object/Vehicle",12,Motor Vehicle In-Transport,78368,48,0,0,No,0
+2016,482881,2,2,12,Ford,2001,61,"Single-unit straight truck or Cab-Chassis (10,000 lbs. < GVWR < or = 19,500 lbs.)",998,65,0,No,0,6,6 Clock Point,0,No Rollover,12,Motor Vehicle In-Transport,77012,48,0,0,No,0
+2016,482881,3,1,12,Ford,2012,61,"Single-unit straight truck or Cab-Chassis (10,000 lbs. < GVWR < or = 19,500 lbs.)",998,65,0,No,0,6,6 Clock Point,0,No Rollover,12,Motor Vehicle In-Transport,77017,48,0,0,No,0
+2017,480672,1,1,34,BMW,2004,2,"2-door sedan,hardtop,coupe",998,30,1,Yes,0,12,12 Clock Point,0,No Rollover,8,Pedestrian,78336,48,0,5,"Yes, Specifics Unknown",1
+2017,480972,1,1,23,GMC,2004,15,"Large utility (ANSI D16.1 Utility Vehicle Categories and ""Full Size"" and ""Large"")",998,45,0,No,0,12,12 Clock Point,0,No Rollover,8,Pedestrian,78418,48,0,0,No,0
+2017,481428,1,1,76,Yamaha,2008,80,Two Wheel Motorcycle (excluding motor scooters),998,65,0,No,1,98,Not Reported,0,No Rollover,43,Other Fixed Object,78412,48,0,0,No,0
+2017,482480,1,1,23,GMC,2003,34,Light Pickup,998,55,0,No,1,11,11 Clock Point,1,"Rollover, Tripped by Object/Vehicle",1,Rollover/Overturn,78259,48,0,0,No,0
+2018,480668,1,2,20,Chevrolet,2001,16,"Utility station wagon (includes suburban limousines, Suburban, Travellall, Grand Wagoneer)",998,60,0,No,0,12,12 Clock Point,0,No Rollover,8,Pedestrian,78773,48,0,0,No,0
+2018,480739,1,1,49,Toyota,2006,6,Station Wagon (excluding van and truck based),998,45,0,No,1,98,Not Reported,1,"Rollover, Tripped by Object/Vehicle",1,Rollover/Overturn,78418,48,0,5,"Yes, Specifics Unknown",0
+2018,480918,1,2,7,Dodge,2015,15,"Large utility (ANSI D16.1 Utility Vehicle Categories and ""Full Size"" and ""Large"")",998,65,0,No,0,12,12 Clock Point,0,No Rollover,8,Pedestrian,78362,48,0,0,No,0
+2018,481192,1,1,7,Dodge,2001,34,Light Pickup,998,45,1,Yes,0,12,12 Clock Point,0,No Rollover,9,Pedalcyclist,78412,48,0,5,"Yes, Specifics Unknown",0
+2018,482852,1,99,99,Unknown Make,9999,99,Unknown body type,998,55,0,No,0,12,12 Clock Point,0,No Rollover,8,Pedestrian,99999,99,99,0,No,1
+2018,483224,1,1,7,Dodge,2005,34,Light Pickup,998,35,0,No,0,12,12 Clock Point,0,No Rollover,8,Pedestrian,78418,48,0,0,No,0
+2019,480201,1,1,72,Harley-Davidson,2017,80,Two Wheel Motorcycle (excluding motor scooters),998,65,0,No,1,0,Non-Collision,0,No Rollover,3,Immersion or Partial Immersion,78373,48,99,0,No,0
+2019,481489,1,1,37,Honda,2000,2,"2-door sedan,hardtop,coupe",998,45,0,No,1,0,Non-Collision,9,"Rollover, Unknown Type",1,Rollover/Overturn,78404,48,0,0,No,0
+2019,483286,1,2,49,Toyota,2015,4,"4-door sedan, hardtop",998,40,0,No,0,12,12 Clock Point,0,No Rollover,8,Pedestrian,78418,48,0,0,No,0
+2020,480183,1,1,20,Chevrolet,2002,34,Light Pickup,998,65,0,No,1,12,12 Clock Point,0,No Rollover,52,Guardrail End,78413,48,0,0,No,0
+2020,481304,1,2,41,Mazda,2018,4,"4-door sedan, hardtop",998,30,0,No,1,98,Not Reported,1,"Rollover, Tripped by Object/Vehicle",33,Curb,78245,48,0,4,"Yes, Too Fast for Conditions",0
+2020,482195,1,99,20,Chevrolet,2009,15,"Large utility (ANSI D16.1 Utility Vehicle Categories and ""Full Size"" and ""Large"")",998,35,0,No,0,12,12 Clock Point,0,No Rollover,8,Pedestrian,78418,48,0,0,No,1
+2020,482514,1,1,23,GMC,2018,34,Light Pickup,998,30,0,No,0,12,12 Clock Point,0,No Rollover,8,Pedestrian,78414,48,0,0,No,0
+2020,482533,1,2,72,Harley-Davidson,2016,80,Two Wheel Motorcycle (excluding motor scooters),998,55,1,Yes,1,0,Non-Collision,0,No Rollover,1,Rollover/Overturn,78801,48,0,4,"Yes, Too Fast for Conditions",0
+2020,483498,1,1,37,Honda,2000,4,"4-door sedan, hardtop",998,45,1,Yes,1,63,Left-Back Side,1,"Rollover, Tripped by Object/Vehicle",12,Motor Vehicle In-Transport,78412,48,0,4,"Yes, Too Fast for Conditions",0
+2020,483498,2,4,12,Ford,2006,4,"4-door sedan, hardtop",998,45,0,No,0,83,Right-Back Side,0,No Rollover,12,Motor Vehicle In-Transport,78370,48,0,0,No,0
+2020,483498,3,1,20,Chevrolet,2016,34,Light Pickup,998,45,0,No,0,63,Left-Back Side,1,"Rollover, Tripped by Object/Vehicle",12,Motor Vehicle In-Transport,78418,48,0,0,No,0
+2020,483500,1,1,72,Harley-Davidson,1977,80,Two Wheel Motorcycle (excluding motor scooters),998,45,0,No,1,12,12 Clock Point,0,No Rollover,33,Curb,78418,19,0,4,"Yes, Too Fast for Conditions",0
+2021,481510,1,1,35,Nissan/Datsun,2012,6,Station Wagon (excluding van and truck based),998,40,0,No,0,12,12 Clock Point,0,No Rollover,9,Pedalcyclist,78414,12,0,0,No,0
+2021,482671,1,1,2,Jeep / Kaiser-Jeep / Willys- Jeep,2002,14,"Compact Utility (Utility Vehicle Categories ""Small"" and ""Midsize"")",998,40,0,No,1,9,9 Clock Point,0,No Rollover,30,Utility Pole/Light Support,78418,48,0,4,"Yes, Too Fast for Conditions",0
+2021,482781,1,99,99,Unknown Make,9999,99,Unknown body type,998,30,0,No,0,12,12 Clock Point,0,No Rollover,8,Pedestrian,99999,99,99,0,No,1
+2021,483647,1,2,12,Ford,2010,2,"2-door sedan,hardtop,coupe",998,30,0,No,1,3,3 Clock Point,0,No Rollover,12,Motor Vehicle In-Transport,78412,48,0,0,No,0
+2021,483647,2,1,2,Jeep / Kaiser-Jeep / Willys- Jeep,2006,14,"Compact Utility (Utility Vehicle Categories ""Small"" and ""Midsize"")",998,40,0,No,0,12,12 Clock Point,1,"Rollover, Tripped by Object/Vehicle",12,Motor Vehicle In-Transport,78410,48,0,0,No,0
+2022,481797,1,1,20,Chevrolet,1995,14,"Compact Utility (Utility Vehicle Categories ""Small"" and ""Midsize"")",998,60,0,No,1,12,12 Clock Point,0,No Rollover,12,Motor Vehicle In-Transport,78164,48,0,0,No,0
+2022,481797,2,1,20,Chevrolet,2004,34,Light Pickup,998,60,0,No,0,12,12 Clock Point,0,No Rollover,12,Motor Vehicle In-Transport,78411,48,0,0,No,0
+2022,481886,1,1,20,Chevrolet,2004,15,"Large utility (ANSI D16.1 Utility Vehicle Categories and ""Full Size"" and ""Large"")",998,55,1,Yes,1,12,12 Clock Point,3,Rollover,12,Motor Vehicle In-Transport,78362,48,0,0,No,0
+2022,481886,2,1,52,Mitsubishi,2010,4,"4-door sedan, hardtop",998,55,0,No,1,12,12 Clock Point,0,No Rollover,12,Motor Vehicle In-Transport,78336,48,0,0,No,0
+2022,481886,3,1,7,Dodge,2016,6,Station Wagon (excluding van and truck based),998,55,0,No,0,12,12 Clock Point,0,No Rollover,12,Motor Vehicle In-Transport,78362,48,0,0,No,0
+2022,482404,1,1,7,Dodge,2017,67,"Medium/heavy Pickup (GVWR greater than 10,000 lbs.)",998,60,1,Yes,0,82,Right-Front Side,0,No Rollover,30,Utility Pole/Light Support,78114,48,0,0,No,0
+2022,482404,2,2,59,Lexus,2000,4,"4-door sedan, hardtop",998,60,0,No,2,61,Left,0,No Rollover,12,Motor Vehicle In-Transport,78210,48,0,0,No,0
+2022,483007,1,1,12,Ford,2013,4,"4-door sedan, hardtop",998,40,1,Yes,0,12,12 Clock Point,0,No Rollover,12,Motor Vehicle In-Transport,78418,48,0,4,"Yes, Too Fast for Conditions",0
+2022,483007,2,1,73,Kawasaki,2006,80,Two Wheel Motorcycle (excluding motor scooters),998,40,1,Yes,1,12,12 Clock Point,8,Not Applicable,12,Motor Vehicle In-Transport,78418,48,0,0,No,0
+2023,481869,1,2,2,Jeep / Kaiser-Jeep / Willys- Jeep,2006,14,"Compact Utility (Utility Vehicle Categories ""Small"" and ""Midsize"")",998,65,1,Yes,0,12,12 Clock Point,0,No Rollover,12,Motor Vehicle In-Transport,79567,48,0,0,No,0
+2023,481869,2,3,51,Volvo,1999,4,"4-door sedan, hardtop",998,65,0,No,1,12,12 Clock Point,0,No Rollover,12,Motor Vehicle In-Transport,64068,29,0,0,No,0
+2023,481869,3,3,20,Chevrolet,2007,34,Light Pickup,0,0,0,No,0,62,Left-Front Side,0,No Rollover,12,Motor Vehicle In-Transport,78621,48,0,0,No,0
+2023,481885,1,1,32,Audi,2008,4,"4-door sedan, hardtop",998,60,1,Yes,1,12,12 Clock Point,0,No Rollover,12,Motor Vehicle In-Transport,78373,48,0,0,No,0
+2023,481885,2,3,49,Toyota,2016,14,"Compact Utility (Utility Vehicle Categories ""Small"" and ""Midsize"")",998,60,0,No,0,12,12 Clock Point,3,Rollover,12,Motor Vehicle In-Transport,78626,48,0,0,No,0
+2023,481929,1,1,20,Chevrolet,2022,34,Light Pickup,998,35,1,Yes,1,12,12 Clock Point,0,No Rollover,59,Traffic Sign Support,78408,48,0,0,No,0
+2023,482316,1,1,73,Kawasaki,2023,80,Two Wheel Motorcycle (excluding motor scooters),998,65,1,Yes,1,0,Non-Collision,8,Not Applicable,25,Concrete Traffic Barrier,78412,48,0,3,"Yes, Exceeded Speed Limit",0
+2023,482934,1,1,7,Dodge,2018,4,"4-door sedan, hardtop",998,35,0,No,0,12,12 Clock Point,0,No Rollover,15,Non-Motorist on Personal Conveyance,78411,48,0,0,No,0
+2023,483309,1,1,76,Yamaha,2023,80,Two Wheel Motorcycle (excluding motor scooters),998,60,0,No,1,12,12 Clock Point,8,Not Applicable,12,Motor Vehicle In-Transport,78413,48,0,4,"Yes, Too Fast for Conditions",0
+2023,483309,2,1,20,Chevrolet,2016,34,Light Pickup,998,60,0,No,0,9,9 Clock Point,0,No Rollover,12,Motor Vehicle In-Transport,78414,48,0,0,No,0
+2024,481443,1,1,63,KIA,2015,6,Station Wagon (excluding van and truck based),998,60,1,Yes,0,63,Left-Back Side,3,Rollover,12,Motor Vehicle In-Transport,78418,48,0,0,No,0
+2024,481443,2,1,49,Toyota,2017,4,"4-door sedan, hardtop",998,60,0,No,0,82,Right-Front Side,0,No Rollover,12,Motor Vehicle In-Transport,78368,48,0,0,No,0
+2024,481443,3,4,2,Jeep / Kaiser-Jeep / Willys- Jeep,2021,14,"Compact Utility (Utility Vehicle Categories ""Small"" and ""Midsize"")",998,60,0,No,2,12,12 Clock Point,3,Rollover,12,Motor Vehicle In-Transport,78672,48,0,0,No,0
+2024,481576,1,1,20,Chevrolet,2017,34,Light Pickup,998,40,1,Yes,1,12,12 Clock Point,0,No Rollover,59,Traffic Sign Support,78413,48,0,5,"Yes, Specifics Unknown",0
+2024,482234,1,1,20,Chevrolet,2011,34,Light Pickup,998,60,1,Yes,1,12,12 Clock Point,0,No Rollover,12,Motor Vehicle In-Transport,78412,48,0,0,No,0
+2024,482234,2,6,49,Toyota,2024,14,"Compact Utility (Utility Vehicle Categories ""Small"" and ""Midsize"")",998,60,0,No,0,9,9 Clock Point,3,Rollover,12,Motor Vehicle In-Transport,75063,48,0,0,No,0
+2024,482234,3,5,49,Toyota,2022,34,Light Pickup,998,60,0,No,0,62,Left-Front Side,0,No Rollover,12,Motor Vehicle In-Transport,78751,12,0,0,No,0
