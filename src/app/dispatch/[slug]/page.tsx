@@ -204,17 +204,27 @@ export default async function DispatchArticlePage({
                 </p>
               ))}
 
-              {/* Figure — chart or map built from the records */}
+              {/* Figure — chart or map built from the records. Wide screens get the
+                  landscape version and a little breakout past the text column; phones
+                  get the tall version, scrollable inside its own box. */}
               {section.figure && (
-                <figure className="my-10">
+                <figure className="my-10 lg:-mx-20 xl:-mx-32">
                   <div className="overflow-x-auto rounded-xl border border-sand-200 bg-white">
-                    <img
-                      src={section.figure.src}
-                      alt={section.figure.alt}
-                      className="h-auto w-full"
-                      style={{ minWidth: section.figure.minWidth ?? 620 }}
-                      loading="lazy"
-                    />
+                    <picture>
+                      {section.figure.srcWide && (
+                        <source
+                          media="(min-width: 768px)"
+                          srcSet={section.figure.srcWide}
+                        />
+                      )}
+                      <img
+                        src={section.figure.src}
+                        alt={section.figure.alt}
+                        className="h-auto w-full"
+                        style={{ minWidth: section.figure.minWidth ?? 620 }}
+                        loading="lazy"
+                      />
+                    </picture>
                   </div>
                   {section.figure.caption && (
                     <figcaption className="mt-3 text-sm text-navy-400 leading-relaxed">

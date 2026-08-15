@@ -17,7 +17,15 @@ export interface DispatchSection {
    * Rendered full-bleed within the column, horizontally scrollable on narrow
    * screens so wide charts stay legible.
    */
-  figure?: { src: string; alt: string; caption?: string; minWidth?: number };
+  figure?: {
+    /** Phone-first image (tall). Also the fallback for browsers without <picture>. */
+    src: string;
+    /** Optional wide/landscape version, used from the md breakpoint up. */
+    srcWide?: string;
+    alt: string;
+    caption?: string;
+    minWidth?: number;
+  };
 }
 
 export interface DispatchContent {
@@ -32,7 +40,7 @@ export interface DispatchContent {
 export const dispatchContent: Record<string, DispatchContent> = {
   "highway-361-fatal-crashes": {
     lede:
-      "On Monday evening, a southbound driver crossed the centerline of State Highway 361 at Beach Access Road 2 and hit an oncoming vehicle head-on. Jarrod Fangman, 59, died at the scene. The highway was closed for more than four hours. Investigators do not suspect alcohol. On Friday afternoon, four miles north, a southbound car was rear-ended, shoved into the northbound lane, and hit head-on by an oncoming vehicle; a fourth car struck the wreck. A 55-year-old man and a 46-year-old woman, whose names have not been released, were killed. Investigators say alcohol was not a factor there either.",
+      "On Monday evening, a southbound driver crossed the centerline of State Highway 361 at Beach Access Road 2 and hit an oncoming vehicle head-on. The driver of that vehicle, a 59-year-old man, died at the scene. The highway was closed for more than four hours. Investigators said they did not suspect alcohol. On Friday afternoon, four miles north, a southbound car was rear-ended, shoved into the northbound lane, and hit head-on by an oncoming vehicle; a fourth car struck the wreck. A 55-year-old man and a 46-year-old woman were killed. Investigators said alcohol was not a factor there either.",
 
     sections: [
       {
@@ -64,6 +72,7 @@ export const dispatchContent: Record<string, DispatchContent> = {
         ],
         figure: {
           src: "/images/sh361-crash-map.png",
+          srcWide: "/images/sh361-crash-map-desktop.png",
           alt: "Vertical map of State Highway 361 from Port Aransas down to Park Road 22. Bars show crashes per half-mile; red diamonds mark every fatal crash. The fatal crashes fall in the shaded middle section, which has no median, while the heaviest crash volume is at the two ends. A right-hand column marks every development entrance meeting the highway.",
           caption:
             "Every reportable crash on SH 361 between Beach Access Road 1 and Park Road 22, 2016 – August 2026, placed on TxDOT's mile posts (source: TxDOT CRIS). Bars are crashes per half-mile; solid diamonds are fatal crashes; hollow diamonds are this week's two, which are not yet in the state file. The shaded band is the undivided, 60-mph section. Arrows on the right are development entrances and subdivision streets meeting the highway.",
@@ -180,7 +189,7 @@ export const dispatchContent: Record<string, DispatchContent> = {
           "It is not saying that developments cause these crashes. Drivers cause crashes, and the record is blunt about how.",
           "Of the fifteen fatal crashes on and immediately around this corridor since 2016, ten involved alcohol or drugs, according to the state and federal crash files and the arrests that followed. One driver is serving twenty years for intoxication manslaughter for a 2024 crash that killed two people. Another was charged in April with intoxication manslaughter in a 2025 crash that killed a 21-year-old nursing student. Failure to control speed is the most common contributing factor on the corridor by a wide margin. The Port Aransas police chief and a department lieutenant have both said publicly that impatient passing — using the center turn lane to get around slower traffic — is a recurring cause of head-on crashes here.",
           "All of that is true, and none of it is unusual. Impairment and speed are constants on every road in Texas. What differs from road to road is what happens next: whether a drifting vehicle meets a raised median, a wide shoulder and a turn bay, or an oncoming car at a combined hundred and twenty miles an hour.",
-          "This week made the point without alcohol. Neither Monday's crash nor Friday's involved a drunk driver. Monday's was a driver who crossed the line. Friday's was a rear-end collision — the most ordinary crash there is — that became a head-on because there was nowhere else for the struck car to go.",
+          "This week made the point without alcohol, at least on the record so far: investigators said alcohol was not a contributing factor in either crash, and both investigations remained open as this was published. Monday's was a driver who crossed the line. Friday's was a rear-end collision — the most ordinary crash there is — that became a head-on because there was nowhere else for the struck car to go.",
         ],
       },
       {
@@ -204,7 +213,7 @@ export const dispatchContent: Record<string, DispatchContent> = {
           "The island road was built as a way through. It is being used as a way in — by roughly 78 driveways and streets, a third of them added in the last twenty years, with a thousand acres of frontage in planning and a developer asking for a signal.",
           "That transformation is not illegal, hidden or even unusual. It is the ordinary way a rural highway becomes a suburban one. What is unusual here is the gap between the change and the engineering: a road acquiring driveways at the pace of a boom, with the median that a road with driveways requires scheduled for the two ends and unscheduled for the middle where the people die.",
           "TxDOT named the growth problem on this island in 2011, applied the remedy to the town in 2017, and has the island's remedy split into a funded end, an unfunded end, and eight unprogrammed miles. The city has a resolution asking the state to study a turn lane by the Whataburger, and a new signal downtown. The developer's promised stoplight is a stop sign and a portable light a police officer runs by hand during Spring Break.",
-          "Three people died on that road this week, in two crashes, neither of them drunk, both of them ending up in the oncoming lane.",
+          "Three people died on that road this week, in two crashes investigators say did not involve alcohol, both of them ending up in the oncoming lane.",
           "The next set of decisions is at the Council's August 25 meeting, at the Corpus Christi MPO, and in the next legislative session.",
         ],
       },
@@ -213,7 +222,7 @@ export const dispatchContent: Record<string, DispatchContent> = {
         body: [
           "The crash figures in this piece come from the Texas Department of Transportation's Crash Records Information System, queried for every reportable crash on SH 361 in Nueces County from 2016 through August 15, 2026, with crash-level coordinates, severity, contributing factors, roadway design attributes and TxDOT's attached traffic counts. Crashes were assigned to the corridor by TxDOT's own mile posts. Fatal crashes were cross-checked one by one against the federal Fatality Analysis Reporting System, which matched the state file for every year it covers. Exposure came from TxDOT's published annual average daily traffic counters at each end of the island; benchmark rates come from TxDOT's own Texas Motor Vehicle Traffic Crash Facts tables. Funding status comes from TxDOT's public project tracker, the Unified Transportation Program, and the Corpus Christi MPO's meeting minutes. Council actions come from the city's agendas, packets and minutes.",
           "The data file and a full method note are published alongside this piece. Anyone can check the arithmetic.",
-          "This week's two crashes are not yet in the state file; they are counted here from police accounts as reported. The names of the two people killed on Friday had not been released when this was published.",
+          "This week's two crashes are not yet in the state file; they are counted here from police accounts as reported, including the finding on alcohol, and both investigations were open at publication. Port A Local does not publish the names of people killed in crashes.",
         ],
       },
     ],
