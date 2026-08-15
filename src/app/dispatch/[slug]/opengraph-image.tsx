@@ -57,10 +57,24 @@ export default async function Image({
     );
   }
 
+  // Cut to a word boundary so the share card never ends mid-word.
+  function truncateAtWord(text: string, max: number) {
+    if (text.length <= max) return text;
+    const cut = text.slice(0, max);
+    const lastSpace = cut.lastIndexOf(" ");
+    return (lastSpace > max * 0.6 ? cut.slice(0, lastSpace) : cut).replace(
+      /[\s.,;:—–-]+$/,
+      "",
+    ) + "…";
+  }
+
+  // Dispatch dates are plain ISO days — format in UTC so the card doesn't
+  // render a day early in the build/runtime local zone.
   const date = new Date(dispatch.date).toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
     day: "numeric",
+    timeZone: "UTC",
   });
 
   // No highlight set → fall back to standard branded OG
@@ -243,9 +257,7 @@ export default async function Image({
                     width: 540,
                   }}
                 >
-                  {dispatch.subtitle.length > 130
-                    ? dispatch.subtitle.slice(0, 130) + "…"
-                    : dispatch.subtitle}
+                  {truncateAtWord(dispatch.subtitle, 130)}
                 </div>
               )}
             </div>
