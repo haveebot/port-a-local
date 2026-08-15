@@ -44,6 +44,45 @@ export interface Dispatch {
 
 export const dispatches: Dispatch[] = [
   {
+    slug: "highway-361-fatal-crashes",
+    title: "Three Dead in Five Days on the Island Road",
+    subtitle:
+      "Port A Local pulled ten years of state crash records for State Highway 361. Per mile driven, the island road produces fewer crashes than a typical Texas rural two-lane highway — and nearly twice the deaths. Every fatal crash on the corridor since 2016 is north of the only stretch TxDOT has funded.",
+    description:
+      "Two fatal crashes five days apart in August 2026 killed three people on State Highway 361 between Port Aransas and Park Road 22. Neither involved alcohol; both were centerline crossings. Port A Local pulled the TxDOT crash file for the corridor — 421 crashes, 14 fatal crashes, 17 deaths since 2016 — and mapped every one against the road's design and TxDOT's own funding record.",
+    category: "investigation",
+    icon: "🛣️",
+    readTime: "12 min",
+    featured: true,
+    published: true,
+    date: "2026-08-15",
+    tags: [
+      "Port Aransas",
+      "Highway 361",
+      "SH 361",
+      "Mustang Island",
+      "TxDOT",
+      "traffic safety",
+      "crash records",
+      "CRIS",
+      "raised median",
+      "access management",
+      "Beach Access Road 1B",
+      "Cinnamon Shore",
+      "Sea Oats Group",
+      "Corpus Christi MPO",
+      "City Council",
+      "development",
+    ],
+    relatedDispatches: ["the-two-port-aransases", "closed-session-66-million"],
+    ogHighlight: {
+      type: "stat",
+      text: "14 of 14",
+      label:
+        "Fatal crashes on SH 361 since 2016 are north of the stretch TxDOT funded first",
+    },
+  },
+  {
     slug: "closed-session-66-million",
     title: "$66 Million in Closed Session",
     subtitle:

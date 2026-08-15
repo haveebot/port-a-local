@@ -22,6 +22,7 @@ function DispatchCard({
     year: "numeric",
     month: "long",
     day: "numeric",
+    timeZone: "UTC",
   });
 
   return (

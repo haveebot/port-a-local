@@ -12,6 +12,12 @@ export interface DispatchSection {
   pullQuote?: { text: string; attribution?: string };
   /** Optional stat callout — rendered as a boxed fact list */
   callout?: { label: string; items: { label: string; value: string }[] };
+  /**
+   * Optional figure — a chart or map built from the piece's own records.
+   * Rendered full-bleed within the column, horizontally scrollable on narrow
+   * screens so wide charts stay legible.
+   */
+  figure?: { src: string; alt: string; caption?: string; minWidth?: number };
 }
 
 export interface DispatchContent {
@@ -24,6 +30,358 @@ export interface DispatchContent {
 }
 
 export const dispatchContent: Record<string, DispatchContent> = {
+  "highway-361-fatal-crashes": {
+    lede:
+      "On Monday evening, a southbound driver crossed the centerline of State Highway 361 at Beach Access Road 2 and hit an oncoming vehicle head-on. Jarrod Fangman, 59, died at the scene. The highway was closed for more than four hours. Investigators do not suspect alcohol. On Friday afternoon, four miles north, a southbound car was rear-ended, shoved into the northbound lane, and hit head-on by an oncoming vehicle; a fourth car struck the wreck. A 55-year-old man and a 46-year-old woman, whose names have not been released, were killed. Investigators say alcohol was not a factor there either.",
+
+    sections: [
+      {
+        heading: "What the record shows",
+        body: [
+          "Three people died on the island road in five days. That is the news. What follows is the record underneath it.",
+          "Port A Local pulled the crash file for State Highway 361 from the Texas Department of Transportation's Crash Records Information System — every reportable crash in Nueces County on that highway from 2016 through August 15, 2026, with coordinates, severity, contributing factors and the roadway's own design attributes attached. Filtered to TxDOT's project corridor, Beach Access Road 1 in Port Aransas south to Park Road 22: 421 crashes, 12 fatal crashes, 14 deaths, 18 crashes with a suspected serious injury, 278 people injured. This week's two crashes have not been processed into the state file yet. With them, the corridor's toll since 2016 is 14 fatal crashes and 17 deaths.",
+          "Read those crashes by location and the road stops looking uniform.",
+        ],
+        callout: {
+          label: "SH 361 · Beach Access Road 1 to Park Road 22 · 2016 – Aug 15, 2026",
+          items: [
+            { label: "Crashes", value: "421" },
+            { label: "Fatal crashes", value: "14" },
+            { label: "People killed", value: "17" },
+            { label: "Serious-injury crashes", value: "18" },
+            { label: "Fatal crashes in the funded stretch", value: "0" },
+            { label: "Signals on the 15 miles", value: "2" },
+          ],
+        },
+      },
+      {
+        heading: "Fender-benders at the ends. Funerals in the middle.",
+        body: [
+          "The busiest crash locations on the corridor are its two ends. The southern end — from Access Road 3 past Newport Pass and Zahn Road to the signal at Park Road 22 — recorded 212 crashes in ten and a half years, more than any comparable stretch of the highway. Seven of them involved a serious injury. None of them killed anybody.",
+          "Every fatal crash on the corridor since 2016 happened north of Access Road 3.",
+          "They are spread across the middle: near Cinnamon Shore, near Gulf Waters, at La Concha Boulevard, at Sea Way Drive, near the Mayan Princess, at Beach Access Road 2, near the state park. All fourteen fall between mile 21.5 and mile 31 on TxDOT's own mile posts — the segment where the highway is two lanes, undivided, no median, posted at 60.",
+          "The ends have signals, turn bays and, at the Port Aransas end, a curbed median. The middle has a painted stripe.",
+        ],
+        figure: {
+          src: "/images/sh361-crash-map.png",
+          alt: "Vertical map of State Highway 361 from Port Aransas down to Park Road 22. Bars show crashes per half-mile; red diamonds mark every fatal crash. The fatal crashes fall in the shaded middle section, which has no median, while the heaviest crash volume is at the two ends. A right-hand column marks every development entrance meeting the highway.",
+          caption:
+            "Every reportable crash on SH 361 between Beach Access Road 1 and Park Road 22, 2016 – August 2026, placed on TxDOT's mile posts (source: TxDOT CRIS). Bars are crashes per half-mile; solid diamonds are fatal crashes; hollow diamonds are this week's two, which are not yet in the state file. The shaded band is the undivided, 60-mph section. Arrows on the right are development entrances and subdivision streets meeting the highway.",
+          minWidth: 620,
+        },
+      },
+      {
+        heading: "Fewer crashes than a normal highway. Nearly twice the deaths.",
+        body: [
+          "Raw counts flatter a quiet road and damn a busy one, so we converted them. Using TxDOT's own traffic counters at each end of the island — average daily traffic running between roughly 5,800 and 12,100 vehicles depending on the segment and the year — the corridor carried about 504 million vehicle-miles between 2016 and 2025.",
+          "Against that exposure, SH 361 recorded 76.6 crashes per hundred million vehicle-miles. The statewide rate for a rural two-lane, two-way road in 2024 was 100.5. For a rural state highway, 94.0. By the ordinary measure of how dangerous a road is, the island road is safer than the Texas average.",
+          "Its death rate is 2.58 per hundred million vehicle-miles. The Texas rate across the same decade was 1.38. Nationally, rural roads run about 1.68.",
+          "The middle seven miles are sharper still: about half the crash rate of a normal Texas two-lane, and 3.49 deaths per hundred million vehicle-miles — two and a half times the state.",
+          "Put plainly: fewer people crash here than you would expect, and more of them die. On this road, 1 crash in 30 kills someone. Statewide the figure is about 1 in 140; on rural Texas roads, about 1 in 80. That ratio is not a story about how often drivers make mistakes. It is a story about what happens to an ordinary mistake once it is made.",
+        ],
+      },
+      {
+        heading: "What kills people here",
+        body: [
+          "Head-on collisions are under 6 percent of the crashes on this corridor and more than 40 percent of its deaths. Statewide, head-on crashes account for about 15 percent of traffic deaths. And that count is from before this week: both of this week's fatal crashes were vehicles that ended up in the oncoming lane — one by drifting, one by being pushed there from behind.",
+          "A third of all crashes on the corridor were logged as intersection, intersection-related or driveway-access crashes. Turning conflicts run through the contributing-factor field: failure to yield turning left, turning when unsafe, failure to yield at a stop sign, failure to yield from a private drive. In its own analysis presented at the 2024 public meeting, TxDOT ranked the corridor's top five contributing factors as failure to control speed, failure to yield turning left, failure to drive in a single lane, failure to yield at a stop sign, and driving under the influence. Two of the agency's own top five are access conflicts.",
+          "There is no mystery about the remedy, because TxDOT has already named it. Its proposal for this corridor is to widen to four lanes with raised center medians and left-turn lanes as needed. Its public information officer for the Corpus Christi district, Rickey Dailey, put the mechanism in one sentence.",
+        ],
+        pullQuote: {
+          text: "The raised median tends to cut down on head-on crashes.",
+          attribution:
+            "Rickey Dailey, TxDOT Corpus Christi public information officer · KRIS 6 · September 2024",
+        },
+      },
+      {
+        heading: "The corridor already ran the experiment",
+        body: [
+          "This is not a theory anyone has to take on faith, because the same highway has already been treated at one end and left alone at the other.",
+          "In March 2011, TxDOT held a citizens' meeting at Port Aransas City Hall on a proposal for the town section: one additional travel lane in each direction and, in the agency's words, \"a raised median along the 2.8 mile project length creating a boulevard-type roadway,\" with left-turn bays where warranted. The stated purpose was to improve safety and reduce congestion, and the stated reason was growth: \"As growth on North Padre Island and Mustang Island accelerates and traffic increases, congestion and safety are growing concerns.\"",
+          "That was 2011. The town boulevard was registered for construction in February 2016 at an estimated $5.8 million and completed in May 2017.",
+          "The result is visible in the crash file. The curbed-median section at the south edge of Port Aransas has the highest crash rate on the whole island — it is an urban stretch with signals, driveways and stop-and-go summer traffic — and for ten straight years, from 2016 through 2025, it did not kill anyone. Its first fatal crash in the file is from March 2026, a rear-end collision in a 45-mph zone during Spring Break.",
+          "High crash rate, near-zero death rate. That is what a median does. Fifteen miles of the same highway south of it did not get one.",
+        ],
+      },
+      {
+        heading: "A road built as a way through, used as a way in",
+        body: [
+          "SH 361 down Mustang Island was built as a conduit: a beginning and an end, with a state park and open dune in between. It carries no port traffic, no distribution traffic, no industrial traffic. Nearly everyone on it is going to or from the beach, a rental, or a house.",
+          "It now has roughly 78 driveways, subdivision streets and public access roads meeting it between Beach Access Road 1A and Zahn Road — 52 on the beach side, 26 on the bay side — according to a count of the road's mapped connections. About a third of them have been added since 2005. Six to eight have been added since 2020.",
+          "The densest cluster of new entrances — Royal Sands, Mustang Royale, Beachwalk, the six Cinnamon Shore North connections, Cinnamon Shore South's four streets, Sunrise Beach, Spoonbill Bay, Gulf Waters, the new Beach Access Road 1-B — sits on the northern half of the fatal cluster. The southern half of the fatal cluster is the older turning node around La Concha Boulevard, Sea Way Drive, the Mayan Princess and Beach Access Road 2, where five fatal crashes have happened since 2019 — four of them in the last four years, two of them this week.",
+          "More is coming, and the developers have said so in writing. In comments filed to TxDOT during the 2024 public meeting, a development team wrote: \"Our Development team represents approximately 1,000 acres on Mustang Island, which represents over 3 miles of HWY 361 Frontage. We can share land plans and development intent to help plan locations of culverts, traffic lights, decel lanes, and other turns and intersections.\" A resort project asked for a traffic light at its entrance for a 135-lot RV park, a four-story hotel, a gas station and 35 residential lots. Sea Oats Group's 2017 announcement of its $1.3 billion Phase II described a community that \"will lie on both sides of State Highway 361 … with a golf cart bridge enabling residents to easily access amenities on both sides of the highway.\"",
+          "Other people who use the road filed comments in the same record.",
+        ],
+        pullQuote: {
+          text:
+            "The increased congestion near all the new development around Cinnamon Shores is where I see the most \"near misses,\" whether it is folks pulling into or out of various driveways.",
+          attribution:
+            "Public comment to TxDOT · SH 361 Mustang Island Project · September 2024",
+        },
+      },
+      {
+        heading: "The stoplight that was planned",
+        body: [
+          "The clearest illustration of how access gets added to this highway is the city's own newest road.",
+          "On March 21, 2024, the Port Aransas City Council voted unanimously to vacate a 40-foot city easement running to the beach along the south side of Cinnamon Shore North, and to accept in its place a 60-foot easement 165 feet farther south, dedicated to the city by Sea Oats Group, the subdivision's developer. The resolution states the exchange is beneficial because \"the alternative location is preferable, can be effected now rather than waiting for the future platting of the adjacent land.\" The city had negotiated with the developer for about a year and a half; the 165-foot shift was the developer's idea.",
+          "Reporting the vote, the Port Aransas South Jetty described the design at the highway: a two-lane road widening to three lanes where it meets SH 361, with a center left-turn lane, a right-turn lane and an entering lane, and — in the paper's words — \"A stoplight also is planned for the intersection of the road and the highway.\" Sea Oats Group's chief executive, Jeff Lamkin, said the road would \"provide access from the bay properties on that whole side of the island to get safely across 361 at a stoplight.\" The company has plans for a subdivision with a marina on the bay side.",
+          "The road was bid in April 2025. Its 217-page construction specification lists, at the SH 361 intersection, one R1-1 stop sign and one stop bar. It contains no traffic signal, no signal foundation, no illumination, and no signal item of any kind. In August 2025 the Council approved a $162,771 change order for a northbound turn lane on SH 361 that TxDOT required — and, in the minutes of the same meeting, \"briefly discussed a potential traffic signal installation for Access Road B,\" with the city manager to verify with TxDOT whether the city would bear cost-sharing obligations.",
+          "Beach Access Road 1-B opened on March 2, 2026, at a cost of about $1.3 million. For Spring Break, the police department set up portable, officer-operated traffic lights at Access Road 1 and at the new road — signals a patrol officer switches by hand. In April, Council discussed permanent signals and deferred: the record has the mayor emphasizing \"the importance of gathering additional traffic data before considering permanent signal installations, particularly after full implementation and usage of Beach Access Road 1B during the upcoming summer season.\"",
+          "There is a reason the stoplight is not simply a city decision. SH 361 is a state highway, and signals on it are TxDOT's call, granted on a warrant study. When a developer asked TxDOT for one in 2024, the agency's written answer was to follow its Access Management Manual, request driveway access, and work with the area office to determine whether a traffic engineering study or a traffic impact analysis is needed \"to determine if a signal is warranted based on future volumes.\"",
+          "No signal has been warranted anywhere on the fifteen miles. There are two on the corridor: one at each end.",
+        ],
+      },
+      {
+        heading: "Where the money is",
+        body: [
+          "TxDOT's SH 361 Mustang Island Project — four lanes, raised center medians, turn lanes, a shared-use path, from Access Road 1 to Park Road 22 — held its first public meeting in September 2024. The fact sheet gives a construction start of 2030, with an asterisk: \"Project advancement is contingent upon results of environmental process and funding availability.\" A second public meeting was slated for summer 2025. TxDOT's hearings pages list none.",
+          "The agency's own public project tracker, checked this week, shows what has actually been programmed. It is not one fifteen-mile project. It is two pieces at the two ends, and a gap.",
+          "The southern piece — Access Road 3 to Park Road 22, 2.5 miles, about $60 million — is in the state's Unified Transportation Program, inside the Corpus Christi metropolitan planning boundary, with an estimated letting date of August 2032. The northern piece — Access Road 1 to Mariners Drive, 3.6 miles, about $54 million — is listed as planning, ten-plus years out, with an estimated letting of October 2036, and is not in the UTP. Between Mariners Drive and Access Road 3 — roughly eight miles — there is no widening project at all.",
+          "That unprogrammed middle contains nine of the corridor's fourteen fatal crashes and twelve of its seventeen deaths.",
+          "The funded-first piece contains none. In ten and a half years, the stretch TxDOT has programmed soonest recorded 212 crashes and zero deaths.",
+          "The corridor is also split administratively. About half of it lies inside the Corpus Christi Metropolitan Planning Organization's boundary and half outside; Port Aransas is not an MPO member. In December 2024, TxDOT's district representative asked the MPO's policy committee whether SH 361 could be added to that year's UTP list so evaluation could begin. The technical committee did not recommend it, no member proposed removing another project to make room, and the list was approved without it. In March 2025 the same TxDOT representative told the committee flatly that SH 361 \"is not currently funded and has no construction dollars.\" In February 2026, discussing whether Port Aransas should join, the committee's minutes record that \"none of those improvements have been prioritized by the MPO at this time.\"",
+          "There is one funded, near-term item on the whole corridor: a $10.5 million safety-improvement project, Access Road 1 to Park Road 22, estimated to let in July 2027. Its scope is not a median.",
+        ],
+        callout: {
+          label: "What TxDOT has programmed · agency project tracker, August 2026",
+          items: [
+            {
+              label: "Access Rd 3 → PR 22 · 2.5 mi · in the state program",
+              value: "$60M · let 2032 · 0 deaths since 2016",
+            },
+            {
+              label: "Access Rd 1 → Mariners Dr · 3.6 mi · not in the program",
+              value: "$54M · let 2036 · 5 deaths since 2016",
+            },
+            {
+              label: "Mariners Dr → Access Rd 3 · ~8 mi",
+              value: "no widening project · 12 deaths since 2016",
+            },
+            {
+              label: "Safety improvements, Access Rd 1 → PR 22 (not a median)",
+              value: "$10.5M · let 2027",
+            },
+          ],
+        },
+      },
+      {
+        heading: "What gets engineered instead",
+        body: [
+          "It would be unfair to say the city has done nothing about traffic. It would also be inaccurate to say it has pressed the state hard on the artery. Both statements can be checked, because both live in the same public record.",
+          "Since 2018, the Council's formal actions touching SH 361 are these: a January 2023 resolution asking TxDOT to study the turn-lane alignment in town near the Whataburger and CVS entrances, because \"confusion with designated turn lanes creates increased risk for a head-on accident\"; a February 2023 resolution supporting a second causeway to the island; a line in the 2023 and 2024 legislative priorities reading \"TxDOT – Support for St. Hwy 361 and ferry improvements\"; a July 2023 request to meet with TxDOT about the speed limit after a run of crashes, which produced temporary flashing speed signs; an agreement to host license-plate readers in TxDOT right-of-way; participation as an agency in the second-causeway environmental study; and recurring workshop discussions about lighting, pursued with the area's state representative.",
+          "There is no Council resolution supporting the SH 361 Mustang Island Project. No letter or resolution to the Texas Transportation Commission asking that it be accelerated or funded. No joint resolution with Nueces County or Corpus Christi. No delegation to the MPO — the body that declined to add the project to the funding list — and no action on the city's own 2023 comprehensive plan recommendation to \"investigate the potential for the City to join the CCMPO.\" When TxDOT collected seventy public comments on the project in fall 2024, none came from the City of Port Aransas.",
+          "Meanwhile, in town, the engineering has been concrete and funded. A warrant study for the intersection of Avenue G and Station Street was commissioned, found three signal warrants met, and produced a signal: $400,000 budgeted in the 2024-25 city budget, awarded in September 2025 at $315,267.52, energized in late June 2026. At the June 2026 goal-setting workshop, the Council took up a roundabout at Avenue G, Sixth Street and Cut Off Road. That item came from TxDOT — staff described the agency as enthusiastic about the concept and possibly holding money for it — and Cut Off Road is itself SH 361, the in-town leg.",
+          "That is the shape of it. Where the state has money and a project, the city moves. On the fifteen miles where the state has no construction dollars, the city has a line in a legislative priorities list.",
+        ],
+      },
+      {
+        heading: "What this piece is not saying",
+        body: [
+          "It is not saying that developments cause these crashes. Drivers cause crashes, and the record is blunt about how.",
+          "Of the fifteen fatal crashes on and immediately around this corridor since 2016, ten involved alcohol or drugs, according to the state and federal crash files and the arrests that followed. One driver is serving twenty years for intoxication manslaughter for a 2024 crash that killed two people. Another was charged in April with intoxication manslaughter in a 2025 crash that killed a 21-year-old nursing student. Failure to control speed is the most common contributing factor on the corridor by a wide margin. The Port Aransas police chief and a department lieutenant have both said publicly that impatient passing — using the center turn lane to get around slower traffic — is a recurring cause of head-on crashes here.",
+          "All of that is true, and none of it is unusual. Impairment and speed are constants on every road in Texas. What differs from road to road is what happens next: whether a drifting vehicle meets a raised median, a wide shoulder and a turn bay, or an oncoming car at a combined hundred and twenty miles an hour.",
+          "This week made the point without alcohol. Neither Monday's crash nor Friday's involved a drunk driver. Monday's was a driver who crossed the line. Friday's was a rear-end collision — the most ordinary crash there is — that became a head-on because there was nowhere else for the struck car to go.",
+        ],
+      },
+      {
+        heading: "The arithmetic of waiting",
+        body: [
+          "Crash counts on this corridor have been flat for a decade: 197 in the five years through 2020, 189 in the five years through 2025, while traffic on the island rose by roughly a quarter. On a per-mile-driven basis, crashes went down.",
+          "Deaths went the other way. Three fatal crashes and three deaths in 2016 through 2020. Eight fatal crashes and ten deaths in 2021 through 2025. Three fatal crashes and four deaths so far in 2026 — with four and a half months left in the year, already the deadliest year in the record.",
+          "TxDOT's timeline for the fix, as published, is 2030 at the earliest, contingent on funding. Its own project tracker now shows the funded end piece letting in 2032 and the northern piece in 2036, with the eight miles in between unscheduled. The agency told commenters in 2024 that \"if additional interim safety solutions are identified that can fit within the existing right of way, then TxDOT could advance those solutions earlier than 2030 if funding is available.\" The interim measures delivered so far are passing lanes, rumble strips, and safety lighting at four locations — the state park entrance, Beach Access Road 2, La Concha Boulevard and the Gulf Waters entrance. Every one of them is an access point.",
+          "The people who live here have been describing the mechanism to the state for years, in the state's own comment forms.",
+        ],
+        pullQuote: {
+          text:
+            "361 is an incredibly dangerous and deadly highway … oftentimes driving half-way in the shoulder in fear of a head on collision.",
+          attribution:
+            "Public comment to TxDOT · SH 361 Mustang Island Project · September 19, 2024",
+        },
+      },
+      {
+        heading: "Close",
+        body: [
+          "The island road was built as a way through. It is being used as a way in — by roughly 78 driveways and streets, a third of them added in the last twenty years, with a thousand acres of frontage in planning and a developer asking for a signal.",
+          "That transformation is not illegal, hidden or even unusual. It is the ordinary way a rural highway becomes a suburban one. What is unusual here is the gap between the change and the engineering: a road acquiring driveways at the pace of a boom, with the median that a road with driveways requires scheduled for the two ends and unscheduled for the middle where the people die.",
+          "TxDOT named the growth problem on this island in 2011, applied the remedy to the town in 2017, and has the island's remedy split into a funded end, an unfunded end, and eight unprogrammed miles. The city has a resolution asking the state to study a turn lane by the Whataburger, and a new signal downtown. The developer's promised stoplight is a stop sign and a portable light a police officer runs by hand during Spring Break.",
+          "Three people died on that road this week, in two crashes, neither of them drunk, both of them ending up in the oncoming lane.",
+          "The next set of decisions is at the Council's August 25 meeting, at the Corpus Christi MPO, and in the next legislative session.",
+        ],
+      },
+      {
+        heading: "How we did this",
+        body: [
+          "The crash figures in this piece come from the Texas Department of Transportation's Crash Records Information System, queried for every reportable crash on SH 361 in Nueces County from 2016 through August 15, 2026, with crash-level coordinates, severity, contributing factors, roadway design attributes and TxDOT's attached traffic counts. Crashes were assigned to the corridor by TxDOT's own mile posts. Fatal crashes were cross-checked one by one against the federal Fatality Analysis Reporting System, which matched the state file for every year it covers. Exposure came from TxDOT's published annual average daily traffic counters at each end of the island; benchmark rates come from TxDOT's own Texas Motor Vehicle Traffic Crash Facts tables. Funding status comes from TxDOT's public project tracker, the Unified Transportation Program, and the Corpus Christi MPO's meeting minutes. Council actions come from the city's agendas, packets and minutes.",
+          "The data file and a full method note are published alongside this piece. Anyone can check the arithmetic.",
+          "This week's two crashes are not yet in the state file; they are counted here from police accounts as reported. The names of the two people killed on Friday had not been released when this was published.",
+        ],
+      },
+    ],
+
+    sources: [
+      {
+        label:
+          "TxDOT — Crash Records Information System (CRIS) public query, SH 361, Nueces County, 2016–2026",
+        url: "https://cris.dot.state.tx.us/public/Query/app/home",
+      },
+      {
+        label:
+          "Port A Local — SH 361 crash extract (CSV: every crash with coordinates, severity and contributing factors)",
+        url: "/data/sh361/sh361-crashes-2016-2026.csv",
+      },
+      {
+        label: "Port A Local — method note for this analysis",
+        url: "/data/sh361/METHOD.md",
+      },
+      {
+        label:
+          "Port A Local — full-size corridor chart (crashes, fatal crashes and every access point, mile by mile)",
+        url: "/images/sh361-crash-map-wide.png",
+      },
+      {
+        label:
+          "TxDOT — SH 361 Mustang Island Project (Access Road 1 to Park Road 22, CSJ 2263-03-024)",
+        url: "https://www.txdot.gov/projects/projects-studies/corpus-christi/sh361-mustang-island-project.html",
+      },
+      {
+        label: "TxDOT — SH 361 Mustang Island Project fact sheet, September 2024",
+        url: "https://ftp.txdot.gov/pub/txdot/get-involved/crp/sh361/091924-fact-sheet.pdf",
+      },
+      {
+        label:
+          "TxDOT — SH 361 public meeting documentation and comment responses, September–October 2024",
+        url: "https://ftp.txdot.gov/pub/txdot/get-involved/crp/sh361/091924-public-meeting-summary.pdf",
+      },
+      {
+        label:
+          "TxDOT — media advisory, SH 361 proposed improvements citizens' meeting, March 28, 2011 (town boulevard, raised median)",
+        url: "https://ftp.txdot.gov/pub/txdot-info/crp/notices/sh361.pdf",
+      },
+      {
+        label:
+          "TxDOT — Texas Motor Vehicle Traffic Crash Facts 2024: statewide crash rates by highway system and road type",
+        url: "https://www.txdot.gov/content/dam/docs/division/trf/crash-records/2024/02.pdf",
+      },
+      {
+        label:
+          "TxDOT — Comparison of motor vehicle traffic deaths, vehicle miles and death rates, 2003–2025",
+        url: "https://www.txdot.gov/content/dam/docs/division/trf/crash-records/final-compares-2003-2025.pdf",
+      },
+      {
+        label:
+          "TxDOT — annual average daily traffic counters, SH 361 (TxDOT Annual AADT public data)",
+        url: "https://www.txdot.gov/data-maps/traffic-count-data.html",
+      },
+      {
+        label: "TxDOT — public project tracker (CSJ 2263-03 projects, retrieved August 15, 2026)",
+        url: "https://apps3.txdot.gov/apps-cq/project_tracker/",
+      },
+      {
+        label:
+          "Texas Department of Licensing and Regulation — SH 361 town section, widen two-lane rural to four-lane urban with raised median, 2016–2017",
+        url: "https://www.tdlr.texas.gov/TABS/Search/Print/EABPRJB6809588",
+      },
+      {
+        label: "NHTSA — Fatality Analysis Reporting System (FARS), Nueces County, 2014–2024",
+        url: "https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars",
+      },
+      {
+        label:
+          "Corpus Christi MPO — Transportation Policy Committee minutes, December 5, 2024 (SH 361 not added to the 2026 UTP list)",
+        url: "https://www.corpuschristi-mpo.org/03_tpc_agendas/2024/20241205_tpcminutes.pdf",
+      },
+      {
+        label:
+          "Corpus Christi MPO — Transportation Policy Committee minutes, March 6, 2025 (\"SH 361 is not currently funded\")",
+        url: "https://www.corpuschristi-mpo.org/03_tpc_agendas/2025/20250306_tpcminutes.pdf",
+      },
+      {
+        label:
+          "Corpus Christi MPO — Transportation Policy Committee minutes, February 5, 2026 (boundary and prioritization)",
+        url: "https://www.corpuschristi-mpo.org/03_tpc_agendas/2026/20260205_tpcminutes.pdf",
+      },
+      {
+        label:
+          "City of Port Aransas — Beach Access Road 1-B construction specifications, April 2025",
+        url: "https://cityofportaransas.org/wp-content/uploads/2025/04/Beach-Access-Road-1-B-Specifications.pdf",
+      },
+      {
+        label:
+          "City of Port Aransas City Council — agenda and packet, March 21, 2024 (Resolution 2024-R18, beach access easement exchange)",
+        url: "https://cityofportaransas.civicweb.net/document/152071/",
+      },
+      {
+        label:
+          "City of Port Aransas City Council — agenda and packet, January 19, 2023 (resolution requesting TxDOT turn-lane study)",
+        url: "https://cityofportaransas.civicweb.net/document/30815/",
+      },
+      {
+        label:
+          "City of Port Aransas City Council — agenda and packet, August 11, 2025 (Resolution 2025-R38, SH 361 turn lane change order)",
+        url: "https://cityofportaransas.civicweb.net/document/163775/",
+      },
+      {
+        label:
+          "City of Port Aransas City Council — minutes, September 18, 2025 and April 21, 2026 (signal award; deferral on permanent signals)",
+        url: "https://cityofportaransas.civicweb.net/document/171047/",
+      },
+      {
+        label:
+          "City of Port Aransas — Priorities and Strategies goals workshop packet, June 30, 2026 (roundabout and SH 361 lighting items)",
+        url: "https://cityofportaransas.civicweb.net/document/170525/",
+      },
+      {
+        label:
+          "City of Port Aransas — Moving Forward Port A Comprehensive Plan, adopted April 20, 2023",
+        url: "https://cityofportaransas.org/wp-content/uploads/2023/06/Moving-Forward-Port-A-Comprehensive-Plan-Adopted-2023.04.20.pdf",
+      },
+      {
+        label:
+          "City of Corpus Christi — Padre/Mustang Island Mobility Plan, existing conditions memorandum",
+        url: "https://www.corpuschristitx.gov/media/iroft2nf/mustang-padre-island-mobility-existing-conditions.pdf",
+      },
+      {
+        label:
+          "Port Aransas South Jetty — \"City decides on different spot for access road,\" March 27, 2024",
+        url: "https://www.portasouthjetty.com/articles/city-decides-on-different-spot-for-access-road/",
+      },
+      {
+        label: "Port Aransas South Jetty — \"New beach access road opens,\" March 4, 2026",
+        url: "https://www.portasouthjetty.com/articles/new-beach-access-road-opens/",
+      },
+      {
+        label:
+          "KRIS 6 — \"Fatal head-on collision on Highway 361 in Port Aransas kills one, injures another,\" August 11, 2026",
+        url: "https://www.kristv.com/news/local-news/in-your-neighborhood/corpus-christi/padre-island/fatal-head-on-collision-on-highway-361-in-port-aransas-kills-one-injures-another",
+      },
+      {
+        label:
+          "KRIS 6 — \"UPDATE: New details on Friday's fatal wreck on Hwy 361,\" August 14, 2026",
+        url: "https://www.kristv.com/news/local-news/in-your-neighborhood/corpus-christi/padre-island/2-dead-several-hospitalized-in-4-vehicle-crash-on-highway-361-near-corpus-christi",
+      },
+      {
+        label:
+          "KRIS 6 — \"FACING DANGER: TxDOT's plan for SH 361; is it enough to reduce fatal crashes?\" December 16, 2024",
+        url: "https://www.kristv.com/news/local-news/in-your-neighborhood/corpus-christi/padre-island/facing-danger-txdots-plan-for-sh-361-is-it-enough-to-reduce-fatal-crashes",
+      },
+      {
+        label:
+          "KRIS 6 — \"TxDOT releases plans to improve safety on HWY 361 with construction starting in 2030,\" September 2024",
+        url: "https://www.kristv.com/news/local-news/in-your-neighborhood/nueces-county/port-aransas/txdot-releases-plans-to-improve-safety-on-hwy-361-with-construction-starting-in-2030",
+      },
+      {
+        label:
+          "Corpus Christi Caller-Times — \"Plans underway to widen State Highway 361 as crashes add up,\" August 16, 2024",
+        url: "https://eu.caller.com/story/news/local/2024/08/16/plans-underway-to-widen-state-highway-361-as-crashes-add-up/74796020007/",
+      },
+      {
+        label:
+          "Sea Oats Group — announcement of $1.3 billion Phase II expansion of Cinnamon Shore, June 13, 2017",
+        url: "https://www.globenewswire.com/news-release/2017/06/13/1018389/0/en/Sea-Oats-Group-Announces-1-3-Billion-Phase-II-Expansion-of-Cinnamon-Shore-on-the-Texas-Gulf-Coast.html",
+      },
+    ],
+  },
+
   "closed-session-66-million": {
     lede:
       "This Wednesday at 5:00 PM, the Port Aransas City Council will vote to consent to a $66 million hotel-and-convention center at Palmilla Beach Resort.",
