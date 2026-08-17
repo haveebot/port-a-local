@@ -42,7 +42,7 @@
     },
     {
       "path": "/api/cron/cart-first-look-expire",
-      "schedule": "* * * * *"
+      "schedule": "*/5 * * * *"
     },
     {
       "path": "/api/cron/beach-day-before",
