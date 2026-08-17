@@ -391,6 +391,109 @@ export const dispatchContent: Record<string, DispatchContent> = {
     ],
   },
 
+  "highway-361-after-dark": {
+    lede:
+      "After Saturday's piece on the crash record for State Highway 361, several readers asked the same question in different words: does the file show a difference between day and night? It does — and it is larger than the difference between most of the other things people argue about on that road.",
+
+    sections: [
+      {
+        heading: "What was asked, and what we did",
+        body: [
+          "Every crash report filed in Texas records the light condition at the scene: daylight, dark with street lighting, dark with none, dawn, dusk. That field was already in the file we pulled for Saturday's piece — 421 crashes on the corridor between Beach Access Road 1 and Park Road 22, 2016 through August 15. Nobody had asked it to sort itself by light before. Readers asked, so we sorted it.",
+          "One framing note, because it decides what the numbers mean. Counting crashes by time of day mostly measures traffic: fewer cars run at 3 a.m., so fewer crashes happen at 3 a.m. That tells you little. The useful question is not how many crashes happen after dark, but how many of the crashes that do happen end with someone dead. That is what the chart below measures.",
+        ],
+        callout: {
+          label: "How often a crash on SH 361 kills someone",
+          items: [
+            { label: "In daylight", value: "1.7% — 5 of 293" },
+            { label: "After dark, with street lighting", value: "2.4% — 1 of 42" },
+            { label: "After dark, no lighting", value: "7.0% — 5 of 71" },
+            { label: "Crashes between 8pm and 6am", value: "22% of all crashes" },
+            { label: "Deaths between 8pm and 6am", value: "58% of all fatal crashes" },
+          ],
+        },
+        figure: {
+          src: "/images/sh361-night-map.png",
+          srcWide: "/images/sh361-night-map-desktop.png",
+          alt: "Three panels of SH 361 crash data by light condition: fatal share by daylight, dark with lighting and dark without; crashes by hour of day with fatal crashes marked; and the corridor showing where fatal crashes after dark occurred relative to lit sections.",
+          caption:
+            "SH 361 between Beach Access Road 1 and Park Road 22, 2016 through August 15, 2026. Source: TxDOT Crash Records Information System. The underlying file is published with Saturday's piece.",
+          minWidth: 620,
+        },
+      },
+      {
+        heading: "What the sorted file shows",
+        body: [
+          "Darkness accounts for 27 percent of the crashes on the corridor and half of the fatal ones. Between 8 p.m. and 6 a.m. — 22 percent of the crashes — the road produces 58 percent of its deaths.",
+          "The gradient inside darkness is the part that surprised us. On stretches with street lighting, a crash after dark kills someone 2.4 percent of the time, which is close to the daylight figure of 1.7 percent. On stretches with no lighting, it is 7.0 percent. A crash on an unlit stretch of this road after dark is about four times as likely to kill as the same crash in daylight.",
+          "Geographically, every fatal crash after dark in the file is at or north of Access Road 2 — in the same unlit, undivided middle where Saturday's piece found the deaths concentrated regardless of light.",
+        ],
+      },
+      {
+        heading: "What it does not show",
+        body: [
+          "It does not show that lighting would have prevented those deaths. The southern miles TxDOT lit in 2023 and 2024 have had 65 crashes after dark in this ten-year window and none of them killed anyone — but that was true before the lights went in as well as after. The lit section is also the section with the signals, the lower speeds near Park Road 22 and the shortest distance to a hospital. Untangling those would take more than a crash file.",
+          "Twelve fatal crashes is a small number. One additional death in the wrong cell moves these percentages several points. Read the gaps as direction, not precision — and note that neither of the two crashes that killed three people on August 10 and August 14 happened after dark. The couple killed Friday died at 3:40 in the afternoon.",
+          "What the file does support is narrower and still useful: on this road, darkness and the absence of lighting travel with a much higher chance that a crash turns fatal, and both conditions are concentrated in the miles that have no median and no funded project.",
+        ],
+        pullQuote: {
+          text: "It is important to address Hwy 361 now.",
+          attribution:
+            "State Rep. Todd Hunter, in a text message to KRIS 6 News, August 17, 2026",
+        },
+      },
+      {
+        heading: "Why the timing matters",
+        body: [
+          "On Wednesday afternoon, the full Nueces County state legislative delegation — Rep. Todd Hunter, Rep. Denise Villalobos and Senators Juan \"Chuy\" Hinojosa and Adam Hinojosa — meets TxDOT about this highway. Rep. Villalobos told KRIS 6 News that this is not the first time the delegation has met about it.",
+          "The widening those meetings are ultimately about is expensive and distant. TxDOT's public project tracker puts the southern piece at $60 million with a 2032 letting date and the northern piece at $54 million in 2036, and programs nothing at all for the roughly eight miles in between — the miles where most of the deaths are.",
+          "Lighting is a different order of cost. The three lighting jobs TxDOT has already awarded on this corridor — one near Gulf Waters, one at La Concha Boulevard, and five miles running south toward Park Road 22 — came to about $483,000 combined. That is less than one percent of either widening piece. The argument that has kept more of it from happening is not primarily engineering; it is who pays. TxDOT has taken the position that continuous lighting inside a city is a city expense, which is why the phrase turns up in Port Aransas council workshops alongside the mayor's remark that the state ought to pay for its own highway.",
+          "We are not in a position to say what the delegation should ask for on Wednesday. We are in a position to say what is in the file, which is this: the deadliest condition on the island road, after the missing median, is the dark.",
+        ],
+      },
+      {
+        heading: "How this was done",
+        body: [
+          "Same file, same corridor, same method as Saturday. Crashes were pulled from TxDOT's Crash Records Information System for SH 361 in Nueces County, filtered to the segment between Beach Access Road 1 and Park Road 22 using the state's own distance-from-origin measure, and grouped by the light condition recorded on each report. Dawn and dusk are counted separately from dark, which is why the panels show fourteen markers where the corridor total is twelve fatal crashes plus the two from last week that the state file has not yet ingested.",
+          "The spreadsheet and the method note are published with Saturday's piece. If you find an error in this, tell us and we will correct it in public.",
+        ],
+      },
+    ],
+
+    sources: [
+      {
+        label:
+          "Port A Local — \"Three Dead in Five Days on the “Island Road”,\" August 15, 2026 (the underlying analysis, data file and method note)",
+        url: "https://theportalocal.com/dispatch/highway-361-fatal-crashes",
+      },
+      {
+        label:
+          "TxDOT Crash Records Information System — public crash query, SH 361, Nueces County, 2016–2026",
+        url: "https://cris.dot.state.tx.us/public/Query/app/home",
+      },
+      {
+        label:
+          "Port A Local — SH 361 crash file (CSV, 421 crashes with light condition, location and severity)",
+        url: "/data/sh361/sh361-crashes-2016-2026.csv",
+      },
+      {
+        label:
+          "KRIS 6 News — \"Couple killed in Highway 361 crash identified; lawmakers to meet with TxDOT this week,\" August 17, 2026",
+        url: "https://www.kristv.com/news/local-news/in-your-neighborhood/corpus-christi/padre-island/couple-killed-in-highway-361-crash-identified-lawmakers-to-meet-with-txdot-this-week",
+      },
+      {
+        label:
+          "TxDOT Project Tracker — control-section-job records for SH 361 (2263-03), retrieved August 15, 2026",
+        url: "https://apps3.txdot.gov/apps-cq/project_tracker/",
+      },
+      {
+        label:
+          "TxDOT — SH 361 Mustang Island Project, public meeting materials, September 19, 2024",
+        url: "https://www.txdot.gov/projects/projects-studies/corpus-christi/sh361-mustang-island-project.html",
+      },
+    ],
+  },
+
   "closed-session-66-million": {
     lede:
       "This Wednesday at 5:00 PM, the Port Aransas City Council will vote to consent to a $66 million hotel-and-convention center at Palmilla Beach Resort.",
