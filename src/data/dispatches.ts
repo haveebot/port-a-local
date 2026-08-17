@@ -74,12 +74,51 @@ export const dispatches: Dispatch[] = [
       "City Council",
       "development",
     ],
-    relatedDispatches: ["the-two-port-aransases", "closed-session-66-million"],
+    relatedDispatches: [
+      "highway-361-after-dark",
+      "the-two-port-aransases",
+      "closed-session-66-million",
+    ],
     ogHighlight: {
       type: "stat",
       text: "14 of 14",
       label:
         "Fatal crashes on SH 361 since 2016 are north of the stretch TxDOT funded first",
+    },
+  },
+  {
+    slug: "highway-361-after-dark",
+    title: "We Were Asked What the Crash File Says About Darkness",
+    subtitle:
+      "Readers asked whether the ten-year record on State Highway 361 shows a day-and-night pattern. It does. A crash after dark on an unlit stretch of the island road is about four times as likely to kill as the same crash in daylight — and the Nueces County legislative delegation meets TxDOT about the highway on Wednesday.",
+    description:
+      "A follow-up analysis of the TxDOT crash file for SH 361 between Port Aransas and Park Road 22, sorted by the light condition recorded on each crash report. Darkness is 27% of the corridor's crashes and half its fatal ones; 8pm to 6am accounts for 22% of crashes and 58% of deaths; every fatal crash after dark is at or north of Access Road 2.",
+    category: "analysis",
+    icon: "🌙",
+    readTime: "5 min",
+    featured: true,
+    published: true,
+    date: "2026-08-17",
+    tags: [
+      "Port Aransas",
+      "Highway 361",
+      "SH 361",
+      "Mustang Island",
+      "TxDOT",
+      "traffic safety",
+      "crash records",
+      "CRIS",
+      "highway lighting",
+      "Todd Hunter",
+      "raised median",
+      "data analysis",
+    ],
+    relatedDispatches: ["highway-361-fatal-crashes"],
+    ogHighlight: {
+      type: "stat",
+      text: "7.0%",
+      label:
+        "How often a crash after dark with no lighting kills someone on SH 361 — in daylight it is 1.7%",
     },
   },
   {
