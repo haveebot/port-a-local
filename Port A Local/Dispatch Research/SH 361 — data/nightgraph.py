@@ -18,6 +18,23 @@ C = [r for r in rows if f(r["DFO"]) is not None and LO <= f(r["DFO"]) <= HI]
 def isfatal(r): return r["Crash Severity"].startswith("K")
 def isdark(r):  return r["Light Condition"].startswith("DARK")   # dawn/dusk are not dark
 
+# Impairment for the FATAL crashes comes from the best available record — FARS lab
+# results, court outcomes, DPS toxicology — not the state file's contributing-factor
+# field, which misses a third of them. Keyed by crash date.
+IMPAIRED_FATAL = {
+    "2016-01-13": True,   "2018-03-17": True,   "2019-01-25": False,
+    "2022-06-16": False,  "2022-08-13": True,   "2023-06-30": True,
+    "2023-07-03": True,   "2023-11-02": True,   "2024-05-14": True,
+    "2024-08-09": True,   "2025-08-15": True,   "2026-03-02": False,
+}
+# Aug 2026 crashes are not in the state file yet: (DFO, deaths, dark?, impaired?)
+NEWS_FATAL = [(27.72, 1, False, False), (26.90, 2, False, False)]
+ALC_FLAG = ("UNDER INFLUENCE - ALCOHOL", "HAD BEEN DRINKING",
+            "UNDER INFLUENCE - DRUG", "TAKING MEDICATION")
+def flagged(r):
+    s = (r["Contributing Factors"] or "") + ";" + (r["Other Factor"] or "")
+    return any(k in s for k in ALC_FLAG)
+
 # same palette as the published corridor chart
 INK="#1f2933"; MUTED="#6b7280"; GRID="#e5e7eb"; BAR="#9aa5b1"; BARLIGHT="#c9d1d9"
 FATAL="#b42318"; ACCENT="#0f766e"; PAPER="#ffffff"
@@ -26,10 +43,11 @@ GROUPS = [("In daylight", "DAYLIGHT", BARLIGHT),
           ("After dark, with street lighting", "DARK, LIGHTED", BAR),
           ("After dark, no lighting", "DARK, NOT LIGHTED", FATAL)]
 LIT_SECTIONS = [(22.96, 23.34), (26.75, 27.00), (27.75, 28.05), (29.85, 34.75)]
-SOURCE = ("Source: TxDOT Crash Records Information System — 421 crashes on SH 361 between Beach Access Road 1 and Park Road 22,\n"
-          "2016 through Aug. 15, 2026. This measures how deadly a crash is, not how many happen: there is less traffic after dark.\n"
-          "Twelve fatal crashes is a small number — read the gaps as direction, not precision. The lighting was installed recently,\n"
-          "so this is not a before-and-after. Neither of the two crashes that killed three people on Aug. 10 and Aug. 14 was after dark.")
+SOURCE = ("Sources: TxDOT Crash Records Information System (421 crashes, Beach Access Road 1 to Park Road 22, 2016–Aug. 15, 2026);\n"
+          "NHTSA Fatality Analysis Reporting System, Nueces County court records and DPS lab results for impairment in the fatal crashes.\n"
+          "Shaded hourly portions are a FLOOR — the state file's factor field misses a third of the impaired fatal crashes, because\n"
+          "toxicology returns after the report is filed. Impairment means any driver involved, not necessarily the person killed.\n"
+          "Fourteen fatal crashes is a small number: read the gaps as direction. Neither Aug. 10 nor Aug. 14 was after dark.")
 
 
 def panel_share(ax, label_size, num_size, note_size, gap=1.55):
@@ -49,16 +67,20 @@ def panel_share(ax, label_size, num_size, note_size, gap=1.55):
 
 
 def panel_hours(ax, tick_size, legend_size):
-    H = collections.Counter(); HF = collections.Counter()
+    H = collections.Counter(); HF = collections.Counter(); HA = collections.Counter()
     for r in C:
         t = (r["Crash Time"] or "").strip()
         if len(t) != 4 or not t[:2].isdigit(): continue
         h = int(t[:2]); H[h] += 1
         if isfatal(r): HF[h] += 1
+        if flagged(r): HA[h] += 1
     hours = range(24)
     isnight = lambda h: h >= 20 or h < 6
     ax.bar(list(hours), [H[h] for h in hours], width=0.76, zorder=2,
            color=[BAR if isnight(h) else BARLIGHT for h in hours])
+    # impairment overlay — the portion of each hour's crashes with a recorded
+    # alcohol or drug factor. A floor: the field misses cases (see note).
+    ax.bar(list(hours), [HA[h] for h in hours], width=0.76, zorder=3, color=FATAL, alpha=0.85)
     for h in hours:
         for i in range(HF[h]):
             ax.plot([h], [H[h] + 4.5 + 4.2 * i], marker="D", color=FATAL, ms=7.5,
@@ -71,25 +93,35 @@ def panel_hours(ax, tick_size, legend_size):
     ax.spines["bottom"].set_color(GRID)
     ax.text(0.5, 0.93, "◆ = a fatal crash", transform=ax.transAxes, fontsize=legend_size,
             color=FATAL, ha="center", va="top")
-    ax.text(0.995, 0.93, "darker bars = 8pm–6am", transform=ax.transAxes,
-            fontsize=legend_size - 1, color=MUTED, ha="right", va="top")
+    ax.text(0.995, 0.93, "shaded = alcohol or drugs recorded", transform=ax.transAxes,
+            fontsize=legend_size - 1, color=FATAL, ha="right", va="top")
+    ax.text(0.005, 0.93, "darker bars = 8pm–6am", transform=ax.transAxes,
+            fontsize=legend_size - 1, color=MUTED, ha="left", va="top")
 
 
 def panel_corridor(ax, label_size, tick_size):
     for a, b in LIT_SECTIONS:
         ax.axvspan(a, b, ymin=0.34, ymax=0.56, color=GRID, zorder=1)
     ax.plot([LO, HI], [0.45, 0.45], color="#dde3ea", lw=8, solid_capstyle="butt", zorder=0)
-    for r in C:
-        if not isfatal(r): continue
-        d = f(r["DFO"]); dark = isdark(r)
-        ax.plot([d], [0.86 if dark else 0.06], marker="D", ms=12,
+    def mark(d, dark, impaired):
+        y = 0.86 if dark else 0.06
+        ax.plot([d], [y], marker="D", ms=12,
                 mfc=FATAL if dark else PAPER, mec=FATAL, mew=1.6, zorder=4)
         ax.plot([d, d], [0.45, 0.79 if dark else 0.13], color=FATAL, lw=1,
                 alpha=0.45, zorder=2)
+        if impaired:
+            ax.plot([d], [y], marker="o", ms=21, mfc="none", mec=INK, mew=1.5,
+                    zorder=5)
+    for r in C:
+        if not isfatal(r): continue
+        mark(f(r["DFO"]), isdark(r), IMPAIRED_FATAL.get(r["Crash Date"], False))
+    for d, _n, dark, imp in NEWS_FATAL:
+        mark(d, dark, imp)
     ax.text(HI - 0.15, 0.99, "after dark", fontsize=label_size, color=FATAL,
             fontweight="bold", va="top", ha="right")
-    ax.text(27.45, 0.0, "daylight or dusk", fontsize=label_size, color=MUTED,
-            va="bottom", ha="center")
+    ax.text(HI - 0.15, 0.0, "daylight or dusk", fontsize=label_size, color=MUTED,
+            va="bottom", ha="right")
+
     ax.text(32.3, 0.585, "lit by TxDOT, 2023–24", fontsize=tick_size, color=MUTED,
             ha="center", va="bottom")
     for x, lab, ha in [(20.31, "Port Aransas", "left"), (27.88, "Access Rd 2", "center"),
@@ -106,10 +138,10 @@ def render_mobile(out):
     fig = plt.figure(figsize=(10.8, 13.5), dpi=100); fig.patch.set_facecolor(PAPER)
     head = lambda y, t: fig.text(L, y, t, fontsize=20, fontweight="bold", color=INK, va="top")
     note = lambda y, t: fig.text(L, y, t, fontsize=14.5, color=INK, va="top", linespacing=1.5)
-    fig.text(L, 0.972, "SH 361, Mustang Island — the day/night record",
+    fig.text(L, 0.972, "SH 361 — day, night and impairment",
              fontsize=26, fontweight="bold", color=INK, va="top")
-    fig.text(L, 0.936, "Ten years of TxDOT crash records for the island road, from Port Aransas\n"
-                       "to Park Road 22, sorted by the light condition on each crash report",
+    fig.text(L, 0.936, "Ten years of TxDOT crash records for the island road, Port Aransas to Park\n"
+                       "Road 22 — by light condition, and by whether drink or drugs were involved",
              fontsize=15, color=MUTED, va="top", linespacing=1.45)
     head(0.876, "How often a crash kills someone")
     panel_share(fig.add_axes([L, 0.700, W, 0.156]), 16.5, 25, 13.5)
@@ -117,12 +149,15 @@ def render_mobile(out):
                 "as the same crash in daylight.")
     head(0.630, "When crashes happen — and when they kill")
     panel_hours(fig.add_axes([L, 0.464, W, 0.145]), 13.5, 13.5)
-    note(0.426, "8pm to 6am is 22% of the crashes on this road — and 58% of the fatal ones.")
+    note(0.420, "8pm to 6am is 22% of the crashes on this road — and 58% of the fatal ones.\n"
+                "Recorded impairment runs about four times higher after dark.")
     head(0.384, "Where the deaths after dark happened")
+    fig.text(R, 0.384, "◯ = impaired driver involved", fontsize=13, color=INK,
+             va="top", ha="right")
     panel_corridor(fig.add_axes([L, 0.205, W, 0.148]), 14.5, 13)
-    note(0.162, "Every fatal crash after dark is at or north of Access Road 2. The southern\n"
-                "miles have plenty of night crashes — 65 — but none of them fatal, before or\n"
-                "after the lights went in.")
+    note(0.156, "Every fatal crash after dark is at or north of Access Road 2. Nine of the\n"
+                "fourteen involved an impaired driver — in daylight as well as after dark —\n"
+                "and eight ended with a vehicle in the oncoming lane.")
     fig.text(R, 0.104, "theportalocal.com/dispatch", fontsize=12.5, color=MUTED,
              va="top", ha="right")
     fig.text(L, 0.078, SOURCE, fontsize=11, color=MUTED, va="top", linespacing=1.55)
@@ -132,25 +167,29 @@ def render_mobile(out):
 def render_desktop(out):
     """Landscape: same three panels, stacked full width — wide and short."""
     L, R = 0.058, 0.972; W = R - L
-    fig = plt.figure(figsize=(11.4, 8.8), dpi=100); fig.patch.set_facecolor(PAPER)
+    fig = plt.figure(figsize=(11.4, 9.6), dpi=100); fig.patch.set_facecolor(PAPER)
     head = lambda y, t: fig.text(L, y, t, fontsize=17, fontweight="bold", color=INK, va="top")
     note = lambda y, t: fig.text(L, y, t, fontsize=13, color=INK, va="top", linespacing=1.5)
-    fig.text(L, 0.968, "SH 361, Mustang Island — the day/night record",
+    fig.text(L, 0.972, "SH 361 — day, night and impairment",
              fontsize=25, fontweight="bold", color=INK, va="top")
-    fig.text(L, 0.921, "Ten years of TxDOT crash records for the island road, from Port Aransas to Park Road 22,\n"
-                       "sorted by the light condition recorded on each crash report",
+    fig.text(L, 0.930, "Ten years of TxDOT crash records for the island road, from Port Aransas to Park Road 22, sorted by\n"
+                       "the light condition recorded on each report — and by whether alcohol or drugs were involved",
              fontsize=13, color=MUTED, va="top", linespacing=1.45)
-    head(0.852, "How often a crash kills someone")
-    panel_share(fig.add_axes([L, 0.672, W, 0.158]), 14, 21, 12, gap=1.35)
-    note(0.658, "A crash on an unlit stretch after dark is about four times as likely to kill as the same crash in daylight.")
-    head(0.610, "When crashes happen — and when they kill")
-    panel_hours(fig.add_axes([L, 0.450, W, 0.138]), 12, 12)
-    note(0.416, "8pm to 6am is 22% of the crashes on this road — and 58% of the fatal ones.")
-    head(0.368, "Where the deaths after dark happened")
-    panel_corridor(fig.add_axes([L, 0.206, W, 0.138]), 13, 11.5)
-    note(0.166, "Every fatal crash after dark is at or north of Access Road 2. The southern miles have plenty of night crashes — 65 — but none fatal, before or after the lights.")
-    fig.text(R, 0.140, "theportalocal.com/dispatch", fontsize=11.5, color=MUTED, va="top", ha="right")
-    fig.text(L, 0.108, SOURCE, fontsize=10.5, color=MUTED, va="top", linespacing=1.55)
+    head(0.868, "How often a crash kills someone")
+    panel_share(fig.add_axes([L, 0.700, W, 0.148]), 14, 21, 12, gap=1.35)
+    note(0.686, "A crash on an unlit stretch after dark is about four times as likely to kill as the same crash in daylight.")
+    head(0.640, "When crashes happen — and when they kill")
+    panel_hours(fig.add_axes([L, 0.492, W, 0.128]), 12, 12)
+    note(0.462, "8pm to 6am is 22% of the crashes on this road — and 58% of the fatal ones.\n"
+                "Recorded impairment runs about four times higher after dark.")
+    head(0.400, "Where the deaths after dark happened")
+    fig.text(R, 0.400, "◯ = impaired driver involved", fontsize=12, color=INK,
+             va="top", ha="right")
+    panel_corridor(fig.add_axes([L, 0.246, W, 0.130]), 13, 11.5)
+    note(0.208, "Every fatal crash after dark is at or north of Access Road 2. Nine of the fourteen involved an impaired\n"
+                "driver — in daylight as well as after dark — and eight ended with a vehicle in the oncoming lane.")
+    fig.text(R, 0.150, "theportalocal.com/dispatch", fontsize=11.5, color=MUTED, va="top", ha="right")
+    fig.text(L, 0.124, SOURCE, fontsize=10.5, color=MUTED, va="top", linespacing=1.55)
     plt.savefig(out, facecolor=PAPER); print("saved", out)
 
 

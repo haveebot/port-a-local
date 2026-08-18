@@ -426,9 +426,9 @@ export const dispatchContent: Record<string, DispatchContent> = {
         figure: {
           src: "/images/sh361-night-map.png",
           srcWide: "/images/sh361-night-map-desktop.png",
-          alt: "Three panels of SH 361 crash data by light condition: fatal share by daylight, dark with lighting and dark without; crashes by hour of day with fatal crashes marked; and the corridor showing where fatal crashes after dark occurred relative to lit sections.",
+          alt: "Three panels of SH 361 crash data. First, how often a crash kills someone by light condition: 1.7% in daylight, 2.4% after dark with street lighting, 7.0% after dark with none. Second, crashes by hour of day, with the portion involving recorded alcohol or drugs shaded and each fatal crash marked. Third, the corridor from Port Aransas to Park Road 22 showing every fatal crash by day or night, circled where an impaired driver was involved, against the sections TxDOT has lit.",
           caption:
-            "SH 361 between Beach Access Road 1 and Park Road 22, 2016 through August 15, 2026. Source: TxDOT Crash Records Information System. The underlying file is published with Saturday's piece.",
+            "SH 361 between Beach Access Road 1 and Park Road 22, 2016 through August 15, 2026. Updated August 18 with the impairment layer. Sources: TxDOT Crash Records Information System; NHTSA Fatality Analysis Reporting System, Nueces County court records and DPS lab results for impairment in the fatal crashes. The underlying file is published with Saturday's piece.",
           minWidth: 620,
         },
       },
@@ -465,7 +465,7 @@ export const dispatchContent: Record<string, DispatchContent> = {
       {
         heading: "Update, August 18: the alcohol layer, and why the file undercounts it",
         body: [
-          "A reader asked us to add impairment to the day-and-night view. We did, and it turned into two findings — one about the road, one about the record itself.",
+          "A reader asked us to add impairment to the day-and-night view. The chart above now carries it: the shaded portion of each hour is the share of those crashes with alcohol or drugs recorded, and every fatal crash circled in the bottom panel involved an impaired driver. Adding the layer turned up two findings — one about the road, one about the record itself.",
           "Sorted by light, the corridor's crash reports record alcohol or drugs in 4.4 percent of daylight crashes, 16.3 percent of crashes after dark on lit stretches, and 18.3 percent after dark with no lighting. Impairment shows up roughly four times as often in crashes after dark. That is thirty-three flagged crashes out of 421, so treat it as direction rather than a precise rate.",
           "Then we checked that field against the federal fatality file, which carries actual laboratory results, and it does not hold up. Of the corridor's twelve fatal crashes in the state file, the contributing-factor field flags six as involving alcohol or drugs. The federal file, court outcomes and DPS lab work establish impairment in nine.",
           "The clearest example is the crash that killed a 35-year-old Corpus Christi man in August 2024. The federal record puts the at-fault driver's blood alcohol at 0.200 — two and a half times the legal limit. The state crash report's contributing-factor field for that crash says only \"failed to drive in single lane.\"",
