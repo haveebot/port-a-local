@@ -234,6 +234,55 @@ export default async function DispatchArticlePage({
                 </figure>
               )}
 
+              {/* Data table — record-level detail, scrolls on phones */}
+              {section.table && (
+                <figure className="my-10">
+                  {section.table.caption && (
+                    <figcaption className="mb-3 text-sm font-semibold text-navy-900">
+                      {section.table.caption}
+                    </figcaption>
+                  )}
+                  <div className="overflow-x-auto rounded-xl border border-sand-200">
+                    <table className="w-full min-w-[640px] border-collapse text-left text-sm">
+                      <thead>
+                        <tr className="bg-sand-50">
+                          {section.table.columns.map((col) => (
+                            <th
+                              key={col}
+                              scope="col"
+                              className="border-b border-sand-200 px-4 py-3 text-xs font-semibold uppercase tracking-wide text-navy-500"
+                            >
+                              {col}
+                            </th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {section.table.rows.map((row, r) => (
+                          <tr key={r} className="odd:bg-white even:bg-sand-50/40">
+                            {row.map((cell, c) => (
+                              <td
+                                key={c}
+                                className={`border-b border-sand-100 px-4 py-3 align-top text-navy-700 ${
+                                  c === 0 ? "whitespace-nowrap font-medium text-navy-900" : ""
+                                }`}
+                              >
+                                {cell}
+                              </td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  {section.table.note && (
+                    <figcaption className="mt-3 text-sm text-navy-400 leading-relaxed">
+                      {section.table.note}
+                    </figcaption>
+                  )}
+                </figure>
+              )}
+
               {section.pullQuote && (
                 <blockquote className="my-10 pl-6 border-l-4 border-coral-400">
                   <p className="text-xl sm:text-2xl font-display font-bold text-navy-800 leading-snug mb-2">

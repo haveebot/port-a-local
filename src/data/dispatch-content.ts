@@ -13,6 +13,17 @@ export interface DispatchSection {
   /** Optional stat callout — rendered as a boxed fact list */
   callout?: { label: string; items: { label: string; value: string }[] };
   /**
+   * Optional data table — for record-level detail the prose can't carry.
+   * Scrolls horizontally on phones; `note` prints under it as a source or
+   * qualifier line.
+   */
+  table?: {
+    caption?: string;
+    columns: string[];
+    rows: string[][];
+    note?: string;
+  };
+  /**
    * Optional figure — a chart or map built from the piece's own records.
    * Rendered full-bleed within the column, horizontally scrollable on narrow
    * screens so wide charts stay legible.
@@ -449,6 +460,46 @@ export const dispatchContent: Record<string, DispatchContent> = {
           "The widening those meetings are ultimately about is expensive and distant. TxDOT's public project tracker puts the southern piece at $60 million with a 2032 letting date and the northern piece at $54 million in 2036, and programs nothing at all for the roughly eight miles in between — the miles where most of the deaths are.",
           "Lighting is a different order of cost. The three lighting jobs TxDOT has already awarded on this corridor — one near Gulf Waters, one at La Concha Boulevard, and five miles running south toward Park Road 22 — came to about $483,000 combined. That is less than one percent of either widening piece. The argument that has kept more of it from happening is not primarily engineering; it is who pays. TxDOT has taken the position that continuous lighting inside a city is a city expense, which is why the phrase turns up in Port Aransas council workshops alongside the mayor's remark that the state ought to pay for its own highway.",
           "We are not in a position to say what the delegation should ask for on Wednesday. We are in a position to say what is in the file, which is this: the deadliest condition on the island road, after the missing median, is the dark.",
+        ],
+      },
+      {
+        heading: "Update, August 18: the alcohol layer, and why the file undercounts it",
+        body: [
+          "A reader asked us to add impairment to the day-and-night view. We did, and it turned into two findings — one about the road, one about the record itself.",
+          "Sorted by light, the corridor's crash reports record alcohol or drugs in 4.4 percent of daylight crashes, 16.3 percent of crashes after dark on lit stretches, and 18.3 percent after dark with no lighting. Impairment shows up roughly four times as often in crashes after dark. That is thirty-three flagged crashes out of 421, so treat it as direction rather than a precise rate.",
+          "Then we checked that field against the federal fatality file, which carries actual laboratory results, and it does not hold up. Of the corridor's twelve fatal crashes in the state file, the contributing-factor field flags six as involving alcohol or drugs. The federal file, court outcomes and DPS lab work establish impairment in nine.",
+          "The clearest example is the crash that killed a 35-year-old Corpus Christi man in August 2024. The federal record puts the at-fault driver's blood alcohol at 0.200 — two and a half times the legal limit. The state crash report's contributing-factor field for that crash says only \"failed to drive in single lane.\"",
+          "The reason is procedural, not anybody's fault: the officer's crash report is filed within days, and toxicology comes back weeks or months later. Nothing goes back to update that field. In one case here, the intoxication-manslaughter arrest came eight months after the crash.",
+          "That matters for how anyone reads the alcohol numbers above. If the file misses a third of the impaired crashes among fatalities — the crashes that get the most investigation — it certainly misses more among the four hundred non-fatal crashes, where blood is rarely drawn at all. The real share of impaired crashes on this road is higher than the file says, in daylight and after dark both. We would rather tell you the number is soft than hand you a clean-looking figure we cannot stand behind.",
+        ],
+        table: {
+          caption: "Every fatal crash on the corridor since 2016, with light condition and impairment as established by the best available record",
+          columns: ["Date", "Light", "Impairment (source)", "What happened"],
+          rows: [
+            ["Jan 13, 2016", "Daylight", "Drinking recorded, no test given (federal file)", "Motorcycle overturned, single vehicle"],
+            ["Mar 17, 2018", "Dark, no lighting", "Drugs recorded; alcohol 0.000 (federal file)", "Pedestrian struck in heavy fog"],
+            ["Jan 25, 2019", "Dark, no lighting", "None established, no test given", "Motorcycle left the road into water"],
+            ["Jun 16, 2022", "Daylight", "None recorded", "Head-on"],
+            ["Aug 13, 2022", "Dark, no lighting", "0.060 BAC; charged with intoxication manslaughter", "Head-on — two killed"],
+            ["Jun 30, 2023", "Dark, no lighting", "0.179 BAC (federal file)", "Head-on while passing"],
+            ["Jul 3, 2023", "Dark, lit", "0.040 BAC (federal file)", "Left turn across traffic at a driveway"],
+            ["Nov 2, 2023", "Daylight", "Drugs recorded; speeding (federal file)", "Motorcycle passing struck a left-turning pickup"],
+            ["May 14, 2024", "Daylight", "0.200 BAC; 20-year sentence", "Passing crash pushed a vehicle into oncoming traffic — two killed"],
+            ["Aug 9, 2024", "Dusk", "0.200 BAC (federal file) — not flagged in the state file", "Crossed the centerline, struck two vehicles"],
+            ["Aug 15, 2025", "Dark, no lighting", "Methamphetamine, DPS lab; charged eight months later", "Head-on"],
+            ["Mar 2, 2026", "Daylight", "None recorded", "Cyclist struck"],
+            ["Aug 10, 2026", "Daylight", "Not suspected (investigators)", "Head-on at Access Road 2"],
+            ["Aug 14, 2026", "Daylight", "Not a factor (investigators)", "Rear-end pushed a car into oncoming traffic — two killed"],
+          ],
+          note: "Impairment refers to any driver involved in the crash, which in several of these was not the person who died. The 2025 and 2026 crashes are not yet in the state file and are recorded here from lab results, court records and police accounts; the two August 2026 investigations remain open. Sources: TxDOT Crash Records Information System, NHTSA Fatality Analysis Reporting System, Nueces County court records, DPS.",
+        },
+      },
+      {
+        heading: "What the two layers say together",
+        body: [
+          "Impairment is in nine of these fourteen crashes. Darkness and missing lighting travel with a much higher chance that a crash turns fatal. Both are true, and neither is the whole picture.",
+          "What the fourteen rows have in common is not the driver. It is the geometry. Eight of them ended with a vehicle in the oncoming lane on a road with nothing in the middle to stop it — whether the driver was drunk, high, distracted, or simply unlucky enough to be rear-ended, as the couple killed on August 14 were, at 3:40 in the afternoon, stone sober.",
+          "That is the value of putting the layers on one page. A road cannot stop people from drinking. It can decide what happens to everyone else when they do.",
         ],
       },
       {
