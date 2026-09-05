@@ -29,14 +29,33 @@ Stephanie's is still formally open. It is counted as lost here because these con
 
 ## How it is reflected in the system
 
-The three charged-back bookings have had `vendor_amount_cents` set to **0** in `beach_booking_claims`, each with an audit note recording the dispute ID, the amount removed and the prior value. The payout engine (`src/lib/beachPayouts.ts`) skips any claim with a zero amount, so these can no longer pay out even if the hold is lifted.
+The **entire cost of each chargeback** comes off Bron's total — the amount charged back, the $15 card-network fee, and the margin PAL would have kept. A job that gets charged back earns nobody anything.
 
-That accounts for **$403.75** of the $630 — the vendor share of the three jobs. The remaining **$226.25** is PAL's own margin plus the $45 in service fees on those bookings, which has no per-booking row to sit on. It is carried in this statement and must be applied when the payout is finally settled:
+Recorded in two places, both in the database:
 
-```
-Accrued in system after zeroing the three   $2,078.75
-Less PAL margin + service fees on those     −  $226.25
-Net payable                                 $1,852.50
+1. **`beach_booking_claims`** — the three charged-back bookings have `vendor_amount_cents` set to **0**, each with an audit note carrying the dispute ID and the prior value. The payout engine (`src/lib/beachPayouts.ts`) skips any zero-amount claim, so these can never pay out even if the hold is lifted. Removes **$403.75**.
+2. **`beach_payout_adjustments`** (new table) — three ledger lines for the balance of each chargeback: PAL's margin plus the service fee. Removes **$226.25**.
+
+| Booking | Full cost to PAL | Zeroed on the row | Adjustment line |
+|---|---|---|---|
+| Moriah Aveidi | $220.00 | $158.75 | −$61.25 |
+| Kelly Crocker | $95.00 | $60.00 | −$35.00 |
+| Stephanie Simon | $315.00 | $185.00 | −$130.00 |
+| | **$630.00** | **$403.75** | **−$226.25** |
+
+The authoritative figure, straight from the database:
+
+```sql
+WITH earned AS (
+  SELECT COALESCE(SUM(vendor_amount_cents),0) AS c
+  FROM beach_booking_claims
+  WHERE claimed_by_slug LIKE 'brons%' AND paid_out_at IS NULL
+), adj AS (
+  SELECT COALESCE(SUM(amount_cents),0) AS c
+  FROM beach_payout_adjustments WHERE vendor_slug='brons'
+)
+SELECT (earned.c + adj.c)/100.0 AS net_payable FROM earned, adj;
+--  $1,852.50
 ```
 
 ## The 20 bookings behind the accrued figure
