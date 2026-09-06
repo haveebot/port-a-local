@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse, after } from "next/server";
 import {
   smsPhonesFor,
   findVendorByPhoneE164,
@@ -89,7 +89,17 @@ type Intent =
 
 function classifyBody(body: string): Intent {
   const trimmed = body.trim().toLowerCase();
-  if (/\b(stop|stopall|cancel|end|quit|unsubscribe|revoke|optout)\b/.test(trimmed)) return "stop";
+  // Consent keywords (STOP / YES / NO) count only when the WHOLE message is
+  // the keyword — the same rule Twilio's carrier-level STOP filter applies.
+  // A sentence that merely opens with "No," or "Yes," is a reply to a person,
+  // not a consent action: on 2026-08-07 "No, they are not loungers…" from a
+  // vendor was recorded as a cart-SMS opt-out, and "Yes it will be set up"
+  // style replies were answered with opt-in confirmations instead of being
+  // relayed to the operator. Measured 2026-09-06 against every inbound since
+  // May 1 (162 messages): 12 reclassify, all conversational sentences or
+  // iMessage tapbacks quoting our own text; every bare YES / STOP still lands.
+  const bare = trimmed.replace(/[\s.!,]+$/, "");
+  if (/^(stop|stopall|cancel|end|quit|unsubscribe|revoke|optout)$/.test(bare)) return "stop";
   // ACCEPT / CLAIM both map to "take it". CLAIM kept for backward compat
   // with vendors who learned the old keyword. ACCEPT is the new canonical
   // (per 2026-05-09 keyword UX softening).
@@ -97,8 +107,8 @@ function classifyBody(body: string): Intent {
   if (/\bclaim\b/.test(trimmed)) return "claim";
   // PASS = "release this lead to other vendors". Distinct from NO (opt-out).
   if (/^(pass|skip|decline|release|no thanks|not me|cant|can'?t)\b/.test(trimmed)) return "pass";
-  if (/^(yes|y|yeah|yep|sure|opt[ -]?in|ok|okay)\b/.test(trimmed)) return "yes";
-  if (/^(no|nope|nah|opt[ -]?out|email[ -]?only)\b/.test(trimmed)) return "no";
+  if (/^(yes|y|yeah|yep|sure|opt[ -]?in|ok|okay)(\s*(please|thanks|thank you))?$/.test(bare)) return "yes";
+  if (/^(no|nope|nah|opt[ -]?out|email[ -]?only)(\s*(thanks|thank you))?$/.test(bare)) return "no";
   return "other";
 }
 
@@ -134,12 +144,12 @@ async function handleBeachClaim(
       return;
     }
     const winnerName = winnerVendor?.name ?? "another vendor";
-    sendSms(
+    after(sendSms(
       fromRaw,
       `Port A Local: ${beachVendor.name} - sorry, ${winnerName} already claimed that booking. Watch for the next one.`,
     ).catch((err) =>
       console.error("[twilio/inbound] beach lost-race reply failed:", err),
-    );
+    ));
     return;
   }
 
@@ -151,7 +161,7 @@ async function handleBeachClaim(
       })
     : "your scheduled date";
 
-  notifyClaimResolution({
+  after(notifyClaimResolution({
     winner: beachVendor,
     customerName: unclaimed.customerName ?? "Customer",
     product: unclaimed.product ?? "setup",
@@ -161,17 +171,17 @@ async function handleBeachClaim(
     setupDate: unclaimed.setupDate,
   }).catch((err) =>
     console.error("[twilio/inbound] notifyClaimResolution failed:", err),
-  );
+  ));
 
   // Operator alert — beach parity with the cart accept ping. The operator
   // now hears when a beach booking is claimed (and by which team member).
   const qtyLabel = unclaimed.qty && unclaimed.qty > 1 ? ` ×${unclaimed.qty}` : "";
-  sendSms(
+  after(sendSms(
     OPERATOR_PHONE_E164,
     `[beach ✅] ${beachVendor.name} claimed ${unclaimed.product ?? "setup"}${qtyLabel} — ${setupDateFormatted} — ${unclaimed.customerName ?? "customer"}`,
   ).catch((err) =>
     console.error("[twilio/inbound] beach claim operator ping failed:", err),
-  );
+  ));
 }
 
 /* =====================================================================
@@ -196,12 +206,12 @@ async function handleCartFirstLook(
     console.log(
       `[twilio/inbound] ${intent.toUpperCase()} from ${vendor.slug} (${vendor.name}) — no pending first-look; routing manually`,
     );
-    sendSms(
+    after(sendSms(
       OPERATOR_PHONE_E164,
       `[${vendor.name} → PAL] ${intent.toUpperCase()}: ${body}`.slice(0, 1500),
     ).catch((err) =>
       console.error("[twilio/inbound] no-pending surface failed:", err),
-    );
+    ));
     return;
   }
 
@@ -225,7 +235,7 @@ async function handleCartFirstLook(
       }
       await new Promise((r) => setTimeout(r, 600));
     }
-    sendOpenBlastSms(
+    after(sendOpenBlastSms(
       {
         cartLabel: compactCartLabel(pending.leadMetadata.cartLabel),
         pickupFormatted: pending.leadMetadata.pickupShort,
@@ -238,7 +248,7 @@ async function handleCartFirstLook(
       .then((sent) =>
         console.log(`[first-look] PASS triggered open-blast to ${sent} vendors`),
       )
-      .catch((err) => console.error("[first-look] PASS open-blast failed:", err));
+      .catch((err) => console.error("[first-look] PASS open-blast failed:", err)));
     return;
   }
 
@@ -256,9 +266,9 @@ async function handleCartFirstLook(
 
   // Record the vendor on the durable booking row (the rentals calendar's
   // source of truth). lead_id is the Stripe session id. Fail-soft.
-  assignCartVendor(pending.leadId, vendor.slug).catch((err) =>
+  after(assignCartVendor(pending.leadId, vendor.slug).catch((err) =>
     console.error("[twilio/inbound] assignCartVendor failed:", err),
-  );
+  ));
 
   const md = pending.leadMetadata;
   const acceptingContact = matchedPhone.contactName ?? "team";
@@ -289,12 +299,12 @@ async function handleCartFirstLook(
     }
     await new Promise((r) => setTimeout(r, 600));
   }
-  sendSms(
+  after(sendSms(
     OPERATOR_PHONE_E164,
     `[first-look ✅] ${vendor.name} (${acceptingContact}) claimed ${md.cartLabel} — ${md.pickupShort} to ${md.returnShort} for ${md.customerName} — ${md.handoff}`,
   ).catch((err) =>
     console.error("[twilio/inbound] operator ping on accept failed:", err),
-  );
+  ));
 }
 
 /* =====================================================================
@@ -324,9 +334,9 @@ export async function POST(req: NextRequest) {
     // vendor streams since insiders aren't vendors.
     const insider = findInsider(fromE164);
     if (insider) {
-      forwardInsiderSmsToAdmin(insider, body, messageSid).catch((err) =>
+      after(forwardInsiderSmsToAdmin(insider, body, messageSid).catch((err) =>
         console.error("[twilio/inbound] insider-forward failed:", err),
-      );
+      ));
       try {
         const agentResult = await runInsiderAgent(insider, body);
         console.log(
@@ -382,12 +392,12 @@ export async function POST(req: NextRequest) {
           return twimlResponse();
         }
       }
-      sendSms(
+      after(sendSms(
         fromRaw,
         `Port A Local: Thanks ${beachVendor.name} - no unclaimed beach booking right now. Next blast comes through automatically.`,
       ).catch((err) =>
         console.error("[twilio/inbound] beach no-lead reply failed:", err),
-      );
+      ));
       return twimlResponse();
     }
 
@@ -403,9 +413,9 @@ export async function POST(req: NextRequest) {
         inboundSid: messageSid,
         inboundBody: body,
       });
-      sendSms(cartMatch.phone.number, buildOptInConfirmSms(cartMatch.vendor.name)).catch((err) =>
+      after(sendSms(cartMatch.phone.number, buildOptInConfirmSms(cartMatch.vendor.name)).catch((err) =>
         console.error("[twilio/inbound] confirm-send failed:", err),
-      );
+      ));
       return twimlResponse();
     }
     if (intent === "no" && cartMatch) {
@@ -413,31 +423,31 @@ export async function POST(req: NextRequest) {
         inboundSid: messageSid,
         inboundBody: body,
       });
-      sendSms(cartMatch.phone.number, buildOptOutAckSms(cartMatch.vendor.name)).catch((err) =>
+      after(sendSms(cartMatch.phone.number, buildOptOutAckSms(cartMatch.vendor.name)).catch((err) =>
         console.error("[twilio/inbound] optout-ack-send failed:", err),
-      );
+      ));
       return twimlResponse();
     }
 
     // ---- BEACH catch-all (fallback: any other beach-vendor reply) ----
     if (beachVendor) {
-      sendSms(
+      after(sendSms(
         OPERATOR_PHONE_E164,
         `[${beachVendor.name} → PAL] ${body}`.slice(0, 1500),
       ).catch((err) =>
         console.error("[twilio/inbound] beach-vendor surface to operator failed:", err),
-      );
+      ));
       return twimlResponse();
     }
 
     // ---- CART catch-all (fallback: any other cart-vendor reply) ----
     if (cartMatch) {
-      sendSms(
+      after(sendSms(
         OPERATOR_PHONE_E164,
         `[${cartMatch.vendor.name} (${cartMatch.phone.label ?? "phone"}) → PAL] ${body}`.slice(0, 1500),
       ).catch((err) =>
         console.error("[twilio/inbound] cart-vendor surface to operator failed:", err),
-      );
+      ));
       return twimlResponse();
     }
 
@@ -473,9 +483,9 @@ export async function POST(req: NextRequest) {
       console.error("[twilio/inbound] stranger forward to admin@ failed:", adminResult.reason);
     }
     if (watch && operatorResult.status === "fulfilled") {
-      recordNotification(fromE164).catch((err) =>
+      after(recordNotification(fromE164).catch((err) =>
         console.error("[twilio/inbound] recordNotification failed:", err),
-      );
+      ));
     }
     return twimlResponse();
   } catch (err) {
