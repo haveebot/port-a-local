@@ -104,7 +104,15 @@ function classifyBody(body: string): Intent {
   // with vendors who learned the old keyword. ACCEPT is the new canonical
   // (per 2026-05-09 keyword UX softening).
   if (/^(accept|take|takeit|i'?ll take it)\b/.test(trimmed)) return "accept";
-  if (/\bclaim\b/.test(trimmed)) return "claim";
+  // CLAIM only when the message OPENS with the claim ("Claim", "We claim",
+  // "Claim beach set up!") — never when the word merely appears. 2026-09-06
+  // 20:57Z a vendor's "I did not claim it … I don't have anything available
+  // today" auto-claimed the booking, sent her a Claim Confirmed, and told the
+  // operator she had taken it while the customer stood on the beach. iMessage
+  // tapbacks quoting our own "Claim Confirmed" text matched the same way.
+  // Measured against every inbound since 2026-04-01: 24 old matches → 21 keep
+  // (all real claims), 3 tapbacks + the negation drop.
+  if (/^(we|i|i'?ll|we'?ll)?\s*claim\b/.test(trimmed)) return "claim";
   // PASS = "release this lead to other vendors". Distinct from NO (opt-out).
   if (/^(pass|skip|decline|release|no thanks|not me|cant|can'?t)\b/.test(trimmed)) return "pass";
   if (/^(yes|y|yeah|yep|sure|opt[ -]?in|ok|okay)(\s*(please|thanks|thank you))?$/.test(bare)) return "yes";
